@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2004 The Apache Software Foundation.
+ * Copyright 1999-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,8 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.24 2004/07/24 09:58:40 scolebourne Exp $
+ * @author Stephen Colebourne
+ * @version $Id$
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -106,6 +107,32 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.waitFor(new File(""), -1);
 
         FileUtils.waitFor(new File(""), 2);
+    }
+
+    //-----------------------------------------------------------------------
+    public void testToFile1() throws Exception {
+        URL url = new URL("file", null, "a/b/c/file.txt");
+        File file = FileUtils.toFile(url);
+        assertEquals(true, file.toString().indexOf("file.txt") >= 0);
+    }
+
+    public void testToFile2() throws Exception {
+        URL url = new URL("file", null, "a/b/c/file%20n%61me.tx%74");
+        File file = FileUtils.toFile(url);
+        assertEquals(true, file.toString().indexOf("file name.txt") >= 0);
+    }
+
+    public void testToFile3() throws Exception {
+        assertEquals(null, FileUtils.toFile((URL) null));
+        assertEquals(null, FileUtils.toFile(new URL("http://jakarta.apache.org")));
+    }
+
+    public void testToFile4() throws Exception {
+        URL url = new URL("file", null, "a/b/c/file%2Xn%61me.txt");
+        try {
+            FileUtils.toFile(url);
+            fail();
+        }  catch (IllegalArgumentException ex) {}
     }
 
     // toFiles

@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.39 2004/10/29 21:34:56 bayard Exp $
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public class FileUtils {
 
@@ -306,17 +307,29 @@ public class FileUtils {
     //-----------------------------------------------------------------------
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
+     * <p>
+     * From version 1.1 this method will decode the URL.
+     * Syntax such as <code>file:///my%20docs/file.txt</code> will be
+     * correctly decoded to <code>/my docs/file.txt</code>.
      *
-     * @param url  the file URL to convert
+     * @param url  the file URL to convert, null returns null
      * @return the equivalent <code>File</code> object, or <code>null</code>
      *  if the URL's protocol is not <code>file</code>
+     * @throws IllegalArgumentException if the file is incorrectly encoded
      */
     public static File toFile(URL url) {
-        if (!url.getProtocol().equals("file")) {
+        if (url == null || !url.getProtocol().equals("file")) {
             return null;
         } else {
-            String filename =
-                url.getFile().replace('/', File.separatorChar);
+            String filename = url.getFile().replace('/', File.separatorChar);
+            int pos =0;
+            while ((pos = filename.indexOf('%', pos)) >= 0) {
+                if (pos + 2 < filename.length()) {
+                    String hexStr = filename.substring(pos + 1, pos + 3);
+                    char ch = (char) Integer.parseInt(hexStr, 16);
+                    filename = filename.substring(0, pos) + ch + filename.substring(pos + 3);
+                }
+            }
             return new File(filename);
         }
     }
@@ -328,10 +341,16 @@ public class FileUtils {
      * If the input is null, an empty array is returned.
      * If the input contains null, the output array contains null at the same
      * index.
+     * <p>
+     * From version 1.1 this method will decode the URL.
+     * Syntax such as <code>file:///my%20docs/file.txt</code> will be
+     * correctly decoded to <code>/my docs/file.txt</code>.
      *
      * @param urls  the file URLs to convert, null returns empty array
      * @return a non-null array of Files matching the input, with a null item
      *  if there was a null at that index in the input array
+     * @throws IllegalArgumentException if any file is not a URL file
+     * @throws IllegalArgumentException if any file is incorrectly encoded
      */
     public static File[] toFiles(URL[] urls) {
         if (urls == null || urls.length == 0) {
