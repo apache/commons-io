@@ -15,10 +15,7 @@
  */
 package org.apache.commons.io;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -32,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.18 2004/04/23 22:47:39 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.19 2004/07/03 11:20:45 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -448,6 +445,22 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
         assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
 
+    }
+
+    public void testTouch() throws IOException {
+        File file = new File(getTestDirectory(), "touch.txt") ;
+        FileUtils.touch(file);
+        assertTrue("FileUtils.touch() created file.", file.exists());
+        FileOutputStream out = new FileOutputStream(file) ;
+        assertEquals("Created empty file.", 0, file.length());
+        out.write(0) ;
+        out.close();
+        assertEquals("Wrote one byte to file.", 1, file.length());
+        file.setLastModified(0) ;
+        assertEquals("Set lastModified to 0.", 0, file.lastModified());
+        FileUtils.touch(file) ;
+        assertEquals("FileUtils.touch() didn't empty the file.", 1, file.length());
+        assertFalse("FileUtils.touch() changed lastModified.", 0 == file.lastModified()) ;        
     }
 
 }
