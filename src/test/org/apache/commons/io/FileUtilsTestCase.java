@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.5 2003/11/22 20:48:10 jeremias Exp $
- * $Revision: 1.5 $
- * $Date: 2003/11/22 20:48:10 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.6 2003/11/22 20:50:01 jeremias Exp $
+ * $Revision: 1.6 $
+ * $Date: 2003/11/22 20:50:01 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.5 2003/11/22 20:48:10 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.6 2003/11/22 20:50:01 jeremias Exp $
  * @see FileUtils
  */
 public final class FileUtilsTestCase extends FileBasedTestCase {
@@ -157,28 +157,6 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
         //assertEquals(urls[0].getFile(), File.separator + files[0].getAbsolutePath());
         //assertEquals(urls[1].getFile(), File.separator + files[1].getAbsolutePath());
 
-    }
-
-    public void testGetFilesFromExtension() {
-        // TODO I'm not sure what is supposed to happen here
-        FileUtils.getFilesFromExtension("dir", null);
-
-        // Non-existent files
-        final String[] emptyFileNames =
-            FileUtils.getFilesFromExtension(
-                getTestDirectory().getAbsolutePath(),
-                new String[] { "java" });
-        assertTrue(emptyFileNames.length == 0);
-
-        // Existing files
-        // TODO Figure out how to test this
-        /*
-        final String[] fileNames =
-            FileUtils.getFilesFromExtension(
-                getClass().getResource("/java/util/").getFile(),
-                new String[] { "class" });
-        assertTrue(fileNames.length > 0);
-        */
     }
 
     // mkdir
