@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import org.apache.commons.io.WildcardUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * This is where most of the find functionality occurs. Nearly every option 
@@ -219,6 +219,7 @@ public class FindingFilter implements FileFilter {
     /**
      * @todo needs to handle +5 for > 5 and -5 for < 5. 
      * @todo Also needs to handle k, m, g, as suffixes.
+     * @todo Switch from 512 byte block size to bytes
      */
     class SizeFilter implements FileFilter {
         private Object option;
@@ -251,9 +252,9 @@ public class FindingFilter implements FileFilter {
         }
         public boolean accept(File file) {
             if(this.ignoreCase) {
-                return FindingFilter.invert( this.invert,  WildcardUtils.match(file.getName().toLowerCase(), this.argument.toString().toLowerCase()) );
+                return FindingFilter.invert( this.invert,  FilenameUtils.wildcardMatch(file.getName().toLowerCase(), this.argument.toString().toLowerCase()) );
             } else {
-                return FindingFilter.invert( this.invert,  WildcardUtils.match(file.getName(), this.argument.toString()) );
+                return FindingFilter.invert( this.invert,  FilenameUtils.wildcardMatch(file.getName(), this.argument.toString()) );
             }
         }
     }
@@ -271,9 +272,9 @@ public class FindingFilter implements FileFilter {
         }
         public boolean accept(File file) {
             if(this.ignoreCase) {
-                return FindingFilter.invert( this.invert,  WildcardUtils.match(file.getPath().toLowerCase(), this.argument.toString().toLowerCase()) );
+                return FindingFilter.invert( this.invert,  FilenameUtils.wildcardMatch(file.getPath().toLowerCase(), this.argument.toString().toLowerCase()) );
             } else {
-                return FindingFilter.invert( this.invert,  WildcardUtils.match(file.getPath(), this.argument.toString()) );
+                return FindingFilter.invert( this.invert,  FilenameUtils.wildcardMatch(file.getPath(), this.argument.toString()) );
             }
         }
     }

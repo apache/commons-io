@@ -41,6 +41,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(DemuxTestCase.class));
         suite.addTest(new TestSuite(EndianUtilsTest.class));
         suite.addTest(new TestSuite(FilenameUtilsTestCase.class));
+        suite.addTest(new TestSuite(FilenameUtilsWildcardTestCase.class));
         suite.addTest(new TestSuite(FileUtilsFileNewerTestCase.class));
         suite.addTest(new TestSuite(FileUtilsListFilesTestCase.class));
         suite.addTest(new TestSuite(FileUtilsTestCase.class));
@@ -49,7 +50,6 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(IOUtilsCopyTestCase.class));
         suite.addTest(new TestSuite(IOUtilsTestCase.class));
         suite.addTest(new TestSuite(IOUtilsWriteTestCase.class));
-        suite.addTest(new TestSuite(WildcardUtilsTest.class));
         return suite;
     }
 }

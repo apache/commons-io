@@ -2,12 +2,12 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
-import org.apache.commons.io.WildcardUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Filters files using supplied wildcard(s).
  * <p/>
- * See org.apache.commons.io.find.WildcardUtils for wildcard matching rules
+ * See org.apache.commons.io.find.FilenameUtils.wildcardMatch() for wildcard matching rules
  * <p/>
  *
  * <p/>
@@ -22,7 +22,7 @@ import org.apache.commons.io.WildcardUtils;
  * </pre>
  *
  * @author Jason Anderson
- * @version $Revision: 1.4 $ $Date: 2004/10/25 23:28:29 $
+ * @version $Revision: 1.5 $ $Date: 2004/10/31 04:17:34 $
  * @since Commons IO 1.1
  */
 public class WildcardFilter extends AbstractFileFilter {
@@ -86,7 +86,7 @@ public class WildcardFilter extends AbstractFileFilter {
         }
     
         for (int i = 0; i < wildcards.length; i++) {
-            if (WildcardUtils.match(name, wildcards[i])) {
+            if (FilenameUtils.wildcardMatch(name, wildcards[i])) {
                 return true;
             }
         }
@@ -106,7 +106,7 @@ public class WildcardFilter extends AbstractFileFilter {
         }
     
         for (int i = 0; i < wildcards.length; i++) {
-            if (WildcardUtils.match(file.getName(), wildcards[i])) {
+            if (FilenameUtils.wildcardMatch(file.getName(), wildcards[i])) {
                 return true;
             }
         }
