@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestSuite.java,v 1.3 2003/01/27 02:23:27 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2003/01/27 02:23:27 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestSuite.java,v 1.4 2003/07/25 07:51:26 jeremias Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/07/25 07:51:26 $
  *
  * ====================================================================
  *
@@ -61,20 +61,31 @@
 
 package org.apache.commons.io;
 
+import org.apache.commons.io.filefilter.FileFilterTestCase;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
 /**
  * A basic test suite that tests all the IO package.
+ * 
+ * @author Matthew Hawthorne
+ * @see org.apache.commons.io
  */
 public class IOTestSuite
 {
+    
+    public static void main(String[] args) {
+        TestRunner.run(suite());
+    }
+    
     public static Test suite()
     {
         final TestSuite suite = new TestSuite( "IO Utilities" );
         suite.addTest( new TestSuite( FileUtilsTestCase.class ) );
         suite.addTest( new TestSuite( IOUtilTestCase.class ) );
-        suite.addTest( new TestSuite( org.apache.commons.io.filefilter.FileFilterTestCase.class ) );
+        suite.addTest( new TestSuite( FileFilterTestCase.class ) );
         suite.addTest( new TestSuite( DemuxTestCase.class ) );
         suite.addTest( new TestSuite( HexDumpTest.class ) );
         return suite;
