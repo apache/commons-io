@@ -1,12 +1,12 @@
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,56 +16,113 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * This filter produces a logical OR of the two filters specified.
+ * A {@link FileFilter} providing conditional OR logic across a list of
+ * file filters. This filter returns <code>true</code> if any filters in the
+ * list return <code>true</code>. Otherwise, it returns <code>false</code>.
+ * Checking of the file filter list stops when the first filter returns
+ * <code>true</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.8 $ $Date: 2004/02/23 04:37:57 $
- * 
- * @author Stephen Colebourne
+ * @version $Revision: 1.9 $ $Date: 2004/10/24 21:58:44 $
+ *
+ * @author  Steven Caswell
  */
-public class OrFileFilter extends AbstractFileFilter {
-    
-    /** The first filter */
-    private IOFileFilter filter1;
-    /** The second filter */
-    private IOFileFilter filter2;
+public class OrFileFilter
+  extends AbstractFileFilter
+  implements IOFileFilter, ConditionalFileFilter {
 
-    /**
-     * Constructs a new file filter that ORs the result of two other filters.
-     * 
-     * @param filter1  the first filter, must not be null
-     * @param filter2  the second filter, must not be null
-     * @throws IllegalArgumentException if either filter is null
-     */
-    public OrFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        if (filter1 == null || filter2 == null) {
-            throw new IllegalArgumentException("The filters must not be null");
-        }
-        this.filter1 = filter1;
-        this.filter2 = filter2;
-    }
+  private List fileFilters;
 
-    /**
-     * Checks to see if either filter is true.
-     * 
-     * @param file  the File to check
-     * @return true if either filter is true
-     */
-    public boolean accept(File file) {
-        return filter1.accept(file) || filter2.accept(file);
+  /**
+   * Constructs a new instance of <code>OrFileFilter</code>.
+   */
+  public OrFileFilter() {
+    this.fileFilters = new ArrayList();
+  }
+
+  /**
+   * Constructs a new instance of <code>OrFileFilter</code>
+   * with the specified filters.
+   *
+   * @param fileFileter the file filters for this filter
+   */
+  public OrFileFilter(final List fileFilters) {
+    this.fileFilters = new ArrayList(fileFilters);
+  }
+
+  /**
+   * Constructs a new file filter that ORs the result of two other filters.
+   * 
+   * @param filter1  the first filter, must not be null
+   * @param filter2  the second filter, must not be null
+   * @throws IllegalArgumentException if either filter is null
+   */
+  public OrFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+      if (filter1 == null || filter2 == null) {
+          throw new IllegalArgumentException("The filters must not be null");
+      }
+      this.fileFilters = new ArrayList();
+      addFileFilter(filter1);
+      addFileFilter(filter2);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addFileFilter(final IOFileFilter ioFileFilter) {
+    this.fileFilters.add(ioFileFilter);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List getFileFilters() {
+    return Collections.unmodifiableList(this.fileFilters);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean removeFileFilter(IOFileFilter ioFileFilter) {
+    return this.fileFilters.remove(ioFileFilter);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setFileFilters(final List fileFilters) {
+    this.fileFilters = fileFilters;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean accept(final File file) {
+    for(Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
+      IOFileFilter fileFilter = (IOFileFilter) iter.next();
+      if(fileFilter.accept(file)) {
+        return true;
+      }
     }
-    
-    /**
-     * Checks to see if either filter is true.
-     * 
-     * @param file  the File directory
-     * @param name  the filename
-     * @return true if either filter is true
-     */
-    public boolean accept(File file, String name) {
-        return filter1.accept(file, name) || filter2.accept(file, name);
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean accept(final File file, final String name) {
+    for(Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
+      IOFileFilter fileFilter = (IOFileFilter) iter.next();
+      if(fileFilter.accept(file, name)) {
+        return true;
+      }
     }
-    
+    return false;
+  }
 }

@@ -183,6 +183,7 @@
         <include>**/*Test*</include>
       </includes>
       <excludes>
+        <exclude>**/*AbstractTestCase*</exclude>
         <exclude>**/testtools/**</exclude>
       </excludes>
     </unitTest>
