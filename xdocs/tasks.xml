@@ -12,19 +12,25 @@
         <ul>
           <li>EndianUtils - InputStream/OutputStream methods</li>
           <li>LockableFileWriter</li>
-          <li>ClassLoaderObjectInputStream</li>
           <li>SwappedDataInputStream - [half done]</li>
         </ul>
         though they may not affect an initial beta release. 
         </li>
-        <li>More Javadocs!!!</li>
         <li>Improve site!!!</li>
+      </ul>
+      <p>Javadoc status:</p>
+      <ul>
+        <li>io.*</li>
+        <li>io.filefilter</li>
+        <li>io.input</li>
+        <li>io.output</li>
       </ul>
       <p>
         The following classes will be excluded from the initial release:
       </p>
       <ul>
         <li>FilenameUtils: This class is still a big mess with many methods not working properly.</li>
+        <li>ClassLoaderObjectInputStream: Unless a unit test is written for it in time. </li>
       </ul>
     </section>
     <section name="Post 1.0 release">
