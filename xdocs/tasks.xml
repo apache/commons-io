@@ -3,10 +3,6 @@
   <body>
     <section name="Action Items">
       <p>
-        The following action items need to be completed prior to a Version 1.0
-        release of this component:
-      </p>
-      <p>
         The following classes will be excluded from the initial release:
       </p>
       <ul>
