@@ -59,6 +59,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 
@@ -72,7 +73,7 @@ import java.util.Vector;
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @version $Id: FileUtils.java,v 1.5 2002/01/28 10:03:11 sanders Exp $
+ * @version $Id: FileUtils.java,v 1.6 2002/06/12 19:50:40 dlr Exp $
  */
 public class FileUtils {
 
@@ -192,7 +193,7 @@ public class FileUtils {
      * @param fileName The name of the file to read.
      * @return The file contents or null if read failed.
      */
-    public static String fileRead(String fileName) throws Exception {
+    public static String fileRead(String fileName) throws IOException {
         StringBuffer buf = new StringBuffer();
 
         FileInputStream in = new FileInputStream(fileName);
