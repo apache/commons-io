@@ -6,15 +6,6 @@
         The following action items need to be completed prior to a Version 1.0
         release of this component:
       </p>
-      <ul>
-        <li>Write TestCases for: 
-        <ul>
-          <li>SwappedDataInputStream - [half done]</li>
-        </ul>
-        though they may not affect an initial beta release. 
-        </li>
-        <li>Improve site!!!</li>
-      </ul>
       <p>
         The following classes will be excluded from the initial release:
       </p>
