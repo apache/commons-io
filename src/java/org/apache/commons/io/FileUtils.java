@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.36 2004/07/24 09:58:41 scolebourne Exp $
+ * @version $Id: FileUtils.java,v 1.37 2004/08/13 23:51:41 scolebourne Exp $
  */
 public class FileUtils {
 
@@ -456,7 +456,7 @@ public class FileUtils {
         try {
             FileOutputStream output = new FileOutputStream(destination);
             try {
-                CopyUtils.copy(input, output);
+                IOUtils.copy(input, output);
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -514,7 +514,7 @@ public class FileUtils {
         try {
             FileOutputStream output = new FileOutputStream(destination);
             try {
-                CopyUtils.copy(input, output);
+                IOUtils.copy(input, output);
             } finally {
                 IOUtils.closeQuietly(output);
             }
