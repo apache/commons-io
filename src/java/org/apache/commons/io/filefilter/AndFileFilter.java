@@ -29,7 +29,7 @@ import java.util.List;
  * <code>false</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.10 $ $Date: 2004/10/25 22:53:26 $
+ * @version $Revision: 1.11 $ $Date: 2004/10/25 23:28:29 $
  *
  * @author Steven Caswell
  */
@@ -42,6 +42,7 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance of <code>AndFileFilter</code>.
+     * @since Commons IO 1.1
      */
     public AndFileFilter() {
         this.fileFilters = new ArrayList();
@@ -50,6 +51,7 @@ public class AndFileFilter
     /**
      * Constructs a new instance of <code>AndFileFilter</code>
      * with the specified list of filters.
+     * @since Commons IO 1.1
      */
     public AndFileFilter(final List fileFilters) {
         this.fileFilters = new ArrayList(fileFilters);
