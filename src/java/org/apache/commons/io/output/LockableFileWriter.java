@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.output;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -75,7 +75,7 @@ import java.io.Writer;
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.2 2002/01/28 05:01:48 sanders Exp $
+ * @version $Id: LockableFileWriter.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
  */
 public class LockableFileWriter extends Writer {
 

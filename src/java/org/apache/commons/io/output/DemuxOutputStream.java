@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.output;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -62,7 +62,7 @@ import java.io.OutputStream;
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/08 22:14:46 $
+ * @version $Revision: 1.1 $ $Date: 2002/11/11 19:34:02 $
  */
 public final class DemuxOutputStream
     extends OutputStream

@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.input;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,45 +55,72 @@ package org.apache.commons.io;
  */
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.FilterOutputStream;
+import java.io.InputStream;
 
 /**
- * Used in debugging, it counts the number of bytes that pass 
- * through it.
+ * Data written to this stream is forwarded to a stream that has been associated
+ * with this thread.
  *
- * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.2 2002/10/18 22:01:33 bayard Exp $
+ * @author <a href="mailto:peter@apache.org">Peter Donald</a>
+ * @version $Revision: 1.1 $ $Date: 2002/11/11 19:34:02 $
  */
-public class CountingOutputStream extends FilterOutputStream {
+public final class DemuxInputStream
+    extends InputStream
+{
+    private final InheritableThreadLocal m_streams = new InheritableThreadLocal();
 
-    private int count;
-
-    public CountingOutputStream( OutputStream out ) {
-        super(out);
-    }
-
-    public void write(byte[] b) throws IOException {
-        count += b.length;
-        super.write(b);
-    }
-
-    public void write(byte[] b, int off, int len) throws IOException {
-        count += len;
-        super.write(b, off, len);
-    }
-
-    /// TODO: Decide if this should increment by 2, or 4, or 1 etc.
-    public void write(int b) throws IOException {
-        count++;
-        super.write(b);
+    /**
+     * Bind the specified stream to the current thread.
+     *
+     * @param input the stream to bind
+     */
+    public InputStream bindStream( final InputStream input )
+    {
+        final InputStream oldValue = getStream();
+        m_streams.set( input );
+        return oldValue;
     }
 
     /**
-     * The number of bytes that have passed through this stream.
+     * Closes stream associated with current thread.
+     *
+     * @throws IOException if an error occurs
      */
-    public int getCount() {
-        return this.count;
+    public void close()
+        throws IOException
+    {
+        final InputStream input = getStream();
+        if( null != input )
+        {
+            input.close();
+        }
     }
 
+    /**
+     * Read byte from stream associated with current thread.
+     *
+     * @return the byte read from stream
+     * @throws IOException if an error occurs
+     */
+    public int read()
+        throws IOException
+    {
+        final InputStream input = getStream();
+        if( null != input )
+        {
+            return input.read();
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    /**
+     * Utility method to retrieve stream bound to current thread (if any).
+     */
+    private InputStream getStream()
+    {
+        return (InputStream)m_streams.get();
+    }
 }

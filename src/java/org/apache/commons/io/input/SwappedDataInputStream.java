@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.input;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,11 +59,13 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.EndianUtil;
+
 /**
  * DataInput for systems relying on little endian data formats.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/07/08 22:14:46 $
+ * @version CVS $Revision: 1.1 $ $Date: 2002/11/11 19:34:02 $
  * @since 4.0
  */
 public class SwappedDataInputStream

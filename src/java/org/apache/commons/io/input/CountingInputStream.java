@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.input;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,44 +55,45 @@ package org.apache.commons.io;
  */
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.FilterOutputStream;
+import java.io.InputStream;
+import java.io.FilterInputStream;
 
 /**
- * Classic splitter of OutputStream. Named after the unix 'tee' 
- * command. It allows a stream to be branched off so there 
- * are now two streams.
+ * Used in debugging, it counts the number of bytes that pass 
+ * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: TeeOutputStream.java,v 1.1 2002/02/23 04:29:53 bayard Exp $
+ * @version $Id: CountingInputStream.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
  */
-public class TeeOutputStream extends FilterOutputStream {
+public class CountingInputStream extends FilterInputStream {
 
-    protected OutputStream branch;
+    private int count;
 
-    public TeeOutputStream( OutputStream out, OutputStream branch ) {
-        super(out);
-        this.branch = branch;
+    public CountingInputStream( InputStream in ) {
+        super(in);
     }
 
-    public synchronized void write(byte[] b, int off, int len) throws IOException {
-        super.write(b, off, len);
-        this.branch.write(b, off, len);
+    public int read(byte[] b) throws IOException {
+        count += b.length;
+        return super.read(b);
     }
 
-    public synchronized void write(int b) throws IOException {
-        super.write(b);
-        this.branch.write(b);
+    public int read(byte[] b, int off, int len) throws IOException {
+        count += len;
+        return super.read(b, off, len);
     }
 
-    public void flush() throws IOException {
-        super.flush();
-        branch.flush();
+    /// TODO: Decide if this should increment by 2, or 4, or 1 etc.
+    public int read() throws IOException {
+        count++;
+        return super.read();
     }
 
-    public void close() throws IOException {
-        super.close();
-        branch.close();
+    /**
+     * The number of bytes that have passed through this stream.
+     */
+    public int getCount() {
+        return this.count;
     }
 
 }
