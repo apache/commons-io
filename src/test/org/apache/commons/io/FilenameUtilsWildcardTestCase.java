@@ -17,39 +17,39 @@ package org.apache.commons.io;
 
 import junit.framework.TestCase;
 
-public class WildcardUtilsTest extends TestCase {
+public class FilenameUtilsWildcardTestCase extends TestCase {
 
-    public WildcardUtilsTest(String name) {
+    public FilenameUtilsWildcardTestCase(String name) {
         super(name);
     }
 
     //-----------------------------------------------------------------------
-    // To test: 
-    //   WildcardUtils.match(String,String)
+    // Testing:
+    //   FilenameUtils.wildcardMatch(String,String)
 
     public void testMatch() {
-        assertTrue( WildcardUtils.match("Foo", "Foo") );
-        assertTrue( WildcardUtils.match("", "") );
-        assertTrue( WildcardUtils.match("Foo", "Fo*") );
-        assertTrue( WildcardUtils.match("Foo", "Fo?") );
-        assertTrue( WildcardUtils.match("Foo Bar and Catflap", "Fo*") );
-        assertTrue( WildcardUtils.match("New Bookmarks", "N?w ?o?k??r?s") );
-        assertFalse( WildcardUtils.match("Foo", "Bar") );
-        assertTrue( WildcardUtils.match("Foo Bar Foo", "F*o Bar*") );
-        assertTrue( WildcardUtils.match("Adobe Acrobat Installer", "Ad*er") );
-        assertTrue( WildcardUtils.match("Foo", "*Foo") );
-        assertTrue( WildcardUtils.match("Foo", "Foo*") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo") );
+        assertTrue( FilenameUtils.wildcardMatch("", "") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo", "Fo*") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo", "Fo?") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo Bar and Catflap", "Fo*") );
+        assertTrue( FilenameUtils.wildcardMatch("New Bookmarks", "N?w ?o?k??r?s") );
+        assertFalse( FilenameUtils.wildcardMatch("Foo", "Bar") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo Bar Foo", "F*o Bar*") );
+        assertTrue( FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo", "*Foo") );
+        assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo*") );
     }
 
     public void testSplitOnTokens() {
-        assertArrayEquals( new String[] { "Ad", "*", "er" }, WildcardUtils.splitOnTokens("Ad*er") );
-        assertArrayEquals( new String[] { "Ad", "?", "er" }, WildcardUtils.splitOnTokens("Ad?er") );
-        assertArrayEquals( new String[] { "Test", "*", "?", "One" }, WildcardUtils.splitOnTokens("Test*?One") );
-        assertArrayEquals( new String[] { "*", "*", "*", "*" }, WildcardUtils.splitOnTokens("****") );
-        assertArrayEquals( new String[] { "*", "?", "?", "*" }, WildcardUtils.splitOnTokens("*??*") );
-        assertArrayEquals( new String[] { "*", "?", "?", "*" }, WildcardUtils.splitOnTokens("*??*") );
-        assertArrayEquals( new String[] { "h", "?", "?", "*" }, WildcardUtils.splitOnTokens("h??*") );
-        assertArrayEquals( new String[] { "" }, WildcardUtils.splitOnTokens("") );
+        assertArrayEquals( new String[] { "Ad", "*", "er" }, FilenameUtils.splitOnTokens("Ad*er") );
+        assertArrayEquals( new String[] { "Ad", "?", "er" }, FilenameUtils.splitOnTokens("Ad?er") );
+        assertArrayEquals( new String[] { "Test", "*", "?", "One" }, FilenameUtils.splitOnTokens("Test*?One") );
+        assertArrayEquals( new String[] { "*", "*", "*", "*" }, FilenameUtils.splitOnTokens("****") );
+        assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
+        assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
+        assertArrayEquals( new String[] { "h", "?", "?", "*" }, FilenameUtils.splitOnTokens("h??*") );
+        assertArrayEquals( new String[] { "" }, FilenameUtils.splitOnTokens("") );
     }
 
     private void assertArrayEquals(Object[] a1, Object[] a2) {
@@ -60,7 +60,7 @@ public class WildcardUtilsTest extends TestCase {
     }
 
     private void assertMatch(String text, String wildcard, boolean expected) {
-        assertEquals(text + " " + wildcard, expected, WildcardUtils.match(text, wildcard));
+        assertEquals(text + " " + wildcard, expected, FilenameUtils.wildcardMatch(text, wildcard));
     }
 
     // A separate set of tests, added to this batch

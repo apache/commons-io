@@ -77,7 +77,6 @@ public class FileFinder implements Finder {
 
         boolean depthFirst = toBoolean(options.get(Finder.DEPTH));
 
-        // TODO: to implement
         int maxDepth = toInt(options.get(Finder.MAXDEPTH));
         int minDepth = toInt(options.get(Finder.MINDEPTH));
         boolean ignoreHiddenDirs = toBoolean(options.get(Finder.IGNORE_HIDDEN_DIRS));
