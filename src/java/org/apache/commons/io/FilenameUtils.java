@@ -76,7 +76,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.2 2003/11/27 20:53:04 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.3 2003/12/29 05:59:18 bayard Exp $
  */
 public class FilenameUtils {
 
@@ -443,7 +443,7 @@ public class FilenameUtils {
      * Delete a file. If file is directory delete it and all sub-directories.
      * @param file file or directory to delete.
      * @throws IOException in case deletion is unsuccessful
-     * @deprecated Use {@link #forceDelete(File)}
+     * @deprecated Use {@link FileUtils#forceDelete(File)}
      */
     public static void forceDelete(final String file) throws IOException {
         FileUtils.forceDelete(new File(file));
@@ -455,7 +455,7 @@ public class FilenameUtils {
      * Clean a directory without deleting it.
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
-     * @deprecated Use {@link #cleanDirectory(File)}
+     * @deprecated Use {@link FileUtils#cleanDirectory(File)}
      */
     public static void cleanDirectory(final String directory)
         throws IOException {
@@ -467,7 +467,7 @@ public class FilenameUtils {
      *
      * @param directory directory to inspect
      * @return size of directory in bytes.
-     * @deprecated Use {@link #sizeOfDirectory(File)}
+     * @deprecated Use {@link FileUtils#sizeOfDirectory(File)}
      */
     public static long sizeOfDirectory(final String directory) {
         return FileUtils.sizeOfDirectory(new File(directory));
@@ -486,7 +486,7 @@ public class FilenameUtils {
      * @throws IOException if <code>source</code> does not exist, the file in
      * <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      *
-     * @deprecated Use {@link #copyFileToDirectory(File, File)}
+     * @deprecated Use {@link FileUtils#copyFileToDirectory(File, File)}
      */
     public static void copyFileToDirectory(
         final String source,
@@ -499,7 +499,7 @@ public class FilenameUtils {
      * Recursively delete a directory.
      * @param directory directory to delete
      * @throws IOException in case deletion is unsuccessful
-     * @deprecated Use {@link #deleteDirectory(File)}
+     * @deprecated Use {@link FileUtils#deleteDirectory(File)}
      */
     public static void deleteDirectory(final String directory)
         throws IOException {
@@ -511,7 +511,7 @@ public class FilenameUtils {
      * Matches the equally named unix command.
      * @param filename filename to inspect
      * @return The directory portion excluding the ending file separator.
-     * @deprecated Use {@link #getPath(File)}
+     * @deprecated Use {@link FileUtils#getPath(File)}
      * TODO DELETE before 1.0
      */
     public static String dirname(String filename) {
@@ -523,7 +523,7 @@ public class FilenameUtils {
      * Returns the filename portion of a file specification string.
      * @param filename filename to inspect
      * @return The filename string with extension.
-     * @deprecated Use {@link #removeExtension(File)}
+     * @deprecated Use {@link FileUtils#removeExtension(File)}
      * TODO DELETE before 1.0
      */
     public static String filename(String filename) {
@@ -539,7 +539,7 @@ public class FilenameUtils {
      * the dot).
      * @param filename filename to inspect
      * @return the extension
-     * @deprecated Use {@link #getExtension(File)}
+     * @deprecated Use {@link FileUtils#getExtension(File)}
      * TODO probably duplicate method. See getExtension
      */
     public static String extension(String filename) {
