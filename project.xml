@@ -183,7 +183,6 @@
             </includes>
             <excludes>
                 <exclude>**/testtools/**</exclude>
-                <exclude>**/compress/**/*Test*</exclude>
                 <exclude>**/IOUtilTestCase*</exclude>
             </excludes>
 
