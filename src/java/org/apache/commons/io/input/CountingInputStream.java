@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,22 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Used in debugging, it counts the number of bytes that pass 
- * through it.
+ * A decorating input stream that counts the number of bytes that
+ * have passed through so far.
  *
- * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.9 2004/06/13 05:35:44 bayard Exp $
+ * @author Henri Yandell
+ * @version $Id$
  */
 public class CountingInputStream extends ProxyInputStream {
 
+    /** The count of bytes that have passed. */
     private int count;
 
     /**
      * Constructs a new CountingInputStream.
      * @param in InputStream to delegate to
      */
-    public CountingInputStream( InputStream in ) {
+    public CountingInputStream(InputStream in) {
         super(in);
     }
 
@@ -79,10 +80,10 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /** 
-      * Set the count back to 0. 
-      *
-      * @return the count previous to resetting.
-      */
+     * Set the count back to 0. 
+     *
+     * @return the count previous to resetting.
+     */
     public synchronized int resetCount() {
         int tmp = this.count;
         this.count = 0;
