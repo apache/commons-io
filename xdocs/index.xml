@@ -2,7 +2,7 @@
 
 <!--
     Main index
-    $Id: index.xml,v 1.3 2004/01/30 00:03:57 scolebourne Exp $
+    $Id: index.xml,v 1.4 2004/02/04 21:50:19 scolebourne Exp $
 -->
 
 <document>
@@ -13,6 +13,8 @@
             Commons-IO contains <a href="#utilities">utility classes</a>,
             stream implementations, <a href="#filefilters">file filters</a>, and
             <a href="#endian">endian classes</a>.
+            IO has recently been promoted from the commons sandbox, however there
+            remains no formal release at present.
         </p>
 
         <p>
