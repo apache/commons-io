@@ -62,7 +62,6 @@ import java.io.InputStream;
 import java.io.FileFilter;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -117,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.17 2003/11/22 20:44:48 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.18 2003/11/22 20:51:28 jeremias Exp $
  */
 public class FileUtils {
 
@@ -859,112 +858,6 @@ public class FileUtils {
     public static void fileDelete(String fileName) {
         File file = new File(fileName);
         file.delete();
-    }
-
-    /**
-     * Given a directory and an array of extensions... return an array of
-     * compliant files.
-     *
-     * TODO Should an ignore list be passed in?
-     * TODO Should a recurse flag be passed in?
-     * TODO Should be rewritten using the filefilter package.
-     * TODO Remove this method before 1.0. listFiles() variants are more flexible.
-     *
-     * The given extensions should be like "java" and not like ".java"
-     * @deprecated Method is too specific. Use one of the listFiles() methods 
-     * instead. Method will be deleted before Commons IO 1.0.
-     */
-    public static String[] getFilesFromExtension(
-            String directory,
-            String[] extensions) {
-
-        Collection files = new ArrayList();
-
-        File currentDir = new File(directory);
-
-        String[] unknownFiles = currentDir.list();
-
-        if (unknownFiles == null) {
-            return new String[0];
-        }
-
-        for (int i = 0; i < unknownFiles.length; ++i) {
-            String currentFileName =
-                directory
-                    + System.getProperty("file.separator")
-                    + unknownFiles[i];
-            File currentFile = new java.io.File(currentFileName);
-
-            if (currentFile.isDirectory()) {
-
-                //ignore all CVS directories...
-                if (currentFile.getName().equals("CVS")) {
-                    continue;
-                }
-
-                //ok... transverse into this directory and get all the files... then combine
-                //them with the current list.
-
-                String[] fetchFiles =
-                    getFilesFromExtension(currentFileName, extensions);
-                files = blendFiles(files, fetchFiles);
-
-            } else {
-                //ok... add the file
-
-                String add = currentFile.getAbsolutePath();
-                if (isValidFile(add, extensions)) {
-                    files.add(add);
-
-                }
-
-            }
-        }
-
-        //ok... move the Vector into the files list...
-
-        String[] foundFiles = new String[files.size()];
-        files.toArray(foundFiles);
-
-        return foundFiles;
-
-    }
-
-    /**
-     * Private hepler method for getFilesFromExtension()
-     */
-    private static Collection blendFiles(Collection c, String[] files) {
-
-        for (int i = 0; i < files.length; ++i) {
-            c.add(files[i]);
-        }
-
-        return c;
-    }
-
-    /**
-     * Checks to see if a file is of a particular type(s).
-     * Note that if the file does not have an extension, an empty string
-     * (&quot;&quot;) is matched for.
-     *
-     */
-    private static boolean isValidFile(String file, String[] extensions) {
-
-        String extension = extension(file);
-        if (extension == null) {
-            extension = "";
-        }
-
-        //ok.. now that we have the "extension" go through the current know
-        //excepted extensions and determine if this one is OK.
-
-        for (int i = 0; i < extensions.length; ++i) {
-            if (extensions[i].equals(extension))
-                return true;
-        }
-
-        return false;
-
     }
 
     /**
