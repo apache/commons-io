@@ -62,4 +62,37 @@ public class WildcardUtilsTest extends TestCase {
         }
     }
 
+    private void assertMatch(String text, String wildcard, boolean expected) {
+        assertEquals(text + " " + wildcard, expected, WildcardUtils.match(text, wildcard));
+    }
+
+    // A separate set of tests, added to this batch
+    public void testMatch2() {
+        assertMatch("log.txt", "log.txt", true);
+        assertMatch("log.txt1", "log.txt", false);
+
+        assertMatch("log.txt", "log.txt*", true);
+        assertMatch("log.txt", "log.txt*1", false);
+        assertMatch("log.txt", "*log.txt*", true);
+
+        assertMatch("log.txt", "*.txt", true);
+        assertMatch("txt.log", "*.txt", false);
+        assertMatch("config.ini", "*.ini", true);
+
+        assertMatch("config.txt.bak", "con*.txt", false);
+
+        assertMatch("log.txt9", "*.txt?", true);
+        assertMatch("log.txt", "*.txt?", false);
+
+        assertMatch("progtestcase.java~5~", "*test*.java~*~", true);
+        assertMatch("progtestcase.java;5~", "*test*.java~*~", false);
+        assertMatch("progtestcase.java~5", "*test*.java~*~", false);
+
+        assertMatch("log.txt", "log.*", true);
+
+        assertMatch("log.txt", "log?*", true);
+
+        assertMatch("log.txt12", "log.txt??", true);
+    }
+
 }

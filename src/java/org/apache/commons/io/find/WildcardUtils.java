@@ -28,42 +28,65 @@ public class WildcardUtils {
      * matches to a specified wildcard. 
      */
     public static boolean match(String text, String wildcard) {
-        // split wildcard on ? and *
-        // for each element of the array, find a matching block in text
-        // earliest matching block counts
         String[] wcs = splitOnTokens(wildcard);
+  
         int textIdx = 0;
-        for(int i=0; i<wcs.length; i++) {
-            if(textIdx == text.length()) {
-                if("*".equals(wcs[i])) {
-                    return true;
-                }
-                return wcs[i].length() == 0;
-            }
-
-            if("?".equals(wcs[i])) {
+        int wcsIdx = 0;
+        boolean anyChars = false;
+  
+        // loop whilst tokens and text left to process
+        while (wcsIdx < wcs.length && textIdx < text.length()) {
+  
+            // ? so move to next text char
+            if (wcs[wcsIdx].equals("?")) {
                 textIdx++;
             } else
-            if("*".equals(wcs[i])) {
-                int nextIdx = i+1;
-                if(nextIdx == wcs.length) {
-                    return true;
-                }
-                int restartIdx = text.indexOf(wcs[nextIdx], textIdx);
-                if(restartIdx == -1) {
-                    return false;
+            if (!wcs[wcsIdx].equals("*")) {
+                // matching text token
+                if (anyChars) {
+                    // any chars then try to locate text token
+                    textIdx = text.indexOf(wcs[wcsIdx], textIdx);
+  
+                    if (textIdx == -1) {
+                        // token not found
+                        return false;
+                    }
                 } else {
-                    textIdx = restartIdx;
+                    // matching from current position
+                    if (!text.startsWith(wcs[wcsIdx], textIdx)) {
+                        // couldnt match token
+                        return false;
+                    }
                 }
-            } else {
-                if(!text.startsWith(wcs[i], textIdx)) {
-                    return false;
-                } else {
-                    textIdx += wcs[i].length();
-                }
+  
+                // matched text token, move text index to end of matched token
+                textIdx += wcs[wcsIdx].length();
             }
+  
+            // set any chars status
+            anyChars = wcs[wcsIdx].equals("*");
+  
+            wcsIdx++;
         }
 
+        // didnt match all wildcards
+        if (wcsIdx < wcs.length) {
+            // ok if one remaining and wildcard or empty
+            if (wcsIdx + 1 != wcs.length || !(wcs[wcsIdx].equals("*") || wcs[wcsIdx].equals("")) ) {
+                return false;
+            }
+        }
+  
+        // ran out of text chars
+        if (textIdx > text.length()) {
+           return false;
+        }
+  
+        // didnt match all text chars, only ok if any chars set
+        if (textIdx < text.length() && !anyChars) {
+            return false;
+        }
+  
         return true;
     }
 
