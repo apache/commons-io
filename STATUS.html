@@ -7,7 +7,7 @@
    
 <div align="center"> 
 <h1>The Jakarta Commons <em>IO</em> Component</h1>
- $Id: STATUS.html,v 1.5 2002/11/12 08:11:17 bayard Exp $<br>
+ $Id: STATUS.html,v 1.6 2002/12/07 20:26:11 bayard Exp $<br>
  <a href="#Introduction">[Introduction]</a> <a href="#Dependencies">[Dependencies]</a> 
 <a href="#Release%20Info">[Release Info]</a> <a href="#Committers">[Committers]</a> 
 <a href="#Action%20Items">[Action Items]</a> <br>
@@ -62,16 +62,22 @@ to ensure that it continues to meet a variety of needs.</p>
 <p>The following action items need to be completed prior to a Version 1.0 
 release of this component:</p>
 <ul>
-  <li>Compress - Move the compress sub-package out of IO</li>
-  <li>Rewrite the FileFilters to depend on Predicates. This makes AndFileFilter etc unneeded</li>
-  <li>Create a FileFilterUtils for hiding the predicates behind</li>
-  <li>Create a PredicateFileFilter to serve as a predicate adaptor</li>
+  <li>Compress - Move the compress sub-package out of IO - READY</li>
+  <li>Rewrite the FileFilters to depend on Predicates. This makes AndFileFilter etc unneeded - DONE</li>
+  <li>Create a FileFilterUtils for hiding the predicates behind - DONE</li>
+  <li>Create a PredicateFileFilter to serve as a predicate adaptor - DONE</li>
+  <li>Rename FileUtilTest to FileUtilsTest</li>
+  <li>Extract code from IOUtils to CopyUtils? </li>
+  <li>Remove StreamUtils as all its methods are in IOUtils - READY</li>
 </ul>
 <h5>5.1  NEW CODE</h5>
 <ul>
+  <li>ProxyOutput/InputStream. These are predictable Filter-streams. Need to see if FilterWriter/Reader are predictable - DONE</li>
   <li>A CsvReader/Writer set of classes in a csv sub-package</li>
   <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
   <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
+  <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
+  <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
   <li>Finder system. Generic code to find things in things. So FileFinder, ClassFinder, ZipFinder. Probably too big for IO</li>
 </ul>
   
