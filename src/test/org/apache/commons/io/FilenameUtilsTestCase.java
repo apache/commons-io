@@ -30,7 +30,7 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.15 2004/10/30 22:43:21 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.16 2004/10/30 23:12:18 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -73,24 +73,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     /** @see junit.framework.TestCase#tearDown() */
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
-    }
-
-    // removePath
-
-    public void testRemovePath() {
-        String fileName =
-            FilenameUtils.removePath(
-                new File(getTestDirectory(), getName()).getAbsolutePath());
-        assertEquals(getName(), fileName);
-    }
-
-    // getPath
-
-    public void testGetPath() {
-        String fileName =
-            FilenameUtils.getPath(
-                new File(getTestDirectory(), getName()).getAbsolutePath());
-        assertEquals(getTestDirectory().getAbsolutePath(), fileName);
     }
 
     // catPath
@@ -189,40 +171,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         return sb.toString();
     }
 
-    public void testGetExtension() {
-        String[][] tests = {
-                { "filename.ext", "ext" }, 
-                { "README", "" }, 
-                { "domain.dot.com", "com" }, 
-                { "image.jpeg", "jpeg" },
-                { "a.b/c", "" },
-                { "a.b/c.txt", "txt" },
-                { "a/b/c", "" },
-        };
-        for (int i = 0; i < tests.length; i++) {
-            assertEquals(tests[i][1], FilenameUtils.getExtension(tests[i][0]));
-            //assertEquals(tests[i][1], FilenameUtils.extension(tests[i][0]));
-        }
-    }
-
-    public void testGetExtensionWithPaths() {
-        String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "ext" }, {
-                "C:\\temp\\foo\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/filename.ext", "ext" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/README", "" }, {
-                "C:\\temp\\foo.bar\\README", "" }, {
-                "../filename.ext", "ext" }
-        };
-        for (int i = 0; i < testsWithPaths.length; i++) {
-            assertEquals(
-                testsWithPaths[i][1],
-                FilenameUtils.getExtension(testsWithPaths[i][0]));
-            //assertEquals(testsWithPaths[i][1], FilenameUtils.extension(testsWithPaths[i][0]));
-        }
-    }
-
     public void testRemoveExtension() {
         String[][] tests = { 
                 { "filename.ext", "filename" }, 
@@ -314,6 +262,41 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b\\c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a/b.notextension/c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b.notextension\\c"));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testGetPath() {
+        assertEquals(null, FilenameUtils.getPath(null));
+        assertEquals("", FilenameUtils.getPath("noseperator.inthispath"));
+        assertEquals("a/b", FilenameUtils.getPath("a/b/c.txt"));
+        assertEquals("a/b", FilenameUtils.getPath("a/b/c"));
+        assertEquals("a/b/c", FilenameUtils.getPath("a/b/c/"));
+        assertEquals("a\\b", FilenameUtils.getPath("a\\b\\c"));
+    }
+
+    public void testRemovePath() {
+        assertEquals(null, FilenameUtils.getName(null));
+        assertEquals("noseperator.inthispath", FilenameUtils.getName("noseperator.inthispath"));
+        assertEquals("c.txt", FilenameUtils.getName("a/b/c.txt"));
+        assertEquals("c", FilenameUtils.getName("a/b/c"));
+        assertEquals("", FilenameUtils.getName("a/b/c/"));
+        assertEquals("c", FilenameUtils.getName("a\\b\\c"));
+    }
+
+    public void testGetExtension() {
+        assertEquals(null, FilenameUtils.getExtension(null));
+        assertEquals("ext", FilenameUtils.getExtension("file.ext"));
+        assertEquals("", FilenameUtils.getExtension("README"));
+        assertEquals("com", FilenameUtils.getExtension("domain.dot.com"));
+        assertEquals("jpeg", FilenameUtils.getExtension("image.jpeg"));
+        assertEquals("", FilenameUtils.getExtension("a.b/c"));
+        assertEquals("txt", FilenameUtils.getExtension("a.b/c.txt"));
+        assertEquals("", FilenameUtils.getExtension("a/b/c"));
+        assertEquals("", FilenameUtils.getExtension("a.b\\c"));
+        assertEquals("txt", FilenameUtils.getExtension("a.b\\c.txt"));
+        assertEquals("", FilenameUtils.getExtension("a\\b\\c"));
+        assertEquals("", FilenameUtils.getExtension("C:\\temp\\foo.bar\\README"));
+        assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
     }
 
 }

@@ -63,7 +63,7 @@ import java.io.IOException;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.21 2004/10/30 22:43:21 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.22 2004/10/30 23:12:18 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -127,121 +127,6 @@ public class FilenameUtils {
         index = filename.length() - index;
         return filename.substring(0, index);
     }
-
-   /**
-     * Gets the extension of a filename.
-     * <p>
-     * eg
-     * <pre>
-     * foo.txt      --> "txt"
-     * a/b/c.jpg    --> "jpg"
-     * a/b/c        --> ""
-     * a.b/c.txt    --> "txt"
-     * a.b/c        --> ""
-     * </pre>
-     *
-     * @param filename the filename to retrieve the extension of.
-     * @return the extension of filename or an empty string if none exists.
-     */
-    public static String getExtension(String filename) {
-        String suffix = "";
-        String shortFilename = filename;
-        String ifilename = internalize(filename);
-
-        int lastDirSeparator = ifilename.lastIndexOf(INTERNAL_SEPARATOR_CHAR);
-        if (lastDirSeparator > 0) {
-            shortFilename = ifilename.substring(lastDirSeparator + 1);
-        }
-
-        int index = shortFilename.lastIndexOf('.');
-
-        if (index > 0 && index < shortFilename.length() - 1) {
-            suffix = shortFilename.substring(index + 1);
-        }
-
-        return suffix;
-    }
-
-    /**
-     * Remove path from filename. Equivalent to the unix command
-     * <code>basename</code>.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> c.txt
-     * a.txt     --> a.txt
-     * </pre>
-     *
-     * @param filepath the filepath
-     * @return the filename minus path
-     */
-    // KILL? Just use StringUtils?
-    public static String removePath(String filepath) {
-        return removePath(filepath, File.separatorChar);
-    }
-
-    /**
-     * Remove path from filename.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> c.txt
-     * a.txt     --> a.txt
-     * </pre>
-     *
-     * @param filepath the filepath
-     * @param fileSeparatorChar the file separator character to use
-     * @return the filename minus path
-     */
-    // KILL: Why allow the char to be specified?
-    public static String removePath( String filepath, char fileSeparatorChar) {
-        int index = filepath.lastIndexOf(fileSeparatorChar);
-
-        if (-1 == index) {
-            return filepath;
-        } else {
-            return filepath.substring(index + 1);
-        }
-    }
-
-    /**
-     * Get path from filename. Roughly equivalent to the unix command
-     * <code>dirname</code>.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> a/b
-     * a.txt     --> ""
-     * </pre>
-     *
-     * @param filepath the filepath
-     * @return the filename minus path
-     */
-    // KILL? Just use StringUtils?
-    public static String getPath(String filepath) {
-        return getPath(filepath, File.separatorChar);
-    }
-
-    /**
-     * Get path from filename.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> a/b
-     * a.txt     --> ""
-     * </pre>
-     *
-     * @param filepath the filepath
-     * @param fileSeparatorChar the file separator character to use
-     * @return the filename minus path
-     */
-    // KILL: Why allow the char to be specified?
-    public static String getPath( String filepath, char fileSeparatorChar) {
-        int index = filepath.lastIndexOf(fileSeparatorChar);
-        if (-1 == index) {
-            return "";
-        } else {
-            return filepath.substring(0, index);
-        }
-    }
-
-
 
     /**
      * Normalize a path.
@@ -500,16 +385,16 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The position of the last forward or backslash is returned.
      * 
-     * @param path  the path to find the last path separator in
+     * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
      * is no such character.
      */
-    public static int indexOfLastSeparator(String path) {
-        if (path == null) {
+    public static int indexOfLastSeparator(String filename) {
+        if (filename == null) {
             return -1;
         }
-        int lastUnixPos = path.lastIndexOf(UNIX_SEPARATOR);
-        int lastWindowsPos = path.lastIndexOf(WINDOWS_SEPARATOR);
+        int lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR);
+        int lastWindowsPos = filename.lastIndexOf(WINDOWS_SEPARATOR);
         return Math.max(lastUnixPos, lastWindowsPos);
     }
 
@@ -520,17 +405,97 @@ public class FilenameUtils {
      * To do this it uses {@link #indexOfLastSeparator(String)} which will
      * handle a file in either Unix or Windows format.
      * 
-     * @param path  the path to find the last path separator in
+     * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
      * is no such character.
      */
-    public static int indexOfExtension(String path) {
-        if (path == null) {
+    public static int indexOfExtension(String filename) {
+        if (filename == null) {
             return -1;
         }
-        int extensionPos = path.lastIndexOf(EXTENSION_SEPARATOR);
-        int lastSeparator = indexOfLastSeparator(path);
+        int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
+        int lastSeparator = indexOfLastSeparator(filename);
         return (lastSeparator > extensionPos ? -1 : extensionPos);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Gets the path from a full filename.
+     * <p>
+     * This method will handle a file in either Unix or Windows format.
+     * The text before the last forward or backslash is returned.
+     * This method is roughly equivalent to the unix command <code>dirname</code>.
+     * <pre>
+     * a/b/c.txt --> a/b
+     * a.txt     --> ""
+     * a/b/c     --> a/b
+     * a/b/c/    --> a/b/c
+     * </pre>
+     *
+     * @param filename  the filename to query, null returns null
+     * @return the filename minus path
+     */
+    public static String getPath(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfLastSeparator(filename);
+        if (index == -1) {
+            return "";
+        } else {
+            return filename.substring(0, index);
+        }
+    }
+
+    /**
+     * Gets the name minus the path from a full filename.
+     * <p>
+     * This method will handle a file in either Unix or Windows format.
+     * The text after the last forward or backslash is returned.
+     * This method is roughly equivalent to the unix command <code>basename</code>.
+     * <pre>
+     * a/b/c.txt --> c.txt
+     * a.txt     --> a.txt
+     * a/b/c     --> c
+     * a/b/c/    --> ""
+     * </pre>
+     *
+     * @param filename  the filename to query, null returns null
+     * @return the filename minus path
+     */
+    public static String getName(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfLastSeparator(filename);
+        return filename.substring(index + 1);
+    }
+
+    /**
+     * Gets the extension of a filename.
+     * <p>
+     * This method returns the textual part of the filename after the last dot.
+     * There must be no directory separator after the dot.
+     * <pre>
+     * foo.txt      --> "txt"
+     * a/b/c.jpg    --> "jpg"
+     * a/b.txt/c    --> ""
+     * a/b/c        --> ""
+     * </pre>
+     *
+     * @param filename the filename to retrieve the extension of.
+     * @return the extension of filename or an empty string if none exists.
+     */
+    public static String getExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfExtension(filename);
+        if (index == -1) {
+            return "";
+        } else {
+            return filename.substring(index + 1);
+        }
     }
 
 }
