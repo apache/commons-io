@@ -1,9 +1,7 @@
-package org.apache.commons.io.input;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,21 +16,21 @@ package org.apache.commons.io.input;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -53,6 +51,7 @@ package org.apache.commons.io.input;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,27 +62,33 @@ import java.io.FilterInputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
+ * @version $Id: CountingInputStream.java,v 1.2 2003/07/27 17:13:41 jeremias Exp $
  */
 public class CountingInputStream extends FilterInputStream {
 
     private int count;
 
+    /**
+     * Constructs a new CountingInputStream.
+     * @param in InputStream to delegate to
+     */
     public CountingInputStream( InputStream in ) {
         super(in);
     }
 
+    /** @see java.io.InputStream#read(byte[]) */
     public int read(byte[] b) throws IOException {
         count += b.length;
         return super.read(b);
     }
 
+    /** @see java.io.InputStream#read(byte[], int, int) */
     public int read(byte[] b, int off, int len) throws IOException {
         count += len;
         return super.read(b, off, len);
     }
 
-    /// TODO: Decide if this should increment by 2, or 4, or 1 etc.
+    /** @see java.io.InputStream#read() */
     public int read() throws IOException {
         count++;
         return super.read();
@@ -91,6 +96,7 @@ public class CountingInputStream extends FilterInputStream {
 
     /**
      * The number of bytes that have passed through this stream.
+     * @return the number of bytes accumulated
      */
     public int getCount() {
         return this.count;
