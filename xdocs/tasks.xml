@@ -21,7 +21,7 @@
       <p>Javadoc status:</p>
       <ul>
         <li>io.*</li>
-        <li>io.input</li>
+        <li>io.input [SwappedDataInputStream might need work]</li>
         <li>io.output</li>
       </ul>
       <p>
