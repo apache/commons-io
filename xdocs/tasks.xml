@@ -11,9 +11,7 @@
             parameter. Reasoning can be found at
             http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
         <li>FileUtils: This class is a big mess ATM. We need to clean it up.</li>
-        <li>Creation of FilenameUtils: This class will take over the methods with 
-            String filename parameters. FileUtils is only for methods with 
-            java.io.File parameters.</li>
+        <li>FilenameUtils: Fix javadoc links to point to FileUtils. </li>
         <li>Need to see if FilterWriter/Reader are predictable (see also ProxyInput/OutputStream)</li>
         <li>More TestCases!!!</li>
         <li>More Javadocs!!!</li>
