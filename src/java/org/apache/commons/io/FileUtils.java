@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * This class provides basic facilities for manipulating files. 
+ * This class provides basic facilities for manipulating files.
  *
  * <h3>File-related methods</h3>
  * <p>
@@ -43,8 +43,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * {@link #copyFileToDirectory File to a directory},
  * copy a {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
- * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
- * clean} a directory.
+ * as well as methods to {@link #deleteDirectory(File) delete} and
+ * {@link #cleanDirectory(File) clean} a directory.
  * </p>
  *
  * Common {@link java.io.File} manipulation routines.
@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.37 2004/08/13 23:51:41 scolebourne Exp $
+ * @version $Id: FileUtils.java,v 1.38 2004/10/24 04:20:06 martinc Exp $
  */
 public class FileUtils {
 
@@ -87,7 +87,7 @@ public class FileUtils {
      * The number of bytes in a gigabyte.
      */
     public static final long ONE_GB = ONE_KB * ONE_MB;
-    
+
     /**
      * An empty array of type <code>File</code>.
      */
@@ -134,9 +134,17 @@ public class FileUtils {
     }
 
 
-    private static void innerListFiles(Collection files, File directory, IOFileFilter filter) {
-        File[] found = directory.listFiles((FileFilter)filter);
-        if (found != null) { 
+    /**
+     * <p>Finds files within a given directory (and optionally its
+     * subdirectories). All files found are filtered by an IOFileFilter.</p>
+     * @param files the collection of files found.
+     * @param directory the directory to search in.
+     * @param filter the filter to apply to files and directories.
+     */
+    private static void innerListFiles(Collection files, File directory,
+            IOFileFilter filter) {
+        File[] found = directory.listFiles((FileFilter) filter);
+        if (found != null) {
             for (int i = 0; i < found.length; i++) {
                 if (found[i].isDirectory()) {
                     innerListFiles(files, found[i], filter);
@@ -156,17 +164,17 @@ public class FileUtils {
      * @return an array of java.io.File
      */
     public static File[] convertFileCollectionToFileArray(Collection files) {
-         return (File[])files.toArray(new File[files.size()]);
+         return (File[]) files.toArray(new File[files.size()]);
     }
 
 
     /**
-     * <p>Finds files within a given directory (and optionally its 
+     * <p>Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
      * </p>
-     * <p>If your search should recurse into subdirectories you can pass in 
-     * an IOFileFilter for directories. You don't need to bind a 
-     * DirectoryFileFilter (via logical AND) to this filter. This method does 
+     * <p>If your search should recurse into subdirectories you can pass in
+     * an IOFileFilter for directories. You don't need to bind a
+     * DirectoryFileFilter (via logical AND) to this filter. This method does
      * that for you.
      * </p>
      * <p>An example: If you want to search through all directories called
@@ -175,28 +183,30 @@ public class FileUtils {
      * <p>Another common usage of this method is find files in a directory
      * tree but ignoring the directories generated CVS. You can simply pass
      * in <code>FileFilterUtils.makeCVSAware(null)</code>.
-     * </p>  
+     * </p>
      * @param directory the directory to search in
      * @param fileFilter filter to apply when finding files.
-     * @param dirFilter optional filter to apply when finding subdirectories. 
+     * @param dirFilter optional filter to apply when finding subdirectories.
      * If this parameter is null, subdirectories will not be included in the
      * search. Use TrueFileFilter.INSTANCE to match all directories.
      * @return an collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
-    public static Collection listFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+    public static Collection listFiles(File directory, IOFileFilter fileFilter,
+            IOFileFilter dirFilter) {
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter 'directory' is not a directory");
+            throw new IllegalArgumentException(
+                    "Parameter 'directory' is not a directory");
         }
         if (fileFilter == null) {
             throw new NullPointerException("Parameter 'fileFilter' is null");
         }
-        
+
         //Setup effective file filter
-        IOFileFilter effFileFilter = FileFilterUtils.andFileFilter(fileFilter, 
+        IOFileFilter effFileFilter = FileFilterUtils.andFileFilter(fileFilter,
             FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
-            
+
         //Setup effective directory filter
         IOFileFilter effDirFilter;
         if (dirFilter == null) {
@@ -205,14 +215,14 @@ public class FileUtils {
             effDirFilter = FileFilterUtils.andFileFilter(dirFilter,
                 DirectoryFileFilter.INSTANCE);
         }
-        
+
         //Find files
         Collection files = new java.util.LinkedList();
-        innerListFiles(files, directory, 
+        innerListFiles(files, directory,
             FileFilterUtils.orFileFilter(effFileFilter, effDirFilter));
         return files;
     }
-    
+
 
     /**
      * Converts an array of file extensions to suffixes for use
@@ -231,14 +241,15 @@ public class FileUtils {
 
     /**
      * Finds files within a given directory (and optionally its subdirectories)
-     * which match an array of extensions. 
+     * which match an array of extensions.
      * @param directory the directory to search in
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
      * parameter is null, all files are returned.
      * @param recursive If true all subdirectories are searched, too.
      * @return an collection of java.io.File with the matching files
      */
-    public static Collection listFiles(File directory, String[] extensions, boolean recursive) {
+    public static Collection listFiles(File directory, String[] extensions,
+            boolean recursive) {
         IOFileFilter filter;
         if (extensions == null) {
             filter = TrueFileFilter.INSTANCE;
@@ -246,18 +257,20 @@ public class FileUtils {
             String[] suffixes = toSuffixes(extensions);
             filter = new SuffixFileFilter(suffixes);
         }
-        return listFiles(directory, filter, 
+        return listFiles(directory, filter,
             (recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE));
     }
 
 
     /**
-     * <p>Compare the contents of two files to determine if they are equal or not.</p>
+     * <p>Compare the contents of two files to determine if they are equal or
+     * not.</p>
      * <p>Code origin: Avalon</p>
      *
      * @param file1 the first file
      * @param file2 the second file
-     * @return true if the content of the files are equal or they both don't exist, false otherwise
+     * @return true if the content of the files are equal or they both don't
+     * exist, false otherwise
      * @throws IOException in case of an I/O error
      */
     public static boolean contentEquals(File file1, File file2)
@@ -293,13 +306,13 @@ public class FileUtils {
     //-----------------------------------------------------------------------
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
-     * 
+     *
      * @param url  the file URL to convert
      * @return the equivalent <code>File</code> object, or <code>null</code>
      *  if the URL's protocol is not <code>file</code>
      */
     public static File toFile(URL url) {
-        if (url.getProtocol().equals("file") == false) {
+        if (!url.getProtocol().equals("file")) {
             return null;
         } else {
             String filename =
@@ -313,12 +326,12 @@ public class FileUtils {
      * <p>
      * Returns an array of the same size as the input.
      * If the input is null, an empty array is returned.
-     * If the input contains null, the output array contains null at the same index.
-     * 
+     * If the input contains null, the output array contains null at the same
+     * index.
+     *
      * @param urls  the file URLs to convert, null returns empty array
      * @return a non-null array of Files matching the input, with a null item
      *  if there was a null at that index in the input array
-     * @throws IllegalArgumentException if the URL could not be converted to a File
      */
     public static File[] toFiles(URL[] urls) {
         if (urls == null || urls.length == 0) {
@@ -329,7 +342,8 @@ public class FileUtils {
             URL url = urls[i];
             if (url != null) {
                 if (url.getProtocol().equals("file") == false) {
-                    throw new IllegalArgumentException("URL could not be converted to a File: " + url);
+                    throw new IllegalArgumentException(
+                            "URL could not be converted to a File: " + url);
                 }
                 files[i] = toFile(url);
             }
@@ -358,8 +372,9 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
+     * Copy file from source to destination. If
+     * <code>destinationDirectory</code> does not exist, it (and any parent
+     * directories) will be created. If a file <code>source</code> in
      * <code>destinationDirectory</code> exists, it will be overwritten.
      * The copy will have the same file date as the original.
      *
@@ -367,9 +382,11 @@ public class FileUtils {
      * @param destinationDirectory A directory to copy <code>source</code> into.
      *
      * @throws FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException if <code>destinationDirectory</code> isn't a directory.
+     * @throws IllegalArgumentException if <code>destinationDirectory</code>
+     * isn't a directory.
      * @throws IOException if <code>source</code> does not exist, the file in
-     * <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
+     * <code>destinationDirectory</code> cannot be written to, or an IO error
+     * occurs during copying.
      */
     public static void copyFileToDirectory(
         File source,
@@ -377,25 +394,28 @@ public class FileUtils {
         throws IOException {
         if (destinationDirectory.exists()
             && !destinationDirectory.isDirectory()) {
-            throw new IllegalArgumentException("Destination is not a directory");
+            throw new IllegalArgumentException(
+                    "Destination is not a directory");
         }
 
-        copyFile(source, new File(destinationDirectory, source.getName()), true);
+        copyFile(source,
+                new File(destinationDirectory, source.getName()), true);
     }
 
     /**
-     * Copy file from source to destination. The directories up to 
-     * <code>destination</code> will be created if they don't already exist. 
+     * Copy file from source to destination. The directories up to
+     * <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      * The copy will have the same file date as the original.
      *
-     * @param source An existing non-directory <code>File</code> to copy 
+     * @param source An existing non-directory <code>File</code> to copy
      * bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to 
+     * @param destination A non-directory <code>File</code> to write bytes to
      * (possibly overwriting).
      *
-     * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
-     * written to, or an IO error occurs during copying.
+     * @throws IOException if <code>source</code> does not exist,
+     * <code>destination</code> cannot be written to, or an IO error occurs
+     * during copying.
      *
      * @throws FileNotFoundException if <code>destination</code> is a directory
      * (use {@link #copyFileToDirectory}).
@@ -404,28 +424,30 @@ public class FileUtils {
                 throws IOException {
         copyFile(source, destination, true);
     }
-                
-                
+
+
     /**
-     * Copy file from source to destination. The directories up to 
-     * <code>destination</code> will be created if they don't already exist. 
+     * Copy file from source to destination. The directories up to
+     * <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      *
-     * @param source An existing non-directory <code>File</code> to copy 
+     * @param source An existing non-directory <code>File</code> to copy
      * bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to 
+     * @param destination A non-directory <code>File</code> to write bytes to
      * (possibly overwriting).
      * @param preserveFileDate True if the file date of the copy should be the
      * same as the original.
      *
-     * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
-     * written to, or an IO error occurs during copying.
+     * @throws IOException if <code>source</code> does not exist,
+     * <code>destination</code> cannot be written to, or an IO error occurs
+     * during copying.
      *
      * @throws FileNotFoundException if <code>destination</code> is a directory
      * (use {@link #copyFileToDirectory}).
      */
-    public static void copyFile(File source, File destination, boolean preserveFileDate)
-                throws IOException {
+    public static void copyFile(File source, File destination,
+            boolean preserveFileDate)
+            throws IOException {
         //check source exists
         if (!source.exists()) {
             String message = "File " + source + " does not exist";
@@ -445,7 +467,7 @@ public class FileUtils {
             throw new IOException(message);
         }
 
-        //makes sure it is not the same file        
+        //makes sure it is not the same file
         if (source.getCanonicalPath().equals(destination.getCanonicalPath())) {
             String message =
                 "Unable to write file " + source + " on itself.";
@@ -472,21 +494,22 @@ public class FileUtils {
                     + destination;
             throw new IOException(message);
         }
-        
+
         if (preserveFileDate) {
             //file copy should preserve file date
-            destination.setLastModified(source.lastModified());        
+            destination.setLastModified(source.lastModified());
         }
     }
 
     /**
-     * Copies bytes from the URL <code>source</code> to a file <code>destination</code>.
-     * The directories up to <code>destination</code> will be created if they don't already exist.
-     * <code>destination</code> will be overwritten if it already exists.
+     * Copies bytes from the URL <code>source</code> to a file
+     * <code>destination</code>. The directories up to <code>destination</code>
+     * will be created if they don't already exist. <code>destination</code>
+     * will be overwritten if it already exists.
      *
      * @param source A <code>URL</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     * overwriting).
+     * @param destination A non-directory <code>File</code> to write bytes to
+     * (possibly overwriting).
      *
      * @throws IOException if
      * <ul>
@@ -598,7 +621,9 @@ public class FileUtils {
             }
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException ignore) {} catch (Exception ex) {
+            } catch (InterruptedException ignore) {
+                ;
+            } catch (Exception ex) {
                 break;
             }
         }
@@ -667,7 +692,7 @@ public class FileUtils {
      * @throws UnsupportedEncodingException if the encoding is not supported
      *   by the VM
      */
-    public static void writeStringToFile(File file, 
+    public static void writeStringToFile(File file,
             String data, String encoding) throws IOException {
         OutputStream out = new FileOutputStream(file);
         try {
@@ -705,7 +730,7 @@ public class FileUtils {
      * </p>
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
-     * <li>You get exceptions when a file or directory cannot be deleted. 
+     * <li>You get exceptions when a file or directory cannot be deleted.
      *      (java.io.File methods returns a boolean)</li>
      * </ul>
      * @param file file or directory to delete.
@@ -807,7 +832,7 @@ public class FileUtils {
                 throw new IOException(message);
             }
         } else {
-            if (false == directory.mkdirs()) {
+            if (!directory.mkdirs()) {
                 String message =
                     "Unable to create directory " + directory;
                 throw new IOException(message);
@@ -847,33 +872,37 @@ public class FileUtils {
 
         return size;
     }
-   
+
      /**
-      * Tests if the specified <code>File</code> is newer than the reference 
+      * Tests if the specified <code>File</code> is newer than the reference
       * <code>File</code>.
       *
-      * @param file the <code>File</code> of which the modification date must be compared
-      * @param reference the <code>File</code> of which the modification date is used 
+      * @param file the <code>File</code> of which the modification date must
+      * be compared.
+      * @param reference the <code>File</code> of which the modification date
+      * is used.
       * like reference
-      * @return true if the <code>File</code> exists and has been modified more recently
-      * than the reference <code>File</code>.
+      * @return true if the <code>File</code> exists and has been modified more
+      * recently than the reference <code>File</code>.
       */
      public static boolean isFileNewer(File file, File reference) {
          if (reference == null) {
              throw new IllegalArgumentException("No specified reference file");
          }
          if (!reference.exists()) {
-             throw new IllegalArgumentException("The reference file '" + file + "' doesn't exist");
+             throw new IllegalArgumentException(
+                    "The reference file '" + file + "' doesn't exist");
          }
- 
+
          return isFileNewer(file, reference.lastModified());
      }
- 
+
      /**
-      * Tests if the specified <code>File</code> is newer than the specified 
-      * <code>Date</code>
+      * Tests if the specified <code>File</code> is newer than the specified
+      * <code>Date</code>.
       *
-      * @param file the <code>File</code> of which the modification date must be compared
+      * @param file the <code>File</code> of which the modification date must be
+      * compared.
       * @param date the date reference
       * @return true if the <code>File</code> exists and has been modified after
       * the given <code>Date</code>.
@@ -884,13 +913,15 @@ public class FileUtils {
          }
          return isFileNewer(file, date.getTime());
      }
- 
+
      /**
-      * Tests if the specified <code>File</code> is newer than the specified 
+      * Tests if the specified <code>File</code> is newer than the specified
       * time reference.
       *
-      * @param file the <code>File</code> of which the modification date must be compared.
-      * @param timeMillis the time reference measured in milliseconds since the epoch 
+      * @param file the <code>File</code> of which the modification date must
+      * be compared.
+      * @param timeMillis the time reference measured in milliseconds since the
+      * epoch
       * (00:00:00 GMT, January 1, 1970)
       * @return true if the <code>File</code> exists and has been modified after
       * the given time reference.
@@ -902,7 +933,7 @@ public class FileUtils {
          if (!file.exists()) {
              return false;
          }
- 
+
          return file.lastModified() > timeMillis;
     }
 
