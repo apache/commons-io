@@ -1,0 +1,23 @@
+$Id: RELEASE-NOTES.txt,v 1.1 2002/01/25 19:06:14 sanders Exp $
+
+			 Commons I/O Package
+			   Version 1.0-dev
+			    Release Notes
+
+
+INTRODUCTION:
+
+This document contains the release notes for this version of the Commons
+I/O package, and highlights changes since the previous version.  The
+current release adds new features and bug fixes, and is being done now to
+follow the release early/release often mentality.
+
+
+NEW FEATURES:
+
+* 
+
+
+BUG FIXES:
+
+
