@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -43,7 +42,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Stephen Colebourne
- * @version CVS $Revision: 1.17 $ $Date: 2004/07/31 09:52:09 $
+ * @version CVS $Revision: 1.18 $ $Date: 2004/07/31 11:26:39 $
  */
 public class IOUtils {
 
@@ -130,6 +129,9 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
      * 
      * @param input  the <code>InputStream</code> to read from
      * @return the requested byte array
@@ -145,6 +147,9 @@ public class IOUtils {
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
      * using the default character encoding of the platform.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
      * 
      * @param input  the <code>Reader</code> to read from
      * @return the requested byte array
@@ -163,12 +168,16 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
      * 
      * @param input  the <code>Reader</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
+     * @since 1.1
      */
     public static byte[] toByteArray(Reader input, String encoding) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -185,32 +194,11 @@ public class IOUtils {
      * @param input  the <code>String</code> to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
-     *  (never happens, but can't remove due to backwards compatibility)
+     * @throws IOException if an I/O error occurs (never occurs)
+     * @deprecated Use {@link String#getBytes()}
      */
     public static byte[] toByteArray(String input) throws IOException {
         return input.getBytes();
-    }
-
-    /**
-     * Get the contents of a <code>String</code> as a <code>byte[]</code>
-     * using the specified character encoding.
-     * <p>
-     * This is based on {@link String#getBytes(String)}.
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
-     * 
-     * @param input  the <code>String</code> to convert
-     * @param encoding  the encoding to use, null means platform default
-     * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws UnsupportedEncodingException if the named charset is not supported
-     */
-    public static byte[] toByteArray(String input, String encoding) throws UnsupportedEncodingException {
-        if (encoding == null) {
-            return input.getBytes();
-        }
-        return input.getBytes(encoding);
     }
 
     // toString
@@ -218,6 +206,9 @@ public class IOUtils {
     /**
      * Get the contents of an <code>InputStream</code> as a String
      * using the default character encoding of the platform.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
      * 
      * @param input  the <code>InputStream</code> to read from
      * @return the requested String
@@ -236,6 +227,9 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param encoding  the encoding to use, null means platform default
@@ -251,6 +245,9 @@ public class IOUtils {
 
     /**
      * Get the contents of a <code>Reader</code> as a String.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
      * 
      * @param input  the <code>Reader</code> to read from
      * @return the requested String
@@ -270,12 +267,11 @@ public class IOUtils {
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs (never occurs)
+     * @deprecated Use {@link String#String(byte[])}
      */
     public static String toString(byte[] input) throws IOException {
-        StringWriter sw = new StringWriter();
-        CopyUtils.copy(input, sw);
-        return sw.toString();
+        return new String(input);
     }
 
     /**
@@ -289,17 +285,22 @@ public class IOUtils {
      * @param encoding  the encoding to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs (never occurs)
+     * @deprecated Use {@link String#String(byte[],String)}
      */
     public static String toString(byte[] input, String encoding) throws IOException {
-        StringWriter sw = new StringWriter();
-        CopyUtils.copy(input, sw, encoding);
-        return sw.toString();
+        if (encoding == null) {
+            return new String(input);
+        } else {
+            return new String(input, encoding);
+        }
     }
 
     //-----------------------------------------------------------------------
     /**
      * Compare the contents of two Streams to determine if they are equal or not.
+     * <p>
+     * This method buffers the input internally using <code>BufferedInputStream</code>.
      *
      * @param input1  the first stream
      * @param input2  the second stream
