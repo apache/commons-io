@@ -5,7 +5,7 @@
  * version 1.1, a copy of which has been included with this distribution in
  * the LICENSE.txt file.
  */
-package org.apache.commons.compress.tar;
+package org.apache.commons.io.compress.tar;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
