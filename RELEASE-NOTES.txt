@@ -1,4 +1,4 @@
-$Id: RELEASE-NOTES.txt,v 1.4 2004/04/18 06:14:52 bayard Exp $
+$Id: RELEASE-NOTES.txt,v 1.5 2004/04/18 22:04:50 bayard Exp $
 
 			 Commons IO Package
 			   Version 1.0
@@ -24,3 +24,4 @@ NEW FEATURES:
 BUG FIXES:
 
 Since this is the first release, there are no declared bugfixes.
+
