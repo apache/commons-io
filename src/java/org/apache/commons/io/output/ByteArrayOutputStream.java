@@ -42,7 +42,7 @@ import java.util.List;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: ByteArrayOutputStream.java,v 1.7 2004/02/23 04:48:17 bayard Exp $
+ * @version $Id: ByteArrayOutputStream.java,v 1.8 2004/04/24 19:24:09 jeremias Exp $
  */
 public class ByteArrayOutputStream extends OutputStream {
 
@@ -79,11 +79,6 @@ public class ByteArrayOutputStream extends OutputStream {
         return (byte[])buffers.get(index);
     }
 
-    /* unused ATM
-    private int getCurrentCapacity() {
-        return filledBufferSum + currentBuffer.length;
-    }*/
-    
     private void needNewBuffer(int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             //Recycling old buffer
