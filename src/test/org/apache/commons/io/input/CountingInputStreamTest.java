@@ -62,5 +62,21 @@ public class CountingInputStreamTest extends TestCase {
         String textResult = new String(result).trim();
         assertEquals(textResult, text);
     }
+
+    public void testResetting() throws Exception {
+        String text = "A piece of text";
+        byte[] bytes = text.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        byte[] result = new byte[bytes.length];
+
+        int found = cis.read(result, 0, 5);
+        assertEquals( found, cis.getCount() );
+
+        int count = cis.resetCount();
+        found = cis.read(result, 6, 5);
+        assertEquals( found, cis.getCount() );
+    }
 }
 
