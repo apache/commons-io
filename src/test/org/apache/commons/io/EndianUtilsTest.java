@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.3 2003/11/26 08:15:32 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2003/11/26 08:15:32 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.4 2003/11/27 04:08:14 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/11/27 04:08:14 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.3 $ $Date: 2003/11/26 08:15:32 $
+ * @version $Revision: 1.4 $ $Date: 2003/11/27 04:08:14 $
  */
 
 public class EndianUtilsTest extends TestCase {
@@ -129,6 +129,52 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( f1, EndianUtils.swapFloat( EndianUtils.swapFloat( f1 ) ), 0.0 );
         double d1 = Double.longBitsToDouble( 0x0102030405060708L );
         assertEquals( d1, EndianUtils.swapDouble( EndianUtils.swapDouble( d1 ) ), 0.0 );
+    }
+
+    public void testReadSwappedShort() {
+        byte[] bytes = new byte[] { 0x02, 0x01 };
+        assertEquals( 0x0102, EndianUtils.readSwappedShort( bytes, 0 ) );
+    }
+
+    public void testWriteSwappedShort() {
+        byte[] bytes = new byte[2];
+        EndianUtils.writeSwappedShort( bytes, 0, (short) 0x0102 );
+        assertEquals( 0x02, bytes[0] );
+        assertEquals( 0x01, bytes[1] );
+    }
+
+    public void testReadSwappedInteger() {
+        byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
+        int ln = EndianUtils.readSwappedInteger( bytes, 0 );
+        assertEquals( 0x01020304, EndianUtils.readSwappedInteger( bytes, 0 ) );
+    }
+
+    public void testWriteSwappedInteger() {
+        byte[] bytes = new byte[4];
+        EndianUtils.writeSwappedInteger( bytes, 0, 0x01020304 );
+        assertEquals( 0x04, bytes[0] );
+        assertEquals( 0x03, bytes[1] );
+        assertEquals( 0x02, bytes[2] );
+        assertEquals( 0x01, bytes[3] );
+    }
+
+    public void testReadSwappedLong() {
+        byte[] bytes = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
+        long ln = EndianUtils.readSwappedLong( bytes, 0 );
+        assertEquals( 0x0102030405060708L, EndianUtils.readSwappedLong( bytes, 0 ) );
+    }
+
+    public void testWriteSwappedLong() {
+        byte[] bytes = new byte[8];
+        EndianUtils.writeSwappedLong( bytes, 0, 0x0102030405060708L );
+        assertEquals( 0x08, bytes[0] );
+        assertEquals( 0x07, bytes[1] );
+        assertEquals( 0x06, bytes[2] );
+        assertEquals( 0x05, bytes[3] );
+        assertEquals( 0x04, bytes[4] );
+        assertEquals( 0x03, bytes[5] );
+        assertEquals( 0x02, bytes[6] );
+        assertEquals( 0x01, bytes[7] );
     }
 
     /*
