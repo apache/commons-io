@@ -7,9 +7,6 @@
         release of this component:
       </p>
       <ul>
-        <li>IOUtils: Remove the toByteArray() variants with the bufferSize
-            parameter. [Jeremias]   Reasoning can be found at
-            http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
         <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>IOUtilsTestCase: Move copy tests over to CopyUtilsTestCase or kill them. [Hen]</li>
         <li>Re-enable test case for:  IOUtilTestCase</li>
