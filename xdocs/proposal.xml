@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="xdoc.xsl"?>
-<!-- $Revision: 1.1 $ $Date: 2004/02/18 09:01:22 $ -->
+<!-- $Revision: 1.2 $ $Date: 2004/02/18 09:40:34 $ -->
 <document>
 <properties>
   <title>Proposal for IO Package</title>
@@ -8,7 +8,7 @@
  <body>
   
  
-<section name="Proposal for <em>IO</em> Package">
+<section name="Proposal for IO Package">
  
   
 
