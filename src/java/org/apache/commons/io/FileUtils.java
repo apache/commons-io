@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.24 2003/12/30 15:24:01 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.25 2003/12/30 16:27:42 jeremias Exp $
  */
 public class FileUtils {
 
@@ -192,7 +192,7 @@ public class FileUtils {
      * @param files a Collection containing java.io.File instances
      * @return an array of java.io.File
      */
-    public File[] convertFileCollectionToFileArray(Collection files) {
+    public static File[] convertFileCollectionToFileArray(Collection files) {
          return (File[])files.toArray(new File[files.size()]);
     }
 
