@@ -56,7 +56,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.FilterOutputStream;
+import org.apache.commons.io.ProxyOutputStream;
 
 /**
  * Classic splitter of OutputStream. Named after the unix 'tee' 
@@ -64,15 +64,20 @@ import java.io.FilterOutputStream;
  * are now two streams.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: TeeOutputStream.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
+ * @version $Id: TeeOutputStream.java,v 1.2 2002/12/07 20:31:08 bayard Exp $
  */
-public class TeeOutputStream extends FilterOutputStream {
+public class TeeOutputStream extends ProxyOutputStream {
 
     protected OutputStream branch;
 
     public TeeOutputStream( OutputStream out, OutputStream branch ) {
         super(out);
         this.branch = branch;
+    }
+
+    public synchronized void write(byte[] b) throws IOException {
+        super.write(b);
+        this.branch.write(b);
     }
 
     public synchronized void write(byte[] b, int off, int len) throws IOException {
@@ -87,12 +92,12 @@ public class TeeOutputStream extends FilterOutputStream {
 
     public void flush() throws IOException {
         super.flush();
-        branch.flush();
+        this.branch.flush();
     }
 
     public void close() throws IOException {
         super.close();
-        branch.close();
+        this.branch.close();
     }
 
 }
