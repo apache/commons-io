@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.4 2003/12/30 07:00:03 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/12/30 07:00:03 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.5 2003/12/30 07:06:46 bayard Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/12/30 07:06:46 $
  *
  * ====================================================================
  *
@@ -147,7 +147,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             FileOutputStream fout = new FileOutputStream( destination );
             try {
-                int count = IOUtils.copy( fin, fout );
+                int count = CopyUtils.copy( fin, fout );
                 assertTrue( "Not all bytes were read", fin.available() == 0 );
                 assertEquals( "Number of bytes read should equal file size", m_testFile.length(), count );
                 fout.flush();
@@ -171,7 +171,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             FileWriter fout = new FileWriter( destination );
             try {
-                IOUtils.copy( fin, fout );
+                CopyUtils.copy( fin, fout );
 
                 assertTrue( "Not all bytes were read", fin.available() == 0 );
                 fout.flush();
@@ -210,10 +210,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             FileOutputStream fout = new FileOutputStream( destination );
             try {
-                IOUtils.copy( fin, fout );
+                CopyUtils.copy( fin, fout );
                 //Note: this method *does* flush. It is equivalent to:
                 //  OutputStreamWriter _out = new OutputStreamWriter(fout);
-                //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
+                //  CopyUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
                 //  _out.flush();
                 //  out = fout;
     
@@ -237,7 +237,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             FileWriter fout = new FileWriter( destination );
             try {
-                int count = IOUtils.copy( fin, fout );
+                int count = CopyUtils.copy( fin, fout );
                 assertEquals( "The number of characters returned by copy is wrong", m_testFile.length(), count);
 
                 fout.flush();
@@ -282,10 +282,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         
         FileOutputStream fout = new FileOutputStream( destination );
         try {
-            IOUtils.copy( str, fout );
+            CopyUtils.copy( str, fout );
             //Note: this method *does* flush. It is equivalent to:
             //  OutputStreamWriter _out = new OutputStreamWriter(fout);
-            //  IOUtils.copy( str, _out, 4096 ); // copy( Reader, Writer, int );
+            //  CopyUtils.copy( str, _out, 4096 ); // copy( Reader, Writer, int );
             //  _out.flush();
             //  out = fout;
             // note: we don't flush here; this IOUtils method does it for us
@@ -313,7 +313,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         
         FileWriter fout = new FileWriter( destination );
         try {
-            IOUtils.copy( str, fout );
+            CopyUtils.copy( str, fout );
             fout.flush();
 
             checkFile( destination, m_testFile );
@@ -370,7 +370,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         FileWriter fout = new FileWriter( destination );
         try {
-            IOUtils.copy( in, fout );
+            CopyUtils.copy( in, fout );
             fout.flush();
             checkFile( destination, m_testFile );
             checkWrite( fout );
@@ -409,7 +409,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         FileOutputStream fout = new FileOutputStream( destination );
         try {
-            IOUtils.copy( in, fout );
+            CopyUtils.copy( in, fout );
 
             fout.flush();
 
