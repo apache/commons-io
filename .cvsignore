@@ -6,3 +6,4 @@ io.ipr
 .classpath
 .checkstyle
 bin
+*.log
