@@ -55,7 +55,7 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.17 2004/10/29 21:34:56 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.18 2004/10/29 21:38:49 bayard Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -68,7 +68,7 @@ public class FilenameUtils {
     /**
      * Standard separator string used when internalizing paths.
      */
-    // KILL
+    // KILL? It's here to match symmetry of File.separator and to promote its use
     private static final String INTERNAL_SEPARATOR = "/";
 
     /**
@@ -202,9 +202,7 @@ public class FilenameUtils {
      * @return the filename minus path
      */
     // KILL: Why allow the char to be specified?
-    public static String removePath(
-        String filepath,
-        char fileSeparatorChar) {
+    public static String removePath( String filepath, char fileSeparatorChar) {
         int index = filepath.lastIndexOf(fileSeparatorChar);
 
         if (-1 == index) {
@@ -244,9 +242,7 @@ public class FilenameUtils {
      * @return the filename minus path
      */
     // KILL: Why allow the char to be specified?
-    public static String getPath(
-        String filepath,
-        char fileSeparatorChar) {
+    public static String getPath( String filepath, char fileSeparatorChar) {
         int index = filepath.lastIndexOf(fileSeparatorChar);
         if (-1 == index) {
             return "";
@@ -340,8 +336,8 @@ public class FilenameUtils {
      * @param lookupPath the base path to attach to
      * @param path path the second path to attach to the first
      * @return The concatenated paths, or null if error occurs
-     * @todo UNIX/Windows only. Is this a problem?
      */
+     // TODO UNIX/Windows only. Is this a problem?
     public static String catPath(String lookupPath, String path) {
         // Cut off the last slash and everything beyond
         int index = indexOfLastPathSeparator(lookupPath);
@@ -391,8 +387,8 @@ public class FilenameUtils {
      * <code>filename</code> is relative.
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
-     * @todo Decide whether this is worth keeping?
      */
+     // KILL? Decide whether this is worth keeping?
     public static File resolveFile(File baseFile, String filename) {
         String filenm = filename;
         if ('/' != File.separatorChar) {
@@ -460,7 +456,7 @@ public class FilenameUtils {
      * @param path The path to be internalized.
      * @return The internalized path.
      */
-    // KILL: Inline into the one place this is used
+    // KILL: Inline into the one place this is used?
     private static String internalize(String path) {
         return path.replace('\\', INTERNAL_SEPARATOR_CHAR);
     }
@@ -471,7 +467,7 @@ public class FilenameUtils {
      * @param path The path to be externalized.
      * @return The externalized path.
      */
-    // KILL: Nothing uses this
+    // KILL: Nothing uses this. It exists as symmetry of internalize and to promote its use
     private static String externalize(String path) {
         if (INTERNAL_SEPARATOR_CHAR != File.separatorChar) {
             path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
