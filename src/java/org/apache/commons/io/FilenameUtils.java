@@ -38,7 +38,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.7 2004/02/23 04:35:59 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.8 2004/03/12 21:58:59 jeremias Exp $
  */
 public class FilenameUtils {
 
@@ -263,38 +263,61 @@ public class FilenameUtils {
     }
 
     /**
-     * Will concatenate 2 paths.  Paths with <code>..</code> will be
-     * properly handled.
-     * <p>Eg.,<br />
+     * Will concatenate 2 paths. Paths with <code>..</code> will be
+     * properly handled. The path separator between the 2 paths is the 
+     * system default path separator.
+     *
+     * <p>Eg. on UNIX,<br />
      * <code>/a/b/c</code> + <code>d</code> = <code>/a/b/d</code><br />
      * <code>/a/b/c</code> + <code>../d</code> = <code>/a/d</code><br />
      * </p>
      *
+     * <p>Eg. on Microsoft Windows,<br />
+     * <code>C:\a\b\c</code> + <code>d</code> = <code>C:\a\b\d</code><br />
+     * <code>C:\a\b\c</code> + <code>..\d</code> = <code>C:\a\d</code><br />
+     * <code>/a/b/c</code> + <code>d</code> = <code>/a/b\d</code><br />
+     * </p>
+     *
      * Thieved from Tomcat sources...
      *
+     * @param lookupPath the base path to attach to
+     * @param path path the second path to attach to the first
      * @return The concatenated paths, or null if error occurs
      */
     public static String catPath( String lookupPath, String path) {
         // Cut off the last slash and everything beyond
-        int index = lookupPath.lastIndexOf("/");
+        int index = indexOfLastPathSeparator(lookupPath);
         String lookup = lookupPath.substring(0, index);
         String pth = path;
 
         // Deal with .. by chopping dirs off the lookup path
-        while (pth.startsWith("../")) {
+        while (pth.startsWith("../") || pth.startsWith("..\\")) {
             if (lookup.length() > 0) {
-                index = lookup.lastIndexOf("/");
+                index = indexOfLastPathSeparator(lookup);
                 lookup = lookup.substring(0, index);
             } else {
                 // More ..'s than dirs, return null
                 return null;
             }
 
-            index = pth.indexOf("../") + 3;
-            pth = pth.substring(index);
+            pth = pth.substring(3);
         }
 
-        return new StringBuffer(lookup).append("/").append(pth).toString();
+        return new StringBuffer(lookup).append(File.separator).append(pth).toString();
+    }
+    
+    /**
+     * Return the index of the last 'path separator' character. The 'path separator'
+     * character is '/' for UNIX systems and '\' for Microsoft Windows systems.
+     * 
+     * @param path The path to find the last path separator in
+     * @return The index of the last 'path separator' character, or -1 if there
+     * is no such character.
+     */
+    public static int indexOfLastPathSeparator(String path) {
+        int lastUnixPos = path.lastIndexOf('/');
+        int lastWindowsPos = path.lastIndexOf('\\');
+        return Math.max(lastUnixPos, lastWindowsPos);
     }
 
     /**
