@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.3 2002/10/26 06:24:15 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2002/10/26 06:24:15 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.4 2003/07/03 14:43:27 jeremias Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/07/03 14:43:27 $
  *
  * ====================================================================
  *
@@ -211,8 +211,9 @@ public final class IOUtilTestCase
         final FileInputStream fin = new FileInputStream( m_testFile );
         final FileOutputStream fout = new FileOutputStream( destination );
 
-        IOUtil.copy( fin, fout );
+        int count = IOUtil.copy( fin, fout );
         assertTrue( "Not all bytes were read", fin.available() == 0 );
+        assertEquals( "Number of bytes read should equal file size", m_testFile.length(), count );
         fout.flush();
 
         checkFile( destination );
@@ -280,7 +281,8 @@ public final class IOUtilTestCase
         final File destination = newFile( "copy4.txt" );
         final FileReader fin = new FileReader( m_testFile );
         final FileWriter fout = new FileWriter( destination );
-        IOUtil.copy( fin, fout );
+        int count = IOUtil.copy( fin, fout );
+        assertEquals( "The number of characters returned by copy is wrong", m_testFile.length(), count);
 
         fout.flush();
         checkFile( destination );
