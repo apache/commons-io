@@ -64,7 +64,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.10 $ $Date: 2004/01/02 07:43:34 $
+ * @version CVS $Revision: 1.11 $ $Date: 2004/01/02 07:53:46 $
  */
 public final class EndianUtils
 {
@@ -444,23 +444,9 @@ public final class EndianUtils
     public static long readSwappedLong( InputStream input )
         throws IOException
     {
-        int value1 = read( input );
-        int value2 = read( input );
-        int value3 = read( input );
-        int value4 = read( input );
-        int value5 = read( input );
-        int value6 = read( input );
-        int value7 = read( input );
-        int value8 = read( input );
-
-        return (long)( ( ( value1 & 0xff ) << 0 ) +
-            ( ( value2 & 0xff ) << 8 ) +
-            ( ( value3 & 0xff ) << 16 ) +
-            ( ( value4 & 0xff ) << 24 ) +
-            ( ( value5 & 0xff ) << 32 ) +
-            ( ( value6 & 0xff ) << 40 ) +
-            ( ( value7 & 0xff ) << 48 ) +
-            ( ( value8 & 0xff ) << 56 ) );
+        byte[] bytes = new byte[8];
+        input.read( bytes );
+        return readSwappedLong( bytes, 0 );
     }
 
     /**
