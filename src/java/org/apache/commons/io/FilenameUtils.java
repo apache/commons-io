@@ -55,7 +55,8 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.13 2004/10/24 18:34:23 martinc Exp $
+ * @version $Id: FilenameUtils.java,v 1.14 2004/10/25 23:27:41 scolebourne Exp $
+ * @since Commons IO 1.1
  */
 public class FilenameUtils {
 
@@ -462,33 +463,6 @@ public class FilenameUtils {
             path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
         }
         return path;
-    }
-
-    // DEPRECATED. Though no replacement exists.
-
-    /**
-     * Returns the filename portion of a file specification string.
-     * Matches the equally named unix command.
-     * @param filename filename to inspect
-     * @param suffix additional remaining portion of name that if matches will
-     * be removed
-     * @return The filename string without the suffix.
-     * @deprecated This method will be deleted.
-     */
-    public static String basename(String filename, String suffix) {
-        int i = filename.lastIndexOf(File.separator) + 1;
-        int lastDot =
-            ((suffix != null) && (suffix.length() > 0))
-                ? filename.lastIndexOf(suffix)
-                : -1;
-
-        if (lastDot >= 0) {
-            return filename.substring(i, lastDot);
-        } else if (i > 0) {
-            return filename.substring(i);
-        } else {
-            return filename; // else returns all (no path and no extension)
-        }
     }
 
 }
