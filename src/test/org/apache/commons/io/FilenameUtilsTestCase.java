@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.21 2004/11/27 01:22:05 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.22 2004/11/27 17:00:51 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -79,18 +79,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     /** @see junit.framework.TestCase#tearDown() */
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
-    }
-
-    //-----------------------------------------------------------------------
-    public void testCatPath() {
-        // TODO StringIndexOutOfBoundsException thrown if file doesn't contain slash.
-        // Is this acceptable?
-        //assertEquals("", FilenameUtils.catPath("a", "b"));
-
-        assertEquals("/a" + File.separator + "c", FilenameUtils.catPath("/a/b", "c"));
-        assertEquals("/a" + File.separator + "d", FilenameUtils.catPath("/a/b/c", "../d"));
-        assertEquals("C:\\a" + File.separator + "c", FilenameUtils.catPath("C:\\a\\b", "c"));
-        assertEquals("C:\\a" + File.separator + "d", FilenameUtils.catPath("C:\\a\\b\\c", "../d"));
     }
 
     //-----------------------------------------------------------------------
@@ -213,6 +201,37 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(null, FilenameUtils.normalize("//server/../a"));
         assertEquals(null, FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testConcat() {
+        assertEquals(null, FilenameUtils.concat("", null));
+        assertEquals(null, FilenameUtils.concat(null, null));
+        assertEquals(null, FilenameUtils.concat(null, ""));
+        assertEquals(null, FilenameUtils.concat(null, "a"));
+        assertEquals(SEP + "a", FilenameUtils.concat(null, "/a"));
+        
+        assertEquals(null, FilenameUtils.concat("", ":")); // invalid prefix
+        assertEquals(null, FilenameUtils.concat(":", "")); // invalid prefix
+        
+        assertEquals("f", FilenameUtils.concat("", "f/"));
+        assertEquals("f", FilenameUtils.concat("", "f"));
+        assertEquals("a" + SEP + "f", FilenameUtils.concat("a/", "f/"));
+        assertEquals("a" + SEP + "f", FilenameUtils.concat("a", "f"));
+        assertEquals("a" + SEP + "b" + SEP + "f", FilenameUtils.concat("a/b/", "f/"));
+        assertEquals("a" + SEP + "b" + SEP + "f", FilenameUtils.concat("a/b", "f"));
+        
+        assertEquals("a" + SEP + "f", FilenameUtils.concat("a/b/", "../f/"));
+        assertEquals("a" + SEP + "f", FilenameUtils.concat("a/b", "../f"));
+        assertEquals("a" + SEP + "c" + SEP + "g", FilenameUtils.concat("a/b/../c/", "f/../g/"));
+        assertEquals("a" + SEP + "c" + SEP + "g", FilenameUtils.concat("a/b/../c", "f/../g"));
+        
+        assertEquals("a" + SEP + "c.txt" + SEP + "f", FilenameUtils.concat("a/c.txt", "f"));
+        
+        assertEquals(SEP + "f", FilenameUtils.concat("", "/f/"));
+        assertEquals(SEP + "f", FilenameUtils.concat("", "/f"));
+        assertEquals(SEP + "f", FilenameUtils.concat("a/", "/f/"));
+        assertEquals(SEP + "f", FilenameUtils.concat("a", "/f"));
     }
 
     //-----------------------------------------------------------------------
