@@ -1,5 +1,5 @@
 /*
- * Copyright 2003,2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.io.output;
  
 import java.io.IOException;
@@ -21,22 +20,26 @@ import java.io.OutputStream;
 
 /**
  * This OutputStream writes all data to the famous <b>/dev/null</b>.
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: NullOutputStream.java,v 1.4 2004/02/23 04:40:29 bayard Exp $
+ * <p>
+ * This output stream has no destination (file/socket etc.) and all
+ * bytes written to it are ignored and lost.
+ * 
+ * @author Jeremias Maerki
+ * @version $Id$
  */
 public class NullOutputStream extends OutputStream {
 
     /**
      * @see java.io.OutputStream#write(byte[], int, int)
      */
-    public synchronized void write(byte[] b, int off, int len) {
+    public void write(byte[] b, int off, int len) {
         //to /dev/null
     }
 
     /**
      * @see java.io.OutputStream#write(int)
      */
-    public synchronized void write(int b) {
+    public void write(int b) {
         //to /dev/null
     }
 
