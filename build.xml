@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.8 2003/01/27 02:22:30 bayard Exp $
+        $Id: build.xml,v 1.9 2003/04/04 14:04:16 bayard Exp $
 -->
 
 
@@ -253,9 +253,11 @@
           <include name="**/*Test.class" />
           <include name="**/*TestCase.class" />          
           <include name="**/Test*.class" />
+          <include name="**/output/Test*.class" />
           <exclude name="**/AllTest.class" />
           <exclude name="**/*$$*Test.class" />
-          <exclude name="**/compress/*.class" />
+          <exclude name="**/compress/zip/*.class" />
+          <exclude name="**/compress/tar/*.class" />
         </fileset>
       </batchtest>
     </junit>  
