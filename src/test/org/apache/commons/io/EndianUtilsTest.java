@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.5 2003/11/27 06:27:52 bayard Exp $
- * $Revision: 1.5 $
- * $Date: 2003/11/27 06:27:52 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.6 2003/11/27 06:30:26 bayard Exp $
+ * $Revision: 1.6 $
+ * $Date: 2003/11/27 06:30:26 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.5 $ $Date: 2003/11/27 06:27:52 $
+ * @version $Revision: 1.6 $ $Date: 2003/11/27 06:30:26 $
  */
 
 public class EndianUtilsTest extends TestCase {
@@ -193,6 +193,27 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x03, bytes[1] );
         assertEquals( 0x02, bytes[2] );
         assertEquals( 0x01, bytes[3] );
+    }
+
+    public void testReadSwappedDouble() {
+        byte[] bytes = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
+        double d1 = Double.longBitsToDouble( 0x0102030405060708L );
+        double d2 = EndianUtils.readSwappedDouble( bytes, 0 );
+        assertEquals( d1, d2, 0.0 );
+    }
+
+    public void testWriteSwappedDouble() {
+        byte[] bytes = new byte[8];
+        double d1 = Double.longBitsToDouble( 0x0102030405060708L );
+        EndianUtils.writeSwappedDouble( bytes, 0, d1 );
+        assertEquals( 0x08, bytes[0] );
+        assertEquals( 0x07, bytes[1] );
+        assertEquals( 0x06, bytes[2] );
+        assertEquals( 0x05, bytes[3] );
+        assertEquals( 0x04, bytes[4] );
+        assertEquals( 0x03, bytes[5] );
+        assertEquals( 0x02, bytes[6] );
+        assertEquals( 0x01, bytes[7] );
     }
 
     /*
