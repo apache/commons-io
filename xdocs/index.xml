@@ -2,7 +2,7 @@
 
 <!--
     Main index
-    $Id: index.xml,v 1.5 2004/02/23 05:09:27 bayard Exp $
+    $Id: index.xml,v 1.6 2004/02/23 05:16:38 bayard Exp $
 -->
 
 <document>
@@ -10,9 +10,9 @@
 
     <section name="Commons IO">
         <p>
-            Commons-IO contains <a href="#utilities">utility classes</a>,
-            stream implementations, <a href="#filefilters">file filters</a>, and
-            <a href="#endian">endian classes</a>.
+            Commons-IO contains <a href="#Utility classes">utility classes</a>,
+            stream implementations, <a href="#File filters">file filters</a>, and
+            <a href="#Endian classes">endian classes</a>.
             IO has recently been promoted from the commons sandbox, however there
             remains no formal release at present.
         </p>
@@ -23,7 +23,6 @@
         </p>
     </section>
 
-    <a name="utilities"/>
     <section name="Utility classes">
         <subsection name="CopyUtils and IOUtils">
             <p>
@@ -93,7 +92,6 @@
 
     </section>
 
-    <a name="filefilters"/>
     <section name="File filters">
         <p>
             The <code>org.apache.commons.io.filefilter</code>
@@ -109,7 +107,6 @@
         </p>
     </section>
 
-    <a name="endian"/>
     <section name="Endian classes">
         <p>
             Different computer architectures adopt different
