@@ -16,21 +16,21 @@
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -50,7 +50,6 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
 package org.apache.commons.io.filefilter;
 
@@ -63,7 +62,7 @@ import java.io.FilenameFilter;
  * interfaces together.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.1 $ $Date: 2003/05/16 22:33:47 $
+ * @version $Revision: 1.2 $ $Date: 2003/07/27 17:11:38 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -85,7 +84,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * <p>
      * Defined in {@link java.io.FilenameFilter}.
      * 
-     * @param file  the directory File to check
+     * @param dir  the directory File to check
      * @param name  the filename within the directory to check
      * @return true if this file matches the test
      */
