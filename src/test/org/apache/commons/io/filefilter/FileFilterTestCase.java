@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.4 2003/01/27 02:22:31 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/01/27 02:22:31 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.5 2003/02/25 09:03:50 tobrien Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/02/25 09:03:50 $
  *
  * ====================================================================
  *
@@ -96,11 +96,15 @@ public final class FileFilterTestCase
                (filter.accept(file) == expected) 
                );
 
-       if(file.getParentFile() != null) {
+       if(file != null && file.getParentFile() != null) {
            assertTrue(
                 "Filter(File, String) "+filter.getClass().getName()+" not "+expected+" for "+file, 
                 (filter.accept(file.getParentFile(), file.getName()) == expected)
            );
+       } else if( file == null ) {
+	   assertTrue(
+		      "Filter(File, String) "+filter.getClass().getName()+" not "+expected+" for null",
+		      filter.accept( file ) == expected );
        }
     }
 
@@ -118,13 +122,15 @@ public final class FileFilterTestCase
 
     public void testDirectory() throws Exception {
         FileFilter filter = new DirectoryFileFilter();
-        /* These don't like the test for accept(File, String)
+
         assertFiltering( filter, new File("src/"), true);
         assertFiltering( filter, new File("src/java/"), true);
-        */
+        
         assertFiltering( filter, new File("project.xml"), false);
-        assertFiltering( filter, new File("test"), false);
-        assertFiltering( filter, new File("test/"), false);
+	
+	assertFiltering( filter, new File("test"), true);
+        assertFiltering( filter, new File("test/"), true);
+
         assertFiltering( filter, new File("STATUS.html"), false);
     }
 
@@ -132,7 +138,7 @@ public final class FileFilterTestCase
         FileFilter filter = new PrefixFileFilter( new String[] { "foo", "bar" } );
         assertFiltering( filter, new File("foo.test"), true);
         assertFiltering( filter, new File("foo"), true);
-        assertFiltering( filter, new File("bar"), false);
+        assertFiltering( filter, new File("bar"), true);
         assertFiltering( filter, new File("food/"), true);
         assertFiltering( filter, new File("barred\\"), true);
         assertFiltering( filter, new File("test"), false);
@@ -142,9 +148,9 @@ public final class FileFilterTestCase
 
     public void testNull() throws Exception {
         FileFilter filter = FileFilterUtils.nullFileFilter();
-        assertFiltering( filter, new File("foo.test"), true);
-        assertFiltering( filter, new File("foo"), true);
-        assertFiltering( filter, new File(""), true);
+        assertFiltering( filter, new File("foo.test"), false);
+        assertFiltering( filter, new File("foo"), false);
+        assertFiltering( filter, null, true);
     }
 
 }
