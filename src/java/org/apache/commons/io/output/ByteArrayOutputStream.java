@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.1 2003/04/04 14:03:25 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/04/04 14:03:25 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.2 2003/07/27 17:15:49 jeremias Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/07/27 17:15:49 $
  *
  * ====================================================================
  *
@@ -87,7 +87,7 @@ import java.util.List;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: ByteArrayOutputStream.java,v 1.1 2003/04/04 14:03:25 bayard Exp $
+ * @version $Id: ByteArrayOutputStream.java,v 1.2 2003/07/27 17:15:49 jeremias Exp $
  */
 public class ByteArrayOutputStream extends OutputStream {
 
@@ -126,9 +126,10 @@ public class ByteArrayOutputStream extends OutputStream {
         return (byte[])buffers.get(index);
     }
 
+    /* unused ATM
     private int getCurrentCapacity() {
         return filledBufferSum + currentBuffer.length;
-    }
+    }*/
     
     private void needNewBuffer(int newcount) {
         if (DEBUG) System.out.println("Need new buffer: newcount=" + newcount
@@ -211,6 +212,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * Closing a <tt>ByteArrayOutputStream</tt> has no effect. The methods in
      * this class can be called after the stream has been closed without
      * generating an <tt>IOException</tt>.
+     * @throws IOException in case an I/O error occurs
      */
     public void close() throws IOException {
         //nop
