@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.21 2003/12/29 03:28:53 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.22 2003/12/29 13:14:52 bayard Exp $
  */
 public class FileUtils {
 
@@ -257,7 +257,7 @@ public class FileUtils {
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
-    public static String[] toSuffixes(final String[] extensions) {
+    private static String[] toSuffixes(final String[] extensions) {
         String[] suffixes = new String[extensions.length];
         for (int i = 0; i < extensions.length; i++) {
             suffixes[i] = "." + extensions[i];
