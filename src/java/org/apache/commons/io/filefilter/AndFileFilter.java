@@ -29,106 +29,106 @@ import java.util.List;
  * <code>false</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.9 $ $Date: 2004/10/24 21:58:44 $
+ * @version $Revision: 1.10 $ $Date: 2004/10/25 22:53:26 $
  *
- * @author  Steven Caswell
+ * @author Steven Caswell
  */
 public class AndFileFilter
-extends AbstractFileFilter
-implements IOFileFilter, ConditionalFileFilter {
+        extends AbstractFileFilter
+        implements IOFileFilter, ConditionalFileFilter {
 
-  private List fileFilters;
+    /** The list of file filters. */
+    private List fileFilters;
 
-  /**
-   * Constructs a new instance of <code>AndFileFilter</code>.
-   */
-  public AndFileFilter() {
-    this.fileFilters = new ArrayList();
-  }
-
-  /**
-   * Constructs a new instance of <code>AndFileFilter</code>
-   * with the specified list of filters.
-   */
-  public AndFileFilter(final List fileFilters) {
-    this.fileFilters = new ArrayList(fileFilters);
-  }
-
-  /**
-   * Constructs a new file filter that ANDs the result of two other filters.
-   *
-   * @param filter1  the first filter, must not be null
-   * @param filter2  the second filter, must not be null
-   * @throws IllegalArgumentException if either filter is null
-   */
-  public AndFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-      if (filter1 == null || filter2 == null) {
-          throw new IllegalArgumentException("The filters must not be null");
-      }
-      this.fileFilters = new ArrayList();
-      addFileFilter(filter1);
-      addFileFilter(filter2);
-  }
-
-  /**
-   * @{inheritDoc}
-   */
-  public void addFileFilter(final IOFileFilter ioFileFilter) {
-    this.fileFilters.add(ioFileFilter);
-  }
-
-  /**
-   * @{inheritDoc}
-   */
-  public List getFileFilters() {
-    return Collections.unmodifiableList(this.fileFilters);
-  }
-
-  /**
-   * @{inheritDoc}
-   */
-  public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
-    return this.fileFilters.remove(ioFileFilter);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setFileFilters(final List fileFilters) {
-    this.fileFilters = new ArrayList(fileFilters);
-  }
-
-  /**
-   * @{inheritDoc}
-   */
-  public boolean accept(final File file) {
-    if(this.fileFilters.size() == 0) {
-      return false;
+    /**
+     * Constructs a new instance of <code>AndFileFilter</code>.
+     */
+    public AndFileFilter() {
+        this.fileFilters = new ArrayList();
     }
-    for(Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-      IOFileFilter fileFilter = (IOFileFilter) iter.next();
-      if(!fileFilter.accept(file)) {
-        return false;
-      }
-    }
-    return true;
-  }
 
-  /**
-   * @{inheritDoc}
-   */
-  public boolean accept(final File file, final String name)
-  {
-    if(this.fileFilters.size() == 0) {
-      return false;
+    /**
+     * Constructs a new instance of <code>AndFileFilter</code>
+     * with the specified list of filters.
+     */
+    public AndFileFilter(final List fileFilters) {
+        this.fileFilters = new ArrayList(fileFilters);
     }
-    for(Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-      IOFileFilter fileFilter = (IOFileFilter) iter.next();
-      if(!fileFilter.accept(file, name)) {
-        return false;
-      }
+
+    /**
+     * Constructs a new file filter that ANDs the result of two other filters.
+     *
+     * @param filter1  the first filter, must not be null
+     * @param filter2  the second filter, must not be null
+     * @throws IllegalArgumentException if either filter is null
+     */
+    public AndFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+        if (filter1 == null || filter2 == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        this.fileFilters = new ArrayList();
+        addFileFilter(filter1);
+        addFileFilter(filter2);
     }
-    return true;
-  }
+
+    /**
+     * @{inheritDoc}
+     */
+    public void addFileFilter(final IOFileFilter ioFileFilter) {
+        this.fileFilters.add(ioFileFilter);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public List getFileFilters() {
+        return Collections.unmodifiableList(this.fileFilters);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
+        return this.fileFilters.remove(ioFileFilter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setFileFilters(final List fileFilters) {
+        this.fileFilters = new ArrayList(fileFilters);
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean accept(final File file) {
+        if (this.fileFilters.size() == 0) {
+            return false;
+        }
+        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
+            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+            if (!fileFilter.accept(file)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public boolean accept(final File file, final String name) {
+        if (this.fileFilters.size() == 0) {
+            return false;
+        }
+        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
+            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+            if (!fileFilter.accept(file, name)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

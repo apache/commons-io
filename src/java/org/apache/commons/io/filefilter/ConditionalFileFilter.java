@@ -21,42 +21,42 @@ import java.util.List;
  * Defines operations for conditional file filters.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.1 $ $Date: 2004/10/24 21:58:44 $
+ * @version $Revision: 1.2 $ $Date: 2004/10/25 22:53:26 $
  *
- * @author  Steven Caswell
+ * @author Steven Caswell
  */
-public interface ConditionalFileFilter
-{
-  /**
-   * Adds the specified file filter to the list of file filters at the end of
-   * the list.
-   *
-   * @param ioFileFilter the filter to be added
-   */
-  public void addFileFilter(IOFileFilter ioFileFilter);
+public interface ConditionalFileFilter {
 
-  /**
-   * Returns this conditional file filter's list of file filters.
-   *
-   * @return the file filter list
-   */
-  public List getFileFilters();
-  
-  /**
-   * Removes the specified file filter.
-   *
-   * @param ioFileFilter filter to be removed
-   * @return <code>true</code> if the filter was found in the list,
-   * <code>false</code> otherwise
-   */
-  public boolean removeFileFilter(IOFileFilter ioFileFilter);
+    /**
+     * Adds the specified file filter to the list of file filters at the end of
+     * the list.
+     *
+     * @param ioFileFilter the filter to be added
+     */
+    public void addFileFilter(IOFileFilter ioFileFilter);
 
-  /**
-   * Sets the list of file filters, replacing any previously configured
-   * file filters on this filter.
-   *
-   * @param fileFilters the list of filters
-   */
-  public void setFileFilters(List fileFilters);
-  
+    /**
+     * Returns this conditional file filter's list of file filters.
+     *
+     * @return the file filter list
+     */
+    public List getFileFilters();
+
+    /**
+     * Removes the specified file filter.
+     *
+     * @param ioFileFilter filter to be removed
+     * @return <code>true</code> if the filter was found in the list,
+     * <code>false</code> otherwise
+     */
+    public boolean removeFileFilter(IOFileFilter ioFileFilter);
+
+    /**
+     * Sets the list of file filters, replacing any previously configured
+     * file filters on this filter.
+     *
+     * @param fileFilters the list of filters
+     */
+    public void setFileFilters(List fileFilters);
+
 }
