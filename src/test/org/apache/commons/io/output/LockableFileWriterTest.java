@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 
 
 import java.io.IOException;
+import java.io.File;
 
 import junit.framework.TestCase;
 
@@ -27,33 +28,44 @@ import junit.framework.TestCase;
  * the locking is tested only on construction. 
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.1 $ $Date: 2004/02/23 05:49:52 $
+ * @version $Revision: 1.2 $ $Date: 2004/02/29 21:07:14 $
  */
 
 public class LockableFileWriterTest extends TestCase {
+
+    private File file;
 
     public LockableFileWriterTest(String name) {
         super(name);
     }
 
+    public void setUp() {
+        this.file = new File("testlockfile");
+    }
+
+    public void tearDown() {
+        this.file.delete();
+    }
+
     public void testFileLocked() throws IOException {
-        LockableFileWriter lfw = new LockableFileWriter("testlockfile");
+        LockableFileWriter lfw = new LockableFileWriter(this.file);
         try {
-            LockableFileWriter lfw2 = new LockableFileWriter("testlockfile");
+            LockableFileWriter lfw2 = new LockableFileWriter(this.file);
             fail("Somehow able to open a locked file. ");
         } catch(IOException ioe) {
             String msg = ioe.getMessage();
             assertTrue( "Exception message does not start correctly. ", 
                         msg.startsWith("Can't write file, lock ") );
+        } finally {
+            lfw.close();
         }
-        lfw.close();
     }
 
     public void testFileNotLocked() throws IOException {
-        LockableFileWriter lfw = new LockableFileWriter("testnotlockfile");
+        LockableFileWriter lfw = new LockableFileWriter(this.file);
         lfw.close();
         try {
-            LockableFileWriter lfw2 = new LockableFileWriter("testnotlockfile");
+            LockableFileWriter lfw2 = new LockableFileWriter(this.file);
             lfw2.close();
         } catch(IOException ioe) {
             String msg = ioe.getMessage();
