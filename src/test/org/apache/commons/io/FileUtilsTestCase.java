@@ -22,18 +22,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * This is used to test FileUtils for correctness.
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.20 2004/07/03 11:24:49 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.21 2004/07/15 08:21:14 scolebourne Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -465,6 +465,46 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.touch(file) ;
         assertEquals("FileUtils.touch() didn't empty the file.", 1, file.length());
         assertFalse("FileUtils.touch() changed lastModified.", 0 == file.lastModified()) ;        
+    }
+
+    public void testReadFileToString() throws Exception {
+        File file = new File(getTestDirectory(), "read.obj");
+        FileOutputStream out = new FileOutputStream(file);
+        byte[] text = "Hello /u1234".getBytes("UTF8");
+        out.write(text);
+        out.close();
+        
+        String data = FileUtils.readFileToString(file, "UTF8");
+        assertEquals("Hello /u1234", data);
+    }
+
+    public void testReadFileToByteArray() throws Exception {
+        File file = new File(getTestDirectory(), "read.txt");
+        FileOutputStream out = new FileOutputStream(file);
+        out.write(11);
+        out.write(21);
+        out.write(31);
+        out.close();
+        
+        byte[] data = FileUtils.readFileToByteArray(file);
+        assertEquals(3, data.length);
+        assertEquals(11, data[0]);
+        assertEquals(21, data[1]);
+        assertEquals(31, data[2]);
+    }
+
+    public void testWriteStringToFile() throws Exception {
+        File file = new File(getTestDirectory(), "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
+        byte[] text = "Hello /u1234".getBytes("UTF8");
+        assertEqualContent(text, file);
+    }
+
+    public void testWriteByteArrayToFile() throws Exception {
+        File file = new File(getTestDirectory(), "write.obj");
+        byte[] data = new byte[] {11, 21, 31};
+        FileUtils.writeByteArrayToFile(file, data);
+        assertEqualContent(data, file);
     }
 
 }
