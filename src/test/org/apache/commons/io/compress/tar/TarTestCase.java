@@ -5,7 +5,7 @@
  * version 1.1, a copy of which has been included with this distribution in
  * the LICENSE.txt file.
  */
-package org.apache.commons.compress.tar;
+package org.apache.commons.io.compress.tar;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,16 +15,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import junit.framework.TestCase;
-import org.apache.excalibur.tar.TarEntry;
-import org.apache.excalibur.tar.TarInputStream;
-import org.apache.excalibur.tar.TarOutputStream;
 
 /**
  * Test case for all tar resources.
  *
  * @todo Find V7 tar and do tests against it
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/08 22:19:10 $
+ * @version $Revision: 1.2 $ $Date: 2002/07/09 15:12:23 $
  */
 public final class TarTestCase
     extends TestCase

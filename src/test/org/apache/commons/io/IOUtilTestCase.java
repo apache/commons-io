@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.1 2002/07/08 22:19:10 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2002/07/08 22:19:10 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2002/07/09 15:12:23 $
  *
  * ====================================================================
  *
@@ -75,8 +75,6 @@ import java.io.Writer;
 import java.util.Arrays;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import org.apache.avalon.excalibur.io.FileUtil;
-import org.apache.avalon.excalibur.io.IOUtil;
 
 // Note: jdk1.2 dependency
 
@@ -482,3 +480,4 @@ public final class IOUtilTestCase
         //assertTrue( "File would not delete", (file.delete() || ( !file.exists() )));
     }
 }
+

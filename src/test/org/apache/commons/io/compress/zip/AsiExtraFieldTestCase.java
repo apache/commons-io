@@ -9,8 +9,6 @@ package org.apache.commons.io.compress.zip;
 
 import java.util.zip.ZipException;
 import junit.framework.TestCase;
-import org.apache.excalibur.zip.AsiExtraField;
-import org.apache.excalibur.zip.UnixStat;
 
 /**
  * JUnit testcases AsiExtraField.
