@@ -76,7 +76,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.4 2003/12/30 06:50:16 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.5 2003/12/30 15:23:23 jeremias Exp $
  */
 public class FilenameUtils {
 
@@ -491,7 +491,7 @@ public class FilenameUtils {
     public static void copyFileToDirectory(
         String source,
         String destinationDirectory)
-        throws IOException {
+        throws IOException, FileNotFoundException {
         FileUtils.copyFileToDirectory(new File(source), new File(destinationDirectory));
     }
 
