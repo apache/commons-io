@@ -72,7 +72,7 @@ import java.util.Vector;
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @version $Id: FileUtils.java,v 1.4 2002/01/28 10:01:25 sanders Exp $
+ * @version $Id: FileUtils.java,v 1.5 2002/01/28 10:03:11 sanders Exp $
  */
 public class FileUtils {
 
@@ -372,7 +372,7 @@ public class FileUtils {
     /**
      * Simple way to make a directory
      */
-    public void mkdir(String dir) {
+    public static void mkdir(String dir) {
         File file = new File(dir);
         if (!file.exists()) {
             file.mkdirs();
