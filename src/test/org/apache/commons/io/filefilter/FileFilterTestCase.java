@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.1 2002/11/12 08:05:12 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2002/11/12 08:05:12 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.2 2002/12/07 20:27:39 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2002/12/07 20:27:39 $
  *
  * ====================================================================
  *
@@ -89,11 +89,19 @@ public final class FileFilterTestCase
     public void assertFiltering(FileFilter filter, File file, boolean expected)
         throws Exception
     {
+       // Note. This only tests the (File, String) version if the parent of 
+       //       the File passed in is not null
        assertTrue(
-            "Filter "+filter.getClass().getName()+" not "+expected+" for "+file, 
+            "Filter(File) "+filter.getClass().getName()+" not "+expected+" for "+file, 
                (filter.accept(file) == expected) 
-            && (filter.accept(file.getParentFile(), file.getName()) == expected)
-       );
+               );
+
+       if(file.getParentFile() != null) {
+           assertTrue(
+                "Filter(File, String) "+filter.getClass().getName()+" not "+expected+" for "+file, 
+                (filter.accept(file.getParentFile(), file.getName()) == expected)
+           );
+       }
     }
 
     public void testExtension() throws Exception {
@@ -108,5 +116,25 @@ public final class FileFilterTestCase
         assertFiltering( filter, new File("fred.test"), true);
     }
 
-}
+    public void testNull() throws Exception {
+        FileFilter filter = new NullFileFilter();
+        assertFiltering( filter, new File("foo.test"), true);
+        assertFiltering( filter, new File("foo"), true);
+        assertFiltering( filter, new File(""), true);
+    }
 
+    public void testPrefix() throws Exception {
+        FileFilter filter = new PrefixFileFilter("foo");
+        assertFiltering( filter, new File("foo.test"), true);
+        assertFiltering( filter, new File("foo"), true);
+        assertFiltering( filter, new File("bar"), false);
+    }
+
+    public void testDirectory() throws Exception {
+        FileFilter filter = new DirectoryFileFilter();
+        assertFiltering( filter, new File("src/"), true);
+        assertFiltering( filter, new File("project.xml"), false);
+        assertFiltering( filter, new File("src/java/"), true);
+    }
+
+}
