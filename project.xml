@@ -98,12 +98,12 @@
     
     <dependency>
       <id>commons-lang</id>
-      <version>1.1</version>
+      <version>1.1-dev.20021217.062015</version>
     </dependency>
   </dependencies>
 
-	
-	
+  
+  
   <build>
 
     <nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
@@ -115,16 +115,14 @@
     <!-- Unit test classes -->
     <unitTest>
       <includes>
-        <include>**/Test*.java</include>
+        <include>**/*Test*</include>
       </includes>
       <excludes>
-        <exclude>**/compress/**/Test*.java</exclude>
+        <exclude>**/compress/**/*Test*</exclude>
       </excludes>
     </unitTest>
 
-    
-    <!-- Integration unit test classes -->
-    <integrationUnitTestPatterns></integrationUnitTestPatterns>
+   
 
     <!-- J A R  R E S O U R C E S -->
     <!-- Resources that are packaged up inside the JAR file -->
