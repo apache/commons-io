@@ -28,10 +28,15 @@ import java.io.OutputStream;
  * threshold is reached, and only then commit it to disk. If the stream is
  * closed before the threshold is reached, the data will not be written to
  * disk at all.</p>
+ * 
+ * <p>This class originated in FileUpload processing. In this use case, you do
+ * not know in advance the size of the file being uploaded. If the file is small
+ * you want to store it in memory (for speed), but if the file is large you want
+ * to store it to file (to avoid memory issues).</p>
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  *
- * @version $Id: DeferredFileOutputStream.java,v 1.2 2004/02/23 04:40:29 bayard Exp $
+ * @version $Id: DeferredFileOutputStream.java,v 1.3 2004/07/14 07:59:51 scolebourne Exp $
  */
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
