@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsFileNewerTestCase.java,v 1.2 2003/10/13 07:06:04 rdonkin Exp $
- * $Revision: 1.2 $
- * $Date: 2003/10/13 07:06:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsFileNewerTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/12/30 07:00:03 $
  *
  * ====================================================================
  *
@@ -70,16 +70,16 @@ import org.apache.commons.io.testtools.*;
  *
  * @author <a href="mailto:alban.peignier@free.fr">Alban Peignier</a>
  */
-public final class FileUtilsFileNewerTestCase extends FileBasedTestCase {
+public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
 
     // Test data
-    private static final int FILE1_SIZE = 1;
-    private static final int FILE2_SIZE = 1024 * 4 + 1;
+    private static int FILE1_SIZE = 1;
+    private static int FILE2_SIZE = 1024 * 4 + 1;
 
-    private final File m_testFile1;
-    private final File m_testFile2;
+    private File m_testFile1;
+    private File m_testFile2;
 
-    public FileUtilsFileNewerTestCase(final String name) {
+    public FileUtilsFileNewerTestCase(String name) {
         super(name);
         
         m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -111,7 +111,7 @@ public final class FileUtilsFileNewerTestCase extends FileBasedTestCase {
             throw new IllegalStateException("The m_testFile1 should exist");
 
         long fileLastModified = m_testFile1.lastModified();
-        final long ONE_SECOND = 1000;
+        long ONE_SECOND = 1000;
 
         testIsFileNewer("one second earlier is not newer" , m_testFile1, fileLastModified + ONE_SECOND, false);
         testIsFileNewer("same time is not newer" , m_testFile1, fileLastModified, false);
@@ -159,7 +159,7 @@ public final class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         assertEquals(description + " - time", wantedResult, FileUtils.isFileNewer(file, time));
         assertEquals(description + " - date", wantedResult, FileUtils.isFileNewer(file, new Date(time)));
         
-        final File temporaryFile = m_testFile2;
+        File temporaryFile = m_testFile2;
 
         temporaryFile.setLastModified(time);
         if (temporaryFile.lastModified() != time)

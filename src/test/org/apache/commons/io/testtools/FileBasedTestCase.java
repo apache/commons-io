@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.4 2003/12/29 03:28:53 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/12/29 03:28:53 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.5 2003/12/30 07:00:04 bayard Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/12/30 07:00:04 $
  *
  * ====================================================================
  * The Apache Software License, Version 1.1
@@ -93,13 +93,13 @@ public abstract class FileBasedTestCase extends TestCase {
         return testDir;
     }
     
-    protected void createFile(final File file, final long size)
+    protected void createFile(File file, long size)
             throws IOException {
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file 
                 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
+        BufferedOutputStream output =
             new BufferedOutputStream(new java.io.FileOutputStream(file));
         try {
             generateTestData(output, size);
@@ -108,7 +108,7 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
     
-    protected byte[] generateTestData(final long size) {
+    protected byte[] generateTestData(long size) {
         try {
             ByteArrayOutputStream baout = new ByteArrayOutputStream();
             generateTestData(baout, size);
@@ -118,7 +118,7 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
     
-    protected void generateTestData(final OutputStream out, final long size) 
+    protected void generateTestData(OutputStream out, long size) 
                 throws IOException {
         for (int i = 0; i < size; i++) {
             //output.write((byte)'X');
@@ -129,7 +129,7 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     protected File newFile(String filename) throws IOException {
-        final File destination = new File( getTestDirectory(), filename );
+        File destination = new File( getTestDirectory(), filename );
         /*
         assertTrue( filename + "Test output data file shouldn't previously exist",
                     !destination.exists() );
@@ -140,14 +140,14 @@ public abstract class FileBasedTestCase extends TestCase {
         return destination;
     }
 
-    protected void checkFile( final File file, final File referenceFile )
+    protected void checkFile( File file, File referenceFile )
                 throws Exception {
         assertTrue( "Check existence of output file", file.exists() );
         assertEqualContent( referenceFile, file );
     }
 
     /** Assert that the content of two files is the same. */
-    private void assertEqualContent( final File f0, final File f1 )
+    private void assertEqualContent( File f0, File f1 )
         throws IOException
     {
         /* This doesn't work because the filesize isn't updated until the file
@@ -156,12 +156,12 @@ public abstract class FileBasedTestCase extends TestCase {
                     " have differing file sizes (" + f0.length() +
                     " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
         */
-        final InputStream is0 = new java.io.FileInputStream( f0 );
+        InputStream is0 = new java.io.FileInputStream( f0 );
         try {
-            final InputStream is1 = new java.io.FileInputStream( f1 );
+            InputStream is1 = new java.io.FileInputStream( f1 );
             try {
-                final byte[] buf0 = new byte[ 1024 ];
-                final byte[] buf1 = new byte[ 1024 ];
+                byte[] buf0 = new byte[ 1024 ];
+                byte[] buf1 = new byte[ 1024 ];
                 int n0 = 0;
                 int n1 = 0;
 
@@ -185,10 +185,10 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     /** Assert that the content of a file is equal to that in a byte[]. */
-    protected void assertEqualContent( final byte[] b0, final File file )
+    protected void assertEqualContent( byte[] b0, File file )
         throws IOException
     {
-        final InputStream is = new java.io.FileInputStream( file );
+        InputStream is = new java.io.FileInputStream( file );
         try {
             byte[] b1 = new byte[ b0.length ];
             int numRead = is.read( b1 );
@@ -203,10 +203,10 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void checkWrite(final OutputStream output) throws Exception {
+    protected void checkWrite(OutputStream output) throws Exception {
         try {
             new java.io.PrintStream(output).write(0);
-        } catch (final Throwable t) {
+        } catch (Throwable t) {
             throw new AssertionFailedError(
                 "The copy() method closed the stream "
                     + "when it shouldn't have. "
@@ -214,10 +214,10 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void checkWrite(final Writer output) throws Exception {
+    protected void checkWrite(Writer output) throws Exception {
         try {
             new java.io.PrintWriter(output).write('a');
-        } catch (final Throwable t) {
+        } catch (Throwable t) {
             throw new AssertionFailedError(
                 "The copy() method closed the stream "
                     + "when it shouldn't have. "
@@ -225,7 +225,7 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void deleteFile( final File file )
+    protected void deleteFile( File file )
         throws Exception {
         if (file.exists()) {
             assertTrue("Couldn't delete file: " + file, file.delete());
