@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.35 2004/07/15 09:16:17 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.36 2004/07/24 09:58:41 scolebourne Exp $
  */
 public class FileUtils {
 
@@ -87,6 +87,11 @@ public class FileUtils {
      * The number of bytes in a gigabyte.
      */
     public static final long ONE_GB = ONE_KB * ONE_MB;
+    
+    /**
+     * An empty array of type <code>File</code>.
+     */
+    public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
     /**
      * Returns a human-readable version of the file size (original is in
@@ -285,11 +290,13 @@ public class FileUtils {
         }
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
-     * @param url File URL.
-     * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
-     * is not <code>file</code>
+     * 
+     * @param url  the file URL to convert
+     * @return the equivalent <code>File</code> object, or <code>null</code>
+     *  if the URL's protocol is not <code>file</code>
      */
     public static File toFile(URL url) {
         if (url.getProtocol().equals("file") == false) {
@@ -302,11 +309,42 @@ public class FileUtils {
     }
 
     /**
-     * Convert the array of Files into a list of URLs.
+     * Converts each of an array of <code>URL</code> to a <code>File</code>.
+     * <p>
+     * Returns an array of the same size as the input.
+     * If the input is null, an empty array is returned.
+     * If the input contains null, the output array contains null at the same index.
+     * 
+     * @param urls  the file URLs to convert, null returns empty array
+     * @return a non-null array of Files matching the input, with a null item
+     *  if there was a null at that index in the input array
+     * @throws IllegalArgumentException if the URL could not be converted to a File
+     */
+    public static File[] toFiles(URL[] urls) {
+        if (urls == null || urls.length == 0) {
+            return EMPTY_FILE_ARRAY;
+        }
+        File[] files = new File[urls.length];
+        for (int i = 0; i < urls.length; i++) {
+            URL url = urls[i];
+            if (url != null) {
+                if (url.getProtocol().equals("file") == false) {
+                    throw new IllegalArgumentException("URL could not be converted to a File: " + url);
+                }
+                files[i] = toFile(url);
+            }
+        }
+        return files;
+    }
+
+    /**
+     * Converts each of an array of <code>File</code> to a <code>URL</code>.
+     * <p>
+     * Returns an array of the same size as the input.
      *
-     * @param files the array of files
-     * @return the array of URLs
-     * @throws IOException if an error occurs
+     * @param files  the files to convert
+     * @return an array of URLs matching the input
+     * @throws IOException if a file cannot be converted
      */
     public static URL[] toURLs(File[] files) throws IOException {
         URL[] urls = new URL[files.length];
@@ -318,7 +356,7 @@ public class FileUtils {
         return urls;
     }
 
-
+    //-----------------------------------------------------------------------
     /**
      * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
      * (and any parent directories) will be created. If a file <code>source</code> in

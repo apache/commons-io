@@ -34,7 +34,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.23 2004/07/24 08:41:00 scolebourne Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.24 2004/07/24 09:58:40 scolebourne Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -108,18 +108,85 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.waitFor(new File(""), 2);
     }
 
-    // toURL
+    // toFiles
 
-    public void testToURLs() throws Exception {
-        File[] files = new File[] { new File("file1"), new File("file2")};
-
-        URL[] urls = FileUtils.toURLs(files);
-
-        // Path separator causes equality tests to fail
-        //assertEquals(urls[0].getFile(), File.separator + files[0].getAbsolutePath());
-        //assertEquals(urls[1].getFile(), File.separator + files[1].getAbsolutePath());
-
+    public void testToFiles1() throws Exception {
+        URL[] urls = new URL[] {
+            new URL("file", null, "file1.txt"),
+            new URL("file", null, "file2.txt"),
+        };
+        File[] files = FileUtils.toFiles(urls);
+        
+        assertEquals(urls.length, files.length);
+        assertEquals("File: " + files[0], true, files[0].toString().indexOf("file1.txt") >= 0);
+        assertEquals("File: " + files[1], true, files[1].toString().indexOf("file2.txt") >= 0);
     }
+
+    public void testToFiles2() throws Exception {
+        URL[] urls = new URL[] {
+            new URL("file", null, "file1.txt"),
+            null,
+        };
+        File[] files = FileUtils.toFiles(urls);
+        
+        assertEquals(urls.length, files.length);
+        assertEquals("File: " + files[0], true, files[0].toString().indexOf("file1.txt") >= 0);
+        assertEquals("File: " + files[1], null, files[1]);
+    }
+
+    public void testToFiles3() throws Exception {
+        URL[] urls = null;
+        File[] files = FileUtils.toFiles(urls);
+        
+        assertEquals(0, files.length);
+    }
+
+    public void testToFiles4() throws Exception {
+        URL[] urls = new URL[] {
+            new URL("file", null, "file1.txt"),
+            new URL("http", "jakarta.apache.org", "file1.txt"),
+        };
+        try {
+            FileUtils.toFiles(urls);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+    }
+
+    // toURLs
+
+    public void testToURLs1() throws Exception {
+        File[] files = new File[] {
+            new File(getTestDirectory(), "file1.txt"),
+            new File(getTestDirectory(), "file2.txt"),
+        };
+        URL[] urls = FileUtils.toURLs(files);
+        
+        assertEquals(files.length, urls.length);
+        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
+        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") >= 0);
+        assertEquals(true, urls[1].toExternalForm().startsWith("file:"));
+        assertEquals(true, urls[1].toExternalForm().indexOf("file2.txt") >= 0);
+    }
+
+//    public void testToURLs2() throws Exception {
+//        File[] files = new File[] {
+//            new File(getTestDirectory(), "file1.txt"),
+//            null,
+//        };
+//        URL[] urls = FileUtils.toURLs(files);
+//        
+//        assertEquals(files.length, urls.length);
+//        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
+//        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") > 0);
+//        assertEquals(null, urls[1]);
+//    }
+//
+//    public void testToURLs3() throws Exception {
+//        File[] files = null;
+//        URL[] urls = FileUtils.toURLs(files);
+//        
+//        assertEquals(0, urls.length);
+//    }
 
     // contentEquals
 
