@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<document>
+
+    <body>
+        <section name="Action Items">
+
+            <p>
+                The following action items need to be completed prior to a Version 1.0
+                release of this component:
+            </p>
+
+            <ul>
+                <li>Compress - Move the compress sub-package out of IO - READY</li>
+                <li>Rename FileUtilTest to FileUtilsTest - DONE</li>
+                <li>Rename *Util.java for *Utils.java for consistency - DONE</li>
+                <li>Extract code from IOUtils to CopyUtils? </li>
+                <li>Remove StreamUtils as all its methods are in IOUtils - DONE</li>
+
+                <li>IOUtils: Remove the toByteArray() variants with the bufferSize
+                parameter. Reasoning can be found at
+                http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
+
+                <li>IOUtils: Change toByteArray() methods to use the new
+                ByteArrayOutputStream which should improve performance considerably.</li>
+
+                <li>IOUtils: Remove the deprecated bufferedCopy method. IO is not released
+                so we should be able to do that - DONE</li>
+
+                <li>FileUtils: This class is a big mess ATM. We need to clean it up.</li>
+                <li>Split IOUtils into IOUtils and CopyUtils - DONE (Matthew Hawthorne)</li>
+                <li>More TestCases!!!</li>
+                <li>More Javadocs!!!</li>
+            </ul>
+        </section>
+
+        <section name="New Code">
+            <ul>
+              <li>ProxyOutput/InputStream. These are predictable Filter-streams. Need to see if FilterWriter/Reader are predictable - DONE</li>
+              <li>
+                FileUtils: Add isFileNewer() method from Alban Peignier:
+                <![CDATA[
+                http://nagoya.apache.org/eyebrowse/BrowseList?listName=commons-dev@jakarta.apache.org&by=thread&from=348688 - DONE
+           ]]>
+              </li>
+
+              <li>A CsvReader/Writer set of classes in a csv sub-package</li>
+              <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
+              <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
+              <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
+              <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
+              <li>Finder system. Generic code to find things in things. So FileFinder, ClassFinder, ZipFinder. Probably too big for IO</li>
+              <li>Add an additional ByteArrayOutputStream variant that saves content
+                in memory just as the original but starts to write to a temp file when
+                a given number of bytes is surpassed. This is to reduce the memory
+                usage for big "things".</li>
+            </ul>
+    </section>
+
+    <section name="Misc.">
+        <ul>
+            <li>
+                <strong>Integration</strong>.  Seek and integrate various i/o related
+                classes.
+            </li>
+
+            <li>
+                <strong>Install / Use Documentation</strong>.  Create simple
+                installation and User's Guide documentation for this component.
+            </li>
+       </ul>
+   </section>
+
+    </body>
+
+</document>
