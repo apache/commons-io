@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/CountingInputStreamTest.java,v 1.2 2003/12/30 07:00:04 bayard Exp $
- * $Revision: 1.2 $
- * $Date: 2003/12/30 07:00:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/CountingInputStreamTest.java,v 1.3 2003/12/30 15:25:06 jeremias Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/12/30 15:25:06 $
  *
  * ====================================================================
  *
@@ -61,8 +61,6 @@
 
 package org.apache.commons.io.input;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 
 import junit.framework.TestCase;

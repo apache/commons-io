@@ -54,14 +54,10 @@
 package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -145,7 +141,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.10 $ $Date: 2003/12/30 07:06:46 $
+ * @version CVS $Revision: 1.11 $ $Date: 2003/12/30 15:24:23 $
  */
 public final class IOUtils
 {
