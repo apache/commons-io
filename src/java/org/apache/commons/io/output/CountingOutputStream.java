@@ -23,7 +23,7 @@ import java.io.OutputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.5 2004/02/23 04:40:29 bayard Exp $
+ * @version $Id: CountingOutputStream.java,v 1.6 2004/06/13 05:35:44 bayard Exp $
  */
 public class CountingOutputStream extends ProxyOutputStream {
 
@@ -63,4 +63,14 @@ public class CountingOutputStream extends ProxyOutputStream {
         return this.count;
     }
 
+    /** 
+      * Set the count back to 0. 
+      *
+      * @return the count previous to resetting.
+      */
+    public synchronized int resetCount() {
+        int tmp = this.count;
+        this.count = 0;
+        return tmp;
+    }
 }

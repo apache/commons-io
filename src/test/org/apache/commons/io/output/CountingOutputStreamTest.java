@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.2 $ $Date: 2004/02/23 05:02:25 $
+ * @version $Revision: 1.3 $ $Date: 2004/06/13 05:35:44 $
  */
 
 public class CountingOutputStreamTest extends TestCase {
@@ -59,15 +59,21 @@ public class CountingOutputStreamTest extends TestCase {
         cos.write(array, 5, 5);
         assertByteArrayEquals("CountingOutputStream.write(byte[], int, int)", baos.toByteArray(), 0, 35);
         assertEquals("CountingOutputStream.getCount()", cos.getCount(), 35);
+
+        int count = cos.resetCount();
+        assertEquals("CountingOutputStream.resetCount()", count, 35);
+
+        for(int i = 0; i < 10; i++) {
+            cos.write(i);
+        }
+        assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
+        assertEquals("CountingOutputStream.getCount()", cos.getCount(), 10);
+
     }
 
     private void assertByteArrayEquals(String msg, byte[] array, int start, int end) {
-        assertEquals(msg+": array size mismatch", end-start,
-                array.length );
-
         for (int i = start; i < end; i++) {
-            assertEquals(msg+": array[ " + i + "] mismatch", array[i],
-                    i);
+            assertEquals(msg+": array[" + i + "] mismatch", array[i], i-start);
         }
     }
 
