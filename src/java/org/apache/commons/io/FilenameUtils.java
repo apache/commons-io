@@ -18,6 +18,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -28,10 +29,10 @@ import java.util.Stack;
  * This class aims to help avoid those problems.
  * <p>
  * Most methods on this class are designed to work the same on both Unix and Windows.
- * Both separators (forward and back) are recognised, and both sets of prefixes.
- * The comparison methods do differ by machine however, comparing case insensitive
- * on Windows and case sensitive on Unix.
- * See the javadoc of each method for details.
+ * Those that don't include 'System', 'Unix' or 'Windows' in their name.
+ * <p>
+ * Most methods recognise both separators (forward and back), and both
+ * sets of prefixes. See the javadoc of each method for details.
  * <p>
  * This class defines six components within a filename (example C:\dev\project\file.txt):
  * <ul>
@@ -681,27 +682,46 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Checks whether two filenames are equal using the case rules of the system.
+     * Checks whether two filenames are equal exactly.
      * <p>
-     * No processing is performed on the filenames other than comparison.
-     * The check is case sensitive on Unix and case insensitive on Windows.
+     * No processing is performed on the filenames other than comparison,
+     * thus this is merely a null-safe case-sensitive equals.
      *
      * @param filename1  the first filename to query, may be null
      * @param filename2  the second filename to query, may be null
      * @return true if the filenames are equal, null equals null
      */
     public static boolean equals(String filename1, String filename2) {
-        if (filename1 == filename2) {
-            return true;
-        }
-        if (filename1 == null || filename2 == null) {
-            return false;
-        }
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
-            return filename1.equalsIgnoreCase(filename2);
-        } else {
-            return filename1.equals(filename2);
-        }
+        return equals(filename1, filename2, false, false);
+    }
+
+    /**
+     * Checks whether two filenames are equal using the case rules of the system.
+     * <p>
+     * No processing is performed on the filenames other than comparison.
+     * The check is case-sensitive on Unix and case-insensitive on Windows.
+     *
+     * @param filename1  the first filename to query, may be null
+     * @param filename2  the second filename to query, may be null
+     * @return true if the filenames are equal, null equals null
+     */
+    public static boolean equalsOnSystem(String filename1, String filename2) {
+        return equals(filename1, filename2, true, false);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Checks whether two filenames are equal after both have been normalized.
+     * <p>
+     * Both filenames are first passed to {@link #normalize(String)}.
+     * The check is then performed in a case-sensitive manner.
+     *
+     * @param filename1  the first filename to query, may be null
+     * @param filename2  the second filename to query, may be null
+     * @return true if the filenames are equal, null equals null
+     */
+    public static boolean equalsNormalized(String filename1, String filename2) {
+        return equals(filename1, filename2, false, true);
     }
 
     /**
@@ -709,22 +729,43 @@ public class FilenameUtils {
      * and using the case rules of the system.
      * <p>
      * Both filenames are first passed to {@link #normalize(String)}.
-     * The check is then performed case sensitive on Unix and case insensitive on Windows.
+     * The check is then performed case-sensitive on Unix and
+     * case-insensitive on Windows.
      *
      * @param filename1  the first filename to query, may be null
      * @param filename2  the second filename to query, may be null
      * @return true if the filenames are equal, null equals null
      */
-    public static boolean equalsNormalized(String filename1, String filename2) {
+    public static boolean equalsNormalizedOnSystem(String filename1, String filename2) {
+        return equals(filename1, filename2, true, true);
+    }
+
+    /**
+     * Checks whether two filenames are equal after both have been normalized
+     * and optionally using the case rules of the system.
+     * <p>
+     * Both filenames are first passed to {@link #normalize(String)}.
+     *
+     * @param filename1  the first filename to query, may be null
+     * @param filename2  the second filename to query, may be null
+     * @param system  whether to use the system (windows or unix)
+     * @param normalized  whether to normalize the filenames
+     * @return true if the filenames are equal, null equals null
+     */
+    private static boolean equals(
+            String filename1, String filename2,
+            boolean system, boolean normalized) {
         if (filename1 == filename2) {
             return true;
         }
         if (filename1 == null || filename2 == null) {
             return false;
         }
-        filename1 = normalize(filename1);
-        filename2 = normalize(filename2);
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+        if (normalized) {
+            filename1 = normalize(filename1);
+            filename2 = normalize(filename2);
+        }
+        if (system && (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR)) {
             return filename1.equalsIgnoreCase(filename2);
         } else {
             return filename1.equals(filename2);
@@ -733,12 +774,11 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Checks whether the extension of the filename is that specified
-     * using the case rules of the system.
+     * Checks whether the extension of the filename is that specified.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
-     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     * The extension check is case-sensitive on all platforms.
      *
      * @param filename  the filename to query, null returns false
      * @param extension  the extension to check for, null or empty checks for no extension
@@ -752,20 +792,15 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
-            return fileExt.equalsIgnoreCase(extension);
-        } else {
-            return fileExt.equals(extension);
-        }
+        return fileExt.equals(extension);
     }
 
     /**
-     * Checks whether the extension of the filename is one of those specified
-     * using the case rules of the system.
+     * Checks whether the extension of the filename is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
-     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     * The extension check is case-sensitive on all platforms.
      *
      * @param filename  the filename to query, null returns false
      * @param extensions  the extensions to check for, null checks for no extension
@@ -775,33 +810,24 @@ public class FilenameUtils {
         if (filename == null) {
             return false;
         }
-        if (extensions == null) {
+        if (extensions == null || extensions.length == 0) {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
-            for (int i = 0; i < extensions.length; i++) {
-                if (fileExt.equalsIgnoreCase(extensions[i])) {
-                    return true;
-                }
-            }
-        } else {
-            for (int i = 0; i < extensions.length; i++) {
-                if (fileExt.equals(extensions[i])) {
-                    return true;
-                }
+        for (int i = 0; i < extensions.length; i++) {
+            if (fileExt.equals(extensions[i])) {
+                return true;
             }
         }
         return false;
     }
 
     /**
-     * Checks whether the extension of the filename is one of those specified
-     * using the case rules of the system.
+     * Checks whether the extension of the filename is one of those specified.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
-     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     * The extension check is case-sensitive on all platforms.
      *
      * @param filename  the filename to query, null returns false
      * @param extensions  the extensions to check for, null checks for no extension
@@ -811,21 +837,27 @@ public class FilenameUtils {
         if (filename == null) {
             return false;
         }
-        if (extensions == null) {
+        if (extensions == null || extensions.isEmpty()) {
             return (indexOfExtension(filename) == -1);
         }
-        String[] array = (String[]) extensions.toArray(new String[extensions.size()]);
-        return isExtension(filename, array);
+        String fileExt = getExtension(filename);
+        for (Iterator it = extensions.iterator(); it.hasNext();) {
+            if (fileExt.equals(it.next())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Checks a filename to see if it matches the specified wildcard matcher.
+     * Checks a filename to see if it matches the specified wildcard matcher,
+     * always testing case-sensitive.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
-     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     * The extension check is case-sensitive.
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --> true
      * wildcardMatch("c.txt", "*.jpg")      --> false
@@ -839,13 +871,52 @@ public class FilenameUtils {
      * @return true if the filename matches the wilcard string
      */
     public static boolean wildcardMatch(String filename, String wildcardMatcher) {
+        return wildcardMatch(filename, wildcardMatcher, false);
+    }
+
+    /**
+     * Checks a filename to see if it matches the specified wildcard matcher
+     * using the case rules of the system.
+     * <p>
+     * The wildcard matcher uses the characters '?' and '*' to represent a
+     * single or multiple wildcard characters.
+     * This is the same as often found on Dos/Unix command lines.
+     * The check is case-sensitive on Unix and case-insensitive on Windows.
+     * <pre>
+     * wildcardMatch("c.txt", "*.txt")      --> true
+     * wildcardMatch("c.txt", "*.jpg")      --> false
+     * wildcardMatch("a/b/c.txt", "a/b/*")  --> true
+     * wildcardMatch("c.txt", "*.???")      --> true
+     * wildcardMatch("c.txt", "*.????")     --> false
+     * </pre>
+     * 
+     * @param filename  the filename to match on
+     * @param wildcardMatcher  the wildcard string to match against
+     * @return true if the filename matches the wilcard string
+     */
+    public static boolean wildcardMatchOnSystem(String filename, String wildcardMatcher) {
+        return wildcardMatch(filename, wildcardMatcher, true);
+    }
+
+    /**
+     * Checks a filename to see if it matches the specified wildcard matcher.
+     * <p>
+     * The wildcard matcher uses the characters '?' and '*' to represent a
+     * single or multiple wildcard characters.
+     * 
+     * @param filename  the filename to match on
+     * @param wildcardMatcher  the wildcard string to match against
+     * @param system  whether to use the system (windows or unix)
+     * @return true if the filename matches the wilcard string
+     */
+    private static boolean wildcardMatch(String filename, String wildcardMatcher, boolean system) {
         if (filename == null && wildcardMatcher == null) {
             return true;
         }
         if (filename == null || wildcardMatcher == null) {
             return false;
         }
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+        if (system && (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR)) {
             filename = filename.toLowerCase();
             wildcardMatcher = wildcardMatcher.toLowerCase();
         }
