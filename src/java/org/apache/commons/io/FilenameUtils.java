@@ -16,9 +16,8 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Utility class that provides methods to manipulate filenames and filepaths.
@@ -51,7 +50,7 @@ import java.util.ArrayList;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.28 2004/11/26 19:18:28 martinc Exp $
+ * @version $Id: FilenameUtils.java,v 1.29 2004/11/27 01:22:05 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -112,22 +111,29 @@ public class FilenameUtils {
      * The input may contain separators in either Unix or Windows format.
      * The output will contain separators in the format of the system.
      * <p>
-     * A double slash will be merged to a single slash (thus UNC names are not handled).
-     * A single dot path segment will be removed with no other effect.
+     * A trailing slash will be removed.
+     * A double slash will be merged to a single slash (but UNC names are handled).
+     * A single dot path segment will be removed.
      * A double dot will cause that path segment and the one before to be removed.
      * If the double dot has no parent path segment to work with, <code>null</code>
      * is returned.
      * <pre>
-     * /foo//               -->     /foo/
-     * /foo/./              -->     /foo/
-     * /foo/../bar          -->     /bar
-     * /foo/../bar/         -->     /bar/
-     * /foo/../bar/../baz   -->     /baz
-     * //foo//./bar         -->     /foo/bar
-     * /../                 -->     null
-     * ../foo               -->     null
-     * foo/../../bar        -->     null
-     * foo/../bar           -->     bar
+     * /foo//               -->   /foo
+     * /foo/./              -->   /foo
+     * /foo/../bar          -->   /bar
+     * /foo/../bar/         -->   /bar
+     * /foo/../bar/../baz   -->   /baz
+     * //foo//./bar         -->   /foo/bar
+     * /../                 -->   null
+     * ../foo               -->   null
+     * foo/../../bar        -->   null
+     * foo/../bar           -->   bar
+     * //server/foo/../bar  -->   //server/bar
+     * //server/../bar      -->   null
+     * C:\foo\..\bar        -->   C:\bar
+     * C:\..\bar            -->   null
+     * ~/foo/../bar         -->   ~/bar
+     * ~/../bar             -->   null
      * </pre>
      *
      * @param filename  the filename to normalize, null returns null
@@ -137,23 +143,30 @@ public class FilenameUtils {
         if (filename == null) {
             return null;
         }
-        char[] array = filename.toCharArray();
+        int size = filename.length();
+        if (size == 0) {
+            return filename;
+        }
         int prefix = getPrefixLength(filename);
         if (prefix < 0) {
             return null;
         }
         
-        // TODO: Use prefix
+        char[] array = new char[size + 2];  // +1 for possible extra slash, +2 for arraycopy
+        filename.getChars(0, filename.length(), array, 0);
         
-        int size = array.length;
-        // fix separators
+        // fix separators throughout
         for (int i = 0; i < array.length; i++) {
             if (array[i] == OTHER_SEPARATOR) {
                 array[i] = SYSTEM_SEPARATOR;
             }
         }
+        if (isSeparator(array[size - 1]) == false) {
+            array[size++] = SYSTEM_SEPARATOR;
+        }
+        
         // adjoining slashes
-        for (int i = 1; i < size; i++) {
+        for (int i = prefix + 1; i < size; i++) {
             if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == SYSTEM_SEPARATOR) {
                 System.arraycopy(array, i, array, i - 1, size - i);
                 size--;
@@ -161,38 +174,44 @@ public class FilenameUtils {
             }
         }
         // dot slash
-        for (int i = 2; i < size; i++) {
+        for (int i = prefix + 1; i < size; i++) {
             if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
-                    array[i - 2] == SYSTEM_SEPARATOR) {
-                System.arraycopy(array, i, array, i - 2, size - i);
+                    (i == prefix + 1 || array[i - 2] == SYSTEM_SEPARATOR)) {
+                System.arraycopy(array, i + 1, array, i - 1, size - i);
                 size -=2;
                 i--;
             }
         }
         // double dot slash
         outer:
-        for (int i = 2; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
-                    array[i - 2] == '.' && (i == 2 || array[i - 3] == SYSTEM_SEPARATOR)) {
-                if (i == 2) {
+        for (int i = prefix + 2; i < size; i++) {
+            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' && array[i - 2] == '.' &&
+                    (i == prefix + 2 || array[i - 3] == SYSTEM_SEPARATOR)) {
+                if (i == prefix + 2) {
                     return null;
                 }
                 int j;
-                for (j = i - 4 ; j >= 0; j--) {
+                for (j = i - 4 ; j >= prefix; j--) {
                     if (array[j] == SYSTEM_SEPARATOR) {
-                        System.arraycopy(array, i, array, j, size - i);
+                        System.arraycopy(array, i + 1, array, j + 1, size - i);
                         size -= (i - j);
                         i = j + 1;
                         continue outer;
                     }
                 }
-                System.arraycopy(array, i + 1, array, 0, size - i - 1);
-                size -= (i + 1);
-                i = 1;
+                System.arraycopy(array, i + 1, array, prefix, size - i);
+                size -= (i + 1 - prefix);
+                i = prefix + 1;
             }
         }
         
-        return new String(array, 0, size);
+        if (size <= 0) {  // should never be less than 0
+            return "";
+        }
+        if (size <= prefix) {  // should never be less than prefix
+            return new String(array, 0, size);
+        }
+        return new String(array, 0, size - 1);
     }
 
     /**
@@ -239,79 +258,6 @@ public class FilenameUtils {
 
         return new StringBuffer(lookup).
                 append(File.separator).append(pth).toString();
-    }
-
-    /**
-     * Resolve a file <code>filename</code> to it's canonical form. If
-     * <code>filename</code> is relative (doesn't start with <code>/</code>),
-     * it will be resolved relative to <code>baseFile</code>, otherwise it is
-     * treated as a normal root-relative path.
-     *
-     * @param baseFile Where to resolve <code>filename</code> from, if
-     * <code>filename</code> is relative.
-     * @param filename Absolute or relative file path to resolve.
-     * @return The canonical <code>File</code> of <code>filename</code>.
-     */
-     // KILL? Decide whether this is worth keeping?
-    public static File resolveFile(File baseFile, String filename) {
-        String filenm = filename;
-        if ('/' != File.separatorChar) {
-            filenm = filename.replace('/', File.separatorChar);
-        }
-
-        if ('\\' != File.separatorChar) {
-            filenm = filename.replace('\\', File.separatorChar);
-        }
-
-        // deal with absolute files
-        if (filenm.startsWith(File.separator)) {
-            File file = new File(filenm);
-
-            try {
-                file = file.getCanonicalFile();
-            } catch (IOException ioe) {
-                // ignore
-            }
-
-            return file;
-        }
-        // FIXME: I'm almost certain this // removal is unnecessary, as
-        // getAbsoluteFile() strips
-        // them. However, I'm not sure about this UNC stuff. (JT)
-        char[] chars = filename.toCharArray();
-        StringBuffer sb = new StringBuffer();
-
-        //remove duplicate file separators in succession - except
-        //on win32 at start of filename as UNC filenames can
-        //be \\AComputer\AShare\myfile.txt
-        int start = 0;
-        if ('\\' == File.separatorChar) {
-            sb.append(filenm.charAt(0));
-            start++;
-        }
-
-        for (int i = start; i < chars.length; i++) {
-            boolean doubleSeparator =
-                File.separatorChar == chars[i]
-                    && File.separatorChar == chars[i - 1];
-
-            if (!doubleSeparator) {
-                sb.append(chars[i]);
-            }
-        }
-
-        filenm = sb.toString();
-
-        //must be relative
-        File file = (new File(baseFile, filenm)).getAbsoluteFile();
-
-        try {
-            file = file.getCanonicalFile();
-        } catch ( IOException ioe) {
-            ;
-        }
-
-        return file;
     }
 
     //-----------------------------------------------------------------------
@@ -377,6 +323,8 @@ public class FilenameUtils {
      * ~/a/b/c.txt         --> "~/"        --> current user relative
      * ~user/a/b/c.txt     --> "~user/"    --> named user relative
      * </pre>
+     * Both sets of prefixes will be matched regardless of the system
+     * on which the code runs.
      * 
      * @param filename  the filename to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
@@ -389,40 +337,35 @@ public class FilenameUtils {
         if (len == 0) {
             return 0;
         }
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
-            char ch0 = filename.charAt(0);
-            if (len == 1) {
-                return (isSeparator(ch0) ? 1 : 0);
-            } else {
-                char ch1 = filename.charAt(1);
-                if (ch1 == ':') {
-                    ch0 = Character.toUpperCase(ch0);
-                    if (ch0 < 'A' || ch0 > 'Z' || len == 2 || isSeparator(filename.charAt(2)) == false) {
-                        return -1;
-                    }
-                    return 3;
-                } else if (isSeparator(ch0) && isSeparator(ch1)) {
-                    int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
-                    int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
-                    if ((posUnix == -1 && posWin == -1) || posUnix == 2 || posWin == 2) {
-                        return -1;
-                    }
-                    posUnix = (posUnix == -1 ? posWin : posUnix);
-                    posWin = (posWin == -1 ? posUnix : posWin);
-                    return Math.min(posUnix, posWin) + 1;
-                } else {
-                    return (isSeparator(ch0) ? 1 : 0);
-                }
+        char ch0 = filename.charAt(0);
+        if (len == 1) {
+            if (ch0 == '~' || ch0 == ':') {
+                return -1;
             }
+            return (isSeparator(ch0) ? 1 : 0);
         } else {
-            char ch0 = filename.charAt(0);
             if (ch0 == '~') {
-                if (len == 1) {
-                    return -1;
-                }
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
                 int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
                 if (posUnix == -1 && posWin == -1) {
+                    return -1;
+                }
+                posUnix = (posUnix == -1 ? posWin : posUnix);
+                posWin = (posWin == -1 ? posUnix : posWin);
+                return Math.min(posUnix, posWin) + 1;
+            }
+            char ch1 = filename.charAt(1);
+            if (ch1 == ':') {
+                ch0 = Character.toUpperCase(ch0);
+                if (ch0 < 'A' || ch0 > 'Z' || len == 2 || isSeparator(filename.charAt(2)) == false) {
+                    return -1;
+                }
+                return 3;
+                
+            } else if (isSeparator(ch0) && isSeparator(ch1)) {
+                int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
+                int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
+                if ((posUnix == -1 && posWin == -1) || posUnix == 2 || posWin == 2) {
                     return -1;
                 }
                 posUnix = (posUnix == -1 ? posWin : posUnix);
@@ -513,10 +456,11 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The text before the last forward or backslash is returned.
      * <pre>
-     * ~/a/b/c.txt --> a/b
-     * a.txt       --> ""
-     * a/b/c       --> a/b
-     * a/b/c/      --> a/b/c
+     * C:\a\b\c.txt --> a\b
+     * ~/a/b/c.txt  --> a/b
+     * a.txt        --> ""
+     * a/b/c        --> a/b
+     * a/b/c/       --> a/b/c
      * </pre>
      *
      * @param filename  the filename to query, null returns null
@@ -544,10 +488,11 @@ public class FilenameUtils {
      * This method will handle a file in either Unix or Windows format.
      * The text before the last forward or backslash is returned.
      * <pre>
-     * ~/a/b/c.txt --> ~/a/b
-     * a.txt       --> ""
-     * a/b/c       --> a/b
-     * a/b/c/      --> a/b/c
+     * C:\a\b\c.txt --> C:\a\b
+     * ~/a/b/c.txt  --> ~/a/b
+     * a.txt        --> ""
+     * a/b/c        --> a/b
+     * a/b/c/       --> a/b/c
      * </pre>
      *
      * @param filename  the filename to query, null returns null
