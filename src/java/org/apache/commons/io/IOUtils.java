@@ -40,9 +40,9 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.14 $ $Date: 2004/04/24 23:49:25 $
+ * @version CVS $Revision: 1.15 $ $Date: 2004/06/13 04:45:25 $
  */
-public final class IOUtils
+public class IOUtils
 {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
