@@ -32,21 +32,39 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
     //   FilenameUtils.wildcardMatch(String,String)
 
     public void testMatch() {
-        assertEquals(false, FilenameUtils.wildcardMatch(null, "Foo") );
-        assertEquals(false, FilenameUtils.wildcardMatch("Foo", null) );
-        assertEquals(true, FilenameUtils.wildcardMatch(null, null) );
-        assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo") );
-        assertTrue( FilenameUtils.wildcardMatch("", "") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo", "Fo*") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo", "Fo?") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo Bar and Catflap", "Fo*") );
-        assertTrue( FilenameUtils.wildcardMatch("New Bookmarks", "N?w ?o?k??r?s") );
-        assertFalse( FilenameUtils.wildcardMatch("Foo", "Bar") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo Bar Foo", "F*o Bar*") );
-        assertTrue( FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo", "*Foo") );
-        assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo*") );
-        assertEquals(WINDOWS,  FilenameUtils.wildcardMatch("FOO", "Foo*") );
+        assertEquals(false, FilenameUtils.wildcardMatch(null, "Foo"));
+        assertEquals(false, FilenameUtils.wildcardMatch("Foo", null));
+        assertEquals(true, FilenameUtils.wildcardMatch(null, null));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatch("", ""));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo*"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo?"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar and Catflap", "Fo*"));
+        assertEquals(true, FilenameUtils.wildcardMatch("New Bookmarks", "N?w ?o?k??r?s"));
+        assertEquals(false, FilenameUtils.wildcardMatch("Foo", "Bar"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar Foo", "F*o Bar*"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "*Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo*"));
+        assertEquals(false, FilenameUtils.wildcardMatch("FOO", "Foo*"));
+    }
+
+    public void testMatchOnSystem() {
+        assertEquals(false, FilenameUtils.wildcardMatchOnSystem(null, "Foo"));
+        assertEquals(false, FilenameUtils.wildcardMatchOnSystem("Foo", null));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem(null, null));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("", ""));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Fo*"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Fo?"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo Bar and Catflap", "Fo*"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("New Bookmarks", "N?w ?o?k??r?s"));
+        assertEquals(false, FilenameUtils.wildcardMatchOnSystem("Foo", "Bar"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo Bar Foo", "F*o Bar*"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Adobe Acrobat Installer", "Ad*er"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "*Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Foo*"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
     }
 
     public void testSplitOnTokens() {
