@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2002/07/09 15:12:23 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/Attic/DemuxTestCase.java,v 1.1 2002/11/12 07:28:03 bayard Exp $
+ * $Revision: 1.1 $
+ * $Date: 2002/11/12 07:28:03 $
  *
  * ====================================================================
  *
@@ -59,7 +59,7 @@
  *
  */
 
-package org.apache.commons.io;
+package org.apache.commons.io.output;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
