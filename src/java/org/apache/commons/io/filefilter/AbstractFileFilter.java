@@ -17,11 +17,11 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowlegement:
+ *    any, must include the following acknowledgement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowlegement may appear in the software itself,
- *    if and wherever such third-party acknowlegements normally appear.
+ *    Alternately, this acknowledgement may appear in the software itself,
+ *    if and wherever such third-party acknowledgements normally appear.
  *
  * 4. The names "The Jakarta Project", "Commons", and "Apache Software
  *    Foundation" must not be used to endorse or promote products derived
@@ -63,7 +63,7 @@ import java.io.File;
  * otherwise your class will infinitely loop.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.6 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.7 $ $Date: 2003/10/13 07:03:50 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne

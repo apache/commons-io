@@ -17,11 +17,11 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowlegement:
+ *    any, must include the following acknowledgement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowlegement may appear in the software itself,
- *    if and wherever such third-party acknowlegements normally appear.
+ *    Alternately, this acknowledgement may appear in the software itself,
+ *    if and wherever such third-party acknowledgements normally appear.
  *
  * 4. The names "The Jakarta Project", "Commons", and "Apache Software
  *    Foundation" must not be used to endorse or promote products derived
@@ -62,7 +62,7 @@ import java.io.FilterInputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.2 2003/07/27 17:13:41 jeremias Exp $
+ * @version $Id: CountingInputStream.java,v 1.3 2003/10/13 07:04:16 rdonkin Exp $
  */
 public class CountingInputStream extends FilterInputStream {
 
