@@ -1,5 +1,5 @@
 /*
- * Copyright 2003,2004 The Apache Software Foundation.
+ * Copyright 2003-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,10 @@ import junit.framework.TestCase;
 /**
  * Tests the CountingInputStream.
  *
- * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
+ * @author Henri Yandell
+ * @author Marcelo Liberato
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public class CountingInputStreamTest extends TestCase {
 
@@ -78,5 +81,73 @@ public class CountingInputStreamTest extends TestCase {
         found = cis.read(result, 6, 5);
         assertEquals( found, cis.getCount() );
     }
-}
+    
+    public void testZeroLength1() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        CountingInputStream cis = new CountingInputStream(bais);
 
+        int found = cis.read();
+        assertEquals(-1, found);
+        assertEquals(0, cis.getCount());
+    }
+
+    public void testZeroLength2() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        byte[] result = new byte[10];
+
+        int found = cis.read(result);
+        assertEquals(-1, found);
+        assertEquals(0, cis.getCount());
+    }
+
+    public void testZeroLength3() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        byte[] result = new byte[10];
+
+        int found = cis.read(result, 0, 5);
+        assertEquals(-1, found);
+        assertEquals(0, cis.getCount());
+    }
+
+    public void testEOF1() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        int found = cis.read();
+        assertEquals(0, found);
+        assertEquals(1, cis.getCount());
+        found = cis.read();
+        assertEquals(0, found);
+        assertEquals(2, cis.getCount());
+        found = cis.read();
+        assertEquals(-1, found);
+        assertEquals(2, cis.getCount());
+    }
+
+    public void testEOF2() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        byte[] result = new byte[10];
+
+        int found = cis.read(result);
+        assertEquals(2, found);
+        assertEquals(2, cis.getCount());
+    }
+
+    public void testEOF3() throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        CountingInputStream cis = new CountingInputStream(bais);
+
+        byte[] result = new byte[10];
+
+        int found = cis.read(result, 0, 5);
+        assertEquals(2, found);
+        assertEquals(2, cis.getCount());
+    }
+
+}

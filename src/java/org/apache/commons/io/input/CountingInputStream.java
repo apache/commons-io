@@ -23,6 +23,7 @@ import java.io.InputStream;
  * have passed through so far.
  *
  * @author Henri Yandell
+ * @author Marcelo Liberato
  * @version $Id$
  */
 public class CountingInputStream extends ProxyInputStream {
@@ -45,7 +46,7 @@ public class CountingInputStream extends ProxyInputStream {
      */
     public int read(byte[] b) throws IOException {
         int found = super.read(b);
-        this.count += found;
+        this.count += (found >= 0) ? found : 0;
         return found;
     }
 
@@ -56,18 +57,19 @@ public class CountingInputStream extends ProxyInputStream {
      */
     public int read(byte[] b, int off, int len) throws IOException {
         int found = super.read(b, off, len);
-        this.count += found;
+        this.count += (found >= 0) ? found : 0;
         return found;
     }
 
     /**
-     * Increases the count by 1. 
+     * Increases the count by 1 if a byte is successfully read. 
      *
      * @see java.io.InputStream#read()
      */
     public int read() throws IOException {
-        this.count++;
-        return super.read();
+        int found = super.read();
+        this.count += (found >= 0) ? 1 : 0;
+        return found;
     }
 
     /**
