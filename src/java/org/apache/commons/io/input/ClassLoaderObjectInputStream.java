@@ -1,4 +1,4 @@
-package org.apache.commons.io;
+package org.apache.commons.io.input;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -65,7 +65,7 @@ import java.io.StreamCorruptedException;
  * by Avalon components that are juggling many classloaders.
  *
  * @author <a href="mailto:paul_hammant@yahoo.com">Paul Hammant</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/08 22:14:46 $
+ * @version $Revision: 1.1 $ $Date: 2002/11/11 19:34:02 $
  */
 public class ClassLoaderObjectInputStream
     extends ObjectInputStream
