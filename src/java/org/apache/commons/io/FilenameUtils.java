@@ -52,7 +52,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.10 2004/06/13 05:13:57 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.11 2004/06/13 05:17:11 bayard Exp $
  */
 public class FilenameUtils {
 
@@ -414,22 +414,7 @@ public class FilenameUtils {
     }
 
 
-
-    // ----------------------------------------------------------------
-    // Deprecated methods
-    // ----------------------------------------------------------------
-
-    /**
-     * Returns the filename portion of a file specification string.
-     * Matches the equally named unix command.
-     * @param filename filename to inspect
-     * @return The filename string without extension.
-     * @deprecated This method will be deleted before a 1.0 release
-     * TODO DELETE before 1.0
-     */
-    public static String basename(String filename) {
-        return basename(filename, extension(filename));
-    }
+    // DEPRECATED. Though no replacement exists.
 
     /**
      * Returns the filename portion of a file specification string.
@@ -454,130 +439,6 @@ public class FilenameUtils {
         } else {
             return filename; // else returns all (no path and no extension)
         }
-    }
-
-    /**
-     * Delete a file. If file is directory delete it and all sub-directories.
-     * @param file file or directory to delete.
-     * @throws IOException in case deletion is unsuccessful
-     * @deprecated Use {@link FileUtils#forceDelete(File)}
-     */
-    public static void forceDelete( String file) throws IOException {
-        FileUtils.forceDelete(new File(file));
-    }
-
-
-
-    /**
-     * Clean a directory without deleting it.
-     * @param directory directory to clean
-     * @throws IOException in case cleaning is unsuccessful
-     * @deprecated Use {@link FileUtils#cleanDirectory(File)}
-     */
-    public static void cleanDirectory( String directory)
-        throws IOException {
-        FileUtils.cleanDirectory(new File(directory));
-    }
-
-    /**
-     * Recursively count size of a directory (sum of the length of all files).
-     *
-     * @param directory directory to inspect
-     * @return size of directory in bytes.
-     * @deprecated Use {@link FileUtils#sizeOfDirectory(File)}
-     */
-    public static long sizeOfDirectory( String directory) {
-        return FileUtils.sizeOfDirectory(new File(directory));
-    }
-
-    /**
-     * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
-     * <code>destinationDirectory</code> exists, it will be overwritten.
-     *
-     * @param source An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     *
-     * @throws FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException if <code>destinationDirectory</code> isn't a directory.
-     * @throws IOException if <code>source</code> does not exist, the file in
-     * <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
-     *
-     * @deprecated Use {@link FileUtils#copyFileToDirectory(File, File)}
-     */
-    public static void copyFileToDirectory(
-        String source,
-        String destinationDirectory)
-        throws IOException, FileNotFoundException {
-        FileUtils.copyFileToDirectory(new File(source), new File(destinationDirectory));
-    }
-
-    /**
-     * Recursively delete a directory.
-     * @param directory directory to delete
-     * @throws IOException in case deletion is unsuccessful
-     * @deprecated Use {@link FileUtils#deleteDirectory(File)}
-     */
-    public static void deleteDirectory( String directory)
-        throws IOException {
-        FileUtils.deleteDirectory(new File(directory));
-    }
-
-    /**
-     * Returns the directory path portion of a file specification string.
-     * Matches the equally named unix command.
-     * @param filename filename to inspect
-     * @return The directory portion excluding the ending file separator.
-     * @deprecated Use {@link FileUtils#getPath(File)}
-     * TODO DELETE before 1.0
-     */
-    public static String dirname(String filename) {
-        int i = filename.lastIndexOf(File.separator);
-        return (i >= 0 ? filename.substring(0, i) : "");
-    }
-
-    /**
-     * Returns the filename portion of a file specification string.
-     * @param filename filename to inspect
-     * @return The filename string with extension.
-     * @deprecated Use {@link FileUtils#removeExtension(File)}
-     * TODO DELETE before 1.0
-     */
-    public static String filename(String filename) {
-        int i = filename.lastIndexOf(File.separator);
-        return (i >= 0 ? filename.substring(i + 1) : filename);
-    }
-
-
-
-    /**
-     * Returns the extension portion of a file specification string.
-     * This everything after the last dot '.' in the filename (NOT including
-     * the dot).
-     * @param filename filename to inspect
-     * @return the extension
-     * @deprecated Use {@link FileUtils#getExtension(File)}
-     * TODO probably duplicate method. See getExtension
-     */
-    public static String extension(String filename) {
-        int lastDot = filename.lastIndexOf('.');
-
-        if (lastDot >= 0) {
-            return filename.substring(lastDot + 1);
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * Creates a file handle.
-     *
-     * @param fileName The name of the file.
-     * @return A <code>File</code> instance.
-     * @deprecated Use {@link java.io.File#Constructor(String)}
-     */
-    public static File getFile(String fileName) {
-        return new File(fileName);
     }
 
 }
