@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!DOCTYPE project [
 <!ENTITY commons-nav SYSTEM "../../incl_nav.xml">
@@ -6,24 +6,28 @@
 
 <project name="IO">
 
-    <title>IO</title>
+  <title>IO</title>
+  <organizationLogo href="/images/jakarta-logo-blue.gif">
+   Jakarta
+  </organizationLogo>
 
-    <organizationLogo href="/images/jakarta-logo-blue.gif">
-        Jakarta
-   </organizationLogo>
+  <body>
+    <links>
+      <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/"/>
+    </links>
 
-    <body>
+    <menu name="Commons IO">
+      <item name="Overview" href="index.html"/>
+      <item name="Javadoc" href="apidocs/index.html"/>
+      <item name="Best practices" href="bestpractices.html"/>
+      <item name="Building" href="building.html"/>
+      <item name="Mailing lists" href="mail-lists.html"/>
+      <item name="Team" href="team-list.html"/>
+      <item name="Tasks" href="tasks.html"/>
+      <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons-sandbox/io/"/>
+    </menu>
+    
+    &commons-nav;
 
-        <menu name="Commons IO">
-            <item name="Home" href="index.html"/>
-            <item name="Best Practices" href="bestpractices.html"/>
-            <item name="Building" href="building.html"/>
-            <item name="Tasks" href="tasks.html"/>
-        </menu>
-
-        &commons-nav;
-
-    </body>
-
+  </body>
 </project>
-

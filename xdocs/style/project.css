@@ -1,0 +1,10 @@
+#banner, #banner td { 
+ background: #fff;
+ color: #000;
+}
+
+#banner td { 
+ height: 100%;
+ vertical-align: middle;
+}
+
