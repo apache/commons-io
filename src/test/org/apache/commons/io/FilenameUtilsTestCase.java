@@ -29,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.6 2004/03/12 21:44:47 jeremias Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.7 2004/03/12 21:59:19 jeremias Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -107,8 +107,16 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         // Is this acceptable?
         //assertEquals("", FilenameUtils.catPath("a", "b"));
 
-        assertEquals("/a/c", FilenameUtils.catPath("/a/b", "c"));
-        assertEquals("/a/d", FilenameUtils.catPath("/a/b/c", "../d"));
+        assertEquals("/a" + File.separator + "c", FilenameUtils.catPath("/a/b", "c"));
+        assertEquals("/a" + File.separator + "d", FilenameUtils.catPath("/a/b/c", "../d"));
+        assertEquals("C:\\a" + File.separator + "c", FilenameUtils.catPath("C:\\a\\b", "c"));
+        assertEquals("C:\\a" + File.separator + "d", FilenameUtils.catPath("C:\\a\\b\\c", "../d"));
+    }
+
+    public void testIndexOfLastPathSeparator() {
+        assertEquals(-1, FilenameUtils.indexOfLastPathSeparator("noseperator.inthispath"));
+        assertEquals(3, FilenameUtils.indexOfLastPathSeparator("a/b/c"));
+        assertEquals(3, FilenameUtils.indexOfLastPathSeparator("a\\b\\c"));
     }
 
     // resolveFile
