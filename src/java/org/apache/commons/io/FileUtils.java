@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.32 2004/06/13 04:58:07 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.33 2004/07/03 11:20:45 jeremias Exp $
  */
 public class FileUtils {
 
@@ -121,8 +121,9 @@ public class FileUtils {
      * @throws IOException If an I/O problem occurs
      */
     public static void touch(File file) throws IOException {
-        OutputStream out = new java.io.FileOutputStream(file);
+        OutputStream out = new java.io.FileOutputStream(file, true);
         IOUtils.closeQuietly(out);
+        file.setLastModified(System.currentTimeMillis());
     }
 
 
