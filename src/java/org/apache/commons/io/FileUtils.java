@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.23 2003/12/30 06:50:16 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.24 2003/12/30 15:24:01 jeremias Exp $
  */
 public class FileUtils {
 
@@ -611,6 +611,7 @@ public class FileUtils {
      *
      * @param file the file to write.
      * @param data The content to write to the file.
+     * @param encoding encoding to use
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported
      *   by the VM
