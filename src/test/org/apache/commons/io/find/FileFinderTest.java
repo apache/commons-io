@@ -39,7 +39,7 @@ public class FileFinderTest extends TestCase {
     public void setUp() {
         finder = new FileFinder();
         options = new HashMap();
-        options.put(Finder.NOT+Finder.PATH, "*CVS*");
+        options.put(Finder.NOT+Finder.PATH, "*.svn*");
         // uncomment for debugging
 //        finder.addFindListener( new DebugListener() );
     }
