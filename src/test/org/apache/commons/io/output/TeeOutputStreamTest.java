@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/TeeOutputStreamTest.java,v 1.1 2003/11/23 09:32:45 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/11/23 09:32:45 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/TeeOutputStreamTest.java,v 1.2 2003/11/27 06:57:44 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/11/27 06:57:44 $
  *
  * ====================================================================
  *
@@ -71,7 +71,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.1 $ $Date: 2003/11/23 09:32:45 $
+ * @version $Revision: 1.2 $ $Date: 2003/11/27 06:57:44 $
  */
 
 public class TeeOutputStreamTest extends TestCase {
@@ -110,8 +110,4 @@ public class TeeOutputStreamTest extends TestCase {
         }
     }
 
-    public static void main(String[] ignored_args) {
-        System.out.println("Testing io.output.Stream functionality");
-        junit.textui.TestRunner.run(TeeOutputStreamTest.class);
-    }
 }
