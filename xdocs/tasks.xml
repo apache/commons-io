@@ -11,7 +11,6 @@
             parameter. Reasoning can be found at
             http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
         <li>FileUtils: This class is a big mess ATM. We need to clean it up.</li>
-        <li>FilenameUtils: Fix javadoc links to point to FileUtils. </li>
         <li>Need to see if FilterWriter/Reader are predictable (see also ProxyInput/OutputStream)</li>
         <li>Write TestCases for: 
         <ul>
