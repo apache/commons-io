@@ -33,7 +33,7 @@
     </mkdir>
     <javac destdir="${classesdir}" deprecation="true" debug="true" optimize="false" excludes="**/package.html">
       <src>
-        <pathelement location="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io/src/java">
+        <pathelement location="src/java">
         </pathelement>
       </src>
       <classpath>
@@ -44,13 +44,13 @@
       </classpath>
     </javac>
     <copy todir="${classesdir}">
-      <fileset dir="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io">
+      <fileset dir=".">
         <include name="**/*.properties">
         </include>
       </fileset>
     </copy>
     <copy todir="${testclassesdir}">
-      <fileset dir="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io/data/test">
+      <fileset dir="data/test">
       </fileset>
     </copy>
   </target>
@@ -99,7 +99,7 @@
         </pathelement>
       </classpath>
       <batchtest todir="${testreportdir}">
-        <fileset dir="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io/src/test">
+        <fileset dir="src/test">
           <include name="**/*Test*">
           </include>
           <exclude name="**/testtools/**">
@@ -117,7 +117,7 @@
     </mkdir>
     <javac destdir="${testclassesdir}" deprecation="true" debug="true" optimize="false" excludes="**/package.html">
       <src>
-        <pathelement location="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io/src/test">
+        <pathelement location="src/test">
         </pathelement>
       </src>
       <classpath>
@@ -141,7 +141,7 @@
     </property>
     <property name="title" value="io SNAPSHOT API">
     </property>
-    <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="/Users/hen/java/jakarta/src/jakarta-commons-sandbox/io/src/java" packagenames="org.apache.commons.io.*">
+    <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="src/java" packagenames="org.apache.commons.io.*">
       <classpath>
         <fileset dir="${libdir}">
           <include name="*.jar">
