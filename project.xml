@@ -19,7 +19,7 @@
   
   <name>IO</name>
   <id>commons-io</id>
-  <currentVersion>1.0</currentVersion>
+  <currentVersion>1.1-dev</currentVersion>
   <inceptionYear>2002</inceptionYear>
   <shortDescription>Commons IO</shortDescription>
   <description>
@@ -37,11 +37,11 @@
   </organization>
 
   <licenses>
-	<license>
-    	<name>The Apache Software License, Version 2.0</name>
-    	<url>/LICENSE.txt</url>
-    	<distribution>repo</distribution>
-	</license>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>/LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
   
   <gumpRepositoryId>jakarta</gumpRepositoryId>
@@ -70,149 +70,143 @@
     </mailingList>
   </mailingLists>
   
+  <versions>
+    <version>
+      <id>1.0</id>
+      <name>1.0</name>
+      <tag>IO_1_0</tag>
+    </version>
+  </versions>
 
-    <developers>
-        <developer>
-            <name>Scott Sanders</name>
-            <id>sanders</id>
-            <email>sanders@apache.org</email>
-            <organization></organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
+  <developers>
+    <developer>
+      <name>Scott Sanders</name>
+      <id>sanders</id>
+      <email>sanders@apache.org</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>dIon Gillard</name>
+      <id>dion</id>
+      <email>dion@apache.org</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Nicola Ken Barozzi</name>
+      <id>nicolaken</id>
+      <email>nicolaken@apache.org</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Henri Yandell</name>
+      <id>bayard</id>
+      <email>bayard@apache.org</email>
+      <organization></organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Stephen Colebourne</name>
+      <id>scolebourne</id>
+      <organization>SITA ATS</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jeremias Maerki</name>
+      <id>jeremias</id>
+      <email>jeremias@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <url>http://nagoya.apache.org/wiki/apachewiki.cgi?JeremiasMaerki</url>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <name>Matthew Hawthorne</name>
+      <id>matth</id>
+      <email>matth@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Martin Cooper</name>
+      <id>martinc</id>
+      <email>martinc@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
 
-        <developer>
-            <name>dIon Gillard</name>
-            <id>dion</id>
-            <email>dion@apache.org</email>
-            <organization></organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
+  </developers>
 
-        <developer>
-            <name>Nicola Ken Barozzi</name>
-            <id>nicolaken</id>
-            <email>nicolaken@apache.org</email>
-            <organization></organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
+  <contributors>
+    <contributor>
+      <name>Alban Peignier</name>
+      <email>alban.peignier at free.fr</email>
+    </contributor>
+    <contributor>
+      <name>Jason Anderson</name>
+    </contributor>
+  </contributors>
 
-        <developer>
-            <name>Henri Yandell</name>
-            <id>bayard</id>
-            <email>bayard@apache.org</email>
-            <organization></organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
+  <dependencies>
+    <dependency>
+      <id>junit</id>
+      <version>3.8.1</version>
+    </dependency>
+  </dependencies>
 
-        <developer>
-            <name>Stephen Colebourne</name>
-            <id>scolebourne</id>
-            <organization>SITA ATS</organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
-
-        <developer>
-            <name>Jeremias Maerki</name>
-            <id>jeremias</id>
-            <email>jeremias@apache.org</email>
-            <organization/>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <url>http://nagoya.apache.org/wiki/apachewiki.cgi?JeremiasMaerki</url>
-            <timezone>+1</timezone>
-        </developer>
-
-        <developer>
-            <name>Matthew Hawthorne</name>
-            <id>matth</id>
-            <email>matth@apache.org</email>
-            <organization/>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
-
-        <developer>
-            <name>Martin Cooper</name>
-            <id>martinc</id>
-            <email>martinc@apache.org</email>
-            <organization/>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
-
-    </developers>
-
-    <contributors>
-        <contributor>
-            <name>Alban Peignier</name>
-            <email>alban.peignier at free.fr</email>
-        </contributor>
-        <contributor>
-            <name>Jason Anderson</name>
-        </contributor>
-    </contributors>
-
-    <dependencies>
-        <dependency>
-            <id>junit</id>
-            <version>3.8.1</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-    	<nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
-    	<sourceDirectory>src/java</sourceDirectory>
-    	<unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-        <!-- Unit test classes -->
-        <!-- TODO Organize test inclusions and exclusions -->
-        <unitTest>
-            <includes>
-                <include>**/*Test*</include>
-            </includes>
-            <excludes>
-                <exclude>**/testtools/**</exclude>
-            </excludes>
-        </unitTest>
-
-        <resources>
-            <resource>
-              <targetPath>META-INF</targetPath>
-              <includes>
-                <include>NOTICE.txt</include>
-              </includes>
-            </resource>
-        </resources>
-
+  <build>
+    <nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <!-- Unit test classes -->
+    <!-- TODO Organize test inclusions and exclusions -->
+    <unitTest>
+      <includes>
+        <include>**/*Test*</include>
+      </includes>
+      <excludes>
+        <exclude>**/testtools/**</exclude>
+      </excludes>
+    </unitTest>
+    <resources>
+      <resource>
+        <targetPath>META-INF</targetPath>
+          <includes>
+            <include>NOTICE.txt</include>
+          </includes>
+        </resource>
+      </resources>
     </build>
 
   <reports>
-     <report>maven-changelog-plugin</report>
-     <report>maven-changes-plugin</report>
-     <!--report>maven-checkstyle-plugin</report-->
-     <!--report>maven-clover-plugin</report-->
-     <report>maven-developer-activity-plugin</report>
-     <report>maven-file-activity-plugin</report>
-     <report>maven-javadoc-plugin</report>
-     <!--report>maven-jellydoc-plugin</report-->
-     <report>maven-junit-report-plugin</report>
-     <report>maven-jxr-plugin</report>
-     <report>maven-license-plugin</report>
-     <!--report>maven-linkcheck-plugin</report-->
-     <!--report>maven-statcvs-plugin</report-->
-     <!--report>maven-tasklist-plugin</report-->
+    <report>maven-changelog-plugin</report>
+    <report>maven-changes-plugin</report>
+    <report>maven-checkstyle-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-license-plugin</report>
   </reports>
 
 </project>
