@@ -69,7 +69,9 @@ public class FileFinder implements Finder {
         return find(directory, new java.util.HashMap());
     }
 
-    // TODO: add maxdepth and mindepth somehow
+    /**
+     * @todo add maxdepth and mindepth somehow
+     */
     public File[] find(File directory, Map options) {
         notifyDirectoryStarted(directory);
 
