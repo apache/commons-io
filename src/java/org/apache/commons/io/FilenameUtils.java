@@ -21,7 +21,21 @@ import java.io.IOException;
 
 /**
  * Common {@link java.io.File} manipulation routines through 
- * use of a filename.
+ * use of a filename/path.
+ *
+ * <h3>Path-related methods</h3>
+ *
+ * <p>Methods exist to retrieve the components of a typical file path. For example
+ * <code>/www/hosted/mysite/index.html</code>, can be broken into:
+ * <ul>
+ *   <li><code>/www/hosted/mysite/</code> -- retrievable through {@link #getPath}</li>
+ *   <li><code>index.html</code> -- retrievable through {@link #removePath}</li>
+ *   <li><code>/www/hosted/mysite/index</code> -- retrievable through {@link #removeExtension}</li>
+ *   <li><code>html</code> -- retrievable through {@link #getExtension}</li>
+ * </ul>
+ * There are also methods to {@link #catPath concatenate two paths}, {@link #resolveFile resolve a
+ * path relative to a File} and {@link #normalize} a path.
+ * </p>
  *
  * <h3>Origin of code</h3>
  * <ul>
@@ -38,7 +52,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.8 2004/03/12 21:58:59 jeremias Exp $
+ * @version $Id: FilenameUtils.java,v 1.9 2004/06/13 04:58:07 bayard Exp $
  */
 public class FilenameUtils {
 

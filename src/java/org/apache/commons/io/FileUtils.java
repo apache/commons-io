@@ -35,21 +35,7 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * This class provides basic facilities for manipulating files and file paths.
- *
- * <h3>Path-related methods</h3>
- *
- * <p>Methods exist to retrieve the components of a typical file path. For example
- * <code>/www/hosted/mysite/index.html</code>, can be broken into:
- * <ul>
- *   <li><code>/www/hosted/mysite/</code> -- retrievable through {@link #getPath}</li>
- *   <li><code>index.html</code> -- retrievable through {@link #removePath}</li>
- *   <li><code>/www/hosted/mysite/index</code> -- retrievable through {@link #removeExtension}</li>
- *   <li><code>html</code> -- retrievable through {@link #getExtension}</li>
- * </ul>
- * There are also methods to {@link #catPath concatenate two paths}, {@link #resolveFile resolve a
- * path relative to a File} and {@link #normalize} a path.
- * </p>
+ * This class provides basic facilities for manipulating files. 
  *
  * <h3>File-related methods</h3>
  * <p>
@@ -78,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.31 2004/04/24 19:46:16 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.32 2004/06/13 04:58:07 bayard Exp $
  */
 public class FileUtils {
 
