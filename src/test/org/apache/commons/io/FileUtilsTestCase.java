@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.GregorianCalendar;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -33,7 +34,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.22 2004/07/15 09:49:53 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.23 2004/07/24 08:41:00 scolebourne Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -456,19 +457,24 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         if (file.exists()) {
             file.delete();
         }
-        assertTrue("Prerequisite failed, test file exists", !file.exists());
+        assertTrue("Bad test: test file still exists", !file.exists());
         FileUtils.touch(file);
-        assertTrue("FileUtils.touch() created file.", file.exists());
+        assertTrue("FileUtils.touch() created file", file.exists());
         FileOutputStream out = new FileOutputStream(file) ;
         assertEquals("Created empty file.", 0, file.length());
         out.write(0) ;
         out.close();
-        assertEquals("Wrote one byte to file.", 1, file.length());
-        file.setLastModified(0) ;
-        assertEquals("Set lastModified to 0.", 0, file.lastModified());
+        assertEquals("Wrote one byte to file", 1, file.length());
+        long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
+        boolean res = file.setLastModified(y2k);  // 0L fails on Win98
+        assertEquals("Bad test: set lastModified failed", true, res);
+        assertEquals("Bad test: set lastModified set incorrect value", y2k, file.lastModified());
+        long now = System.currentTimeMillis();
         FileUtils.touch(file) ;
         assertEquals("FileUtils.touch() didn't empty the file.", 1, file.length());
-        assertFalse("FileUtils.touch() changed lastModified.", 0 == file.lastModified()) ;        
+        assertEquals("FileUtils.touch() changed lastModified", false, y2k == file.lastModified());
+        assertEquals("FileUtils.touch() changed lastModified to more than now-3s", true, file.lastModified() >= (now - 3000));
+        assertEquals("FileUtils.touch() changed lastModified to less than now+3s", true, file.lastModified() <= (now + 3000));
     }
 
     public void testReadFileToString() throws Exception {
