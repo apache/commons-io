@@ -19,9 +19,16 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Common {@link java.io.File} manipulation routines through
- * use of a filename/path.
- *
+ * Utility class that provides methods to manipulate filenames and filepaths.
+ * <p>
+ * This class defines three basic components within a filename (example C:\dev\file.txt):
+ * <ul>
+ * <li>the path - C:\dev
+ * <li>the name - file.txt
+ * <li>the extension - txt
+ * </ul>
+ * The class only supports Unix and Windows style names.
+ * 
  * <h3>Path-related methods</h3>
  *
  * <p>Methods exist to retrieve the components of a typical file path. For
@@ -56,7 +63,7 @@ import java.io.IOException;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.19 2004/10/30 22:16:23 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.20 2004/10/30 22:41:57 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -65,6 +72,11 @@ public class FilenameUtils {
      * Standard separator char used when internalizing paths.
      */
     private static final char INTERNAL_SEPARATOR_CHAR = '/';
+
+    /**
+     * The extension separator character.
+     */
+    private static final char EXTENSION_SEPARATOR = '.';
 
     /**
      * The Unix separator character.
@@ -356,14 +368,14 @@ public class FilenameUtils {
      // TODO UNIX/Windows only. Is this a problem?
     public static String catPath(String lookupPath, String path) {
         // Cut off the last slash and everything beyond
-        int index = indexOfLastPathSeparator(lookupPath);
+        int index = indexOfLastSeparator(lookupPath);
         String lookup = lookupPath.substring(0, index);
         String pth = path;
 
         // Deal with .. by chopping dirs off the lookup path
         while (pth.startsWith("../") || pth.startsWith("..\\")) {
             if (lookup.length() > 0) {
-                index = indexOfLastPathSeparator(lookup);
+                index = indexOfLastSeparator(lookup);
                 lookup = lookup.substring(0, index);
             } else {
                 // More ..'s than dirs, return null
@@ -375,22 +387,6 @@ public class FilenameUtils {
 
         return new StringBuffer(lookup).
                 append(File.separator).append(pth).toString();
-    }
-
-    /**
-     * Return the index of the last 'path separator' character. The 'path
-     * separator' character is '/' for UNIX systems and '\' for Microsoft
-     * Windows systems.
-     *
-     * @param path The path to find the last path separator in
-     * @return The index of the last 'path separator' character, or -1 if there
-     * is no such character.
-     */
-    // KILL: Inline into above method
-    public static int indexOfLastPathSeparator(String path) {
-        int lastUnixPos = path.lastIndexOf('/');
-        int lastWindowsPos = path.lastIndexOf('\\');
-        return Math.max(lastUnixPos, lastWindowsPos);
     }
 
     /**
@@ -493,7 +489,7 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Convert all separators to the Unix separator of forward slash.
+     * Converts all separators to the Unix separator of forward slash.
      * 
      * @param path  the path to be changed, null ignored
      * @return the updated path
@@ -506,7 +502,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Convert all separators to the Windows separator of backslash.
+     * Converts all separators to the Windows separator of backslash.
      * 
      * @param path  the path to be changed, null ignored
      * @return the updated path
@@ -519,7 +515,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Convert all separators to the system separator.
+     * Converts all separators to the system separator.
      * 
      * @param path  the path to be changed, null ignored
      * @return the updated path
@@ -528,15 +524,51 @@ public class FilenameUtils {
         if (path == null) {
             return null;
         }
-        if (SYSTEM_SEPARATOR == UNIX_SEPARATOR) {
-            return separatorsToUnix(path);
-        }
         if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
             return separatorsToWindows(path);
+        } else {
+            return separatorsToUnix(path);
         }
-        path = path.replace(UNIX_SEPARATOR, SYSTEM_SEPARATOR);
-        path = path.replace(WINDOWS_SEPARATOR, SYSTEM_SEPARATOR);
-        return path;
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Returns the index of the last directory separator character.
+     * <p>
+     * This method will handle a file in either Unix or Windows format.
+     * The position of the last forward or backslash is returned.
+     * 
+     * @param path  the path to find the last path separator in
+     * @return the index of the last separator character, or -1 if there
+     * is no such character.
+     */
+    public static int indexOfLastSeparator(String path) {
+        if (path == null) {
+            return -1;
+        }
+        int lastUnixPos = path.lastIndexOf(UNIX_SEPARATOR);
+        int lastWindowsPos = path.lastIndexOf(WINDOWS_SEPARATOR);
+        return Math.max(lastUnixPos, lastWindowsPos);
+    }
+
+    /**
+     * Returns the index of the last extension separator character, which is a dot.
+     * <p>
+     * This method also checks that there is no directory separator after the last dot.
+     * To do this it uses {@link #indexOfLastSeparator(String)} which will
+     * handle a file in either Unix or Windows format.
+     * 
+     * @param path  the path to find the last path separator in
+     * @return the index of the last separator character, or -1 if there
+     * is no such character.
+     */
+    public static int indexOfExtension(String path) {
+        if (path == null) {
+            return -1;
+        }
+        int extensionPos = path.lastIndexOf(EXTENSION_SEPARATOR);
+        int lastSeparator = indexOfLastSeparator(path);
+        return (lastSeparator > extensionPos ? -1 : extensionPos);
     }
 
 }

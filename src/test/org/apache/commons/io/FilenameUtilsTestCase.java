@@ -30,7 +30,7 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.13 2004/10/30 22:16:23 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.14 2004/10/30 22:41:56 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -112,12 +112,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("/a" + File.separator + "d", FilenameUtils.catPath("/a/b/c", "../d"));
         assertEquals("C:\\a" + File.separator + "c", FilenameUtils.catPath("C:\\a\\b", "c"));
         assertEquals("C:\\a" + File.separator + "d", FilenameUtils.catPath("C:\\a\\b\\c", "../d"));
-    }
-
-    public void testIndexOfLastPathSeparator() {
-        assertEquals(-1, FilenameUtils.indexOfLastPathSeparator("noseperator.inthispath"));
-        assertEquals(3, FilenameUtils.indexOfLastPathSeparator("a/b/c"));
-        assertEquals(3, FilenameUtils.indexOfLastPathSeparator("a\\b\\c"));
     }
 
     // resolveFile
@@ -309,6 +303,25 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
             assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("/a/b/c"));
             assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToSystem("D:/a/b/c"));
         }
+    }
+
+    //-----------------------------------------------------------------------
+    public void testIndexOfLastSeparator() {
+        assertEquals(-1, FilenameUtils.indexOfLastSeparator(null));
+        assertEquals(-1, FilenameUtils.indexOfLastSeparator("noseperator.inthispath"));
+        assertEquals(3, FilenameUtils.indexOfLastSeparator("a/b/c"));
+        assertEquals(3, FilenameUtils.indexOfLastSeparator("a\\b\\c"));
+    }
+
+    public void testIndexOfExtension() {
+        assertEquals(-1, FilenameUtils.indexOfExtension(null));
+        assertEquals(-1, FilenameUtils.indexOfExtension("file"));
+        assertEquals(4, FilenameUtils.indexOfExtension("file.txt"));
+        assertEquals(13, FilenameUtils.indexOfExtension("a.txt/b.txt/c.txt"));
+        assertEquals(-1, FilenameUtils.indexOfExtension("a/b/c"));
+        assertEquals(-1, FilenameUtils.indexOfExtension("a\\b\\c"));
+        assertEquals(-1, FilenameUtils.indexOfExtension("a/b.notextension/c"));
+        assertEquals(-1, FilenameUtils.indexOfExtension("a\\b.notextension\\c"));
     }
 
 }
