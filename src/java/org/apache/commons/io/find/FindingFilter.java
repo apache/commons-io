@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+import org.apache.commons.io.WildcardUtils;
+
 /**
  * This is where most of the find functionality occurs. Nearly every option 
  * to find is mapped to a FileFilter, which are then chained together inside 
