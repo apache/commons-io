@@ -31,7 +31,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.13 2004/03/12 22:22:25 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.14 2004/03/14 10:22:27 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -42,6 +42,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Size of test directory.
      */
     private static final int TEST_DIRECTORY_SIZE = 0;
+    
+    /** Delay in milliseconds to make sure test for "last modified date" are accurate */
+    private static final int LAST_MODIFIED_DELAY = 600;
 
     private File testFile1;
     private File testFile2;
@@ -250,8 +253,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyFile1() throws Exception {
         File destination = new File(getTestDirectory(), "copy1.txt");
         
-        Thread.sleep(200); //This is to slow things down so we can catch if 
-                           //the lastModified date is not ok
+        Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if 
+        //the lastModified date is not ok
         
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
@@ -263,8 +267,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyFile2() throws Exception {
         File destination = new File(getTestDirectory(), "copy2.txt");
         
-        Thread.sleep(200); //This is to slow things down so we can catch if 
-                           //the lastModified date is not ok
+        Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if 
+        //the lastModified date is not ok
         
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
@@ -276,8 +281,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
         File destination = new File(getTestDirectory(), "copy2.txt");
         
-        Thread.sleep(200); //This is to slow things down so we can catch if 
-                           //the lastModified date is not ok
+        Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if 
+        //the lastModified date is not ok
         
         FileUtils.copyFile(testFile1, destination, false);
         assertTrue("Check Exist", destination.exists());
@@ -312,8 +318,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             directory.mkdirs();
         File destination = new File(directory, testFile1.getName());
         
-        Thread.sleep(200); //This is to slow things down so we can catch if 
-                           //the lastModified date is not ok
+        Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if 
+        //the lastModified date is not ok
         
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
@@ -328,8 +335,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             directory.mkdirs();
         File destination = new File(directory, testFile1.getName());
         
-        Thread.sleep(200); //This is to slow things down so we can catch if 
-                           //the lastModified date is not ok
+        Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if 
+        //the lastModified date is not ok
         
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
