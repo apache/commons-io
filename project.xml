@@ -1,215 +1,212 @@
 <?xml version="1.0"?>
 <project>
 
-  <pomVersion>3</pomVersion>
-  
-  <id>${pom.groupId}-${pom.name}</id>
-  <name>io</name>
-  <groupId>jakarta-commons</groupId>
-  
-  <currentVersion>SNAPSHOT</currentVersion>
+    <pomVersion>3</pomVersion>
 
-  <organization>
-    <name>Apache Software Foundation</name>
-    <url>http://www.apache.org</url>
-    <logo>http://jakarta.apache.org/commons/images/jakarta-logo-blue.gif</logo>
-  </organization>
-  
-  <inceptionYear>2002</inceptionYear>
-  <package>org.apache.commons.io</package>
-  
-  <logo>/images/logo.jpg</logo>
+    <id>${pom.groupId}-${pom.name}</id>
+    <name>io</name>
+    <groupId>jakarta-commons</groupId>
 
-	<!-- Gump integration -->
-  	<gumpRepositoryId>jakarta-io</gumpRepositoryId>
+    <currentVersion>SNAPSHOT</currentVersion>
 
-	<description>
-		Commons.IO is a package of Java utility classes for ther classes that are in java.io's hierarchy, or are considered to be so standard and of such high reuse as to justify existence in java.io.
-  	</description>
+    <organization>
+        <name>Apache Software Foundation</name>
+        <url>http://www.apache.org</url>
+        <logo>http://jakarta.apache.org/commons/images/jakarta-logo-blue.gif</logo>
+    </organization>
 
-  	<shortDescription>Java Common IO Components</shortDescription>
+    <inceptionYear>2002</inceptionYear>
+    <package>org.apache.commons.io</package>
+    <logo>/images/logo.jpg</logo>
 
-	<url>http://jakarta.apache.org/commons/io/</url>
-  
-  	<issueTrackingUrl>
-		http://nagoya.apache.org:8080/scarab/servlet/scarab/
-  	</issueTrackingUrl>
-  
-  <siteAddress>jakarta.apache.org</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/commons/sandbox/io/</siteDirectory>
-	
-	<distributionDirectory>
-    	/www/jakarta.apache.org/builds/jakarta-commons-sandbox/io/
-  	</distributionDirectory>
+    <!-- Gump integration -->
+    <gumpRepositoryId>jakarta-io</gumpRepositoryId>
 
-  <repository>
-	<connection>
-		scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons-sandbox/io
-    </connection>
-    
-    <url>http://cvs.apache.org/viewcvs/jakarta-commons-sandbox/io/</url>
-  </repository>
+    <description>
+        Commons.IO is a package of Java utility classes for ther classes that are in java.io's hierarchy, or are considered to be so standard and of such high reuse as to justify existence in java.io.
+    </description>
 
-	<mailingLists>
-    	<mailingList>
-			<name>Commons User List</name>
-			 <subscribe>commons-user-subscribe@jakarta.apache.org</subscribe>
-			 <unsubscribe>commons-user-unsubscribe@jakarta.apache.org</unsubscribe>
-			 <archive>
-			 	http://nagoya.apache.org:8080/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org
-			 </archive>
-    	</mailingList>
-    
-    	<mailingList>
-      		<name>Commons Developer List</name>
-      		<subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
-      		<unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      		<archive>
-      			http://nagoya.apache.org:8080/eyebrowse/SummarizeList?listName=commons-dev@jakarta.apache.org
-      		</archive>
-    	</mailingList>
-  	</mailingLists>
+    <shortDescription>Java Common IO Components</shortDescription>
 
-  <developers>
-    <developer>
-      <name>Scott Sanders</name>
-      <id>sanders</id>
-      <email>sanders@apache.org</email>
-      <organization></organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>dIon Gillard</name>
-      <id>dion</id>
-      <email>dion@apache.org</email>
-      <organization></organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Nicola Ken Barozzi</name>
-      <id>nicolaken</id>
-      <email>nicolaken@apache.org</email>
-      <organization></organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Henri Yandell</name>
-      <id>bayard</id>
-      <email>bayard@apache.org</email>
-      <organization></organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Stephen Colebourne</name>
-      <id>scolebourne</id>
-      <email>scolebourne@apache.org</email>
-      <organization>SITA ATS</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Jeremias Maerki</name>
-      <id>jeremias</id>
-      <email>jeremias@apache.org</email>
-      <organization/>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-    <developer>
-      <name>Matthew Hawthorne</name>
-      <id>matth</id>
-      <email>matth@apache.org</email>
-      <organization/>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    
-  </developers>
+    <url>http://jakarta.apache.org/commons/io/</url>
 
+    <issueTrackingUrl>
+        http://nagoya.apache.org:8080/scarab/servlet/scarab/
+    </issueTrackingUrl>
 
-  <!-- Need to mark these as compile-time/run-time -->
+    <siteAddress>jakarta.apache.org</siteAddress>
+    <siteDirectory>/www/jakarta.apache.org/commons/sandbox/io/</siteDirectory>
 
-  <dependencies>
-    <dependency>
-      <id>junit</id>
-      <version>3.7</version>
-    </dependency>
-  </dependencies>
+    <distributionDirectory>
+        /www/jakarta.apache.org/builds/jakarta-commons-sandbox/io/
+    </distributionDirectory>
 
+    <repository>
+        <connection>
+            scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons-sandbox/io
+        </connection>
 
+        <url>http://cvs.apache.org/viewcvs/jakarta-commons-sandbox/io/</url>
+    </repository>
 
-  <build>
+    <mailingLists>
+        <mailingList>
+            <name>Commons User List</name>
 
-    <nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    <integrationUnitTestSourceDirectory/>
-    <aspectSourceDirectory/>
+            <subscribe>
+                commons-user-subscribe@jakarta.apache.org
+            </subscribe>
 
-    <!-- Unit test classes -->
-    <unitTest>
-      <includes>
-        <include>**/*Test*</include>
-      </includes>
-      <excludes>
-      	<exclude>**/testtools/**</exclude>
-        <exclude>**/compress/**/*Test*</exclude>
-        <exclude>**/IOUtilTestCase*</exclude>
-      </excludes>
+            <unsubscribe>
+                commons-user-unsubscribe@jakarta.apache.org
+            </unsubscribe>
 
-      <resources>
-        <resource>
-            <directory>data/test</directory>
-        </resource>
-      </resources>
+            <archive>
+                http://nagoya.apache.org:8080/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org
+            </archive>
+        </mailingList>
 
-    </unitTest>
+        <mailingList>
+            <name>Commons Developer List</name>
+            <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
+            <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
+            <archive>
+                http://nagoya.apache.org:8080/eyebrowse/SummarizeList?listName=commons-dev@jakarta.apache.org
+            </archive>
+        </mailingList>
+    </mailingLists>
 
+    <developers>
+        <developer>
+            <name>Scott Sanders</name>
+            <id>sanders</id>
+            <email>sanders@apache.org</email>
+            <organization></organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
 
+        <developer>
+            <name>dIon Gillard</name>
+            <id>dion</id>
+            <email>dion@apache.org</email>
+            <organization></organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
 
-    <!-- J A R  R E S O U R C E S -->
-    <!-- Resources that are packaged up inside the JAR file -->
-    <resources>
-    	<resource>
-     		<includes>
-        		<include>**/*.properties</include>
-      		</includes>
-      	</resource>
-    </resources>
-  </build>
+        <developer>
+            <name>Nicola Ken Barozzi</name>
+            <id>nicolaken</id>
+            <email>nicolaken@apache.org</email>
+            <organization></organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
 
+        <developer>
+            <name>Henri Yandell</name>
+            <id>bayard</id>
+            <email>bayard@apache.org</email>
+            <organization></organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
 
-	<reports>
-		<report>maven-javadoc-plugin</report>
-		<report>maven-junit-report-plugin</report>
-		<report>maven-jxr-plugin</report>
+        <developer>
+            <name>Stephen Colebourne</name>
+            <id>scolebourne</id>
+            <email>scolebourne@apache.org</email>
+            <organization>SITA ATS</organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
 
-		<report>maven-checkstyle-plugin</report>
-		<report>maven-clover-plugin</report>
-		<report>maven-linkcheck-plugin</report>
-		<report>maven-pmd-plugin</report>
-	
-		<report>maven-changelog-plugin</report>
-		<report>maven-developer-activity-plugin</report>
-		<report>maven-file-activity-plugin</report>
-		<report>maven-statcvs-plugin</report>
-	</reports>
+        <developer>
+            <name>Jeremias Maerki</name>
+            <id>jeremias</id>
+            <email>jeremias@apache.org</email>
+            <organization/>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+
+        <developer>
+            <name>Matthew Hawthorne</name>
+            <id>matth</id>
+            <email>matth@apache.org</email>
+            <organization/>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+
+    </developers>
+
+    <!-- Need to mark these as compile-time/run-time -->
+    <dependencies>
+        <dependency>
+            <id>junit</id>
+            <version>3.7</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <nagEmailAddress>commons-dev@jakarta.apache.org</nagEmailAddress>
+        <sourceDirectory>src/java</sourceDirectory>
+        <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+        <integrationUnitTestSourceDirectory/>
+        <aspectSourceDirectory/>
+
+        <!-- Unit test classes -->
+        <unitTest>
+            <includes>
+                <include>**/*Test*</include>
+            </includes>
+            <excludes>
+                <exclude>**/testtools/**</exclude>
+                <exclude>**/compress/**/*Test*</exclude>
+                <exclude>**/IOUtilTestCase*</exclude>
+            </excludes>
+
+            <resources>
+                <resource>
+                    <directory>data/test</directory>
+                </resource>
+            </resources>
+        </unitTest>
+
+        <!-- J A R  R E S O U R C E S -->
+        <!-- Resources that are packaged up inside the JAR file -->
+        <resources>
+            <resource>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    <reports>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-junit-report-plugin</report>
+        <report>maven-jxr-plugin</report>
+
+        <report>maven-checkstyle-plugin</report>
+        <report>maven-clover-plugin</report>
+        <report>maven-linkcheck-plugin</report>
+        <report>maven-pmd-plugin</report>
+
+        <report>maven-changelog-plugin</report>
+        <report>maven-developer-activity-plugin</report>
+        <report>maven-file-activity-plugin</report>
+        <report>maven-statcvs-plugin</report>
+    </reports>
 
 </project>
