@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.5 2003/02/25 09:03:50 tobrien Exp $
- * $Revision: 1.5 $
- * $Date: 2003/02/25 09:03:50 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.6 2003/02/25 09:39:38 tobrien Exp $
+ * $Revision: 1.6 $
+ * $Date: 2003/02/25 09:39:38 $
  *
  * ====================================================================
  *
@@ -128,8 +128,8 @@ public final class FileFilterTestCase
         
         assertFiltering( filter, new File("project.xml"), false);
 	
-	assertFiltering( filter, new File("test"), true);
-        assertFiltering( filter, new File("test/"), true);
+	assertFiltering( filter, new File("test"), false);
+        assertFiltering( filter, new File("test/"), false);
 
         assertFiltering( filter, new File("STATUS.html"), false);
     }
