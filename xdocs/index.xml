@@ -1,150 +1,75 @@
 <?xml version="1.0"?>
-
 <!--
-    Main index
-    $Id: index.xml,v 1.8 2004/04/24 23:53:01 bayard Exp $
+Copyright 2002-2004 The Apache Software Foundation.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific iouage governing permissions and
+limitations under the License.
 -->
 
 <document>
+
  <properties>
-   <title>Commons IO</title>
-   <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
-  </properties>
-  <body>
+  <title>Commons IO</title>
+  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+ </properties>
 
-    <section name="Commons IO">
-        <p>
-            Commons-IO contains <a href="#Utility classes">utility classes</a>,
-            stream implementations, <a href="#File filters">file filters</a>, and
-            <a href="#Endian classes">endian classes</a>.
-        </p>
+ <body>
 
-        <p>
-            For a more detailed descriptions, take a look at the
-            <a href="apidocs/index.html">JavaDocs</a>.
-        </p>
-    </section>
+<section name="Commons IO">
 
-    <section name="Utility classes">
-        <subsection name="CopyUtils and IOUtils">
-            <p>
-                <code>org.apache.commons.io.CopyUtils</code>
-                contains a comprehensive set of static methods for copying
-                from String, byte[], InputStream, Reader
-                to OutputStream, Writer.
-            </p>
-            <p>
-                <code>org.apache.commons.io.IOUtils</code>
-                contains additional IO-related tools for safely closing streams
-                and creating Strings and byte arrays from streams and Readers.
-            </p>
+<p>
+</p>
+</section>
 
-            <p>
-                As an example, consider the task of reading bytes
-                from a URL, and printing them. This would typically done like this:
-            </p>
+<section name="Latest Release">
+<p>The latest release of Apache Jakarta Commons IO is version 1.0. It is available (from mirrors) in <a href="http://jakarta.apache.org/site/binindex.cgi#commons-io">binary</a> and <a href="http://jakarta.apache.org/site/sourceindex.cgi#commons-io">source</a> downloads. </p>
+</section>
 
-            <source>
-    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-    try {
-        InputStreamReader inR = new InputStreamReader( in );
-        BufferedReader buf = new BufferedReader( inR );
-        String line;
-        while ( ( line = buf.readLine() ) != null ) {
-            System.out.println( line );
-        }
-    } finally {
-        in.close();
-    }
-            </source>
+<section name="Documentation">
+<p>
+A top level description of some of the classes to be found in the IO component is available - <a href="description.html">Description</a>. 
+</p>
 
-            <p>
-                With the IOUtils class, that could be done with:
-            </p>
+<p>
+The <a href="http://jakarta.apache.org/commons/io/apidocs/index.html">JavaDoc API documents</a> are available online.
+</p>
+</section>
 
-            <source>
-    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-    try {
-        System.out.println( IOUtils.toString( in ) );
-    } finally {
-        IOUtils.closeQuietly(in);
-    }
-            </source>
+<section name="Bugs">
+<p>
+Bugs may be reported via the Bugzilla Management system. The following links may prove useful:
+</p>
+<ul>
+ <li><a href="http://issues.apache.org/bugzilla/createaccount.cgi">Create a Bugzilla account</a></li>
+ <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons">Submit a bug report</a></li>
+ <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All IO bugs</a></li>
+ <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All open IO bugs</a></li>
+</ul>
+</section>
 
-            <p>
-                In certain application domains, such IO operations are
-                common, and this class can save a great deal of time. And you can
-                rely on well-tested code.
+<section name="Releases">
+<ul>
+<li><a href="http://jakarta.apache.org/site/binindex.cgi#commons-io">Version 1.0</a></li>
+</ul>
+</section>
 
-                For utility code such as this, flexibility and speed are of primary importance.
-            </p>
+<section name="Repository">
+<ul>
+<li>
+<a href="http://cvs.apache.org/viewcvs/jakarta-commons/io/">CVS Repository</a>
+</li>
+</ul>
+</section>
 
-        </subsection>
-
-        <subsection name="FileUtils">
-            <p>
-                The <code>org.apache.commons.io.FileUtils</code>
-                class contains methods for retrieving different components of a file path
-                (directory name, file base name, file extension), methods
-                for copying files to other files and directories, and methods
-                for querying, deleting and cleaning directories. For more information,
-                see the class description.
-            </p>
-        </subsection>
-
-    </section>
-
-    <section name="File filters">
-        <p>
-            The <code>org.apache.commons.io.filefilter</code>
-            package defines an interface (<code>IOFileFilter</code>) that
-            combines both <code>java.io.FileFilter</code> and
-            <code>java.io.FilenameFilter</code>. Besides
-            that the package offers a series of ready-to-use
-            implementations of the <code>IOFileFilter</code>
-            interface including
-            implementation that allow you to combine other such filters.
-
-            These filter can be used to list files or in FileDialog, for example.
-        </p>
-    </section>
-
-    <section name="Endian classes">
-        <p>
-            Different computer architectures adopt different
-            conventions for byte ordering. In so-called
-            "Little Endian" architectures (eg Intel), the low-order
-            byte is stored in memory at the lowest address, and
-            subsequent bytes at higher addresses. For "Big Endian"
-            architectures (eg Motorola), the situation is reversed.
-        </p>
-
-        <p>
-        There are two classes in this package of relevance:
-        </p>
-
-        <ul>
-           <li>
-           The <code>org.apache.commons.io.EndianUtils</code>
-           class contains static methods for swapping the Endian-ness
-           of Java primitives and streams.
-           </li>
-
-           <li>
-           The <code>org.apache.commons.io.input.SwappedDataInputStream</code>
-           class is an implementation of the <code>DataInput</code> interface. With
-           this, one can read data from files of non-native Endian-ness.
-           </li>
-        </ul>
-
-        <p>
-            For more information, see
-            <a
-                href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
-         </p>
-
-    </section>
-
-  </body>
-
+</body>
 </document>
+

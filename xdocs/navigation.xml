@@ -11,6 +11,7 @@
 
     <menu name="Commons IO">
       <item name="Overview" href="index.html"/>
+      <item name="Description" href="description.html"/>
       <item name="Javadoc" href="apidocs/index.html"/>
       <item name="Best practices" href="bestpractices.html"/>
       <item name="Building" href="building.html"/>
