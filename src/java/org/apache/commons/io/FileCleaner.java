@@ -28,7 +28,7 @@ import java.util.Vector;
  * @author Noel Bergman
  * @author Martin Cooper
  *
- * @version $Id: FileCleaner.java,v 1.1 2004/03/18 06:04:14 martinc Exp $
+ * @version $Id: FileCleaner.java,v 1.2 2004/10/24 04:20:06 martinc Exp $
  */
 public class FileCleaner {
 
@@ -57,7 +57,7 @@ public class FileCleaner {
                 try {
                     // Wait for a tracker to remove.
                     tracker = (Tracker) q.remove();
-                } catch(Exception _) {
+                } catch (Exception e) {
                     continue;
                 }
 
@@ -124,10 +124,10 @@ public class FileCleaner {
          *
          * @param file   The file to be tracked.
          * @param marker The marker object used to track the file.
-         * @param q      The queue on to which the tracker will be pushed.
+         * @param queue  The queue on to which the tracker will be pushed.
          */
-        public Tracker(File file, Object marker, ReferenceQueue q) {
-            this(file.getPath(), marker, q);
+        public Tracker(File file, Object marker, ReferenceQueue queue) {
+            this(file.getPath(), marker, queue);
         }
 
         /**
@@ -135,10 +135,10 @@ public class FileCleaner {
          *
          * @param path   The full path to the file to be tracked.
          * @param marker The marker object used to track the file.
-         * @param q      The queue on to which the tracker will be pushed.
+         * @param queue  The queue on to which the tracker will be pushed.
          */
-        public Tracker(String path, Object marker, ReferenceQueue q) {
-            super(marker, q);
+        public Tracker(String path, Object marker, ReferenceQueue queue) {
+            super(marker, queue);
             this.path = path;
         }
 

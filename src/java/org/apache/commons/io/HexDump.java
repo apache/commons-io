@@ -1,12 +1,12 @@
 /*
  * Copyright 2002,2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.io.OutputStream;
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.8 $ $Date: 2004/02/23 04:35:59 $
+ * @version $Revision: 1.9 $ $Date: 2004/10/24 04:20:07 $
  */
 public class HexDump {
 
@@ -37,7 +37,7 @@ public class HexDump {
     public HexDump() { }
 
     /**
-     * dump an array of bytes to an OutputStream
+     * Dump an array of bytes to an OutputStream.
      *
      * @param data the byte array to be dumped
      * @param offset its offset, whatever that might mean
@@ -103,12 +103,12 @@ public class HexDump {
             System.getProperty("line.separator");
     private static final StringBuffer _lbuffer = new StringBuffer(8);
     private static final StringBuffer _cbuffer = new StringBuffer(2);
-    private static final char _hexcodes[] =
+    private static final char[] _hexcodes =
             {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
-                'E', 'F'
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'
             };
-    private static final int _shifts[] =
+    private static final int[] _shifts =
             {
                 28, 24, 20, 16, 12, 8, 4, 0
             };

@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,24 +26,25 @@ import java.io.StringReader;
 import java.io.Writer;
 
 /**
- * <p>
- * This class provides static utility methods for buffered
- * copying between sources (<code>InputStream</code>, <code>Reader</code>, <code>String</code> and
- * <code>byte[]</code>) and destinations (<code>OutputStream</code>, <code>Writer</code>,
- * <code>String</code> and <code>byte[]</code>).
- * </p>
+ * <p>This class provides static utility methods for buffered
+ * copying between sources (<code>InputStream</code>, <code>Reader</code>,
+ * <code>String</code> and <code>byte[]</code>) and destinations
+ * (<code>OutputStream</code>, <code>Writer</code>, <code>String</code> and
+ * <code>byte[]</code>).</p>
  *
- * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em> flush or close the
- * streams. Often doing so would require making non-portable assumptions about the streams' origin
- * and further use. This means that both streams' <code>close()</code> methods must be called after
- * copying. if one omits this step, then the stream resources (sockets, file descriptors) are
- * released when the associated Stream is garbage-collected. It is not a good idea to rely on this
- * mechanism. For a good overview of the distinction between "memory management" and "resource
- * management", see <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
+ * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em>
+ * flush or close the streams. Often doing so would require making non-portable
+ * assumptions about the streams' origin and further use. This means that both
+ * streams' <code>close()</code> methods must be called after copying. if one
+ * omits this step, then the stream resources (sockets, file descriptors) are
+ * released when the associated Stream is garbage-collected. It is not a good
+ * idea to rely on this mechanism. For a good overview of the distinction
+ * between "memory management" and "resource management", see
+ * <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
  * UnixReview article</a>.</p>
  *
- * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding 
- * to be selected (otherwise the platform default is used). We would like to 
+ * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding
+ * to be selected (otherwise the platform default is used). We would like to
  * encourage you to always specify the encoding because relying on the platform
  * default can lead to unexpected results.</p>
  *
@@ -51,24 +52,30 @@ import java.io.Writer;
  * let you specify the buffer size because in modern VMs the impact on speed
  * seems to be minimal. We're using a default buffer size of 4 KB.</p>
  *
- * <p>The <code>copy</code> methods use an internal buffer when copying. It is therefore advisable
- * <em>not</em> to deliberately wrap the stream arguments to the <code>copy</code> methods in
- * <code>Buffered*</code> streams. For example, don't do the
- * following:</p>
+ * <p>The <code>copy</code> methods use an internal buffer when copying. It is
+ * therefore advisable <em>not</em> to deliberately wrap the stream arguments
+ * to the <code>copy</code> methods in <code>Buffered*</code> streams. For
+ * example, don't do the following:</p>
  *
- * <code>copy( new BufferedInputStream( in ), new BufferedOutputStream( out ) );</code>
+ * <code>copy( new BufferedInputStream( in ),
+ *   new BufferedOutputStream( out ) );</code>
  *
  * <p>The rationale is as follows:</p>
  *
- * <p>Imagine that an InputStream's read() is a very expensive operation, which would usually suggest
- * wrapping in a BufferedInputStream. The BufferedInputStream works by issuing infrequent
- * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the underlying InputStream, to
- * fill an internal buffer, from which further <code>read</code> requests can inexpensively get
- * their data (until the buffer runs out).</p>
- * <p>However, the <code>copy</code> methods do the same thing, keeping an internal buffer,
- * populated by {@link InputStream#read(byte[] b, int off, int len)} requests. Having two buffers
- * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
- * management hurts performance slightly (about 3%, according to some simple experiments).</p>
+ * <p>Imagine that an InputStream's read() is a very expensive operation, which
+ * would usually suggest wrapping in a BufferedInputStream. The
+ * BufferedInputStream works by issuing infrequent
+ * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the
+ * underlying InputStream, to fill an internal buffer, from which further
+ * <code>read</code> requests can inexpensively get their data (until the buffer
+ * runs out).</p>
+ *
+ * <p>However, the <code>copy</code> methods do the same thing, keeping an
+ * internal buffer, populated by
+ * {@link InputStream#read(byte[] b, int off, int len)} requests. Having two
+ * buffers (or three if the destination stream is also buffered) is pointless,
+ * and the unnecessary buffer management hurts performance slightly (about 3%,
+ * according to some simple experiments).</p>
  *
  * <p>Behold, intrepid explorers; a map of this class:</p>
  * <pre>
@@ -98,10 +105,11 @@ import java.io.Writer;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
- * @version $Id: CopyUtils.java,v 1.9 2004/08/13 23:51:41 scolebourne Exp $
+ * @version $Id: CopyUtils.java,v 1.10 2004/10/24 04:20:06 martinc Exp $
  * @deprecated Use IOUtils. Will be removed in 2.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().
- *  Null handling behaviour changed in IOUtils (null data does not throw NullPointerException).
+ *  Null handling behaviour changed in IOUtils (null data does not
+ *  throw NullPointerException).
  */
 public class CopyUtils {
 
@@ -113,7 +121,7 @@ public class CopyUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public CopyUtils() {}
+    public CopyUtils() { }
 
     // ----------------------------------------------------------------
     // byte[] -> OutputStream
@@ -174,7 +182,8 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
+     * Copy bytes from an <code>InputStream</code> to an
+     * <code>OutputStream</code>.
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @return the number of bytes copied
@@ -264,7 +273,7 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Serialize chars from a <code>Reader</code> to bytes on an 
+     * Serialize chars from a <code>Reader</code> to bytes on an
      * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
@@ -276,7 +285,8 @@ public class CopyUtils {
                 throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
-        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
+        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
+        // have to flush here.
         out.flush();
     }
 
@@ -285,7 +295,8 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
+     * Serialize chars from a <code>String</code> to bytes on an
+     * <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
      * @param input the <code>String</code> to read from
      * @param output the <code>OutputStream</code> to write to
@@ -298,7 +309,8 @@ public class CopyUtils {
         StringReader in = new StringReader(input);
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(in, out);
-        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
+        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
+        // have to flush here.
         out.flush();
     }
 

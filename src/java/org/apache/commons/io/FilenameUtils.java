@@ -1,12 +1,12 @@
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,25 +16,27 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Common {@link java.io.File} manipulation routines through 
+ * Common {@link java.io.File} manipulation routines through
  * use of a filename/path.
  *
  * <h3>Path-related methods</h3>
  *
- * <p>Methods exist to retrieve the components of a typical file path. For example
- * <code>/www/hosted/mysite/index.html</code>, can be broken into:
+ * <p>Methods exist to retrieve the components of a typical file path. For
+ * example <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
- *   <li><code>/www/hosted/mysite/</code> -- retrievable through {@link #getPath}</li>
+ *   <li><code>/www/hosted/mysite/</code> -- retrievable through
+ *       {@link #getPath}</li>
  *   <li><code>index.html</code> -- retrievable through {@link #removePath}</li>
- *   <li><code>/www/hosted/mysite/index</code> -- retrievable through {@link #removeExtension}</li>
+ *   <li><code>/www/hosted/mysite/index</code> -- retrievable through
+ *       {@link #removeExtension}</li>
  *   <li><code>html</code> -- retrievable through {@link #getExtension}</li>
  * </ul>
- * There are also methods to {@link #catPath concatenate two paths}, {@link #resolveFile resolve a
- * path relative to a File} and {@link #normalize} a path.
+ * There are also methods to {@link #catPath concatenate two paths},
+ * {@link #resolveFile resolve a path relative to a File} and
+ * {@link #normalize} a path.
  * </p>
  *
  * <h3>Origin of code</h3>
@@ -52,7 +54,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.11 2004/06/13 05:17:11 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.12 2004/10/24 04:20:07 martinc Exp $
  */
 public class FilenameUtils {
 
@@ -109,10 +111,10 @@ public class FilenameUtils {
      * @param filename the filename
      * @return the filename minus extension
      */
-    public static String removeExtension( final String filename) {
+    public static String removeExtension(final String filename) {
         String ext = getExtension(filename);
         int index = ext.length();
-        if(index > 0) {
+        if (index > 0) {
             // include the . in the count
             index++;
         }
@@ -140,7 +142,7 @@ public class FilenameUtils {
         String shortFilename = filename;
 
         int lastDirSeparator = filename.lastIndexOf(File.separatorChar);
-        if(lastDirSeparator > 0){
+        if (lastDirSeparator > 0) {
             shortFilename = filename.substring(lastDirSeparator + 1);
         }
 
@@ -154,7 +156,8 @@ public class FilenameUtils {
     }
 
     /**
-     * Remove path from filename. Equivalent to the unix command <code>basename</code>
+     * Remove path from filename. Equivalent to the unix command
+     * <code>basename</code>.
      * ie.
      * <pre>
      * a/b/c.txt --> c.txt
@@ -164,7 +167,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
-    public static String removePath( String filepath) {
+    public static String removePath(String filepath) {
         return removePath(filepath, File.separatorChar);
     }
 
@@ -193,7 +196,8 @@ public class FilenameUtils {
     }
 
     /**
-     * Get path from filename. Roughly equivalent to the unix command <code>dirname</code>.
+     * Get path from filename. Roughly equivalent to the unix command
+     * <code>dirname</code>.
      * ie.
      * <pre>
      * a/b/c.txt --> a/b
@@ -203,7 +207,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
-    public static String getPath( String filepath) {
+    public static String getPath(String filepath) {
         return getPath(filepath, File.separatorChar);
     }
 
@@ -234,8 +238,8 @@ public class FilenameUtils {
 
     /**
      * Normalize a path.
-     * Eliminates "/../" and "/./" in a string. Returns <code>null</code> if the ..'s went past the
-     * root.
+     * Eliminates "/../" and "/./" in a string. Returns <code>null</code> if
+     * the ..'s went past the root.
      * Eg:
      * <pre>
      * /foo//               -->     /foo/
@@ -250,13 +254,14 @@ public class FilenameUtils {
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
      */
-    public static String normalize( String path) {
+    public static String normalize(String path) {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
         while (true) {
             int index = normalized.indexOf("//");
-            if (index < 0)
+            if (index < 0) {
                 break;
+            }
             normalized =
                 normalized.substring(0, index)
                     + normalized.substring(index + 1);
@@ -265,8 +270,9 @@ public class FilenameUtils {
         // Resolve occurrences of "/./" in the normalized path
         while (true) {
             int index = normalized.indexOf("/./");
-            if (index < 0)
+            if (index < 0) {
                 break;
+            }
             normalized =
                 normalized.substring(0, index)
                     + normalized.substring(index + 2);
@@ -275,10 +281,12 @@ public class FilenameUtils {
         // Resolve occurrences of "/../" in the normalized path
         while (true) {
             int index = normalized.indexOf("/../");
-            if (index < 0)
+            if (index < 0) {
                 break;
-            if (index == 0)
+            }
+            if (index == 0) {
                 return null; // Trying to go outside our context
+            }
             int index2 = normalized.lastIndexOf('/', index - 1);
             normalized =
                 normalized.substring(0, index2)
@@ -291,7 +299,7 @@ public class FilenameUtils {
 
     /**
      * Will concatenate 2 paths. Paths with <code>..</code> will be
-     * properly handled. The path separator between the 2 paths is the 
+     * properly handled. The path separator between the 2 paths is the
      * system default path separator.
      *
      * <p>Eg. on UNIX,<br />
@@ -311,7 +319,7 @@ public class FilenameUtils {
      * @param path path the second path to attach to the first
      * @return The concatenated paths, or null if error occurs
      */
-    public static String catPath( String lookupPath, String path) {
+    public static String catPath(String lookupPath, String path) {
         // Cut off the last slash and everything beyond
         int index = indexOfLastPathSeparator(lookupPath);
         String lookup = lookupPath.substring(0, index);
@@ -330,13 +338,15 @@ public class FilenameUtils {
             pth = pth.substring(3);
         }
 
-        return new StringBuffer(lookup).append(File.separator).append(pth).toString();
+        return new StringBuffer(lookup).
+                append(File.separator).append(pth).toString();
     }
-    
+
     /**
-     * Return the index of the last 'path separator' character. The 'path separator'
-     * character is '/' for UNIX systems and '\' for Microsoft Windows systems.
-     * 
+     * Return the index of the last 'path separator' character. The 'path
+     * separator' character is '/' for UNIX systems and '\' for Microsoft
+     * Windows systems.
+     *
      * @param path The path to find the last path separator in
      * @return The index of the last 'path separator' character, or -1 if there
      * is no such character.
@@ -348,16 +358,17 @@ public class FilenameUtils {
     }
 
     /**
-     * Resolve a file <code>filename</code> to it's canonical form. If <code>filename</code> is
-     * relative (doesn't start with <code>/</code>), it will be resolved relative to
-     * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
+     * Resolve a file <code>filename</code> to it's canonical form. If
+     * <code>filename</code> is relative (doesn't start with <code>/</code>),
+     * it will be resolved relative to <code>baseFile</code>, otherwise it is
+     * treated as a normal root-relative path.
      *
-     * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
-     * relative.
+     * @param baseFile Where to resolve <code>filename</code> from, if
+     * <code>filename</code> is relative.
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
      */
-    public static File resolveFile( File baseFile, String filename) {
+    public static File resolveFile(File baseFile, String filename) {
         String filenm = filename;
         if ('/' != File.separatorChar) {
             filenm = filename.replace('/', File.separatorChar);
@@ -373,11 +384,14 @@ public class FilenameUtils {
 
             try {
                 file = file.getCanonicalFile();
-            } catch ( IOException ioe) {}
+            } catch (IOException ioe) {
+                // ignore
+            }
 
             return file;
         }
-        // FIXME: I'm almost certain this // removal is unnecessary, as getAbsoluteFile() strips
+        // FIXME: I'm almost certain this // removal is unnecessary, as
+        // getAbsoluteFile() strips
         // them. However, I'm not sure about this UNC stuff. (JT)
         char[] chars = filename.toCharArray();
         StringBuffer sb = new StringBuffer();
@@ -408,7 +422,9 @@ public class FilenameUtils {
 
         try {
             file = file.getCanonicalFile();
-        } catch ( IOException ioe) {}
+        } catch ( IOException ioe) {
+            ;
+        }
 
         return file;
     }
