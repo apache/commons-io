@@ -60,6 +60,9 @@ import java.io.FileFilter;
 import java.io.File;
 
 /**
+ * This is used to turn a JDK FileFilter or FilenameFilter into a Predicate, 
+ * as well as an Apache IO FileFilter. Once it is a predicate, it can be 
+ * used with the PredicateUtils.
  */
 public class DelegateFileFilter
 extends AbstractFileFilter
