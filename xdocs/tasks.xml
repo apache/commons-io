@@ -18,7 +18,7 @@
         </li>
         <li>Improve site!!!</li>
       </ul>
-      <p>Javadoc status:</p>
+      <p>Javadoc todo:</p>
       <ul>
         <li>io.*</li>
         <li>io.input [SwappedDataInputStream might need work]</li>
