@@ -104,6 +104,16 @@
             </roles>
         </developer>
 
+        <developer>
+            <name>Martin Cooper</name>
+            <id>martinc</id>
+            <email>martinc@apache.org</email>
+            <organization/>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+
     </developers>
 
     <contributors>
