@@ -108,6 +108,8 @@
           </include>
           <exclude name="**/*AbstractTestCase*">
           </exclude>
+          <exclude name="**/PackageTestSuite*">
+          </exclude>
           <exclude name="**/testtools/**">
           </exclude>
         </fileset>

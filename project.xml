@@ -184,6 +184,7 @@
       </includes>
       <excludes>
         <exclude>**/*AbstractTestCase*</exclude>
+        <exclude>**/PackageTestSuite*</exclude>
         <exclude>**/testtools/**</exclude>
       </excludes>
     </unitTest>
