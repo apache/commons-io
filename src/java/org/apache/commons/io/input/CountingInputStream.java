@@ -71,6 +71,17 @@ public class CountingInputStream extends ProxyInputStream {
         this.count += (found >= 0) ? 1 : 0;
         return found;
     }
+    
+    /**
+     * Increases the count by the number of skipped bytes.
+     * 
+     * @see java.io.InputStream#skip(long)
+     */
+    public long skip(final long length) throws IOException {
+        final long skip = super.skip(length);
+        this.count += skip;
+        return skip;
+    }
 
     /**
      * The number of bytes that have passed through this stream.
