@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.1 2004/01/02 07:31:18 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2004/01/02 07:31:18 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.2 2004/01/02 07:37:00 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/01/02 07:37:00 $
  *
  * ====================================================================
  *
@@ -74,7 +74,7 @@ import junit.framework.TestCase;
  * effectively tests the underlying EndianUtils Stream methods.
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.1 $ $Date: 2004/01/02 07:31:18 $
+ * @version $Revision: 1.2 $ $Date: 2004/01/02 07:37:00 $
  */
 
 public class SwappedDataInputStreamTest extends TestCase {
@@ -86,9 +86,6 @@ public class SwappedDataInputStreamTest extends TestCase {
     }
 
     public void setUp() {
-        // This does not seem to be the right fake setup.
-        // The EndianUtils Stream methods read an integer at a time, 
-        // and not a byte.
         byte[] bytes = new byte[] {
             0x01,
             0x02,
