@@ -61,7 +61,8 @@ import java.io.InputStream;
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. It is an alternative base class to FilterInputStream
- * to increase reusability.
+ * to increase reusability, because FilterInputStream changes the 
+ * methods being called, such as read(byte[]) to read(byte[], int, int).
  */
 public abstract class ProxyInputStream extends FilterInputStream {
 
