@@ -144,18 +144,11 @@ import java.io.Writer;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.3 $ $Date: 2003/07/27 17:21:27 $
+ * @version CVS $Revision: 1.4 $ $Date: 2003/07/29 13:07:39 $
  */
 public final class IOUtils
 {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
-
-    /**
-     * Private constructor to prevent instantiation.
-     */
-    private IOUtils()
-    {
-    }
 
     /**
      * Unconditionally close an <code>Reader</code>.
