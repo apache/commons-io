@@ -32,6 +32,8 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         dir.mkdirs();
         File file = new File(dir, "dummy-build.xml");
         FileUtils.touch(file);
+        file = new File(dir, "README");
+        FileUtils.touch(file);
         
         dir = new File(dir, "subdir1");
         dir.mkdirs();
@@ -74,16 +76,28 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
     
     public void testListFilesByExtension() throws Exception {
-        String[] extensions = {"xml", "txt"};
+        final String[] extensions = {"xml", "txt"};
+        
         Collection files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
         assertEquals(1, files.size());
         Collection filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
+        assertFalse(filenames.contains("README"));
+        assertFalse(filenames.contains("dummy-file.txt"));
+        
         files = FileUtils.listFiles(getLocalTestDirectory(), extensions, true);
         filenames = filesToFilenames(files);
         assertEquals(4, filenames.size());
         assertTrue(filenames.contains("dummy-file.txt"));
-        assertFalse(filenames.contains("dumy-index.html"));
+        assertFalse(filenames.contains("dummy-index.html"));
+        
+        files = FileUtils.listFiles(getLocalTestDirectory(), null, false);
+        assertEquals(2, files.size());
+        filenames = filesToFilenames(files);
+        assertTrue(filenames.contains("dummy-build.xml"));
+        assertTrue(filenames.contains("README"));
+        assertFalse(filenames.contains("dummy-file.txt"));
+        
     }
 
     public void testListFiles() throws Exception {
