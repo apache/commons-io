@@ -3,7 +3,7 @@
 
     <pomVersion>3</pomVersion>
 
-    <id>${pom.groupId}-${pom.name}</id>
+    <id>commons-io</id>
     <name>io</name>
     <groupId>jakarta-commons</groupId>
 
