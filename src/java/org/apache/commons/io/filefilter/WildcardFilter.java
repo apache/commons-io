@@ -2,7 +2,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
-import org.apache.commons.io.find.WildcardUtils;
+import org.apache.commons.io.WildcardUtils;
 
 /**
  * Filters files using supplied wildcard(s).
