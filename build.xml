@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.7 2002/12/07 20:33:33 bayard Exp $
+        $Id: build.xml,v 1.8 2003/01/27 02:22:30 bayard Exp $
 -->
 
 
@@ -60,9 +60,6 @@
   <!-- The base directory for unit test sources -->
   <property name="test.home"               value="src/test"/>
 
-  <!-- The base directory for unit test sources -->
-  <property name="examples.home"           value="src/examples"/>
-  
 <!-- ========== Compiler Defaults ========================================= -->
 
 
@@ -118,7 +115,6 @@
     <mkdir dir="${build.home}/classes"/>
     <mkdir dir="${build.home}/conf"/>
     <mkdir dir="${build.home}/tests"/>
-    <mkdir dir="${build.home}/examples"/>
   </target>
 
 
@@ -160,21 +156,6 @@
     </copy>
   </target>
 
-  <target name="compile.examples" depends="compile"
-   description="Compile examples">
-    <javac  srcdir="${examples.home}"
-           destdir="${build.home}/examples"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy    todir="${build.home}/examples" filtering="off">
-      <fileset dir="${examples.home}" excludes="**/*.java"/>
-    </copy>
-  </target>
-  
-
   <target name="clean"
    description="Clean build and distribution directories">
     <delete    dir="${build.home}"/>
@@ -182,7 +163,7 @@
   </target>
 
 
-  <target name="all" depends="clean,compile, compile.examples"
+  <target name="all" depends="clean,compile"
    description="Clean and compile all components"/>
 
 
@@ -216,7 +197,7 @@
   </target>
 
 
-  <target name="jar" depends="compile, compile.examples"
+  <target name="jar" depends="compile"
    description="Create jar">
     <mkdir      dir="${dist.home}"/>
     <mkdir      dir="${build.home}/classes/META-INF"/>
@@ -225,13 +206,6 @@
     <jar    jarfile="${dist.home}/commons-${component.name}.jar"
             basedir="${build.home}/classes"
            manifest="${build.home}/conf/MANIFEST.MF"/>
-    <mkdir      dir="${dist.home}/examples"/>
-    <mkdir      dir="${build.home}/examples/classes/META-INF"/>
-    <copy      file="../LICENSE"
-             tofile="${build.home}/examples/classes/META-INF/LICENSE.txt"/>
-    <jar    jarfile="${dist.home}/commons-${component.name}-examples.jar"
-            basedir="${build.home}/examples/classes"
-           manifest="${build.home}/conf/MANIFEST.MF"/>           
   </target>
 
 
