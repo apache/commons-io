@@ -61,7 +61,7 @@ import java.io.InputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.6 2003/12/30 15:19:00 jeremias Exp $
+ * @version $Id: CountingInputStream.java,v 1.7 2004/02/10 06:06:05 bayard Exp $
  */
 public class CountingInputStream extends ProxyInputStream {
 
@@ -75,21 +75,33 @@ public class CountingInputStream extends ProxyInputStream {
         super(in);
     }
 
-    /** @see java.io.InputStream#read(byte[]) */
+    /**
+     * Increases the count by super.read(b)'s return count
+     * 
+     * @see java.io.InputStream#read(byte[]) 
+     */
     public int read(byte[] b) throws IOException {
         int found = super.read(b);
         this.count += found;
         return found;
     }
 
-    /** @see java.io.InputStream#read(byte[], int, int) */
+    /**
+     * Increases the count by super.read(b, off, len)'s return count
+     *
+     * @see java.io.InputStream#read(byte[], int, int)
+     */
     public int read(byte[] b, int off, int len) throws IOException {
         int found = super.read(b, off, len);
         this.count += found;
         return found;
     }
 
-    /** @see java.io.InputStream#read() */
+    /**
+     * Increases the count by 1. 
+     *
+     * @see java.io.InputStream#read()
+     */
     public int read() throws IOException {
         this.count++;
         return super.read();
@@ -97,6 +109,7 @@ public class CountingInputStream extends ProxyInputStream {
 
     /**
      * The number of bytes that have passed through this stream.
+     *
      * @return the number of bytes accumulated
      */
     public int getCount() {
