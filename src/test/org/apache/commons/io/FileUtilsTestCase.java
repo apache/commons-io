@@ -18,6 +18,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -31,7 +32,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.16 2004/04/18 07:29:00 bayard Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.17 2004/04/23 22:30:42 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -380,14 +381,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     // Used to exist as IOTestCase class
     public void testFileUtils() throws Exception {
         // Loads file from classpath
-        String path = "/test.txt";
-        URL url = this.getClass().getResource(path);
-        assertNotNull(path + " was not found.", url);
-
-        String filename = url.getFile();
-        //The following line applies a fix for spaces in a path
-        filename = replaceAll(filename, "%20", " ");
-        String filename2 = "test2.txt";
+        File file1 = new File(getTestDirectory(), "test.txt");
+        String filename = file1.getAbsolutePath();
+        
+        //Create test file on-the-fly (used to be in CVS)
+        OutputStream out = new java.io.FileOutputStream(file1);
+        try {
+            out.write("This is a test".getBytes("UTF-8"));
+        } finally {
+            out.close();
+        }
+        
+        File file2 = new File(getTestDirectory(), "test2.txt");
+        String filename2 = file2.getAbsolutePath();
 
 //1.0 These lines commented out as FilenameUtils not in 1.0
 //1.0        assertTrue(
@@ -402,15 +408,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 //1.0            "Second test file does not exist",
 //1.0            !FilenameUtils.fileExists(filename2));
 
-        FileUtils.writeStringToFile(new File(filename2), filename, "UTF-8");
-//1.0        assertTrue("Second file was written", FilenameUtils.fileExists(filename2));
+        FileUtils.writeStringToFile(file2, filename, "UTF-8");
+        assertTrue(file2.exists());
+        assertTrue(file2.length() > 0);
 
-        String file2contents = FileUtils.readFileToString(new File(filename2), "UTF-8");
+        String file2contents = FileUtils.readFileToString(file2, "UTF-8");
         assertTrue(
             "Second file's contents correct",
-            FileUtils.readFileToString(new File(filename2), "UTF-8").equals(file2contents));
+            filename.equals(file2contents));
 
-          new File(filename2).delete();   // remove after 1.0
+        assertTrue(file2.delete());
+        
 //1.0        FilenameUtils.fileDelete(filename2);
 //1.0        assertTrue(
 //1.0            "Second test file does not exist",
