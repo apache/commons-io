@@ -14,18 +14,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.apache.excalibur.bzip2.CBZip2InputStream;
 
 /**
  * This simple example shows how to use the Bzip2 classes to uncompress a file.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/08 22:13:43 $
+ * @author <a href="mailto:nicolaken@apache.org">Nicola Ken Barozzi</a>
+ * @version $Revision: 1.2 $ $Date: 2002/07/09 14:55:32 $
  */
 public class Bzip2Uncompress
 {
     public static void main( final String[] args )
     {
+      try
+      {
         if( 2 != args.length )
         {
             System.out.println( "java Bzip2Uncompress <input> <output>" );
@@ -39,6 +41,11 @@ public class Bzip2Uncompress
         copy( input, output );
         input.close();
         output.close();
+      }catch(Exception e){
+        e.printStackTrace();
+        System.exit(1);       
+      
+      }
     }
 
     /**
