@@ -2,7 +2,7 @@
 
 <!--
     Main index
-    $Id: index.xml,v 1.4 2004/02/04 21:50:19 scolebourne Exp $
+    $Id: index.xml,v 1.5 2004/02/23 05:09:27 bayard Exp $
 -->
 
 <document>
@@ -19,7 +19,7 @@
 
         <p>
             For a more detailed descriptions, take a look at the
-            <a href="apidocs/index.html">JavaDocs.</a>
+            <a href="apidocs/index.html">JavaDocs</a>.
         </p>
     </section>
 
