@@ -4,11 +4,5 @@
 commons.home=../../jakarta-commons
 junit.home=/usr/local/junit3.7
 
-# Derived home directories
-lang.home=${commons.home}/lang
-
-# Jakarta JAR files
-commons-lang.jar=${lang.home}/dist/commons-lang.jar
-
 # External packages
 junit.jar=${junit.home}/junit.jar

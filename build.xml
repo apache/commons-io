@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.9 2003/04/04 14:04:16 bayard Exp $
+        $Id: build.xml,v 1.10 2003/05/16 22:29:03 scolebourne Exp $
 -->
 
 
@@ -75,7 +75,6 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${commons-lang.jar}"/>
   </path>
 
 
@@ -87,7 +86,6 @@
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${build.home}/tests"/>
     <pathelement location="${junit.jar}"/>
-    <pathelement location="${commons-lang.jar}"/>
   </path>
 
   <!-- Should all tests fail if one does? -->

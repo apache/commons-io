@@ -84,21 +84,24 @@
         <role>Java Developer</role>
       </roles>
     </developer>
+    <developer>
+      <name>Stephen Colebourne</name>
+      <id>scolebourne</id>
+      <email>scolebourne@apache.org</email>
+      <organization>SITA ATS</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
   </developers>
 
 
   <!-- Need to mark these as compile-time/run-time -->
 
   <dependencies>
-
     <dependency>
       <id>junit</id>
       <version>3.7</version>
-    </dependency>
-    
-    <dependency>
-      <id>commons-lang</id>
-      <version>1.1-dev.20021217.062015</version>
     </dependency>
   </dependencies>
 
@@ -133,5 +136,6 @@
       </includes>
     </resources>
   </build>
+  
 </project>
 
