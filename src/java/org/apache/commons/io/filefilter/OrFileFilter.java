@@ -29,7 +29,7 @@ import java.util.List;
  * <code>true</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.10 $ $Date: 2004/10/25 22:53:26 $
+ * @version $Revision: 1.11 $ $Date: 2004/10/25 23:28:30 $
  *
  * @author Steven Caswell
  */
@@ -42,6 +42,7 @@ public class OrFileFilter
 
     /**
      * Constructs a new instance of <code>OrFileFilter</code>.
+     * @since Commons IO 1.1
      */
     public OrFileFilter() {
         this.fileFilters = new ArrayList();
@@ -52,6 +53,7 @@ public class OrFileFilter
      * with the specified filters.
      *
      * @param fileFileter the file filters for this filter
+     * @since Commons IO 1.1
      */
     public OrFileFilter(final List fileFilters) {
         this.fileFilters = new ArrayList(fileFilters);

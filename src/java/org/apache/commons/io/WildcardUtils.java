@@ -20,6 +20,10 @@ import java.util.ArrayList;
 /**
  * An implementation of Wildcard logic, as seen on command lines 
  * on UNIX and DOS.
+ * 
+ * @author Henri Yandell
+ * @version $Revision: 1.2 $ $Date: 2004/10/25 23:28:30 $
+ * @since Commons IO 1.1
  */
 public class WildcardUtils {
 

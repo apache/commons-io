@@ -22,6 +22,8 @@ import org.apache.commons.io.WildcardUtils;
  * </pre>
  *
  * @author Jason Anderson
+ * @version $Revision: 1.4 $ $Date: 2004/10/25 23:28:29 $
+ * @since Commons IO 1.1
  */
 public class WildcardFilter extends AbstractFileFilter {
 
