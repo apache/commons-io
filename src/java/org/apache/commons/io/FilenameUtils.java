@@ -17,6 +17,7 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Utility class that provides methods to manipulate filenames and filepaths.
@@ -63,7 +64,7 @@ import java.io.IOException;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.23 2004/10/30 23:23:54 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.24 2004/10/30 23:59:17 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -465,6 +466,90 @@ public class FilenameUtils {
         } else {
             return filename.substring(0, index);
         }
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Checks whether the extension of the filename is that specified.
+     * <p>
+     * This method obtains the extension as the textual part of the filename
+     * after the last dot. There must be no directory separator after the dot.
+     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     *
+     * @param filename  the filename to query, null returns false
+     * @param extension  the extension to check for, null or empty checks for no extension
+     * @return true if the filename has the specified extension
+     */
+    public static boolean isExtension(String filename, String extension) {
+        if (filename == null) {
+            return false;
+        }
+        if (extension == null || extension.length() == 0) {
+            return (indexOfExtension(filename) == -1);
+        }
+        String fileExt = getExtension(filename);
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            return fileExt.equalsIgnoreCase(extension);
+        } else {
+            return fileExt.equals(extension);
+        }
+    }
+
+    /**
+     * Checks whether the extension of the filename is one of those specified.
+     * <p>
+     * This method obtains the extension as the textual part of the filename
+     * after the last dot. There must be no directory separator after the dot.
+     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     *
+     * @param filename  the filename to query, null returns false
+     * @param extensions  the extensions to check for, null checks for no extension
+     * @return true if the filename is one of the extensions
+     */
+    public static boolean isExtension(String filename, String[] extensions) {
+        if (filename == null) {
+            return false;
+        }
+        if (extensions == null) {
+            return (indexOfExtension(filename) == -1);
+        }
+        String fileExt = getExtension(filename);
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            for (int i = 0; i < extensions.length; i++) {
+                if (fileExt.equalsIgnoreCase(extensions[i])) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = 0; i < extensions.length; i++) {
+                if (fileExt.equals(extensions[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the extension of the filename is one of those specified.
+     * <p>
+     * This method obtains the extension as the textual part of the filename
+     * after the last dot. There must be no directory separator after the dot.
+     * The extension check is case sensitive on Unix and case insensitive on Windows.
+     *
+     * @param filename  the filename to query, null returns false
+     * @param extensions  the extensions to check for, null checks for no extension
+     * @return true if the filename is one of the extensions
+     */
+    public static boolean isExtension(String filename, Collection extensions) {
+        if (filename == null) {
+            return false;
+        }
+        if (extensions == null) {
+            return (indexOfExtension(filename) == -1);
+        }
+        String[] array = (String[]) extensions.toArray(new String[extensions.size()]);
+        return isExtension(filename, array);
     }
 
 }
