@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.1 2002/02/22 06:12:38 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2002/02/22 06:12:38 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.2 2003/07/27 17:20:59 jeremias Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/07/27 17:20:59 $
  *
  * ====================================================================
  *
@@ -56,28 +56,22 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
-
-
 package org.apache.commons.io;
-
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-
 /**
- * dump data in hexadecimal format; derived from a HexDump utility I
+ * Dump data in hexadecimal format; derived from a HexDump utility I
  * wrote in June 2001
  *
  * Taken from the POI project
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.1 $ $Date: 2002/02/22 06:12:38 $
+ * @version $Revision: 1.2 $ $Date: 2003/07/27 17:20:59 $
  */
-
 public class HexDump {
 
     // all static methods, so no need for a public constructor
@@ -146,6 +140,7 @@ public class HexDump {
         }
     }
 
+    /** line-separator (initializes to "line.separator" system property. */
     public static final String EOL =
             System.getProperty("line.separator");
     private static final StringBuffer _lbuffer = new StringBuffer(8);
