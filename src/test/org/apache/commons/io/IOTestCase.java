@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestCase.java,v 1.2 2002/01/28 04:44:49 sanders Exp $
- * $Revision: 1.2 $
- * $Date: 2002/01/28 04:44:49 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestCase.java,v 1.3 2002/01/28 05:01:49 sanders Exp $
+ * $Revision: 1.3 $
+ * $Date: 2002/01/28 05:01:49 $
  *
  * ====================================================================
  *
@@ -62,10 +62,8 @@
 package org.apache.commons.io;
 
 
-import java.lang.reflect.InvocationTargetException;
-
-import junit.framework.TestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
@@ -78,7 +76,7 @@ import junit.framework.TestSuite;
  * </p>
  *
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 
 public class IOTestCase extends TestCase {
@@ -115,7 +113,7 @@ public class IOTestCase extends TestCase {
 
 
     /**
-     *
+     *  Test the FileUtils implementation.
      */
     public void testFileUtils() {
         String filename = "src/test/org/apache/commons/io/test.txt";
