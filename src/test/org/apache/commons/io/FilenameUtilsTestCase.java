@@ -17,12 +17,15 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * This is used to test FilenameUtils for correctness.
@@ -30,10 +33,12 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.17 2004/10/30 23:23:53 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.18 2004/10/30 23:59:17 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
+    
+    private static final boolean WINDOWS = (File.separatorChar == '\\');
 
     private File testFile1;
     private File testFile2;
@@ -191,20 +196,20 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testSeparatorsToSystem() {
-        if (File.separatorChar == '/') {
-            assertEquals(null, FilenameUtils.separatorsToSystem(null));
-            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b/c"));
-            assertEquals("/a/b/c.txt", FilenameUtils.separatorsToSystem("/a/b/c.txt"));
-            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b\\c"));
-            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("\\a\\b\\c"));
-            assertEquals("D:/a/b/c", FilenameUtils.separatorsToSystem("D:\\a\\b\\c"));
-        } else {
+        if (WINDOWS) {
             assertEquals(null, FilenameUtils.separatorsToSystem(null));
             assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("\\a\\b\\c"));
             assertEquals("\\a\\b\\c.txt", FilenameUtils.separatorsToSystem("\\a\\b\\c.txt"));
             assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("\\a\\b/c"));
             assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("/a/b/c"));
             assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToSystem("D:/a/b/c"));
+        } else {
+            assertEquals(null, FilenameUtils.separatorsToSystem(null));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b/c"));
+            assertEquals("/a/b/c.txt", FilenameUtils.separatorsToSystem("/a/b/c.txt"));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b\\c"));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("\\a\\b\\c"));
+            assertEquals("D:/a/b/c", FilenameUtils.separatorsToSystem("D:\\a\\b\\c"));
         }
     }
 
@@ -276,6 +281,123 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a\\b\\c", FilenameUtils.removeExtension("a\\b\\c"));
         assertEquals("C:\\temp\\foo.bar\\README", FilenameUtils.removeExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("../filename", FilenameUtils.removeExtension("../filename.ext"));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testIsExtension() {
+        assertEquals(false, FilenameUtils.isExtension(null, (String) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", (String) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("file.txt", "txt"));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", "rtf"));
+        
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", (String) null));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("a/b/file.txt", "txt"));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", "rtf"));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", (String) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("a.b/file.txt", "txt"));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", "rtf"));
+        
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", (String) null));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("a\\b\\file.txt", "txt"));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", "rtf"));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", (String) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", "txt"));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", "rtf"));
+        
+        if (WINDOWS) {
+            assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
+        } else {
+            assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
+        }
+    }
+
+    public void testIsExtensionArray() {
+        assertEquals(false, FilenameUtils.isExtension(null, (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", new String[0]));
+        assertEquals(true, FilenameUtils.isExtension("file.txt", new String[] {"txt"}));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("file.txt", new String[] {"rtf", "txt"}));
+        
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", new String[0]));
+        assertEquals(true, FilenameUtils.isExtension("a/b/file.txt", new String[] {"txt"}));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("a/b/file.txt", new String[] {"rtf", "txt"}));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", new String[0]));
+        assertEquals(true, FilenameUtils.isExtension("a.b/file.txt", new String[] {"txt"}));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("a.b/file.txt", new String[] {"rtf", "txt"}));
+        
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", new String[0]));
+        assertEquals(true, FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"txt"}));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"rtf", "txt"}));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", (String[]) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new String[0]));
+        assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"txt"}));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"rtf", "txt"}));
+        
+        if (WINDOWS) {
+            assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT"}));
+            assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT", "RTF"}));
+        } else {
+            assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT"}));
+            assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT", "RTF"}));
+        }
+    }
+
+    public void testIsExtensionCollection() {
+        assertEquals(false, FilenameUtils.isExtension(null, (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", new ArrayList()));
+        assertEquals(true, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
+        assertEquals(false, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
+        
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", new ArrayList()));
+        assertEquals(true, FilenameUtils.isExtension("a/b/file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
+        assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("a/b/file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", new ArrayList()));
+        assertEquals(true, FilenameUtils.isExtension("a.b/file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
+        assertEquals(false, FilenameUtils.isExtension("a.b/file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("a.b/file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
+        
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList()));
+        assertEquals(true, FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
+        assertEquals(false, FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
+        
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", (Collection) null));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList()));
+        assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
+        assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
+        
+        if (WINDOWS) {
+            assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"TXT"}))));
+            assertEquals(true, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"TXT", "RTF"}))));
+        } else {
+            assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"TXT"}))));
+            assertEquals(false, FilenameUtils.isExtension("a.b\\file.txt", new ArrayList(Arrays.asList(new String[] {"TXT", "RTF"}))));
+        }
     }
 
 }
