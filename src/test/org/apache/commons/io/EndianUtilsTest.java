@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.12 $ $Date: 2004/02/29 21:46:17 $
+ * @version $Revision: 1.13 $ $Date: 2004/02/29 21:47:07 $
  */
 public class EndianUtilsTest extends TestCase {
 
@@ -86,6 +86,7 @@ public class EndianUtilsTest extends TestCase {
     public void testReadSwappedShort() throws IOException {
         byte[] bytes = new byte[] { 0x02, 0x01 };
         assertEquals( 0x0102, EndianUtils.readSwappedShort( bytes, 0 ) );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( 0x0102, EndianUtils.readSwappedShort( input ) );
     }
@@ -106,6 +107,7 @@ public class EndianUtilsTest extends TestCase {
     public void testReadSwappedUnsignedShort() throws IOException {
         byte[] bytes = new byte[] { 0x02, 0x01 };
         assertEquals( 0x00000102, EndianUtils.readSwappedUnsignedShort( bytes, 0 ) );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( 0x00000102, EndianUtils.readSwappedUnsignedShort( input ) );
     }
@@ -113,6 +115,7 @@ public class EndianUtilsTest extends TestCase {
     public void testReadSwappedInteger() throws IOException {
         byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
         assertEquals( 0x01020304, EndianUtils.readSwappedInteger( bytes, 0 ) );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( 0x01020304, EndianUtils.readSwappedInteger( input ) );
     }
@@ -137,6 +140,7 @@ public class EndianUtilsTest extends TestCase {
     public void testReadSwappedUnsignedInteger() throws IOException {
         byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
         assertEquals( 0x0000000001020304L, EndianUtils.readSwappedUnsignedInteger( bytes, 0 ) );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( 0x0000000001020304L, EndianUtils.readSwappedUnsignedInteger( input ) );
     }
@@ -144,6 +148,7 @@ public class EndianUtilsTest extends TestCase {
     public void testReadSwappedLong() throws IOException {
         byte[] bytes = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
         assertEquals( 0x0102030405060708L, EndianUtils.readSwappedLong( bytes, 0 ) );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( 0x0102030405060708L, EndianUtils.readSwappedLong( input ) );
     }
@@ -178,6 +183,7 @@ public class EndianUtilsTest extends TestCase {
         float f1 = Float.intBitsToFloat( 0x01020304 );
         float f2 = EndianUtils.readSwappedFloat( bytes, 0 );
         assertEquals( f1, f2, 0.0 );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( f1, EndianUtils.readSwappedFloat( input ), 0.0 );
     }
@@ -205,6 +211,7 @@ public class EndianUtilsTest extends TestCase {
         double d1 = Double.longBitsToDouble( 0x0102030405060708L );
         double d2 = EndianUtils.readSwappedDouble( bytes, 0 );
         assertEquals( d1, d2, 0.0 );
+
         ByteArrayInputStream input = new ByteArrayInputStream(bytes);
         assertEquals( d1, EndianUtils.readSwappedDouble( input ), 0.0 );
     }
