@@ -137,6 +137,8 @@
             <roles>
                 <role>Java Developer</role>
             </roles>
+            <url>http://nagoya.apache.org/wiki/apachewiki.cgi?JeremiasMaerki</url>
+            <timezone>+1</timezone>
         </developer>
 
         <developer>
@@ -150,6 +152,13 @@
         </developer>
 
     </developers>
+    
+    <contributors>
+        <contributor>
+            <name>Alban Peignier</name>
+            <email>alban.peignier at free.fr</email>
+        </contributor>
+    </contributors>
 
     <!-- Need to mark these as compile-time/run-time -->
     <dependencies>
@@ -206,6 +215,7 @@
         <report>maven-linkcheck-plugin</report>
         <report>maven-pmd-plugin</report>
 
+        <report>maven-changes-plugin</report>
         <report>maven-changelog-plugin</report>
         <report>maven-developer-activity-plugin</report>
         <report>maven-file-activity-plugin</report>
