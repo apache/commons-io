@@ -69,7 +69,7 @@ import java.io.Writer;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
- * @version $Id: CopyUtils.java,v 1.2 2003/10/13 07:04:52 rdonkin Exp $
+ * @version $Id: CopyUtils.java,v 1.3 2003/12/30 06:52:49 bayard Exp $
  */
 public class CopyUtils {
 
@@ -93,7 +93,7 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final byte[] input, final OutputStream output)
+    public static void copy(byte[] input, OutputStream output)
         throws IOException {
         copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -106,8 +106,8 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final byte[] input,
-            final OutputStream output,
+            byte[] input,
+            OutputStream output,
             int bufferSize)
                 throws IOException {
         // TODO Is bufferSize param needed?
@@ -126,7 +126,7 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final byte[] input, final Writer output)
+    public static void copy(byte[] input, Writer output)
         throws IOException {
         copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -141,11 +141,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final byte[] input,
-            final Writer output,
-            final int bufferSize)
+            byte[] input,
+            Writer output,
+            int bufferSize)
                 throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output, bufferSize);
     }
 
@@ -160,11 +160,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final byte[] input,
-            final Writer output,
-            final String encoding)
+            byte[] input,
+            Writer output,
+            String encoding)
                 throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output, encoding);
     }
 
@@ -180,12 +180,12 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final byte[] input,
-            final Writer output,
-            final String encoding,
-            final int bufferSize)
+            byte[] input,
+            Writer output,
+            String encoding,
+            int bufferSize)
                 throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output, encoding, bufferSize);
     }
 
@@ -200,7 +200,7 @@ public class CopyUtils {
      * @return the number of bytes copied
      * @throws IOException In case of an I/O problem
      */
-    public static int copy(final InputStream input, final OutputStream output)
+    public static int copy(InputStream input, OutputStream output)
                 throws IOException {
         return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -214,11 +214,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static int copy(
-            final InputStream input,
-            final OutputStream output,
-            final int bufferSize)
+            InputStream input,
+            OutputStream output,
+            int bufferSize)
                 throws IOException {
-        final byte[] buffer = new byte[bufferSize];
+        byte[] buffer = new byte[bufferSize];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -239,7 +239,7 @@ public class CopyUtils {
      * @return the number of characters copied
      * @throws IOException In case of an I/O problem
      */
-    public static int copy(final Reader input, final Writer output)
+    public static int copy(Reader input, Writer output)
                 throws IOException {
         return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -253,11 +253,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static int copy(
-            final Reader input,
-            final Writer output,
-            final int bufferSize)
+            Reader input,
+            Writer output,
+            int bufferSize)
                 throws IOException {
-        final char[] buffer = new char[bufferSize];
+        char[] buffer = new char[bufferSize];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -279,7 +279,7 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final InputStream input, final Writer output)
+    public static void copy(InputStream input, Writer output)
             throws IOException {
         copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -294,11 +294,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final InputStream input,
-            final Writer output,
-            final int bufferSize)
+            InputStream input,
+            Writer output,
+            int bufferSize)
                 throws IOException {
-        final InputStreamReader in = new InputStreamReader(input);
+        InputStreamReader in = new InputStreamReader(input);
         copy(in, output, bufferSize);
     }
 
@@ -313,11 +313,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final InputStream input,
-            final Writer output,
-            final String encoding)
+            InputStream input,
+            Writer output,
+            String encoding)
                 throws IOException {
-        final InputStreamReader in = new InputStreamReader(input, encoding);
+        InputStreamReader in = new InputStreamReader(input, encoding);
         copy(in, output);
     }
 
@@ -333,12 +333,12 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final InputStream input,
-            final Writer output,
-            final String encoding,
-            final int bufferSize)
+            InputStream input,
+            Writer output,
+            String encoding,
+            int bufferSize)
                 throws IOException {
-        final InputStreamReader in = new InputStreamReader(input, encoding);
+        InputStreamReader in = new InputStreamReader(input, encoding);
         copy(in, output, bufferSize);
     }
 
@@ -353,7 +353,7 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final Reader input, final OutputStream output)
+    public static void copy(Reader input, OutputStream output)
             throws IOException {
         copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -367,11 +367,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final Reader input,
-            final OutputStream output,
-            final int bufferSize)
+            Reader input,
+            OutputStream output,
+            int bufferSize)
                 throws IOException {
-        final OutputStreamWriter out = new OutputStreamWriter(output);
+        OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out, bufferSize);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
         out.flush();
@@ -388,7 +388,7 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final String input, final OutputStream output)
+    public static void copy(String input, OutputStream output)
             throws IOException {
         copy(input, output, DEFAULT_BUFFER_SIZE);
     }
@@ -402,12 +402,12 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            final String input,
-            final OutputStream output,
-            final int bufferSize)
+            String input,
+            OutputStream output,
+            int bufferSize)
                 throws IOException {
-        final StringReader in = new StringReader(input);
-        final OutputStreamWriter out = new OutputStreamWriter(output);
+        StringReader in = new StringReader(input);
+        OutputStreamWriter out = new OutputStreamWriter(output);
         copy(in, out, bufferSize);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
         out.flush();
@@ -423,7 +423,7 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final String input, final Writer output)
+    public static void copy(String input, Writer output)
                 throws IOException {
         output.write(input);
     }
