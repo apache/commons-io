@@ -64,10 +64,15 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.11 $ $Date: 2004/01/02 07:53:46 $
+ * @version CVS $Revision: 1.12 $ $Date: 2004/02/21 02:32:50 $
  */
 public final class EndianUtils
 {
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public EndianUtils() { }
 
     // ========================================== Swapping routines
 
