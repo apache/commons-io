@@ -55,7 +55,7 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.14 2004/10/25 23:27:41 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.15 2004/10/29 18:28:03 bayard Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -123,7 +123,7 @@ public class FilenameUtils {
      * @param filename the filename
      * @return the filename minus extension
      */
-    public static String removeExtension(final String filename) {
+    public static String removeExtension(String filename) {
         String ext = getExtension(filename);
         int index = ext.length();
         if (index > 0) {
@@ -149,7 +149,7 @@ public class FilenameUtils {
      * @param filename the filename to retrieve the extension of.
      * @return the extension of filename or an empty string if none exists.
      */
-    public static String getExtension(final String filename) {
+    public static String getExtension(String filename) {
         String suffix = "";
         String shortFilename = filename;
         String ifilename = internalize(filename);
