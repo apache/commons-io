@@ -57,21 +57,21 @@ import java.io.File;
 import java.util.List;
 
 /**
- * This filters filenames for a certain prefix.
+ * Filters filenames for a certain prefix.
  * <p>
  * For example, to print all files and directories in the 
- * current directory whose name starts with <code>foo</code>:
+ * current directory whose name starts with <code>Test</code>:
  *
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new PrefixFileFilter("foo"));
+ * String[] files = dir.list( new PrefixFileFilter("Test") );
  * for ( int i = 0; i &lt; files.length; i++ ) {
  *     System.out.println(files[i]);
  * }
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.3 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.4 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -81,13 +81,14 @@ import java.util.List;
  */
 public class PrefixFileFilter extends AbstractFileFilter {
     
-    /** The filename prefix to search for */
+    /** The filename prefixes to search for */
     private String[] prefixes;
 
     /**
      * Constructs a new Prefix file filter for a single prefix.
      * 
-     * @param prefix  the prefix to allow, null means none
+     * @param prefix  the prefix to allow, must not be null
+     * @throws IllegalArgumentException if the prefix is null
      */
     public PrefixFileFilter(final String prefix) {
         if (prefixes == null) {
@@ -97,12 +98,13 @@ public class PrefixFileFilter extends AbstractFileFilter {
     }
 
     /**
-     * Constructs a new Prefix file filter for an array of prefixes.
+     * Constructs a new Prefix file filter for any of an array of prefixes.
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
      * 
-     * @param prefixes  the prefixes to allow, null means none
+     * @param prefixes  the prefixes to allow, must not be null
+     * @throws IllegalArgumentException if the prefix array is null
      */
     public PrefixFileFilter(final String[] prefixes) {
         if (prefixes == null) {
@@ -114,7 +116,9 @@ public class PrefixFileFilter extends AbstractFileFilter {
     /**
      * Constructs a new Prefix file filter for a list of prefixes.
      * 
-     * @param prefixes  the prefixes to allow, null means none
+     * @param prefixes  the prefixes to allow, must not be null
+     * @throws IllegalArgumentException if the prefix list is null
+     * @throws ClassCastException if the list does not contain Strings
      */
     public PrefixFileFilter(final List prefixes) {
         if (prefixes == null) {
@@ -124,7 +128,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
     }
 
     /**
-     * Checks to see if the filename ends with the prefix.
+     * Checks to see if the filename starts with the prefix.
      * 
      * @param file  the File to check
      * @return true if the filename starts with one of our prefixes

@@ -1,7 +1,7 @@
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ import java.io.File;
  * A file filter that always returns true.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.3 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -76,7 +76,7 @@ public class TrueFileFilter implements IOFileFilter {
     }
     
     /**
-     * Return true.
+     * Returns true.
      * 
      * @param file  the file to check
      * @return true
@@ -86,7 +86,7 @@ public class TrueFileFilter implements IOFileFilter {
     }
     
     /**
-     * Return true.
+     * Returns true.
      * 
      * @param dir  the directory to check
      * @param name  the filename

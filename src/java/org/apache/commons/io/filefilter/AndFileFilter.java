@@ -1,7 +1,7 @@
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ import java.io.File;
  * This filter produces a logical AND of the two filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.4 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.5 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Stephen Colebourne
  */
@@ -73,8 +73,9 @@ public class AndFileFilter extends AbstractFileFilter {
     /**
      * Constructs a new file filter that ANDs the result of two other filters.
      * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
+     * @param filter1  the first filter, must not be null
+     * @param filter2  the second filter, must not be null
+     * @throws IllegalArgumentException if either filter is null
      */
     public AndFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
         if (filter1 == null || filter2 == null) {

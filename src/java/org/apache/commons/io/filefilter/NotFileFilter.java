@@ -1,7 +1,7 @@
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ import java.io.File;
  * This filter produces a logical NOT of the filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.3 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Stephen Colebourne
  */
@@ -71,7 +71,8 @@ public class NotFileFilter extends AbstractFileFilter {
     /**
      * Constructs a new file filter that NOTs the result of another filters.
      * 
-     * @param filter  the filter
+     * @param filter  the filter, must not be null
+     * @throws IllegalArgumentException if the filter is null
      */
     public NotFileFilter(IOFileFilter filter) {
         if (filter == null) {
