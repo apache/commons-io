@@ -1,9 +1,7 @@
-package org.apache.commons.io.output;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,21 +16,21 @@ package org.apache.commons.io.output;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -52,15 +50,13 @@ package org.apache.commons.io.output;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
-
+package org.apache.commons.io.output;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-
 
 /**
  * FileWriter that will create and honor lock files to allow simple
@@ -75,7 +71,7 @@ import java.io.Writer;
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
+ * @version $Id: LockableFileWriter.java,v 1.2 2003/07/27 17:17:12 jeremias Exp $
  */
 public class LockableFileWriter extends Writer {
 
@@ -87,31 +83,67 @@ public class LockableFileWriter extends Writer {
 
     private boolean append = false;
 
+    /**
+     * Constructs a LockableFileWriter. If the file exists, it is overwritten.
+     * @param fileName file to write to
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(String fileName)
             throws IOException {
         this(fileName, false, null);
     }
 
+    /**
+     * Constructs a LockableFileWriter.
+     * @param fileName file to write to
+     * @param append true if content should be appended (default is to overwrite).
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(String fileName, boolean append)
             throws IOException {
         this(fileName, append, null);
     }
 
+    /**
+     * Constructs a LockableFileWriter.
+     * @param fileName file to write to
+     * @param append true if content should be appended (default is to overwrite).
+     * @param lockDir Specifies the directory in which the lock file should be held.
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(String fileName, boolean append, String lockDir)
             throws IOException {
         this(new File(fileName), append, lockDir);
     }
 
+    /**
+     * Constructs a LockableFileWriter. If the file exists, it is overwritten.
+     * @param file file to write to
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(File file)
             throws IOException {
         this(file, false, null);
     }
 
+    /**
+     * Constructs a LockableFileWriter.
+     * @param file file to write to
+     * @param append true if content should be appended (default is to overwrite).
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(File file, boolean append)
             throws IOException {
         this(file, append, null);
     }
 
+    /**
+     * Constructs a LockableFileWriter.
+     * @param file file to write to
+     * @param append true if content should be appended (default is to overwrite).
+     * @param lockDir Specifies the directory in which the lock file should be held.
+     * @throws IOException in case of an I/O error
+     */
     public LockableFileWriter(File file, boolean append, String lockDir)
             throws IOException {
         this.append = append;
@@ -149,6 +181,7 @@ public class LockableFileWriter extends Writer {
         }
     }
 
+    /** @see java.io.Writer#close() */
     public void close()
             throws IOException {
         try {
@@ -158,11 +191,13 @@ public class LockableFileWriter extends Writer {
         }
     }
 
+    /** @see java.io.Writer#write(char[], int, int) */
     public void write(char[] cbuf, int off, int len)
             throws IOException {
         writer.write(cbuf, off, len);
     }
 
+    /** @see java.io.Writer#flush() */
     public void flush()
             throws IOException {
         writer.flush();

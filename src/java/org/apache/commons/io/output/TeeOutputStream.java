@@ -1,9 +1,7 @@
-package org.apache.commons.io.output;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,21 +16,21 @@ package org.apache.commons.io.output;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -53,10 +51,10 @@ package org.apache.commons.io.output;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import org.apache.commons.io.ProxyOutputStream;
 
 /**
  * Classic splitter of OutputStream. Named after the unix 'tee' 
@@ -64,37 +62,48 @@ import org.apache.commons.io.ProxyOutputStream;
  * are now two streams.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: TeeOutputStream.java,v 1.2 2002/12/07 20:31:08 bayard Exp $
+ * @version $Id: TeeOutputStream.java,v 1.3 2003/07/27 17:17:58 jeremias Exp $
  */
 public class TeeOutputStream extends ProxyOutputStream {
 
+    /** the second OutputStream to write to */
     protected OutputStream branch;
 
+    /**
+     * Constructs a TeeOutputStream.
+     * @param out the main OutputStream
+     * @param branch the second OutputStream
+     */
     public TeeOutputStream( OutputStream out, OutputStream branch ) {
         super(out);
         this.branch = branch;
     }
 
+    /** @see java.io.OutputStream#write(byte[]) */
     public synchronized void write(byte[] b) throws IOException {
         super.write(b);
         this.branch.write(b);
     }
 
+    /** @see java.io.OutputStream#write(byte[], int, int) */
     public synchronized void write(byte[] b, int off, int len) throws IOException {
         super.write(b, off, len);
         this.branch.write(b, off, len);
     }
 
+    /** @see java.io.OutputStream#write(int) */
     public synchronized void write(int b) throws IOException {
         super.write(b);
         this.branch.write(b);
     }
 
+    /** @see java.io.OutputStream#flush() */
     public void flush() throws IOException {
         super.flush();
         this.branch.flush();
     }
 
+    /** @see java.io.OutputStream#close() */
     public void close() throws IOException {
         super.close();
         this.branch.close();

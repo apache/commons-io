@@ -1,9 +1,7 @@
-package org.apache.commons.io.output;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,21 +16,21 @@ package org.apache.commons.io.output;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -53,37 +51,43 @@ package org.apache.commons.io.output;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import org.apache.commons.io.ProxyOutputStream;
 
 /**
  * Used in debugging, it counts the number of bytes that pass 
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.2 2002/12/07 20:31:08 bayard Exp $
+ * @version $Id: CountingOutputStream.java,v 1.3 2003/07/27 17:16:32 jeremias Exp $
  */
 public class CountingOutputStream extends ProxyOutputStream {
 
     private int count;
 
+    /**
+     * Constructs a CountingOutputStream.
+     * @param out the OutputStream to write to
+     */
     public CountingOutputStream( OutputStream out ) {
         super(out);
     }
 
+    /** @see java.io.OutputStream#write(byte[]) */
     public void write(byte[] b) throws IOException {
         count += b.length;
         super.write(b);
     }
 
+    /** @see java.io.OutputStream#write(byte[], int, int) */
     public void write(byte[] b, int off, int len) throws IOException {
         count += len;
         super.write(b, off, len);
     }
 
-    /// TODO: Decide if this should increment by 2, or 4, or 1 etc.
+    /** @see java.io.OutputStream#write(int) */
     public void write(int b) throws IOException {
         count++;
         super.write(b);
@@ -91,6 +95,7 @@ public class CountingOutputStream extends ProxyOutputStream {
 
     /**
      * The number of bytes that have passed through this stream.
+     * @return the number of bytes accumulated
      */
     public int getCount() {
         return this.count;
