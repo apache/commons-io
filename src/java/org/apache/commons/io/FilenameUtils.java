@@ -53,10 +53,21 @@ import java.io.IOException;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
+ * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.12 2004/10/24 04:20:07 martinc Exp $
+ * @version $Id: FilenameUtils.java,v 1.13 2004/10/24 18:34:23 martinc Exp $
  */
 public class FilenameUtils {
+
+    /**
+     * Standard separator char used when internalizing paths.
+     */
+    private static final char INTERNAL_SEPARATOR_CHAR = '/';
+
+    /**
+     * Standard separator string used when internalizing paths.
+     */
+    private static final String INTERNAL_SEPARATOR = "/";
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -140,10 +151,11 @@ public class FilenameUtils {
     public static String getExtension(final String filename) {
         String suffix = "";
         String shortFilename = filename;
+        String ifilename = internalize(filename);
 
-        int lastDirSeparator = filename.lastIndexOf(File.separatorChar);
+        int lastDirSeparator = ifilename.lastIndexOf(INTERNAL_SEPARATOR_CHAR);
         if (lastDirSeparator > 0) {
-            shortFilename = filename.substring(lastDirSeparator + 1);
+            shortFilename = ifilename.substring(lastDirSeparator + 1);
         }
 
         int index = shortFilename.lastIndexOf('.');
@@ -429,6 +441,28 @@ public class FilenameUtils {
         return file;
     }
 
+    /**
+     * Convert all separators to the internal form. This allows manipulation
+     * of paths without concern for which separators are used within them.
+     * @param path The path to be internalized.
+     * @return The internalized path.
+     */
+    private static String internalize(String path) {
+        return path.replace('\\', INTERNAL_SEPARATOR_CHAR);
+    }
+
+    /**
+     * Convert all separators to their external form. That is, ensure that all
+     * separators are the same as File.separator.
+     * @param path The path to be externalized.
+     * @return The externalized path.
+     */
+    private static String externalize(String path) {
+        if (INTERNAL_SEPARATOR_CHAR != File.separatorChar) {
+            path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
+        }
+        return path;
+    }
 
     // DEPRECATED. Though no replacement exists.
 
