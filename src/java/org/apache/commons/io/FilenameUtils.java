@@ -22,6 +22,16 @@ import java.util.Collection;
 /**
  * Utility class that provides methods to manipulate filenames and filepaths.
  * <p>
+ * When dealing with filenames you can hit problems when moving from a Windows
+ * based development machine to a Unix based production machine.
+ * This class aims to help avoid those problems.
+ * <p>
+ * Most methods on this class are designed to work the same on both Unix and Windows.
+ * Both separators (forward and back) are recognised, and both sets of prefixes.
+ * The comparison methods do differ by machine however, comparing case insensitive
+ * on Windows and case sensitive on Unix.
+ * See the javadoc of each method for details.
+ * <p>
  * This class defines six components within a filename (example C:\dev\project\file.txt):
  * <ul>
  * <li>the prefix - C:\</li>
@@ -31,7 +41,9 @@ import java.util.Collection;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
- * The class only supports Unix and Windows style names. Prefixes are matched as follows:
+ * Note that the path of a directory is the parent directory.
+ * <p>
+ * This class only supports Unix and Windows style names. Prefixes are matched as follows:
  * <pre>
  * Windows style:
  * a\b\c.txt           --> ""          --> relative
@@ -45,6 +57,8 @@ import java.util.Collection;
  * ~/a/b/c.txt         --> "~/"        --> current user relative
  * ~user/a/b/c.txt     --> "~user/"    --> named user relative
  * </pre>
+ * Both prefix styles are matched always, irrespective of the machine that you are
+ * currently running on.
  * 
  * </p>
  * <h3>Origin of code</h3>
@@ -65,7 +79,7 @@ import java.util.Collection;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.30 2004/11/27 17:00:51 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.31 2004/12/04 19:28:40 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -133,6 +147,9 @@ public class FilenameUtils {
      * A double dot will cause that path segment and the one before to be removed.
      * If the double dot has no parent path segment to work with, <code>null</code>
      * is returned.
+     * <p>
+     * The output will be the same on both Unix and Windows except
+     * for the separator character.
      * <pre>
      * /foo//               -->   /foo
      * /foo/./              -->   /foo
@@ -151,7 +168,7 @@ public class FilenameUtils {
      * ~/foo/../bar         -->   ~/bar
      * ~/../bar             -->   null
      * </pre>
-     * (Note the file separator returned will be correct for windows/unix)
+     * (Note the file separator returned will be correct for Windows/Unix)
      *
      * @param filename  the filename to normalize, null returns null
      * @return the normalized String, or null if invalid
@@ -232,7 +249,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Concatenates two paths using normal command line style rules.
+     * Concatenates a filename to a base path using normal command line style rules.
      * <p>
      * The first argument is the base path, the second is the path to concatenate.
      * The returned path is always normalized via {@link #normalize(String)},
@@ -241,43 +258,47 @@ public class FilenameUtils {
      * If <code>pathToAdd</code> is absolute (has a prefix), then it will
      * be normalized and returned.
      * Otherwise, the paths will be joined, normalized and returned.
+     * <p>
+     * The output will be the same on both Unix and Windows except
+     * for the separator character.
      * <pre>
      * /foo/ + bar          -->   /foo/bar
      * /foo/a + bar         -->   /foo/a/bar
-     * /foo/c.txt + bar     -->   /foo/c.txt/bar
      * /foo/ + ../bar       -->   /bar
      * /foo/ + ../../bar    -->   null
      * /foo/ + /bar         -->   /bar
      * /foo/.. + /bar       -->   /bar
+     * /foo + bar/c.txt     -->   /foo/bar/c.txt
+     * /foo/c.txt + bar     -->   /foo/c.txt/bar (!)
      * </pre>
-     * Note that the first parameter must be a path. If it ends with a name, then
+     * (!) Note that the first parameter must be a path. If it ends with a name, then
      * the name will be built into the concatenated path. If this might be a problem,
      * use {@link #getFullPath(String)} on the base path argument.
      *
      * @param basePath  the base path to attach to, always treated as a path
-     * @param pathToAdd  path the second path to attach to the first
+     * @param fullFilenameToAdd  the filename (or path) to attach to the base
      * @return the concatenated path, or null if invalid
      */
-    public static String concat(String basePath, String pathToAdd) {
-        int prefix = getPrefixLength(pathToAdd);
+    public static String concat(String basePath, String fullFilenameToAdd) {
+        int prefix = getPrefixLength(fullFilenameToAdd);
         if (prefix < 0) {
             return null;
         }
         if (prefix > 0) {
-            return normalize(pathToAdd);
+            return normalize(fullFilenameToAdd);
         }
         if (basePath == null) {
             return null;
         }
         int len = basePath.length();
         if (len == 0) {
-            return normalize(pathToAdd);
+            return normalize(fullFilenameToAdd);
         }
         char ch = basePath.charAt(len - 1);
         if (isSeparator(basePath.charAt(len - 1))) {
-            return normalize(basePath + pathToAdd);
+            return normalize(basePath + fullFilenameToAdd);
         } else {
-            return normalize(basePath + '/' + pathToAdd);
+            return normalize(basePath + '/' + fullFilenameToAdd);
         }
     }
 
@@ -344,8 +365,9 @@ public class FilenameUtils {
      * ~/a/b/c.txt         --> "~/"        --> current user relative
      * ~user/a/b/c.txt     --> "~user/"    --> named user relative
      * </pre>
-     * Both sets of prefixes will be matched regardless of the system
-     * on which the code runs.
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
+     * ie. both Unix and Windows prefixes are matched regardless.
      * 
      * @param filename  the filename to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
@@ -406,6 +428,8 @@ public class FilenameUtils {
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The position of the last forward or backslash is returned.
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      * 
      * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
@@ -426,6 +450,8 @@ public class FilenameUtils {
      * This method also checks that there is no directory separator after the last dot.
      * To do this it uses {@link #indexOfLastSeparator(String)} which will
      * handle a file in either Unix or Windows format.
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      * 
      * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
@@ -459,6 +485,9 @@ public class FilenameUtils {
      * ~/a/b/c.txt         --> "~/"        --> current user relative
      * ~user/a/b/c.txt     --> "~user/"    --> named user relative
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
+     * ie. both Unix and Windows prefixes are matched regardless.
      *
      * @param filename  the filename to query, null returns null
      * @return the prefix of the file, null if invalid
@@ -476,6 +505,7 @@ public class FilenameUtils {
 
     /**
      * Gets the path from a full filename, which excludes the prefix.
+     * The path of a directory is the parent directory.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The text before the last forward or backslash is returned.
@@ -486,6 +516,8 @@ public class FilenameUtils {
      * a/b/c        --> a/b
      * a/b/c/       --> a/b/c
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename  the filename to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
@@ -508,6 +540,7 @@ public class FilenameUtils {
 
     /**
      * Gets the full path from a full filename, which is the prefix + path.
+     * The path of a directory is the parent directory.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The text before the last forward or backslash is returned.
@@ -518,6 +551,8 @@ public class FilenameUtils {
      * a/b/c        --> a/b
      * a/b/c/       --> a/b/c
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename  the filename to query, null returns null
      * @return the path of the file, an empty string if none exists, null if invalid
@@ -549,6 +584,8 @@ public class FilenameUtils {
      * a/b/c     --> c
      * a/b/c/    --> ""
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename  the filename to query, null returns null
      * @return the name of the file without the path, or an empty string if none exists
@@ -572,6 +609,8 @@ public class FilenameUtils {
      * a/b/c     --> c
      * a/b/c/    --> ""
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename  the filename to query, null returns null
      * @return the name of the file without the path, or an empty string if none exists
@@ -591,6 +630,8 @@ public class FilenameUtils {
      * a/b.txt/c    --> ""
      * a/b/c        --> ""
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename the filename to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists.
@@ -615,10 +656,12 @@ public class FilenameUtils {
      * There must be no directory separator after the dot.
      * <pre>
      * foo.txt    --> foo
-     * a\b\c.jpg --> a\b\c
-     * a\b\c     --> a\b\c
-     * a.b\c        --> a.b\c
+     * a\b\c.jpg  --> a\b\c
+     * a\b\c      --> a\b\c
+     * a.b\c      --> a.b\c
      * </pre>
+     * <p>
+     * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename  the filename to query, null returns null
      * @return the filename minus the extension
@@ -637,7 +680,60 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Checks whether the extension of the filename is that specified.
+     * Checks whether two filenames are equal using the case rules of the system.
+     * <p>
+     * No processing is performed on the filenames other than comparison.
+     * The check is case sensitive on Unix and case insensitive on Windows.
+     *
+     * @param filename1  the first filename to query, may be null
+     * @param filename2  the second filename to query, may be null
+     * @return true if the filenames are equal, null equals null
+     */
+    public static boolean equals(String filename1, String filename2) {
+        if (filename1 == filename2) {
+            return true;
+        }
+        if (filename1 == null || filename2 == null) {
+            return false;
+        }
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            return filename1.equalsIgnoreCase(filename2);
+        } else {
+            return filename1.equals(filename2);
+        }
+    }
+
+    /**
+     * Checks whether two filenames are equal after both have been normalized
+     * and using the case rules of the system.
+     * <p>
+     * Both filenames are first passed to {@link #normalize(String)}.
+     * The check is then performed case sensitive on Unix and case insensitive on Windows.
+     *
+     * @param filename1  the first filename to query, may be null
+     * @param filename2  the second filename to query, may be null
+     * @return true if the filenames are equal, null equals null
+     */
+    public static boolean equalsNormalized(String filename1, String filename2) {
+        if (filename1 == filename2) {
+            return true;
+        }
+        if (filename1 == null || filename2 == null) {
+            return false;
+        }
+        filename1 = normalize(filename1);
+        filename2 = normalize(filename2);
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            return filename1.equalsIgnoreCase(filename2);
+        } else {
+            return filename1.equals(filename2);
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Checks whether the extension of the filename is that specified
+     * using the case rules of the system.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
@@ -663,7 +759,8 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks whether the extension of the filename is one of those specified.
+     * Checks whether the extension of the filename is one of those specified
+     * using the case rules of the system.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
@@ -698,7 +795,8 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks whether the extension of the filename is one of those specified.
+     * Checks whether the extension of the filename is one of those specified
+     * using the case rules of the system.
      * <p>
      * This method obtains the extension as the textual part of the filename
      * after the last dot. There must be no directory separator after the dot.
@@ -721,15 +819,25 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * See if a particular piece of text, often a filename, 
-     * matches to a specified wildcard, as seen on DOS/UNIX command lines.
+     * Checks a filename to see if it matches the specified wildcard matcher.
+     * <p>
+     * The wildcard matcher uses the characters '?' and '*' to represent a
+     * single or multiple wildcard characters.
+     * This is the same as often found on Dos/Unix command lines.
+     * <pre>
+     * wildcardMatch("c.txt", "*.txt")      --> true
+     * wildcardMatch("c.txt", "*.jpg")      --> false
+     * wildcardMatch("a/b/c.txt", "a/b/*")  --> true
+     * wildcardMatch("c.txt", "*.???")      --> true
+     * wildcardMatch("c.txt", "*.????")     --> false
+     * </pre>
      * 
      * @param filename  the filename to match on
-     * @param wildcard  the wildcard string to match against
+     * @param wildcardMatcher  the wildcard string to match against
      * @return true if the filename matches the wilcard string
      */
-    public static boolean wildcardMatch(String filename, String wildcard) {
-        String[] wcs = splitOnTokens(wildcard);
+    public static boolean wildcardMatch(String filename, String wildcardMatcher) {
+        String[] wcs = splitOnTokens(wildcardMatcher);
   
         int textIdx = 0;
         int wcsIdx = 0;

@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.22 2004/11/27 17:00:51 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.23 2004/12/04 19:28:40 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -448,6 +448,28 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a\\b\\c", FilenameUtils.removeExtension("a\\b\\c"));
         assertEquals("C:\\temp\\foo.bar\\README", FilenameUtils.removeExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("../filename", FilenameUtils.removeExtension("../filename.ext"));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testEquals() {
+        assertEquals(true, FilenameUtils.equals(null, null));
+        assertEquals(false, FilenameUtils.equals(null, ""));
+        assertEquals(false, FilenameUtils.equals("", null));
+        assertEquals(true, FilenameUtils.equals("", ""));
+        assertEquals(true, FilenameUtils.equals("file.txt", "file.txt"));
+        assertEquals(WINDOWS, FilenameUtils.equals("file.txt", "FILE.TXT"));
+        assertEquals(false, FilenameUtils.equals("a\\b\\file.txt", "a/b/file.txt"));
+    }
+
+    public void testEqualsNormalized() {
+        assertEquals(true, FilenameUtils.equalsNormalized(null, null));
+        assertEquals(false, FilenameUtils.equalsNormalized(null, ""));
+        assertEquals(false, FilenameUtils.equalsNormalized("", null));
+        assertEquals(true, FilenameUtils.equalsNormalized("", ""));
+        assertEquals(true, FilenameUtils.equalsNormalized("file.txt", "file.txt"));
+        assertEquals(WINDOWS, FilenameUtils.equalsNormalized("file.txt", "FILE.TXT"));
+        assertEquals(true, FilenameUtils.equalsNormalized("a\\b\\file.txt", "a/b/file.txt"));
+        assertEquals(true, FilenameUtils.equalsNormalized("a\\b\\", "a/b"));
     }
 
     //-----------------------------------------------------------------------
