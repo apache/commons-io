@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.7 2003/12/30 15:26:59 jeremias Exp $
- * $Revision: 1.7 $
- * $Date: 2003/12/30 15:26:59 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.8 2004/01/02 06:44:26 bayard Exp $
+ * $Revision: 1.8 $
+ * $Date: 2004/01/02 06:44:26 $
  *
  * ====================================================================
  *
@@ -64,7 +64,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.7 $ $Date: 2003/12/30 15:26:59 $
+ * @version $Revision: 1.8 $ $Date: 2004/01/02 06:44:26 $
  */
 public class EndianUtilsTest extends TestCase {
 
@@ -136,6 +136,11 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x01, bytes[1] );
     }
 
+    public void testReadSwappedUnsignedShort() {
+        byte[] bytes = new byte[] { 0x02, 0x01 };
+        assertEquals( 0x00000102, EndianUtils.readSwappedUnsignedShort( bytes, 0 ) );
+    }
+
     public void testReadSwappedInteger() {
         byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
         int ln = EndianUtils.readSwappedInteger( bytes, 0 );
@@ -151,7 +156,10 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x01, bytes[3] );
     }
 
-    // TODO: public void testWriteUnsignedInteger
+    public void testReadSwappedUnsignedInteger() {
+        byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
+        assertEquals( 0x0000000001020304L, EndianUtils.readSwappedUnsignedInteger( bytes, 0 ) );
+    }
 
     public void testReadSwappedLong() {
         byte[] bytes = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
@@ -211,9 +219,6 @@ public class EndianUtilsTest extends TestCase {
 
     /*
     // TODO:
-
-    // All readSwappedXxxx(byte[], int)
-    // All writeSwappedXxxx(byte[], int, xxxx)
     // All readSwappedXxxx(InputStream)
     // All writeSwappedXxxx(OutputStream, xxxx)
     */
