@@ -11,7 +11,6 @@
         <li>Write TestCases for: 
         <ul>
           <li>EndianUtils - InputStream/OutputStream methods</li>
-          <li>LockableFileWriter</li>
           <li>SwappedDataInputStream - [half done]</li>
         </ul>
         though they may not affect an initial beta release. 
