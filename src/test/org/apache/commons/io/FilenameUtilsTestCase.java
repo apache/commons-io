@@ -30,7 +30,7 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.14 2004/10/30 22:41:56 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.15 2004/10/30 22:43:21 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -73,14 +73,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     /** @see junit.framework.TestCase#tearDown() */
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
-    }
-
-    // mkdir
-
-    public void testMkdir() {
-        File dir = new File(getTestDirectory(), "testdir");
-        FilenameUtils.mkdir(dir.getAbsolutePath());
-        dir.deleteOnExit();
     }
 
     // removePath

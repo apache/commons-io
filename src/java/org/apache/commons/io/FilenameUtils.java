@@ -63,7 +63,7 @@ import java.io.IOException;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.20 2004/10/30 22:41:57 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.21 2004/10/30 22:43:21 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -103,44 +103,6 @@ public class FilenameUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public FilenameUtils() { }
-
-    /**
-     * Check if a file exits.
-     *
-     * @param fileName The name of the file to check.
-     * @return true if file exists.
-     */
-    // KILL: Not filename based
-    public static boolean fileExists(String fileName) {
-        File file = new File(fileName);
-        return file.exists();
-    }
-
-
-
-    /**
-     * Deletes a file.
-     *
-     * @param fileName The name of the file to delete.
-     */
-    // KILL: Not filename based
-    public static void fileDelete(String fileName) {
-        File file = new File(fileName);
-        file.delete();
-    }
-
-    /**
-     * Simple way to make a directory. It also creates the parent directories
-     * if necessary.
-     * @param dir directory to create
-     */
-    // KILL: Not filename based
-    public static void mkdir(String dir) {
-        File file = new File(dir);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-    }
 
     /**
      * Remove extension from filename.
