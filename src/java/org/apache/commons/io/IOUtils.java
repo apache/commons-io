@@ -17,6 +17,7 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,12 +66,13 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
  * @author Gareth Davis
+ * @author Ian Springer
  * @version CVS $Revision$ $Date$
  */
 public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and
-    // Writer. Each method should take at least one of these as a parameter.
-    // NOTE: This class should not depend on any other classes
+    // Writer. Each method should take at least one of these as a parameter,
+    // or return one of them.
 
     /**
      * The default buffer size to use.
@@ -388,6 +390,35 @@ public class IOUtils {
         } else {
             return new String(input, encoding);
         }
+    }
+
+    /**
+     * Convert the specified string to an input stream, encoded as bytes
+     * using the default character encoding of the platform.
+     *
+     * @param input the string to convert
+     * @return an input stream
+     */
+    public static InputStream toInputStream(String input) {
+        byte[] bytes = input.getBytes();
+        return new ByteArrayInputStream(bytes);
+    }
+
+    /**
+     * Convert the specified string to an input stream, encoded as bytes
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     *
+     * @param input the string to convert
+     * @param encoding the encoding to use, null means platform default
+     * @throws IOException if the encoding is invalid
+     * @return an input stream
+     */
+    public static InputStream toInputStream(String input, String encoding) throws IOException {
+        byte[] bytes = encoding != null ? input.getBytes(encoding) : input.getBytes();
+        return new ByteArrayInputStream(bytes);
     }
 
     // write byte[]

@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 import org.apache.commons.io.testtools.*;
@@ -42,6 +43,7 @@ import org.apache.commons.io.testtools.*;
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Gareth Davis
+ * @author Ian Springer
  */
 public class IOUtilsTestCase extends FileBasedTestCase {
     /*
@@ -250,6 +252,26 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         } finally {
             fin.close();
         }
+    }
+
+    /**
+     * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}.
+     * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
+     * {@link #testInputStreamToByteArray()} to ensure this method functions correctly.
+     *
+     * @throws Exception on error
+     */
+    public void testStringToInputStream() throws Exception {
+        String str = "Abc123Xyz!";
+        InputStream inStream = IOUtils.toInputStream(str);
+        byte[] bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(str.getBytes(), bytes);
+        inStream = IOUtils.toInputStream(str, null);
+        bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(str.getBytes(), bytes);
+        inStream = IOUtils.toInputStream(str, "UTF-8");
+        bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(str.getBytes("UTF-8"), bytes);
     }
 
     public void testByteArrayToOutputStream()
