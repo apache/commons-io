@@ -52,12 +52,15 @@ package org.apache.commons.io;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
  */
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Vector;
+
 
 /**
  * Common {@link java.io.File} manipulation routines.
@@ -69,10 +72,10 @@ import java.util.Vector;
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @version $Id: FileUtils.java,v 1.2 2002/01/28 04:44:49 sanders Exp $
+ * @version $Id: FileUtils.java,v 1.3 2002/01/28 05:01:48 sanders Exp $
  */
-public class FileUtils
-{
+public class FileUtils {
+
     /**
      * The number of bytes in a kilobyte.
      */
@@ -95,24 +98,16 @@ public class FileUtils
      * @param size The number of bytes.
      * @return     A human-readable display value (includes units).
      */
-    public static String byteCountToDisplaySize(int size)
-    {
+    public static String byteCountToDisplaySize(int size) {
         String displaySize;
 
-        if (size / ONE_GB > 0)
-        {
+        if (size / ONE_GB > 0) {
             displaySize = String.valueOf(size / ONE_GB) + " GB";
-        }
-        else if (size / ONE_MB > 0)
-        {
+        } else if (size / ONE_MB > 0) {
             displaySize = String.valueOf(size / ONE_MB) + " MB";
-        }
-        else if (size / ONE_KB > 0)
-        {
+        } else if (size / ONE_KB > 0) {
             displaySize = String.valueOf(size / ONE_KB) + " KB";
-        }
-        else
-        {
+        } else {
             displaySize = String.valueOf(size) + " bytes";
         }
 
@@ -124,8 +119,7 @@ public class FileUtils
      * Matches the equally named unix command.
      * @return The directory portion excluding the ending file separator.
      */
-    public static String dirname(String filename)
-    {
+    public static String dirname(String filename) {
         int i = filename.lastIndexOf(File.separator);
         return (i >= 0 ? filename.substring(0, i) : "");
     }
@@ -134,8 +128,7 @@ public class FileUtils
      * Returns the filename portion of a file specification string.
      * @return The filename string with extension.
      */
-    public static String filename(String filename)
-    {
+    public static String filename(String filename) {
         int i = filename.lastIndexOf(File.separator);
         return (i >= 0 ? filename.substring(i + 1) : filename);
     }
@@ -145,8 +138,7 @@ public class FileUtils
      * Matches the equally named unix command.
      * @return The filename string without extension.
      */
-    public static String basename(String filename)
-    {
+    public static String basename(String filename) {
         return basename(filename, extension(filename));
     }
 
@@ -154,23 +146,17 @@ public class FileUtils
      * Returns the filename portion of a file specification string.
      * Matches the equally named unix command.
      */
-    public static String basename(String filename, String suffix)
-    {
+    public static String basename(String filename, String suffix) {
         int i = filename.lastIndexOf(File.separator) + 1;
         int lastDot = ((suffix != null) && (suffix.length() > 0))
-          ? filename.lastIndexOf(suffix) : -1;
+                ? filename.lastIndexOf(suffix) : -1;
 
-        if (lastDot >= 0)
-        {
-          return filename.substring(i, lastDot);
-        }
-        else if (i > 0)
-        {
-          return filename.substring(i);
-        }
-        else
-        {
-          return filename; // else returns all (no path and no extension)
+        if (lastDot >= 0) {
+            return filename.substring(i, lastDot);
+        } else if (i > 0) {
+            return filename.substring(i);
+        } else {
+            return filename; // else returns all (no path and no extension)
         }
     }
 
@@ -179,17 +165,13 @@ public class FileUtils
      * This everything after the last dot '.' in the filename (NOT including
      * the dot).
      */
-    public static String extension(String filename)
-    {
+    public static String extension(String filename) {
         int lastDot = filename.lastIndexOf('.');
 
-        if (lastDot >= 0)
-        {
-          return filename.substring(lastDot + 1);
-        }
-        else
-        {
-          return "";
+        if (lastDot >= 0) {
+            return filename.substring(lastDot + 1);
+        } else {
+            return "";
         }
     }
 
@@ -199,8 +181,7 @@ public class FileUtils
      * @param fileName The name of the file to check.
      * @return true if file exists.
      */
-    public static boolean fileExists(String fileName)
-    {
+    public static boolean fileExists(String fileName) {
         File file = new File(fileName);
         return file.exists();
     }
@@ -211,17 +192,16 @@ public class FileUtils
      * @param fileName The name of the file to read.
      * @return The file contents or null if read failed.
      */
-    public static String fileRead(String fileName) throws Exception
-    {
+    public static String fileRead(String fileName) throws Exception {
         StringBuffer buf = new StringBuffer();
 
         FileInputStream in = new FileInputStream(fileName);
 
         int count;
         byte[] b = new byte[512];
-        while ( (count = in.read(b)) > 0 )  // blocking read
+        while ((count = in.read(b)) > 0)  // blocking read
         {
-            buf.append( new String(b, 0, count) );
+            buf.append(new String(b, 0, count));
         }
 
         in.close();
@@ -235,10 +215,9 @@ public class FileUtils
      * @param fileName The name of the file to write.
      * @param data The content to write to the file.
      */
-    public static void fileWrite(String fileName, String data) throws Exception
-    {
+    public static void fileWrite(String fileName, String data) throws Exception {
         FileOutputStream out = new FileOutputStream(fileName);
-        out.write( data.getBytes() );
+        out.write(data.getBytes());
         out.close();
     }
 
@@ -247,8 +226,7 @@ public class FileUtils
      *
      * @param fileName The name of the file to delete.
      */
-    public static void fileDelete(String fileName)
-    {
+    public static void fileDelete(String fileName) {
         File file = new File(fileName);
         file.delete();
     }
@@ -260,30 +238,21 @@ public class FileUtils
      * @param seconds The maximum time in seconds to wait.
      * @return True if file exists.
      */
-    public static boolean waitFor(String fileName, int seconds)
-    {
+    public static boolean waitFor(String fileName, int seconds) {
         File file = new File(fileName);
         int timeout = 0;
         int tick = 0;
-        while ( ! file.exists() )
-        {
-            if (tick++ >= 10)
-            {
+        while (!file.exists()) {
+            if (tick++ >= 10) {
                 tick = 0;
-                if (timeout++ > seconds)
-                {
+                if (timeout++ > seconds) {
                     return false;
                 }
             }
-            try
-            {
+            try {
                 Thread.sleep(100);
-            }
-            catch(InterruptedException ignore)
-            {
-            }
-            catch(Exception ex)
-            {
+            } catch (InterruptedException ignore) {
+            } catch (Exception ex) {
                 break;
             }
         }
@@ -296,8 +265,7 @@ public class FileUtils
      * @param fileName The name of the file.
      * @return A <code>File</code> instance.
      */
-    public static File getFile(String fileName)
-    {
+    public static File getFile(String fileName) {
         return new File(fileName);
     }
 
@@ -309,7 +277,7 @@ public class FileUtils
      * TODO Should a recurse flag be passed in?
      *
      * The given extensions should be like "java" and not like ".java"
-    */
+     */
     public static String[] getFilesFromExtension(String directory, String[] extensions) {
 
         Vector files = new Vector();
@@ -322,7 +290,7 @@ public class FileUtils
             return new String[0];
         }
 
-        for (int i = 0;i < unknownFiles.length;++i) {
+        for (int i = 0; i < unknownFiles.length; ++i) {
             String currentFileName = directory + System.getProperty("file.separator") + unknownFiles[i];
             java.io.File currentFile = new java.io.File(currentFileName);
 
@@ -330,7 +298,7 @@ public class FileUtils
 
 
                 //ignore all CVS directories...
-                if ( currentFile.getName().equals("CVS") ) {
+                if (currentFile.getName().equals("CVS")) {
                     continue;
                 }
 
@@ -339,14 +307,14 @@ public class FileUtils
                 //them with the current list.
 
                 String[] fetchFiles = getFilesFromExtension(currentFileName, extensions);
-                files = blendFilesToVector( files, fetchFiles);
+                files = blendFilesToVector(files, fetchFiles);
 
             } else {
                 //ok... add the file
 
                 String add = currentFile.getAbsolutePath();
-                if ( isValidFile( add, extensions ) ) {
-                    files.addElement( add );
+                if (isValidFile(add, extensions)) {
+                    files.addElement(add);
 
                 }
 
@@ -365,7 +333,7 @@ public class FileUtils
 
     /**
      * Private hepler method for getFilesFromExtension()
-    */
+     */
     private static Vector blendFilesToVector(Vector v, String[] files) {
 
         for (int i = 0; i < files.length; ++i) {
@@ -380,7 +348,7 @@ public class FileUtils
      * Note that if the file does not have an extension, an empty string
      * (&quot;&quot;) is matched for.
      *
-    */
+     */
     private static boolean isValidFile(String file, String[] extensions) {
 
 

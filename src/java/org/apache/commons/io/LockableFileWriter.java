@@ -52,12 +52,15 @@ package org.apache.commons.io;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
  */
 
+
 import java.io.File;
-import java.io.Writer;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+
 
 /**
  * FileWriter that will create and honor lock files to allow simple
@@ -72,10 +75,10 @@ import java.io.IOException;
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.1 2002/01/26 02:47:42 sanders Exp $
+ * @version $Id: LockableFileWriter.java,v 1.2 2002/01/28 05:01:48 sanders Exp $
  */
-public class LockableFileWriter extends Writer
-{
+public class LockableFileWriter extends Writer {
+
     private static final String LCK = ".lck";
 
     private File lockFile = null;
@@ -85,42 +88,35 @@ public class LockableFileWriter extends Writer
     private boolean append = false;
 
     public LockableFileWriter(String fileName)
-        throws IOException
-    {
+            throws IOException {
         this(fileName, false, null);
     }
 
     public LockableFileWriter(String fileName, boolean append)
-        throws IOException
-    {
+            throws IOException {
         this(fileName, append, null);
     }
 
     public LockableFileWriter(String fileName, boolean append, String lockDir)
-        throws IOException
-    {
+            throws IOException {
         this(new File(fileName), append, lockDir);
     }
 
     public LockableFileWriter(File file)
-        throws IOException
-    {
+            throws IOException {
         this(file, false, null);
     }
 
     public LockableFileWriter(File file, boolean append)
-        throws IOException
-    {
+            throws IOException {
         this(file, append, null);
     }
 
     public LockableFileWriter(File file, boolean append, String lockDir)
-        throws IOException
-    {
+            throws IOException {
         this.append = append;
 
-        if (lockDir == null)
-        {
+        if (lockDir == null) {
             lockDir = System.getProperty("java.io.tmpdir");
         }
         testLockDir(new File(lockDir));
@@ -131,56 +127,44 @@ public class LockableFileWriter extends Writer
     }
 
     private void testLockDir(File lockDir)
-        throws IOException
-    {
-        if (!lockDir.exists())
-        {
+            throws IOException {
+        if (!lockDir.exists()) {
             throw new IOException(
-                "Could not find lockDir: " + lockDir.getAbsolutePath());
+                    "Could not find lockDir: " + lockDir.getAbsolutePath());
         }
-        if (!lockDir.canWrite())
-        {
+        if (!lockDir.canWrite()) {
             throw new IOException(
-                "Could not write to lockDir: " + lockDir.getAbsolutePath());
+                    "Could not write to lockDir: " + lockDir.getAbsolutePath());
         }
     }
 
     private void createLock()
-        throws IOException
-    {
-        synchronized (LockableFileWriter.class)
-        {
-            if (!lockFile.createNewFile())
-            {
+            throws IOException {
+        synchronized (LockableFileWriter.class) {
+            if (!lockFile.createNewFile()) {
                 throw new IOException("Can't write file, lock " +
-                    lockFile.getAbsolutePath() + " exists");
+                        lockFile.getAbsolutePath() + " exists");
             }
             lockFile.deleteOnExit();
         }
     }
 
     public void close()
-        throws IOException
-    {
-        try
-        {
+            throws IOException {
+        try {
             writer.close();
-        }
-        finally
-        {
+        } finally {
             lockFile.delete();
         }
     }
 
     public void write(char[] cbuf, int off, int len)
-        throws IOException
-    {
+            throws IOException {
         writer.write(cbuf, off, len);
     }
 
     public void flush()
-        throws IOException
-    {
+            throws IOException {
         writer.flush();
     }
 }

@@ -52,14 +52,15 @@ package org.apache.commons.io;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
  */
 
-import java.io.IOException;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.lang.StringBuffer;
 
 /**
  * Methods for manipulating streams.
@@ -69,10 +70,10 @@ import java.lang.StringBuffer;
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:leonardr@collab.net">Leonard Richardson</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: StreamUtils.java,v 1.1 2002/01/26 02:47:42 sanders Exp $
+ * @version $Id: StreamUtils.java,v 1.2 2002/01/28 05:01:49 sanders Exp $
  */
-public class StreamUtils
-{
+public class StreamUtils {
+
     /**
      * Buffer size to use if one is not specified.
      */
@@ -87,8 +88,7 @@ public class StreamUtils
      * @return A String version of the contents of <code>toRead</code>.
      */
     public static String streamAsString(InputStream toRead)
-        throws IOException
-    {
+            throws IOException {
         return streamAsString(toRead, DEFAULT_BUFFER_SIZE, null);
     }
 
@@ -105,8 +105,7 @@ public class StreamUtils
      */
     public static String streamAsString(InputStream toRead, int bufferSize,
                                         String encoding)
-        throws IOException
-    {
+            throws IOException {
         ByteArrayOutputStream contents = readStream(toRead, bufferSize);
         return (encoding == null ? contents.toString() :
                 contents.toString(encoding));
@@ -120,8 +119,7 @@ public class StreamUtils
      * @return The contents of <code>toRead</code>.
      */
     public static byte[] streamAsBytes(InputStream toRead, int bufferSize)
-        throws IOException
-    {
+            throws IOException {
         ByteArrayOutputStream contents = readStream(toRead, bufferSize);
         return contents.toByteArray();
     }
@@ -138,14 +136,12 @@ public class StreamUtils
      */
     protected static ByteArrayOutputStream readStream(InputStream toRead,
                                                       int bufferSize)
-       throws IOException
-     {
+            throws IOException {
         ByteArrayOutputStream contents = new ByteArrayOutputStream();
         byte[] buffer = new byte[bufferSize];
         int bytesRead;
 
-        while ( (bytesRead = toRead.read(buffer)) != -1 )
-        {
+        while ((bytesRead = toRead.read(buffer)) != -1) {
             contents.write(buffer, 0, bytesRead);
         }
 
@@ -161,8 +157,7 @@ public class StreamUtils
      * @param toWrite Stream to use as sink.
      */
     public static void pipe(InputStream toRead, OutputStream toWrite)
-        throws IOException
-    {
+            throws IOException {
         pipe(toRead, toWrite, DEFAULT_BUFFER_SIZE);
     }
 
@@ -176,13 +171,11 @@ public class StreamUtils
      */
     public static void pipe(InputStream toRead, OutputStream toWrite,
                             int bufferSize)
-        throws IOException
-    {
+            throws IOException {
         byte[] buffer = new byte[bufferSize];
         int bytesRead;
 
-        while ( (bytesRead = toRead.read(buffer)) != -1 )
-        {
+        while ((bytesRead = toRead.read(buffer)) != -1) {
             toWrite.write(buffer, 0, bytesRead);
         }
     }
