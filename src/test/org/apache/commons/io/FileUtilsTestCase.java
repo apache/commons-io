@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.4 2003/10/17 20:15:46 matth Exp $
- * $Revision: 1.4 $
- * $Date: 2003/10/17 20:15:46 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.5 2003/11/22 20:48:10 jeremias Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/11/22 20:48:10 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.4 2003/10/17 20:15:46 matth Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.5 2003/11/22 20:48:10 jeremias Exp $
  * @see FileUtils
  */
 public final class FileUtilsTestCase extends FileBasedTestCase {
@@ -141,9 +141,9 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
     // waitFor
 
     public void testWaitFor() {
-        FileUtils.waitFor("", -1);
+        FileUtils.waitFor(new File(""), -1);
 
-        FileUtils.waitFor("", 2);
+        FileUtils.waitFor(new File(""), 2);
     }
 
     // toURL
@@ -520,20 +520,20 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
             "Second test file does not exist",
             !FileUtils.fileExists(filename2));
 
-        FileUtils.fileWrite(filename2, filename);
+        FileUtils.writeStringToFile(new File(filename2), filename, "UTF-8");
         assertTrue("Second file was written", FileUtils.fileExists(filename2));
 
-        final String file2contents = FileUtils.fileRead(filename2);
+        final String file2contents = FileUtils.readFileToString(new File(filename2), "UTF-8");
         assertTrue(
             "Second file's contents correct",
-            FileUtils.fileRead(filename2).equals(file2contents));
+            FileUtils.readFileToString(new File(filename2), "UTF-8").equals(file2contents));
 
         FileUtils.fileDelete(filename2);
         assertTrue(
             "Second test file does not exist",
             !FileUtils.fileExists(filename2));
 
-        final String contents = FileUtils.fileRead(filename);
+        final String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
         assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
 
     }
