@@ -17,7 +17,7 @@
 
     <inceptionYear>2002</inceptionYear>
     <package>org.apache.commons.io</package>
-    <logo>/images/logo.jpg</logo>
+    <logo>/images/logo.gif</logo>
 
     <!-- Gump integration -->
     <gumpRepositoryId>jakarta-io</gumpRepositoryId>
