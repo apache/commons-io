@@ -96,7 +96,7 @@ import java.util.Vector;
  * Common {@link java.io.File} manipulation routines.
  *
  * Taken from the commons-utils repo.
- * Also code from alexandria's FileUtils.
+ * Also code from Alexandria's FileUtils.
  * And from Avalon Excalibur's IO.
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
@@ -105,7 +105,7 @@ import java.util.Vector;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id: FileUtils.java,v 1.9 2002/07/28 08:28:48 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.10 2002/07/28 20:48:46 dlr Exp $
  */
 public class FileUtils {
 
@@ -266,8 +266,8 @@ public class FileUtils {
     public static void fileCopy(String inFileName, String outFileName) throws
         Exception
     {
-        String content = FileUtils.fileRead(inFileName);
-        FileUtils.fileWrite(outFileName, content);
+        String content = fileRead(inFileName);
+        fileWrite(outFileName, content);
     }
 
     /**
@@ -401,7 +401,7 @@ public class FileUtils {
     private static boolean isValidFile(String file, String[] extensions) {
 
 
-        String extension = FileUtils.extension(file);
+        String extension = extension(file);
         if (extension == null) {
             extension = "";
         }
@@ -1061,7 +1061,7 @@ public class FileUtils {
             final File file = files[ i ];
             try
             {
-                FileUtil.forceDeleteOnExit( file );
+                forceDeleteOnExit( file );
             }
             catch( final IOException ioe )
             {
@@ -1166,7 +1166,7 @@ public class FileUtils {
             final File file = files[ i ];
             try
             {
-                FileUtil.forceDelete( file );
+                forceDelete( file );
             }
             catch( final IOException ioe )
             {
