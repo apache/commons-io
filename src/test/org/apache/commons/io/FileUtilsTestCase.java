@@ -405,6 +405,74 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             testFile1.lastModified() != destination.lastModified());*/    
     }
 
+    public void testCopyDirectoryToNonExistingDest() throws Exception {
+        createFile(testFile1, 1234);
+        createFile(testFile2, 4321);
+        File srcDir = getTestDirectory();
+        File subDir = new File(srcDir, "sub");
+        subDir.mkdir();
+        File subFile = new File(subDir, "A.txt");
+        FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
+        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        FileUtils.deleteDirectory(destDir);
+        
+        FileUtils.copyDirectory(srcDir, destDir);
+        
+        assertTrue("Check exists", destDir.exists());
+        assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
+        assertEquals(true, new File(destDir, "sub/A.txt").exists());
+        FileUtils.deleteDirectory(destDir);
+    }
+
+    public void testCopyDirectoryToExistingDest() throws Exception {
+        createFile(testFile1, 1234);
+        createFile(testFile2, 4321);
+        File srcDir = getTestDirectory();
+        File subDir = new File(srcDir, "sub");
+        subDir.mkdir();
+        File subFile = new File(subDir, "A.txt");
+        FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
+        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        FileUtils.deleteDirectory(destDir);
+        destDir.mkdirs();
+        
+        FileUtils.copyDirectory(srcDir, destDir);
+        
+        assertEquals(FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
+        assertEquals(true, new File(destDir, "sub/A.txt").exists());
+    }
+
+    public void testCopyDirectoryErrors() throws Exception {
+        try {
+            FileUtils.copyDirectory(null, null);
+            fail();
+        } catch (NullPointerException ex) {}
+        try {
+            FileUtils.copyDirectory(new File("a"), null);
+            fail();
+        } catch (NullPointerException ex) {}
+        try {
+            FileUtils.copyDirectory(null, new File("a"));
+            fail();
+        } catch (NullPointerException ex) {}
+        try {
+            FileUtils.copyDirectory(new File("doesnt-exist"), new File("a"));
+            fail();
+        } catch (IOException ex) {}
+        try {
+            FileUtils.copyDirectory(testFile1, new File("a"));
+            fail();
+        } catch (IOException ex) {}
+        try {
+            FileUtils.copyDirectory(getTestDirectory(), testFile1);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            FileUtils.copyDirectory(getTestDirectory(), getTestDirectory());
+            fail();
+        } catch (IOException ex) {}
+    }
+
     // forceDelete
 
     public void testForceDeleteAFile1() throws Exception {
