@@ -55,14 +55,13 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FilterInputStream;
 
 /**
  * Used in debugging, it counts the number of bytes that pass 
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.5 2003/11/23 09:20:20 bayard Exp $
+ * @version $Id: CountingInputStream.java,v 1.6 2003/12/30 15:19:00 jeremias Exp $
  */
 public class CountingInputStream extends ProxyInputStream {
 
