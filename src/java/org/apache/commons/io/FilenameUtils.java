@@ -51,7 +51,7 @@ import java.util.ArrayList;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.27 2004/11/23 00:04:29 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.28 2004/11/26 19:18:28 martinc Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -416,7 +416,6 @@ public class FilenameUtils {
             }
         } else {
             char ch0 = filename.charAt(0);
-            char ch1 = filename.charAt(1);
             if (ch0 == '~') {
                 if (len == 1) {
                     return -1;
