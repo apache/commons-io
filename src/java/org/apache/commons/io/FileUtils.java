@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.33 2004/07/03 11:20:45 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.34 2004/07/15 08:21:14 scolebourne Exp $
  */
 public class FileUtils {
 
@@ -121,7 +121,7 @@ public class FileUtils {
      * @throws IOException If an I/O problem occurs
      */
     public static void touch(File file) throws IOException {
-        OutputStream out = new java.io.FileOutputStream(file, true);
+        OutputStream out = new FileOutputStream(file, true);
         IOUtils.closeQuietly(out);
         file.setLastModified(System.currentTimeMillis());
     }
@@ -271,8 +271,8 @@ public class FileUtils {
         InputStream input1 = null;
         InputStream input2 = null;
         try {
-            input1 = new java.io.FileInputStream(file1);
-            input2 = new java.io.FileInputStream(file2);
+            input1 = new FileInputStream(file1);
+            input2 = new FileInputStream(file2);
             return IOUtils.contentEquals(input1, input2);
 
         } finally {
@@ -574,16 +574,15 @@ public class FileUtils {
      * in inconsistent results.
      * </p>
      *
-     * @param file the file to read.
-     * @param encoding the encoding to use
+     * @param file  the file to read
+     * @param encoding  the encoding to use
      * @return The file contents or null if read failed.
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported
-     *   by the VM
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static String readFileToString(
             File file, String encoding) throws IOException {
-        InputStream in = new java.io.FileInputStream(file);
+        InputStream in = new FileInputStream(file);
         try {
             return IOUtils.toString(in, encoding);
         } finally {
@@ -593,10 +592,28 @@ public class FileUtils {
 
     /**
      * <p>
-     * Writes data to a file. The file will be created if it does not exist.
+     * Reads the contents of a file into a byte array.
+     * </p>
+     *
+     * @param file  the file to read
+     * @return The file contents or null if read failed.
+     * @throws IOException in case of an I/O error
+     */
+    public static byte[] readFileToByteArray(File file) throws IOException {
+        InputStream in = new FileInputStream(file);
+        try {
+            return IOUtils.toByteArray(in);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    /**
+     * <p>
+     * Writes a String to a file creating the file if it does not exist.
      * </p>
      * <p>
-     * There is no readFileToString method without encoding parameter because
+     * There is no writeStringToFile method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
      * </p>
@@ -610,9 +627,28 @@ public class FileUtils {
      */
     public static void writeStringToFile(File file, 
             String data, String encoding) throws IOException {
-        OutputStream out = new java.io.FileOutputStream(file);
+        OutputStream out = new FileOutputStream(file);
         try {
             out.write(data.getBytes(encoding));
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    /**
+     * <p>
+     * Writes a byte array to a file creating the file if it does not exist.
+     * </p>
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @throws IOException in case of an I/O error
+     */
+    public static void writeByteArrayToFile(
+            File file, byte[] data) throws IOException {
+        OutputStream out = new FileOutputStream(file);
+        try {
+            out.write(data);
         } finally {
             IOUtils.closeQuietly(out);
         }
