@@ -2,10 +2,14 @@
 
 <!--
     Main index
-    $Id: index.xml,v 1.7 2004/04/18 06:16:35 bayard Exp $
+    $Id: index.xml,v 1.8 2004/04/24 23:53:01 bayard Exp $
 -->
 
 <document>
+ <properties>
+   <title>Commons IO</title>
+   <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+  </properties>
   <body>
 
     <section name="Commons IO">
