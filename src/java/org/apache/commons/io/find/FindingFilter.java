@@ -206,7 +206,7 @@ public class FindingFilter implements FileFilter {
             this.argument = new Boolean(argument.toString()).booleanValue();
         }
         public boolean accept(File file) {
-            return FindingFilter.invert( this.invert,  (file.length() == 0) == this.argument );
+            return FindingFilter.invert( this.invert,  (!file.isDirectory() && file.length() == 0) == this.argument );
         }
     }
 
