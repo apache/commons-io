@@ -21,7 +21,6 @@
       <p>Javadoc status:</p>
       <ul>
         <li>io.*</li>
-        <li>io.filefilter</li>
         <li>io.input</li>
         <li>io.output</li>
       </ul>
