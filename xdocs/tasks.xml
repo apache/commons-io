@@ -8,9 +8,10 @@
       </p>
       <ul>
         <li>IOUtils: Remove the toByteArray() variants with the bufferSize
-            parameter. Reasoning can be found at
+            parameter. [Jeremias]   Reasoning can be found at
             http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
-        <li>FileUtils: This class is a big mess ATM. We need to clean it up.</li>
+        <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
+        <li>IOUtilsTestCase: Move copy tests over to CopyUtilsTestCase or kill them. [Hen]</li>
         <li>Write TestCases for: 
         <ul>
           <li>EndianUtils - InputStream/OutputStream methods</li>
@@ -18,6 +19,7 @@
           <li>ClassLoaderObjectInputStream</li>
           <li>SwappedDataInputStream</li>
         </ul>
+        though they may not affect an initial beta release. 
         </li>
         <li>More Javadocs!!!</li>
         <li>Improve site!!!</li>
