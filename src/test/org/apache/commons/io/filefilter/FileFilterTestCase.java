@@ -1,12 +1,12 @@
 /*
  * Copyright 2002-2004 The Apache Software Foundation.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,11 +29,11 @@ public class FileFilterTestCase extends TestCase {
     public FileFilterTestCase(String name) {
         super(name);
     }
-    
+
     public static void main(String[] args) {
         TestRunner.run(suite());
     }
-    
+
     public static TestSuite suite() {
         return new TestSuite(FileFilterTestCase.class);
     }
@@ -45,7 +45,7 @@ public class FileFilterTestCase extends TestCase {
     }
 
     public void assertFiltering(IOFileFilter filter, File file, boolean expected) throws Exception {
-        // Note. This only tests the (File, String) version if the parent of 
+        // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
         assertTrue(
             "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
@@ -71,11 +71,11 @@ public class FileFilterTestCase extends TestCase {
         assertFiltering(filter, new File("fred"), false);
         assertFiltering(filter, new File(".tes"), true);
         assertFiltering(filter, new File("fred.test"), true);
-        
+
         filter = new SuffixFileFilter("est");
         assertFiltering(filter, new File("test"), true);
         assertFiltering(filter, new File("fred"), false);
-        
+
         try {
             new SuffixFileFilter((String) null);
             fail();
@@ -108,18 +108,18 @@ public class FileFilterTestCase extends TestCase {
         assertFiltering(filter, new File("test"), false);
         assertFiltering(filter, new File("fo_o.test"), false);
         assertFiltering(filter, new File("abar.exe"), false);
-        
+
         filter = new PrefixFileFilter("tes");
         assertFiltering(filter, new File("test"), true);
         assertFiltering(filter, new File("fred"), false);
-        
+
         try {
             new PrefixFileFilter((String) null);
             fail();
         } catch (IllegalArgumentException ex) {
         }
     }
-    
+
     public void testNameFilter() throws Exception {
         IOFileFilter filter = new NameFileFilter(new String[] { "foo", "bar" });
         assertFiltering(filter, new File("foo"), true);
@@ -197,4 +197,35 @@ public class FileFilterTestCase extends TestCase {
         }
     }
 
+
+    public void testWildcard() throws Exception {
+        IOFileFilter filter = new WildcardFilter("*.txt");
+        assertFiltering(filter, new File("log.txt"), true);
+//        assertFiltering(filter, new File("log.txt.bak"), false);
+
+        filter = new WildcardFilter("log?.txt");
+        assertFiltering(filter, new File("log1.txt"), true);
+        assertFiltering(filter, new File("log12.txt"), false);
+
+        filter = new WildcardFilter("open??.????04");
+        assertFiltering(filter, new File("openAB.102504"), true);
+        assertFiltering(filter, new File("openA.102504"), false);
+        assertFiltering(filter, new File("openXY.123103"), false);
+//        assertFiltering(filter, new File("openAB.102504.old"), false);
+
+        filter = new WildcardFilter(new String[] {"*.java", "*.class"});
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.class"), true);
+        assertFiltering(filter, new File("Test.jsp"), false);
+
+        try {
+            new WildcardFilter((String) null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+    }
+
+
 }
+
