@@ -49,10 +49,6 @@
         </include>
       </fileset>
     </copy>
-    <copy todir="${testclassesdir}">
-      <fileset dir="data/test">
-      </fileset>
-    </copy>
   </target>
   <target name="jar" description="o Create the jar" depends="compile,test">
     <jar jarfile="target/${final.name}.jar" excludes="**/package.html" basedir="${classesdir}">
@@ -153,8 +149,6 @@
     </javadoc>
   </target>
   <target name="get-deps" unless="noget" depends="init">
-    <get dest="${libdir}/junit-3.8.1.jar" usetimestamp="true" ignoreerrors="true" src="http://www.ibiblio.org/maven/junit/jars/junit-3.8.1.jar">
-    </get>
     <get dest="${libdir}/junit-3.8.1.jar" usetimestamp="true" ignoreerrors="true" src="http://www.ibiblio.org/maven/junit/jars/junit-3.8.1.jar">
     </get>
     <get dest="${libdir}/ant-1.5.jar" usetimestamp="true" ignoreerrors="true" src="http://www.ibiblio.org/maven/ant/jars/ant-1.5.jar">
