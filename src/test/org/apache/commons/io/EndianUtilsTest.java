@@ -1,13 +1,13 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.6 2003/11/27 06:30:26 bayard Exp $
- * $Revision: 1.6 $
- * $Date: 2003/11/27 06:30:26 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.7 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.7 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,21 +58,14 @@
  * <http://www.apache.org/>.
  *
  */
-
-
 package org.apache.commons.io;
-
-
-import java.io.IOException;
 
 import junit.framework.TestCase;
 
-
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.6 $ $Date: 2003/11/27 06:30:26 $
+ * @version $Revision: 1.7 $ $Date: 2003/12/30 15:26:59 $
  */
-
 public class EndianUtilsTest extends TestCase {
 
     public EndianUtilsTest(String name) {

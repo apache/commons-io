@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.8 2003/12/30 07:00:03 bayard Exp $
- * $Revision: 1.8 $
- * $Date: 2003/12/30 07:00:03 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.9 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.9 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
@@ -82,15 +82,15 @@ import org.apache.commons.io.input.DemuxInputStream;
 public class DemuxTestCase
     extends TestCase
 {
-    private static String T1 = "Thread1";
-    private static String T2 = "Thread2";
-    private static String T3 = "Thread3";
-    private static String T4 = "Thread4";
+    private static final String T1 = "Thread1";
+    private static final String T2 = "Thread2";
+    private static final String T3 = "Thread3";
+    private static final String T4 = "Thread4";
 
-    private static String DATA1 = "Data for thread1";
-    private static String DATA2 = "Data for thread2";
-    private static String DATA3 = "Data for thread3";
-    private static String DATA4 = "Data for thread4";
+    private static final String DATA1 = "Data for thread1";
+    private static final String DATA2 = "Data for thread2";
+    private static final String DATA3 = "Data for thread3";
+    private static final String DATA4 = "Data for thread4";
 
     private static Random c_random = new Random();
     private HashMap m_outputMap = new HashMap();

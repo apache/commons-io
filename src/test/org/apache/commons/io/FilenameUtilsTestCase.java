@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2003/12/30 07:00:03 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.4 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
@@ -60,9 +60,7 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
@@ -75,17 +73,10 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.4 2003/12/30 15:26:59 jeremias Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
-
-    // Test data
-
-    /**
-     * Size of test directory.
-     */
-    private static int TEST_DIRECTORY_SIZE = 0;
 
     private File testFile1;
     private File testFile2;

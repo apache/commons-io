@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.9 2003/12/30 07:00:03 bayard Exp $
- * $Revision: 1.9 $
- * $Date: 2003/12/30 07:00:03 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.10 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.10 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.9 2003/12/30 07:00:03 bayard Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.10 2003/12/30 15:26:59 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -85,7 +85,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     /**
      * Size of test directory.
      */
-    private static int TEST_DIRECTORY_SIZE = 0;
+    private static final int TEST_DIRECTORY_SIZE = 0;
 
     private File testFile1;
     private File testFile2;

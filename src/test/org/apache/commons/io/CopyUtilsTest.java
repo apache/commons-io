@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: CopyUtilsTest.java,v 1.4 2003/12/30 07:00:03 bayard Exp $
+ * @version $Id: CopyUtilsTest.java,v 1.5 2003/12/30 15:26:59 jeremias Exp $
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {
@@ -87,7 +87,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
      * relevant methods are called. (JT)
      */
 
-    private int FILE_SIZE = 1024 * 4 + 1;
+    private static final int FILE_SIZE = 1024 * 4 + 1;
 
 
     private byte[] inData = generateTestData(FILE_SIZE);

@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsFileNewerTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2003/12/30 07:00:03 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsFileNewerTestCase.java,v 1.4 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
@@ -73,8 +73,8 @@ import org.apache.commons.io.testtools.*;
 public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
 
     // Test data
-    private static int FILE1_SIZE = 1;
-    private static int FILE2_SIZE = 1024 * 4 + 1;
+    private static final int FILE1_SIZE = 1;
+    private static final int FILE2_SIZE = 1024 * 4 + 1;
 
     private File m_testFile1;
     private File m_testFile2;
@@ -111,7 +111,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
             throw new IllegalStateException("The m_testFile1 should exist");
 
         long fileLastModified = m_testFile1.lastModified();
-        long ONE_SECOND = 1000;
+        final long ONE_SECOND = 1000;
 
         testIsFileNewer("one second earlier is not newer" , m_testFile1, fileLastModified + ONE_SECOND, false);
         testIsFileNewer("same time is not newer" , m_testFile1, fileLastModified, false);

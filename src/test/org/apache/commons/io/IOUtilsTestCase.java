@@ -1,13 +1,13 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.5 2003/12/30 07:06:46 bayard Exp $
- * $Revision: 1.5 $
- * $Date: 2003/12/30 07:06:46 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.6 2003/12/30 15:26:59 jeremias Exp $
+ * $Revision: 1.6 $
+ * $Date: 2003/12/30 15:26:59 $
  *
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -95,7 +95,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      * relevant methods are called. (JT)
      */
 
-    private int FILE_SIZE = 1024 * 4 + 1;
+    private static final int FILE_SIZE = 1024 * 4 + 1;
 
     private File m_testFile;
 
