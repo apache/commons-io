@@ -29,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.7 2004/03/12 21:59:19 jeremias Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.8 2004/06/13 05:13:57 bayard Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -203,10 +203,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testGetExtension() {
-        String[][] tests = { { "filename.ext", "ext" }, {
-                "README", "" }, {
-                "domain.dot.com", "com" }, {
-                "image.jpeg", "jpeg" }
+        String[][] tests = {
+                { "filename.ext", "ext" }, 
+                { "README", "" }, 
+                { "domain.dot.com", "com" }, 
+                { "image.jpeg", "jpeg" },
+                { "a.b/c", "" },
+                { "a.b/c.txt", "txt" },
+                { "a/b/c", "" },
         };
         for (int i = 0; i < tests.length; i++) {
             assertEquals(tests[i][1], FilenameUtils.getExtension(tests[i][0]));
@@ -234,11 +238,15 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testRemoveExtension() {
-        String[][] tests = { { "filename.ext", "filename" }, {
-                "first.second.third.ext", "first.second.third" }, {
-                "README", "README" }, {
-                "domain.dot.com", "domain.dot" }, {
-                "image.jpeg", "image" }
+        String[][] tests = { 
+                { "filename.ext", "filename" }, 
+                { "first.second.third.ext", "first.second.third" }, 
+                { "README", "README" }, 
+                { "domain.dot.com", "domain.dot" }, 
+                { "image.jpeg", "image" },
+                { "a.b/c", "a.b/c" },
+                { "a.b/c.txt", "a.b/c" },
+                { "a/b/c", "a/b/c" },
         };
 
         for (int i = 0; i < tests.length; i++) {

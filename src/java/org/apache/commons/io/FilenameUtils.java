@@ -52,7 +52,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.9 2004/06/13 04:58:07 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.10 2004/06/13 05:13:57 bayard Exp $
  */
 public class FilenameUtils {
 
@@ -103,41 +103,54 @@ public class FilenameUtils {
      * foo.txt    --> foo
      * a\b\c.jpg --> a\b\c
      * a\b\c     --> a\b\c
+     * a.b\c        --> a.b\c
      * </pre>
      *
      * @param filename the filename
      * @return the filename minus extension
      */
-    public static String removeExtension( String filename) {
-        int index = filename.lastIndexOf('.');
-
-        if (-1 == index) {
-            return filename;
-        } else {
-            return filename.substring(0, index);
+    public static String removeExtension( final String filename) {
+        String ext = getExtension(filename);
+        int index = ext.length();
+        if(index > 0) {
+            // include the . in the count
+            index++;
         }
+        index = filename.length() - index;
+        return filename.substring(0, index);
     }
 
-    /**
-     * Get extension from filename.
-     * ie
+   /**
+     * Gets the extension of a filename.
+     * <p>
+     * eg
      * <pre>
-     * foo.txt    --> "txt"
-     * a\b\c.jpg --> "jpg"
-     * a\b\c     --> ""
+     * foo.txt      --> "txt"
+     * a/b/c.jpg    --> "jpg"
+     * a/b/c        --> ""
+     * a.b/c.txt    --> "txt"
+     * a.b/c        --> ""
      * </pre>
      *
-     * @param filename the filename
-     * @return the extension of filename or "" if none
+     * @param filename the filename to retrieve the extension of.
+     * @return the extension of filename or an empty string if none exists.
      */
-    public static String getExtension( String filename) {
-        int index = filename.lastIndexOf('.');
+    public static String getExtension(final String filename) {
+        String suffix = "";
+        String shortFilename = filename;
 
-        if (-1 == index) {
-            return "";
-        } else {
-            return filename.substring(index + 1);
+        int lastDirSeparator = filename.lastIndexOf(File.separatorChar);
+        if(lastDirSeparator > 0){
+            shortFilename = filename.substring(lastDirSeparator + 1);
         }
+
+        int index = shortFilename.lastIndexOf('.');
+
+        if (index > 0 && index < shortFilename.length() - 1) {
+            suffix = shortFilename.substring(index + 1);
+        }
+
+        return suffix;
     }
 
     /**
