@@ -160,6 +160,9 @@
             <name>Alban Peignier</name>
             <email>alban.peignier at free.fr</email>
         </contributor>
+        <contributor>
+            <name>Jason Anderson</name>
+        </contributor>
     </contributors>
 
     <dependencies>
