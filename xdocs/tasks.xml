@@ -21,8 +21,7 @@
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
         <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
         <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
-        <li>Finder system. Generic code to find things in things. So FileFinder, 
-            ClassFinder, ZipFinder. Probably too big for IO</li>
+        <li>Finder system. Currently takes a Map for options; it needs to have the ability to set methods on the Finder. </li>
         <li>Add an additional ByteArrayOutputStream variant that saves content
             in memory just as the original but starts to write to a temp file when
             a given number of bytes is surpassed. This is to reduce the memory
