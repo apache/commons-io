@@ -23,9 +23,10 @@ import java.util.ArrayList;
 /**
  * Utility class that provides methods to manipulate filenames and filepaths.
  * <p>
- * This class defines three basic components within a filename (example C:\dev\file.txt):
+ * This class defines four basic components within a filename (example C:\dev\project\file.txt):
  * <ul>
- * <li>the path - C:\dev
+ * <li>the prefix - C:\
+ * <li>the path - dev\project
  * <li>the name - file.txt
  * <li>the extension - txt
  * </ul>
@@ -65,7 +66,7 @@ import java.util.ArrayList;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.25 2004/10/31 04:17:34 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.26 2004/11/22 01:11:55 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -90,10 +91,118 @@ public class FilenameUtils {
      */
     private static final char SYSTEM_SEPARATOR = File.separatorChar;
 
+//    /**
+//     * The separator character that is the opposite of the system separator.
+//     */
+//    private static final char OTHER_SEPARATOR;
+//    static {
+//        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+//            OTHER_SEPARATOR = UNIX_SEPARATOR;
+//        } else {
+//            OTHER_SEPARATOR = WINDOWS_SEPARATOR;
+//        }
+//    }
+
     /**
      * Instances should NOT be constructed in standard programming.
      */
     public FilenameUtils() { }
+
+//    //-----------------------------------------------------------------------
+//    /**
+//     * Checks if the character is a separator.
+//     * 
+//     * @param ch  the character to check
+//     * @return true if it is a separators
+//     */
+//    private static boolean isSeparator(char ch) {
+//        return (ch == UNIX_SEPARATOR) || (ch == WINDOWS_SEPARATOR);
+//    }
+//
+//    //-----------------------------------------------------------------------
+//    /**
+//     * Normalizes a path, removing double and single dot path steps.
+//     * <p>
+//     * This method normalizes a path to a standard format.
+//     * The input may contain separators in either Unix or Windows format.
+//     * The output will contain separators in the format of the system.
+//     * <p>
+//     * A double slash will be merged to a single slash (thus UNC names are not handled).
+//     * A single dot path segment will be removed with no other effect.
+//     * A double dot will cause that path segment and the one before to be removed.
+//     * If the double dot has no parent path segment to work with, <code>null</code>
+//     * is returned.
+//     * <pre>
+//     * /foo//               -->     /foo/
+//     * /foo/./              -->     /foo/
+//     * /foo/../bar          -->     /bar
+//     * /foo/../bar/         -->     /bar/
+//     * /foo/../bar/../baz   -->     /baz
+//     * //foo//./bar         -->     /foo/bar
+//     * /../                 -->     null
+//     * ../foo               -->     null
+//     * foo/../../bar        -->     null
+//     * foo/../bar           -->     bar
+//     * </pre>
+//     *
+//     * @param path  the path to normalize, null returns null
+//     * @return the normalized String, or null if too many ..'s.
+//     * @todo prefixes for Windows
+//     */
+//    public static String normalize(String path) {
+//        if (path == null) {
+//            return null;
+//        }
+//        char[] array = path.toCharArray();
+//        int size = array.length;
+//        // fix separators
+//        for (int i = 0; i < array.length; i++) {
+//            if (array[i] == OTHER_SEPARATOR) {
+//                array[i] = SYSTEM_SEPARATOR;
+//            }
+//        }
+//        // adjoining slashes
+//        for (int i = 1; i < size; i++) {
+//            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == SYSTEM_SEPARATOR) {
+//                System.arraycopy(array, i, array, i - 1, size - i);
+//                size--;
+//                i--;
+//            }
+//        }
+//        // dot slash
+//        for (int i = 2; i < size; i++) {
+//            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
+//                    array[i - 2] == SYSTEM_SEPARATOR) {
+//                System.arraycopy(array, i, array, i - 2, size - i);
+//                size -=2;
+//                i--;
+//            }
+//        }
+//        // double dot slash
+//        outer:
+//        for (int i = 2; i < size; i++) {
+//            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
+//                    array[i - 2] == '.' && (i == 2 || array[i - 3] == SYSTEM_SEPARATOR)) {
+//                if (i == 2) {
+//                    return null;
+//                }
+//                int j;
+//                for (j = i - 4 ; j >= 0; j--) {
+//                    if (array[j] == SYSTEM_SEPARATOR) {
+//                        System.arraycopy(array, i, array, j, size - i);
+//                        size -= (i - j);
+//                        i = j + 1;
+//                        continue outer;
+//                    }
+//                }
+//                System.arraycopy(array, i + 1, array, 0, size - i - 1);
+//                size -= (i + 1);
+//                i = 1;
+//            }
+//        }
+//        
+//        return new String(array, 0, size);
+//    }
 
     //-----------------------------------------------------------------------
     /**
@@ -322,6 +431,62 @@ public class FilenameUtils {
     }
 
     //-----------------------------------------------------------------------
+//    /**
+//     * Returns the length of the filename prefix, such as <code>C:/</code> or <code>~/</code>.
+//     * <p>
+//     * This method will handle a file in either Unix or Windows format.
+//     * The prefix includes the first slash in the full filename.
+//     * <pre>
+//     * Windows:
+//     * a\b\c.txt           --> ""          --> relative
+//     * \a\b\c.txt          --> "\"         --> drive relative
+//     * C:\a\b\c.txt        --> "C:\"       --> absolute
+//     * \\server\a\b\c.txt  --> "\\server\" --> UNC
+//     * 
+//     * Unix:
+//     * a/b/c.txt           --> ""          --> relative
+//     * /a/b/c.txt          --> "/"         --> absolute
+//     * ~/a/b/c.txt         --> "~/"        --> current user relative
+//     * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+//     * </pre>
+//     * 
+//     * @param filename  the filename to find the prefix in, null returns -1
+//     * @return the length of the prefix, -1 if invalid or null
+//     */
+//    public static int getPrefixLength(String filename) {
+//        if (filename == null) {
+//            return -1;
+//        }
+//        int len = filename.length();
+//        if (len == 0) {
+//            return 0;
+//        }
+//        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+//            char ch0 = filename.charAt(0);
+//            if (len == 1) {
+//                return (isSeparator(ch0) ? 1 : 0);
+//            } else {
+//                char ch1 = filename.charAt(1);
+//                if (ch1 == ':') {
+//                    ch0 = Character.toUpperCase(ch0);
+//                    if (ch0 < 'A' || ch0 > 'Z' || len == 2 || isSeparator(filename.charAt(2)) == false) {
+//                        return -1;
+//                    }
+//                    return 3;
+//                } else if (isSeparator(ch0) && isSeparator(ch1)) {
+//                    int pos = Math.min(
+//                        filename.indexOf(UNIX_SEPARATOR, 2),
+//                        filename.indexOf(WINDOWS_SEPARATOR, 2));
+//                    return (pos == -1 || pos == 2 ? -1 : pos + 1);
+//                } else {
+//                    return (isSeparator(ch0) ? 1 : 0);
+//                }
+//            }
+//        } else {
+//        }
+//        return 0;
+//    }
+
     /**
      * Returns the index of the last directory separator character.
      * <p>
@@ -330,7 +495,7 @@ public class FilenameUtils {
      * 
      * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
-     * is no such character.
+     * is no such character
      */
     public static int indexOfLastSeparator(String filename) {
         if (filename == null) {
@@ -350,7 +515,7 @@ public class FilenameUtils {
      * 
      * @param filename  the filename to find the last path separator in, null returns -1
      * @return the index of the last separator character, or -1 if there
-     * is no such character.
+     * is no such character
      */
     public static int indexOfExtension(String filename) {
         if (filename == null) {
@@ -362,6 +527,39 @@ public class FilenameUtils {
     }
 
     //-----------------------------------------------------------------------
+//    /**
+//     * Gets the prefix from a full filename, such as <code>C:/</code> or <code>~/</code>.
+//     * <p>
+//     * This method will handle a file in either Unix or Windows format.
+//     * The prefix includes the first slash in the full filename.
+//     * <pre>
+//     * Windows:
+//     * a\b\c.txt           --> ""          --> relative
+//     * \a\b\c.txt          --> "\"         --> drive relative
+//     * C:\a\b\c.txt        --> "C:\"       --> absolute
+//     * \\server\a\b\c.txt  --> "\\server\" --> UNC
+//     * 
+//     * Unix:
+//     * a/b/c.txt           --> ""          --> relative
+//     * /a/b/c.txt          --> "/"         --> absolute
+//     * ~/a/b/c.txt         --> "~/"        --> current user relative
+//     * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+//     * </pre>
+//     *
+//     * @param filename  the filename to query, null returns null
+//     * @return the prefix of the file, null if invalid
+//     */
+//    public static String getPrefix(String filename) {
+//        if (filename == null) {
+//            return null;
+//        }
+//        int len = getPrefixLength(filename);
+//        if (len < 0) {
+//            return null;
+//        }
+//        return filename.substring(0, len);
+//    }
+
     /**
      * Gets the path from a full filename.
      * <p>
@@ -553,11 +751,16 @@ public class FilenameUtils {
         return isExtension(filename, array);
     }
 
+    //-----------------------------------------------------------------------
     /**
      * See if a particular piece of text, often a filename, 
      * matches to a specified wildcard, as seen on DOS/UNIX command lines.
+     * 
+     * @param filename  the filename to match on
+     * @param wildcard  the wildcard string to match against
+     * @return true if the filename matches the wilcard string
      */
-    public static boolean wildcardMatch(String text, String wildcard) {
+    public static boolean wildcardMatch(String filename, String wildcard) {
         String[] wcs = splitOnTokens(wildcard);
   
         int textIdx = 0;
@@ -565,17 +768,16 @@ public class FilenameUtils {
         boolean anyChars = false;
   
         // loop whilst tokens and text left to process
-        while (wcsIdx < wcs.length && textIdx < text.length()) {
+        while (wcsIdx < wcs.length && textIdx < filename.length()) {
   
             // ? so move to next text char
             if (wcs[wcsIdx].equals("?")) {
                 textIdx++;
-            } else
-            if (!wcs[wcsIdx].equals("*")) {
+            } else if (!wcs[wcsIdx].equals("*")) {
                 // matching text token
                 if (anyChars) {
                     // any chars then try to locate text token
-                    textIdx = text.indexOf(wcs[wcsIdx], textIdx);
+                    textIdx = filename.indexOf(wcs[wcsIdx], textIdx);
   
                     if (textIdx == -1) {
                         // token not found
@@ -583,7 +785,7 @@ public class FilenameUtils {
                     }
                 } else {
                     // matching from current position
-                    if (!text.startsWith(wcs[wcsIdx], textIdx)) {
+                    if (!filename.startsWith(wcs[wcsIdx], textIdx)) {
                         // couldnt match token
                         return false;
                     }
@@ -608,12 +810,12 @@ public class FilenameUtils {
         }
   
         // ran out of text chars
-        if (textIdx > text.length()) {
+        if (textIdx > filename.length()) {
            return false;
         }
   
         // didnt match all text chars, only ok if any chars set
-        if (textIdx < text.length() && !anyChars) {
+        if (textIdx < filename.length() && !anyChars) {
             return false;
         }
   
@@ -624,13 +826,13 @@ public class FilenameUtils {
     // package level so a unit test may run on this
     static String[] splitOnTokens(String text) {
         char[] array = text.toCharArray();
-        if(text.indexOf("?") == -1 && text.indexOf("*") == -1) {
+        if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
             return new String[] { text };
         }
 
         ArrayList list = new ArrayList();
         StringBuffer buffer = new StringBuffer();
-        for(int i=0; i<array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if(array[i] == '?' || array[i] == '*') {
                 if(buffer.length() != 0) {
                    list.add(buffer.toString());
@@ -641,12 +843,11 @@ public class FilenameUtils {
                 buffer.append(array[i]);
             }
         }
-        if(buffer.length() != 0) {
+        if (buffer.length() != 0) {
             list.add(buffer.toString());
         }
 
         return (String[]) list.toArray(new String[0]);
     }
-        
 
 }
