@@ -62,7 +62,7 @@ import junit.textui.TestRunner;
 /**
  * Used to test an unknown FileFilter
  */
-public final class FileFilterTestCase extends TestCase {
+public class FileFilterTestCase extends TestCase {
 
     public FileFilterTestCase(String name) {
         super(name);

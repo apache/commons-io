@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/CountingInputStreamTest.java,v 1.1 2003/11/23 09:20:54 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/11/23 09:20:54 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/CountingInputStreamTest.java,v 1.2 2003/12/30 07:00:04 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/12/30 07:00:04 $
  *
  * ====================================================================
  *
@@ -72,7 +72,7 @@ import junit.framework.TestCase;
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
  */
-public final class CountingInputStreamTest extends TestCase {
+public class CountingInputStreamTest extends TestCase {
 
     public CountingInputStreamTest(String name) {
         super(name);

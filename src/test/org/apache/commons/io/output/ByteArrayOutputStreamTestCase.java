@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.3 2003/10/13 07:05:50 rdonkin Exp $
- * $Revision: 1.3 $
- * $Date: 2003/10/13 07:05:50 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.4 2003/12/30 07:00:04 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/30 07:00:04 $
  *
  * ====================================================================
  *
@@ -70,9 +70,9 @@ import junit.framework.TestCase;
  *
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  */
-public final class ByteArrayOutputStreamTestCase extends TestCase {
+public class ByteArrayOutputStreamTestCase extends TestCase {
 
-    private static final byte[] DATA;
+    private static byte[] DATA;
     
     static {
         DATA = new byte[64];
@@ -112,7 +112,7 @@ public final class ByteArrayOutputStreamTestCase extends TestCase {
         return written;
     }
 
-    private static final boolean byteCmp(byte[] src, byte[] cmp) {
+    private static boolean byteCmp(byte[] src, byte[] cmp) {
         for (int i = 0; i < cmp.length; i++) {
             if (src[i] != cmp[i]) {
                 return false;

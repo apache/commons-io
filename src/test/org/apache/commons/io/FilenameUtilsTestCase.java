@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.2 2003/11/27 20:53:54 bayard Exp $
- * $Revision: 1.2 $
- * $Date: 2003/11/27 20:53:54 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/12/30 07:00:03 $
  *
  * ====================================================================
  *
@@ -75,20 +75,20 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.2 2003/11/27 20:53:54 bayard Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.3 2003/12/30 07:00:03 bayard Exp $
  * @see FilenameUtils
  */
-public final class FilenameUtilsTestCase extends FileBasedTestCase {
+public class FilenameUtilsTestCase extends FileBasedTestCase {
 
     // Test data
 
     /**
      * Size of test directory.
      */
-    private static final int TEST_DIRECTORY_SIZE = 0;
+    private static int TEST_DIRECTORY_SIZE = 0;
 
-    private final File testFile1;
-    private final File testFile2;
+    private File testFile1;
+    private File testFile2;
 
     private static int testFile1Size;
     private static int testFile2Size;
@@ -101,7 +101,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
         return new TestSuite(FilenameUtilsTestCase.class);
     }
 
-    public FilenameUtilsTestCase(final String name) throws IOException {
+    public FilenameUtilsTestCase(String name) throws IOException {
         super(name);
 
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -130,7 +130,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     // mkdir
 
     public void testMkdir() {
-        final File dir = new File(getTestDirectory(), "testdir");
+        File dir = new File(getTestDirectory(), "testdir");
         FilenameUtils.mkdir(dir.getAbsolutePath());
         dir.deleteOnExit();
     }
@@ -138,7 +138,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     // removePath
 
     public void testRemovePath() {
-        final String fileName =
+        String fileName =
             FilenameUtils.removePath(
                 new File(getTestDirectory(), getName()).getAbsolutePath());
         assertEquals(getName(), fileName);
@@ -147,7 +147,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     // getPath
 
     public void testGetPath() {
-        final String fileName =
+        String fileName =
             FilenameUtils.getPath(
                 new File(getTestDirectory(), getName()).getAbsolutePath());
         assertEquals(getTestDirectory().getAbsolutePath(), fileName);
@@ -167,7 +167,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     // resolveFile
 
     public void testResolveFileDotDot() throws Exception {
-        final File file = FilenameUtils.resolveFile(getTestDirectory(), "..");
+        File file = FilenameUtils.resolveFile(getTestDirectory(), "..");
         assertEquals(
             "Check .. operator",
             file,
@@ -175,14 +175,14 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testResolveFileDot() throws Exception {
-        final File file = FilenameUtils.resolveFile(getTestDirectory(), ".");
+        File file = FilenameUtils.resolveFile(getTestDirectory(), ".");
         assertEquals("Check . operator", file, getTestDirectory());
     }
 
     // normalize
 
     public void testNormalize() throws Exception {
-        final String[] src =
+        String[] src =
             {
                 "",
                 "/",
@@ -202,7 +202,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
                 "/../",
                 "/foo/../../" };
 
-        final String[] dest =
+        String[] dest =
             {
                 "",
                 "/",
@@ -248,7 +248,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testGetExtension() {
-        final String[][] tests = { { "filename.ext", "ext" }, {
+        String[][] tests = { { "filename.ext", "ext" }, {
                 "README", "" }, {
                 "domain.dot.com", "com" }, {
                 "image.jpeg", "jpeg" }
@@ -261,7 +261,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
 
     /* TODO: Reenable this test */
     public void DISABLED__testGetExtensionWithPaths() {
-        final String[][] testsWithPaths =
+        String[][] testsWithPaths =
             { { "/tmp/foo/filename.ext", "ext" }, {
                 "C:\\temp\\foo\\filename.ext", "ext" }, {
                 "/tmp/foo.bar/filename.ext", "ext" }, {
@@ -279,7 +279,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testRemoveExtension() {
-        final String[][] tests = { { "filename.ext", "filename" }, {
+        String[][] tests = { { "filename.ext", "filename" }, {
                 "first.second.third.ext", "first.second.third" }, {
                 "README", "README" }, {
                 "domain.dot.com", "domain.dot" }, {
@@ -294,7 +294,7 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
 
     /* TODO: Reenable this test */
     public void DISABLED__testRemoveExtensionWithPaths() {
-        final String[][] testsWithPaths =
+        String[][] testsWithPaths =
             { { "/tmp/foo/filename.ext", "filename" }, {
                 "C:\\temp\\foo\\filename.ext", "filename" }, {
                 "/tmp/foo.bar/filename.ext", "filename" }, {

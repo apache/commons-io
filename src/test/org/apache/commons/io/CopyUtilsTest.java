@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: CopyUtilsTest.java,v 1.3 2003/11/22 20:18:55 jeremias Exp $
+ * @version $Id: CopyUtilsTest.java,v 1.4 2003/12/30 07:00:03 bayard Exp $
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {
@@ -87,7 +87,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
      * relevant methods are called. (JT)
      */
 
-    private final int FILE_SIZE = 1024 * 4 + 1;
+    private int FILE_SIZE = 1024 * 4 + 1;
 
 
     private byte[] inData = generateTestData(FILE_SIZE);
@@ -180,7 +180,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         
         CopyUtils.copy(reader, out);
         //Note: this method *does* flush. It is equivalent to:
-        //  final OutputStreamWriter _out = new OutputStreamWriter(fout);
+        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
         //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
         //  _out.flush();
         //  out = fout;
@@ -210,14 +210,14 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_stringToOutputStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        String str = new String(inData, "US-ASCII");
         
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         CopyUtils.copy(str, out);
         //Note: this method *does* flush. It is equivalent to:
-        //  final OutputStreamWriter _out = new OutputStreamWriter(fout);
+        //  OutputStreamWriter _out = new OutputStreamWriter(fout);
         //  IOUtils.copy( str, _out, 4096 ); // copy( Reader, Writer, int );
         //  _out.flush();
         //  out = fout;
@@ -228,7 +228,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_stringToWriter() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        String str = new String(inData, "US-ASCII");
 
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);

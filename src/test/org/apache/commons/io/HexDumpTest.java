@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/HexDumpTest.java,v 1.3 2003/11/22 20:18:54 jeremias Exp $
- * $Revision: 1.3 $
- * $Date: 2003/11/22 20:18:54 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/HexDumpTest.java,v 1.4 2003/12/30 07:00:03 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/30 07:00:03 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 /**
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson (mjohnson at apache dot org)
- * @version $Revision: 1.3 $ $Date: 2003/11/22 20:18:54 $
+ * @version $Revision: 1.4 $ $Date: 2003/12/30 07:00:03 $
  */
 
 public class HexDumpTest extends TestCase {
@@ -85,7 +85,7 @@ public class HexDumpTest extends TestCase {
         super(name);
     }
 
-    private char toHex(final int n) {
+    private char toHex(int n) {
         char[] hexChars =
                 {
                     '0', '1', '2', '3', '4', '5', '6', '7',
@@ -291,7 +291,7 @@ public class HexDumpTest extends TestCase {
         }
     }
 
-    private char toAscii(final int c) {
+    private char toAscii(int c) {
         char rval = '.';
 
         if ((c >= 32) && (c <= 126)) {

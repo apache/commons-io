@@ -76,7 +76,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
     
     public void testListFilesByExtension() throws Exception {
-        final String[] extensions = {"xml", "txt"};
+        String[] extensions = {"xml", "txt"};
         
         Collection files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
         assertEquals(1, files.size());

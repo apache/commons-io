@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestSuite.java,v 1.7 2003/10/13 07:06:04 rdonkin Exp $
- * $Revision: 1.7 $
- * $Date: 2003/10/13 07:06:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestSuite.java,v 1.8 2003/12/30 07:00:03 bayard Exp $
+ * $Revision: 1.8 $
+ * $Date: 2003/12/30 07:00:03 $
  *
  * ====================================================================
  *
@@ -82,7 +82,7 @@ public class IOTestSuite
     
     public static Test suite()
     {
-        final TestSuite suite = new TestSuite( "IO Utilities" );
+        TestSuite suite = new TestSuite( "IO Utilities" );
         suite.addTest( new TestSuite( CopyUtilsTest.class ) );
         suite.addTest( new TestSuite( IOUtilsTestCase.class ) );
         suite.addTest( new TestSuite( FileUtilsTestCase.class ) );
