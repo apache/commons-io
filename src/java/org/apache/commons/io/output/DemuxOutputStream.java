@@ -61,12 +61,12 @@ import java.io.OutputStream;
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.3 $ $Date: 2003/10/13 07:04:31 $
+ * @version $Revision: 1.4 $ $Date: 2003/12/30 06:55:59 $
  */
-public final class DemuxOutputStream
+public class DemuxOutputStream
     extends OutputStream
 {
-    private final InheritableThreadLocal m_streams = new InheritableThreadLocal();
+    private InheritableThreadLocal m_streams = new InheritableThreadLocal();
 
     /**
      * Bind the specified stream to the current thread.
@@ -74,9 +74,9 @@ public final class DemuxOutputStream
      * @param output the stream to bind
      * @return the OutputStream that was previously active
      */
-    public OutputStream bindStream( final OutputStream output )
+    public OutputStream bindStream( OutputStream output )
     {
-        final OutputStream stream = getStream();
+        OutputStream stream = getStream();
         m_streams.set( output );
         return stream;
     }
@@ -89,7 +89,7 @@ public final class DemuxOutputStream
     public void close()
         throws IOException
     {
-        final OutputStream output = getStream();
+        OutputStream output = getStream();
         if( null != output )
         {
             output.close();
@@ -104,7 +104,7 @@ public final class DemuxOutputStream
     public void flush()
         throws IOException
     {
-        final OutputStream output = getStream();
+        OutputStream output = getStream();
         if( null != output )
         {
             output.flush();
@@ -117,10 +117,10 @@ public final class DemuxOutputStream
      * @param ch the byte to write to stream
      * @throws IOException if an error occurs
      */
-    public void write( final int ch )
+    public void write( int ch )
         throws IOException
     {
-        final OutputStream output = getStream();
+        OutputStream output = getStream();
         if( null != output )
         {
             output.write( ch );

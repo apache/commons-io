@@ -72,7 +72,7 @@ import java.util.List;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.4 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -83,7 +83,7 @@ import java.util.List;
 public class SuffixFileFilter extends AbstractFileFilter {
     
     /** The filename suffixes to search for */
-    private final String[] suffixes;
+    private String[] suffixes;
 
     /**
      * Constructs a new Suffix file filter for a single extension.
@@ -91,7 +91,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * @param suffix  the suffix to allow, must not be null
      * @throws IllegalArgumentException if the suffix is null
      */
-    public SuffixFileFilter(final String suffix) {
+    public SuffixFileFilter(String suffix) {
         if (suffix == null) {
             throw new IllegalArgumentException("The suffix must not be null");
         }
@@ -107,7 +107,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * @param suffixes  the suffixes to allow, must not be null
      * @throws IllegalArgumentException if the suffix array is null
      */
-    public SuffixFileFilter(final String[] suffixes) {
+    public SuffixFileFilter(String[] suffixes) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The array of suffixes must not be null");
         }
@@ -121,7 +121,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * @throws IllegalArgumentException if the suffix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public SuffixFileFilter(final List suffixes) {
+    public SuffixFileFilter(List suffixes) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
@@ -134,7 +134,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * @param file  the File to check
      * @return true if the filename ends with one of our suffixes
      */
-    public boolean accept(final File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         for (int i = 0; i < this.suffixes.length; i++) {
             if (name.endsWith(this.suffixes[i])) {
@@ -151,7 +151,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * @param name  the filename
      * @return true if the filename ends with one of our suffixes
      */
-    public boolean accept(final File file, final String name) {
+    public boolean accept(File file, String name) {
         for (int i = 0; i < this.suffixes.length; i++) {
             if (name.endsWith(this.suffixes[i])) {
                 return true;

@@ -66,7 +66,7 @@ import org.apache.commons.io.EndianUtils;
  * <p><b>Origin of code: </b>Avalon Excalibur (IO)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.4 $ $Date: 2003/10/13 07:04:16 $
+ * @version CVS $Revision: 1.5 $ $Date: 2003/12/30 06:55:59 $
  */
 public class SwappedDataInputStream extends ProxyInputStream
     implements DataInput
@@ -76,7 +76,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * Constructs a SwappedDataInputStream.
      * @param input InputStream to read from
      */
-    public SwappedDataInputStream( final InputStream input )
+    public SwappedDataInputStream( InputStream input )
     {
         super( input );
     }
@@ -117,22 +117,22 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /** @see java.io.DataInput#readFully(byte[]) */
-    public void readFully( final byte[] data )
+    public void readFully( byte[] data )
         throws IOException, EOFException
     {
         readFully( data, 0, data.length );
     }
 
     /** @see java.io.DataInput#readFully(byte[], int, int) */
-    public void readFully( final byte[] data, final int offset, final int length )
+    public void readFully( byte[] data, final int offset, final int length )
         throws IOException, EOFException
     {
         int remaining = length;
 
         while( remaining > 0 )
         {
-            final int location = offset + ( length - remaining );
-            final int count = read( data, location, remaining );
+            int location = offset + ( length - remaining );
+            int count = read( data, location, remaining );
 
             if( -1 == count )
             {
@@ -195,7 +195,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /** @see java.io.DataInput#skipBytes(int) */
-    public int skipBytes( final int count )
+    public int skipBytes( int count )
         throws IOException, EOFException
     {
         return (int)in.skip( count );

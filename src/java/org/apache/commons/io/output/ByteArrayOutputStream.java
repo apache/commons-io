@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.3 2003/10/13 07:04:31 rdonkin Exp $
- * $Revision: 1.3 $
- * $Date: 2003/10/13 07:04:31 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.4 2003/12/30 06:55:59 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/30 06:55:59 $
  *
  * ====================================================================
  *
@@ -87,11 +87,11 @@ import java.util.List;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: ByteArrayOutputStream.java,v 1.3 2003/10/13 07:04:31 rdonkin Exp $
+ * @version $Id: ByteArrayOutputStream.java,v 1.4 2003/12/30 06:55:59 bayard Exp $
  */
 public class ByteArrayOutputStream extends OutputStream {
 
-    private static final boolean DEBUG = false;
+    private static boolean DEBUG = false;
 
     private List buffers = new java.util.ArrayList();
     private int currentBufferIndex;
@@ -143,7 +143,7 @@ public class ByteArrayOutputStream extends OutputStream {
             if (DEBUG) System.out.println("-->Recycling old buffer: size=" 
                         + currentBuffer.length);
         } else {
-            final int newBufferSize;
+            int newBufferSize;
             if (currentBuffer == null) {
                 newBufferSize = newcount;
                 filledBufferSum = 0;
@@ -234,8 +234,8 @@ public class ByteArrayOutputStream extends OutputStream {
     public synchronized void writeTo(OutputStream out) throws IOException {
         int remaining = count;
         for (int i = 0; i < buffers.size(); i++) {
-            final byte[] buf = getBuffer(i);
-            final int c = Math.min(buf.length, remaining);
+            byte[] buf = getBuffer(i);
+            int c = Math.min(buf.length, remaining);
             out.write(buf, 0, c);
             remaining -= c;
             if (remaining == 0) {
@@ -250,10 +250,10 @@ public class ByteArrayOutputStream extends OutputStream {
     public synchronized byte toByteArray()[] {
         int remaining = count;
         int pos = 0;
-        final byte newbuf[] = new byte[count];
+        byte newbuf[] = new byte[count];
         for (int i = 0; i < buffers.size(); i++) {
-            final byte[] buf = getBuffer(i);
-            final int c = Math.min(buf.length, remaining);
+            byte[] buf = getBuffer(i);
+            int c = Math.min(buf.length, remaining);
             System.arraycopy(buf, 0, newbuf, pos, c);
             pos += c;
             remaining -= c;

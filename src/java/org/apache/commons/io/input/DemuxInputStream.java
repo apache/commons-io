@@ -61,12 +61,12 @@ import java.io.InputStream;
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.3 $ $Date: 2003/10/13 07:04:16 $
+ * @version $Revision: 1.4 $ $Date: 2003/12/30 06:55:59 $
  */
-public final class DemuxInputStream
+public class DemuxInputStream
     extends InputStream
 {
-    private final InheritableThreadLocal m_streams = new InheritableThreadLocal();
+    private InheritableThreadLocal m_streams = new InheritableThreadLocal();
 
     /**
      * Bind the specified stream to the current thread.
@@ -74,9 +74,9 @@ public final class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public InputStream bindStream( final InputStream input )
+    public InputStream bindStream( InputStream input )
     {
-        final InputStream oldValue = getStream();
+        InputStream oldValue = getStream();
         m_streams.set( input );
         return oldValue;
     }
@@ -89,7 +89,7 @@ public final class DemuxInputStream
     public void close()
         throws IOException
     {
-        final InputStream input = getStream();
+        InputStream input = getStream();
         if( null != input )
         {
             input.close();
@@ -105,7 +105,7 @@ public final class DemuxInputStream
     public int read()
         throws IOException
     {
-        final InputStream input = getStream();
+        InputStream input = getStream();
         if( null != input )
         {
             return input.read();

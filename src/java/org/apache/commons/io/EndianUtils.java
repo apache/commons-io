@@ -64,7 +64,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.8 $ $Date: 2003/12/30 06:50:16 $
+ * @version CVS $Revision: 1.9 $ $Date: 2003/12/30 06:52:49 $
  */
 public final class EndianUtils
 {
@@ -349,8 +349,8 @@ public final class EndianUtils
     public static int readSwappedUnsignedShort( InputStream input )
         throws IOException
     {
-        final int value1 = read( input );
-        final int value2 = read( input );
+        int value1 = read( input );
+        int value2 = read( input );
 
         return (int)( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) );
@@ -382,10 +382,10 @@ public final class EndianUtils
     public static int readSwappedInteger( InputStream input )
         throws IOException
     {
-        final int value1 = read( input );
-        final int value2 = read( input );
-        final int value3 = read( input );
-        final int value4 = read( input );
+        int value1 = read( input );
+        int value2 = read( input );
+        int value3 = read( input );
+        int value4 = read( input );
 
         return (int)( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
@@ -403,10 +403,10 @@ public final class EndianUtils
     public static long readSwappedUnsignedInteger( InputStream input )
         throws IOException
     {
-        final int value1 = read( input );
-        final int value2 = read( input );
-        final int value3 = read( input );
-        final int value4 = read( input );
+        int value1 = read( input );
+        int value2 = read( input );
+        int value3 = read( input );
+        int value4 = read( input );
 
         return (long)( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
@@ -444,14 +444,14 @@ public final class EndianUtils
     public static long readSwappedLong( InputStream input )
         throws IOException
     {
-        final int value1 = read( input );
-        final int value2 = read( input );
-        final int value3 = read( input );
-        final int value4 = read( input );
-        final int value5 = read( input );
-        final int value6 = read( input );
-        final int value7 = read( input );
-        final int value8 = read( input );
+        int value1 = read( input );
+        int value2 = read( input );
+        int value3 = read( input );
+        int value4 = read( input );
+        int value5 = read( input );
+        int value6 = read( input );
+        int value7 = read( input );
+        int value8 = read( input );
 
         return (long)( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
@@ -518,7 +518,7 @@ public final class EndianUtils
     private static int read( InputStream input )
         throws IOException
     {
-        final int value = input.read();
+        int value = input.read();
 
         if( -1 == value )
         {

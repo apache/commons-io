@@ -69,11 +69,11 @@ import java.io.Writer;
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.4 2003/11/27 20:50:03 bayard Exp $
+ * @version $Id: LockableFileWriter.java,v 1.5 2003/12/30 06:55:59 bayard Exp $
  */
 public class LockableFileWriter extends Writer {
 
-    private static final String LCK = ".lck";
+    private static String LCK = ".lck";
 
     private File lockFile = null;
 

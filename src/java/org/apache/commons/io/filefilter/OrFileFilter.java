@@ -59,16 +59,16 @@ import java.io.File;
  * This filter produces a logical OR of the two filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.6 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.7 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Stephen Colebourne
  */
 public class OrFileFilter extends AbstractFileFilter {
     
     /** The first filter */
-    private final IOFileFilter filter1;
+    private IOFileFilter filter1;
     /** The second filter */
-    private final IOFileFilter filter2;
+    private IOFileFilter filter2;
 
     /**
      * Constructs a new file filter that ORs the result of two other filters.
@@ -102,7 +102,7 @@ public class OrFileFilter extends AbstractFileFilter {
      * @param name  the filename
      * @return true if either filter is true
      */
-    public boolean accept(final File file, final String name) {
+    public boolean accept(File file, String name) {
         return filter1.accept(file, name) || filter2.accept(file, name);
     }
     

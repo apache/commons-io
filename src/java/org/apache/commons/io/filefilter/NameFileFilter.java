@@ -71,7 +71,7 @@ import java.util.List;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.1 $ $Date: 2003/11/22 20:01:27 $
+ * @version $Revision: 1.2 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -90,7 +90,7 @@ public class NameFileFilter extends AbstractFileFilter {
      * @param name  the name to allow, must not be null
      * @throws IllegalArgumentException if the prefix is null
      */
-    public NameFileFilter(final String name) {
+    public NameFileFilter(String name) {
         if (name == null) {
             throw new IllegalArgumentException("The name must not be null");
         }
@@ -106,7 +106,7 @@ public class NameFileFilter extends AbstractFileFilter {
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
-    public NameFileFilter(final String[] names) {
+    public NameFileFilter(String[] names) {
         if (names == null) {
             throw new IllegalArgumentException("The array of names must not be null");
         }
@@ -120,7 +120,7 @@ public class NameFileFilter extends AbstractFileFilter {
      * @throws IllegalArgumentException if the name list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public NameFileFilter(final List names) {
+    public NameFileFilter(List names) {
         if (names == null) {
             throw new IllegalArgumentException("The list of names must not be null");
         }
@@ -133,7 +133,7 @@ public class NameFileFilter extends AbstractFileFilter {
      * @param file  the File to check
      * @return true if the filename matches
      */
-    public boolean accept(final File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         for (int i = 0; i < this.names.length; i++) {
             if (name.equals(this.names[i])) {
@@ -150,7 +150,7 @@ public class NameFileFilter extends AbstractFileFilter {
      * @param name  the filename
      * @return true if the filename matches
      */
-    public boolean accept(final File file, final String name) {
+    public boolean accept(File file, String name) {
         for (int i = 0; i < this.names.length; i++) {
             if (name.equals(this.names[i])) {
                 return true;
