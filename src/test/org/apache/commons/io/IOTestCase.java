@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestCase.java,v 1.1 2002/01/26 02:47:42 sanders Exp $
- * $Revision: 1.1 $
- * $Date: 2002/01/26 02:47:42 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOTestCase.java,v 1.2 2002/01/28 04:44:49 sanders Exp $
+ * $Revision: 1.2 $
+ * $Date: 2002/01/28 04:44:49 $
  *
  * ====================================================================
  *
@@ -78,7 +78,7 @@ import junit.framework.TestSuite;
  * </p>
  *
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public class IOTestCase extends TestCase {
@@ -115,10 +115,31 @@ public class IOTestCase extends TestCase {
 
 
     /**
-     *  tests the string and int arrays of TestBean
+     *
      */
-    public void testSomething() {
+    public void testFileUtils() {
+        String filename = "src/test/org/apache/commons/io/test.txt";
+        String filename2 = "src/test/org/apache/commons/io/test2.txt";
+        assertTrue("test.txt extension == \"txt\"", FileUtils.extension(filename).equals("txt"));
+        assertTrue("Test file exists", FileUtils.fileExists(filename));
+        assertTrue("Second test file does not exist", !FileUtils.fileExists(filename2));
+        try {
+            FileUtils.fileWrite(filename2, filename);
+            assertTrue("Second file was written", FileUtils.fileExists(filename2));
+            String file2contents = FileUtils.fileRead(filename2);
+            assertTrue("Second file's contents correct", FileUtils.fileRead(filename2).equals(file2contents));
+            FileUtils.fileDelete(filename2);
+            assertTrue("Second test file does not exist", !FileUtils.fileExists(filename2));
+        } catch (Exception e) {
+            fail("Error reading or writing second test file: " + filename);
+        }
 
+        try {
+            String contents = FileUtils.fileRead(filename);
+            assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
+        } catch (Exception e) {
+            fail("Error loading file: " + filename);
+        }
     }
 
 
