@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.4 2002/11/12 07:42:44 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2002/11/12 07:42:44 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.1 2002/12/25 22:16:36 scolebourne Exp $
+ * $Revision: 1.1 $
+ * $Date: 2002/12/25 22:16:36 $
  *
  * ====================================================================
  *
@@ -74,7 +74,7 @@ import junit.framework.TestSuite;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  */
-public final class FileUtilTestCase
+public final class FileUtilsTestCase
     extends TestCase
 {
     private final int FILE1_SIZE = 1;
@@ -84,7 +84,7 @@ public final class FileUtilTestCase
     private final File m_testFile1;
     private final File m_testFile2;
 
-    public FileUtilTestCase( final String name )
+    public FileUtilsTestCase( final String name )
         throws IOException
     {
         super( name );
@@ -120,16 +120,16 @@ public final class FileUtilTestCase
         throws IOException
     {
         final TestSuite suite = new TestSuite();
-        suite.addTest( new FileUtilTestCase( "testCopyFile1" ) );
-        suite.addTest( new FileUtilTestCase( "testCopyFile2" ) );
-        suite.addTest( new FileUtilTestCase( "testForceDeleteAFile1" ) );
-        suite.addTest( new FileUtilTestCase( "testForceDeleteAFile2" ) );
-        suite.addTest( new FileUtilTestCase( "testCopyFile1ToDir" ) );
-        suite.addTest( new FileUtilTestCase( "testCopyFile2ToDir" ) );
-        suite.addTest( new FileUtilTestCase( "testForceDeleteDir" ) );
-        suite.addTest( new FileUtilTestCase( "testResolveFileDotDot" ) );
-        suite.addTest( new FileUtilTestCase( "testResolveFileDot" ) );
-        suite.addTest( new FileUtilTestCase( "testNormalize" ) );
+        suite.addTest( new FileUtilsTestCase( "testCopyFile1" ) );
+        suite.addTest( new FileUtilsTestCase( "testCopyFile2" ) );
+        suite.addTest( new FileUtilsTestCase( "testForceDeleteAFile1" ) );
+        suite.addTest( new FileUtilsTestCase( "testForceDeleteAFile2" ) );
+        suite.addTest( new FileUtilsTestCase( "testCopyFile1ToDir" ) );
+        suite.addTest( new FileUtilsTestCase( "testCopyFile2ToDir" ) );
+        suite.addTest( new FileUtilsTestCase( "testForceDeleteDir" ) );
+        suite.addTest( new FileUtilsTestCase( "testResolveFileDotDot" ) );
+        suite.addTest( new FileUtilsTestCase( "testResolveFileDot" ) );
+        suite.addTest( new FileUtilsTestCase( "testNormalize" ) );
         return suite;
     }
 
