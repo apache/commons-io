@@ -69,7 +69,7 @@ import java.io.Writer;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
- * @version $Id: CopyUtils.java,v 1.3 2003/12/30 06:52:49 bayard Exp $
+ * @version $Id: CopyUtils.java,v 1.4 2003/12/30 16:35:11 jeremias Exp $
  */
 public class CopyUtils {
 
@@ -94,23 +94,7 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(byte[] input, OutputStream output)
-        throws IOException {
-        copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
-     * @param input the byte array to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            byte[] input,
-            OutputStream output,
-            int bufferSize)
-                throws IOException {
-        // TODO Is bufferSize param needed?
+            throws IOException {
         output.write(input);
     }
 
@@ -127,27 +111,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(byte[] input, Writer output)
-        throws IOException {
-        copy(input, output, DEFAULT_BUFFER_SIZE);
+            throws IOException {
+        ByteArrayInputStream in = new ByteArrayInputStream(input);
+        copy(in, output);
     }
 
-    /**
-     * Copy and convert bytes from a <code>byte[]</code> to chars on a
-     * <code>Writer</code>.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the byte array to read from
-     * @param output the <code>Writer</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            byte[] input,
-            Writer output,
-            int bufferSize)
-                throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(input);
-        copy(in, output, bufferSize);
-    }
 
     /**
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
@@ -168,26 +136,6 @@ public class CopyUtils {
         copy(in, output, encoding);
     }
 
-    /**
-     * Copy and convert bytes from a <code>byte[]</code> to chars on a
-     * <code>Writer</code>, using the specified encoding.
-     * @param input the byte array to read from
-     * @param output the <code>Writer</code> to write to
-     * @param encoding The name of a supported character encoding. See the
-     *        <a href="http://www.iana.org/assignments/character-sets">IANA
-     *        Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            byte[] input,
-            Writer output,
-            String encoding,
-            int bufferSize)
-                throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(input);
-        copy(in, output, encoding, bufferSize);
-    }
 
     // ----------------------------------------------------------------
     // Core copy methods
@@ -200,25 +148,11 @@ public class CopyUtils {
      * @return the number of bytes copied
      * @throws IOException In case of an I/O problem
      */
-    public static int copy(InputStream input, OutputStream output)
-                throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @return the number of bytes copied
-     * @throws IOException In case of an I/O problem
-     */
     public static int copy(
             InputStream input,
-            OutputStream output,
-            int bufferSize)
+            OutputStream output)
                 throws IOException {
-        byte[] buffer = new byte[bufferSize];
+        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -239,25 +173,11 @@ public class CopyUtils {
      * @return the number of characters copied
      * @throws IOException In case of an I/O problem
      */
-    public static int copy(Reader input, Writer output)
-                throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @return the number of characters copied
-     * @throws IOException In case of an I/O problem
-     */
     public static int copy(
             Reader input,
-            Writer output,
-            int bufferSize)
+            Writer output)
                 throws IOException {
-        char[] buffer = new char[bufferSize];
+        char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -279,27 +199,12 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(InputStream input, Writer output)
-            throws IOException {
-        copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Copy and convert bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code>.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
     public static void copy(
             InputStream input,
-            Writer output,
-            int bufferSize)
+            Writer output)
                 throws IOException {
         InputStreamReader in = new InputStreamReader(input);
-        copy(in, output, bufferSize);
+        copy(in, output);
     }
 
     /**
@@ -321,26 +226,6 @@ public class CopyUtils {
         copy(in, output);
     }
 
-    /**
-     * Copy and convert bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code>, using the specified encoding.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @param encoding The name of a supported character encoding. See the
-     *        <a href="http://www.iana.org/assignments/character-sets">IANA
-     *        Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            InputStream input,
-            Writer output,
-            String encoding,
-            int bufferSize)
-                throws IOException {
-        InputStreamReader in = new InputStreamReader(input, encoding);
-        copy(in, output, bufferSize);
-    }
 
     // ----------------------------------------------------------------
     // Reader -> OutputStream
@@ -353,26 +238,12 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(Reader input, OutputStream output)
-            throws IOException {
-        copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Serialize chars from a <code>Reader</code> to bytes on an 
-     * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
     public static void copy(
             Reader input,
-            OutputStream output,
-            int bufferSize)
+            OutputStream output)
                 throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
-        copy(input, out, bufferSize);
+        copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
         out.flush();
     }
@@ -388,27 +259,13 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(String input, OutputStream output)
-            throws IOException {
-        copy(input, output, DEFAULT_BUFFER_SIZE);
-    }
-
-    /**
-     * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
-     * flush the <code>OutputStream</code>.
-     * @param input the <code>String</code> to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException In case of an I/O problem
-     */
     public static void copy(
             String input,
-            OutputStream output,
-            int bufferSize)
+            OutputStream output)
                 throws IOException {
         StringReader in = new StringReader(input);
         OutputStreamWriter out = new OutputStreamWriter(output);
-        copy(in, out, bufferSize);
+        copy(in, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
         out.flush();
     }
