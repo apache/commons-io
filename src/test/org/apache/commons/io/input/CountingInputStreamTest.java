@@ -17,6 +17,8 @@
 package org.apache.commons.io.input;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -148,6 +150,21 @@ public class CountingInputStreamTest extends TestCase {
         int found = cis.read(result, 0, 5);
         assertEquals(2, found);
         assertEquals(2, cis.getCount());
+    }
+    
+    public void testSkipping() throws IOException {
+        String text = "Hello World!";
+        byte[] bytes = text.getBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        CountingInputStream cis = new CountingInputStream(bais);
+        
+        assertEquals(6,cis.skip(6));
+        assertEquals(6,cis.getCount());
+        final byte[] result = new byte[6];
+        cis.read(result);
+        
+        assertEquals("World!",new String(result));
+        assertEquals(12,cis.getCount());
     }
 
 }

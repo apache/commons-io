@@ -16,7 +16,7 @@
 -->
 <project>
   <pomVersion>3</pomVersion>
-  
+
   <name>IO</name>
   <id>commons-io</id>
   <currentVersion>1.1-dev</currentVersion>
@@ -26,7 +26,7 @@
         Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
   </description>
   <logo>/images/io-logo-white.png</logo>
-  
+
   <url>http://jakarta.apache.org/commons/${pom.artifactId.substring(8)}/</url>
   <package>org.apache.commons.${pom.artifactId.substring(8)}</package>
 
@@ -43,18 +43,18 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/commons/${pom.artifactId.substring(8)}/</siteDirectory>
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons/${pom.artifactId.substring(8)}/</distributionDirectory>
-  
+
   <repository>
     <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/${pom.artifactId.substring(8)}/trunk</connection>
     <url>http://svn.apache.org/repos/asf/jakarta/commons/proper/${pom.artifactId.substring(8)}/trunk</url>
   </repository>
-  
+
   <mailingLists>
     <mailingList>
       <name>Commons Dev List</name>
@@ -69,7 +69,7 @@
       <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org</archive>
     </mailingList>
   </mailingLists>
-  
+
   <versions>
     <version>
       <id>1.0</id>
@@ -146,6 +146,15 @@
       <name>Martin Cooper</name>
       <id>martinc</id>
       <email>martinc@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Rob Oxspring</name>
+      <id>roxspring</id>
+      <email>roxspring@apache.org</email>
       <organization/>
       <roles>
         <role>Java Developer</role>
