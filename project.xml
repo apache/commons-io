@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project>
-  <extend>../project.xml</extend>
+  <extend>../commons-build/project.xml</extend>
   <name>IO</name>
   <id>commons-io</id>
 
