@@ -31,13 +31,28 @@ import java.util.Collection;
  * <li>the base name - file</li>
  * <li>the extension - txt</li>
  * </ul>
- * The class only supports Unix and Windows style names.
+ * The class only supports Unix and Windows style names. Prefixes are matched as follows:
+ * <pre>
+ * Windows style:
+ * a\b\c.txt           --> ""          --> relative
+ * \a\b\c.txt          --> "\"         --> drive relative
+ * C:\a\b\c.txt        --> "C:\"       --> absolute
+ * \\server\a\b\c.txt  --> "\\server\" --> UNC
+ * 
+ * Unix style:
+ * a/b/c.txt           --> ""          --> relative
+ * /a/b/c.txt          --> "/"         --> absolute
+ * ~/a/b/c.txt         --> "~/"        --> current user relative
+ * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+ * </pre>
+ * 
  * </p>
  * <h3>Origin of code</h3>
  * <ul>
  *   <li>Commons Utils</li>
  *   <li>Alexandria's FileUtils</li>
  *   <li>Avalon Excalibur's IO</li>
+ *   <li>Tomcat</li>
  * </ul>
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
@@ -50,7 +65,7 @@ import java.util.Collection;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.29 2004/11/27 01:22:05 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.30 2004/11/27 17:00:51 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -90,14 +105,15 @@ public class FilenameUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public FilenameUtils() { }
+    public FilenameUtils() {
+    }
 
     //-----------------------------------------------------------------------
     /**
      * Checks if the character is a separator.
      * 
      * @param ch  the character to check
-     * @return true if it is a separators
+     * @return true if it is a separator character
      */
     private static boolean isSeparator(char ch) {
         return (ch == UNIX_SEPARATOR) || (ch == WINDOWS_SEPARATOR);
@@ -135,9 +151,10 @@ public class FilenameUtils {
      * ~/foo/../bar         -->   ~/bar
      * ~/../bar             -->   null
      * </pre>
+     * (Note the file separator returned will be correct for windows/unix)
      *
      * @param filename  the filename to normalize, null returns null
-     * @return the normalized String, or null if too many ..'s.
+     * @return the normalized String, or null if invalid
      */
     public static String normalize(String filename) {
         if (filename == null) {
@@ -215,49 +232,53 @@ public class FilenameUtils {
     }
 
     /**
-     * Will concatenate 2 paths. Paths with <code>..</code> will be
-     * properly handled. The path separator between the 2 paths is the
-     * system default path separator.
+     * Concatenates two paths using normal command line style rules.
+     * <p>
+     * The first argument is the base path, the second is the path to concatenate.
+     * The returned path is always normalized via {@link #normalize(String)},
+     * thus <code>..</code> is handled.
+     * <p>
+     * If <code>pathToAdd</code> is absolute (has a prefix), then it will
+     * be normalized and returned.
+     * Otherwise, the paths will be joined, normalized and returned.
+     * <pre>
+     * /foo/ + bar          -->   /foo/bar
+     * /foo/a + bar         -->   /foo/a/bar
+     * /foo/c.txt + bar     -->   /foo/c.txt/bar
+     * /foo/ + ../bar       -->   /bar
+     * /foo/ + ../../bar    -->   null
+     * /foo/ + /bar         -->   /bar
+     * /foo/.. + /bar       -->   /bar
+     * </pre>
+     * Note that the first parameter must be a path. If it ends with a name, then
+     * the name will be built into the concatenated path. If this might be a problem,
+     * use {@link #getFullPath(String)} on the base path argument.
      *
-     * <p>Eg. on UNIX,<br />
-     * <code>/a/b/c</code> + <code>d</code> = <code>/a/b/d</code><br />
-     * <code>/a/b/c</code> + <code>../d</code> = <code>/a/d</code><br />
-     * </p>
-     *
-     * <p>Eg. on Microsoft Windows,<br />
-     * <code>C:\a\b\c</code> + <code>d</code> = <code>C:\a\b\d</code><br />
-     * <code>C:\a\b\c</code> + <code>..\d</code> = <code>C:\a\d</code><br />
-     * <code>/a/b/c</code> + <code>d</code> = <code>/a/b\d</code><br />
-     * </p>
-     *
-     * Thieved from Tomcat sources...
-     *
-     * @param lookupPath the base path to attach to
-     * @param path path the second path to attach to the first
-     * @return The concatenated paths, or null if error occurs
+     * @param basePath  the base path to attach to, always treated as a path
+     * @param pathToAdd  path the second path to attach to the first
+     * @return the concatenated path, or null if invalid
      */
-     // TODO UNIX/Windows only. Is this a problem?
-    public static String catPath(String lookupPath, String path) {
-        // Cut off the last slash and everything beyond
-        int index = indexOfLastSeparator(lookupPath);
-        String lookup = lookupPath.substring(0, index);
-        String pth = path;
-
-        // Deal with .. by chopping dirs off the lookup path
-        while (pth.startsWith("../") || pth.startsWith("..\\")) {
-            if (lookup.length() > 0) {
-                index = indexOfLastSeparator(lookup);
-                lookup = lookup.substring(0, index);
-            } else {
-                // More ..'s than dirs, return null
-                return null;
-            }
-
-            pth = pth.substring(3);
+    public static String concat(String basePath, String pathToAdd) {
+        int prefix = getPrefixLength(pathToAdd);
+        if (prefix < 0) {
+            return null;
         }
-
-        return new StringBuffer(lookup).
-                append(File.separator).append(pth).toString();
+        if (prefix > 0) {
+            return normalize(pathToAdd);
+        }
+        if (basePath == null) {
+            return null;
+        }
+        int len = basePath.length();
+        if (len == 0) {
+            return normalize(pathToAdd);
+        }
+        char ch = basePath.charAt(len - 1);
+        if (isSeparator(basePath.charAt(len - 1))) {
+            return normalize(basePath + pathToAdd);
+        } else {
+            return normalize(basePath + '/' + pathToAdd);
+        }
     }
 
     //-----------------------------------------------------------------------
@@ -338,8 +359,11 @@ public class FilenameUtils {
             return 0;
         }
         char ch0 = filename.charAt(0);
+        if (ch0 == ':') {
+            return -1;
+        }
         if (len == 1) {
-            if (ch0 == '~' || ch0 == ':') {
+            if (ch0 == '~') {
                 return -1;
             }
             return (isSeparator(ch0) ? 1 : 0);
