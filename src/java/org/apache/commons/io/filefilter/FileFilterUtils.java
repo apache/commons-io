@@ -59,10 +59,10 @@ import java.io.FilenameFilter;
 /**
  * Useful utilities for working with file filters. It provides access to all
  * file filter implementations in this package so you don't have to import
- * every classes you use.
+ * every class you use.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.6 $ $Date: 2003/11/22 20:03:52 $
+ * @version $Revision: 1.7 $ $Date: 2004/02/10 06:00:03 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
