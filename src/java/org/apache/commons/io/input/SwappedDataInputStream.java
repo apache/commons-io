@@ -59,13 +59,13 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.EndianUtil;
+import org.apache.commons.io.EndianUtils;
 
 /**
  * DataInput for systems relying on little endian data formats.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/11/11 19:34:02 $
+ * @version CVS $Revision: 1.2 $ $Date: 2003/07/25 07:51:26 $
  * @since 4.0
  */
 public class SwappedDataInputStream
@@ -100,13 +100,13 @@ public class SwappedDataInputStream
     public double readDouble()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedDouble( m_input );
+        return EndianUtils.readSwappedDouble( m_input );
     }
 
     public float readFloat()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedFloat( m_input );
+        return EndianUtils.readSwappedFloat( m_input );
     }
 
     public void readFully( final byte[] data )
@@ -137,7 +137,7 @@ public class SwappedDataInputStream
     public int readInt()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedInteger( m_input );
+        return EndianUtils.readSwappedInteger( m_input );
     }
 
     public String readLine()
@@ -149,13 +149,13 @@ public class SwappedDataInputStream
     public long readLong()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedLong( m_input );
+        return EndianUtils.readSwappedLong( m_input );
     }
 
     public short readShort()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedShort( m_input );
+        return EndianUtils.readSwappedShort( m_input );
     }
 
     public int readUnsignedByte()
@@ -167,7 +167,7 @@ public class SwappedDataInputStream
     public int readUnsignedShort()
         throws IOException, EOFException
     {
-        return EndianUtil.readSwappedUnsignedShort( m_input );
+        return EndianUtils.readSwappedUnsignedShort( m_input );
     }
 
     public String readUTF()

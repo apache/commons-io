@@ -1,9 +1,7 @@
-package org.apache.commons.io;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -18,21 +16,21 @@ package org.apache.commons.io;
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
- *    written permission, please contact apache@apache.org.
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
- *    prior written permission of the Apache Software Foundation.
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -52,19 +50,16 @@ package org.apache.commons.io;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
-
+package org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Vector;
-
 
 /*
  * This class provides basic facilities for manipulating files and file paths.
@@ -105,7 +100,7 @@ import java.util.Vector;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id: FileUtils.java,v 1.10 2002/07/28 20:48:46 dlr Exp $
+ * @version $Id: FileUtils.java,v 1.11 2003/07/25 07:51:24 jeremias Exp $
  */
 public class FileUtils {
 
@@ -472,13 +467,13 @@ public class FileUtils {
         {
             input1 = new FileInputStream( file1 );
             input2 = new FileInputStream( file2 );
-            return IOUtil.contentEquals( input1, input2 );
+            return IOUtils.contentEquals( input1, input2 );
 
         }
         finally
         {
-            IOUtil.shutdownStream( input1 );
-            IOUtil.shutdownStream( input2 );
+            IOUtils.shutdownStream( input1 );
+            IOUtils.shutdownStream( input2 );
         }
     }
 
@@ -742,9 +737,9 @@ public class FileUtils {
 
         final FileInputStream input = new FileInputStream( source );
         final FileOutputStream output = new FileOutputStream( destination );
-        IOUtil.copy( input, output );
-        IOUtil.shutdownStream( input );
-        IOUtil.shutdownStream( output );
+        IOUtils.copy( input, output );
+        IOUtils.shutdownStream( input );
+        IOUtils.shutdownStream( output );
 
         if( source.length() != destination.length() )
         {
@@ -790,9 +785,9 @@ public class FileUtils {
 
         final InputStream input = source.openStream();
         final FileOutputStream output = new FileOutputStream( destination );
-        IOUtil.copy( input, output );
-        IOUtil.shutdownStream( input );
-        IOUtil.shutdownStream( output );
+        IOUtils.copy( input, output );
+        IOUtils.shutdownStream( input );
+        IOUtils.shutdownStream( output );
     }
 
     /**
