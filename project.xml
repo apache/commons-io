@@ -20,16 +20,16 @@
         hierarchy.  Classes in this package are considered to be so standard
         and of such high reuse as to justify existence in java.io.
   </description>
-  <url>http://jakarta.apache.org/commons/sandbox/io/</url>
+  <url>http://jakarta.apache.org/commons/io/</url>
 
   <siteAddress>jakarta.apache.org</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/commons/sandbox/io/</siteDirectory>
+  <siteDirectory>/www/jakarta.apache.org/commons/io/</siteDirectory>
 
   <repository>
     <connection>
-      scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons-sandbox/io
+      scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons/io
     </connection>
-    <url>http://cvs.apache.org/viewcvs/jakarta-commons-sandbox/io/</url>
+    <url>http://cvs.apache.org/viewcvs/jakarta-commons/io/</url>
   </repository>
 
     <developers>
