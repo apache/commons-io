@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.6 2003/11/22 20:50:01 jeremias Exp $
- * $Revision: 1.6 $
- * $Date: 2003/11/22 20:50:01 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.7 2003/11/22 21:06:41 jeremias Exp $
+ * $Revision: 1.7 $
+ * $Date: 2003/11/22 21:06:41 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.6 2003/11/22 20:50:01 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.7 2003/11/22 21:06:41 jeremias Exp $
  * @see FileUtils
  */
 public final class FileUtilsTestCase extends FileBasedTestCase {
@@ -174,10 +174,13 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
         final File file = new File(getTestDirectory(), getName());
         assertTrue(FileUtils.contentEquals(file, file));
 
-        // TODO Should comparing 2 directories throw an Exception instead of returning false?
         // Directories
-        assertTrue(
-            !FileUtils.contentEquals(getTestDirectory(), getTestDirectory()));
+        try {
+            FileUtils.contentEquals(getTestDirectory(), getTestDirectory());
+            fail("Comparing directories should fail with an IOException");
+        } catch (IOException ioe) {
+            //expected
+        }
 
         // Different files
         final File objFile1 =
