@@ -25,7 +25,7 @@ import java.io.File;
  * otherwise your class will infinitely loop.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.10 $ $Date: 2004/10/24 16:50:23 $
+ * @version $Revision$ $Date$
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne

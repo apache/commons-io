@@ -27,7 +27,7 @@ import java.io.OutputStream;
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.9 $ $Date: 2004/10/24 04:20:07 $
+ * @version $Revision$ $Date$
  */
 public class HexDump {
 

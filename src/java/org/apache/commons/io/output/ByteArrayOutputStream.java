@@ -42,7 +42,7 @@ import java.util.List;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: ByteArrayOutputStream.java,v 1.8 2004/04/24 19:24:09 jeremias Exp $
+ * @version $Id$
  */
 public class ByteArrayOutputStream extends OutputStream {
 

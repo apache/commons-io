@@ -23,7 +23,7 @@ import java.io.FilenameFilter;
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.8 $ $Date: 2004/02/23 04:37:57 $
+ * @version $Revision$ $Date$
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne

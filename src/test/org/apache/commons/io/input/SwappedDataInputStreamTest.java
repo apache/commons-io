@@ -29,7 +29,7 @@ import junit.framework.TestCase;
  * effectively tests the underlying EndianUtils Stream methods.
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.9 $ $Date: 2004/02/29 22:03:45 $
+ * @version $Revision$ $Date$
  */
 
 public class SwappedDataInputStreamTest extends TestCase {

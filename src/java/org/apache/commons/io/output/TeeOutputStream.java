@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * are now two streams.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: TeeOutputStream.java,v 1.6 2004/02/23 04:53:04 bayard Exp $
+ * @version $Id$
  */
 public class TeeOutputStream extends ProxyOutputStream {
 

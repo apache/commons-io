@@ -22,7 +22,7 @@ import org.apache.commons.io.FilenameUtils;
  * </pre>
  *
  * @author Jason Anderson
- * @version $Revision: 1.5 $ $Date: 2004/10/31 04:17:34 $
+ * @version $Revision$ $Date$
  * @since Commons IO 1.1
  */
 public class WildcardFilter extends AbstractFileFilter {

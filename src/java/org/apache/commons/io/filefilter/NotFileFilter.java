@@ -21,7 +21,7 @@ import java.io.File;
  * This filter produces a logical NOT of the filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.6 $ $Date: 2004/02/23 04:37:57 $
+ * @version $Revision$ $Date$
  * 
  * @author Stephen Colebourne
  */

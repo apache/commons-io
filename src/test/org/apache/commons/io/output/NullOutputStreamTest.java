@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  * Exceptions are thrown. 
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.2 $ $Date: 2004/02/23 05:02:25 $
+ * @version $Revision$ $Date$
  */
 
 public class NullOutputStreamTest extends TestCase {

@@ -31,7 +31,7 @@ import java.io.Writer;
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.7 2004/02/23 04:40:29 bayard Exp $
+ * @version $Id$
  */
 public class LockableFileWriter extends Writer {
 

@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.13 $ $Date: 2004/02/29 21:47:07 $
+ * @version $Revision$ $Date$
  */
 public class EndianUtilsTest extends TestCase {
 

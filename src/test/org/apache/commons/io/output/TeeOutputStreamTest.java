@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.3 $ $Date: 2004/02/23 05:02:25 $
+ * @version $Revision$ $Date$
  */
 
 public class TeeOutputStreamTest extends TestCase {

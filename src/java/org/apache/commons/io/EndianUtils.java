@@ -26,7 +26,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.15 $ $Date: 2004/10/24 04:20:06 $
+ * @version CVS $Revision$ $Date$
  */
 public class EndianUtils {
 

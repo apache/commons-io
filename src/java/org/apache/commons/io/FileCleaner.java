@@ -28,7 +28,7 @@ import java.util.Vector;
  * @author Noel Bergman
  * @author Martin Cooper
  *
- * @version $Id: FileCleaner.java,v 1.2 2004/10/24 04:20:06 martinc Exp $
+ * @version $Id$
  */
 public class FileCleaner {
 

@@ -23,7 +23,7 @@ import java.io.OutputStream;
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.5 $ $Date: 2004/02/23 04:40:29 $
+ * @version $Revision$ $Date$
  */
 public class DemuxOutputStream
     extends OutputStream

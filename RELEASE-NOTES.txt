@@ -1,4 +1,4 @@
-$Id: RELEASE-NOTES.txt,v 1.5 2004/04/18 22:04:50 bayard Exp $
+$Id$
 
 			 Commons IO Package
 			   Version 1.0

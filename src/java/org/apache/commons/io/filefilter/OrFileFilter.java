@@ -29,7 +29,7 @@ import java.util.List;
  * <code>true</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.11 $ $Date: 2004/10/25 23:28:30 $
+ * @version $Revision$ $Date$
  *
  * @author Steven Caswell
  */
