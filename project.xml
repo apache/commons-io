@@ -190,7 +190,17 @@
                     <directory>data/test</directory>
                 </resource>
             </resources>
+
         </unitTest>
+
+        <resources>
+            <resource>
+              <targetPath>META-INF</targetPath>
+              <includes>
+                <include>NOTICE.txt</include>
+              </includes>
+            </resource>
+        </resources>
 
     </build>
 
