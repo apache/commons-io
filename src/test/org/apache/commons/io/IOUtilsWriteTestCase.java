@@ -35,7 +35,7 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
  * @author Matthew Hawthorne
  * @author Jeremias Maerki
  * @author Stephen Colebourne
- * @version $Id: IOUtilsWriteTestCase.java,v 1.1 2004/08/13 23:39:01 scolebourne Exp $
+ * @version $Id$
  * @see IOUtils
  */
 public class IOUtilsWriteTestCase extends FileBasedTestCase {

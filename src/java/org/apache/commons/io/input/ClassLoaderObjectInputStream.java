@@ -26,7 +26,7 @@ import java.io.StreamCorruptedException;
  * by Avalon components that are juggling many classloaders.
  *
  * @author <a href="mailto:paul_hammant@yahoo.com">Paul Hammant</a>
- * @version $Revision: 1.5 $ $Date: 2004/02/23 04:38:52 $
+ * @version $Revision$ $Date$
  */
 public class ClassLoaderObjectInputStream
     extends ObjectInputStream

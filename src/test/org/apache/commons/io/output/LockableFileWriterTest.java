@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  * the locking is tested only on construction. 
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.2 $ $Date: 2004/02/29 21:07:14 $
+ * @version $Revision$ $Date$
  */
 
 public class LockableFileWriterTest extends TestCase {

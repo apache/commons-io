@@ -37,7 +37,7 @@ import junit.textui.TestRunner;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: CopyUtilsTest.java,v 1.8 2004/08/13 23:51:41 scolebourne Exp $
+ * @version $Id$
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {

@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 /**
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson (mjohnson at apache dot org)
- * @version $Revision: 1.5 $ $Date: 2004/02/23 05:02:25 $
+ * @version $Revision$ $Date$
  */
 
 public class HexDumpTest extends TestCase {

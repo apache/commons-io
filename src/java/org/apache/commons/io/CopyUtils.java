@@ -105,7 +105,7 @@ import java.io.Writer;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
- * @version $Id: CopyUtils.java,v 1.10 2004/10/24 04:20:06 martinc Exp $
+ * @version $Id$
  * @deprecated Use IOUtils. Will be removed in 2.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().
  *  Null handling behaviour changed in IOUtils (null data does not

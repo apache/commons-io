@@ -21,7 +21,7 @@ import java.util.List;
  * Defines operations for conditional file filters.
  *
  * @since Commons IO 1.1
- * @version $Revision: 1.3 $ $Date: 2004/10/25 23:28:29 $
+ * @version $Revision$ $Date$
  *
  * @author Steven Caswell
  */

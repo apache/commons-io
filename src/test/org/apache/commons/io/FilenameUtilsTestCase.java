@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.23 2004/12/04 19:28:40 scolebourne Exp $
+ * @version $Id$
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {

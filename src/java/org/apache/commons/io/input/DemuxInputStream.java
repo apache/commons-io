@@ -23,7 +23,7 @@ import java.io.InputStream;
  * with this thread.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.5 $ $Date: 2004/02/23 04:38:52 $
+ * @version $Revision$ $Date$
  */
 public class DemuxInputStream
     extends InputStream

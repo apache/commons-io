@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.3 $ $Date: 2004/06/13 05:35:44 $
+ * @version $Revision$ $Date$
  */
 
 public class CountingOutputStreamTest extends TestCase {

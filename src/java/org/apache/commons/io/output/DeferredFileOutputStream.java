@@ -35,7 +35,7 @@ import java.io.OutputStream;
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  *
- * @version $Id: DeferredFileOutputStream.java,v 1.4 2004/10/11 04:29:47 martinc Exp $
+ * @version $Id$
  */
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream

@@ -65,7 +65,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
  * @author Gareth Davis
- * @version CVS $Revision: 1.22 $ $Date: 2004/10/24 04:20:07 $
+ * @version CVS $Revision$ $Date$
  */
 public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and

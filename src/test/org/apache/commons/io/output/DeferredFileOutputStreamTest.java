@@ -31,7 +31,7 @@ import java.util.Arrays;
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  *
- * @version $Id: DeferredFileOutputStreamTest.java,v 1.2 2004/02/23 05:02:25 bayard Exp $
+ * @version $Id$
  */
 public class DeferredFileOutputStreamTest extends TestCase
  {

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="xdoc.xsl"?>
-<!-- $Revision: 1.2 $ $Date: 2004/02/18 09:40:34 $ -->
+<!-- $Revision$ $Date$ -->
 <document>
 <properties>
   <title>Proposal for IO Package</title>

@@ -23,7 +23,7 @@ import java.io.OutputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.6 2004/06/13 05:35:44 bayard Exp $
+ * @version $Id$
  */
 public class CountingOutputStream extends ProxyOutputStream {
 
