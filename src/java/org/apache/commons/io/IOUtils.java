@@ -28,83 +28,19 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 /**
  * General IO Stream manipulation.
  * <p>
- * This class provides static utility methods for input/output operations, particularly buffered
- * copying between sources (<code>InputStream</code>, <code>Reader</code>, <code>String</code> and
- * <code>byte[]</code>) and destinations (<code>OutputStream</code>, <code>Writer</code>,
- * <code>String</code> and <code>byte[]</code>).
+ * This class provides static utility methods for input/output operations.
  * </p>
- *
- * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em> flush or close the
- * streams. Often, doing so would require making non-portable assumptions about the streams' origin
- * and further use. This means that both streams' <code>close()</code> methods must be called after
- * copying. if one omits this step, then the stream resources (sockets, file descriptors) are
- * released when the associated Stream is garbage-collected. It is not a good idea to rely on this
- * mechanism. For a good overview of the distinction between "memory management" and "resource
- * management", see <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
- * UnixReview article</a></p>
- *
- * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding 
- * to be selected (otherwise the platform default is used). We would like to 
- * encourage you to always specify the encoding because relying on the platform
- * default can lead to unexpected results.</p>
- *
- * <p>We don't provide special variants for the <code>copy</code> methods that
- * let you specify the buffer size because in modern VMs the impact on speed
- * seems to be minimal. We're using a default buffer size of 4 KB.</p>
- *
- * <p>The <code>copy</code> methods use an internal buffer when copying. It is therefore advisable
- * <em>not</em> to deliberately wrap the stream arguments to the <code>copy</code> methods in
- * <code>Buffered*</code> streams. For example, don't do the
- * following:</p>
- *
- * <code>copy( new BufferedInputStream( in ), new BufferedOutputStream( out ) );</code>
- *
- * <p>The rationale is as follows:</p>
- *
- * <p>Imagine that an InputStream's read() is a very expensive operation, which would usually suggest
- * wrapping in a BufferedInputStream. The BufferedInputStream works by issuing infrequent
- * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the underlying InputStream, to
- * fill an internal buffer, from which further <code>read</code> requests can inexpensively get
- * their data (until the buffer runs out).</p>
- * <p>However, the <code>copy</code> methods do the same thing, keeping an internal buffer,
- * populated by {@link InputStream#read(byte[] b, int off, int len)} requests. Having two buffers
- * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
- * management hurts performance slightly (about 3%, according to some simple experiments).</p>
- *
- * <p>Behold, intrepid explorers; a map of this class:</p>
- * <pre>
- *       Method      Input               Output          Dependency
- *       ------      -----               ------          -------
- * 1     copy        InputStream         OutputStream    (primitive)
- * 2     copy        Reader              Writer          (primitive)
- *
- * 3     copy        InputStream         Writer          2
- * 4     toString    InputStream         String          3
- * 5     toByteArray InputStream         byte[]          1
- *
- * 6     copy        Reader              OutputStream    2
- * 7     toString    Reader              String          2
- * 8     toByteArray Reader              byte[]          6
- *
- * 9     copy        String              OutputStream    2
- * 10    copy        String              Writer          (trivial)
- * 11    toByteArray String              byte[]          9
- *
- * 12    copy        byte[]              Writer          3
- * 13    toString    byte[]              String          12
- * 14    copy        byte[]              OutputStream    (trivial)
- * </pre>
- *
- * <p>Note that only the first two methods shuffle bytes; the rest use these
- * two, or (if possible) copy using native Java copy methods. As there are
- * method variants to specify the encoding, each row may
- * correspond to up to 2 methods.</p>
+ * <p>The closeQuietly methods are expected to be used when an IOException 
+ * would be meaningless. This is usually when in a catch block for an 
+ * IOException. </p>
+ * <p>The toString and toByteArray methods all rely on CopyUtils.copy 
+ * methods in the current implementation. </p>
  *
  * <p>Origin of code: Apache Avalon (Excalibur)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.13 $ $Date: 2004/02/23 04:35:59 $
+ * @version CVS $Revision: 1.14 $ $Date: 2004/04/24 23:49:25 $
  */
 public final class IOUtils
 {
