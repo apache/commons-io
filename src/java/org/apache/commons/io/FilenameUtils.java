@@ -55,7 +55,8 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.18 2004/10/29 21:38:49 bayard Exp $
+ * @author Stephen Colebourne
+ * @version $Id: FilenameUtils.java,v 1.19 2004/10/30 22:16:23 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -64,6 +65,21 @@ public class FilenameUtils {
      * Standard separator char used when internalizing paths.
      */
     private static final char INTERNAL_SEPARATOR_CHAR = '/';
+
+    /**
+     * The Unix separator character.
+     */
+    private static final char UNIX_SEPARATOR = '/';
+
+    /**
+     * The Windows separator character.
+     */
+    private static final char WINDOWS_SEPARATOR = '\\';
+
+    /**
+     * The system separator character.
+     */
+    private static final char SYSTEM_SEPARATOR = File.separatorChar;
 
     /**
      * Standard separator string used when internalizing paths.
@@ -472,6 +488,54 @@ public class FilenameUtils {
         if (INTERNAL_SEPARATOR_CHAR != File.separatorChar) {
             path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
         }
+        return path;
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Convert all separators to the Unix separator of forward slash.
+     * 
+     * @param path  the path to be changed, null ignored
+     * @return the updated path
+     */
+    public static String separatorsToUnix(String path) {
+        if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
+            return path;
+        }
+        return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+    }
+
+    /**
+     * Convert all separators to the Windows separator of backslash.
+     * 
+     * @param path  the path to be changed, null ignored
+     * @return the updated path
+     */
+    public static String separatorsToWindows(String path) {
+        if (path == null || path.indexOf(UNIX_SEPARATOR) == -1) {
+            return path;
+        }
+        return path.replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR);
+    }
+
+    /**
+     * Convert all separators to the system separator.
+     * 
+     * @param path  the path to be changed, null ignored
+     * @return the updated path
+     */
+    public static String separatorsToSystem(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (SYSTEM_SEPARATOR == UNIX_SEPARATOR) {
+            return separatorsToUnix(path);
+        }
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            return separatorsToWindows(path);
+        }
+        path = path.replace(UNIX_SEPARATOR, SYSTEM_SEPARATOR);
+        path = path.replace(WINDOWS_SEPARATOR, SYSTEM_SEPARATOR);
         return path;
     }
 
