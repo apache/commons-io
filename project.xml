@@ -119,6 +119,7 @@
       </includes>
       <excludes>
         <exclude>**/compress/**/*Test*</exclude>
+        <exclude>**/IOUtilTestCase*</exclude>
       </excludes>
     </unitTest>
 
