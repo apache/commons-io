@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * are now two streams.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: TeeOutputStream.java,v 1.5 2004/02/23 04:40:29 bayard Exp $
+ * @version $Id: TeeOutputStream.java,v 1.6 2004/02/23 04:53:04 bayard Exp $
  */
 public class TeeOutputStream extends ProxyOutputStream {
 
@@ -59,13 +59,21 @@ public class TeeOutputStream extends ProxyOutputStream {
         this.branch.write(b);
     }
 
-    /** @see java.io.OutputStream#flush() */
+    /**
+     * Flushes both streams.
+     *
+     * @see java.io.OutputStream#flush()
+     */
     public void flush() throws IOException {
         super.flush();
         this.branch.flush();
     }
 
-    /** @see java.io.OutputStream#close() */
+    /**
+     * Closes both streams. 
+     *
+     * @see java.io.OutputStream#close() 
+     */
     public void close() throws IOException {
         super.close();
         this.branch.close();
