@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.18 2004/10/30 23:59:17 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.19 2004/10/31 00:03:03 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -287,7 +287,9 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     public void testIsExtension() {
         assertEquals(false, FilenameUtils.isExtension(null, (String) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", (String) null));
+        assertEquals(true, FilenameUtils.isExtension("file", (String) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", ""));
+        assertEquals(true, FilenameUtils.isExtension("file", ""));
         assertEquals(true, FilenameUtils.isExtension("file.txt", "txt"));
         assertEquals(false, FilenameUtils.isExtension("file.txt", "rtf"));
         
@@ -321,9 +323,11 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     public void testIsExtensionArray() {
         assertEquals(false, FilenameUtils.isExtension(null, (String[]) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", (String[]) null));
+        assertEquals(true, FilenameUtils.isExtension("file", (String[]) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", new String[0]));
         assertEquals(true, FilenameUtils.isExtension("file.txt", new String[] {"txt"}));
         assertEquals(false, FilenameUtils.isExtension("file.txt", new String[] {"rtf"}));
+        assertEquals(true, FilenameUtils.isExtension("file", new String[] {"rtf", ""}));
         assertEquals(true, FilenameUtils.isExtension("file.txt", new String[] {"rtf", "txt"}));
         
         assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", (String[]) null));
@@ -362,9 +366,11 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     public void testIsExtensionCollection() {
         assertEquals(false, FilenameUtils.isExtension(null, (Collection) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", (Collection) null));
+        assertEquals(true, FilenameUtils.isExtension("file", (Collection) null));
         assertEquals(false, FilenameUtils.isExtension("file.txt", new ArrayList()));
         assertEquals(true, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"txt"}))));
         assertEquals(false, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"rtf"}))));
+        assertEquals(true, FilenameUtils.isExtension("file", new ArrayList(Arrays.asList(new String[] {"rtf", ""}))));
         assertEquals(true, FilenameUtils.isExtension("file.txt", new ArrayList(Arrays.asList(new String[] {"rtf", "txt"}))));
         
         assertEquals(false, FilenameUtils.isExtension("a/b/file.txt", (Collection) null));
