@@ -63,7 +63,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
  * @author Gareth Davis
- * @version CVS $Revision: 1.20 $ $Date: 2004/08/24 19:13:12 $
+ * @version CVS $Revision: 1.21 $ $Date: 2004/10/24 02:09:40 $
  */
 public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and Writer
@@ -142,7 +142,7 @@ public class IOUtils {
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
      *
-     * @param input  the OutputStream to close, may be null or already closed
+     * @param output  the OutputStream to close, may be null or already closed
      */
     public static void closeQuietly(OutputStream output) {
         try {
@@ -239,7 +239,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
+     * @param is  the <code>InputStream</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
@@ -260,7 +260,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
+     * @param is  the <code>InputStream</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
@@ -588,7 +588,7 @@ public class IOUtils {
      * Writes chars from a <code>StringBuffer</code> to bytes on an <code>OutputStream</code>
      * using the default character encoding of the platform.
      * <p>
-     * This method uses {@link StringBuffer#getBytes()}.
+     * This method uses {@link String#getBytes()}.
      * 
      * @param data  the <code>StringBuffer</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
@@ -609,7 +609,7 @@ public class IOUtils {
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method uses {@link StringBuffer#getBytes(String)}.
+     * This method uses {@link String#getBytes(String)}.
      * 
      * @param data  the <code>StringBuffer</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
