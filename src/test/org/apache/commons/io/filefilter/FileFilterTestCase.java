@@ -104,12 +104,16 @@ public final class FileFilterTestCase extends TestCase {
         IOFileFilter filter = new SuffixFileFilter(new String[] { "tes", "est" });
         assertFiltering(filter, new File("fred.tes"), true);
         assertFiltering(filter, new File("fred.est"), true);
+        assertFiltering(filter, new File("fred.EST"), false); //case-sensitive
         assertFiltering(filter, new File("fred.exe"), false);
         assertFiltering(filter, new File("fred"), false);
-
-        // SHOULD THESE WORK???
         assertFiltering(filter, new File(".tes"), true);
         assertFiltering(filter, new File("fred.test"), true);
+        
+        filter = new SuffixFileFilter("est");
+        assertFiltering(filter, new File("test"), true);
+        assertFiltering(filter, new File("fred"), false);
+        
         try {
             new SuffixFileFilter((String) null);
             fail();
@@ -134,6 +138,7 @@ public final class FileFilterTestCase extends TestCase {
     public void testPrefix() throws Exception {
         IOFileFilter filter = new PrefixFileFilter(new String[] { "foo", "bar" });
         assertFiltering(filter, new File("foo.test"), true);
+        assertFiltering(filter, new File("FOO.test"), false);  //case-sensitive
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("food/"), true);
@@ -141,11 +146,30 @@ public final class FileFilterTestCase extends TestCase {
         assertFiltering(filter, new File("test"), false);
         assertFiltering(filter, new File("fo_o.test"), false);
         assertFiltering(filter, new File("abar.exe"), false);
+        
+        filter = new PrefixFileFilter("tes");
+        assertFiltering(filter, new File("test"), true);
+        assertFiltering(filter, new File("fred"), false);
+        
         try {
             new PrefixFileFilter((String) null);
             fail();
         } catch (IllegalArgumentException ex) {
         }
+    }
+    
+    public void testNameFilter() throws Exception {
+        IOFileFilter filter = new NameFileFilter(new String[] { "foo", "bar" });
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("fred"), false);
+
+        filter = new NameFileFilter("foo");
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("FOO"), false); //case-sensitive
+        assertFiltering(filter, new File("barfoo"), false);
+        assertFiltering(filter, new File("foobar"), false);
+        assertFiltering(filter, new File("fred"), false);
     }
 
     public void testTrue() throws Exception {
