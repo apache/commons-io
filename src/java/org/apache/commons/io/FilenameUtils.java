@@ -76,7 +76,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.1 2003/11/23 20:43:30 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.2 2003/11/27 20:53:04 bayard Exp $
  */
 public class FilenameUtils {
 
@@ -114,8 +114,6 @@ public class FilenameUtils {
             file.mkdirs();
         }
     }
-
-    /* *** AVALON CODE *** */
 
     /**
      * Remove extension from filename.
