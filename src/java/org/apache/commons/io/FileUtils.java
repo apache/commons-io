@@ -78,7 +78,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.30 2004/04/23 22:47:39 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.31 2004/04/24 19:46:16 jeremias Exp $
  */
 public class FileUtils {
 
@@ -155,7 +155,7 @@ public class FileUtils {
     /**
      * Converts a Collection containing java.io.File instanced into array
      * representation. This is to account for the difference between
-     * File.listFiles() and FileUtilsNew.listFiles().
+     * File.listFiles() and FileUtils.listFiles().
      * @param files a Collection containing java.io.File instances
      * @return an array of java.io.File
      */
