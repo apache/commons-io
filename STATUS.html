@@ -7,7 +7,7 @@
    
 <div align="center"> 
 <h1>The Jakarta Commons <em>IO</em> Component</h1>
- $Id: STATUS.html,v 1.10 2003/07/27 17:08:54 jeremias Exp $<br>
+ $Id: STATUS.html,v 1.11 2003/08/21 19:11:44 jeremias Exp $<br>
  <a href="#Introduction">[Introduction]</a> <a href="#Dependencies">[Dependencies]</a> 
 <a href="#Release%20Info">[Release Info]</a> <a href="#Committers">[Committers]</a> 
 <a href="#Action%20Items">[Action Items]</a> <br>
@@ -82,15 +82,16 @@ release of this component:</p>
     ByteArrayOutputStream which should improve performance considerably.</li>
   <li>IOUtils: Remove the deprecated bufferedCopy method. IO is not released
     so we should be able to do that - DONE</li>
-  <li>FileUtils: Add isFileNewer() method from Alban Peignier:
-    http://nagoya.apache.org/eyebrowse/BrowseList?listName=commons-dev@jakarta.apache.org&by=thread&from=348688</li>
   <li>FileUtils: This class is a big mess ATM. We need to clean it up.</li>
+  <li>Split IOUtils into IOUtils and CopyUtils - DONE (Matthew Hawthorne)</li>
   <li>More TestCases!!!</li>
   <li>More Javadocs!!!</li>
 </ul>
 <h5>5.1  NEW CODE</h5>
 <ul>
   <li>ProxyOutput/InputStream. These are predictable Filter-streams. Need to see if FilterWriter/Reader are predictable - DONE</li>
+  <li>FileUtils: Add isFileNewer() method from Alban Peignier:
+    http://nagoya.apache.org/eyebrowse/BrowseList?listName=commons-dev@jakarta.apache.org&by=thread&from=348688 - DONE</li>
   <li>A CsvReader/Writer set of classes in a csv sub-package</li>
   <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
   <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
