@@ -64,7 +64,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.6 $ $Date: 2003/11/27 04:07:09 $
+ * @version CVS $Revision: 1.7 $ $Date: 2003/11/27 06:32:26 $
  */
 public final class EndianUtils
 {
@@ -310,12 +310,6 @@ public final class EndianUtils
     {
         return Double.longBitsToDouble( readSwappedLong( data, offset ) );
     }
-
-    //////////////////////////////////////////////////////////////////////
-    //
-    //  The following haven't been fully tested yet - unit tests coming soon!!!
-    //
-    //////////////////////////////////////////////////////////////////////
 
     /**
      * Writes a "short" value to an OutputStream. The value is
