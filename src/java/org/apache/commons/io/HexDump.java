@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.2 2003/07/27 17:20:59 jeremias Exp $
- * $Revision: 1.2 $
- * $Date: 2003/07/27 17:20:59 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.3 2003/07/29 13:07:39 jeremias Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/07/29 13:07:39 $
  *
  * ====================================================================
  *
@@ -70,13 +70,9 @@ import java.io.OutputStream;
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.2 $ $Date: 2003/07/27 17:20:59 $
+ * @version $Revision: 1.3 $ $Date: 2003/07/29 13:07:39 $
  */
 public class HexDump {
-
-    // all static methods, so no need for a public constructor
-    private HexDump() {
-    }
 
     /**
      * dump an array of bytes to an OutputStream

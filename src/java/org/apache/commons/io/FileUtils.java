@@ -103,7 +103,7 @@ import java.util.Vector;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id: FileUtils.java,v 1.12 2003/07/27 17:20:23 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.13 2003/07/29 13:07:39 jeremias Exp $
  */
 public class FileUtils {
 
@@ -121,14 +121,6 @@ public class FileUtils {
      * The number of bytes in a gigabyte.
      */
     public static final int ONE_GB = ONE_KB * ONE_MB;
-
-    /**
-     * Private constructor to prevent instantiation.
-     *
-     */
-    private FileUtils()
-    {
-    }
 
     /**
      * Returns a human-readable version of the file size (original is in
@@ -158,6 +150,8 @@ public class FileUtils {
      * Matches the equally named unix command.
      * @param filename filename to inspect
      * @return The directory portion excluding the ending file separator.
+     * @deprecated use getPath() instead.
+     * TODO DELETE before 1.0
      */
     public static String dirname(String filename) {
         int i = filename.lastIndexOf(File.separator);
@@ -168,6 +162,8 @@ public class FileUtils {
      * Returns the filename portion of a file specification string.
      * @param filename filename to inspect
      * @return The filename string with extension.
+     * @deprecated use removeExtension() instead.
+     * TODO DELETE before 1.0
      */
     public static String filename(String filename) {
         int i = filename.lastIndexOf(File.separator);
@@ -179,6 +175,7 @@ public class FileUtils {
      * Matches the equally named unix command.
      * @param filename filename to inspect
      * @return The filename string without extension.
+     * TODO DELETE before 1.0
      */
     public static String basename(String filename) {
         return basename(filename, extension(filename));
@@ -212,6 +209,7 @@ public class FileUtils {
      * the dot).
      * @param filename filename to inspect
      * @return the extension
+     * TODO probably duplicate method. See getExtension
      */
     public static String extension(String filename) {
         int lastDot = filename.lastIndexOf('.');
