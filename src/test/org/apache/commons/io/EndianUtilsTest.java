@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.1 2003/11/26 07:50:05 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/11/26 07:50:05 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.2 2003/11/26 07:56:38 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/11/26 07:56:38 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.1 $ $Date: 2003/11/26 07:50:05 $
+ * @version $Revision: 1.2 $ $Date: 2003/11/26 07:56:38 $
  */
 
 public class EndianUtilsTest extends TestCase {
@@ -80,8 +80,10 @@ public class EndianUtilsTest extends TestCase {
     }
 
     public void testSwapShort() {
-        // need to study to make up these
-        assertEquals( 1, EndianUtils.swapShort( (short) 256 ) );
+        assertEquals( (short) 0, EndianUtils.swapShort( (short) 0 ) );
+        assertEquals( (short) 0x0201, EndianUtils.swapShort( (short) 0x0102 ) );
+        assertEquals( (short) 0xffff, EndianUtils.swapShort( (short) 0xffff ) );
+        assertEquals( (short) 0x0102, EndianUtils.swapShort( (short) 0x0201 ) );
     }
 
     public void testSwapInteger() {
@@ -99,13 +101,26 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x0807060504030201L, EndianUtils.swapLong( 0x0102030405060708L ) );
     }
 
-    // TODO:
     /*
     public void testSwapFloat() {
     }
 
     public void testSwapDouble() {
     }
+    */
+
+    /**
+     * Tests all swapXxxx methods for symmetry when going from one endian 
+     * to another and back again. 
+     */
+    public void testSymmetry() {
+        assertEquals( (short) 0x0102, EndianUtils.swapShort( EndianUtils.swapShort( (short) 0x0102 ) ) );
+        assertEquals( 0x01020304, EndianUtils.swapInteger( EndianUtils.swapInteger( 0x01020304 ) ) );
+        assertEquals( 0x0102030405060708L, EndianUtils.swapLong( EndianUtils.swapLong( 0x0102030405060708L ) ) );
+    }
+
+    /*
+    // TODO:
 
     // All readSwappedXxxx(byte[], int)
     // All writeSwappedXxxx(byte[], int, xxxx)
