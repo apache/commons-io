@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.2 2003/10/13 07:05:23 rdonkin Exp $
- * $Revision: 1.2 $
- * $Date: 2003/10/13 07:05:23 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.3 2003/11/22 20:09:23 jeremias Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/11/22 20:09:23 $
  *
  * ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,7 +59,6 @@
 package org.apache.commons.io.testtools;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +68,7 @@ import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
