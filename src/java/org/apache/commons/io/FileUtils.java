@@ -57,11 +57,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Vector;
 
 /**
  * This class provides basic facilities for manipulating files and file paths.
@@ -106,7 +107,7 @@ import java.util.Vector;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
- * @version $Id: FileUtils.java,v 1.15 2003/10/13 07:04:52 rdonkin Exp $
+ * @version $Id: FileUtils.java,v 1.16 2003/10/17 20:15:46 matth Exp $
  */
 public class FileUtils {
 
@@ -241,16 +242,6 @@ public class FileUtils {
     }
 
     /**
-     * Creates a file handle.
-     *
-     * @param fileName The name of the file.
-     * @return A <code>File</code> instance.
-     */
-    public static File getFile(String fileName) {
-        return new File(fileName);
-    }
-
-    /**
      * Given a directory and an array of extensions... return an array of
      * compliant files.
      *
@@ -264,9 +255,9 @@ public class FileUtils {
         String directory,
         String[] extensions) {
 
-        Vector files = new Vector();
+        Collection files = new ArrayList();
 
-        java.io.File currentDir = new java.io.File(directory);
+        File currentDir = new File(directory);
 
         String[] unknownFiles = currentDir.list();
 
@@ -279,7 +270,7 @@ public class FileUtils {
                 directory
                     + System.getProperty("file.separator")
                     + unknownFiles[i];
-            java.io.File currentFile = new java.io.File(currentFileName);
+            File currentFile = new java.io.File(currentFileName);
 
             if (currentFile.isDirectory()) {
 
@@ -293,14 +284,14 @@ public class FileUtils {
 
                 String[] fetchFiles =
                     getFilesFromExtension(currentFileName, extensions);
-                files = blendFilesToVector(files, fetchFiles);
+                files = blendFiles(files, fetchFiles);
 
             } else {
                 //ok... add the file
 
                 String add = currentFile.getAbsolutePath();
                 if (isValidFile(add, extensions)) {
-                    files.addElement(add);
+                    files.add(add);
 
                 }
 
@@ -310,7 +301,7 @@ public class FileUtils {
         //ok... move the Vector into the files list...
 
         String[] foundFiles = new String[files.size()];
-        files.copyInto(foundFiles);
+        files.toArray(foundFiles);
 
         return foundFiles;
 
@@ -319,13 +310,13 @@ public class FileUtils {
     /**
      * Private hepler method for getFilesFromExtension()
      */
-    private static Vector blendFilesToVector(Vector v, String[] files) {
+    private static Collection blendFiles(Collection c, String[] files) {
 
         for (int i = 0; i < files.length; ++i) {
-            v.addElement(files[i]);
+            c.add(files[i]);
         }
 
-        return v;
+        return c;
     }
 
     /**
@@ -1270,6 +1261,17 @@ public class FileUtils {
         throws Exception {
         String content = fileRead(inFileName);
         fileWrite(outFileName, content);
+    }
+
+    /**
+     * Creates a file handle.
+     *
+     * @param fileName The name of the file.
+     * @return A <code>File</code> instance.
+     * @deprecated Use {@link java.io.File#Constructor(String)}
+     */
+    public static File getFile(String fileName) {
+        return new File(fileName);
     }
 
 }
