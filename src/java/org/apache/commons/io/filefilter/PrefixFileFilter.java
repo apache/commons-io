@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,56 +51,108 @@ package org.apache.commons.io.filefilter;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.util.List;
 
 /**
  * This filters filenames for a certain prefix.
- *
- * <p>Eg., to print all files and directories in the current directory whose name starts with</p>
- * <code>foo</code>:
+ * <p>
+ * For example, to print all files and directories in the 
+ * current directory whose name starts with <code>foo</code>:
  *
  * <pre>
  * File dir = new File(".");
  * String[] files = dir.list( new PrefixFileFilter("foo"));
- * for ( int i=0; i&lt;files.length; i++ )
- * {
+ * for ( int i = 0; i &lt; files.length; i++ ) {
  *     System.out.println(files[i]);
  * }
  * </pre>
  *
- *
- * @author  Federico Barbieri <fede@apache.org>
- * @author Serge Knystautas <sergek@lokitech.com>
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/07/28 03:10:01 $
- * @since 4.0
+ * @since Commons IO 1.0
+ * @version $Revision: 1.2 $ $Date: 2003/05/16 22:33:47 $
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @author Federico Barbieri
+ * @author Serge Knystautas
+ * @author Peter Donald
  */
-public class PrefixFileFilter
-    extends AbstractFileFilter
-{
-    private String[] m_prefixs;
+public class PrefixFileFilter extends AbstractFileFilter {
+    
+    /** The filename prefix to search for */
+    private String[] prefixes;
 
-    public PrefixFileFilter( final String[] prefixs )
-    {
-        m_prefixs = prefixs;
+    /**
+     * Constructs a new Prefix file filter for a single prefix.
+     * 
+     * @param prefix  the prefix to allow, null means none
+     */
+    public PrefixFileFilter(final String prefix) {
+        if (prefixes == null) {
+            throw new IllegalArgumentException("The prefix must not be null");
+        }
+        this.prefixes = new String[] {prefix};
     }
 
-    public PrefixFileFilter( final String prefix )
-    {
-        m_prefixs = new String[]{prefix};
+    /**
+     * Constructs a new Prefix file filter for an array of prefixes.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
+     * 
+     * @param prefixes  the prefixes to allow, null means none
+     */
+    public PrefixFileFilter(final String[] prefixes) {
+        if (prefixes == null) {
+            throw new IllegalArgumentException("The array of prefixes must not be null");
+        }
+        this.prefixes = prefixes;
     }
 
-    public boolean accept( final File file, final String name )
-    {
-        for( int i = 0; i < m_prefixs.length; i++ )
-        {
-            if( name.startsWith( m_prefixs[ i ] ) )
-            {
+    /**
+     * Constructs a new Prefix file filter for a list of prefixes.
+     * 
+     * @param prefixes  the prefixes to allow, null means none
+     */
+    public PrefixFileFilter(final List prefixes) {
+        if (prefixes == null) {
+            throw new IllegalArgumentException("The list of prefixes must not be null");
+        }
+        this.prefixes = (String[]) prefixes.toArray(new String[prefixes.size()]);
+    }
+
+    /**
+     * Checks to see if the filename ends with the prefix.
+     * 
+     * @param file  the File to check
+     * @return true if the filename starts with one of our prefixes
+     */
+    public boolean accept(final File file) {
+        String name = file.getName();
+        for (int i = 0; i < this.prefixes.length; i++) {
+            if (name.startsWith(this.prefixes[i])) {
                 return true;
             }
         }
         return false;
     }
+    
+    /**
+     * Checks to see if the filename starts with the prefix.
+     * 
+     * @param file  the File directory
+     * @param name  the filename
+     * @return true if the filename starts with one of our prefixes
+     */
+    public boolean accept(final File file, final String name) {
+        for (int i = 0; i < prefixes.length; i++) {
+            if (name.startsWith(prefixes[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

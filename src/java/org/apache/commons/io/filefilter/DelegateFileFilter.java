@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,52 +52,79 @@ package org.apache.commons.io.filefilter;
  * <http://www.apache.org/>.
  *
  */
+package org.apache.commons.io.filefilter;
 
-import java.io.FilenameFilter;
-import java.io.FileFilter;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 
 /**
- * This is used to turn a JDK FileFilter or FilenameFilter into a Predicate, 
- * as well as an Apache IO FileFilter. Once it is a predicate, it can be 
- * used with the PredicateUtils.
+ * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
+ * 
+ * @since Commons IO 1.0
+ * @version $Revision: 1.5 $ $Date: 2003/05/16 22:33:47 $
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
  */
-public class DelegateFileFilter
-extends AbstractFileFilter
-{
+public class DelegateFileFilter extends AbstractFileFilter {
 
-    private FilenameFilter filename;
-    private java.io.FileFilter file;
+    /** The Filename filter */
+    private FilenameFilter filenameFilter;
+    /** The File filter */
+    private FileFilter fileFilter;
 
+    /**
+     * Constructs a delegate file filter around an existing FilenameFilter.
+     * 
+     * @param filter  the filter to decorate
+     */
     public DelegateFileFilter(FilenameFilter filter) {
-        if(filter == null) {
-            throw new NullPointerException("Setting a filter to null will "+
-                "infinitely loop. Use a NullFileFilter instead. ");
+        if (filter == null) {
+            throw new IllegalArgumentException("The FilenameFilter must not be null");
         }
-        this.filename = filter;
+        this.filenameFilter = filter;
     }
 
-    public DelegateFileFilter(java.io.FileFilter filter) {
-        if(filter == null) {
-            throw new NullPointerException("Setting a filter to null will "+
-                "infinitely loop. Use a NullFileFilter instead. ");
+    /**
+     * Constructs a delegate file filter around an existing FileFilter.
+     * 
+     * @param filter  the filter to decorate
+     */
+    public DelegateFileFilter(FileFilter filter) {
+        if (filter == null) {
+            throw new IllegalArgumentException("The FileFilter must not be null");
         }
-        this.file = filter;
+        this.fileFilter = filter;
     }
 
-    public boolean accept( File f) {
-        if(file != null) {
-            return file.accept(f);
+    /**
+     * Checks the filter.
+     * 
+     * @param file  the file to check
+     * @return true if the filter matches
+     */
+    public boolean accept(File file) {
+        if (fileFilter != null) {
+            return fileFilter.accept(file);
         } else {
-            return super.accept(f);
+            return super.accept(file);
         }
     }
 
-    public boolean accept( File dir, String name) {
-        if(filename != null) {
-            return filename.accept(dir, name);
+    /**
+     * Checks the filter.
+     * 
+     * @param dir  the directory
+     * @param name  the filename in the directory
+     * @return true if the filter matches
+     */
+    public boolean accept(File dir, String name) {
+        if (filenameFilter != null) {
+            return filenameFilter.accept(dir, name);
         } else {
             return super.accept(dir, name);
         }
     }
+    
 }

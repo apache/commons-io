@@ -1,13 +1,7 @@
-/*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.7 2003/02/25 09:56:28 tobrien Exp $
- * $Revision: 1.7 $
- * $Date: 2003/02/25 09:56:28 $
- *
- * ====================================================================
- *
+/* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,21 +16,21 @@
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowlegement:
+ * 3. The end-user documentation included with the redistribution,
+ *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowlegement may appear in the software itself,
- *    if and wherever such third-party acknowlegements normally appear.
+ *    Alternately, this acknowledgment may appear in the software itself,
+ *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "The Jakarta Project", "Commons", and "Apache Software
- *    Foundation" must not be used to endorse or promote products derived
- *    from this software without prior written permission. For written
- *    permission, please contact apache@apache.org.
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
+ *    written permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache"
- *    nor may "Apache" appear in their names without prior written
- *    permission of the Apache Group.
+ * 5. Products derived from this software may not be called "Apache",
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -58,99 +52,155 @@
  * <http://www.apache.org/>.
  *
  */
-
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
-import junit.framework.AssertionFailedError;
+
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
 /**
  * Used to test an unknown FileFilter
  */
-public final class FileFilterTestCase
-    extends TestCase
-{
+public final class FileFilterTestCase extends TestCase {
 
-    public void setUp()
-    {
+    public FileFilterTestCase(String name) {
+        super(name);
+    }
+    
+    public static void main(String[] args) {
+        TestRunner.run(suite());
+    }
+    
+    public static TestSuite suite() {
+        return new TestSuite(FileFilterTestCase.class);
     }
 
-    public void tearDown()
-    {
+    public void setUp() {
     }
 
-    public FileFilterTestCase( String name )
-    {
-        super( name );
+    public void tearDown() {
     }
 
-    public void assertFiltering(FileFilter filter, File file, boolean expected)
-        throws Exception
-    {
-       // Note. This only tests the (File, String) version if the parent of 
-       //       the File passed in is not null
-       assertTrue(
-            "Filter(File) "+filter.getClass().getName()+" not "+expected+" for "+file, 
-               (filter.accept(file) == expected) 
-               );
+    public void assertFiltering(IOFileFilter filter, File file, boolean expected) throws Exception {
+        // Note. This only tests the (File, String) version if the parent of 
+        //       the File passed in is not null
+        assertTrue(
+            "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
+            (filter.accept(file) == expected));
 
-       if(file != null && file.getParentFile() != null) {
-           assertTrue(
-                "Filter(File, String) "+filter.getClass().getName()+" not "+expected+" for "+file, 
-                (filter.accept(file.getParentFile(), file.getName()) == expected)
-           );
-       } else if( file == null ) {
-	   assertTrue(
-		      "Filter(File, String) "+filter.getClass().getName()+" not "+expected+" for null",
-		      filter.accept( file ) == expected );
-       }
+        if (file != null && file.getParentFile() != null) {
+            assertTrue(
+                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
+                (filter.accept(file.getParentFile(), file.getName()) == expected));
+        } else if (file == null) {
+            assertTrue(
+                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
+                filter.accept(file) == expected);
+        }
     }
 
-    public void testExtension() throws Exception {
-        FileFilter filter = new ExtensionFileFilter( new String[] { "tes", "est" } ); 
-        assertFiltering( filter, new File("fred.tes"), true);
-        assertFiltering( filter, new File("fred.est"), true);
-        assertFiltering( filter, new File("fred.exe"), false);
-        assertFiltering( filter, new File("fred"), false);
+    public void testSuffix() throws Exception {
+        IOFileFilter filter = new SuffixFileFilter(new String[] { "tes", "est" });
+        assertFiltering(filter, new File("fred.tes"), true);
+        assertFiltering(filter, new File("fred.est"), true);
+        assertFiltering(filter, new File("fred.exe"), false);
+        assertFiltering(filter, new File("fred"), false);
 
         // SHOULD THESE WORK???
-        assertFiltering( filter, new File(".tes"), true);
-        assertFiltering( filter, new File("fred.test"), true);
+        assertFiltering(filter, new File(".tes"), true);
+        assertFiltering(filter, new File("fred.test"), true);
+        try {
+            new SuffixFileFilter((String) null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
     public void testDirectory() throws Exception {
-        FileFilter filter = new DirectoryFileFilter();
+        IOFileFilter filter = new DirectoryFileFilter();
 
-        assertFiltering( filter, new File("src/"), true);
-        assertFiltering( filter, new File("src/java/"), true);
-        
-        assertFiltering( filter, new File("project.xml"), false);
-	
-	assertFiltering( filter, new File("imaginary"), false);
-        assertFiltering( filter, new File("imaginary/"), false);
+        assertFiltering(filter, new File("src/"), true);
+        assertFiltering(filter, new File("src/java/"), true);
 
-        assertFiltering( filter, new File("STATUS.html"), false);
+        assertFiltering(filter, new File("project.xml"), false);
+
+        assertFiltering(filter, new File("imaginary"), false);
+        assertFiltering(filter, new File("imaginary/"), false);
+
+        assertFiltering(filter, new File("STATUS.html"), false);
     }
 
     public void testPrefix() throws Exception {
-        FileFilter filter = new PrefixFileFilter( new String[] { "foo", "bar" } );
-        assertFiltering( filter, new File("foo.test"), true);
-        assertFiltering( filter, new File("foo"), true);
-        assertFiltering( filter, new File("bar"), true);
-        assertFiltering( filter, new File("food/"), true);
-        assertFiltering( filter, new File("barred\\"), true);
-        assertFiltering( filter, new File("test"), false);
-        assertFiltering( filter, new File("fo_o.test"), false);
-        assertFiltering( filter, new File("abar.exe"), false);
+        IOFileFilter filter = new PrefixFileFilter(new String[] { "foo", "bar" });
+        assertFiltering(filter, new File("foo.test"), true);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("food/"), true);
+        assertFiltering(filter, new File("barred\\"), true);
+        assertFiltering(filter, new File("test"), false);
+        assertFiltering(filter, new File("fo_o.test"), false);
+        assertFiltering(filter, new File("abar.exe"), false);
+        try {
+            new PrefixFileFilter((String) null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
-    public void testNull() throws Exception {
-        FileFilter filter = FileFilterUtils.nullFileFilter();
-        assertFiltering( filter, new File("foo.test"), false);
-        assertFiltering( filter, new File("foo"), false);
-        assertFiltering( filter, null, true);
+    public void testTrue() throws Exception {
+        IOFileFilter filter = FileFilterUtils.trueFileFilter();
+        assertFiltering(filter, new File("foo.test"), true);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, null, true);
+    }
+
+    public void testFalse() throws Exception {
+        IOFileFilter filter = FileFilterUtils.falseFileFilter();
+        assertFiltering(filter, new File("foo.test"), false);
+        assertFiltering(filter, new File("foo"), false);
+        assertFiltering(filter, null, false);
+    }
+
+    public void testNot() throws Exception {
+        IOFileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.trueFileFilter());
+        assertFiltering(filter, new File("foo.test"), false);
+        assertFiltering(filter, new File("foo"), false);
+        assertFiltering(filter, null, false);
+        try {
+            new NotFileFilter(null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
+    public void testAnd() throws Exception {
+        IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
+        IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
+        assertFiltering(new AndFileFilter(trueFilter, trueFilter), new File("foo.test"), true);
+        assertFiltering(new AndFileFilter(trueFilter, falseFilter), new File("foo.test"), false);
+        assertFiltering(new AndFileFilter(falseFilter, trueFilter), new File("foo.test"), false);
+        assertFiltering(new AndFileFilter(falseFilter, falseFilter), new File("foo.test"), false);
+        try {
+            new AndFileFilter(falseFilter, null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
+    public void testOr() throws Exception {
+        IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
+        IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
+        assertFiltering(new OrFileFilter(trueFilter, trueFilter), new File("foo.test"), true);
+        assertFiltering(new OrFileFilter(trueFilter, falseFilter), new File("foo.test"), true);
+        assertFiltering(new OrFileFilter(falseFilter, trueFilter), new File("foo.test"), true);
+        assertFiltering(new OrFileFilter(falseFilter, falseFilter), new File("foo.test"), false);
+        try {
+            new OrFileFilter(falseFilter, null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
 }
