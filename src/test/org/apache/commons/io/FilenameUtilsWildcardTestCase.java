@@ -53,7 +53,7 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertArrayEquals( new String[] { "Ad", "*", "er" }, FilenameUtils.splitOnTokens("Ad*er") );
         assertArrayEquals( new String[] { "Ad", "?", "er" }, FilenameUtils.splitOnTokens("Ad?er") );
         assertArrayEquals( new String[] { "Test", "*", "?", "One" }, FilenameUtils.splitOnTokens("Test*?One") );
-        assertArrayEquals( new String[] { "*", "*", "*", "*" }, FilenameUtils.splitOnTokens("****") );
+        assertArrayEquals( new String[] { "*" }, FilenameUtils.splitOnTokens("****") );
         assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
         assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
         assertArrayEquals( new String[] { "h", "?", "?", "*" }, FilenameUtils.splitOnTokens("h??*") );
@@ -98,6 +98,24 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertMatch("log.txt", "log?*", true);
 
         assertMatch("log.txt12", "log.txt??", true);
+        
+        assertMatch("log.log", "log**log", true);
+        assertMatch("log.log", "log**", true);
+        assertMatch("log.log", "log.**", true);
+        assertMatch("log.log", "**.log", true);
+        assertMatch("log.log", "**log", true);
+
+        assertMatch("log.log", "log*log", true);
+        assertMatch("log.log", "log*", true);
+        assertMatch("log.log", "log.*", true);
+        assertMatch("log.log", "*.log", true);
+        assertMatch("log.log", "*log", true);
+        
+        assertMatch("log.log", "*log?", false);
+        assertMatch("log.log", "*log?*", true);
+        assertMatch("log.log.abc", "*log?abc", true);
+        assertMatch("log.log.abc.log.abc", "*log?abc", true);
+        assertMatch("log.log.abc.log.abc.d", "*log?abc?d", true);
     }
 
 }
