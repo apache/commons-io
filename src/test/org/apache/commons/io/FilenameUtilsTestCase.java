@@ -29,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.8 2004/06/13 05:13:57 bayard Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.9 2004/10/24 00:10:05 martinc Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -208,9 +208,9 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
                 { "README", "" }, 
                 { "domain.dot.com", "com" }, 
                 { "image.jpeg", "jpeg" },
-                { "a.b/c", "" },
-                { "a.b/c.txt", "txt" },
-                { "a/b/c", "" },
+                { "a.b" + File.separator + "c", "" },
+                { "a.b" + File.separator + "c.txt", "txt" },
+                { "a" + File.separator + "b" + File.separator + "c", "" },
         };
         for (int i = 0; i < tests.length; i++) {
             assertEquals(tests[i][1], FilenameUtils.getExtension(tests[i][0]));
@@ -244,9 +244,9 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
                 { "README", "README" }, 
                 { "domain.dot.com", "domain.dot" }, 
                 { "image.jpeg", "image" },
-                { "a.b/c", "a.b/c" },
-                { "a.b/c.txt", "a.b/c" },
-                { "a/b/c", "a/b/c" },
+                { "a.b" + File.separator + "c", "a.b" + File.separator + "c" },
+                { "a.b" + File.separator + "c.txt", "a.b" + File.separator + "c" },
+                { "a" + File.separator + "b" + File.separator + "c", "a" + File.separator + "b" + File.separator + "c" },
         };
 
         for (int i = 0; i < tests.length; i++) {

@@ -29,7 +29,7 @@ public class FileFinderTest extends TestCase {
 
     private HashMap options;
     private FileFinder finder;
-    private String dirStr = "src/test/find-data/";
+    private String dirStr = "src" + File.separator + "test" + File.separator + "find-data" + File.separator;
     private File dir = new File(dirStr);
 
     public FileFinderTest(String name) {
@@ -61,13 +61,13 @@ public class FileFinderTest extends TestCase {
     }
 
     public void testFindPath() {
-        options.put(Finder.PATH, dirStr+"path/dir/file");
+        options.put(Finder.PATH, dirStr+"path" + File.separator + "dir" + File.separator + "file");
         File[] files = finder.find(new File(dir, "path"), options);
         assertEquals(1, files.length);
     }
 
     public void testFindIPath() {
-        options.put(Finder.IPATH, dirStr+"PAth/dIR/fILe");
+        options.put(Finder.IPATH, dirStr+"PAth" + File.separator + "dIR" + File.separator + "fILe");
         File[] files = finder.find(new File(dir, "path"), options);
         assertEquals(1, files.length);
     }
@@ -79,13 +79,13 @@ public class FileFinderTest extends TestCase {
     }
 
     public void testFindRegex() {
-        options.put(Finder.REGEX, dirStr+"regex/f.*");
+        options.put(Finder.REGEX, escapePath(dirStr+"regex" + File.separator + "f.*"));
         File[] files = finder.find(new File(dir, "regex"), options);
         assertEquals(3, files.length);
     }
 
     public void testFindIRegex() {
-        options.put(Finder.IREGEX, dirStr+"REgeX/F.*");
+        options.put(Finder.IREGEX, escapePath(dirStr+"REgeX" + File.separator + "F.*"));
         File[] files = finder.find(new File(dir, "regex"), options);
         assertEquals(3, files.length);
     }
@@ -138,6 +138,20 @@ public class FileFinderTest extends TestCase {
         options.put(Finder.CAN_READ, "false");
         File[] files = finder.find(new File(dir, "can_read"), options);
         assertEquals(0, files.length);
+    }
+
+    private static String escapePath(String text) {
+        String repl = "\\";
+        String with = "\\\\";
+
+        StringBuffer buf = new StringBuffer(text.length());
+        int start = 0, end = 0;
+        while ((end = text.indexOf(repl, start)) != -1) {
+            buf.append(text.substring(start, end)).append(with);
+            start = end + repl.length();
+        }
+        buf.append(text.substring(start));
+        return buf.toString();
     }
 
 }
