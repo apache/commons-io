@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.5 2004/01/02 08:04:09 bayard Exp $
- * $Revision: 1.5 $
- * $Date: 2004/01/02 08:04:09 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.6 2004/01/02 08:06:57 bayard Exp $
+ * $Revision: 1.6 $
+ * $Date: 2004/01/02 08:06:57 $
  *
  * ====================================================================
  *
@@ -74,7 +74,7 @@ import junit.framework.TestCase;
  * effectively tests the underlying EndianUtils Stream methods.
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.5 $ $Date: 2004/01/02 08:04:09 $
+ * @version $Revision: 1.6 $ $Date: 2004/01/02 08:06:57 $
  */
 
 public class SwappedDataInputStreamTest extends TestCase {
@@ -133,10 +133,13 @@ public class SwappedDataInputStreamTest extends TestCase {
         assertEquals( (int) 0x04030201, this.sdis.readInt() );
     }
 
-    /*
     public void testReadLine() throws IOException {
+        try {
+            String unexpected = this.sdis.readLine();
+            fail("readLine should be unsupported. ");
+        } catch(UnsupportedOperationException uoe) {
+        }
     }
-    */
 
     public void testReadLong() throws IOException {
         assertEquals( 0x0807060504030201L, this.sdis.readLong() );
