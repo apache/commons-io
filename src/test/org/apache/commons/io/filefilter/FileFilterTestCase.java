@@ -17,14 +17,16 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+
 /**
- * Used to test an unknown FileFilter
+ * Used to test FileFilterUtils.
  */
-public class FileFilterTestCase extends TestCase {
+public class FileFilterTestCase extends FileBasedTestCase {
 
     public FileFilterTestCase(String name) {
         super(name);
@@ -39,9 +41,11 @@ public class FileFilterTestCase extends TestCase {
     }
 
     public void setUp() {
+        getTestDirectory().mkdirs();
     }
 
-    public void tearDown() {
+    public void tearDown() throws Exception {
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     public void assertFiltering(IOFileFilter filter, File file, boolean expected) throws Exception {
@@ -226,6 +230,32 @@ public class FileFilterTestCase extends TestCase {
         }
     }
 
+    public void testMakeCVSAware() throws Exception {
+        IOFileFilter filter1 = FileFilterUtils.makeCVSAware(null);
+        IOFileFilter filter2 = FileFilterUtils.makeCVSAware(FileFilterUtils
+            .nameFileFilter("test-file1.txt"));
 
+        File file = new File(getTestDirectory(), "CVS");
+        file.mkdirs();
+        assertFiltering(filter1, file, false);
+        assertFiltering(filter2, file, false);
+        FileUtils.deleteDirectory(file);
+
+        file = new File(getTestDirectory(), "test-file1.txt");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, true);
+
+        file = new File(getTestDirectory(), "test-file2.log");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, false);
+
+        file = new File(getTestDirectory(), "CVS");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, false);
+    }
+         
 }
 

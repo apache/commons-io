@@ -24,11 +24,12 @@ import java.io.FilenameFilter;
  * every class you use.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.8 $ $Date: 2004/02/23 04:37:57 $
+ * @version $Id$
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
  * @author Jeremias Maerki
+ * @author Masato Tezuka
  */
 public class FileFilterUtils {
     
@@ -156,20 +157,21 @@ public class FileFilterUtils {
     //-----------------------------------------------------------------------
 
     /* Constructed on demand and then cached */
-    private static IOFileFilter cvsFilter = null;
+    private static IOFileFilter cvsFilter;
 
     /**
-     * Resturns an IOFileFilter that ignores CVS directories. You may optionally
+     * Returns an IOFileFilter that ignores CVS directories. You may optionally
      * pass in an existing IOFileFilter in which case it is extended to exclude
      * CVS directories.
-     * @param filter IOFileFilter to modify, null if a new IOFileFilter
+     * @param filter IOFileFilter to wrap, null if a new IOFileFilter
      * should be created
      * @return the requested (combined) filter
+     * @since 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(IOFileFilter filter) {
         if (cvsFilter == null) {
-            cvsFilter = andFileFilter(directoryFileFilter(), 
-                notFileFilter(nameFileFilter("CVS")));
+            cvsFilter = notFileFilter(
+                andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));
         }
         if (filter == null) {
             return cvsFilter;
