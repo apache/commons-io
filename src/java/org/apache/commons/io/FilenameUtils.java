@@ -76,9 +76,14 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.5 2003/12/30 15:23:23 jeremias Exp $
+ * @version $Id: FilenameUtils.java,v 1.6 2004/02/21 02:32:50 bayard Exp $
  */
 public class FilenameUtils {
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public FilenameUtils() { }
 
     /**
      * Check if a file exits.

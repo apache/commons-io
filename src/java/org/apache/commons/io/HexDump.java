@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.5 2003/12/30 06:50:16 bayard Exp $
- * $Revision: 1.5 $
- * $Date: 2003/12/30 06:50:16 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.6 2004/02/21 02:32:50 bayard Exp $
+ * $Revision: 1.6 $
+ * $Date: 2004/02/21 02:32:50 $
  *
  * ====================================================================
  *
@@ -70,9 +70,14 @@ import java.io.OutputStream;
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.5 $ $Date: 2003/12/30 06:50:16 $
+ * @version $Revision: 1.6 $ $Date: 2004/02/21 02:32:50 $
  */
 public class HexDump {
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public HexDump() { }
 
     /**
      * dump an array of bytes to an OutputStream

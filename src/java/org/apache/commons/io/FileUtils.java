@@ -116,9 +116,14 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.25 2003/12/30 16:27:42 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.26 2004/02/21 02:32:50 bayard Exp $
  */
 public class FileUtils {
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public FileUtils() { }
 
     /**
      * The number of bytes in a kilobyte.
