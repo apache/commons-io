@@ -29,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.5 2004/02/23 05:02:25 bayard Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.6 2004/03/12 21:44:47 jeremias Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -185,7 +185,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         String replaceWith) {
         StringBuffer sb = new StringBuffer(text);
         while (true) {
-            int idx = sb.indexOf(lookFor);
+            int idx = sb.toString().indexOf(lookFor);
             if (idx < 0) {
                 break;
             }
