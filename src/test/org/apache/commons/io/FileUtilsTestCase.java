@@ -32,7 +32,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.17 2004/04/23 22:30:42 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.18 2004/04/23 22:47:39 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -180,6 +180,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         } finally {
             fis.close();
         }
+        //TODO Maybe test copy to itself like for copyFile()
     }
 
     // forceMkdir
@@ -279,6 +280,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());    
     }
+    
+    public void testCopyToSelf() throws Exception {
+        File destination = new File(getTestDirectory(), "copy3.txt");
+        //Prepare a test file
+        FileUtils.copyFile(testFile1, destination);
+        
+        try {
+            FileUtils.copyFile(destination, destination);
+            fail("file copy to self should not be possible");
+        } catch (IOException ioe) {
+            //we want the exception, copy to self should be illegal
+        }
+    }
 
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
         File destination = new File(getTestDirectory(), "copy2.txt");
@@ -330,7 +344,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Check Full copy", destination.length() == testFile1Size);
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved", 
-            testFile1.lastModified() == destination.lastModified());*/    
+            testFile1.lastModified() == destination.lastModified());*/
+            
+        try {
+            FileUtils.copyFileToDirectory(destination, directory);
+            fail("Should not be able to copy a file into the same directory as itself");    
+        } catch (IOException ioe) {
+            //we want that, cannot copy to the same directory as the original file
+        }
     }
 
     public void testCopyFile2ToDir() throws Exception {

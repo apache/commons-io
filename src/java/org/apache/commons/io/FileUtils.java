@@ -78,7 +78,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.29 2004/03/12 22:21:38 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.30 2004/04/23 22:47:39 jeremias Exp $
  */
 public class FileUtils {
 
@@ -413,6 +413,13 @@ public class FileUtils {
         if (destination.exists() && !destination.canWrite()) {
             String message =
                 "Unable to open file " + destination + " for writing.";
+            throw new IOException(message);
+        }
+
+        //makes sure it is not the same file        
+        if (source.getCanonicalPath().equals(destination.getCanonicalPath())) {
+            String message =
+                "Unable to write file " + source + " on itself.";
             throw new IOException(message);
         }
 
