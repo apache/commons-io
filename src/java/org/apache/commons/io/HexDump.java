@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.6 2004/02/21 02:32:50 bayard Exp $
- * $Revision: 1.6 $
- * $Date: 2004/02/21 02:32:50 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.7 2004/02/23 04:27:06 bayard Exp $
+ * $Revision: 1.7 $
+ * $Date: 2004/02/23 04:27:06 $
  *
  * ====================================================================
  *
@@ -63,14 +63,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Dump data in hexadecimal format; derived from a HexDump utility I
- * wrote in June 2001
+ * Dumps data in hexadecimal format.
  *
- * Taken from the POI project
+ * Derived from a HexDump utility I wrote in June 2001.
+ *
+ * Taken from the POI project.
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.6 $ $Date: 2004/02/21 02:32:50 $
+ * @version $Revision: 1.7 $ $Date: 2004/02/23 04:27:06 $
  */
 public class HexDump {
 
