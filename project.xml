@@ -184,13 +184,6 @@
             <excludes>
                 <exclude>**/testtools/**</exclude>
             </excludes>
-
-            <resources>
-                <resource>
-                    <directory>data/test</directory>
-                </resource>
-            </resources>
-
         </unitTest>
 
         <resources>
