@@ -54,7 +54,6 @@
 package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -112,10 +111,11 @@ import java.io.Writer;
  * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
  * management hurts performance slightly (about 3%, according to some simple experiments).</p>
  *
+ * <p>Origin of code: Apache Avalon (Excalibur)</p>
+ *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.1 $ $Date: 2003/07/25 07:51:26 $
- * @since 4.0
+ * @version CVS $Revision: 1.2 $ $Date: 2003/07/25 08:17:10 $
  */
 
 /*
@@ -652,28 +652,6 @@ public final class IOUtils
     {
         output.write( input );
     }
-
-    /**
-     * Copy bytes from an <code>InputStream</code> to an
-     * <code>OutputStream</code>, with buffering.
-     * This is equivalent to passing a
-     * {@link java.io.BufferedInputStream} and
-     * {@link java.io.BufferedOutputStream} to {@link #copy(InputStream, OutputStream)},
-     * and flushing the output stream afterwards. The streams are not closed
-     * after the copy.
-     * @deprecated Buffering streams is actively harmful! See the class description as to why. Use
-     * {@link #copy(InputStream, OutputStream)} instead.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void bufferedCopy( final InputStream input, final OutputStream output )
-        throws IOException
-    {
-        final BufferedInputStream in = new BufferedInputStream( input );
-        final BufferedOutputStream out = new BufferedOutputStream( output );
-        copy( in, out );
-        out.flush();
-    }
-
 
     ///////////////////////////////////////////////////////////////
     // String -> byte[]
