@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/NullOutputStream.java,v 1.1 2003/04/04 14:03:25 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/04/04 14:03:25 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/NullOutputStream.java,v 1.2 2003/07/27 17:17:37 jeremias Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/07/27 17:17:37 $
  *
  * ====================================================================
  *
@@ -63,13 +63,11 @@ package org.apache.commons.io.output;
  
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
  * This OutputStream writes all data to the famous <b>/dev/null</b>.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: NullOutputStream.java,v 1.1 2003/04/04 14:03:25 bayard Exp $
+ * @version $Id: NullOutputStream.java,v 1.2 2003/07/27 17:17:37 jeremias Exp $
  */
 public class NullOutputStream extends OutputStream {
 
