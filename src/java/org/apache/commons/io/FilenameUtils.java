@@ -79,7 +79,7 @@ import java.util.Collection;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.31 2004/12/04 19:28:40 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.32 2004/12/10 22:36:56 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -824,6 +824,7 @@ public class FilenameUtils {
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
+     * The extension check is case sensitive on Unix and case insensitive on Windows.
      * <pre>
      * wildcardMatch("c.txt", "*.txt")      --> true
      * wildcardMatch("c.txt", "*.jpg")      --> false
@@ -837,24 +838,38 @@ public class FilenameUtils {
      * @return true if the filename matches the wilcard string
      */
     public static boolean wildcardMatch(String filename, String wildcardMatcher) {
+        if (filename == null && wildcardMatcher == null) {
+            return true;
+        }
+        if (filename == null || wildcardMatcher == null) {
+            return false;
+        }
+        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+            filename = filename.toLowerCase();
+            wildcardMatcher = wildcardMatcher.toLowerCase();
+        }
         String[] wcs = splitOnTokens(wildcardMatcher);
-  
+        boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        boolean anyChars = false;
   
         // loop whilst tokens and text left to process
         while (wcsIdx < wcs.length && textIdx < filename.length()) {
   
-            // ? so move to next text char
             if (wcs[wcsIdx].equals("?")) {
+                // ? so move to next text char
                 textIdx++;
-            } else if (!wcs[wcsIdx].equals("*")) {
+                anyChars = false;
+                
+            } else if (wcs[wcsIdx].equals("*")) {
+                // set any chars status
+                anyChars = true;
+                
+            } else {
                 // matching text token
                 if (anyChars) {
                     // any chars then try to locate text token
                     textIdx = filename.indexOf(wcs[wcsIdx], textIdx);
-  
                     if (textIdx == -1) {
                         // token not found
                         return false;
@@ -869,10 +884,8 @@ public class FilenameUtils {
   
                 // matched text token, move text index to end of matched token
                 textIdx += wcs[wcsIdx].length();
+                anyChars = false;
             }
-  
-            // set any chars status
-            anyChars = wcs[wcsIdx].equals("*");
   
             wcsIdx++;
         }
@@ -901,24 +914,24 @@ public class FilenameUtils {
     // used by wildcardMatch
     // package level so a unit test may run on this
     static String[] splitOnTokens(String text) {
-        char[] array = text.toCharArray();
         if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
             return new String[] { text };
         }
 
+        char[] array = text.toCharArray();
         ArrayList list = new ArrayList();
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < array.length; i++) {
-            if(array[i] == '?' || array[i] == '*') {
-                if(buffer.length() != 0) {
-                   list.add(buffer.toString());
-                   buffer.setLength(0);
-                }
-                list.add(new String( new char[] { array[i] } ));
-            } else {
-                buffer.append(array[i]);
-            }
-        }
+			if (array[i] == '?' || array[i] == '*') {
+				if (buffer.length() != 0) {
+					list.add(buffer.toString());
+					buffer.setLength(0);
+				}
+				list.add(new String(new char[] { array[i] }));
+			} else {
+				buffer.append(array[i]);
+			}
+		}
         if (buffer.length() != 0) {
             list.add(buffer.toString());
         }

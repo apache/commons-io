@@ -15,9 +15,13 @@
  */
 package org.apache.commons.io;
 
+import java.io.File;
+
 import junit.framework.TestCase;
 
 public class FilenameUtilsWildcardTestCase extends TestCase {
+
+    private static final boolean WINDOWS = (File.separatorChar == '\\');
 
     public FilenameUtilsWildcardTestCase(String name) {
         super(name);
@@ -28,6 +32,9 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
     //   FilenameUtils.wildcardMatch(String,String)
 
     public void testMatch() {
+        assertEquals(false, FilenameUtils.wildcardMatch(null, "Foo") );
+        assertEquals(false, FilenameUtils.wildcardMatch("Foo", null) );
+        assertEquals(true, FilenameUtils.wildcardMatch(null, null) );
         assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo") );
         assertTrue( FilenameUtils.wildcardMatch("", "") );
         assertTrue( FilenameUtils.wildcardMatch("Foo", "Fo*") );
@@ -39,6 +46,7 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertTrue( FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er") );
         assertTrue( FilenameUtils.wildcardMatch("Foo", "*Foo") );
         assertTrue( FilenameUtils.wildcardMatch("Foo", "Foo*") );
+        assertEquals(WINDOWS,  FilenameUtils.wildcardMatch("FOO", "Foo*") );
     }
 
     public void testSplitOnTokens() {
