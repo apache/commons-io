@@ -30,7 +30,7 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.12 2004/10/24 18:44:51 martinc Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.13 2004/10/30 22:16:23 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -271,6 +271,43 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
                 testsWithPaths[i][1],
                 FilenameUtils.removeExtension(testsWithPaths[i][0]));
             //assertEquals(testsWithPaths[i][1], FilenameUtils.basename(testsWithPaths[i][0]));
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    public void testSeparatorsToUnix() {
+        assertEquals(null, FilenameUtils.separatorsToUnix(null));
+        assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("/a/b/c"));
+        assertEquals("/a/b/c.txt", FilenameUtils.separatorsToUnix("/a/b/c.txt"));
+        assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("/a/b\\c"));
+        assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("\\a\\b\\c"));
+        assertEquals("D:/a/b/c", FilenameUtils.separatorsToUnix("D:\\a\\b\\c"));
+    }
+
+    public void testSeparatorsToWindows() {
+        assertEquals(null, FilenameUtils.separatorsToWindows(null));
+        assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("\\a\\b\\c"));
+        assertEquals("\\a\\b\\c.txt", FilenameUtils.separatorsToWindows("\\a\\b\\c.txt"));
+        assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("\\a\\b/c"));
+        assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("/a/b/c"));
+        assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
+    }
+
+    public void testSeparatorsToSystem() {
+        if (File.separatorChar == '/') {
+            assertEquals(null, FilenameUtils.separatorsToSystem(null));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b/c"));
+            assertEquals("/a/b/c.txt", FilenameUtils.separatorsToSystem("/a/b/c.txt"));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("/a/b\\c"));
+            assertEquals("/a/b/c", FilenameUtils.separatorsToSystem("\\a\\b\\c"));
+            assertEquals("D:/a/b/c", FilenameUtils.separatorsToSystem("D:\\a\\b\\c"));
+        } else {
+            assertEquals(null, FilenameUtils.separatorsToSystem(null));
+            assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("\\a\\b\\c"));
+            assertEquals("\\a\\b\\c.txt", FilenameUtils.separatorsToSystem("\\a\\b\\c.txt"));
+            assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("\\a\\b/c"));
+            assertEquals("\\a\\b\\c", FilenameUtils.separatorsToSystem("/a/b/c"));
+            assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToSystem("D:/a/b/c"));
         }
     }
 
