@@ -55,38 +55,38 @@ package org.apache.commons.io;
  */
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.FilterOutputStream;
+import java.io.InputStream;
+import java.io.FilterInputStream;
 
 /**
  * Used in debugging, it counts the number of bytes that pass 
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.2 2002/10/18 22:01:33 bayard Exp $
+ * @version $Id: CountingInputStream.java,v 1.1 2002/10/18 22:01:33 bayard Exp $
  */
-public class CountingOutputStream extends FilterOutputStream {
+public class CountingInputStream extends FilterInputStream {
 
     private int count;
 
-    public CountingOutputStream( OutputStream out ) {
-        super(out);
+    public CountingInputStream( InputStream in ) {
+        super(in);
     }
 
-    public void write(byte[] b) throws IOException {
+    public int read(byte[] b) throws IOException {
         count += b.length;
-        super.write(b);
+        return super.read(b);
     }
 
-    public void write(byte[] b, int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         count += len;
-        super.write(b, off, len);
+        return super.read(b, off, len);
     }
 
     /// TODO: Decide if this should increment by 2, or 4, or 1 etc.
-    public void write(int b) throws IOException {
+    public int read() throws IOException {
         count++;
-        super.write(b);
+        return super.read();
     }
 
     /**
