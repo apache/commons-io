@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.3 2003/11/22 20:09:23 jeremias Exp $
- * $Revision: 1.3 $
- * $Date: 2003/11/22 20:09:23 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/testtools/FileBasedTestCase.java,v 1.4 2003/12/29 03:28:53 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2003/12/29 03:28:53 $
  *
  * ====================================================================
  * The Apache Software License, Version 1.1
@@ -104,7 +104,7 @@ public abstract class FileBasedTestCase extends TestCase {
         try {
             generateTestData(output, size);
         } finally {
-            IOUtils.shutdownStream(output);
+            IOUtils.closeQuietly(output);
         }
     }
     
