@@ -31,7 +31,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.15 2004/03/14 20:59:21 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.16 2004/04/18 07:29:00 bayard Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -389,30 +389,32 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         filename = replaceAll(filename, "%20", " ");
         String filename2 = "test2.txt";
 
-        assertTrue(
-            "test.txt extension == \"txt\"",
-            FilenameUtils.getExtension(filename).equals("txt"));
+//1.0 These lines commented out as FilenameUtils not in 1.0
+//1.0        assertTrue(
+//1.0            "test.txt extension == \"txt\"",
+//1.0            FilenameUtils.getExtension(filename).equals("txt"));
 
-        assertTrue(
-            "Test file does not exist: " + filename,
-            FilenameUtils.fileExists(filename));
+//1.0        assertTrue(
+//1.0            "Test file does not exist: " + filename,
+//1.0            FilenameUtils.fileExists(filename));
 
-        assertTrue(
-            "Second test file does not exist",
-            !FilenameUtils.fileExists(filename2));
+//1.0        assertTrue(
+//1.0            "Second test file does not exist",
+//1.0            !FilenameUtils.fileExists(filename2));
 
         FileUtils.writeStringToFile(new File(filename2), filename, "UTF-8");
-        assertTrue("Second file was written", FilenameUtils.fileExists(filename2));
+//1.0        assertTrue("Second file was written", FilenameUtils.fileExists(filename2));
 
         String file2contents = FileUtils.readFileToString(new File(filename2), "UTF-8");
         assertTrue(
             "Second file's contents correct",
             FileUtils.readFileToString(new File(filename2), "UTF-8").equals(file2contents));
 
-        FilenameUtils.fileDelete(filename2);
-        assertTrue(
-            "Second test file does not exist",
-            !FilenameUtils.fileExists(filename2));
+          new File(filename2).delete();   // remove after 1.0
+//1.0        FilenameUtils.fileDelete(filename2);
+//1.0        assertTrue(
+//1.0            "Second test file does not exist",
+//1.0            !FilenameUtils.fileExists(filename2));
 
         String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
         assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
