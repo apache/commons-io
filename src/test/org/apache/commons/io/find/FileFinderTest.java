@@ -39,7 +39,7 @@ public class FileFinderTest extends TestCase {
     public void setUp() {
         finder = new FileFinder();
         options = new HashMap();
-        options.put(Finder.NOT+Finder.PATH, "*.svn*");
+        options.put(Finder.NOT+Finder.PATH, "*CVS*");
         // uncomment for debugging
 //        finder.addFindListener( new DebugListener() );
     }
@@ -102,10 +102,12 @@ public class FileFinderTest extends TestCase {
         assertEquals(1, files.length);
     }
 
+    // finds one in file and also one in dir as 
+    // CVS needs a file in dir for people to commonly have it checked out
     public void testFindTypeF() {
         options.put(Finder.TYPE, "f");
         File[] files = finder.find(new File(dir, "type"), options);
-        assertEquals(1, files.length);
+        assertEquals(2, files.length);
     }
 
     public void testFindTypeD() {
