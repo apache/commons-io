@@ -25,7 +25,7 @@ import java.io.File;
  * otherwise your class will infinitely loop.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.9 $ $Date: 2004/02/23 04:37:57 $
+ * @version $Revision: 1.10 $ $Date: 2004/10/24 16:50:23 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -50,8 +50,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @return true if this file matches the test
      */
     public boolean accept(File dir, String name) {
-        String filename = dir.getName() + File.separator + name;
-        return accept(new File(filename));
+        return accept(new File(dir, name));
     }
 
 }
