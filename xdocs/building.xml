@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!--
+    Building IO
+    $Id: building.xml,v 1.1 2004/01/16 17:05:03 jeremias Exp $
+-->
+
+<document>
+  <body>
+
+    <section name="Overview">
+        <p>
+            Jakarta Commons IO uses <a href="http://maven.apache.org">Maven</a> as 
+            build system. Please install Maven prior to attempting a build of IO.
+        </p>
+    </section>
+
+    <section name="Maven Goals">
+    
+        <subsection name="Building a JAR file">
+            <p>
+                Change into IO's root directory and run "maven jar" to build the JAR 
+                file. After a successful build you will find it in the "target" 
+                subdirectory.
+            </p>
+        </subsection>
+
+        <subsection name="Other Goals">
+            <p>
+                To build the Javadocs, run "maven javadoc". The result will be in 
+                "target/docs/apidocs".
+            </p>
+            <p>
+                To build the full website, run "maven site". The result will be in 
+                "target/docs".
+            </p>
+        </subsection>
+
+    </section>
+
+  </body>
+
+</document>

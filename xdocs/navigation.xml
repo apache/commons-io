@@ -16,6 +16,8 @@
 
         <menu name="Commons IO">
             <item name="Home" href="index.html"/>
+            <item name="Best Practices" href="bestpractices.html"/>
+            <item name="Building" href="building.html"/>
             <item name="Tasks" href="tasks.html"/>
         </menu>
 
