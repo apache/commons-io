@@ -69,13 +69,13 @@ public class FileFinder implements Finder {
         return find(directory, new java.util.HashMap());
     }
 
-    // add maxdepth and mindepth somehow
+    // TODO: add maxdepth and mindepth somehow
     public File[] find(File directory, Map options) {
         notifyDirectoryStarted(directory);
 
         boolean depthFirst = toBoolean(options.get(Finder.DEPTH));
 
-        // to implement
+        // TODO: to implement
         int maxDepth = toInt(options.get(Finder.MAXDEPTH));
         int minDepth = toInt(options.get(Finder.MINDEPTH));
         boolean ignoreHiddenDirs = toBoolean(options.get(Finder.IGNORE_HIDDEN_DIRS));
