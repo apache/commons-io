@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.2 2002/12/07 20:27:39 bayard Exp $
- * $Revision: 1.2 $
- * $Date: 2002/12/07 20:27:39 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/filefilter/FileFilterTestCase.java,v 1.3 2002/12/25 22:16:05 scolebourne Exp $
+ * $Revision: 1.3 $
+ * $Date: 2002/12/25 22:16:05 $
  *
  * ====================================================================
  *
@@ -117,7 +117,7 @@ public final class FileFilterTestCase
     }
 
     public void testNull() throws Exception {
-        FileFilter filter = new NullFileFilter();
+        FileFilter filter = FileFilterUtils.nullFileFilter();
         assertFiltering( filter, new File("foo.test"), true);
         assertFiltering( filter, new File("foo"), true);
         assertFiltering( filter, new File(""), true);
