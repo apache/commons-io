@@ -1,9 +1,0 @@
-build.properties
-dist
-target
-io.ipr
-.project
-.classpath
-.checkstyle
-bin
-*.log
