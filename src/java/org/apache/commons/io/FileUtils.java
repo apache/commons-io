@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.38 2004/10/24 04:20:06 martinc Exp $
+ * @version $Id: FileUtils.java,v 1.39 2004/10/29 21:34:56 bayard Exp $
  */
 public class FileUtils {
 
@@ -606,7 +606,7 @@ public class FileUtils {
      * @param file The file
      * @param seconds The maximum time in seconds to wait.
      * @return True if file exists.
-     * TODO Needs a clearer javadoc to see its real purpose for someone without
+     * @todo Needs a clearer javadoc to see its real purpose for someone without
      *       NFS-knowledge.
      */
     public static boolean waitFor(File file, int seconds) {

@@ -55,7 +55,7 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.16 2004/10/29 18:53:56 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.17 2004/10/29 21:34:56 bayard Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -274,8 +274,8 @@ public class FilenameUtils {
      *
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
+     * @todo Make this non-unix specific
      */
-    // TODO: Make this non-unix specific
     public static String normalize(String path) {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
@@ -340,8 +340,8 @@ public class FilenameUtils {
      * @param lookupPath the base path to attach to
      * @param path path the second path to attach to the first
      * @return The concatenated paths, or null if error occurs
+     * @todo UNIX/Windows only. Is this a problem?
      */
-    // TODO: UNIX/Windows only. Is this a problem?
     public static String catPath(String lookupPath, String path) {
         // Cut off the last slash and everything beyond
         int index = indexOfLastPathSeparator(lookupPath);
@@ -391,8 +391,8 @@ public class FilenameUtils {
      * <code>filename</code> is relative.
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
+     * @todo Decide whether this is worth keeping?
      */
-    // TODO: Decide whether this is worth keeping?
     public static File resolveFile(File baseFile, String filename) {
         String filenm = filename;
         if ('/' != File.separatorChar) {
