@@ -61,7 +61,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Vector;
 
-/*
+/**
  * This class provides basic facilities for manipulating files and file paths.
  *
  * <h3>Path-related methods</h3>
@@ -89,10 +89,13 @@ import java.util.Vector;
  * </p>
  *
  * Common {@link java.io.File} manipulation routines.
- *
- * Taken from the commons-utils repo.
- * Also code from Alexandria's FileUtils.
- * And from Avalon Excalibur's IO.
+ * 
+ * <h3>Origin of code</h3>
+ * <ul>
+ *   <li>commons-utils repo</li>
+ *   <li>Alexandria's FileUtils.</li>
+ *   <li>Avalon Excalibur's IO.</li>
+ * </ul>
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
@@ -100,7 +103,7 @@ import java.util.Vector;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id: FileUtils.java,v 1.11 2003/07/25 07:51:24 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.12 2003/07/27 17:20:23 jeremias Exp $
  */
 public class FileUtils {
 
@@ -118,6 +121,14 @@ public class FileUtils {
      * The number of bytes in a gigabyte.
      */
     public static final int ONE_GB = ONE_KB * ONE_MB;
+
+    /**
+     * Private constructor to prevent instantiation.
+     *
+     */
+    private FileUtils()
+    {
+    }
 
     /**
      * Returns a human-readable version of the file size (original is in
@@ -145,6 +156,7 @@ public class FileUtils {
     /**
      * Returns the directory path portion of a file specification string.
      * Matches the equally named unix command.
+     * @param filename filename to inspect
      * @return The directory portion excluding the ending file separator.
      */
     public static String dirname(String filename) {
@@ -154,6 +166,7 @@ public class FileUtils {
 
     /**
      * Returns the filename portion of a file specification string.
+     * @param filename filename to inspect
      * @return The filename string with extension.
      */
     public static String filename(String filename) {
@@ -164,6 +177,7 @@ public class FileUtils {
     /**
      * Returns the filename portion of a file specification string.
      * Matches the equally named unix command.
+     * @param filename filename to inspect
      * @return The filename string without extension.
      */
     public static String basename(String filename) {
@@ -173,6 +187,10 @@ public class FileUtils {
     /**
      * Returns the filename portion of a file specification string.
      * Matches the equally named unix command.
+     * @param filename filename to inspect
+     * @param suffix additional remaining portion of name that if matches will 
+     * be removed
+     * @return The filename string without the suffix.
      */
     public static String basename(String filename, String suffix) {
         int i = filename.lastIndexOf(File.separator) + 1;
@@ -192,6 +210,8 @@ public class FileUtils {
      * Returns the extension portion of a file specification string.
      * This everything after the last dot '.' in the filename (NOT including
      * the dot).
+     * @param filename filename to inspect
+     * @return the extension
      */
     public static String extension(String filename) {
         int lastDot = filename.lastIndexOf('.');
@@ -215,26 +235,22 @@ public class FileUtils {
     }
 
     /**
-     * Reads the contents of a file.
+     * Reads the contents of a file (using the default encoding).
      *
      * @param fileName The name of the file to read.
      * @return The file contents or null if read failed.
+     * @throws IOException in case of an I/O error
+     * TODO This method should probably be removed or rethought. 
+     * Because it uses the default encoding only it should probably not be 
+     * used at all (platform-dependency)
      */
-    public static String fileRead(String fileName) throws IOException {
-        StringBuffer buf = new StringBuffer();
-
+    public static String fileRead(final String fileName) throws IOException {
         FileInputStream in = new FileInputStream(fileName);
-
-        int count;
-        byte[] b = new byte[512];
-        while ((count = in.read(b)) > 0)  // blocking read
-        {
-            buf.append(new String(b, 0, count));
+        try {
+            return IOUtils.toString(in);
+        } finally {
+            IOUtils.shutdownStream(in);
         }
-
-        in.close();
-
-        return buf.toString();
     }
 
     /**
@@ -242,11 +258,18 @@ public class FileUtils {
      *
      * @param fileName The name of the file to write.
      * @param data The content to write to the file.
+     * @throws IOException in case of an I/O error
+     * TODO This method should probably be removed or rethought. 
+     * Because it uses the default encoding only it should probably not be 
+     * used at all (platform-dependency)
      */
-    public static void fileWrite(String fileName, String data) throws Exception {
+    public static void fileWrite(String fileName, String data) throws IOException {
         FileOutputStream out = new FileOutputStream(fileName);
-        out.write(data.getBytes());
-        out.close();
+        try {
+            out.write(data.getBytes());
+        } finally {
+            IOUtils.shutdownStream(out);
+        }
     }
     
     /**
@@ -257,6 +280,7 @@ public class FileUtils {
      * @param inFileName the file to copy
      * @param outFileName the file to copy to
      * @throws Exception if fileRead or fileWrite throw it
+     * TODO This method is not a good idea. It doesn't do a binary copy. DELETE.
      */
     public static void fileCopy(String inFileName, String outFileName) throws
         Exception
@@ -281,6 +305,7 @@ public class FileUtils {
      * @param fileName The name of the file.
      * @param seconds The maximum time in seconds to wait.
      * @return True if file exists.
+     * TODO Does this method make sense? Does it behave as it should?
      */
     public static boolean waitFor(String fileName, int seconds) {
         File file = new File(fileName);
@@ -319,6 +344,7 @@ public class FileUtils {
      *
      * TODO Should an ignore list be passed in?
      * TODO Should a recurse flag be passed in?
+     * TODO Should be rewritten using the filefilter package.
      *
      * The given extensions should be like "java" and not like ".java"
      */
@@ -414,7 +440,9 @@ public class FileUtils {
     }
 
     /**
-     * Simple way to make a directory
+     * Simple way to make a directory. It also creates the parent directories
+     * if necessary.
+     * @param dir directory to create
      */
     public static void mkdir(String dir) {
         File file = new File(dir);
@@ -426,19 +454,12 @@ public class FileUtils {
 /* *** AVALON CODE *** */
 
     /**
-     * Private constructor to prevent instantiation.
-     *
-     */
-    private FileUtils()
-    {
-    }
-
-    /**
      * Compare the contents of two files to determine if they are equal or not.
      *
      * @param file1 the first file
      * @param file2 the second file
      * @return true if the content of the files are equal or they both don't exist, false otherwise
+     * @throws IOException in case of an I/O error
      */
     public static boolean contentEquals( final File file1, final File file2 )
         throws IOException
@@ -593,6 +614,7 @@ public class FileUtils {
      * </pre>
      *
      * @param filepath the filepath
+     * @param fileSeparatorChar the file separator character to use
      * @return the filename minus path
      */
     public static String removePath( final String filepath, final char fileSeparatorChar )
@@ -634,6 +656,7 @@ public class FileUtils {
      * </pre>
      *
      * @param filepath the filepath
+     * @param fileSeparatorChar the file separator character to use
      * @return the filename minus path
      */
     public static String getPath( final String filepath, final char fileSeparatorChar )
@@ -970,6 +993,8 @@ public class FileUtils {
 
     /**
      * Delete a file. If file is directory delete it and all sub-directories.
+     * @param file file or directory to delete.
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDelete( final String file )
         throws IOException
@@ -979,6 +1004,8 @@ public class FileUtils {
 
     /**
      * Delete a file. If file is directory delete it and all sub-directories.
+     * @param file file or directory to delete.
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDelete( final File file )
         throws IOException
@@ -1001,6 +1028,8 @@ public class FileUtils {
     /**
      * Schedule a file to be deleted when JVM exits.
      * If file is directory delete it and all sub-directories.
+     * @param file file or directory to delete.
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDeleteOnExit( final File file )
         throws IOException
@@ -1017,6 +1046,8 @@ public class FileUtils {
 
     /**
      * Recursively schedule directory for deletion on JVM exit.
+     * @param directory directory to delete.
+     * @throws IOException in case deletion is unsuccessful
      */
     private static void deleteDirectoryOnExit( final File directory )
         throws IOException
@@ -1032,6 +1063,8 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     * @param directory directory to clean.
+     * @throws IOException in case cleaning is unsuccessful
      */
     private static void cleanDirectoryOnExit( final File directory )
         throws IOException
@@ -1073,25 +1106,27 @@ public class FileUtils {
 
     /**
      * Make a directory. If there already exists a file with specified name or
-     * the directory is unable to be created then an exception is thrown.
+     * the directory cannot be created then an exception is thrown.
+     * @param directory directory to create
+     * @throws IOException if the directory cannot be created.
      */
-    public static void forceMkdir( final File file )
+    public static void forceMkdir( final File directory )
         throws IOException
     {
-        if( file.exists() )
+        if( directory.exists() )
         {
-            if( file.isFile() )
+            if( directory.isFile() )
             {
-                final String message = "File " + file + " exists and is " +
+                final String message = "File " + directory + " exists and is " +
                     "not a directory. Unable to create directory.";
                 throw new IOException( message );
             }
         }
         else
         {
-            if( false == file.mkdirs() )
+            if( false == directory.mkdirs() )
             {
-                final String message = "Unable to create directory " + file;
+                final String message = "Unable to create directory " + directory;
                 throw new IOException( message );
             }
         }
@@ -1099,6 +1134,8 @@ public class FileUtils {
 
     /**
      * Recursively delete a directory.
+     * @param directory directory to delete
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void deleteDirectory( final String directory )
         throws IOException
@@ -1108,6 +1145,8 @@ public class FileUtils {
 
     /**
      * Recursively delete a directory.
+     * @param directory directory to delete
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void deleteDirectory( final File directory )
         throws IOException
@@ -1128,6 +1167,8 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     * @param directory directory to clean
+     * @throws IOException in case cleaning is unsuccessful
      */
     public static void cleanDirectory( final String directory )
         throws IOException
@@ -1137,6 +1178,8 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     * @param directory directory to clean
+     * @throws IOException in case cleaning is unsuccessful
      */
     public static void cleanDirectory( final File directory )
         throws IOException
@@ -1176,8 +1219,9 @@ public class FileUtils {
     }
 
     /**
-     * Recursively count size of a directory.
+     * Recursively count size of a directory (sum of the length of all files).
      *
+     * @param directory directory to inspect
      * @return size of directory in bytes.
      */
     public static long sizeOfDirectory( final String directory )
@@ -1186,8 +1230,9 @@ public class FileUtils {
     }
 
     /**
-     * Recursively count size of a directory.
+     * Recursively count size of a directory (sum of the length of all files).
      *
+     * @param directory directory to inspect
      * @return size of directory in bytes.
      */
     public static long sizeOfDirectory( final File directory )
