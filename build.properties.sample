@@ -1,8 +1,0 @@
-# build.properties.sample - Sample build.properties for "io"
-
-# Base properties for expansion below
-commons.home=../../jakarta-commons
-junit.home=/usr/local/junit3.7
-
-# External packages
-junit.jar=${junit.home}/junit.jar
