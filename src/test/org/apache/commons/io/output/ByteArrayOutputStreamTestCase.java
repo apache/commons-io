@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.4 2003/12/30 07:00:04 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/12/30 07:00:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.5 2003/12/30 15:25:22 jeremias Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/12/30 15:25:22 $
  *
  * ====================================================================
  *
@@ -72,7 +72,7 @@ import junit.framework.TestCase;
  */
 public class ByteArrayOutputStreamTestCase extends TestCase {
 
-    private static byte[] DATA;
+    private static final byte[] DATA;
     
     static {
         DATA = new byte[64];
