@@ -65,13 +65,11 @@ import java.io.Writer;
  * to append), and to use the value of the system property
  * <code>java.io.tmpdir</code> for the lock file directory.
  *
- * Borrowed from the commons-util repo.
- *
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @version $Id: LockableFileWriter.java,v 1.3 2003/10/13 07:04:31 rdonkin Exp $
+ * @version $Id: LockableFileWriter.java,v 1.4 2003/11/27 20:50:03 bayard Exp $
  */
 public class LockableFileWriter extends Writer {
 
