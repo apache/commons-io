@@ -1,0 +1,83 @@
+ <!--
+   Copyright 2002-2004 The Apache Software Foundation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+  -->
+<project
+    xmlns:j="jelly:core"
+    xmlns:ant="jelly:ant">
+
+  <!-- ============== DIST ================== -->
+  <!-- Copied from Commons-Collections        -->
+  <postGoal name="dist:prepare-bin-filesystem">
+    <j:set var="maven.dist.bin.assembly.dir" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.dist.bin.assembly.dir')}" />
+    
+    <!-- Copy Files -->
+    <ant:copy todir="${maven.dist.bin.assembly.dir}">
+      <ant:fileset dir=".">
+        <ant:include name="RELEASE-NOTES.html"/>
+        <ant:include name="NOTICE.txt"/>
+      </ant:fileset>
+    </ant:copy>
+
+    <!-- Copy Jars -->
+    <ant:copy todir="${maven.dist.bin.assembly.dir}">
+      <ant:fileset dir="${maven.build.dir}">
+        <ant:include name="*.jar"/>
+      </ant:fileset>
+    </ant:copy>
+
+  </postGoal>
+  
+  <postGoal name="dist:prepare-src-filesystem">
+    <j:set var="maven.dist.src.assembly.dir" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.dist.src.assembly.dir')}" />
+    
+    <!-- Copy Files -->
+    <ant:copy todir="${maven.dist.src.assembly.dir}">
+      <ant:fileset dir=".">
+        <ant:include name="RELEASE-NOTES.html"/>
+        <ant:include name="NOTICE.txt"/>
+        <ant:include name="PROPOSAL.html"/>
+        <ant:include name="STATUS.html"/>
+      </ant:fileset>
+    </ant:copy>
+
+    <!-- Copy Jars -->
+    <ant:copy todir="${maven.dist.src.assembly.dir}">
+      <ant:fileset dir="${maven.build.dir}">
+        <ant:include name="*.jar"/>
+      </ant:fileset>
+    </ant:copy>
+    
+    <!-- Copy XDocs -->
+    <ant:copy todir="${maven.dist.src.assembly.dir}/xdocs">
+      <ant:fileset dir="xdocs" />
+    </ant:copy>
+    
+  </postGoal>
+  
+  <postGoal name="dist:build-bin">
+    <j:set var="distDir" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.dist.dir')}"/>
+    <j:set var="finalName" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.final.name')}"/>
+    <ant:checksum file="${distDir}/${finalName}.tar.gz"/>
+    <ant:checksum file="${distDir}/${finalName}.zip"/>
+  </postGoal>
+  
+  <postGoal name="dist:build-src">
+    <j:set var="distDir" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.dist.dir')}"/>
+    <j:set var="finalName" value="${pom.getPluginContext('maven-dist-plugin').getVariable('maven.final.name')}"/>
+    <ant:checksum file="${distDir}/${finalName}-src.tar.gz"/>
+    <ant:checksum file="${distDir}/${finalName}-src.zip"/>
+  </postGoal>
+  
+</project>
