@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.8 2004/01/02 06:44:26 bayard Exp $
- * $Revision: 1.8 $
- * $Date: 2004/01/02 06:44:26 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.9 2004/01/02 06:44:54 bayard Exp $
+ * $Revision: 1.9 $
+ * $Date: 2004/01/02 06:44:54 $
  *
  * ====================================================================
  *
@@ -64,7 +64,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.8 $ $Date: 2004/01/02 06:44:26 $
+ * @version $Revision: 1.9 $ $Date: 2004/01/02 06:44:54 $
  */
 public class EndianUtilsTest extends TestCase {
 
@@ -143,7 +143,6 @@ public class EndianUtilsTest extends TestCase {
 
     public void testReadSwappedInteger() {
         byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
-        int ln = EndianUtils.readSwappedInteger( bytes, 0 );
         assertEquals( 0x01020304, EndianUtils.readSwappedInteger( bytes, 0 ) );
     }
 
