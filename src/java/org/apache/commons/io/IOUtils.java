@@ -135,20 +135,25 @@ import java.io.Writer;
  * 14    copy        byte[]              OutputStream    (trivial)
  * </pre>
  *
- * <p>Note that only the first two methods shuffle bytes; the rest use these 
- * two, or (if possible) copy using native Java copy methods. As there are 
- * method variants to specify buffer size and encoding, each row may 
+ * <p>Note that only the first two methods shuffle bytes; the rest use these
+ * two, or (if possible) copy using native Java copy methods. As there are
+ * method variants to specify buffer size and encoding, each row may
  * correspond to up to 4 methods.</p>
  *
  * <p>Origin of code: Apache Avalon (Excalibur)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.4 $ $Date: 2003/07/29 13:07:39 $
+ * @version CVS $Revision: 1.5 $ $Date: 2003/08/21 18:40:48 $
  */
 public final class IOUtils
 {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+
+    /**
+     * Instances should NOT be constructed in standard programming.
+     */
+    public IOUtils() {}
 
     /**
      * Unconditionally close an <code>Reader</code>.
@@ -246,6 +251,7 @@ public final class IOUtils
      * @param output the <code>OutputStream</code> to write to
      * @return the number of bytes copied
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, OutputStream)}
      */
     public static int copy( final InputStream input, final OutputStream output )
         throws IOException
@@ -260,6 +266,7 @@ public final class IOUtils
      * @param bufferSize Size of internal buffer to use.
      * @return the number of bytes copied
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, OutputStream, int)}
      */
     public static int copy( final InputStream input,
                              final OutputStream output,
@@ -283,6 +290,7 @@ public final class IOUtils
      * @param output the <code>Writer</code> to write to
      * @return the number of characters copied
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(Reader, Writer)}
      */
     public static int copy( final Reader input, final Writer output )
         throws IOException
@@ -297,6 +305,7 @@ public final class IOUtils
      * @param bufferSize Size of internal buffer to use.
      * @return the number of characters copied
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(Reader, Writer, int)}
      */
     public static int copy( final Reader input, final Writer output, final int bufferSize )
         throws IOException
@@ -328,6 +337,7 @@ public final class IOUtils
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer)}
      */
     public static void copy( final InputStream input, final Writer output )
         throws IOException
@@ -343,6 +353,7 @@ public final class IOUtils
      * @param output the <code>Writer</code> to write to
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, int)}
      */
     public static void copy( final InputStream input, final Writer output, final int bufferSize )
         throws IOException
@@ -360,6 +371,7 @@ public final class IOUtils
      * <a href="http://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, String)}
      */
     public static void copy( final InputStream input, final Writer output, final String encoding )
         throws IOException
@@ -378,6 +390,7 @@ public final class IOUtils
      *        Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, String, int)}
      */
     public static void copy( final InputStream input,
                              final Writer output,
@@ -501,6 +514,7 @@ public final class IOUtils
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(Reader, OutputStream)}
      */
     public static void copy( final Reader input, final OutputStream output )
         throws IOException
@@ -515,6 +529,7 @@ public final class IOUtils
      * @param output the <code>OutputStream</code> to write to
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(Reader, OutputStream, int)}
      */
     public static void copy( final Reader input, final OutputStream output, final int bufferSize )
         throws IOException
@@ -601,6 +616,7 @@ public final class IOUtils
      * @param input the <code>String</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(String, OutputStream)}
      */
     public static void copy( final String input, final OutputStream output )
         throws IOException
@@ -615,6 +631,7 @@ public final class IOUtils
      * @param output the <code>OutputStream</code> to write to
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(String, OutputStream, int)}
      */
     public static void copy( final String input, final OutputStream output, final int bufferSize )
         throws IOException
@@ -637,6 +654,7 @@ public final class IOUtils
      * @param input the <code>String</code> to read from
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(String, Writer)}
      */
     public static void copy( final String input, final Writer output )
         throws IOException
@@ -691,6 +709,7 @@ public final class IOUtils
      * @param input the byte array to read from
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer)}
      */
     public static void copy( final byte[] input, final Writer output )
         throws IOException
@@ -706,6 +725,7 @@ public final class IOUtils
      * @param output the <code>Writer</code> to write to
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, int)}
      */
     public static void copy( final byte[] input, final Writer output, final int bufferSize )
         throws IOException
@@ -723,6 +743,7 @@ public final class IOUtils
      * <a href="http://www.iana.org/assignments/character-sets">IANA
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, String)}
      */
     public static void copy( final byte[] input, final Writer output, final String encoding )
         throws IOException
@@ -741,6 +762,7 @@ public final class IOUtils
      *        Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, String, int)}
      */
     public static void copy( final byte[] input,
                              final Writer output,
@@ -829,6 +851,7 @@ public final class IOUtils
      * @param input the byte array to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], OutputStream)}
      */
     public static void copy( final byte[] input, final OutputStream output )
         throws IOException
@@ -842,6 +865,7 @@ public final class IOUtils
      * @param output the <code>OutputStream</code> to write to
      * @param bufferSize Size of internal buffer to use.
      * @throws IOException In case of an I/O problem
+     * @deprecated Replaced by {@link CopyUtils#copy(byte[], OutputStream, int)}
      */
     public static void copy( final byte[] input,
                              final OutputStream output,
