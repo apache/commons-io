@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.4 2003/12/30 06:55:59 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/12/30 06:55:59 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/output/ByteArrayOutputStream.java,v 1.5 2003/12/30 15:19:45 jeremias Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/12/30 15:19:45 $
  *
  * ====================================================================
  *
@@ -87,11 +87,9 @@ import java.util.List;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: ByteArrayOutputStream.java,v 1.4 2003/12/30 06:55:59 bayard Exp $
+ * @version $Id: ByteArrayOutputStream.java,v 1.5 2003/12/30 15:19:45 jeremias Exp $
  */
 public class ByteArrayOutputStream extends OutputStream {
-
-    private static boolean DEBUG = false;
 
     private List buffers = new java.util.ArrayList();
     private int currentBufferIndex;
@@ -132,17 +130,14 @@ public class ByteArrayOutputStream extends OutputStream {
     }*/
     
     private void needNewBuffer(int newcount) {
-        if (DEBUG) System.out.println("Need new buffer: newcount=" + newcount
-                + " curBufIdx=" + currentBufferIndex
-                + " buffers=" + buffers.size());
         if (currentBufferIndex < buffers.size() - 1) {
+            //Recycling old buffer
             filledBufferSum += currentBuffer.length;
             
             currentBufferIndex++;
             currentBuffer = getBuffer(currentBufferIndex);
-            if (DEBUG) System.out.println("-->Recycling old buffer: size=" 
-                        + currentBuffer.length);
         } else {
+            //Creating new buffer
             int newBufferSize;
             if (currentBuffer == null) {
                 newBufferSize = newcount;
@@ -154,7 +149,6 @@ public class ByteArrayOutputStream extends OutputStream {
                 filledBufferSum += currentBuffer.length;
             }
             
-            if (DEBUG) System.out.println("-->Adding new buffer: size=" + newBufferSize);
             currentBufferIndex++;
             currentBuffer = new byte[newBufferSize];
             buffers.add(currentBuffer);
@@ -174,16 +168,11 @@ public class ByteArrayOutputStream extends OutputStream {
         } else if (len == 0) {
             return;
         }
-        if (DEBUG) System.out.println("------------------write("+len+" bytes)");
         int newcount = count + len;
         int remaining = len;
         int inBufferPos = count - filledBufferSum;
         while (remaining > 0) {
             int part = Math.min(remaining, currentBuffer.length - inBufferPos);
-            if (DEBUG) System.out.println("Writing " + part 
-                    + " bytes at pos " + inBufferPos + " of buffer "
-                    + currentBuffer + " len=" + currentBuffer.length
-                    + " idx=" + currentBufferIndex);
             System.arraycopy(b, off + len - remaining, currentBuffer, inBufferPos, part);
             remaining -= part;
             if (remaining > 0) {
