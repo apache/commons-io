@@ -119,9 +119,8 @@ public class DeferredFileOutputStream
      */
     protected void thresholdReached() throws IOException
     {
-        byte[] data = memoryOutputStream.toByteArray();
         FileOutputStream fos = new FileOutputStream(outputFile);
-        fos.write(data);
+        memoryOutputStream.writeTo(fos);
         diskOutputStream = fos;
         currentOutputStream = fos;
         memoryOutputStream = null;
