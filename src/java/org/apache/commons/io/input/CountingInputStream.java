@@ -62,7 +62,7 @@ import java.io.FilterInputStream;
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingInputStream.java,v 1.4 2003/11/23 09:18:55 bayard Exp $
+ * @version $Id: CountingInputStream.java,v 1.5 2003/11/23 09:20:20 bayard Exp $
  */
 public class CountingInputStream extends ProxyInputStream {
 
@@ -79,20 +79,20 @@ public class CountingInputStream extends ProxyInputStream {
     /** @see java.io.InputStream#read(byte[]) */
     public int read(byte[] b) throws IOException {
         int found = super.read(b);
-        count += found;
+        this.count += found;
         return found;
     }
 
     /** @see java.io.InputStream#read(byte[], int, int) */
     public int read(byte[] b, int off, int len) throws IOException {
         int found = super.read(b, off, len);
-        count += found;
+        this.count += found;
         return found;
     }
 
     /** @see java.io.InputStream#read() */
     public int read() throws IOException {
-        count++;
+        this.count++;
         return super.read();
     }
 
