@@ -78,7 +78,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.28 2004/03/12 21:44:25 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.29 2004/03/12 22:21:38 jeremias Exp $
  */
 public class FileUtils {
 
@@ -332,6 +332,7 @@ public class FileUtils {
      * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
      * (and any parent directories) will be created. If a file <code>source</code> in
      * <code>destinationDirectory</code> exists, it will be overwritten.
+     * The copy will have the same file date as the original.
      *
      * @param source An existing <code>File</code> to copy.
      * @param destinationDirectory A directory to copy <code>source</code> into.
@@ -350,13 +351,14 @@ public class FileUtils {
             throw new IllegalArgumentException("Destination is not a directory");
         }
 
-        copyFile(source, new File(destinationDirectory, source.getName()));
+        copyFile(source, new File(destinationDirectory, source.getName()), true);
     }
 
     /**
      * Copy file from source to destination. The directories up to 
      * <code>destination</code> will be created if they don't already exist. 
      * <code>destination</code> will be overwritten if it already exists.
+     * The copy will have the same file date as the original.
      *
      * @param source An existing non-directory <code>File</code> to copy 
      * bytes from.
@@ -370,7 +372,31 @@ public class FileUtils {
      * (use {@link #copyFileToDirectory}).
      */
     public static void copyFile(File source, File destination)
-        throws IOException {
+                throws IOException {
+        copyFile(source, destination, true);
+    }
+                
+                
+    /**
+     * Copy file from source to destination. The directories up to 
+     * <code>destination</code> will be created if they don't already exist. 
+     * <code>destination</code> will be overwritten if it already exists.
+     *
+     * @param source An existing non-directory <code>File</code> to copy 
+     * bytes from.
+     * @param destination A non-directory <code>File</code> to write bytes to 
+     * (possibly overwriting).
+     * @param preserveFileDate True if the file date of the copy should be the
+     * same as the original.
+     *
+     * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
+     * written to, or an IO error occurs during copying.
+     *
+     * @throws FileNotFoundException if <code>destination</code> is a directory
+     * (use {@link #copyFileToDirectory}).
+     */
+    public static void copyFile(File source, File destination, boolean preserveFileDate)
+                throws IOException {
         //check source exists
         if (!source.exists()) {
             String message = "File " + source + " does not exist";
@@ -409,6 +435,11 @@ public class FileUtils {
                     + " to "
                     + destination;
             throw new IOException(message);
+        }
+        
+        if (preserveFileDate) {
+            //file copy should preserve file date
+            destination.setLastModified(source.lastModified());        
         }
     }
 
