@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.6 2003/10/13 07:06:04 rdonkin Exp $
- * $Revision: 1.6 $
- * $Date: 2003/10/13 07:06:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.7 2003/11/22 20:18:54 jeremias Exp $
+ * $Revision: 1.7 $
+ * $Date: 2003/11/22 20:18:54 $
  *
  * ====================================================================
  *
@@ -62,7 +62,6 @@
 package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -71,6 +70,7 @@ import java.util.Iterator;
 import java.util.Random;
 import junit.framework.TestCase;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
 import org.apache.commons.io.input.DemuxInputStream;
 

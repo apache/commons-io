@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/HexDumpTest.java,v 1.2 2003/10/13 07:06:04 rdonkin Exp $
- * $Revision: 1.2 $
- * $Date: 2003/10/13 07:06:04 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/HexDumpTest.java,v 1.3 2003/11/22 20:18:54 jeremias Exp $
+ * $Revision: 1.3 $
+ * $Date: 2003/11/22 20:18:54 $
  *
  * ====================================================================
  *
@@ -58,13 +58,11 @@
  * <http://www.apache.org/>.
  *
  */
-
-
 package org.apache.commons.io;
 
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import junit.framework.TestCase;
 
@@ -72,7 +70,7 @@ import junit.framework.TestCase;
 /**
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson (mjohnson at apache dot org)
- * @version $Revision: 1.2 $ $Date: 2003/10/13 07:06:04 $
+ * @version $Revision: 1.3 $ $Date: 2003/11/22 20:18:54 $
  */
 
 public class HexDumpTest extends TestCase {

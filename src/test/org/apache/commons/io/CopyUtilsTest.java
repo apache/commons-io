@@ -54,13 +54,13 @@
 package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: CopyUtilsTest.java,v 1.2 2003/10/13 07:06:04 rdonkin Exp $
+ * @version $Id: CopyUtilsTest.java,v 1.3 2003/11/22 20:18:55 jeremias Exp $
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {
