@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.11 2003/07/27 17:08:29 jeremias Exp $
+        $Id: build.xml,v 1.12 2003/08/21 18:59:26 jeremias Exp $
 -->
 
 
@@ -59,6 +59,9 @@
 
   <!-- The base directory for unit test sources -->
   <property name="test.home"               value="src/test"/>
+
+  <!-- Test data directory -->
+  <property name="data.test"               value="data/test"/>
 
 <!-- ========== Compiler Defaults ========================================= -->
 
@@ -152,6 +155,12 @@
     <copy    todir="${build.home}/tests" filtering="off">
       <fileset dir="${test.home}" excludes="**/*.java"/>
     </copy>
+
+    <!-- Copies test data -->
+    <copy todir="${build.home}/tests" filtering="off">
+      <fileset dir="${data.test}"/>
+    </copy>
+
   </target>
 
   <target name="clean"
@@ -236,30 +245,31 @@
       <classpath refid="test.classpath"/>
     </java>
   </target>
--->  
+-->
   <target name="test.io" depends="compile.tests">
-   
+
    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
-   
+
     <junit printsummary="yes" haltonfailure="${test.failonerror}" fork="yes">
 
-      <formatter type="brief" usefile="false"/> 
+      <formatter type="brief" usefile="false"/>
       <classpath refid="test.classpath"/>
 
      <batchtest todir="${build.home}/tests">
         <fileset dir="${build.home}/tests">
           <include name="**/test/*TestCase.class"/>
           <include name="**/*Test.class" />
-          <include name="**/*TestCase.class" />          
+          <include name="**/*TestCase.class" />
           <include name="**/Test*.class" />
           <include name="**/output/Test*.class" />
           <exclude name="**/AllTest.class" />
           <exclude name="**/*$$*Test.class" />
           <exclude name="**/compress/zip/*.class" />
           <exclude name="**/compress/tar/*.class" />
+          <exclude name="**/FileBasedTestCase.class" />
         </fileset>
       </batchtest>
-    </junit>  
+    </junit>
   </target>
-  
+
 </project>
