@@ -32,6 +32,11 @@
   <siteDirectory>/www/jakarta.apache.org/commons/sandbox/io/</siteDirectory>
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons-sandbox/io/</distributionDirectory>
 
+  <repository>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-commons-sandbox/io</connection>
+    <url>http://cvs.apache.org/viewcvs/jakarta-commons-sandbox/io/</url>
+  </repository>
+  
   <mailingLists>
     <mailingList>
       <name>Commons User List</name>
