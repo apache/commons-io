@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.21 2004/07/15 08:21:14 scolebourne Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.22 2004/07/15 09:49:53 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -453,6 +453,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testTouch() throws IOException {
         File file = new File(getTestDirectory(), "touch.txt") ;
+        if (file.exists()) {
+            file.delete();
+        }
+        assertTrue("Prerequisite failed, test file exists", !file.exists());
         FileUtils.touch(file);
         assertTrue("FileUtils.touch() created file.", file.exists());
         FileOutputStream out = new FileOutputStream(file) ;
