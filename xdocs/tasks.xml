@@ -18,11 +18,6 @@
         </li>
         <li>Improve site!!!</li>
       </ul>
-      <p>Javadoc todo:</p>
-      <ul>
-        <li>io.input [SwappedDataInputStream might need work]</li>
-        <li>io.output</li>
-      </ul>
       <p>
         The following classes will be excluded from the initial release:
       </p>
