@@ -15,10 +15,7 @@
  */
 package org.apache.commons.io;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 public class WildcardUtilsTest extends TestCase {
 
