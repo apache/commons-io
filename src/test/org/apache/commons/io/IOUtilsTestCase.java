@@ -41,6 +41,7 @@ import org.apache.commons.io.testtools.*;
  * multiple tests to fail.
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
+ * @author Gareth Davis
  */
 public class IOUtilsTestCase extends FileBasedTestCase {
     /*
@@ -278,6 +279,51 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         deleteFile( destination );
     }
 
+    public void testInputStreamToCharArray()
+            throws Exception
+    {
+        FileInputStream fin = new FileInputStream( m_testFile );
+        try {
+            char[] out = IOUtils.toCharArray( fin );
+            assertNotNull( out );
+            assertTrue( "Not all chars were read", fin.available() == 0 );
+            assertTrue( "Wrong output size: out.length=" + out.length +
+                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEqualContent( out, m_testFile );
+        } finally {
+            fin.close();
+        }
+    }
+
+    public void testInputStreamToCharArrayWithEncoding()
+            throws Exception
+    {
+        FileInputStream fin = new FileInputStream( m_testFile );
+        try {
+            char[] out = IOUtils.toCharArray( fin , "UTF-8" );
+            assertNotNull( out );
+            assertTrue( "Not all chars were read", fin.available() == 0 );
+            assertTrue( "Wrong output size: out.length=" + out.length +
+                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEqualContent( out, m_testFile );
+        } finally {
+            fin.close();
+        }
+    }
+
+    public void testReaderToCharArray()
+            throws Exception
+    {
+        FileReader fr = new FileReader( m_testFile );
+        try {
+            char[] out = IOUtils.toCharArray( fr );
+            assertNotNull( out );
+            assertTrue( "Wrong output size: out.length=" + out.length +
+                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEqualContent( out, m_testFile );
+        } finally {
+            fr.close();
+        }
+    }
 
 }
-

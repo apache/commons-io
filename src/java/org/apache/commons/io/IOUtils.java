@@ -17,6 +17,7 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,7 +62,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
- * @version CVS $Revision: 1.19 $ $Date: 2004/08/13 23:39:01 $
+ * @author Gareth Davis
+ * @version CVS $Revision: 1.20 $ $Date: 2004/08/24 19:13:12 $
  */
 public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and Writer
@@ -226,6 +228,65 @@ public class IOUtils {
      */
     public static byte[] toByteArray(String input) throws IOException {
         return input.getBytes();
+    }
+
+    // read char[]
+    //-----------------------------------------------------------------------
+    /**
+     * Get the contents of an <code>InputStream</code> as a character array
+     * using the default character encoding of the platform.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @return the requested character array
+     * @throws NullPointerException if the input is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static char[] toCharArray(InputStream is) throws IOException {
+        CharArrayWriter output = new CharArrayWriter();
+        copy(is, output);
+        return output.toCharArray();
+    }
+
+    /**
+     * Get the contents of an <code>InputStream</code> as a character array
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param encoding  the encoding to use, null means platform default
+     * @return the requested character array
+     * @throws NullPointerException if the input is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static char[] toCharArray(InputStream is, String encoding) throws IOException {
+        CharArrayWriter output = new CharArrayWriter();
+        copy(is, output, encoding);
+        return output.toCharArray();
+    }
+
+    /**
+     * Get the contents of a <code>Reader</code> as a character array.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @return the requested character array
+     * @throws NullPointerException if the input is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static char[] toCharArray(Reader input) throws IOException {
+        CharArrayWriter sw = new CharArrayWriter();
+        copy(input, sw);
+        return sw.toCharArray();
     }
 
     // read toString
