@@ -57,13 +57,16 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 
 /**
- * Useful utilities for working with file filters.
+ * Useful utilities for working with file filters. It provides access to all
+ * file filter implementations in this package so you don't have to import
+ * every classes you use.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.5 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.6 $ $Date: 2003/11/22 20:03:52 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
+ * @author Jeremias Maerki
  */
 public class FileFilterUtils {
     
@@ -92,6 +95,16 @@ public class FileFilterUtils {
      */
     public static IOFileFilter suffixFileFilter(String suffix) {
         return new SuffixFileFilter(suffix);
+    }
+
+    /**
+     * Returns a filter that returns true if the filename matches the specified text.
+     * 
+     * @param name  the filename
+     * @return a name checking filter
+     */
+    public static IOFileFilter nameFileFilter(String name) {
+        return new NameFileFilter(name);
     }
 
     /**
@@ -176,6 +189,31 @@ public class FileFilterUtils {
      */
     public static IOFileFilter asFileFilter(FilenameFilter filter) {
         return new DelegateFileFilter(filter);
+    }
+
+    //-----------------------------------------------------------------------
+
+    /* Constructed on demand and then cached */
+    private static IOFileFilter cvsFilter = null;
+
+    /**
+     * Resturns an IOFileFilter that ignores CVS directories. You may optionally
+     * pass in an existing IOFileFilter in which case it is extended to exclude
+     * CVS directories.
+     * @param filter IOFileFilter to modify, null if a new IOFileFilter
+     * should be created
+     * @return the requested (combined) filter
+     */
+    public static IOFileFilter makeCVSAware(IOFileFilter filter) {
+        if (cvsFilter == null) {
+            cvsFilter = andFileFilter(directoryFileFilter(), 
+                notFileFilter(nameFileFilter("CVS")));
+        }
+        if (filter == null) {
+            return cvsFilter;
+        } else {
+            return andFileFilter(filter, cvsFilter);
+        }
     }
 
 }
