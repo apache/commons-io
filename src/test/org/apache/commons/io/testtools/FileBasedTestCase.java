@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
@@ -34,6 +35,7 @@ import junit.framework.TestCase;
  * Base class for testcases doing tests with files.
  * 
  * @author Jeremias Maerki
+ * @author Gareth Davis
  */
 public abstract class FileBasedTestCase extends TestCase {
 
@@ -157,6 +159,25 @@ public abstract class FileBasedTestCase extends TestCase {
                 );
         } finally {
             is.close();
+        }
+    }
+
+    /** Assert that the content of a file is equal to that in a char[]. */
+    protected void assertEqualContent( char[] c0, File file )
+        throws IOException
+    {
+        Reader ir = new java.io.FileReader( file );
+        try {
+            char[] c1 = new char[ c0.length ];
+            int numRead = ir.read( c1 );
+            assertTrue( "Different number of bytes", numRead == c0.length );
+            for( int i = 0;
+                 i < numRead;
+                 assertTrue( "Byte " + i + " differs (" + c0[ i ] + " != " + c1[ i ] + ")", 
+                    c0[ i ] == c1[ i ] ), i++
+                );
+        } finally {
+            ir.close();
         }
     }
 
