@@ -40,7 +40,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.15 $ $Date: 2004/06/13 04:45:25 $
+ * @version CVS $Revision: 1.16 $ $Date: 2004/06/13 05:38:07 $
  */
 public class IOUtils
 {
@@ -240,6 +240,7 @@ public class IOUtils
      * @param input the <code>String</code> to convert
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
+     * @deprecated This is reundant, use java.lang.String.toByteArray.
      */
     public static byte[] toByteArray( String input )
         throws IOException
