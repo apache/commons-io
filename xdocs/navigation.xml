@@ -15,6 +15,7 @@
     <body>
 
         <menu name="Commons IO">
+            <item name="Home" href="index.html"/>
             <item name="Tasks" href="tasks.html"/>
         </menu>
 

@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+
+<!--
+    Main index
+    $Id: index.xml,v 1.1 2003/12/21 00:53:41 matth Exp $
+-->
+
+<document>
+  <body>
+
+    <section name="Overview">
+        <p>
+            Commons-IO contains <a href="#utilities">utility classes</a>,
+            stream implementations, <a href="#filefilters">file filters</a>, and
+            <a href="#endian">endian classes</a>.
+        </p>
+
+        <p>
+            For a more detailed descriptions, take a look at the
+            <a href="apidocs/index.html">JavaDocs.</a>
+        </p>
+    </section>
+
+    <a name="utilities"/>
+    <section name="Utility classes">
+        <subsection name="CopyUtils">
+            <p>
+                <code>org.apache.commons.io.CopyUtils</code>
+                contains a comprehensive set of static methods for copying
+                from String, byte[], InputStream, Reader
+                to String, byte[], OutputStream, Writer.
+            </p>
+
+            <p>
+                As an example, consider the task of reading bytes
+                from a URL, and printing them. This would typically done like this:
+            </p>
+
+            <source>
+                InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+                InputStreamReader inR = new InputStreamReader( in );
+                BufferedReader buf = new BufferedReader( inR );
+                String line;
+                while ( ( line = buf.readLine() ) != null ) {
+                    System.out.println( line );
+                }
+                in.close();
+            </source>
+
+            <p>
+                With the CopyUtils class, that could be done with:
+            </p>
+
+            <source>
+                InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+                System.out.println( IOUtils.toString( in ) );
+                in.close();
+            </source>
+
+            <p>
+                In certain application domains, such IO operations are
+                common, and this class can save a great deal of time.
+
+                For utility code such as this, flexibility and speed are of primary importance.
+                In CopyUtils, each kind of copy method has a variant which allows the
+                buffer size to be set. For method that convert bytes to chars, the encoding
+                method may also be set.
+            </p>
+
+        </subsection>
+
+        <subsection name="FileUtils">
+            <p>
+                The <code>org.apache.commons.io.FileUtils</code>
+                class contains methods for retrieving different components of a file path
+                (directory name, file base name, file extension), methods
+                for copying files to other files and directories, and methods
+                for deleting and cleaning directories. For more information,
+                see the class description
+            </p>
+        </subsection>
+
+    </section>
+
+    <a name="filefilters"/>
+    <section name="File filters">
+        <p>
+            The <code>org.apache.commons.io.filefilter</code>
+            package defines an interface (<code>IOFileFilter</code>) that
+            combines both <code>java.io.FileFilter</code> and
+            <code>java.io.FilenameFilter</code>. Besides
+            that the package offers a series of ready-to-use
+            implementations of the <code>IOFileFilter</code>
+            interface including
+            implementation that allow you to combine other such filters.
+
+            These filter can be used to list files or in FileDialog, for example.
+        </p>
+    </section>
+
+    <a name="endian"/>
+    <section name="Endian classes">
+        <p>
+            Different computer architectures adopt different
+            conventions for byte ordering. In so-called
+            "Little Endian" architectures (eg Intel), the low-order
+            byte is stored in memory at the lowest address, and
+            subsequent bytes at higher addresses. For "Big Endian"
+            architectures (eg Motorola), the situation is reversed.
+        </p>
+
+        <p>
+        There are two classes in this package of relevance:
+        </p>
+
+        <ul>
+           <li>
+           The <code>org.apache.commons.io.EndianUtils</code>
+           class contains static methods for swapping the Endian-ness
+           of Java primitives and streams.
+           </li>
+
+           <li>
+           The <code>org.apache.commons.io.input.SwappedDataInputStream</code>
+           class is an implementation of the <code>DataInput</code> interface. With
+           this, one can read data from files of non-native Endian-ness.
+           </li>
+        </ul>
+
+        <p>
+            For more information, see
+            <a
+                href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
+         </p>
+
+    </section>
+
+  </body>
+
+</document>
