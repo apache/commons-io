@@ -58,12 +58,14 @@ package org.apache.commons.io.filefilter;
 import java.io.FilenameFilter;
 import java.io.File;
 
+import org.apache.commons.lang.functor.Predicate;
+
 /**
  * An interface which brings the FileFilter and FilenameFilter 
  * interfaces together.
  */
 public interface FileFilter
-extends java.io.FileFilter, FilenameFilter
+extends java.io.FileFilter, FilenameFilter, Predicate
 {
 
     /** Defined in java.io.FileFilter */
