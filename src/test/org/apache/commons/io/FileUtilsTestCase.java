@@ -31,7 +31,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.12 2004/03/12 21:44:47 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.13 2004/03/12 22:22:25 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
@@ -249,16 +249,41 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testCopyFile1() throws Exception {
         File destination = new File(getTestDirectory(), "copy1.txt");
+        
+        Thread.sleep(200); //This is to slow things down so we can catch if 
+                           //the lastModified date is not ok
+        
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
         assertTrue("Check Full copy", destination.length() == testFile1Size);
+        assertTrue("Check last modified date preserved", 
+            testFile1.lastModified() == destination.lastModified());    
     }
 
     public void testCopyFile2() throws Exception {
         File destination = new File(getTestDirectory(), "copy2.txt");
+        
+        Thread.sleep(200); //This is to slow things down so we can catch if 
+                           //the lastModified date is not ok
+        
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
         assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertTrue("Check last modified date preserved", 
+            testFile1.lastModified() == destination.lastModified());    
+    }
+
+    public void testCopyFile2WithoutFileDatePreservation() throws Exception {
+        File destination = new File(getTestDirectory(), "copy2.txt");
+        
+        Thread.sleep(200); //This is to slow things down so we can catch if 
+                           //the lastModified date is not ok
+        
+        FileUtils.copyFile(testFile1, destination, false);
+        assertTrue("Check Exist", destination.exists());
+        assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertTrue("Check last modified date modified", 
+            testFile1.lastModified() != destination.lastModified());    
     }
 
     // forceDelete
@@ -286,9 +311,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         if (!directory.exists())
             directory.mkdirs();
         File destination = new File(directory, testFile1.getName());
+        
+        Thread.sleep(200); //This is to slow things down so we can catch if 
+                           //the lastModified date is not ok
+        
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
         assertTrue("Check Full copy", destination.length() == testFile1Size);
+        assertTrue("Check last modified date preserved", 
+            testFile1.lastModified() == destination.lastModified());    
     }
 
     public void testCopyFile2ToDir() throws Exception {
@@ -296,9 +327,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         if (!directory.exists())
             directory.mkdirs();
         File destination = new File(directory, testFile1.getName());
+        
+        Thread.sleep(200); //This is to slow things down so we can catch if 
+                           //the lastModified date is not ok
+        
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
         assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertTrue("Check last modified date preserved", 
+            testFile1.lastModified() == destination.lastModified());    
     }
 
     // forceDelete
