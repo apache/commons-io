@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.1 2003/04/04 14:03:26 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/04/04 14:03:26 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/output/ByteArrayOutputStreamTestCase.java,v 1.2 2003/07/25 07:55:31 jeremias Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/07/25 07:55:31 $
  *
  * ====================================================================
  *
@@ -62,7 +62,6 @@
 package org.apache.commons.io.output;
 
 import java.io.IOException;
-import java.util.Random;
 
 import junit.framework.TestCase;
 
