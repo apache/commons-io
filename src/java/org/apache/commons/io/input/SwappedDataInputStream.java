@@ -24,11 +24,13 @@ import org.apache.commons.io.EndianUtils;
 
 /**
  * DataInput for systems relying on little endian data formats.
+ * When read, values will be changed from little endian to big 
+ * endian formats for internal usage. 
  *
  * <p><b>Origin of code: </b>Avalon Excalibur (IO)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.7 $ $Date: 2004/02/23 04:38:52 $
+ * @version CVS $Revision: 1.8 $ $Date: 2004/02/23 04:56:59 $
  */
 public class SwappedDataInputStream extends ProxyInputStream
     implements DataInput
@@ -36,6 +38,7 @@ public class SwappedDataInputStream extends ProxyInputStream
 
     /**
      * Constructs a SwappedDataInputStream.
+     *
      * @param input InputStream to read from
      */
     public SwappedDataInputStream( InputStream input )
@@ -112,7 +115,11 @@ public class SwappedDataInputStream extends ProxyInputStream
         return EndianUtils.readSwappedInteger( in );
     }
 
-    /** @see java.io.DataInput#readLine() */
+    /**
+     * Not currently supported.
+     *
+     * @see java.io.DataInput#readLine()
+     */
     public String readLine()
         throws IOException, EOFException
     {
@@ -148,7 +155,11 @@ public class SwappedDataInputStream extends ProxyInputStream
         return EndianUtils.readSwappedUnsignedShort( in );
     }
 
-    /** @see java.io.DataInput#readUTF() */
+    /**
+     * Not currently supported. 
+     *
+     * @see java.io.DataInput#readUTF() 
+     */
     public String readUTF()
         throws IOException, EOFException
     {
