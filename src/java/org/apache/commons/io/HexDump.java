@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.4 2003/10/13 07:04:52 rdonkin Exp $
- * $Revision: 1.4 $
- * $Date: 2003/10/13 07:04:52 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/java/org/apache/commons/io/HexDump.java,v 1.5 2003/12/30 06:50:16 bayard Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/12/30 06:50:16 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import java.io.OutputStream;
  *
  * @author Scott Sanders (sanders at apache dot org)
  * @author Marc Johnson
- * @version $Revision: 1.4 $ $Date: 2003/10/13 07:04:52 $
+ * @version $Revision: 1.5 $ $Date: 2003/12/30 06:50:16 $
  */
 public class HexDump {
 
@@ -91,8 +91,8 @@ public class HexDump {
      *            null
      */
 
-    public static void dump(final byte[] data, final long offset,
-                            final OutputStream stream, final int index)
+    public static void dump(byte[] data, long offset,
+                            OutputStream stream, int index)
             throws IOException, ArrayIndexOutOfBoundsException,
             IllegalArgumentException {
         if ((index < 0) || (index >= data.length)) {
@@ -151,7 +151,7 @@ public class HexDump {
                 28, 24, 20, 16, 12, 8, 4, 0
             };
 
-    private static StringBuffer dump(final long value) {
+    private static StringBuffer dump(long value) {
         _lbuffer.setLength(0);
         for (int j = 0; j < 8; j++) {
             _lbuffer
@@ -160,7 +160,7 @@ public class HexDump {
         return _lbuffer;
     }
 
-    private static StringBuffer dump(final byte value) {
+    private static StringBuffer dump(byte value) {
         _cbuffer.setLength(0);
         for (int j = 0; j < 2; j++) {
             _cbuffer.append(_hexcodes[(value >> _shifts[j + 6]) & 15]);

@@ -76,7 +76,7 @@ import java.io.IOException;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.3 2003/12/29 05:59:18 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.4 2003/12/30 06:50:16 bayard Exp $
  */
 public class FilenameUtils {
 
@@ -127,8 +127,8 @@ public class FilenameUtils {
      * @param filename the filename
      * @return the filename minus extension
      */
-    public static String removeExtension(final String filename) {
-        final int index = filename.lastIndexOf('.');
+    public static String removeExtension( String filename) {
+        int index = filename.lastIndexOf('.');
 
         if (-1 == index) {
             return filename;
@@ -149,8 +149,8 @@ public class FilenameUtils {
      * @param filename the filename
      * @return the extension of filename or "" if none
      */
-    public static String getExtension(final String filename) {
-        final int index = filename.lastIndexOf('.');
+    public static String getExtension( String filename) {
+        int index = filename.lastIndexOf('.');
 
         if (-1 == index) {
             return "";
@@ -170,7 +170,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
-    public static String removePath(final String filepath) {
+    public static String removePath( String filepath) {
         return removePath(filepath, File.separatorChar);
     }
 
@@ -187,9 +187,9 @@ public class FilenameUtils {
      * @return the filename minus path
      */
     public static String removePath(
-        final String filepath,
-        final char fileSeparatorChar) {
-        final int index = filepath.lastIndexOf(fileSeparatorChar);
+        String filepath,
+        char fileSeparatorChar) {
+        int index = filepath.lastIndexOf(fileSeparatorChar);
 
         if (-1 == index) {
             return filepath;
@@ -209,7 +209,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
-    public static String getPath(final String filepath) {
+    public static String getPath( String filepath) {
         return getPath(filepath, File.separatorChar);
     }
 
@@ -226,9 +226,9 @@ public class FilenameUtils {
      * @return the filename minus path
      */
     public static String getPath(
-        final String filepath,
-        final char fileSeparatorChar) {
-        final int index = filepath.lastIndexOf(fileSeparatorChar);
+        String filepath,
+        char fileSeparatorChar) {
+        int index = filepath.lastIndexOf(fileSeparatorChar);
         if (-1 == index) {
             return "";
         } else {
@@ -256,7 +256,7 @@ public class FilenameUtils {
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
      */
-    public static String normalize(final String path) {
+    public static String normalize( String path) {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
         while (true) {
@@ -307,7 +307,7 @@ public class FilenameUtils {
      *
      * @return The concatenated paths, or null if error occurs
      */
-    public static String catPath(final String lookupPath, final String path) {
+    public static String catPath( String lookupPath, String path) {
         // Cut off the last slash and everything beyond
         int index = lookupPath.lastIndexOf("/");
         String lookup = lookupPath.substring(0, index);
@@ -340,7 +340,7 @@ public class FilenameUtils {
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
      */
-    public static File resolveFile(final File baseFile, String filename) {
+    public static File resolveFile( File baseFile, String filename) {
         String filenm = filename;
         if ('/' != File.separatorChar) {
             filenm = filename.replace('/', File.separatorChar);
@@ -356,14 +356,14 @@ public class FilenameUtils {
 
             try {
                 file = file.getCanonicalFile();
-            } catch (final IOException ioe) {}
+            } catch ( IOException ioe) {}
 
             return file;
         }
         // FIXME: I'm almost certain this // removal is unnecessary, as getAbsoluteFile() strips
         // them. However, I'm not sure about this UNC stuff. (JT)
-        final char[] chars = filename.toCharArray();
-        final StringBuffer sb = new StringBuffer();
+        char[] chars = filename.toCharArray();
+        StringBuffer sb = new StringBuffer();
 
         //remove duplicate file separators in succession - except
         //on win32 at start of filename as UNC filenames can
@@ -375,7 +375,7 @@ public class FilenameUtils {
         }
 
         for (int i = start; i < chars.length; i++) {
-            final boolean doubleSeparator =
+            boolean doubleSeparator =
                 File.separatorChar == chars[i]
                     && File.separatorChar == chars[i - 1];
 
@@ -391,7 +391,7 @@ public class FilenameUtils {
 
         try {
             file = file.getCanonicalFile();
-        } catch (final IOException ioe) {}
+        } catch ( IOException ioe) {}
 
         return file;
     }
@@ -445,7 +445,7 @@ public class FilenameUtils {
      * @throws IOException in case deletion is unsuccessful
      * @deprecated Use {@link FileUtils#forceDelete(File)}
      */
-    public static void forceDelete(final String file) throws IOException {
+    public static void forceDelete( String file) throws IOException {
         FileUtils.forceDelete(new File(file));
     }
 
@@ -457,7 +457,7 @@ public class FilenameUtils {
      * @throws IOException in case cleaning is unsuccessful
      * @deprecated Use {@link FileUtils#cleanDirectory(File)}
      */
-    public static void cleanDirectory(final String directory)
+    public static void cleanDirectory( String directory)
         throws IOException {
         FileUtils.cleanDirectory(new File(directory));
     }
@@ -469,7 +469,7 @@ public class FilenameUtils {
      * @return size of directory in bytes.
      * @deprecated Use {@link FileUtils#sizeOfDirectory(File)}
      */
-    public static long sizeOfDirectory(final String directory) {
+    public static long sizeOfDirectory( String directory) {
         return FileUtils.sizeOfDirectory(new File(directory));
     }
 
@@ -489,8 +489,8 @@ public class FilenameUtils {
      * @deprecated Use {@link FileUtils#copyFileToDirectory(File, File)}
      */
     public static void copyFileToDirectory(
-        final String source,
-        final String destinationDirectory)
+        String source,
+        String destinationDirectory)
         throws IOException {
         FileUtils.copyFileToDirectory(new File(source), new File(destinationDirectory));
     }
@@ -501,7 +501,7 @@ public class FilenameUtils {
      * @throws IOException in case deletion is unsuccessful
      * @deprecated Use {@link FileUtils#deleteDirectory(File)}
      */
-    public static void deleteDirectory(final String directory)
+    public static void deleteDirectory( String directory)
         throws IOException {
         FileUtils.deleteDirectory(new File(directory));
     }

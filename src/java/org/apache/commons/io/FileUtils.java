@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.22 2003/12/29 13:14:52 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.23 2003/12/30 06:50:16 bayard Exp $
  */
 public class FileUtils {
 
@@ -257,7 +257,7 @@ public class FileUtils {
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
-    private static String[] toSuffixes(final String[] extensions) {
+    private static String[] toSuffixes(String[] extensions) {
         String[] suffixes = new String[extensions.length];
         for (int i = 0; i < extensions.length; i++) {
             suffixes[i] = "." + extensions[i];
@@ -297,9 +297,9 @@ public class FileUtils {
      * @return true if the content of the files are equal or they both don't exist, false otherwise
      * @throws IOException in case of an I/O error
      */
-    public static boolean contentEquals(final File file1, final File file2)
+    public static boolean contentEquals(File file1, File file2)
             throws IOException {
-        final boolean file1Exists = file1.exists();
+        boolean file1Exists = file1.exists();
         if (file1Exists != file2.exists()) {
             return false;
         }
@@ -333,11 +333,11 @@ public class FileUtils {
      * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
      * is not <code>file</code>
      */
-    public static File toFile(final URL url) {
+    public static File toFile(URL url) {
         if (url.getProtocol().equals("file") == false) {
             return null;
         } else {
-            final String filename =
+            String filename =
                 url.getFile().replace('/', File.separatorChar);
             return new File(filename);
         }
@@ -350,8 +350,8 @@ public class FileUtils {
      * @return the array of URLs
      * @throws IOException if an error occurs
      */
-    public static URL[] toURLs(final File[] files) throws IOException {
-        final URL[] urls = new URL[files.length];
+    public static URL[] toURLs(File[] files) throws IOException {
+        URL[] urls = new URL[files.length];
 
         for (int i = 0; i < urls.length; i++) {
             urls[i] = files[i].toURL();
@@ -375,8 +375,8 @@ public class FileUtils {
      * <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
     public static void copyFileToDirectory(
-        final File source,
-        final File destinationDirectory)
+        File source,
+        File destinationDirectory)
         throws IOException {
         if (destinationDirectory.exists()
             && !destinationDirectory.isDirectory()) {
@@ -402,11 +402,11 @@ public class FileUtils {
      * @throws FileNotFoundException if <code>destination</code> is a directory
      * (use {@link #copyFileToDirectory}).
      */
-    public static void copyFile(final File source, final File destination)
+    public static void copyFile(File source, File destination)
         throws IOException {
         //check source exists
         if (!source.exists()) {
-            final String message = "File " + source + " does not exist";
+            String message = "File " + source + " does not exist";
             throw new FileNotFoundException(message);
         }
 
@@ -418,14 +418,14 @@ public class FileUtils {
 
         //make sure we can write to destination
         if (destination.exists() && !destination.canWrite()) {
-            final String message =
+            String message =
                 "Unable to open file " + destination + " for writing.";
             throw new IOException(message);
         }
 
-        final FileInputStream input = new FileInputStream(source);
+        FileInputStream input = new FileInputStream(source);
         try {
-            final FileOutputStream output = new FileOutputStream(destination);
+            FileOutputStream output = new FileOutputStream(destination);
             try {
                 CopyUtils.copy(input, output);
             } finally {
@@ -436,7 +436,7 @@ public class FileUtils {
         }
 
         if (source.length() != destination.length()) {
-            final String message =
+            String message =
                 "Failed to copy full contents from "
                     + source
                     + " to "
@@ -461,7 +461,7 @@ public class FileUtils {
      *  <li>an IO error occurs during copying</li>
      * </ul>
      */
-    public static void copyURLToFile(final URL source, final File destination)
+    public static void copyURLToFile(URL source, File destination)
                 throws IOException {
         //does destination directory exist ?
         if (destination.getParentFile() != null
@@ -471,14 +471,14 @@ public class FileUtils {
 
         //make sure we can write to destination
         if (destination.exists() && !destination.canWrite()) {
-            final String message =
+            String message =
                 "Unable to open file " + destination + " for writing.";
             throw new IOException(message);
         }
 
-        final InputStream input = source.openStream();
+        InputStream input = source.openStream();
         try {
-            final FileOutputStream output = new FileOutputStream(destination);
+            FileOutputStream output = new FileOutputStream(destination);
             try {
                 CopyUtils.copy(input, output);
             } finally {
@@ -495,7 +495,7 @@ public class FileUtils {
      * @param directory directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void deleteDirectory(final File directory)
+    public static void deleteDirectory(File directory)
         throws IOException {
         if (!directory.exists()) {
             return;
@@ -503,7 +503,7 @@ public class FileUtils {
 
         cleanDirectory(directory);
         if (!directory.delete()) {
-            final String message =
+            String message =
                 "Unable to delete directory " + directory + ".";
             throw new IOException(message);
         }
@@ -514,26 +514,26 @@ public class FileUtils {
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
      */
-    public static void cleanDirectory(final File directory)
+    public static void cleanDirectory(File directory)
         throws IOException {
         if (!directory.exists()) {
-            final String message = directory + " does not exist";
+            String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
         }
 
         if (!directory.isDirectory()) {
-            final String message = directory + " is not a directory";
+            String message = directory + " is not a directory";
             throw new IllegalArgumentException(message);
         }
 
         IOException exception = null;
 
-        final File[] files = directory.listFiles();
+        File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
-            final File file = files[i];
+            File file = files[i];
             try {
                 forceDelete(file);
-            } catch (final IOException ioe) {
+            } catch (IOException ioe) {
                 exception = ioe;
             }
         }
@@ -552,7 +552,7 @@ public class FileUtils {
      * TODO Needs a clearer javadoc to see its real purpose for someone without
      *       NFS-knowledge.
      */
-    public static boolean waitFor(final File file, final int seconds) {
+    public static boolean waitFor(File file, int seconds) {
         int timeout = 0;
         int tick = 0;
         while (!file.exists()) {
@@ -590,7 +590,7 @@ public class FileUtils {
      *   by the VM
      */
     public static String readFileToString(
-            final File file, final String encoding) throws IOException {
+            File file, String encoding) throws IOException {
         InputStream in = new java.io.FileInputStream(file);
         try {
             return IOUtils.toString(in, encoding);
@@ -615,8 +615,8 @@ public class FileUtils {
      * @throws UnsupportedEncodingException if the encoding is not supported
      *   by the VM
      */
-    public static void writeStringToFile(final File file, 
-            final String data, final String encoding) throws IOException {
+    public static void writeStringToFile(File file, 
+            String data, String encoding) throws IOException {
         OutputStream out = new java.io.FileOutputStream(file);
         try {
             out.write(data.getBytes(encoding));
@@ -640,7 +640,7 @@ public class FileUtils {
      * @param file file or directory to delete.
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void forceDelete(final File file) throws IOException {
+    public static void forceDelete(File file) throws IOException {
         if (file.isDirectory()) {
             deleteDirectory(file);
         } else {
@@ -648,7 +648,7 @@ public class FileUtils {
                 throw new FileNotFoundException("File does not exist: " + file);
             }
             if (!file.delete()) {
-                final String message =
+                String message =
                     "Unable to delete file: " + file;
                 throw new IOException(message);
             }
@@ -661,7 +661,7 @@ public class FileUtils {
      * @param file file or directory to delete.
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void forceDeleteOnExit(final File file) throws IOException {
+    public static void forceDeleteOnExit(File file) throws IOException {
         if (file.isDirectory()) {
             deleteDirectoryOnExit(file);
         } else {
@@ -674,7 +674,7 @@ public class FileUtils {
      * @param directory directory to delete.
      * @throws IOException in case deletion is unsuccessful
      */
-    private static void deleteDirectoryOnExit(final File directory)
+    private static void deleteDirectoryOnExit(File directory)
             throws IOException {
         if (!directory.exists()) {
             return;
@@ -689,26 +689,26 @@ public class FileUtils {
      * @param directory directory to clean.
      * @throws IOException in case cleaning is unsuccessful
      */
-    private static void cleanDirectoryOnExit(final File directory)
+    private static void cleanDirectoryOnExit(File directory)
             throws IOException {
         if (!directory.exists()) {
-            final String message = directory + " does not exist";
+            String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
         }
 
         if (!directory.isDirectory()) {
-            final String message = directory + " is not a directory";
+            String message = directory + " is not a directory";
             throw new IllegalArgumentException(message);
         }
 
         IOException exception = null;
 
-        final File[] files = directory.listFiles();
+        File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
-            final File file = files[i];
+            File file = files[i];
             try {
                 forceDeleteOnExit(file);
-            } catch (final IOException ioe) {
+            } catch (IOException ioe) {
                 exception = ioe;
             }
         }
@@ -725,10 +725,10 @@ public class FileUtils {
      * @param directory directory to create
      * @throws IOException if the directory cannot be created.
      */
-    public static void forceMkdir(final File directory) throws IOException {
+    public static void forceMkdir(File directory) throws IOException {
         if (directory.exists()) {
             if (directory.isFile()) {
-                final String message =
+                String message =
                     "File "
                         + directory
                         + " exists and is "
@@ -737,7 +737,7 @@ public class FileUtils {
             }
         } else {
             if (false == directory.mkdirs()) {
-                final String message =
+                String message =
                     "Unable to create directory " + directory;
                 throw new IOException(message);
             }
@@ -750,22 +750,22 @@ public class FileUtils {
      * @param directory directory to inspect
      * @return size of directory in bytes.
      */
-    public static long sizeOfDirectory(final File directory) {
+    public static long sizeOfDirectory(File directory) {
         if (!directory.exists()) {
-            final String message = directory + " does not exist";
+            String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
         }
 
         if (!directory.isDirectory()) {
-            final String message = directory + " is not a directory";
+            String message = directory + " is not a directory";
             throw new IllegalArgumentException(message);
         }
 
         long size = 0;
 
-        final File[] files = directory.listFiles();
+        File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
-            final File file = files[i];
+            File file = files[i];
 
             if (file.isDirectory()) {
                 size += sizeOfDirectory(file);
@@ -787,7 +787,7 @@ public class FileUtils {
       * @return true if the <code>File</code> exists and has been modified more recently
       * than the reference <code>File</code>.
       */
-     public static boolean isFileNewer(final File file, final File reference) {
+     public static boolean isFileNewer(File file, File reference) {
          if (reference == null) {
              throw new IllegalArgumentException("No specified reference file");
          }
@@ -807,7 +807,7 @@ public class FileUtils {
       * @return true if the <code>File</code> exists and has been modified after
       * the given <code>Date</code>.
       */
-     public static boolean isFileNewer(final File file, final Date date) {
+     public static boolean isFileNewer(File file, Date date) {
          if (date == null) {
              throw new IllegalArgumentException("No specified date");
          }
@@ -824,7 +824,7 @@ public class FileUtils {
       * @return true if the <code>File</code> exists and has been modified after
       * the given time reference.
       */
-     public static boolean isFileNewer(final File file, final long timeMillis) {
+     public static boolean isFileNewer(File file, long timeMillis) {
          if (file == null) {
              throw new IllegalArgumentException("No specified file");
          }

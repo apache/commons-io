@@ -145,7 +145,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.8 $ $Date: 2003/12/29 03:28:53 $
+ * @version CVS $Revision: 1.9 $ $Date: 2003/12/30 06:50:16 $
  */
 public final class IOUtils
 {
@@ -162,7 +162,7 @@ public final class IOUtils
      *
      * @param input A (possibly null) Reader
      */
-    public static void closeQuietly( final Reader input )
+    public static void closeQuietly( Reader input )
     {
         if( input == null )
         {
@@ -173,7 +173,7 @@ public final class IOUtils
         {
             input.close();
         }
-        catch( final IOException ioe )
+        catch( IOException ioe )
         {
         }
     }
@@ -184,7 +184,7 @@ public final class IOUtils
      *
      * @param output A (possibly null) Writer
      */
-    public static void closeQuietly( final Writer output )
+    public static void closeQuietly( Writer output )
     {
         if( output == null )
         {
@@ -195,7 +195,7 @@ public final class IOUtils
         {
             output.close();
         }
-        catch( final IOException ioe )
+        catch( IOException ioe )
         {
         }
     }
@@ -205,7 +205,7 @@ public final class IOUtils
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * @param output A (possibly null) OutputStream
      */
-    public static void closeQuietly( final OutputStream output )
+    public static void closeQuietly( OutputStream output )
     {
         if( output == null )
         {
@@ -216,7 +216,7 @@ public final class IOUtils
         {
             output.close();
         }
-        catch( final IOException ioe )
+        catch( IOException ioe )
         {
         }
     }
@@ -226,7 +226,7 @@ public final class IOUtils
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * @param input A (possibly null) InputStream
      */
-    public static void closeQuietly( final InputStream input )
+    public static void closeQuietly( InputStream input )
     {
         if( input == null )
         {
@@ -237,7 +237,7 @@ public final class IOUtils
         {
             input.close();
         }
-        catch( final IOException ioe )
+        catch( IOException ioe )
         {
         }
     }
@@ -254,7 +254,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, OutputStream)}
      */
-    public static int copy( final InputStream input, final OutputStream output )
+    public static int copy( InputStream input, OutputStream output )
         throws IOException
     {
         return copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -269,12 +269,12 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, OutputStream, int)}
      */
-    public static int copy( final InputStream input,
-                             final OutputStream output,
-                             final int bufferSize )
+    public static int copy( InputStream input,
+                             OutputStream output,
+                             int bufferSize )
         throws IOException
     {
-        final byte[] buffer = new byte[ bufferSize ];
+        byte[] buffer = new byte[ bufferSize ];
         int count = 0;
         int n = 0;
         while( -1 != ( n = input.read( buffer ) ) )
@@ -293,7 +293,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(Reader, Writer)}
      */
-    public static int copy( final Reader input, final Writer output )
+    public static int copy( Reader input, Writer output )
         throws IOException
     {
         return copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -308,10 +308,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(Reader, Writer, int)}
      */
-    public static int copy( final Reader input, final Writer output, final int bufferSize )
+    public static int copy( Reader input, Writer output, int bufferSize )
         throws IOException
     {
-        final char[] buffer = new char[ bufferSize ];
+        char[] buffer = new char[ bufferSize ];
         int count = 0;
         int n = 0;
         while( -1 != ( n = input.read( buffer ) ) )
@@ -340,7 +340,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer)}
      */
-    public static void copy( final InputStream input, final Writer output )
+    public static void copy( InputStream input, Writer output )
         throws IOException
     {
         copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -356,10 +356,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, int)}
      */
-    public static void copy( final InputStream input, final Writer output, final int bufferSize )
+    public static void copy( InputStream input, Writer output, int bufferSize )
         throws IOException
     {
-        final InputStreamReader in = new InputStreamReader( input );
+        InputStreamReader in = new InputStreamReader( input );
         copy( in, output, bufferSize );
     }
 
@@ -374,10 +374,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, String)}
      */
-    public static void copy( final InputStream input, final Writer output, final String encoding )
+    public static void copy( InputStream input, Writer output, String encoding )
         throws IOException
     {
-        final InputStreamReader in = new InputStreamReader( input, encoding );
+        InputStreamReader in = new InputStreamReader( input, encoding );
         copy( in, output );
     }
 
@@ -393,13 +393,13 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(InputStream, Writer, String, int)}
      */
-    public static void copy( final InputStream input,
-                             final Writer output,
-                             final String encoding,
-                             final int bufferSize )
+    public static void copy( InputStream input,
+                             Writer output,
+                             String encoding,
+                             int bufferSize )
         throws IOException
     {
-        final InputStreamReader in = new InputStreamReader( input, encoding );
+        InputStreamReader in = new InputStreamReader( input, encoding );
         copy( in, output, bufferSize );
     }
 
@@ -414,7 +414,7 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final InputStream input )
+    public static String toString( InputStream input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -428,10 +428,10 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final InputStream input, final int bufferSize )
+    public static String toString( InputStream input, int bufferSize )
         throws IOException
     {
-        final StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter();
         copy( input, sw, bufferSize );
         return sw.toString();
     }
@@ -445,7 +445,7 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final InputStream input, final String encoding )
+    public static String toString( InputStream input, String encoding )
         throws IOException
     {
         return toString( input, encoding, DEFAULT_BUFFER_SIZE );
@@ -461,12 +461,12 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final InputStream input,
-                                   final String encoding,
-                                   final int bufferSize )
+    public static String toString( InputStream input,
+                                   String encoding,
+                                   int bufferSize )
         throws IOException
     {
-        final StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter();
         copy( input, sw, encoding, bufferSize );
         return sw.toString();
     }
@@ -480,7 +480,7 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final InputStream input )
+    public static byte[] toByteArray( InputStream input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -493,10 +493,10 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final InputStream input, final int bufferSize )
+    public static byte[] toByteArray( InputStream input, int bufferSize )
         throws IOException
     {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
         copy( input, output, bufferSize );
         return output.toByteArray();
     }
@@ -517,7 +517,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(Reader, OutputStream)}
      */
-    public static void copy( final Reader input, final OutputStream output )
+    public static void copy( Reader input, OutputStream output )
         throws IOException
     {
         copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -532,10 +532,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(Reader, OutputStream, int)}
      */
-    public static void copy( final Reader input, final OutputStream output, final int bufferSize )
+    public static void copy( Reader input, OutputStream output, int bufferSize )
         throws IOException
     {
-        final OutputStreamWriter out = new OutputStreamWriter( output );
+        OutputStreamWriter out = new OutputStreamWriter( output );
         copy( input, out, bufferSize );
         // NOTE: Unless anyone is planning on rewriting OutputStreamWriter, we have to flush
         // here.
@@ -550,7 +550,7 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final Reader input )
+    public static String toString( Reader input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -563,10 +563,10 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final Reader input, final int bufferSize )
+    public static String toString( Reader input, int bufferSize )
         throws IOException
     {
-        final StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter();
         copy( input, sw, bufferSize );
         return sw.toString();
     }
@@ -580,7 +580,7 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final Reader input )
+    public static byte[] toByteArray( Reader input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -593,7 +593,7 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final Reader input, final int bufferSize )
+    public static byte[] toByteArray( Reader input, int bufferSize )
         throws IOException
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -619,7 +619,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(String, OutputStream)}
      */
-    public static void copy( final String input, final OutputStream output )
+    public static void copy( String input, OutputStream output )
         throws IOException
     {
         copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -634,11 +634,11 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(String, OutputStream, int)}
      */
-    public static void copy( final String input, final OutputStream output, final int bufferSize )
+    public static void copy( String input, OutputStream output, int bufferSize )
         throws IOException
     {
-        final StringReader in = new StringReader( input );
-        final OutputStreamWriter out = new OutputStreamWriter( output );
+        StringReader in = new StringReader( input );
+        OutputStreamWriter out = new OutputStreamWriter( output );
         copy( in, out, bufferSize );
         // NOTE: Unless anyone is planning on rewriting OutputStreamWriter, we have to flush
         // here.
@@ -657,7 +657,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(String, Writer)}
      */
-    public static void copy( final String input, final Writer output )
+    public static void copy( String input, Writer output )
         throws IOException
     {
         output.write( input );
@@ -671,7 +671,7 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final String input )
+    public static byte[] toByteArray( String input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -684,7 +684,7 @@ public final class IOUtils
      * @return the requested byte array
      * @throws IOException In case of an I/O problem
      */
-    public static byte[] toByteArray( final String input, final int bufferSize )
+    public static byte[] toByteArray( String input, int bufferSize )
         throws IOException
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -712,7 +712,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer)}
      */
-    public static void copy( final byte[] input, final Writer output )
+    public static void copy( byte[] input, Writer output )
         throws IOException
     {
         copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -728,10 +728,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, int)}
      */
-    public static void copy( final byte[] input, final Writer output, final int bufferSize )
+    public static void copy( byte[] input, Writer output, int bufferSize )
         throws IOException
     {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
+        ByteArrayInputStream in = new ByteArrayInputStream( input );
         copy( in, output, bufferSize );
     }
 
@@ -746,10 +746,10 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, String)}
      */
-    public static void copy( final byte[] input, final Writer output, final String encoding )
+    public static void copy( byte[] input, Writer output, String encoding )
         throws IOException
     {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
+        ByteArrayInputStream in = new ByteArrayInputStream( input );
         copy( in, output, encoding );
     }
 
@@ -765,13 +765,13 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], Writer, String, int)}
      */
-    public static void copy( final byte[] input,
-                             final Writer output,
-                             final String encoding,
-                             final int bufferSize )
+    public static void copy( byte[] input,
+                             Writer output,
+                             String encoding,
+                             int bufferSize )
         throws IOException
     {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
+        ByteArrayInputStream in = new ByteArrayInputStream( input );
         copy( in, output, encoding, bufferSize );
     }
 
@@ -786,7 +786,7 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final byte[] input )
+    public static String toString( byte[] input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -800,10 +800,10 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final byte[] input, final int bufferSize )
+    public static String toString( byte[] input, int bufferSize )
         throws IOException
     {
-        final StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter();
         copy( input, sw, bufferSize );
         return sw.toString();
     }
@@ -817,7 +817,7 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final byte[] input, final String encoding )
+    public static String toString( byte[] input, String encoding )
         throws IOException
     {
         return toString( input, encoding, DEFAULT_BUFFER_SIZE );
@@ -833,12 +833,12 @@ public final class IOUtils
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
-    public static String toString( final byte[] input,
-                                   final String encoding,
-                                   final int bufferSize )
+    public static String toString( byte[] input,
+                                   String encoding,
+                                   int bufferSize )
         throws IOException
     {
-        final StringWriter sw = new StringWriter();
+        StringWriter sw = new StringWriter();
         copy( input, sw, encoding, bufferSize );
         return sw.toString();
     }
@@ -854,7 +854,7 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], OutputStream)}
      */
-    public static void copy( final byte[] input, final OutputStream output )
+    public static void copy( byte[] input, OutputStream output )
         throws IOException
     {
         copy( input, output, DEFAULT_BUFFER_SIZE );
@@ -868,9 +868,9 @@ public final class IOUtils
      * @throws IOException In case of an I/O problem
      * @deprecated Replaced by {@link CopyUtils#copy(byte[], OutputStream, int)}
      */
-    public static void copy( final byte[] input,
-                             final OutputStream output,
-                             final int bufferSize )
+    public static void copy( byte[] input,
+                             OutputStream output,
+                             int bufferSize )
         throws IOException
     {
         output.write( input );
@@ -884,17 +884,17 @@ public final class IOUtils
      * @return true if the content of the streams are equal or they both don't exist, false otherwise
      * @throws IOException In case of an I/O problem
      */
-    public static boolean contentEquals( final InputStream input1,
-                                         final InputStream input2 )
+    public static boolean contentEquals( InputStream input1,
+                                         InputStream input2 )
         throws IOException
     {
-        final InputStream bufferedInput1 = new BufferedInputStream( input1 );
-        final InputStream bufferedInput2 = new BufferedInputStream( input2 );
+        InputStream bufferedInput1 = new BufferedInputStream( input1 );
+        InputStream bufferedInput2 = new BufferedInputStream( input2 );
 
         int ch = bufferedInput1.read();
         while( -1 != ch )
         {
-            final int ch2 = bufferedInput2.read();
+            int ch2 = bufferedInput2.read();
             if( ch != ch2 )
             {
                 return false;
@@ -902,7 +902,7 @@ public final class IOUtils
             ch = bufferedInput1.read();
         }
 
-        final int ch2 = bufferedInput2.read();
+        int ch2 = bufferedInput2.read();
         if( -1 != ch2 )
         {
             return false;
