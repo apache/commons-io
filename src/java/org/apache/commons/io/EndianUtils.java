@@ -64,7 +64,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.4 $ $Date: 2003/10/13 07:04:52 $
+ * @version CVS $Revision: 1.5 $ $Date: 2003/11/27 02:58:10 $
  */
 public final class EndianUtils
 {
@@ -143,7 +143,7 @@ public final class EndianUtils
      * @param offset starting offset in the byte array
      * @param value value to write
      */
-    public static void writeSwappedShort( final byte[] data, final int offset, final int value )
+    public static void writeSwappedShort( final byte[] data, final int offset, final short value )
     {
         data[ offset + 0 ] = (byte)( ( value >> 0 ) & 0xff );
         data[ offset + 1 ] = (byte)( ( value >> 8 ) & 0xff );
@@ -321,7 +321,7 @@ public final class EndianUtils
      * @param value value to write
      * @throws IOException in case of an I/O problem
      */
-    public static void writeSwappedShort( final OutputStream output, final int value )
+    public static void writeSwappedShort( final OutputStream output, final short value )
         throws IOException
     {
         output.write( (byte)( ( value >> 0 ) & 0xff ) );
