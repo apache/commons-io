@@ -7,7 +7,7 @@
    
 <div align="center"> 
 <h1>The Jakarta Commons <em>IO</em> Component</h1>
- $Id: STATUS.html,v 1.8 2003/05/16 22:29:03 scolebourne Exp $<br>
+ $Id: STATUS.html,v 1.9 2003/07/06 15:47:27 jeremias Exp $<br>
  <a href="#Introduction">[Introduction]</a> <a href="#Dependencies">[Dependencies]</a> 
 <a href="#Release%20Info">[Release Info]</a> <a href="#Committers">[Committers]</a> 
 <a href="#Action%20Items">[Action Items]</a> <br>
@@ -59,6 +59,7 @@ to ensure that it continues to meet a variety of needs.</p>
  <li><a href="maito:nicolaken@apache.org">Nicola Ken Barozzi</a><br></li>
  <li><a href="maito:bayard@apache.org">Henri Yandell</a><br></li>
  <li><a href="maito:scolebourne@apache.org">Stephen Colebourne</a><br></li>
+ <li><a href="maito:jeremias@apache.org">Jeremias Maerki</a><br></li>
  <li>Fancy volunteering?  We need you!</li>
 </ul>
 
@@ -70,9 +71,19 @@ to ensure that it continues to meet a variety of needs.</p>
 release of this component:</p>
 <ul>
   <li>Compress - Move the compress sub-package out of IO - READY</li>
-  <li>Rename FileUtilTest to FileUtilsTest</li>
+  <li>Rename FileUtilTest to FileUtilsTest - DONE</li>
+  <li>Rename *Util.java for *Utils.java for consistency</li>
   <li>Extract code from IOUtils to CopyUtils? </li>
-  <li>Remove StreamUtils as all its methods are in IOUtils - READY</li>
+  <li>Remove StreamUtils as all its methods are in IOUtils - DONE</li>
+  <li>IOUtil: Remove the toByteArray() variants with the bufferSize
+    parameter. Reasoning can be found at 
+    http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
+  <li>IOUtil: Change toByteArray() methods to use the new
+    ByteArrayOutputStream which should improve performance considerably.</li>
+  <li>IOUtil: Remove the deprecated bufferedCopy method. IO is not released
+    so we should be able to do that.</li>
+  <li>FileUtils: Add isFileNewer() method from Alban Peignier:
+    http://nagoya.apache.org/eyebrowse/BrowseList?listName=commons-dev@jakarta.apache.org&by=thread&from=348688</li>
 </ul>
 <h5>5.1  NEW CODE</h5>
 <ul>
@@ -83,8 +94,12 @@ release of this component:</p>
   <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
   <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
   <li>Finder system. Generic code to find things in things. So FileFinder, ClassFinder, ZipFinder. Probably too big for IO</li>
+  <li>Add an additional ByteArrayOutputStream variant that saves content
+    in memory just as the original but starts to write to a temp file when
+    a given number of bytes is surpassed. This is to reduce the memory
+    usage for big "things".</li>
 </ul>
-  
+
 <table border="1">
     <tbody>
     <tr>
