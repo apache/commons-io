@@ -9,7 +9,6 @@
       <ul>
         <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>IOUtilsTestCase: Move copy tests over to CopyUtilsTestCase or kill them. [Hen]</li>
-        <li>Re-enable test case for:  IOUtilTestCase</li>
         <li>Write TestCases for: 
         <ul>
           <li>EndianUtils - InputStream/OutputStream methods</li>
