@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.3 2004/01/02 07:52:57 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2004/01/02 07:52:57 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/input/SwappedDataInputStreamTest.java,v 1.4 2004/01/02 07:59:13 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2004/01/02 07:59:13 $
  *
  * ====================================================================
  *
@@ -74,7 +74,7 @@ import junit.framework.TestCase;
  * effectively tests the underlying EndianUtils Stream methods.
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.3 $ $Date: 2004/01/02 07:52:57 $
+ * @version $Revision: 1.4 $ $Date: 2004/01/02 07:59:13 $
  */
 
 public class SwappedDataInputStreamTest extends TestCase {
@@ -116,15 +116,15 @@ public class SwappedDataInputStreamTest extends TestCase {
         assertEquals( (char) 0x0201, this.sdis.readChar() );
     }
 
-    /*
     public void testReadDouble() throws IOException {
-        assertEquals( (double) 0x0807060504030201L, this.sdis.readDouble(), 0 );
+        assertEquals( Double.longBitsToDouble(0x0807060504030201L), this.sdis.readDouble(), 0 );
     }
 
     public void testReadFloat() throws IOException {
-        assertEquals( (float) 0x04030201F, this.sdis.readFloat(), 0 );
+        assertEquals( Float.intBitsToFloat(0x04030201), this.sdis.readFloat(), 0 );
     }
 
+    /*
     public void testReadFully() throws IOException {
     }
     */
@@ -146,7 +146,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         assertEquals( (short) 0x0201, this.sdis.readShort() );
     }
 
-/*
+    /*
     public void testReadUnsignedByte() throws IOException {
     }
 
@@ -164,9 +164,7 @@ public class SwappedDataInputStreamTest extends TestCase {
 
     /*
     public void testSkipBytes() throws IOException {
-        assertEquals( (float) 0x04030201, this.sdis.skipBytes() );
     }
-
     */
 
 }
