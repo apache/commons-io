@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.4 2002/07/09 15:21:38 nicolaken Exp $
+        $Id: build.xml,v 1.5 2002/07/09 16:00:10 nicolaken Exp $
 -->
 
 
@@ -92,7 +92,7 @@
   </path>
 
   <!-- Should all tests fail if one does? -->
-  <property name="test.failonerror"        value="true"/>
+  <property name="test.failonerror"        value="false"/>
 
   <!-- The test runner to execute -->
   <property name="test.runner"             value="junit.textui.TestRunner"/>

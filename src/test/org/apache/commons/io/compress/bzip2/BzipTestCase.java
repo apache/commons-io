@@ -21,7 +21,7 @@ import junit.framework.TestCase;
  * that it behaves correctly.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.2 $ $Date: 2002/07/09 15:12:23 $
+ * @version $Revision: 1.3 $ $Date: 2002/07/09 16:00:10 $
  */
 public class BzipTestCase
     extends TestCase
@@ -125,8 +125,7 @@ public class BzipTestCase
     private InputStream getInputStream( final String resource )
         throws Exception
     {
-        final String filename = ".." + File.separator + ".." + File.separator +
-            "src" + File.separator + "test" + File.separator +
+        final String filename = "target" + File.separator + "tests" + File.separator +
             getClass().getName().replace( '.', File.separatorChar );
         final String path = getPath( filename );
         final File input = new File( path, resource );

@@ -21,7 +21,7 @@ import junit.framework.TestCase;
  *
  * @todo Find V7 tar and do tests against it
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.2 $ $Date: 2002/07/09 15:12:23 $
+ * @version $Revision: 1.3 $ $Date: 2002/07/09 16:00:10 $
  */
 public final class TarTestCase
     extends TestCase
@@ -67,8 +67,8 @@ public final class TarTestCase
         final int size = name.length();
         final String filename =
             name.substring( 0, size - 11 ).replace( '.', SP );
-        return ".." + SP + ".." + SP +
-            "src" + SP + "test" + SP + filename + SP;
+        return "target" + SP + "tests" + SP +
+                SP + filename + SP;
     }
 
     public void testReadPosixTar()
