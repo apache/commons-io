@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.20 2003/12/25 11:05:59 jeremias Exp $
+ * @version $Id: FileUtils.java,v 1.21 2003/12/29 03:28:53 bayard Exp $
  */
 public class FileUtils {
 
@@ -322,8 +322,8 @@ public class FileUtils {
             return IOUtils.contentEquals(input1, input2);
 
         } finally {
-            IOUtils.shutdownStream(input1);
-            IOUtils.shutdownStream(input2);
+            IOUtils.closeQuietly(input1);
+            IOUtils.closeQuietly(input2);
         }
     }
 
@@ -429,10 +429,10 @@ public class FileUtils {
             try {
                 CopyUtils.copy(input, output);
             } finally {
-                IOUtils.shutdownStream(output);
+                IOUtils.closeQuietly(output);
             }
         } finally {
-            IOUtils.shutdownStream(input);
+            IOUtils.closeQuietly(input);
         }
 
         if (source.length() != destination.length()) {
@@ -482,10 +482,10 @@ public class FileUtils {
             try {
                 CopyUtils.copy(input, output);
             } finally {
-                IOUtils.shutdownStream(output);
+                IOUtils.closeQuietly(output);
             }
         } finally {
-            IOUtils.shutdownStream(input);
+            IOUtils.closeQuietly(input);
         }
     }
 
@@ -595,7 +595,7 @@ public class FileUtils {
         try {
             return IOUtils.toString(in, encoding);
         } finally {
-            IOUtils.shutdownStream(in);
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -621,7 +621,7 @@ public class FileUtils {
         try {
             out.write(data.getBytes(encoding));
         } finally {
-            IOUtils.shutdownStream(out);
+            IOUtils.closeQuietly(out);
         }
     }
 

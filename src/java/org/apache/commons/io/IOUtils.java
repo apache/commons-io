@@ -145,7 +145,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.7 $ $Date: 2003/11/22 20:19:29 $
+ * @version CVS $Revision: 1.8 $ $Date: 2003/12/29 03:28:53 $
  */
 public final class IOUtils
 {
@@ -162,7 +162,7 @@ public final class IOUtils
      *
      * @param input A (possibly null) Reader
      */
-    public static void shutdownReader( final Reader input )
+    public static void closeQuietly( final Reader input )
     {
         if( input == null )
         {
@@ -184,7 +184,7 @@ public final class IOUtils
      *
      * @param output A (possibly null) Writer
      */
-    public static void shutdownWriter( final Writer output )
+    public static void closeQuietly( final Writer output )
     {
         if( output == null )
         {
@@ -205,7 +205,7 @@ public final class IOUtils
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * @param output A (possibly null) OutputStream
      */
-    public static void shutdownStream( final OutputStream output )
+    public static void closeQuietly( final OutputStream output )
     {
         if( output == null )
         {
@@ -226,7 +226,7 @@ public final class IOUtils
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * @param input A (possibly null) InputStream
      */
-    public static void shutdownStream( final InputStream input )
+    public static void closeQuietly( final InputStream input )
     {
         if( input == null )
         {
