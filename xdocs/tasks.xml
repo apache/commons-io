@@ -15,7 +15,10 @@
         <li>Need to see if FilterWriter/Reader are predictable (see also ProxyInput/OutputStream)</li>
         <li>Write TestCases for: 
         <ul>
-          <li>EndianUtils InputStream/OutputStream methods. </li>
+          <li>EndianUtils - InputStream/OutputStream methods</li>
+          <li>LockableFileWriter</li>
+          <li>ClassLoaderObjectInputStream</li>
+          <li>SwappedDataInputStream</li>
         </ul>
         </li>
         <li>More Javadocs!!!</li>
