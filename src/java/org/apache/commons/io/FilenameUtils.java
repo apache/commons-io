@@ -55,7 +55,7 @@ import java.io.IOException;
  * @author Matthew Hawthorne
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FilenameUtils.java,v 1.15 2004/10/29 18:28:03 bayard Exp $
+ * @version $Id: FilenameUtils.java,v 1.16 2004/10/29 18:53:56 bayard Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -68,6 +68,7 @@ public class FilenameUtils {
     /**
      * Standard separator string used when internalizing paths.
      */
+    // KILL
     private static final String INTERNAL_SEPARATOR = "/";
 
     /**
@@ -81,6 +82,7 @@ public class FilenameUtils {
      * @param fileName The name of the file to check.
      * @return true if file exists.
      */
+    // KILL: Not filename based
     public static boolean fileExists(String fileName) {
         File file = new File(fileName);
         return file.exists();
@@ -93,6 +95,7 @@ public class FilenameUtils {
      *
      * @param fileName The name of the file to delete.
      */
+    // KILL: Not filename based
     public static void fileDelete(String fileName) {
         File file = new File(fileName);
         file.delete();
@@ -103,6 +106,7 @@ public class FilenameUtils {
      * if necessary.
      * @param dir directory to create
      */
+    // KILL: Not filename based
     public static void mkdir(String dir) {
         File file = new File(dir);
         if (!file.exists()) {
@@ -180,6 +184,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
+    // KILL? Just use StringUtils?
     public static String removePath(String filepath) {
         return removePath(filepath, File.separatorChar);
     }
@@ -196,6 +201,7 @@ public class FilenameUtils {
      * @param fileSeparatorChar the file separator character to use
      * @return the filename minus path
      */
+    // KILL: Why allow the char to be specified?
     public static String removePath(
         String filepath,
         char fileSeparatorChar) {
@@ -220,6 +226,7 @@ public class FilenameUtils {
      * @param filepath the filepath
      * @return the filename minus path
      */
+    // KILL? Just use StringUtils?
     public static String getPath(String filepath) {
         return getPath(filepath, File.separatorChar);
     }
@@ -236,6 +243,7 @@ public class FilenameUtils {
      * @param fileSeparatorChar the file separator character to use
      * @return the filename minus path
      */
+    // KILL: Why allow the char to be specified?
     public static String getPath(
         String filepath,
         char fileSeparatorChar) {
@@ -267,6 +275,7 @@ public class FilenameUtils {
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
      */
+    // TODO: Make this non-unix specific
     public static String normalize(String path) {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
@@ -332,6 +341,7 @@ public class FilenameUtils {
      * @param path path the second path to attach to the first
      * @return The concatenated paths, or null if error occurs
      */
+    // TODO: UNIX/Windows only. Is this a problem?
     public static String catPath(String lookupPath, String path) {
         // Cut off the last slash and everything beyond
         int index = indexOfLastPathSeparator(lookupPath);
@@ -364,6 +374,7 @@ public class FilenameUtils {
      * @return The index of the last 'path separator' character, or -1 if there
      * is no such character.
      */
+    // KILL: Inline into above method
     public static int indexOfLastPathSeparator(String path) {
         int lastUnixPos = path.lastIndexOf('/');
         int lastWindowsPos = path.lastIndexOf('\\');
@@ -381,6 +392,7 @@ public class FilenameUtils {
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
      */
+    // TODO: Decide whether this is worth keeping?
     public static File resolveFile(File baseFile, String filename) {
         String filenm = filename;
         if ('/' != File.separatorChar) {
@@ -448,6 +460,7 @@ public class FilenameUtils {
      * @param path The path to be internalized.
      * @return The internalized path.
      */
+    // KILL: Inline into the one place this is used
     private static String internalize(String path) {
         return path.replace('\\', INTERNAL_SEPARATOR_CHAR);
     }
@@ -458,6 +471,7 @@ public class FilenameUtils {
      * @param path The path to be externalized.
      * @return The externalized path.
      */
+    // KILL: Nothing uses this
     private static String externalize(String path) {
         if (INTERNAL_SEPARATOR_CHAR != File.separatorChar) {
             path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
