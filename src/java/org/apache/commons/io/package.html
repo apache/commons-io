@@ -11,7 +11,7 @@ in this description</span><br>
      <a name="doc.Description"></a>     
 <div align="center">       <a href="#doc.Intro">[Introduction]</a>      
 <a href="#doc.FilenameFilters">[FilenameFilters]</a>       <a
- href="#doc.IOUtil">[IO Utilities]</a>       <a href="#doc.FileUtil">[File
+ href="#doc.IOUtils">[IO Utilities]</a>       <a href="#doc.FileUtil">[File
 Utilities]</a>       <a href="#doc.Endian">[Endian Utilities]</a>     </div>
       <a name="doc.Intro"></a>     
 <h2>Introduction</h2>
@@ -31,10 +31,10 @@ other such filters.</p>
 for example.</p>
 
 
-        <a name="doc.IOUtil"></a>     
-<h2>The <a href="IOUtil.html">org.apache.commons.io.IOUtil</a> class</h2>
+        <a name="doc.IOUtils"></a>     
+<h2>The <a href="IOUtils.html">org.apache.commons.io.IOUtils</a> class</h2>
      
-<p>     The <a href="IOUtil.html">IOUtil</a> class contains a     comprehensive
+<p>     The <a href="IOUtils.html">IOUtils</a> class contains a     comprehensive
 set of static methods for copying from:     </p>
 <ul>
        <li><code>String</code></li>
@@ -72,10 +72,10 @@ them. This would     typically done like this:</p>
 }
    </pre>
      
-<p>With the IOUtil class, that could be done with:</p>
+<p>With the IOUtils class, that could be done with:</p>
      
-<pre>import java.net.URL;<br>import java.io.*;<br>import org.apache.commons.io.IOUtil;<br><br>public class IOUtilCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    <font
- color="blue">System.out.println( IOUtil.toString( in ) );</font>
+<pre>import java.net.URL;<br>import java.io.*;<br>import org.apache.commons.io.IOUtils;<br><br>public class IOUtilsCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    <font
+ color="blue">System.out.println( IOUtils.toString( in ) );</font>
       in.close();
   }   
 }
@@ -85,7 +85,7 @@ them. This would     typically done like this:</p>
 class can save a     great deal of time.</p>
      
 <p>For utility code such as this, flexibility and speed are of primary importance.
-In IOUtil,     each kind of copy method has a variant which allows the buffer
+In IOUtils,     each kind of copy method has a variant which allows the buffer
 size to be set. For methods that     convert bytes to chars, the encoding
 method may also be set.</p>
        <a name="doc.FileUtil"></a>     
