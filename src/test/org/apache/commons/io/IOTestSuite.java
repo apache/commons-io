@@ -40,6 +40,8 @@ public class IOTestSuite
         TestSuite suite = new TestSuite( "IO Utilities" );
         suite.addTest( new TestSuite( CopyUtilsTest.class ) );
         suite.addTest( new TestSuite( IOUtilsTestCase.class ) );
+        suite.addTest( new TestSuite( IOUtilsCopyTestCase.class ) );
+        suite.addTest( new TestSuite( IOUtilsWriteTestCase.class ) );
         suite.addTest( new TestSuite( FileUtilsTestCase.class ) );
         suite.addTest( new TestSuite( FileFilterTestCase.class ) );
         suite.addTest( new TestSuite( DemuxTestCase.class ) );
