@@ -37,7 +37,7 @@ import junit.textui.TestRunner;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: CopyUtilsTest.java,v 1.6 2004/02/23 05:02:25 bayard Exp $
+ * @version $Id: CopyUtilsTest.java,v 1.7 2004/07/31 10:40:47 scolebourne Exp $
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {
@@ -80,6 +80,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     // Tests
     // ----------------------------------------------------------------
 
+    //-----------------------------------------------------------------------
     public void testCopy_byteArrayToOutputStream() throws Exception {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -102,6 +103,32 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    public void testCopy_byteArrayToWriter_nullEncoding() throws Exception {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        Writer writer = new java.io.OutputStreamWriter(baout, "US-ASCII");
+        
+        CopyUtils.copy(inData, writer, null);
+        writer.flush();
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_byteArrayToWriter_Encoding() throws Exception {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        Writer writer = new java.io.OutputStreamWriter(baout, "US-ASCII");
+        
+        CopyUtils.copy(inData, writer, "UTF8");
+        writer.flush();
+
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF8").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
+    }
+
+    //-----------------------------------------------------------------------
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -132,6 +159,40 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    public void testCopy_inputStreamToWriter_nullEncoding() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new YellOnCloseInputStream(in);
+
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        Writer writer = new java.io.OutputStreamWriter(baout, "US-ASCII");
+        
+        CopyUtils.copy(in, writer, null);
+        writer.flush();
+
+        assertTrue("Not all bytes were read", in.available() == 0);
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_inputStreamToWriter_Encoding() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new YellOnCloseInputStream(in);
+
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        Writer writer = new java.io.OutputStreamWriter(baout, "US-ASCII");
+        
+        CopyUtils.copy(in, writer, "UTF8");
+        writer.flush();
+
+        assertTrue("Not all bytes were read", in.available() == 0);
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF8").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
+    }
+
+    //-----------------------------------------------------------------------
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -150,6 +211,39 @@ public class CopyUtilsTest extends FileBasedTestCase {
         // Note: rely on the method to flush
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_readerToOutputStream_nullEncoding() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new YellOnCloseInputStream(in);
+        Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(reader, out, null);
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_readerToOutputStream_Encoding() throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new YellOnCloseInputStream(in);
+        Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(reader, out, "UTF16");
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+        
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
     }
 
     public void testCopy_readerToWriter() throws Exception {
@@ -171,6 +265,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    //-----------------------------------------------------------------------
     public void testCopy_stringToOutputStream() throws Exception {
         String str = new String(inData, "US-ASCII");
         
@@ -189,6 +284,35 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    public void testCopy_stringToOutputStream_nullEncoding() throws Exception {
+        String str = new String(inData, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str, out, null);
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_stringToOutputStream_Encoding() throws Exception {
+        String str = new String(inData, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str, out, "UTF16");
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+        
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
+    }
+
     public void testCopy_stringToWriter() throws Exception {
         String str = new String(inData, "US-ASCII");
 
@@ -203,4 +327,62 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-} // CopyUtilsTest
+    //-----------------------------------------------------------------------
+    public void testCopy_charArrayToOutputStream() throws Exception {
+        String str = new String(inData, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str.toCharArray(), out);
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_charArrayToOutputStream_nullEncoding() throws Exception {
+        String str = new String(inData, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str.toCharArray(), out, null);
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_charArrayToOutputStream_Encoding() throws Exception {
+        String str = new String(inData, "US-ASCII");
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        CopyUtils.copy(str.toCharArray(), out, "UTF16");
+        // note: this method *does* flush.
+        // note: we don't flush here; this IOUtils method does it for us
+        
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
+    }
+
+    public void testCopy_charArrayToWriter() throws Exception {
+        String str = new String(inData, "US-ASCII");
+
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        Writer writer = new java.io.OutputStreamWriter(baout, "US-ASCII");
+
+        CopyUtils.copy(str.toCharArray(), writer);
+        writer.flush();
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+}

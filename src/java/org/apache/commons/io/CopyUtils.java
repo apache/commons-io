@@ -16,6 +16,7 @@
 package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -86,6 +87,9 @@ import java.io.Writer;
  *
  * 7     copy        byte[]              Writer          3
  * 8     copy        byte[]              OutputStream    (trivial)
+ *
+ * 9     copy        char[]              OutputStream    4
+ * 10    copy        char[]              Writer          (trivial)
  * </pre>
  *
  * <p>Note that only the first two methods shuffle bytes; the rest use these
@@ -99,7 +103,7 @@ import java.io.Writer;
  * @author Jeff Turner
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
- * @version $Id: CopyUtils.java,v 1.7 2004/07/31 09:52:09 scolebourne Exp $
+ * @version $Id: CopyUtils.java,v 1.8 2004/07/31 10:40:47 scolebourne Exp $
  */
 public class CopyUtils {
 
@@ -118,7 +122,7 @@ public class CopyUtils {
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      * 
-     * @param input  the byte array to read from
+     * @param input  the byte array to read from, do not modify during output
      * @param output  the <code>OutputStream</code> to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
@@ -130,8 +134,10 @@ public class CopyUtils {
     /**
      * Copy bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
      * using the default character encoding of the platform.
+     * <p>
+     * This method uses {@link ByteArrayInputStream} and {@link InputStreamReader}.
      * 
-     * @param input  the byte array to read from
+     * @param input  the byte array to read from, do not modify during output
      * @param output  the <code>Writer</code> to write to
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
@@ -147,8 +153,10 @@ public class CopyUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link ByteArrayInputStream} and {@link InputStreamReader}.
      * 
-     * @param input  the byte array to read from
+     * @param input  the byte array to read from, do not modify during output
      * @param output  the <code>Writer</code> to write to
      * @param encoding  the encoding to use, null means platform default
      * @throws NullPointerException if the input or output is null
@@ -184,6 +192,8 @@ public class CopyUtils {
     /**
      * Copy bytes from an <code>InputStream</code> to chars on a <code>Writer</code>
      * using the default character encoding of the platform.
+     * <p>
+     * This method uses {@link InputStreamReader}.
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>Writer</code> to write to
@@ -201,6 +211,8 @@ public class CopyUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link InputStreamReader}.
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>Writer</code> to write to
@@ -215,6 +227,58 @@ public class CopyUtils {
             InputStreamReader in = new InputStreamReader(input, encoding);
             copy(in, output);
         }
+    }
+
+    // from char[]
+    //-----------------------------------------------------------------------
+    /**
+     * Copy chars from a <code>char[]</code> to a <code>Writer</code>
+     * using the default character encoding of the platform.
+     * <p>
+     * This method uses {@link CharArrayReader}.
+     * 
+     * @param input  the char array to read from, do not modify during output
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(char[] input, Writer output) throws IOException {
+        output.write(input);
+    }
+
+    /**
+     * Copy chars from a <code>char[]</code> to bytes on an <code>OutputStream</code>.
+     * <p>
+     * This method uses {@link CharArrayReader} and {@link OutputStreamWriter}.
+     * 
+     * @param input  the char array to read from, do not modify during output
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(char[] input, OutputStream output) throws IOException {
+        CharArrayReader in = new CharArrayReader(input);
+        copy(in, output);
+    }
+
+    /**
+     * Copy chars from a <code>char[]</code> to bytes on an <code>OutputStream</code>
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link CharArrayReader} and {@link OutputStreamWriter}.
+     * 
+     * @param input  the char array to read from, do not modify during output
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(char[] input, OutputStream output, String encoding) throws IOException {
+        CharArrayReader in = new CharArrayReader(input);
+        copy(in, output, encoding);
     }
 
     // from Reader
@@ -244,6 +308,8 @@ public class CopyUtils {
      * using the default character encoding of the platform, and calling flush.
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * <p>
+     * This method uses {@link OutputStreamWriter}.
      * 
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>OutputStream</code> to write to
@@ -265,6 +331,8 @@ public class CopyUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * <p>
+     * This method uses {@link OutputStreamWriter}.
      * 
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>OutputStream</code> to write to
@@ -302,6 +370,8 @@ public class CopyUtils {
      * using the default character encoding of the platform, and calling flush.
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * <p>
+     * This method uses {@link StringReader} and {@link OutputStreamWriter}.
      * 
      * @param input  the <code>String</code> to read from
      * @param output  the <code>OutputStream</code> to write to
@@ -324,6 +394,8 @@ public class CopyUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * <p>
+     * This method uses {@link StringReader} and {@link OutputStreamWriter}.
      * 
      * @param input  the <code>String</code> to read from
      * @param output  the <code>OutputStream</code> to write to
