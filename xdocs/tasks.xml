@@ -7,7 +7,6 @@
         release of this component:
       </p>
       <ul>
-        <li>Compress - Move the compress sub-package out of IO - READY</li>
         <li>IOUtils: Remove the toByteArray() variants with the bufferSize
             parameter. Reasoning can be found at
             http://www.mail-archive.com/commons-dev@jakarta.apache.org/msg19703.html</li>
