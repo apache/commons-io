@@ -20,7 +20,6 @@
       </ul>
       <p>Javadoc todo:</p>
       <ul>
-        <li>io.*</li>
         <li>io.input [SwappedDataInputStream might need work]</li>
         <li>io.output</li>
       </ul>
