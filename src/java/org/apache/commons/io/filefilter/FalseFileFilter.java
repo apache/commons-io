@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,25 +50,50 @@ package org.apache.commons.io.filefilter;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
+package org.apache.commons.io.filefilter;
 
-import java.io.FilenameFilter;
 import java.io.File;
 
-import org.apache.commons.lang.functor.Predicate;
-
 /**
- * An interface which brings the FileFilter and FilenameFilter 
- * interfaces together.
+ * A file filter that always returns false.
+ * 
+ * @since Commons IO 1.0
+ * @version $Revision: 1.1 $ $Date: 2003/05/16 22:33:47 $
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
  */
-public interface FileFilter
-extends java.io.FileFilter, FilenameFilter, Predicate
-{
-
-    /** Defined in java.io.FileFilter */
-    public boolean accept( File f);
-
-    /** Defined in FilenameFilter */
-    public boolean accept( File dir, String name);
+public class FalseFileFilter implements IOFileFilter {
+    
+    /** Singleton instance of false filter */
+    public static final IOFileFilter INSTANCE = new FalseFileFilter();
+    
+    /**
+     * Restrictive consructor.
+     */
+    protected FalseFileFilter() {
+    }
+    
+    /**
+     * Return false.
+     * 
+     * @param file  the file to check
+     * @return false
+     */
+    public boolean accept(File file) {
+        return false;
+    }
+    
+    /**
+     * Return false.
+     * 
+     * @param dir  the directory to check
+     * @param name  the filename
+     * @return false
+     */
+    public boolean accept(File dir, String name) {
+        return false;
+    }
+    
 }

@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,36 +52,45 @@ package org.apache.commons.io.filefilter;
  * <http://www.apache.org/>.
  *
  */
+package org.apache.commons.io.filefilter;
 
-import java.io.FilenameFilter;
 import java.io.File;
 
-import org.apache.commons.lang.functor.Predicate;
-
 /**
- * An abstract class which brings the FileFilter and FilenameFilter 
- * interfaces together, through the IO.FileFilter interface. Note that 
- * you <b>must</b> override one of the methods ellse your class will 
- * infinitely loop.
+ * An abstract class which implements the Java FileFilter and FilenameFilter 
+ * interfaces via the IOFileFilter interface.
+ * <p>
+ * Note that a subclass <b>must</b> override one of the accept methods,
+ * otherwise your class will infinitely loop.
  *
+ * @since Commons IO 1.0
+ * @version $Revision: 1.5 $ $Date: 2003/05/16 22:33:46 $
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
  */
-public abstract class AbstractFileFilter
-implements FileFilter
-{
+public abstract class AbstractFileFilter implements IOFileFilter {
 
-    /** Defined in Predicate */
-    public boolean evaluate(Object object) {
-        return accept( (File)object );
+    /**
+     * Checks to see if the File should be accepted by this filter.
+     * 
+     * @param file  the File to check
+     * @return true if this file matches the test
+     */
+    public boolean accept(final File file) {
+        return accept(file.getParentFile(), file.getName());
     }
 
-    /** Defined in FileFilter */
-    public boolean accept( File f) {
-        return accept( f.getParentFile(), f.getName());
-    }
-
-    /** Defined in FilenameFilter */
-    public boolean accept( File dir, String name) {
-        return accept( new File( dir.getName() + File.separator + name ) );
+    /**
+     * Checks to see if the File should be accepted by this filter.
+     * 
+     * @param file  the directory File to check
+     * @param name  the filename within the directory to check
+     * @return true if this file matches the test
+     */
+    public boolean accept(final File dir, final String name) {
+        String filename = dir.getName() + File.separator + name;
+        return accept(new File(filename));
     }
 
 }

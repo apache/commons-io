@@ -50,105 +50,111 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
 package org.apache.commons.io.filefilter;
 
+import java.io.File;
+import java.util.List;
+
 /**
- * Useful utilities for working with file filters.
- * 
+ * This filters files based on the suffix (what the filename
+ * ends with). This is used in retrieving all the files of a
+ * particular type.
+ * <p>
+ * For example, to retrieve and print all <code>*.java</code> files 
+ * in the current directory:
+ *
+ * <pre>
+ * File dir = new File(".");
+ * String[] files = dir.list( new SuffixFileFilter( new String[]{".java"} ) );
+ * for (int i = 0; i &lt; files.length; i++) {
+ *     System.out.println(files[i]);
+ * }
+ * </pre>
+ *
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/05/16 22:33:46 $
+ * @version $Revision: 1.1 $ $Date: 2003/05/16 22:33:46 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
+ * @author Federico Barbieri
+ * @author Serge Knystautas
+ * @author Peter Donald
  */
-public class FileFilterUtils {
+public class SuffixFileFilter extends AbstractFileFilter {
+    
+    /** The filename suffixes to search for */
+    private final String[] suffixes;
+
+    /**
+     * Constructs a new Suffix file filter for a single extension.
+     * 
+     * @param extension  the extension to allow, must not be null
+     */
+    public SuffixFileFilter(final String suffix) {
+        if (suffix == null) {
+            throw new IllegalArgumentException("The suffix must not be null");
+        }
+        this.suffixes = new String[] {suffix};
+    }
+
+    /**
+     * Constructs a new Suffix file filter for an array of suffixs.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
+     * 
+     * @param suffixes  the suffixes to allow, must not be null
+     */
+    public SuffixFileFilter(final String[] suffixes) {
+        if (suffixes == null) {
+            throw new IllegalArgumentException("The array of suffixes must not be null");
+        }
+        this.suffixes = suffixes;
+    }
+
+    /**
+     * Constructs a new Suffix file filter for a list of suffixes.
+     * 
+     * @param suffixes  the suffixes to allow, must not be null
+     */
+    public SuffixFileFilter(final List suffixes) {
+        if (suffixes == null) {
+            throw new IllegalArgumentException("The list of suffixes must not be null");
+        }
+        this.suffixes = (String[]) suffixes.toArray(new String[suffixes.size()]);
+    }
+
+    /**
+     * Checks to see if the filename ends with the suffix.
+     * 
+     * @param file  the File to check
+     * @return true if the filename ends with one of our suffixes
+     */
+    public boolean accept(final File file) {
+        String name = file.getName();
+        for (int i = 0; i < this.suffixes.length; i++) {
+            if (name.endsWith(this.suffixes[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     /**
-     * FileFilterUtils is not normally instantiated.
-     */
-    public FileFilterUtils() {
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a filter that returns true if the filename starts with the specified text.
+     * Checks to see if the filename ends with the suffix.
      * 
-     * @param prefix  the filename prefix
-     * @return a prefix checking filter
+     * @param file  the File directory
+     * @param name  the filename
+     * @return true if the filename ends with one of our suffixes
      */
-    public static IOFileFilter prefixFileFilter(String prefix) {
-        return new PrefixFileFilter(prefix);
-    }
-
-    /**
-     * Returns a filter that returns true if the filename ends with the specified text.
-     * 
-     * @param suffix  the filename suffix
-     * @return a suffix checking filter
-     */
-    public static IOFileFilter suffixFileFilter(String suffix) {
-        return new SuffixFileFilter(suffix);
-    }
-
-    /**
-     * Returns a filter that checks if the file is a directory.
-     * 
-     * @return directory file filter
-     */
-    public static IOFileFilter directoryFileFilter() {
-        return DirectoryFileFilter.INSTANCE;
-    }
-    
-    /**
-     * Returns a filter that ANDs the two specified filters.
-     * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
-     * @return a filter that ANDs the two specified filters
-     */
-    public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new AndFileFilter(filter1, filter2);
-    }
-
-    /**
-     * Returns a filter that ORs the two specified filters.
-     * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
-     * @return a filter that ORs the two specified filters
-     */
-    public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new OrFileFilter(filter1, filter2);
-    }
-
-    /**
-     * Returns a filter that NOTs the specified filter.
-     * 
-     * @param filter  the filter to invert
-     * @return a filter that NOTs the specified filter
-     */
-    public static IOFileFilter notFileFilter(IOFileFilter filter) {
-        return new NotFileFilter(filter);
-    }
-
-    /**
-     * Returns a filter that always returns true.
-     * 
-     * @return a true filter
-     */
-    public static IOFileFilter trueFileFilter() {
-        return TrueFileFilter.INSTANCE;
-    }
-
-    /**
-     * Returns a filter that always returns false.
-     * 
-     * @return a false filter
-     */
-    public static IOFileFilter falseFileFilter() {
-        return FalseFileFilter.INSTANCE;
+    public boolean accept(final File file, final String name) {
+        for (int i = 0; i < this.suffixes.length; i++) {
+            if (name.endsWith(this.suffixes[i])) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

@@ -54,101 +54,41 @@
  */
 package org.apache.commons.io.filefilter;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+
 /**
- * Useful utilities for working with file filters.
+ * An interface which brings the FileFilter and FilenameFilter 
+ * interfaces together.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/05/16 22:33:46 $
+ * @version $Revision: 1.1 $ $Date: 2003/05/16 22:33:47 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
  */
-public class FileFilterUtils {
-    
-    /**
-     * FileFilterUtils is not normally instantiated.
-     */
-    public FileFilterUtils() {
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a filter that returns true if the filename starts with the specified text.
-     * 
-     * @param prefix  the filename prefix
-     * @return a prefix checking filter
-     */
-    public static IOFileFilter prefixFileFilter(String prefix) {
-        return new PrefixFileFilter(prefix);
-    }
+public interface IOFileFilter extends FileFilter, FilenameFilter {
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
+     * Checks to see if the File should be accepted by this filter.
+     * <p>
+     * Defined in {@link java.io.FileFilter}.
      * 
-     * @param suffix  the filename suffix
-     * @return a suffix checking filter
+     * @param file  the File to check
+     * @return true if this file matches the test
      */
-    public static IOFileFilter suffixFileFilter(String suffix) {
-        return new SuffixFileFilter(suffix);
-    }
+    public boolean accept(File file);
 
     /**
-     * Returns a filter that checks if the file is a directory.
+     * Checks to see if the File should be accepted by this filter.
+     * <p>
+     * Defined in {@link java.io.FilenameFilter}.
      * 
-     * @return directory file filter
+     * @param file  the directory File to check
+     * @param name  the filename within the directory to check
+     * @return true if this file matches the test
      */
-    public static IOFileFilter directoryFileFilter() {
-        return DirectoryFileFilter.INSTANCE;
-    }
-    
-    /**
-     * Returns a filter that ANDs the two specified filters.
-     * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
-     * @return a filter that ANDs the two specified filters
-     */
-    public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new AndFileFilter(filter1, filter2);
-    }
-
-    /**
-     * Returns a filter that ORs the two specified filters.
-     * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
-     * @return a filter that ORs the two specified filters
-     */
-    public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new OrFileFilter(filter1, filter2);
-    }
-
-    /**
-     * Returns a filter that NOTs the specified filter.
-     * 
-     * @param filter  the filter to invert
-     * @return a filter that NOTs the specified filter
-     */
-    public static IOFileFilter notFileFilter(IOFileFilter filter) {
-        return new NotFileFilter(filter);
-    }
-
-    /**
-     * Returns a filter that always returns true.
-     * 
-     * @return a true filter
-     */
-    public static IOFileFilter trueFileFilter() {
-        return TrueFileFilter.INSTANCE;
-    }
-
-    /**
-     * Returns a filter that always returns false.
-     * 
-     * @return a false filter
-     */
-    public static IOFileFilter falseFileFilter() {
-        return FalseFileFilter.INSTANCE;
-    }
+    public boolean accept(File dir, String name);
     
 }

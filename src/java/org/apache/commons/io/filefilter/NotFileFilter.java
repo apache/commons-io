@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,57 +51,54 @@ package org.apache.commons.io.filefilter;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.filefilter;
 
 import java.io.File;
 
 /**
- * This filters files based on the extension (what the filename
- * ends with). This is used in retrieving all the files of a
- * particular type.
+ * This filter produces a logical NOT of the filters specified.
  *
- * <p>Eg., to retrieve and print all <code>*.java</code> files in the current directory:</p>
- *
- * <pre>
- * File dir = new File(".");
- * String[] files = dir.list( new ExtensionFileFilter( new String[]{"java"} ) );
- * for (int i=0; i&lt;files.length; i++)
- * {
- *     System.out.println(files[i]);
- * }
- * </pre>
- *
- * @author  Federico Barbieri <fede@apache.org>
- * @author Serge Knystautas <sergek@lokitech.com>
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/07/28 03:10:01 $
- * @since 4.0
+ * @since Commons IO 1.0
+ * @version $Revision: 1.1 $ $Date: 2003/05/16 22:33:47 $
+ * 
+ * @author Stephen Colebourne
  */
-public class ExtensionFileFilter
-    extends AbstractFileFilter
-{
-    private String[] m_extensions;
+public class NotFileFilter extends AbstractFileFilter {
+    
+    /** The filter */
+    private final IOFileFilter filter;
 
-    public ExtensionFileFilter( final String[] extensions )
-    {
-        m_extensions = extensions;
-    }
-
-    public ExtensionFileFilter( final String extension )
-    {
-        m_extensions = new String[]{extension};
-    }
-
-    public boolean accept( final File file, final String name )
-    {
-        for( int i = 0; i < m_extensions.length; i++ )
-        {
-            if( name.endsWith( m_extensions[ i ] ) )
-            {
-                return true;
-            }
+    /**
+     * Constructs a new file filter that NOTs the result of another filters.
+     * 
+     * @param filter  the filter
+     */
+    public NotFileFilter(IOFileFilter filter) {
+        if (filter == null) {
+            throw new IllegalArgumentException("The filter must not be null");
         }
-        return false;
+        this.filter = filter;
     }
+
+    /**
+     * Checks to see if both filters are true.
+     * 
+     * @param file  the File to check
+     * @return true if the filter returns false
+     */
+    public boolean accept(File file) {
+        return ! filter.accept(file);
+    }
+    
+    /**
+     * Checks to see if both filters are true.
+     * 
+     * @param file  the File directory
+     * @param name  the filename
+     * @return true if the filter returns false
+     */
+    public boolean accept(final File file, final String name) {
+        return ! filter.accept(file, name);
+    }
+    
 }
-
-

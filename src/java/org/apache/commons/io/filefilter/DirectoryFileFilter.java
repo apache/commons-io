@@ -1,9 +1,7 @@
-package org.apache.commons.io.filefilter;
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,32 +51,50 @@ package org.apache.commons.io.filefilter;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.apache.commons.io.filefilter;
+
 import java.io.File;
 
 /**
  * This filter accepts <code>File</code>s that are directories.
- * <p>Eg., here is how to print out a list of the current directory's subdirectories:</p>
+ * <p>
+ * For example, here is how to print out a list of the 
+ * current directory's subdirectories:
  *
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new DirectoryFileFilter() );
- * for ( int i=0; i&lt;files.length; i++ )
- * {
+ * String[] files = dir.list( DirectoryFileFilter.INSTANCE );
+ * for ( int i = 0; i &lt; files.length; i++ ) {
  *     System.out.println(files[i]);
  * }
  * </pre>
  *
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/28 03:10:01 $
- * @since 4.0
+ * @since Commons IO 1.0
+ * @version $Revision: 1.2 $ $Date: 2003/05/16 22:33:46 $
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @author Peter Donald
  */
-public class DirectoryFileFilter
-    extends AbstractFileFilter
-{
-    public boolean accept( final File file )
-    {
+public class DirectoryFileFilter extends AbstractFileFilter {
+    
+    /** Singleton instance of directory filter */
+    public static final IOFileFilter INSTANCE = new DirectoryFileFilter();
+    
+    /**
+     * Restrictive consructor.
+     */
+    protected DirectoryFileFilter() {
+    }
+    
+    /**
+     * Checks to see if the file is a directory.
+     * 
+     * @param file  the File to check
+     * @return true if the file is a directory
+     */
+    public boolean accept(final File file) {
         return file.isDirectory();
     }
+    
 }
-
-

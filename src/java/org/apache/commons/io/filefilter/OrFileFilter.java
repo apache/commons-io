@@ -1,7 +1,7 @@
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,105 +50,59 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
 package org.apache.commons.io.filefilter;
 
+import java.io.File;
+
 /**
- * Useful utilities for working with file filters.
- * 
+ * This filter produces a logical OR of the two filters specified.
+ *
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/05/16 22:33:46 $
+ * @version $Revision: 1.3 $ $Date: 2003/05/16 22:33:47 $
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  */
-public class FileFilterUtils {
+public class OrFileFilter extends AbstractFileFilter {
     
-    /**
-     * FileFilterUtils is not normally instantiated.
-     */
-    public FileFilterUtils() {
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Returns a filter that returns true if the filename starts with the specified text.
-     * 
-     * @param prefix  the filename prefix
-     * @return a prefix checking filter
-     */
-    public static IOFileFilter prefixFileFilter(String prefix) {
-        return new PrefixFileFilter(prefix);
-    }
+    /** The first filter */
+    private final IOFileFilter filter1;
+    /** The second filter */
+    private final IOFileFilter filter2;
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
-     * 
-     * @param suffix  the filename suffix
-     * @return a suffix checking filter
-     */
-    public static IOFileFilter suffixFileFilter(String suffix) {
-        return new SuffixFileFilter(suffix);
-    }
-
-    /**
-     * Returns a filter that checks if the file is a directory.
-     * 
-     * @return directory file filter
-     */
-    public static IOFileFilter directoryFileFilter() {
-        return DirectoryFileFilter.INSTANCE;
-    }
-    
-    /**
-     * Returns a filter that ANDs the two specified filters.
+     * Constructs a new file filter that ORs the result of two other filters.
      * 
      * @param filter1  the first filter
      * @param filter2  the second filter
-     * @return a filter that ANDs the two specified filters
      */
-    public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new AndFileFilter(filter1, filter2);
+    public OrFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+        if (filter1 == null || filter2 == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        this.filter1 = filter1;
+        this.filter2 = filter2;
     }
 
     /**
-     * Returns a filter that ORs the two specified filters.
+     * Checks to see if either filter is true.
      * 
-     * @param filter1  the first filter
-     * @param filter2  the second filter
-     * @return a filter that ORs the two specified filters
+     * @param file  the File to check
+     * @return true if either filter is true
      */
-    public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
-        return new OrFileFilter(filter1, filter2);
+    public boolean accept(File file) {
+        return filter1.accept(file) || filter2.accept(file);
     }
-
+    
     /**
-     * Returns a filter that NOTs the specified filter.
+     * Checks to see if either filter is true.
      * 
-     * @param filter  the filter to invert
-     * @return a filter that NOTs the specified filter
+     * @param file  the File directory
+     * @param name  the filename
+     * @return true if either filter is true
      */
-    public static IOFileFilter notFileFilter(IOFileFilter filter) {
-        return new NotFileFilter(filter);
-    }
-
-    /**
-     * Returns a filter that always returns true.
-     * 
-     * @return a true filter
-     */
-    public static IOFileFilter trueFileFilter() {
-        return TrueFileFilter.INSTANCE;
-    }
-
-    /**
-     * Returns a filter that always returns false.
-     * 
-     * @return a false filter
-     */
-    public static IOFileFilter falseFileFilter() {
-        return FalseFileFilter.INSTANCE;
+    public boolean accept(final File file, final String name) {
+        return filter1.accept(file, name) || filter2.accept(file, name);
     }
     
 }
