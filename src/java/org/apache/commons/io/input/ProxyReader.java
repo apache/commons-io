@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,67 +23,70 @@ import java.io.Reader;
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. 
- * 
+ * <p>
  * It is an alternative base class to FilterReader
  * to increase reusability, because FilterReader changes the 
  * methods being called, such as read(char[]) to read(char[], int, int).
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public abstract class ProxyReader extends FilterReader {
 
-    private Reader proxy;
-
     /**
      * Constructs a new ProxyReader.
-     * @param proxy Reader to delegate to
+     * 
+     * @param proxy  the Reader to delegate to
      */
     public ProxyReader(Reader proxy) {
         super(proxy);
-        this.proxy = proxy;
+        // the proxy is stored in a protected superclass variable named 'in'
     }
 
     /** @see java.io.Reader#read() */
     public int read() throws IOException {
-        return this.proxy.read();
+        return in.read();
     }
 
     /** @see java.io.Reader#read(char[]) */
     public int read(char[] chr) throws IOException {
-        return this.proxy.read(chr);
+        return in.read(chr);
     }
 
     /** @see java.io.Reader#read(char[], int, int) */
     public int read(char[] chr, int st, int end) throws IOException {
-        return this.proxy.read(chr, st, end);
+        return in.read(chr, st, end);
     }
 
     /** @see java.io.Reader#skip(long) */
     public long skip(long ln) throws IOException {
-        return this.proxy.skip(ln);
+        return in.skip(ln);
     }
 
     /** @see java.io.Reader#ready() */
     public boolean ready() throws IOException {
-        return this.proxy.ready();
+        return in.ready();
     }
 
     /** @see java.io.Reader#close() */
     public void close() throws IOException {
-        this.proxy.close();
+        in.close();
     }
 
     /** @see java.io.Reader#mark(int) */
     public synchronized void mark(int idx) throws IOException {
-        this.proxy.mark(idx);
+        in.mark(idx);
     }
 
     /** @see java.io.Reader#reset() */
     public synchronized void reset() throws IOException {
-        this.proxy.reset();
+        in.reset();
     }
 
     /** @see java.io.Reader#markSupported() */
     public boolean markSupported() {
-        return this.proxy.markSupported();
+        return in.markSupported();
     }
 
 }
