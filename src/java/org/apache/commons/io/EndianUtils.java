@@ -64,7 +64,7 @@ import java.io.OutputStream;
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.9 $ $Date: 2003/12/30 06:52:49 $
+ * @version CVS $Revision: 1.10 $ $Date: 2004/01/02 07:43:34 $
  */
 public final class EndianUtils
 {
@@ -250,8 +250,8 @@ public final class EndianUtils
      */
     public static long readSwappedLong( byte[] data, int offset )
     {
-        long ln = (long)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) );
-        long low = (long)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+        long low = (long)( 
+            ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
