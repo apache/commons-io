@@ -30,7 +30,7 @@ import junit.textui.TestRunner;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Martin Cooper
- * @version $Id: FilenameUtilsTestCase.java,v 1.16 2004/10/30 23:12:18 scolebourne Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.17 2004/10/30 23:23:53 scolebourne Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -171,43 +171,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         return sb.toString();
     }
 
-    public void testRemoveExtension() {
-        String[][] tests = { 
-                { "filename.ext", "filename" }, 
-                { "first.second.third.ext", "first.second.third" }, 
-                { "README", "README" }, 
-                { "domain.dot.com", "domain.dot" }, 
-                { "image.jpeg", "image" },
-                { "a.b/c", "a.b/c" },
-                { "a.b/c.txt", "a.b/c" },
-                { "a/b/c", "a/b/c" },
-        };
-
-        for (int i = 0; i < tests.length; i++) {
-            assertEquals(tests[i][1], FilenameUtils.removeExtension(tests[i][0]));
-            //assertEquals(tests[i][1], FilenameUtils.basename(tests[i][0]));
-        }
-    }
-
-    public void testRemoveExtensionWithPaths() {
-        String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "/tmp/foo/filename" }, {
-                "C:\\temp\\foo\\filename.ext", "C:\\temp\\foo\\filename" }, {
-                "/tmp/foo.bar/filename.ext", "/tmp/foo.bar/filename" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "C:\\temp\\foo.bar\\filename" }, {
-                "/tmp/foo.bar/README", "/tmp/foo.bar/README" }, {
-                "C:\\temp\\foo.bar\\README", "C:\\temp\\foo.bar\\README" }, {
-                "../filename.ext", "../filename" }
-        };
-
-        for (int i = 0; i < testsWithPaths.length; i++) {
-            assertEquals(
-                testsWithPaths[i][1],
-                FilenameUtils.removeExtension(testsWithPaths[i][0]));
-            //assertEquals(testsWithPaths[i][1], FilenameUtils.basename(testsWithPaths[i][0]));
-        }
-    }
-
     //-----------------------------------------------------------------------
     public void testSeparatorsToUnix() {
         assertEquals(null, FilenameUtils.separatorsToUnix(null));
@@ -274,7 +237,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a\\b", FilenameUtils.getPath("a\\b\\c"));
     }
 
-    public void testRemovePath() {
+    public void testGetName() {
         assertEquals(null, FilenameUtils.getName(null));
         assertEquals("noseperator.inthispath", FilenameUtils.getName("noseperator.inthispath"));
         assertEquals("c.txt", FilenameUtils.getName("a/b/c.txt"));
@@ -297,6 +260,22 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("", FilenameUtils.getExtension("a\\b\\c"));
         assertEquals("", FilenameUtils.getExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
+    }
+
+    public void testRemoveExtension() {
+        assertEquals(null, FilenameUtils.removeExtension(null));
+        assertEquals("file", FilenameUtils.removeExtension("file.ext"));
+        assertEquals("README", FilenameUtils.removeExtension("README"));
+        assertEquals("domain.dot", FilenameUtils.removeExtension("domain.dot.com"));
+        assertEquals("image", FilenameUtils.removeExtension("image.jpeg"));
+        assertEquals("a.b/c", FilenameUtils.removeExtension("a.b/c"));
+        assertEquals("a.b/c", FilenameUtils.removeExtension("a.b/c.txt"));
+        assertEquals("a/b/c", FilenameUtils.removeExtension("a/b/c"));
+        assertEquals("a.b\\c", FilenameUtils.removeExtension("a.b\\c"));
+        assertEquals("a.b\\c", FilenameUtils.removeExtension("a.b\\c.txt"));
+        assertEquals("a\\b\\c", FilenameUtils.removeExtension("a\\b\\c"));
+        assertEquals("C:\\temp\\foo.bar\\README", FilenameUtils.removeExtension("C:\\temp\\foo.bar\\README"));
+        assertEquals("../filename", FilenameUtils.removeExtension("../filename.ext"));
     }
 
 }
