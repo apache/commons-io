@@ -20,7 +20,7 @@
         <li>Improve site!!!</li>
       </ul>
     </section>
-    <section name="New Code">
+    <section name="Post 1.0 release">
       <ul>
         <li>A CsvReader/Writer set of classes in a csv sub-package</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
