@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.1 2002/07/08 22:19:10 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2002/07/08 22:19:10 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2002/07/09 15:12:23 $
  *
  * ====================================================================
  *
@@ -68,7 +68,6 @@ import java.io.IOException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.avalon.excalibur.io.FileUtil;
 
 /**
  * This is used to test FileUtil for correctness.
@@ -241,3 +240,4 @@ public final class FileUtilTestCase
         }
     }
 }
+

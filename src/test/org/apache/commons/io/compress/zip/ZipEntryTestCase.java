@@ -9,11 +9,6 @@ package org.apache.commons.io.compress.zip;
 
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
-import org.apache.excalibur.zip.AsiExtraField;
-import org.apache.excalibur.zip.UnrecognizedExtraField;
-import org.apache.excalibur.zip.ZipEntry;
-import org.apache.excalibur.zip.ZipExtraField;
-import org.apache.excalibur.zip.ZipShort;
 
 /**
  * JUnit testcases ZipEntry.

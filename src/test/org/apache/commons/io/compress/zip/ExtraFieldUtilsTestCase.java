@@ -8,13 +8,6 @@
 package org.apache.commons.io.compress.zip;
 
 import junit.framework.TestCase;
-import org.apache.excalibur.zip.AsiExtraField;
-import org.apache.excalibur.zip.ExtraFieldUtils;
-import org.apache.excalibur.zip.UnixStat;
-import org.apache.excalibur.zip.UnrecognizedExtraField;
-import org.apache.excalibur.zip.ZipExtraField;
-import org.apache.excalibur.zip.ZipShort;
-
 /**
  * JUnit testcases ExtraFieldUtils.
  *

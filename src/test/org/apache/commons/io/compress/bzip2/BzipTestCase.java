@@ -5,7 +5,7 @@
  * version 1.1, a copy of which has been included  with this distribution in
  * the LICENSE.txt file.
  */
-package org.apache.excalibur.bzip2.test;
+package org.apache.commons.io.compress.bzip2;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,15 +15,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import junit.framework.TestCase;
-import org.apache.excalibur.bzip2.CBZip2InputStream;
-import org.apache.excalibur.bzip2.CBZip2OutputStream;
 
 /**
  * A test the stress tested the BZip implementation to verify
  * that it behaves correctly.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version $Revision: 1.1 $ $Date: 2002/07/08 22:19:09 $
+ * @version $Revision: 1.2 $ $Date: 2002/07/09 15:12:23 $
  */
 public class BzipTestCase
     extends TestCase

@@ -8,7 +8,6 @@
 package org.apache.commons.io.compress.zip;
 
 import junit.framework.TestCase;
-import org.apache.excalibur.zip.ZipShort;
 
 /**
  * JUnit 3 testcases for org.apache.tools.zip.ZipShort.

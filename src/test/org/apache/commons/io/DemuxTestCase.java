@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.1 2002/07/08 22:19:10 nicolaken Exp $
- * $Revision: 1.1 $
- * $Date: 2002/07/08 22:19:10 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/DemuxTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
+ * $Revision: 1.2 $
+ * $Date: 2002/07/09 15:12:23 $
  *
  * ====================================================================
  *
@@ -70,8 +70,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import junit.framework.TestCase;
-import org.apache.avalon.excalibur.io.DemuxInputStream;
-import org.apache.avalon.excalibur.io.DemuxOutputStream;
 
 /**
  * Basic unit tests for the multiplexing streams.
@@ -284,3 +282,4 @@ public final class DemuxTestCase
         }
     }
 }
+
