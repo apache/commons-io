@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.6 2003/12/30 15:26:59 jeremias Exp $
- * $Revision: 1.6 $
- * $Date: 2003/12/30 15:26:59 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.7 2004/01/02 06:18:40 bayard Exp $
+ * $Revision: 1.7 $
+ * $Date: 2004/01/02 06:18:40 $
  *
  * ====================================================================
  *
@@ -139,54 +139,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertTrue( "Content not equal according to java.util.Arrays#equals()", Arrays.equals( b0, b1 ) );
     }
 
-    public void testInputStreamToOutputStream()
-        throws Exception
-    {
-        File destination = newFile( "copy1.txt" );
-        FileInputStream fin = new FileInputStream( m_testFile );
-        try {
-            FileOutputStream fout = new FileOutputStream( destination );
-            try {
-                int count = CopyUtils.copy( fin, fout );
-                assertTrue( "Not all bytes were read", fin.available() == 0 );
-                assertEquals( "Number of bytes read should equal file size", m_testFile.length(), count );
-                fout.flush();
-
-                checkFile( destination, m_testFile );
-                checkWrite( fout );
-            } finally {
-                fout.close();
-            }
-            deleteFile( destination );
-        } finally {
-            fin.close();
-        }
-    }
-
-    public void testInputStreamToWriter()
-        throws Exception
-    {
-        File destination = newFile( "copy2.txt" );
-        FileInputStream fin = new FileInputStream( m_testFile );
-        try {
-            FileWriter fout = new FileWriter( destination );
-            try {
-                CopyUtils.copy( fin, fout );
-
-                assertTrue( "Not all bytes were read", fin.available() == 0 );
-                fout.flush();
-
-                checkFile( destination, m_testFile );
-                checkWrite( fout );
-            } finally {
-                fout.close();
-            }
-            deleteFile( destination );
-        } finally {
-             fin.close();
-        }
-    }
-
     public void testInputStreamToString()
         throws Exception
     {
@@ -197,56 +149,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             assertTrue( "Not all bytes were read", fin.available() == 0 );
             assertTrue( "Wrong output size: out.length()=" + out.length() +
                         "!=" + FILE_SIZE, out.length() == FILE_SIZE );
-        } finally {
-            fin.close();
-        }
-    }
-
-    public void testReaderToOutputStream()
-        throws Exception
-    {
-        File destination = newFile( "copy3.txt" );
-        FileReader fin = new FileReader( m_testFile );
-        try {
-            FileOutputStream fout = new FileOutputStream( destination );
-            try {
-                CopyUtils.copy( fin, fout );
-                //Note: this method *does* flush. It is equivalent to:
-                //  OutputStreamWriter _out = new OutputStreamWriter(fout);
-                //  CopyUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
-                //  _out.flush();
-                //  out = fout;
-    
-                // Note: rely on the method to flush
-                checkFile( destination, m_testFile );
-                checkWrite( fout );
-            } finally {
-                fout.close();
-            }
-            deleteFile( destination );
-        } finally {
-            fin.close();
-        }
-    }
-
-    public void testReaderToWriter()
-        throws Exception
-    {
-        File destination = newFile( "copy4.txt" );
-        FileReader fin = new FileReader( m_testFile );
-        try {
-            FileWriter fout = new FileWriter( destination );
-            try {
-                int count = CopyUtils.copy( fin, fout );
-                assertEquals( "The number of characters returned by copy is wrong", m_testFile.length(), count);
-
-                fout.flush();
-                checkFile( destination, m_testFile );
-                checkWrite( fout );
-            } finally {
-                fout.close();
-            }
-            deleteFile( destination );
         } finally {
             fin.close();
         }
