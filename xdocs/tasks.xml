@@ -7,10 +7,8 @@
         release of this component:
       </p>
       <ul>
-        <li>IOUtilsTestCase: Handle unit tests that test an IOUtils method and a CopyUtils method at the same time. [Hen]</li>
         <li>Write TestCases for: 
         <ul>
-          <li>EndianUtils - InputStream/OutputStream methods</li>
           <li>SwappedDataInputStream - [half done]</li>
         </ul>
         though they may not affect an initial beta release. 
@@ -27,6 +25,8 @@
     </section>
     <section name="Post 1.0 release">
       <ul>
+        <li>IOUtilsTestCase: Handle unit tests that test an IOUtils method and a CopyUtils method at the same time. </li>
+        <li>Write Unit Test for ClassLoaderObjectInputStream. </li>
         <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>A CsvReader/Writer set of classes in a csv sub-package</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
