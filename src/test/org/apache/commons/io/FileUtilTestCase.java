@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2002/07/09 15:12:23 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.3 2002/10/26 06:24:15 bayard Exp $
+ * $Revision: 1.3 $
+ * $Date: 2002/10/26 06:24:15 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * This is used to test FileUtil for correctness.
+ * This is used to test FileUtils for correctness.
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  */
@@ -137,7 +137,7 @@ public final class FileUtilTestCase
         throws Exception
     {
         final File destination = new File( m_testDirectory, "copy1.txt" );
-        FileUtil.copyFile( m_testFile1, destination );
+        FileUtils.copyFile( m_testFile1, destination );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE1_SIZE );
     }
@@ -146,7 +146,7 @@ public final class FileUtilTestCase
         throws Exception
     {
         final File destination = new File( m_testDirectory, "copy2.txt" );
-        FileUtil.copyFile( m_testFile2, destination );
+        FileUtils.copyFile( m_testFile2, destination );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE2_SIZE );
     }
@@ -157,7 +157,7 @@ public final class FileUtilTestCase
         final File destination = new File( m_testDirectory, "copy1.txt" );
         destination.createNewFile();
         assertTrue( "Copy1.txt doesn't exist to delete", destination.exists() );
-        FileUtil.forceDelete( destination );
+        FileUtils.forceDelete( destination );
         assertTrue( "Check No Exist", !destination.exists() );
     }
 
@@ -167,7 +167,7 @@ public final class FileUtilTestCase
         final File destination = new File( m_testDirectory, "copy2.txt" );
         destination.createNewFile();
         assertTrue( "Copy2.txt doesn't exist to delete", destination.exists() );
-        FileUtil.forceDelete( destination );
+        FileUtils.forceDelete( destination );
         assertTrue( "Check No Exist", !destination.exists() );
     }
 
@@ -177,7 +177,7 @@ public final class FileUtilTestCase
         final File directory = new File( m_testDirectory, "subdir" );
         if( !directory.exists() ) directory.mkdirs();
         final File destination = new File( directory, "file1-test.txt" );
-        FileUtil.copyFileToDirectory( m_testFile1, directory );
+        FileUtils.copyFileToDirectory( m_testFile1, directory );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE1_SIZE );
     }
@@ -188,7 +188,7 @@ public final class FileUtilTestCase
         final File directory = new File( m_testDirectory, "subdir" );
         if( !directory.exists() ) directory.mkdirs();
         final File destination = new File( directory, "file2-test.txt" );
-        FileUtil.copyFileToDirectory( m_testFile2, directory );
+        FileUtils.copyFileToDirectory( m_testFile2, directory );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE2_SIZE );
     }
@@ -196,21 +196,21 @@ public final class FileUtilTestCase
     public void testForceDeleteDir()
         throws Exception
     {
-        FileUtil.forceDelete( m_testDirectory.getParentFile() );
+        FileUtils.forceDelete( m_testDirectory.getParentFile() );
         assertTrue( "Check No Exist", !m_testDirectory.getParentFile().exists() );
     }
 
     public void testResolveFileDotDot()
         throws Exception
     {
-        final File file = FileUtil.resolveFile( m_testDirectory, ".." );
+        final File file = FileUtils.resolveFile( m_testDirectory, ".." );
         assertEquals( "Check .. operator", file, m_testDirectory.getParentFile() );
     }
 
     public void testResolveFileDot()
         throws Exception
     {
-        final File file = FileUtil.resolveFile( m_testDirectory, "." );
+        final File file = FileUtils.resolveFile( m_testDirectory, "." );
         assertEquals( "Check . operator", file, m_testDirectory );
     }
 
@@ -236,7 +236,7 @@ public final class FileUtilTestCase
         for( int i = 0; i < src.length; i++ )
         {
             assertEquals( "Check if '" + src[ i ] + "' normalized to '" + dest[ i ] + "'",
-                          dest[ i ], FileUtil.normalize( src[ i ] ) );
+                          dest[ i ], FileUtils.normalize( src[ i ] ) );
         }
     }
 }

@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.2 2002/07/09 15:12:23 nicolaken Exp $
- * $Revision: 1.2 $
- * $Date: 2002/07/09 15:12:23 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.3 2002/10/26 06:24:15 bayard Exp $
+ * $Revision: 1.3 $
+ * $Date: 2002/10/26 06:24:15 $
  *
  * ====================================================================
  *
@@ -131,7 +131,7 @@ public final class IOUtilTestCase
     {
         try
         {
-            FileUtil.deleteDirectory( "test" );
+            FileUtils.deleteDirectory( "test" );
         }
         catch( IOException ioe )
         {
