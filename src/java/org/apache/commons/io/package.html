@@ -22,56 +22,15 @@ file-     and stream-based IO operation. There are three main types of class:
        <a name="doc.FilenameFilters"></a>     
 <h2>FilenameFilters</h2>
      
-<p>     The Java API defines an interface {@link java.io.FilenameFilter},
-which is used to filter     directory listings. This is commonly used in
-the {@link     java.io.File#list(java.io.FilenameFilter)} method, and in
-<code>java.awt.FileDialog</code>.     </p>
-     
-<p>There are three "primitive" FilenameFilters:</p>
-     
-<table>
-       <tbody>
-    <tr>
-      <td><a href="DirectoryFileFilter.html">DirectoryFilter</a></td>
-      <td>Only accept directories</td>
-    </tr>
-       <tr>
-      <td><a href="PrefixFileFilter.html">PrefixFileFilter</a></td>
-      <td>Filter based on prefix</td>
-    </tr>
-       <tr>
-      <td><a href="ExtensionFileFilter.html">ExtensionFileFilter</a></td>
-      <td>Filter based on extension</td>
-    </tr>
-      
-  </tbody>
-</table>
-     
-<p>And there are three "boolean" FilenameFilters:</p>
-     
-<table>
-       <tbody>
-    <tr>
-      <td><a href="AndFileFilter.html">AndFileFilter</a></td>
-      <td>Accept if two subfilters both accept</td>
-    </tr>
-       <tr>
-      <td><a href="InvertedFileFilter.html">InvertedFileFilter</a></td>
-      <td>Accept if a subfilter rejects</td>
-    </tr>
-       <tr>
-      <td><a href="OrFileFilter.html">OrFileFilter</a></td>
-      <td>Accept if either of two subfilters accepts</td>
-    </tr>
-     
-  </tbody>
-</table>
-      
-<p>These boolean FilenameFilters can be nested, to allow arbitrary expressions.
-For example,     here is how one could print all non-directory files in the
-current directory, starting with     "A", and ending in ".java" or ".class":</p>
-     
-<pre>File dir = new File(".");<br>String[] files = dir.list( new AndFileFilter(<br>      new AndFileFilter( <br>        new PrefixFileFilter("A"),<br>        new OrFileFilter(<br>          new ExtensionFileFilter(".class"),<br>          new ExtensionFileFilter(".java")<br>          )<br>        ),<br>      new InvertedFileFilter(<br>        new DirectoryFileFilter()<br>        )<br>      )<br>    );<br>for ( int i=0; i&lt;files.length; i++ )<br>{<br>  System.out.println(files[i]);<br>}<br>    </pre>
+<p>This package defines an interface (IOFileFilter) that combines both 
+{@link java.io.FileFilter} and {@link java.io.FilenameFilter}. Besides
+that the package offers a series of ready-to-use implementations of the
+IOFileFilter interface including implementation that allow you to combine
+other such filters.</p>
+<p>These filter can be used to list files or in {@link java.awt.FileDialog}, 
+for example.</p>
+
+
         <a name="doc.IOUtil"></a>     
 <h2>The <a href="IOUtil.html">org.apache.commons.io.IOUtil</a> class</h2>
      
