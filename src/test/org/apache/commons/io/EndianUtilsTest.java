@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.4 2003/11/27 04:08:14 bayard Exp $
- * $Revision: 1.4 $
- * $Date: 2003/11/27 04:08:14 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/EndianUtilsTest.java,v 1.5 2003/11/27 06:27:52 bayard Exp $
+ * $Revision: 1.5 $
+ * $Date: 2003/11/27 06:27:52 $
  *
  * ====================================================================
  *
@@ -70,7 +70,7 @@ import junit.framework.TestCase;
 
 /**
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.4 $ $Date: 2003/11/27 04:08:14 $
+ * @version $Revision: 1.5 $ $Date: 2003/11/27 06:27:52 $
  */
 
 public class EndianUtilsTest extends TestCase {
@@ -158,9 +158,10 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x01, bytes[3] );
     }
 
+    // TODO: public void testWriteUnsignedInteger
+
     public void testReadSwappedLong() {
         byte[] bytes = new byte[] { 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01 };
-        long ln = EndianUtils.readSwappedLong( bytes, 0 );
         assertEquals( 0x0102030405060708L, EndianUtils.readSwappedLong( bytes, 0 ) );
     }
 
@@ -175,6 +176,23 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x03, bytes[5] );
         assertEquals( 0x02, bytes[6] );
         assertEquals( 0x01, bytes[7] );
+    }
+
+    public void testReadSwappedFloat() {
+        byte[] bytes = new byte[] { 0x04, 0x03, 0x02, 0x01 };
+        float f1 = Float.intBitsToFloat( 0x01020304 );
+        float f2 = EndianUtils.readSwappedFloat( bytes, 0 );
+        assertEquals( f1, f2, 0.0 );
+    }
+
+    public void testWriteSwappedFloat() {
+        byte[] bytes = new byte[4];
+        float f1 = Float.intBitsToFloat( 0x01020304 );
+        EndianUtils.writeSwappedFloat( bytes, 0, f1 );
+        assertEquals( 0x04, bytes[0] );
+        assertEquals( 0x03, bytes[1] );
+        assertEquals( 0x02, bytes[2] );
+        assertEquals( 0x01, bytes[3] );
     }
 
     /*
