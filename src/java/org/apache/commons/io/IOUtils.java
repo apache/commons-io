@@ -111,16 +111,8 @@ import java.io.Writer;
  * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
  * management hurts performance slightly (about 3%, according to some simple experiments).</p>
  *
- * <p>Origin of code: Apache Avalon (Excalibur)</p>
- *
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.2 $ $Date: 2003/07/25 08:17:10 $
- */
-
-/*
- * Behold, intrepid explorers; a map of this class:
- *
+ * <p>Behold, intrepid explorers; a map of this class:</p>
+ * <pre>
  *       Method      Input               Output          Dependency
  *       ------      -----               ------          -------
  * 1     copy        InputStream         OutputStream    (primitive)
@@ -141,12 +133,18 @@ import java.io.Writer;
  * 12    copy        byte[]              Writer          3
  * 13    toString    byte[]              String          12
  * 14    copy        byte[]              OutputStream    (trivial)
+ * </pre>
  *
+ * <p>Note that only the first two methods shuffle bytes; the rest use these 
+ * two, or (if possible) copy using native Java copy methods. As there are 
+ * method variants to specify buffer size and encoding, each row may 
+ * correspond to up to 4 methods.</p>
  *
- * Note that only the first two methods shuffle bytes; the rest use these two, or (if possible) copy
- * using native Java copy methods. As there are method variants to specify buffer size and encoding,
- * each row may correspond to up to 4 methods.
+ * <p>Origin of code: Apache Avalon (Excalibur)</p>
  *
+ * @author <a href="mailto:peter@apache.org">Peter Donald</a>
+ * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
+ * @version CVS $Revision: 1.3 $ $Date: 2003/07/27 17:21:27 $
  */
 public final class IOUtils
 {
