@@ -2,7 +2,7 @@
 
 <!--
     Main index
-    $Id: index.xml,v 1.1 2003/12/21 00:53:41 matth Exp $
+    $Id: index.xml,v 1.2 2004/01/16 17:05:03 jeremias Exp $
 -->
 
 <document>
@@ -23,12 +23,17 @@
 
     <a name="utilities"/>
     <section name="Utility classes">
-        <subsection name="CopyUtils">
+        <subsection name="CopyUtils and IOUtils">
             <p>
                 <code>org.apache.commons.io.CopyUtils</code>
                 contains a comprehensive set of static methods for copying
                 from String, byte[], InputStream, Reader
-                to String, byte[], OutputStream, Writer.
+                to OutputStream, Writer.
+            </p>
+            <p>
+                <code>org.apache.commons.io.IOUtils</code>
+                contains additional IO-related tools for safely closing streams
+                and creating Strings and byte arrays from streams and Readers.
             </p>
 
             <p>
@@ -37,34 +42,38 @@
             </p>
 
             <source>
-                InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-                InputStreamReader inR = new InputStreamReader( in );
-                BufferedReader buf = new BufferedReader( inR );
-                String line;
-                while ( ( line = buf.readLine() ) != null ) {
-                    System.out.println( line );
-                }
-                in.close();
+    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+    try {
+        InputStreamReader inR = new InputStreamReader( in );
+        BufferedReader buf = new BufferedReader( inR );
+        String line;
+        while ( ( line = buf.readLine() ) != null ) {
+            System.out.println( line );
+        }
+    } finally {
+        in.close();
+    }
             </source>
 
             <p>
-                With the CopyUtils class, that could be done with:
+                With the IOUtils class, that could be done with:
             </p>
 
             <source>
-                InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-                System.out.println( IOUtils.toString( in ) );
-                in.close();
+    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+    try {
+        System.out.println( IOUtils.toString( in ) );
+    } finally {
+        IOUtils.closeQuietly(in);
+    }
             </source>
 
             <p>
                 In certain application domains, such IO operations are
-                common, and this class can save a great deal of time.
+                common, and this class can save a great deal of time. And you can
+                rely on well-tested code.
 
                 For utility code such as this, flexibility and speed are of primary importance.
-                In CopyUtils, each kind of copy method has a variant which allows the
-                buffer size to be set. For method that convert bytes to chars, the encoding
-                method may also be set.
             </p>
 
         </subsection>
@@ -75,8 +84,8 @@
                 class contains methods for retrieving different components of a file path
                 (directory name, file base name, file extension), methods
                 for copying files to other files and directories, and methods
-                for deleting and cleaning directories. For more information,
-                see the class description
+                for querying, deleting and cleaning directories. For more information,
+                see the class description.
             </p>
         </subsection>
 

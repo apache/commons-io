@@ -7,7 +7,6 @@
         release of this component:
       </p>
       <ul>
-        <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>IOUtilsTestCase: Handle unit tests that test an IOUtils method and a CopyUtils method at the same time. [Hen]</li>
         <li>Write TestCases for: 
         <ul>
@@ -21,9 +20,16 @@
         <li>More Javadocs!!!</li>
         <li>Improve site!!!</li>
       </ul>
+      <p>
+        The following classes will be excluded from the initial release:
+      </p>
+      <ul>
+        <li>FilenameUtils: This class is still a big mess with many methods not working properly.</li>
+      </ul>
     </section>
     <section name="Post 1.0 release">
       <ul>
+        <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>A CsvReader/Writer set of classes in a csv sub-package</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
