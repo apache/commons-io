@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.34 2004/07/15 08:21:14 scolebourne Exp $
+ * @version $Id: FileUtils.java,v 1.35 2004/07/15 09:16:17 jeremias Exp $
  */
 public class FileUtils {
 
@@ -121,19 +121,23 @@ public class FileUtils {
      * @throws IOException If an I/O problem occurs
      */
     public static void touch(File file) throws IOException {
-        OutputStream out = new FileOutputStream(file, true);
-        IOUtils.closeQuietly(out);
+        if (!file.exists()) {
+            OutputStream out = new FileOutputStream(file);
+            IOUtils.closeQuietly(out);
+        }
         file.setLastModified(System.currentTimeMillis());
     }
 
 
     private static void innerListFiles(Collection files, File directory, IOFileFilter filter) {
         File[] found = directory.listFiles((FileFilter)filter);
-        for (int i = 0; i < found.length; i++) {
-            if (found[i].isDirectory()) {
-                innerListFiles(files, found[i], filter);
-            } else {
-                files.add(found[i]);
+        if (found != null) { 
+            for (int i = 0; i < found.length; i++) {
+                if (found[i].isDirectory()) {
+                    innerListFiles(files, found[i], filter);
+                } else {
+                    files.add(found[i]);
+                }
             }
         }
     }
