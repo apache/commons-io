@@ -17,6 +17,7 @@
         <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
         <li>A CsvReader/Writer set of classes in a csv sub-package</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
+        <li>A "hot folder" handler which triggers an action when a new file has been uploaded to an FTP directory, for example.</li>
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
         <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
         <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
@@ -26,6 +27,7 @@
             in memory just as the original but starts to write to a temp file when
             a given number of bytes is surpassed. This is to reduce the memory
             usage for big "things".</li>
+        <li>FileUtils could use a copyDirectory() method (possibly making use of IOFileFilters)</li>
       </ul>
     </section>
     <section name="Misc.">
