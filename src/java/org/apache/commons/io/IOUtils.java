@@ -55,7 +55,6 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,6 +64,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
  * General IO Stream manipulation.
@@ -144,7 +145,7 @@ import java.io.Writer;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.6 $ $Date: 2003/10/13 07:04:52 $
+ * @version CVS $Revision: 1.7 $ $Date: 2003/11/22 20:19:29 $
  */
 public final class IOUtils
 {
