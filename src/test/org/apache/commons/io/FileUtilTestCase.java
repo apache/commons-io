@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.3 2002/10/26 06:24:15 bayard Exp $
- * $Revision: 1.3 $
- * $Date: 2002/10/26 06:24:15 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/FileUtilTestCase.java,v 1.4 2002/11/12 07:42:44 bayard Exp $
+ * $Revision: 1.4 $
+ * $Date: 2002/11/12 07:42:44 $
  *
  * ====================================================================
  *
@@ -239,5 +239,34 @@ public final class FileUtilTestCase
                           dest[ i ], FileUtils.normalize( src[ i ] ) );
         }
     }
-}
 
+    /**
+     *  Test the FileUtils implementation.
+     */
+    /// Used to exist as IOTestCase class
+    public void testFileUtils() {
+        String filename = "src/test/org/apache/commons/io/test.txt";
+        String filename2 = "src/test/org/apache/commons/io/test2.txt";
+        assertTrue("test.txt extension == \"txt\"", FileUtils.extension(filename).equals("txt"));
+        assertTrue("Test file exists", FileUtils.fileExists(filename));
+        assertTrue("Second test file does not exist", !FileUtils.fileExists(filename2));
+        try {
+            FileUtils.fileWrite(filename2, filename);
+            assertTrue("Second file was written", FileUtils.fileExists(filename2));
+            String file2contents = FileUtils.fileRead(filename2);
+            assertTrue("Second file's contents correct", FileUtils.fileRead(filename2).equals(file2contents));
+            FileUtils.fileDelete(filename2);
+            assertTrue("Second test file does not exist", !FileUtils.fileExists(filename2));
+        } catch (Exception e) {
+            fail("Error reading or writing second test file: " + filename);
+        }
+
+        try {
+            String contents = FileUtils.fileRead(filename);
+            assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
+        } catch (Exception e) {
+            fail("Error loading file: " + filename);
+        }
+    }
+
+}
