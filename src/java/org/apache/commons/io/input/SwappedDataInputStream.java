@@ -17,11 +17,11 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowlegement:
+ *    any, must include the following acknowledgement:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowlegement may appear in the software itself,
- *    if and wherever such third-party acknowlegements normally appear.
+ *    Alternately, this acknowledgement may appear in the software itself,
+ *    if and wherever such third-party acknowledgements normally appear.
  *
  * 4. The names "The Jakarta Project", "Commons", and "Apache Software
  *    Foundation" must not be used to endorse or promote products derived
@@ -66,7 +66,7 @@ import org.apache.commons.io.EndianUtils;
  * <p><b>Origin of code: </b>Avalon Excalibur (IO)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.3 $ $Date: 2003/07/27 17:15:06 $
+ * @version CVS $Revision: 1.4 $ $Date: 2003/10/13 07:04:16 $
  */
 public class SwappedDataInputStream extends ProxyInputStream
     implements DataInput
