@@ -116,7 +116,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @author Matthew Hawthorne
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @version $Id: FileUtils.java,v 1.19 2003/11/23 20:43:30 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.20 2003/12/25 11:05:59 jeremias Exp $
  */
 public class FileUtils {
 
@@ -276,8 +276,13 @@ public class FileUtils {
      * @return an collection of java.io.File with the matching files
      */
     public static Collection listFiles(File directory, String[] extensions, boolean recursive) {
-        String[] suffixes = toSuffixes(extensions);
-        IOFileFilter filter = new SuffixFileFilter(suffixes);
+        IOFileFilter filter;
+        if (extensions == null) {
+            filter = TrueFileFilter.INSTANCE;
+        } else {
+            String[] suffixes = toSuffixes(extensions);
+            filter = new SuffixFileFilter(suffixes);
+        }
         return listFiles(directory, filter, 
             (recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE));
     }
