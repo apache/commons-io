@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
+ * @version $Revision: 1.6 $ $Date: 2003/12/30 15:17:59 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -79,7 +79,7 @@ import java.io.File;
 public class DirectoryFileFilter extends AbstractFileFilter {
     
     /** Singleton instance of directory filter */
-    public static IOFileFilter INSTANCE = new DirectoryFileFilter();
+    public static final IOFileFilter INSTANCE = new DirectoryFileFilter();
     
     /**
      * Restrictive consructor.

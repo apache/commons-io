@@ -59,7 +59,7 @@ import java.io.File;
  * A file filter that always returns true.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
+ * @version $Revision: 1.6 $ $Date: 2003/12/30 15:17:59 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -67,7 +67,7 @@ import java.io.File;
 public class TrueFileFilter implements IOFileFilter {
     
     /** Singleton instance of true filter */
-    public static IOFileFilter INSTANCE = new TrueFileFilter();
+    public static final IOFileFilter INSTANCE = new TrueFileFilter();
     
     /**
      * Restrictive consructor.
