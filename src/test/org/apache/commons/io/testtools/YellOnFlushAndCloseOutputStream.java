@@ -59,4 +59,9 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
         super.close();
     }
 
+    public void off() {
+        yellForFlush = false;
+        yellForClose = false;
+    }
+
 }
