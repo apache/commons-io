@@ -140,7 +140,7 @@ public class FindingFilter implements FileFilter {
 
 }
 
-    // need to implement the daystart bits
+    // TODO: need to implement the daystart bits
     class MinFilter implements FileFilter {
         private Object option;
         private boolean invert;
@@ -176,7 +176,7 @@ public class FindingFilter implements FileFilter {
         }
     }
 
-    // implement daystart
+    // TODO: implement daystart
     class TimeFilter implements FileFilter {
         private Object option;
         private boolean invert;
@@ -212,8 +212,8 @@ public class FindingFilter implements FileFilter {
         }
     }
 
-    // needs to handle +5 for > 5 and -5 for < 5. Also needs 
-    // to handle k, m, g, as suffixes.
+    // TODO: needs to handle +5 for > 5 and -5 for < 5. 
+    // TODO: Also needs to handle k, m, g, as suffixes.
     class SizeFilter implements FileFilter {
         private Object option;
         private boolean invert;
