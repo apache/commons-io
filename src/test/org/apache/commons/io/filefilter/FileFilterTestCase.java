@@ -164,6 +164,15 @@ public final class FileFilterTestCase extends TestCase {
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("fred"), false);
 
+        // repeat for a List
+        java.util.ArrayList list = new java.util.ArrayList();
+        list.add("foo");
+        list.add("bar");
+        filter = new NameFileFilter(list);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("fred"), false);
+
         filter = new NameFileFilter("foo");
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("FOO"), false); //case-sensitive
