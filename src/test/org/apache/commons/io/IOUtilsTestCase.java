@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/Attic/IOUtilTestCase.java,v 1.5 2003/07/25 07:51:26 jeremias Exp $
- * $Revision: 1.5 $
- * $Date: 2003/07/25 07:51:26 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/IOUtilsTestCase.java,v 1.1 2003/07/27 17:10:18 jeremias Exp $
+ * $Revision: 1.1 $
+ * $Date: 2003/07/27 17:10:18 $
  *
  * ====================================================================
  *
@@ -92,7 +92,7 @@ import junit.framework.TestCase;
  *
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  */
-public final class IOUtilTestCase
+public final class IOUtilsTestCase
     extends TestCase
 {
     /*
@@ -139,7 +139,7 @@ public final class IOUtilTestCase
         }
     }
 
-    public IOUtilTestCase( String name )
+    public IOUtilsTestCase( String name )
     {
         super( name );
     }
