@@ -1,22 +1,26 @@
-$Id: RELEASE-NOTES.txt,v 1.3 2003/11/23 20:12:20 bayard Exp $
+$Id: RELEASE-NOTES.txt,v 1.4 2004/04/18 06:14:52 bayard Exp $
 
-			 Commons I/O Package
-			   Version 1.0-dev
+			 Commons IO Package
+			   Version 1.0
 			    Release Notes
 
 
 INTRODUCTION:
 
 This document contains the release notes for this version of the Commons
-I/O package, and highlights changes since the previous version.  The
-current release adds new features and bug fixes, and is being done now to
-follow the release early/release often mentality.
+IO package.
+
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+and endian transformation classes.
 
 NEW FEATURES:
 
-* 
-
+* This is the first release of Commons IO, so all features are new features. 
 
 BUG FIXES:
 
-
+Since this is the first release, there are no declared bugfixes.
