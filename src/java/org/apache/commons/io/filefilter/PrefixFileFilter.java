@@ -71,7 +71,7 @@ import java.util.List;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.5 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.6 $ $Date: 2003/11/22 20:00:06 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -91,7 +91,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @throws IllegalArgumentException if the prefix is null
      */
     public PrefixFileFilter(final String prefix) {
-        if (prefixes == null) {
+        if (prefix == null) {
             throw new IllegalArgumentException("The prefix must not be null");
         }
         this.prefixes = new String[] {prefix};
