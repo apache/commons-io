@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,48 +20,50 @@ import java.io.FilterOutputStream;
 import java.io.OutputStream;
 
 /**
- * 
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. It is an alternative base class to FilterOutputStream
  * to increase reusability.
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public class ProxyOutputStream extends FilterOutputStream {
 
-    private OutputStream proxy;
-
     /**
      * Constructs a new ProxyOutputStream.
-     * @param proxy OutputStream to delegate to
+     * 
+     * @param proxy  the OutputStream to delegate to
      */
     public ProxyOutputStream(OutputStream proxy) {
         super(proxy);
-        this.proxy = proxy;
+        // the proxy is stored in a protected superclass variable named 'out'
     }
 
     /** @see java.io.OutputStream#write(int) */
     public void write(int idx) throws IOException {
-        this.proxy.write(idx);
+        out.write(idx);
     }
 
     /** @see java.io.OutputStream#write(byte[]) */
     public void write(byte[] bts) throws IOException {
-        this.proxy.write(bts);
+        out.write(bts);
     }
 
     /** @see java.io.OutputStream#write(byte[], int, int) */
     public void write(byte[] bts, int st, int end) throws IOException {
-        this.proxy.write(bts, st, end);
+        out.write(bts, st, end);
     }
 
     /** @see java.io.OutputStream#flush() */
     public void flush() throws IOException {
-        this.proxy.flush();
+        out.flush();
     }
 
     /** @see java.io.OutputStream#close() */
     public void close() throws IOException {
-        this.proxy.close();
+        out.close();
     }
 
 }

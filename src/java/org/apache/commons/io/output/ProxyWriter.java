@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,60 +20,62 @@ import java.io.FilterWriter;
 import java.io.Writer;
 
 /**
- * 
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. It is an alternative base class to FilterWriter
  * to increase reusability, because FilterWriter changes the 
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public class ProxyWriter extends FilterWriter {
 
-    private Writer proxy;
-
     /**
      * Constructs a new ProxyWriter.
-     * @param proxy Writer to delegate to
+     * 
+     * @param proxy  the Writer to delegate to
      */
     public ProxyWriter(Writer proxy) {
         super(proxy);
-        this.proxy = proxy;
+        // the proxy is stored in a protected superclass variable named 'out'
     }
 
     /** @see java.io.Writer#write(int) */
     public void write(int idx) throws IOException {
-        this.proxy.write(idx);
+        out.write(idx);
     }
 
     /** @see java.io.Writer#write(char[]) */
     public void write(char[] chr) throws IOException {
-        this.proxy.write(chr);
+        out.write(chr);
     }
 
     /** @see java.io.Writer#write(char[], int, int) */
     public void write(char[] chr, int st, int end) throws IOException {
-        this.proxy.write(chr, st, end);
+        out.write(chr, st, end);
     }
 
     /** @see java.io.Writer#write(String) */
     public void write(String str) throws IOException {
-        this.proxy.write(str);
+        out.write(str);
     }
 
     /** @see java.io.Writer#write(String, int, int) */
     public void write(String str, int st, int end) throws IOException {
-        this.proxy.write(str, st, end);
+        out.write(str, st, end);
     }
 
     /** @see java.io.Writer#flush() */
     public void flush() throws IOException {
-        this.proxy.flush();
+        out.flush();
     }
 
     /** @see java.io.Writer#close() */
     public void close() throws IOException {
-        this.proxy.close();
+        out.close();
     }
 
 }

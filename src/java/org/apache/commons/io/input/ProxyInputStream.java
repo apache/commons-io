@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,67 +23,70 @@ import java.io.InputStream;
  * A Proxy stream which acts as expected, that is it passes the method 
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. 
- * 
+ * <p>
  * It is an alternative base class to FilterInputStream
  * to increase reusability, because FilterInputStream changes the 
  * methods being called, such as read(byte[]) to read(byte[], int, int).
+ * 
+ * @author Henri Yandell
+ * @author Stephen Colebourne
+ * @version $Id$
  */
 public abstract class ProxyInputStream extends FilterInputStream {
 
-    private InputStream proxy;
-
     /**
      * Constructs a new ProxyInputStream.
-     * @param proxy InputStream to delegate to
+     * 
+     * @param proxy  the InputStream to delegate to
      */
     public ProxyInputStream(InputStream proxy) {
         super(proxy);
-        this.proxy = proxy;
+        // the proxy is stored in a protected superclass variable named 'in'
     }
 
     /** @see java.io.InputStream#read() */
     public int read() throws IOException {
-        return this.proxy.read();
+        return in.read();
     }
 
     /** @see java.io.InputStream#read(byte[]) */
     public int read(byte[] bts) throws IOException {
-        return this.proxy.read(bts);
+        return in.read(bts);
     }
 
     /** @see java.io.InputStream#read(byte[], int, int) */
     public int read(byte[] bts, int st, int end) throws IOException {
-        return this.proxy.read(bts, st, end);
+        return in.read(bts, st, end);
     }
 
     /** @see java.io.InputStream#skip(long) */
     public long skip(long ln) throws IOException {
-        return this.proxy.skip(ln);
+        return in.skip(ln);
     }
 
     /** @see java.io.InputStream#available() */
     public int available() throws IOException {
-        return this.proxy.available();
+        return in.available();
     }
 
     /** @see java.io.InputStream#close() */
     public void close() throws IOException {
-        this.proxy.close();
+        in.close();
     }
 
     /** @see java.io.InputStream#mark(int) */
     public synchronized void mark(int idx) {
-        this.proxy.mark(idx);
+        in.mark(idx);
     }
 
     /** @see java.io.InputStream#reset() */
     public synchronized void reset() throws IOException {
-        this.proxy.reset();
+        in.reset();
     }
 
     /** @see java.io.InputStream#markSupported() */
     public boolean markSupported() {
-        return this.proxy.markSupported();
+        return in.markSupported();
     }
 
 }
