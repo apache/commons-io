@@ -17,7 +17,6 @@
 
 package org.apache.commons.io.output;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import java.io.OutputStream;
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  *
- * @version $Id: DeferredFileOutputStream.java,v 1.3 2004/07/14 07:59:51 scolebourne Exp $
+ * @version $Id: DeferredFileOutputStream.java,v 1.4 2004/10/11 04:29:47 martinc Exp $
  */
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
@@ -88,7 +87,7 @@ public class DeferredFileOutputStream
         super(threshold);
         this.outputFile = outputFile;
 
-        memoryOutputStream = new ByteArrayOutputStream(threshold);
+        memoryOutputStream = new ByteArrayOutputStream();
         currentOutputStream = memoryOutputStream;
     }
 
