@@ -93,6 +93,15 @@
         <role>Java Developer</role>
       </roles>
     </developer>
+    <developer>
+      <name>Jeremias Maerki</name>
+      <id>jeremias</id>
+      <email>jeremias@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
   </developers>
 
 
