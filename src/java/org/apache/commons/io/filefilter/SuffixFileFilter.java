@@ -57,23 +57,22 @@ import java.io.File;
 import java.util.List;
 
 /**
- * This filters files based on the suffix (what the filename
- * ends with). This is used in retrieving all the files of a
- * particular type.
+ * Filters files based on the suffix (what the filename ends with).
+ * This is used in retrieving all the files of a particular type.
  * <p>
  * For example, to retrieve and print all <code>*.java</code> files 
  * in the current directory:
  *
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new SuffixFileFilter( new String[]{".java"} ) );
+ * String[] files = dir.list( new SuffixFileFilter(".java") );
  * for (int i = 0; i &lt; files.length; i++) {
  *     System.out.println(files[i]);
  * }
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.2 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.3 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -90,6 +89,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * Constructs a new Suffix file filter for a single extension.
      * 
      * @param suffix  the suffix to allow, must not be null
+     * @throws IllegalArgumentException if the suffix is null
      */
     public SuffixFileFilter(final String suffix) {
         if (suffix == null) {
@@ -105,6 +105,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * instance. This would be inadvisable however.
      * 
      * @param suffixes  the suffixes to allow, must not be null
+     * @throws IllegalArgumentException if the suffix array is null
      */
     public SuffixFileFilter(final String[] suffixes) {
         if (suffixes == null) {
@@ -117,6 +118,8 @@ public class SuffixFileFilter extends AbstractFileFilter {
      * Constructs a new Suffix file filter for a list of suffixes.
      * 
      * @param suffixes  the suffixes to allow, must not be null
+     * @throws IllegalArgumentException if the suffix list is null
+     * @throws ClassCastException if the list does not contain Strings
      */
     public SuffixFileFilter(final List suffixes) {
         if (suffixes == null) {

@@ -53,11 +53,14 @@
  */
 package org.apache.commons.io.filefilter;
 
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+
 /**
  * Useful utilities for working with file filters.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.3 $ $Date: 2003/07/27 17:11:38 $
+ * @version $Revision: 1.4 $ $Date: 2003/09/20 19:52:38 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -67,7 +70,7 @@ public class FileFilterUtils {
     /**
      * FileFilterUtils is not normally instantiated.
      */
-    private FileFilterUtils() {
+    public FileFilterUtils() {
     }
 
     //-----------------------------------------------------------------------
@@ -100,6 +103,7 @@ public class FileFilterUtils {
         return DirectoryFileFilter.INSTANCE;
     }
     
+    //-----------------------------------------------------------------------
     /**
      * Returns a filter that ANDs the two specified filters.
      * 
@@ -132,6 +136,7 @@ public class FileFilterUtils {
         return new NotFileFilter(filter);
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Returns a filter that always returns true.
      * 
@@ -150,4 +155,27 @@ public class FileFilterUtils {
         return FalseFileFilter.INSTANCE;
     }
     
+    //-----------------------------------------------------------------------
+    /**
+     * Returns an <code>IOFileFilter</code> that wraps the
+     * <code>FileFilter</code> instance.
+     * 
+     * @param filter  the filter to be wrapped
+     * @return a new filter that implements IOFileFilter
+     */
+    public static IOFileFilter asFileFilter(FileFilter filter) {
+        return new DelegateFileFilter(filter);
+    }
+
+    /**
+     * Returns an <code>IOFileFilter</code> that wraps the
+     * <code>FilenameFilter</code> instance.
+     * 
+     * @param filter  the filter to be wrapped
+     * @return a new filter that implements IOFileFilter
+     */
+    public static IOFileFilter asFileFilter(FilenameFilter filter) {
+        return new DelegateFileFilter(filter);
+    }
+
 }
