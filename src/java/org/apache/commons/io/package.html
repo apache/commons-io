@@ -46,26 +46,24 @@ set of static methods for copying from:     </p>
 <p>As an example, consider the task of reading bytes from a URL, and printing
 them. This would     typically done like this:</p>
      
-<pre>import java.net.URL;<br>import java.io.*;<br><br>public class ManualCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    <font
- color="blue">
-      InputStreamReader inR = new InputStreamReader( in );
+<pre>import java.net.URL;<br>import java.io.*;<br><br>public class ManualCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    
+    <b>InputStreamReader inR = new InputStreamReader( in );
     BufferedReader buf = new BufferedReader( inR );
     String line;
     while ( ( line = buf.readLine() ) != null )
     {
       System.out.println( line );
-    }
-    </font>
-      in.close();
+    }</b>
+    in.close();
   }
 }
    </pre>
      
 <p>With the IOUtils class, that could be done with:</p>
      
-<pre>import java.net.URL;<br>import java.io.*;<br>import org.apache.commons.io.IOUtils;<br><br>public class IOUtilsCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    <font
- color="blue">System.out.println( IOUtils.toString( in ) );</font>
-      in.close();
+<pre>import java.net.URL;<br>import java.io.*;<br>import org.apache.commons.io.IOUtils;<br><br>public class IOUtilsCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    
+<b>System.out.println( IOUtils.toString( in ) );</b>
+    in.close();
   }   
 }
     </pre>
