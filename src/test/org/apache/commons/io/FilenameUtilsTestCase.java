@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.1 2003/11/23 20:43:30 bayard Exp $
- * $Revision: 1.1 $
- * $Date: 2003/11/23 20:43:30 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FilenameUtilsTestCase.java,v 1.2 2003/11/27 20:53:54 bayard Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/11/27 20:53:54 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.1 2003/11/23 20:43:30 bayard Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.2 2003/11/27 20:53:54 bayard Exp $
  * @see FilenameUtils
  */
 public final class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -162,12 +162,6 @@ public final class FilenameUtilsTestCase extends FileBasedTestCase {
 
         assertEquals("/a/c", FilenameUtils.catPath("/a/b", "c"));
         assertEquals("/a/d", FilenameUtils.catPath("/a/b/c", "../d"));
-    }
-
-    // TODO Remove after debugging
-    private final void log(Object obj) {
-        System.out.println(
-            FilenameUtilsTestCase.class +" " + getName() + " " + obj);
     }
 
     // resolveFile
