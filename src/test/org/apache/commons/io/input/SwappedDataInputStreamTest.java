@@ -29,19 +29,20 @@ import junit.framework.TestCase;
  * effectively tests the underlying EndianUtils Stream methods.
  *
  * @author Henri Yandell (bayard at apache dot org)
- * @version $Revision: 1.8 $ $Date: 2004/02/29 21:58:47 $
+ * @version $Revision: 1.9 $ $Date: 2004/02/29 22:03:45 $
  */
 
 public class SwappedDataInputStreamTest extends TestCase {
 
     private SwappedDataInputStream sdis;
+    private byte[] bytes;
 
     public SwappedDataInputStreamTest(String name) {
         super(name);
     }
 
     public void setUp() {
-        byte[] bytes = new byte[] {
+        bytes = new byte[] {
             0x01,
             0x02,
             0x03,
@@ -79,10 +80,13 @@ public class SwappedDataInputStreamTest extends TestCase {
         assertEquals( Float.intBitsToFloat(0x04030201), this.sdis.readFloat(), 0 );
     }
 
-    /*
     public void testReadFully() throws IOException {
+        byte[] bytesIn = new byte[8];
+        this.sdis.readFully(bytesIn);
+        for( int i=0; i<8; i++) {
+            assertEquals( bytes[i], bytesIn[i] );
+        }
     }
-    */
 
     public void testReadInt() throws IOException {
         assertEquals( (int) 0x04030201, this.sdis.readInt() );
