@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
-<!DOCTYPE project [
-<!ENTITY commons-nav SYSTEM "../../commons-build/incl_nav.xml">
-]>
-
+<!DOCTYPE org.apache.commons.menus SYSTEM '../../commons-build/menus/menus.dtd'>
 <project name="IO">
 
   <title>IO</title>
@@ -25,7 +21,7 @@
       <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons/io/"/>
     </menu>
     
-    &commons-nav;
+    &common-menus;
 
   </body>
 </project>
