@@ -15,7 +15,11 @@
  */
 package org.apache.commons.io;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -29,7 +33,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.19 2004/07/03 11:20:45 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.20 2004/07/03 11:24:49 jeremias Exp $
  * @see FileUtils
  */
 public class FileUtilsTestCase extends FileBasedTestCase {
