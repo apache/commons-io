@@ -29,7 +29,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FilenameUtilsTestCase.java,v 1.9 2004/10/24 00:10:05 martinc Exp $
+ * @version $Id: FilenameUtilsTestCase.java,v 1.10 2004/10/24 01:27:13 martinc Exp $
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {
@@ -218,16 +218,15 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    /* TODO: Reenable this test */
-    public void DISABLED__testGetExtensionWithPaths() {
+    public void testGetExtensionWithPaths() {
         String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "ext" }, {
-                "C:\\temp\\foo\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/filename.ext", "ext" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/README", "" }, {
-                "C:\\temp\\foo.bar\\README", "" }, {
-                "../filename.ext", "ext" }
+            { { File.separator + "tmp" + File.separator + "foo" + File.separator + "filename.ext", "ext" }, {
+                //"C:\\temp\\foo\\filename.ext", "ext" }, {
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "filename.ext", "ext" }, {
+                //"C:\\temp\\foo.bar\\filename.ext", "ext" }, {
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "README", "" }, {
+                //"C:\\temp\\foo.bar\\README", "" }, {
+                ".." + File.separator + "filename.ext", "ext" }
         };
         for (int i = 0; i < testsWithPaths.length; i++) {
             assertEquals(
@@ -255,16 +254,19 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    /* TODO: Reenable this test */
-    public void DISABLED__testRemoveExtensionWithPaths() {
+    public void testRemoveExtensionWithPaths() {
         String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "filename" }, {
-                "C:\\temp\\foo\\filename.ext", "filename" }, {
-                "/tmp/foo.bar/filename.ext", "filename" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "filename" }, {
-                "/tmp/foo.bar/README", "README" }, {
-                "C:\\temp\\foo.bar\\README", "README" }, {
-                "../filename.ext", "filename" }
+            { { File.separator + "tmp" + File.separator + "foo" + File.separator + "filename.ext",
+                File.separator + "tmp" + File.separator + "foo" + File.separator + "filename" }, {
+                //"C:\\temp\\foo\\filename.ext", "filename" }, {
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "filename.ext",
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "filename" }, {
+                //"C:\\temp\\foo.bar\\filename.ext", "filename" }, {
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "README",
+                File.separator + "tmp" + File.separator + "foo.bar" + File.separator + "README" }, {
+                //"C:\\temp\\foo.bar\\README", "README" }, {
+                ".." + File.separator + "filename.ext",
+                ".." + File.separator + "filename" }
         };
 
         for (int i = 0; i < testsWithPaths.length; i++) {
