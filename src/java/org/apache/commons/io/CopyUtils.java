@@ -98,12 +98,13 @@ import java.io.Writer;
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
- * @version $Id: CopyUtils.java,v 1.6 2004/04/24 23:49:25 bayard Exp $
+ * @author Stephen Colebourne
+ * @version $Id: CopyUtils.java,v 1.7 2004/07/31 09:52:09 scolebourne Exp $
  */
 public class CopyUtils {
 
     /**
-     * The name says it all.
+     * The default buffer size to use.
      */
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
@@ -112,75 +113,64 @@ public class CopyUtils {
      */
     public CopyUtils() {}
 
-    // ----------------------------------------------------------------
-    // byte[] -> OutputStream
-    // ----------------------------------------------------------------
-
+    // from byte[]
+    //-----------------------------------------------------------------------
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
-     * @param input the byte array to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @throws IOException In case of an I/O problem
+     * 
+     * @param input  the byte array to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(byte[] input, OutputStream output)
-            throws IOException {
+    public static void copy(byte[] input, OutputStream output) throws IOException {
         output.write(input);
     }
 
-    // ----------------------------------------------------------------
-    // byte[] -> Writer
-    // ----------------------------------------------------------------
-
     /**
-     * Copy and convert bytes from a <code>byte[]</code> to chars on a
-     * <code>Writer</code>.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the byte array to read from
-     * @param output the <code>Writer</code> to write to
-     * @throws IOException In case of an I/O problem
+     * Copy bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
+     * using the default character encoding of the platform.
+     * 
+     * @param input  the byte array to read from
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(byte[] input, Writer output)
-            throws IOException {
+    public static void copy(byte[] input, Writer output) throws IOException {
         ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output);
     }
 
-
     /**
-     * Copy and convert bytes from a <code>byte[]</code> to chars on a
-     * <code>Writer</code>, using the specified encoding.
-     * @param input the byte array to read from
-     * @param output the <code>Writer</code> to write to
-     * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
-     * Charset Registry</a> for a list of valid encoding types.
-     * @throws IOException In case of an I/O problem
+     * Copy bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * 
+     * @param input  the byte array to read from
+     * @param output  the <code>Writer</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(
-            byte[] input,
-            Writer output,
-            String encoding)
-                throws IOException {
+    public static void copy(byte[] input, Writer output, String encoding) throws IOException {
         ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output, encoding);
     }
 
-
-    // ----------------------------------------------------------------
-    // Core copy methods
-    // ----------------------------------------------------------------
-
+    // from InputStream
+    //-----------------------------------------------------------------------
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
      * @return the number of bytes copied
-     * @throws IOException In case of an I/O problem
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static int copy(
-            InputStream input,
-            OutputStream output)
-                throws IOException {
+    public static int copy(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
@@ -191,21 +181,54 @@ public class CopyUtils {
         return count;
     }
 
-    // ----------------------------------------------------------------
-    // Reader -> Writer
-    // ----------------------------------------------------------------
+    /**
+     * Copy bytes from an <code>InputStream</code> to chars on a <code>Writer</code>
+     * using the default character encoding of the platform.
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(InputStream input, Writer output) throws IOException {
+        InputStreamReader in = new InputStreamReader(input);
+        copy(in, output);
+    }
 
     /**
-     * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @return the number of characters copied
-     * @throws IOException In case of an I/O problem
+     * Copy bytes from an <code>InputStream</code> to chars on a <code>Writer</code>
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static int copy(
-            Reader input,
-            Writer output)
-                throws IOException {
+    public static void copy(InputStream input, Writer output, String encoding) throws IOException {
+        if (encoding == null) {
+            copy(input, output);
+        } else {
+            InputStreamReader in = new InputStreamReader(input, encoding);
+            copy(in, output);
+        }
+    }
+
+    // from Reader
+    //-----------------------------------------------------------------------
+    /**
+     * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static int copy(Reader input, Writer output) throws IOException {
         char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
@@ -216,82 +239,76 @@ public class CopyUtils {
         return count;
     }
 
-    // ----------------------------------------------------------------
-    // InputStream -> Writer
-    // ----------------------------------------------------------------
-
     /**
-     * Copy and convert bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code>.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @throws IOException In case of an I/O problem
+     * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>
+     * using the default character encoding of the platform, and calling flush.
+     * <p>
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(
-            InputStream input,
-            Writer output)
-                throws IOException {
-        InputStreamReader in = new InputStreamReader(input);
-        copy(in, output);
-    }
-
-    /**
-     * Copy and convert bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code>, using the specified encoding.
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @param encoding The name of a supported character encoding. See the
-     * <a href="http://www.iana.org/assignments/character-sets">IANA
-     * Charset Registry</a> for a list of valid encoding types.
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            InputStream input,
-            Writer output,
-            String encoding)
-                throws IOException {
-        InputStreamReader in = new InputStreamReader(input, encoding);
-        copy(in, output);
-    }
-
-
-    // ----------------------------------------------------------------
-    // Reader -> OutputStream
-    // ----------------------------------------------------------------
-
-    /**
-     * Serialize chars from a <code>Reader</code> to bytes on an 
-     * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @throws IOException In case of an I/O problem
-     */
-    public static void copy(
-            Reader input,
-            OutputStream output)
-                throws IOException {
+    public static void copy(Reader input, OutputStream output) throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
         out.flush();
     }
 
-    // ----------------------------------------------------------------
-    // String -> OutputStream
-    // ----------------------------------------------------------------
+    /**
+     * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>
+     * using the specified character encoding, and calling flush.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(Reader input, OutputStream output, String encoding) throws IOException {
+        if (encoding == null) {
+            copy(input, output);
+        } else {
+            OutputStreamWriter out = new OutputStreamWriter(output, encoding);
+            copy(input, out);
+            // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
+            out.flush();
+        }
+    }
+
+    // from String
+    //-----------------------------------------------------------------------
+    /**
+     * Copy chars from a <code>String</code> to a <code>Writer</code>.
+     * 
+     * @param input  the <code>String</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void copy(String input, Writer output) throws IOException {
+        output.write(input);
+    }
 
     /**
-     * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
-     * flush the <code>OutputStream</code>.
-     * @param input the <code>String</code> to read from
-     * @param output the <code>OutputStream</code> to write to
-     * @throws IOException In case of an I/O problem
+     * Copy chars from a <code>String</code> to bytes on an <code>OutputStream</code>
+     * using the default character encoding of the platform, and calling flush.
+     * <p>
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * 
+     * @param input  the <code>String</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(
-            String input,
-            OutputStream output)
-                throws IOException {
+    public static void copy(String input, OutputStream output) throws IOException {
         StringReader in = new StringReader(input);
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(in, out);
@@ -299,19 +316,31 @@ public class CopyUtils {
         out.flush();
     }
 
-    // ----------------------------------------------------------------
-    // String -> Writer
-    // ----------------------------------------------------------------
-
     /**
-     * Copy chars from a <code>String</code> to a <code>Writer</code>.
-     * @param input the <code>String</code> to read from
-     * @param output the <code>Writer</code> to write to
-     * @throws IOException In case of an I/O problem
+     * Copy chars from a <code>String</code> to bytes on an <code>OutputStream</code>
+     * using the specified character encoding, and calling flush.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
+     * 
+     * @param input  the <code>String</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
      */
-    public static void copy(String input, Writer output)
-                throws IOException {
-        output.write(input);
+    public static void copy(String input, OutputStream output, String encoding) throws IOException {
+        if (encoding == null) {
+            copy(input, output);
+        } else {
+            StringReader in = new StringReader(input);
+            OutputStreamWriter out = new OutputStreamWriter(output, encoding);
+            copy(in, out);
+            // XXX Unless anyone is planning on rewriting OutputStreamWriter, we have to flush here.
+            out.flush();
+        }
     }
 
-} // CopyUtils
+}
