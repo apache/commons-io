@@ -81,13 +81,14 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * management", see <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
  * UnixReview article</a></p>
  *
- * <p>For each <code>copy</code> method, a variant is provided that allows the caller to specify the
- * buffer size (the default is 4k). As the buffer size can have a fairly large impact on speed, this
- * may be worth tweaking. Often "large buffer -&gt; faster" does not hold, even for large data
- * transfers.</p>
+ * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding 
+ * to be selected (otherwise the platform default is used). We would like to 
+ * encourage you to always specify the encoding because relying on the platform
+ * default can lead to unexpected results.</p>
  *
- * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding to be selected
- * (otherwise the platform default is used).</p>
+ * <p>We don't provide special variants for the <code>copy</code> methods that
+ * let you specify the buffer size because in modern VMs the impact on speed
+ * seems to be minimal. We're using a default buffer size of 4 KB.</p>
  *
  * <p>The <code>copy</code> methods use an internal buffer when copying. It is therefore advisable
  * <em>not</em> to deliberately wrap the stream arguments to the <code>copy</code> methods in
@@ -134,14 +135,14 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  *
  * <p>Note that only the first two methods shuffle bytes; the rest use these
  * two, or (if possible) copy using native Java copy methods. As there are
- * method variants to specify buffer size and encoding, each row may
- * correspond to up to 4 methods.</p>
+ * method variants to specify the encoding, each row may
+ * correspond to up to 2 methods.</p>
  *
  * <p>Origin of code: Apache Avalon (Excalibur)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.11 $ $Date: 2003/12/30 15:24:23 $
+ * @version CVS $Revision: 1.12 $ $Date: 2003/12/30 16:35:11 $
  */
 public final class IOUtils
 {
@@ -248,38 +249,9 @@ public final class IOUtils
     public static String toString( InputStream input )
         throws IOException
     {
-        return toString( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of an <code>InputStream</code> as a String.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the <code>InputStream</code> to read from
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested <code>String</code>
-     * @throws IOException In case of an I/O problem
-     */
-    public static String toString( InputStream input, int bufferSize )
-        throws IOException
-    {
         StringWriter sw = new StringWriter();
-        CopyUtils.copy( input, sw, bufferSize );
+        CopyUtils.copy( input, sw );
         return sw.toString();
-    }
-
-    /**
-     * Get the contents of an <code>InputStream</code> as a String.
-     * @param input the <code>InputStream</code> to read from
-     * @param encoding The name of a supported character encoding. See the
-     *    <a href="http://www.iana.org/assignments/character-sets">IANA
-     *    Charset Registry</a> for a list of valid encoding types.
-     * @return the requested <code>String</code>
-     * @throws IOException In case of an I/O problem
-     */
-    public static String toString( InputStream input, String encoding )
-        throws IOException
-    {
-        return toString( input, encoding, DEFAULT_BUFFER_SIZE );
     }
 
     /**
@@ -288,17 +260,15 @@ public final class IOUtils
      * @param encoding The name of a supported character encoding. See the
      *   <a href="http://www.iana.org/assignments/character-sets">IANA
      *   Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
     public static String toString( InputStream input,
-                                   String encoding,
-                                   int bufferSize )
+                                   String encoding )
         throws IOException
     {
         StringWriter sw = new StringWriter();
-        CopyUtils.copy( input, sw, encoding, bufferSize );
+        CopyUtils.copy( input, sw, encoding );
         return sw.toString();
     }
 
@@ -314,21 +284,8 @@ public final class IOUtils
     public static byte[] toByteArray( InputStream input )
         throws IOException
     {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
-     * @param input the <code>InputStream</code> to read from
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested byte array
-     * @throws IOException In case of an I/O problem
-     */
-    public static byte[] toByteArray( InputStream input, int bufferSize )
-        throws IOException
-    {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        CopyUtils.copy( input, output, bufferSize );
+        CopyUtils.copy( input, output );
         return output.toByteArray();
     }
 
@@ -349,21 +306,8 @@ public final class IOUtils
     public static String toString( Reader input )
         throws IOException
     {
-        return toString( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of a <code>Reader</code> as a String.
-     * @param input the <code>Reader</code> to read from
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested <code>String</code>
-     * @throws IOException In case of an I/O problem
-     */
-    public static String toString( Reader input, int bufferSize )
-        throws IOException
-    {
         StringWriter sw = new StringWriter();
-        CopyUtils.copy( input, sw, bufferSize );
+        CopyUtils.copy( input, sw );
         return sw.toString();
     }
 
@@ -379,21 +323,8 @@ public final class IOUtils
     public static byte[] toByteArray( Reader input )
         throws IOException
     {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
-     * @param input the <code>Reader</code> to read from
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested byte array
-     * @throws IOException In case of an I/O problem
-     */
-    public static byte[] toByteArray( Reader input, int bufferSize )
-        throws IOException
-    {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        CopyUtils.copy( input, output, bufferSize );
+        CopyUtils.copy( input, output );
         return output.toByteArray();
     }
 
@@ -415,24 +346,10 @@ public final class IOUtils
     public static byte[] toByteArray( String input )
         throws IOException
     {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of a <code>String</code> as a <code>byte[]</code>.
-     * @param input the <code>String</code> to convert
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested byte array
-     * @throws IOException In case of an I/O problem
-     */
-    public static byte[] toByteArray( String input, int bufferSize )
-        throws IOException
-    {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        CopyUtils.copy( input, output, bufferSize );
+        CopyUtils.copy( input, output );
         return output.toByteArray();
     }
-
 
 
     ///////////////////////////////////////////////////////////////
@@ -453,39 +370,11 @@ public final class IOUtils
     public static String toString( byte[] input )
         throws IOException
     {
-        return toString( input, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Get the contents of a <code>byte[]</code> as a String.
-     * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input the byte array to read from
-     * @param bufferSize Size of internal buffer to use.
-     * @return the requested <code>String</code>
-     * @throws IOException In case of an I/O problem
-     */
-    public static String toString( byte[] input, int bufferSize )
-        throws IOException
-    {
         StringWriter sw = new StringWriter();
-        CopyUtils.copy( input, sw, bufferSize );
+        CopyUtils.copy( input, sw );
         return sw.toString();
     }
 
-    /**
-     * Get the contents of a <code>byte[]</code> as a String.
-     * @param input the byte array to read from
-     * @param encoding The name of a supported character encoding. See the
-     *    <a href="http://www.iana.org/assignments/character-sets">IANA
-     *    Charset Registry</a> for a list of valid encoding types.
-     * @return the requested <code>String</code>
-     * @throws IOException In case of an I/O problem
-     */
-    public static String toString( byte[] input, String encoding )
-        throws IOException
-    {
-        return toString( input, encoding, DEFAULT_BUFFER_SIZE );
-    }
 
     /**
      * Get the contents of a <code>byte[]</code> as a String.
@@ -493,17 +382,15 @@ public final class IOUtils
      * @param encoding The name of a supported character encoding. See the
      *   <a href="http://www.iana.org/assignments/character-sets">IANA
      *   Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
      * @return the requested <code>String</code>
      * @throws IOException In case of an I/O problem
      */
     public static String toString( byte[] input,
-                                   String encoding,
-                                   int bufferSize )
+                                   String encoding )
         throws IOException
     {
         StringWriter sw = new StringWriter();
-        CopyUtils.copy( input, sw, encoding, bufferSize );
+        CopyUtils.copy( input, sw, encoding );
         return sw.toString();
     }
 
