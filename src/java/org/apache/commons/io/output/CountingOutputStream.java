@@ -56,16 +56,16 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.FilterOutputStream;
+import org.apache.commons.io.ProxyOutputStream;
 
 /**
  * Used in debugging, it counts the number of bytes that pass 
  * through it.
  *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
- * @version $Id: CountingOutputStream.java,v 1.1 2002/11/11 19:34:02 bayard Exp $
+ * @version $Id: CountingOutputStream.java,v 1.2 2002/12/07 20:31:08 bayard Exp $
  */
-public class CountingOutputStream extends FilterOutputStream {
+public class CountingOutputStream extends ProxyOutputStream {
 
     private int count;
 

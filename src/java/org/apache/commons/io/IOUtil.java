@@ -115,7 +115,7 @@ import java.io.Writer;
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version CVS $Revision: 1.1 $ $Date: 2002/07/08 22:14:46 $
+ * @version CVS $Revision: 1.2 $ $Date: 2002/12/07 20:31:07 $
  * @since 4.0
  */
 
@@ -168,7 +168,7 @@ public final class IOUtil
      */
     public static void shutdownReader( final Reader input )
     {
-        if( null == input )
+        if( input == null )
         {
             return;
         }
@@ -190,7 +190,7 @@ public final class IOUtil
      */
     public static void shutdownWriter( final Writer output )
     {
-        if( null == output )
+        if( output == null )
         {
             return;
         }
@@ -211,7 +211,7 @@ public final class IOUtil
      */
     public static void shutdownStream( final OutputStream output )
     {
-        if( null == output )
+        if( output == null )
         {
             return;
         }
@@ -232,7 +232,7 @@ public final class IOUtil
      */
     public static void shutdownStream( final InputStream input )
     {
-        if( null == input )
+        if( input == null )
         {
             return;
         }
