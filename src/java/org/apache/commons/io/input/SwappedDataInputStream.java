@@ -66,7 +66,7 @@ import org.apache.commons.io.EndianUtils;
  * <p><b>Origin of code: </b>Avalon Excalibur (IO)</p>
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision: 1.5 $ $Date: 2003/12/30 06:55:59 $
+ * @version CVS $Revision: 1.6 $ $Date: 2003/12/30 06:56:22 $
  */
 public class SwappedDataInputStream extends ProxyInputStream
     implements DataInput
@@ -124,7 +124,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /** @see java.io.DataInput#readFully(byte[], int, int) */
-    public void readFully( byte[] data, final int offset, final int length )
+    public void readFully( byte[] data, int offset, int length )
         throws IOException, EOFException
     {
         int remaining = length;
