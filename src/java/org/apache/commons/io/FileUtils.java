@@ -57,16 +57,19 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Vector;
 
 /**
  * Common {@link java.io.File} manipulation routines.
  *
  * Taken from the commons-utils repo.
+ * Also code from alexandria's FileUtils.
  *
+ * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @version $Id: FileUtils.java,v 1.1 2002/01/26 02:47:42 sanders Exp $
+ * @version $Id: FileUtils.java,v 1.2 2002/01/28 04:44:49 sanders Exp $
  */
 public class FileUtils
 {
@@ -173,7 +176,7 @@ public class FileUtils
 
     /**
      * Returns the extension portion of a file specification string.
-     * This everything after the last dot '.' in the filename (including
+     * This everything after the last dot '.' in the filename (NOT including
      * the dot).
      */
     public static String extension(String filename)
@@ -182,7 +185,7 @@ public class FileUtils
 
         if (lastDot >= 0)
         {
-          return filename.substring(lastDot);
+          return filename.substring(lastDot + 1);
         }
         else
         {
@@ -297,4 +300,105 @@ public class FileUtils
     {
         return new File(fileName);
     }
+
+    /**
+     * Given a directory and an array of extensions... return an array of
+     * compliant files.
+     *
+     * TODO Should an ignore list be passed in?
+     * TODO Should a recurse flag be passed in?
+     *
+     * The given extensions should be like "java" and not like ".java"
+    */
+    public static String[] getFilesFromExtension(String directory, String[] extensions) {
+
+        Vector files = new Vector();
+
+        java.io.File currentDir = new java.io.File(directory);
+
+        String[] unknownFiles = currentDir.list();
+
+        if (unknownFiles == null) {
+            return new String[0];
+        }
+
+        for (int i = 0;i < unknownFiles.length;++i) {
+            String currentFileName = directory + System.getProperty("file.separator") + unknownFiles[i];
+            java.io.File currentFile = new java.io.File(currentFileName);
+
+            if (currentFile.isDirectory()) {
+
+
+                //ignore all CVS directories...
+                if ( currentFile.getName().equals("CVS") ) {
+                    continue;
+                }
+
+
+                //ok... transverse into this directory and get all the files... then combine
+                //them with the current list.
+
+                String[] fetchFiles = getFilesFromExtension(currentFileName, extensions);
+                files = blendFilesToVector( files, fetchFiles);
+
+            } else {
+                //ok... add the file
+
+                String add = currentFile.getAbsolutePath();
+                if ( isValidFile( add, extensions ) ) {
+                    files.addElement( add );
+
+                }
+
+            }
+        }
+
+        //ok... move the Vector into the files list...
+
+        String[] foundFiles = new String[files.size()];
+        files.copyInto(foundFiles);
+
+        return foundFiles;
+
+    }
+
+
+    /**
+     * Private hepler method for getFilesFromExtension()
+    */
+    private static Vector blendFilesToVector(Vector v, String[] files) {
+
+        for (int i = 0; i < files.length; ++i) {
+            v.addElement(files[i]);
+        }
+
+        return v;
+    }
+
+    /**
+     * Checks to see if a file is of a particular type(s).
+     * Note that if the file does not have an extension, an empty string
+     * (&quot;&quot;) is matched for.
+     *
+    */
+    private static boolean isValidFile(String file, String[] extensions) {
+
+
+        String extension = FileUtils.extension(file);
+        if (extension == null) {
+            extension = "";
+        }
+
+        //ok.. now that we have the "extension" go through the current know
+        //excepted extensions and determine if this one is OK.
+
+        for (int i = 0; i < extensions.length; ++i) {
+            if (extensions[i].equals(extension))
+                return true;
+        }
+
+        return false;
+
+    }
+
 }

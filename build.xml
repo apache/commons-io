@@ -3,7 +3,7 @@
 
 <!--
         "IO" component of the Jakarta Commons Subproject
-        $Id: build.xml,v 1.1 2002/01/25 19:06:14 sanders Exp $
+        $Id: build.xml,v 1.2 2002/01/28 04:44:49 sanders Exp $
 -->
 
 
@@ -233,7 +233,7 @@
     <echo message="Running IO tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.TestIO"/>
+      <arg value="org.apache.commons.io.IOTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
