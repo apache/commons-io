@@ -73,7 +73,7 @@ import java.util.Vector;
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @version $Id: FileUtils.java,v 1.6 2002/06/12 19:50:40 dlr Exp $
+ * @version $Id: FileUtils.java,v 1.7 2002/06/22 06:52:40 dion Exp $
  */
 public class FileUtils {
 
@@ -220,6 +220,22 @@ public class FileUtils {
         FileOutputStream out = new FileOutputStream(fileName);
         out.write(data.getBytes());
         out.close();
+    }
+    
+    /**
+     * Copy a file. The new file will be created if it does not exist. This is
+     * an inefficient method, which just calls {@link #fileRead(String)} and
+     * then {@link #fileWrite(String,String)}
+     *
+     * @param inFileName the file to copy
+     * @param outFileName the file to copy to
+     * @throws Exception if fileRead or fileWrite throw it
+     */
+    public static void fileCopy(String inFileName, String outFileName) throws
+        Exception
+    {
+        String content = FileUtils.fileRead(inFileName);
+        FileUtils.fileWrite(outFileName, content);
     }
 
     /**
