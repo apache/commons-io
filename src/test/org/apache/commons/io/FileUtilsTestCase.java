@@ -1,7 +1,7 @@
 /*
- * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.7 2003/11/22 21:06:41 jeremias Exp $
- * $Revision: 1.7 $
- * $Date: 2003/11/22 21:06:41 $
+ * $Header: /home/jerenkrantz/tmp/commons/commons-convert/cvs/home/cvs/jakarta-commons//io/src/test/org/apache/commons/io/FileUtilsTestCase.java,v 1.8 2003/11/23 20:43:30 bayard Exp $
+ * $Revision: 1.8 $
+ * $Date: 2003/11/23 20:43:30 $
  *
  * ====================================================================
  *
@@ -75,7 +75,7 @@ import junit.textui.TestRunner;
  *
  * @author Peter Donald
  * @author Matthew Hawthorne
- * @version $Id: FileUtilsTestCase.java,v 1.7 2003/11/22 21:06:41 jeremias Exp $
+ * @version $Id: FileUtilsTestCase.java,v 1.8 2003/11/23 20:43:30 bayard Exp $
  * @see FileUtils
  */
 public final class FileUtilsTestCase extends FileBasedTestCase {
@@ -159,14 +159,6 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
 
     }
 
-    // mkdir
-
-    public void testMkdir() {
-        final File dir = new File(getTestDirectory(), "testdir");
-        FileUtils.mkdir(dir.getAbsolutePath());
-        dir.deleteOnExit();
-    }
-
     // contentEquals
 
     public void testContentEquals() throws Exception {
@@ -206,24 +198,6 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue(FileUtils.contentEquals(file, file));
     }
 
-    // removePath
-
-    public void testRemovePath() {
-        final String fileName =
-            FileUtils.removePath(
-                new File(getTestDirectory(), getName()).getAbsolutePath());
-        assertEquals(getName(), fileName);
-    }
-
-    // getPath
-
-    public void testGetPath() {
-        final String fileName =
-            FileUtils.getPath(
-                new File(getTestDirectory(), getName()).getAbsolutePath());
-        assertEquals(getTestDirectory().getAbsolutePath(), fileName);
-    }
-
     // copyURLToFile
 
     public void testCopyURLToFile() throws Exception {
@@ -246,17 +220,6 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
         } finally {
             fis.close();
         }
-    }
-
-    // catPath
-
-    public void testCatPath() {
-        // TODO StringIndexOutOfBoundsException thrown if file doesn't contain slash.
-        // Is this acceptable?
-        //assertEquals("", FileUtils.catPath("a", "b"));
-
-        assertEquals("/a/c", FileUtils.catPath("/a/b", "c"));
-        assertEquals("/a/d", FileUtils.catPath("/a/b/c", "../d"));
     }
 
     // forceMkdir
@@ -391,74 +354,6 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
             !getTestDirectory().getParentFile().exists());
     }
 
-    // resolveFile
-
-    public void testResolveFileDotDot() throws Exception {
-        final File file = FileUtils.resolveFile(getTestDirectory(), "..");
-        assertEquals(
-            "Check .. operator",
-            file,
-            getTestDirectory().getParentFile());
-    }
-
-    public void testResolveFileDot() throws Exception {
-        final File file = FileUtils.resolveFile(getTestDirectory(), ".");
-        assertEquals("Check . operator", file, getTestDirectory());
-    }
-
-    // normalize
-
-    public void testNormalize() throws Exception {
-        final String[] src =
-            {
-                "",
-                "/",
-                "///",
-                "/foo",
-                "/foo//",
-                "/./",
-                "/foo/./",
-                "/foo/./bar",
-                "/foo/../bar",
-                "/foo/../bar/../baz",
-                "/foo/bar/../../baz",
-                "/././",
-                "/foo/./../bar",
-                "/foo/.././bar/",
-                "//foo//./bar",
-                "/../",
-                "/foo/../../" };
-
-        final String[] dest =
-            {
-                "",
-                "/",
-                "/",
-                "/foo",
-                "/foo/",
-                "/",
-                "/foo/",
-                "/foo/bar",
-                "/bar",
-                "/baz",
-                "/baz",
-                "/",
-                "/bar",
-                "/bar/",
-                "/foo/bar",
-                null,
-                null };
-
-        assertEquals("Oops, test writer goofed", src.length, dest.length);
-
-        for (int i = 0; i < src.length; i++) {
-            assertEquals(
-                "Check if '" + src[i] + "' normalized to '" + dest[i] + "'",
-                dest[i],
-                FileUtils.normalize(src[i]));
-        }
-    }
-
     private String replaceAll(
         String text,
         String lookFor,
@@ -491,97 +386,32 @@ public final class FileUtilsTestCase extends FileBasedTestCase {
 
         assertTrue(
             "test.txt extension == \"txt\"",
-            FileUtils.getExtension(filename).equals("txt"));
+            FilenameUtils.getExtension(filename).equals("txt"));
 
         assertTrue(
             "Test file does not exist: " + filename,
-            FileUtils.fileExists(filename));
+            FilenameUtils.fileExists(filename));
 
         assertTrue(
             "Second test file does not exist",
-            !FileUtils.fileExists(filename2));
+            !FilenameUtils.fileExists(filename2));
 
         FileUtils.writeStringToFile(new File(filename2), filename, "UTF-8");
-        assertTrue("Second file was written", FileUtils.fileExists(filename2));
+        assertTrue("Second file was written", FilenameUtils.fileExists(filename2));
 
         final String file2contents = FileUtils.readFileToString(new File(filename2), "UTF-8");
         assertTrue(
             "Second file's contents correct",
             FileUtils.readFileToString(new File(filename2), "UTF-8").equals(file2contents));
 
-        FileUtils.fileDelete(filename2);
+        FilenameUtils.fileDelete(filename2);
         assertTrue(
             "Second test file does not exist",
-            !FileUtils.fileExists(filename2));
+            !FilenameUtils.fileExists(filename2));
 
         final String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
         assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
 
-    }
-
-    public void testGetExtension() {
-        final String[][] tests = { { "filename.ext", "ext" }, {
-                "README", "" }, {
-                "domain.dot.com", "com" }, {
-                "image.jpeg", "jpeg" }
-        };
-        for (int i = 0; i < tests.length; i++) {
-            assertEquals(tests[i][1], FileUtils.getExtension(tests[i][0]));
-            //assertEquals(tests[i][1], FileUtils.extension(tests[i][0]));
-        }
-    }
-
-    /* TODO: Reenable this test */
-    public void DISABLED__testGetExtensionWithPaths() {
-        final String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "ext" }, {
-                "C:\\temp\\foo\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/filename.ext", "ext" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "ext" }, {
-                "/tmp/foo.bar/README", "" }, {
-                "C:\\temp\\foo.bar\\README", "" }, {
-                "../filename.ext", "ext" }
-        };
-        for (int i = 0; i < testsWithPaths.length; i++) {
-            assertEquals(
-                testsWithPaths[i][1],
-                FileUtils.getExtension(testsWithPaths[i][0]));
-            //assertEquals(testsWithPaths[i][1], FileUtils.extension(testsWithPaths[i][0]));
-        }
-    }
-
-    public void testRemoveExtension() {
-        final String[][] tests = { { "filename.ext", "filename" }, {
-                "first.second.third.ext", "first.second.third" }, {
-                "README", "README" }, {
-                "domain.dot.com", "domain.dot" }, {
-                "image.jpeg", "image" }
-        };
-
-        for (int i = 0; i < tests.length; i++) {
-            assertEquals(tests[i][1], FileUtils.removeExtension(tests[i][0]));
-            //assertEquals(tests[i][1], FileUtils.basename(tests[i][0]));
-        }
-    }
-
-    /* TODO: Reenable this test */
-    public void DISABLED__testRemoveExtensionWithPaths() {
-        final String[][] testsWithPaths =
-            { { "/tmp/foo/filename.ext", "filename" }, {
-                "C:\\temp\\foo\\filename.ext", "filename" }, {
-                "/tmp/foo.bar/filename.ext", "filename" }, {
-                "C:\\temp\\foo.bar\\filename.ext", "filename" }, {
-                "/tmp/foo.bar/README", "README" }, {
-                "C:\\temp\\foo.bar\\README", "README" }, {
-                "../filename.ext", "filename" }
-        };
-
-        for (int i = 0; i < testsWithPaths.length; i++) {
-            assertEquals(
-                testsWithPaths[i][1],
-                FileUtils.removeExtension(testsWithPaths[i][0]));
-            //assertEquals(testsWithPaths[i][1], FileUtils.basename(testsWithPaths[i][0]));
-        }
     }
 
 }
