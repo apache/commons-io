@@ -105,7 +105,7 @@ import java.util.Vector;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id: FileUtils.java,v 1.8 2002/07/28 01:28:09 bayard Exp $
+ * @version $Id: FileUtils.java,v 1.9 2002/07/28 08:28:48 bayard Exp $
  */
 public class FileUtils {
 
@@ -519,24 +519,6 @@ public class FileUtils {
         }
 
         return urls;
-    }
-
-    /**
-     * Remove extension from filename.
-     * ie
-     * <pre>
-     * foo.txt    --> foo
-     * a\b\c.jpg --> a\b\c
-     * a\b\c     --> a\b\c
-     * </pre>
-     *
-     * @param filename the filename
-     * @return the filename minus extension
-     * @deprecated Use removeExtension as removeExtention is mispelled
-     */
-    public static String removeExtention( final String filename )
-    {
-        return removeExtension( filename );
     }
 
     /**
