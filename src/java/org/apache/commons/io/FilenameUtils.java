@@ -63,15 +63,10 @@ import java.io.IOException;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.22 2004/10/30 23:12:18 scolebourne Exp $
+ * @version $Id: FilenameUtils.java,v 1.23 2004/10/30 23:23:54 scolebourne Exp $
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
-
-    /**
-     * Standard separator char used when internalizing paths.
-     */
-    private static final char INTERNAL_SEPARATOR_CHAR = '/';
 
     /**
      * The extension separator character.
@@ -94,40 +89,11 @@ public class FilenameUtils {
     private static final char SYSTEM_SEPARATOR = File.separatorChar;
 
     /**
-     * Standard separator string used when internalizing paths.
-     */
-    // KILL? It's here to match symmetry of File.separator and to promote its use
-    private static final String INTERNAL_SEPARATOR = "/";
-
-    /**
      * Instances should NOT be constructed in standard programming.
      */
     public FilenameUtils() { }
 
-    /**
-     * Remove extension from filename.
-     * ie
-     * <pre>
-     * foo.txt    --> foo
-     * a\b\c.jpg --> a\b\c
-     * a\b\c     --> a\b\c
-     * a.b\c        --> a.b\c
-     * </pre>
-     *
-     * @param filename the filename
-     * @return the filename minus extension
-     */
-    public static String removeExtension(String filename) {
-        String ext = getExtension(filename);
-        int index = ext.length();
-        if (index > 0) {
-            // include the . in the count
-            index++;
-        }
-        index = filename.length() - index;
-        return filename.substring(0, index);
-    }
-
+    //-----------------------------------------------------------------------
     /**
      * Normalize a path.
      * Eliminates "/../" and "/./" in a string. Returns <code>null</code> if
@@ -309,31 +275,6 @@ public class FilenameUtils {
         return file;
     }
 
-    /**
-     * Convert all separators to the internal form. This allows manipulation
-     * of paths without concern for which separators are used within them.
-     * @param path The path to be internalized.
-     * @return The internalized path.
-     */
-    // KILL: Inline into the one place this is used?
-    private static String internalize(String path) {
-        return path.replace('\\', INTERNAL_SEPARATOR_CHAR);
-    }
-
-    /**
-     * Convert all separators to their external form. That is, ensure that all
-     * separators are the same as File.separator.
-     * @param path The path to be externalized.
-     * @return The externalized path.
-     */
-    // KILL: Nothing uses this. It exists as symmetry of internalize and to promote its use
-    private static String externalize(String path) {
-        if (INTERNAL_SEPARATOR_CHAR != File.separatorChar) {
-            path = path.replace(INTERNAL_SEPARATOR_CHAR, File.separatorChar);
-        }
-        return path;
-    }
-
     //-----------------------------------------------------------------------
     /**
      * Converts all separators to the Unix separator of forward slash.
@@ -433,7 +374,7 @@ public class FilenameUtils {
      * </pre>
      *
      * @param filename  the filename to query, null returns null
-     * @return the filename minus path
+     * @return the path of the file, or an empty string if none exists
      */
     public static String getPath(String filename) {
         if (filename == null) {
@@ -461,7 +402,7 @@ public class FilenameUtils {
      * </pre>
      *
      * @param filename  the filename to query, null returns null
-     * @return the filename minus path
+     * @return the name of the file without the path, or an empty string if none exists
      */
     public static String getName(String filename) {
         if (filename == null) {
@@ -484,7 +425,7 @@ public class FilenameUtils {
      * </pre>
      *
      * @param filename the filename to retrieve the extension of.
-     * @return the extension of filename or an empty string if none exists.
+     * @return the extension of the file or an empty string if none exists.
      */
     public static String getExtension(String filename) {
         if (filename == null) {
@@ -495,6 +436,34 @@ public class FilenameUtils {
             return "";
         } else {
             return filename.substring(index + 1);
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Removes the extension from a filename.
+     * <p>
+     * This method returns the textual part of the filename before the last dot.
+     * There must be no directory separator after the dot.
+     * <pre>
+     * foo.txt    --> foo
+     * a\b\c.jpg --> a\b\c
+     * a\b\c     --> a\b\c
+     * a.b\c        --> a.b\c
+     * </pre>
+     *
+     * @param filename  the filename to query, null returns null
+     * @return the filename minus the extension
+     */
+    public static String removeExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int index = indexOfExtension(filename);
+        if (index == -1) {
+            return filename;
+        } else {
+            return filename.substring(0, index);
         }
     }
 
