@@ -71,7 +71,7 @@ import java.util.List;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.6 $ $Date: 2003/11/22 20:00:06 $
+ * @version $Revision: 1.7 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -90,7 +90,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @param prefix  the prefix to allow, must not be null
      * @throws IllegalArgumentException if the prefix is null
      */
-    public PrefixFileFilter(final String prefix) {
+    public PrefixFileFilter(String prefix) {
         if (prefix == null) {
             throw new IllegalArgumentException("The prefix must not be null");
         }
@@ -106,7 +106,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
      */
-    public PrefixFileFilter(final String[] prefixes) {
+    public PrefixFileFilter(String[] prefixes) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The array of prefixes must not be null");
         }
@@ -120,7 +120,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @throws IllegalArgumentException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public PrefixFileFilter(final List prefixes) {
+    public PrefixFileFilter(List prefixes) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
@@ -133,7 +133,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @param file  the File to check
      * @return true if the filename starts with one of our prefixes
      */
-    public boolean accept(final File file) {
+    public boolean accept(File file) {
         String name = file.getName();
         for (int i = 0; i < this.prefixes.length; i++) {
             if (name.startsWith(this.prefixes[i])) {
@@ -150,7 +150,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      * @param name  the filename
      * @return true if the filename starts with one of our prefixes
      */
-    public boolean accept(final File file, final String name) {
+    public boolean accept(File file, String name) {
         for (int i = 0; i < prefixes.length; i++) {
             if (name.startsWith(prefixes[i])) {
                 return true;

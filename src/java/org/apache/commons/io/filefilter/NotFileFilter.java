@@ -59,14 +59,14 @@ import java.io.File;
  * This filter produces a logical NOT of the filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.4 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Stephen Colebourne
  */
 public class NotFileFilter extends AbstractFileFilter {
     
     /** The filter */
-    private final IOFileFilter filter;
+    private IOFileFilter filter;
 
     /**
      * Constructs a new file filter that NOTs the result of another filters.
@@ -98,7 +98,7 @@ public class NotFileFilter extends AbstractFileFilter {
      * @param name  the filename
      * @return true if the filter returns false
      */
-    public boolean accept(final File file, final String name) {
+    public boolean accept(File file, String name) {
         return ! filter.accept(file, name);
     }
     

@@ -64,7 +64,7 @@ import java.io.StreamCorruptedException;
  * by Avalon components that are juggling many classloaders.
  *
  * @author <a href="mailto:paul_hammant@yahoo.com">Paul Hammant</a>
- * @version $Revision: 1.3 $ $Date: 2003/10/13 07:04:16 $
+ * @version $Revision: 1.4 $ $Date: 2003/12/30 06:55:59 $
  */
 public class ClassLoaderObjectInputStream
     extends ObjectInputStream
@@ -78,8 +78,8 @@ public class ClassLoaderObjectInputStream
      * @throws IOException in case of an I/O error
      * @throws StreamCorruptedException if the stream is corrupted
      */
-    public ClassLoaderObjectInputStream( final ClassLoader classLoader,
-                                         final InputStream inputStream )
+    public ClassLoaderObjectInputStream( ClassLoader classLoader,
+                                         InputStream inputStream )
         throws IOException, StreamCorruptedException
     {
         super( inputStream );
@@ -87,10 +87,10 @@ public class ClassLoaderObjectInputStream
     }
 
     /** @see java.io.ObjectInputStream#resolveClass(java.io.ObjectStreamClass) */
-    protected Class resolveClass( final ObjectStreamClass objectStreamClass )
+    protected Class resolveClass( ObjectStreamClass objectStreamClass )
         throws IOException, ClassNotFoundException
     {
-        final Class clazz =
+        Class clazz =
             Class.forName( objectStreamClass.getName(), false, m_classLoader );
 
         if( null != clazz )

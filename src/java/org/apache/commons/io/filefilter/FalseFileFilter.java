@@ -59,7 +59,7 @@ import java.io.File;
  * A file filter that always returns false.
  * 
  * @since Commons IO 1.0
- * @version $Revision: 1.4 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -67,7 +67,7 @@ import java.io.File;
 public class FalseFileFilter implements IOFileFilter {
     
     /** Singleton instance of false filter */
-    public static final IOFileFilter INSTANCE = new FalseFileFilter();
+    public static IOFileFilter INSTANCE = new FalseFileFilter();
     
     /**
      * Restrictive consructor.

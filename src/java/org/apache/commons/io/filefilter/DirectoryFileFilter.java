@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision: 1.4 $ $Date: 2003/10/13 07:03:50 $
+ * @version $Revision: 1.5 $ $Date: 2003/12/30 06:55:58 $
  * 
  * @author Henri Yandell
  * @author Stephen Colebourne
@@ -79,7 +79,7 @@ import java.io.File;
 public class DirectoryFileFilter extends AbstractFileFilter {
     
     /** Singleton instance of directory filter */
-    public static final IOFileFilter INSTANCE = new DirectoryFileFilter();
+    public static IOFileFilter INSTANCE = new DirectoryFileFilter();
     
     /**
      * Restrictive consructor.
@@ -93,7 +93,7 @@ public class DirectoryFileFilter extends AbstractFileFilter {
      * @param file  the File to check
      * @return true if the file is a directory
      */
-    public boolean accept(final File file) {
+    public boolean accept(File file) {
         return file.isDirectory();
     }
     
