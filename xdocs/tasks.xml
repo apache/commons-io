@@ -14,7 +14,7 @@
           <li>EndianUtils - InputStream/OutputStream methods</li>
           <li>LockableFileWriter</li>
           <li>ClassLoaderObjectInputStream</li>
-          <li>SwappedDataInputStream</li>
+          <li>SwappedDataInputStream - [half done]</li>
         </ul>
         though they may not affect an initial beta release. 
         </li>
