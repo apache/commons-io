@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ import java.util.Collection;
  * @author Martin Cooper
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
- * @version $Id: FilenameUtils.java,v 1.32 2004/12/10 22:36:56 scolebourne Exp $
+ * @version $Id$
  * @since Commons IO 1.1
  */
 public class FilenameUtils {
@@ -922,16 +922,16 @@ public class FilenameUtils {
         ArrayList list = new ArrayList();
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < array.length; i++) {
-			if (array[i] == '?' || array[i] == '*') {
-				if (buffer.length() != 0) {
-					list.add(buffer.toString());
-					buffer.setLength(0);
-				}
-				list.add(new String(new char[] { array[i] }));
-			} else {
-				buffer.append(array[i]);
-			}
-		}
+            if (array[i] == '?' || array[i] == '*') {
+                if (buffer.length() != 0) {
+                    list.add(buffer.toString());
+                    buffer.setLength(0);
+                }
+                list.add(new String(new char[] { array[i] }));
+            } else {
+                buffer.append(array[i]);
+            }
+        }
         if (buffer.length() != 0) {
             list.add(buffer.toString());
         }
