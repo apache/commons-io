@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A {@link FileFilter} providing conditional OR logic across a list of
+ * A {@link java.io.FileFilter} providing conditional OR logic across a list of
  * file filters. This filter returns <code>true</code> if any filters in the
  * list return <code>true</code>. Otherwise, it returns <code>false</code>.
  * Checking of the file filter list stops when the first filter returns
@@ -52,7 +52,7 @@ public class OrFileFilter
      * Constructs a new instance of <code>OrFileFilter</code>
      * with the specified filters.
      *
-     * @param fileFileter the file filters for this filter
+     * @param fileFilters the file filters for this filter
      * @since Commons IO 1.1
      */
     public OrFileFilter(final List fileFilters) {
