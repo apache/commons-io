@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A {@link FileFilter} providing conditional AND logic across a list of
+ * A {@link java.io.FileFilter} providing conditional AND logic across a list of
  * file filters. This filter returns <code>true</code> if all filters in the
  * list return <code>true</code>. Otherwise, it returns <code>false</code>.
  * Checking of the file filter list stops when the first filter returns
@@ -51,6 +51,7 @@ public class AndFileFilter
     /**
      * Constructs a new instance of <code>AndFileFilter</code>
      * with the specified list of filters.
+     * @param fileFilters a List of IOFileFilter instances
      * @since Commons IO 1.1
      */
     public AndFileFilter(final List fileFilters) {
@@ -74,21 +75,21 @@ public class AndFileFilter
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public void addFileFilter(final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public List getFileFilters() {
         return Collections.unmodifiableList(this.fileFilters);
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
         return this.fileFilters.remove(ioFileFilter);
@@ -102,7 +103,7 @@ public class AndFileFilter
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public boolean accept(final File file) {
         if (this.fileFilters.size() == 0) {
@@ -118,7 +119,7 @@ public class AndFileFilter
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public boolean accept(final File file, final String name) {
         if (this.fileFilters.size() == 0) {
