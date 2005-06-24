@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -252,6 +252,33 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter2, file, false);
 
         file = new File(getTestDirectory(), "CVS");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, false);
+    }
+         
+    public void testMakeSVNAware() throws Exception {
+        IOFileFilter filter1 = FileFilterUtils.makeSVNAware(null);
+        IOFileFilter filter2 = FileFilterUtils.makeSVNAware(FileFilterUtils
+            .nameFileFilter("test-file1.txt"));
+
+        File file = new File(getTestDirectory(), ".svn");
+        file.mkdirs();
+        assertFiltering(filter1, file, false);
+        assertFiltering(filter2, file, false);
+        FileUtils.deleteDirectory(file);
+
+        file = new File(getTestDirectory(), "test-file1.txt");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, true);
+
+        file = new File(getTestDirectory(), "test-file2.log");
+        createFile(file, 0);
+        assertFiltering(filter1, file, true);
+        assertFiltering(filter2, file, false);
+
+        file = new File(getTestDirectory(), ".svn");
         createFile(file, 0);
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
