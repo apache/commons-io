@@ -297,7 +297,7 @@ public class FilenameUtils {
             return normalize(fullFilenameToAdd);
         }
         char ch = basePath.charAt(len - 1);
-        if (isSeparator(basePath.charAt(len - 1))) {
+        if (isSeparator(ch)) {
             return normalize(basePath + fullFilenameToAdd);
         } else {
             return normalize(basePath + '/' + fullFilenameToAdd);
