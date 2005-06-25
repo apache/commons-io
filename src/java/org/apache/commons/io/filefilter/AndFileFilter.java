@@ -55,6 +55,9 @@ public class AndFileFilter
      * @since Commons IO 1.1
      */
     public AndFileFilter(final List fileFilters) {
+        if (fileFilters == null) {
+            throw new IllegalArgumentException("The filters List must not be null");
+        }
         this.fileFilters = new ArrayList(fileFilters);
     }
 
