@@ -33,6 +33,7 @@ public class PackageTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("IO Utilities - input");
+        suite.addTest(new TestSuite(ClassLoaderObjectInputStreamTest.class));
         suite.addTest(new TestSuite(CountingInputStreamTest.class));
         suite.addTest(new TestSuite(SwappedDataInputStreamTest.class));
         return suite;

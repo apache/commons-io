@@ -18,7 +18,6 @@ package org.apache.commons.io.input;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -81,7 +80,7 @@ public class CountingInputStreamTest extends TestCase {
 
         int count = cis.resetCount();
         found = cis.read(result, 6, 5);
-        assertEquals( found, cis.getCount() );
+        assertEquals( found, count );
     }
     
     public void testZeroLength1() throws Exception {

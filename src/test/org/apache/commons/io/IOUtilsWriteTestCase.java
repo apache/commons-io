@@ -205,8 +205,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     public void testWrite_stringToOutputStream_nullData() throws Exception {
-        String str = new String(inData, "US-ASCII");
-        
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         
@@ -242,8 +240,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     public void testWrite_stringToOutputStream_Encoding_nullData() throws Exception {
-        String str = new String(inData, "US-ASCII");
-        
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         
@@ -293,8 +289,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     public void testWrite_stringToWriter_Encoding_nullData() throws Exception {
-        String str = new String(inData, "US-ASCII");
-        
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         Writer writer = new OutputStreamWriter(baout, "US-ASCII");
@@ -330,8 +324,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     public void testWrite_charArrayToOutputStream_nullData() throws Exception {
-        String str = new String(inData, "US-ASCII");
-        
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         
@@ -418,8 +410,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     public void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
-        String str = new String(inData, "US-ASCII");
-        
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         Writer writer = new OutputStreamWriter(baout, "US-ASCII");
