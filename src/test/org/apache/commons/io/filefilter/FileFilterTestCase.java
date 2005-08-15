@@ -209,7 +209,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void testNameFilterNullArgument() throws Exception {
     	String test = null;
     	try {
-    		IOFileFilter filter = new NameFileFilter(test);
+    		new NameFileFilter(test);
     		fail( "constructing a NameFileFilter with a null String argument should fail.");
     	} catch( IllegalArgumentException iae ) {
     	}
@@ -218,7 +218,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void testNameFilterNullArrayArgument() throws Exception {
     	String[] test = null;
     	try {
-    		IOFileFilter filter = new NameFileFilter(test);
+    		new NameFileFilter(test);
     		fail( "constructing a NameFileFilter with a null String[] argument should fail.");
     	} catch( IllegalArgumentException iae ) {
     	}
@@ -227,7 +227,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void testNameFilterNullListArgument() throws Exception {
     	List test = null;
     	try {
-    		IOFileFilter filter = new NameFileFilter(test);
+    		new NameFileFilter(test);
     		fail( "constructing a NameFileFilter with a null List argument should fail.");
     	} catch( IllegalArgumentException iae ) {
     	}
@@ -277,12 +277,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
         } catch (IllegalArgumentException ex) {
         }
 
-        try {
-            new AndFileFilter((List) null);
-            fail();
-        } catch (IllegalArgumentException ex) {
-        }
-}
+        AndFileFilter f = new AndFileFilter((List) null);
+        assertEquals(true, f.getFileFilters().isEmpty());
+    }
 
     public void testOr() throws Exception {
         IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
@@ -316,8 +313,10 @@ public class FileFilterTestCase extends FileBasedTestCase {
             fail();
         } catch (IllegalArgumentException ex) {
         }
+        
+        OrFileFilter f = new OrFileFilter((List) null);
+        assertEquals(true, f.getFileFilters().isEmpty());
     }
-
 
     public void testWildcard() throws Exception {
         IOFileFilter filter = new WildcardFilter("*.txt");
