@@ -42,6 +42,7 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance of <code>AndFileFilter</code>.
+     *
      * @since Commons IO 1.1
      */
     public AndFileFilter() {
@@ -51,14 +52,16 @@ public class AndFileFilter
     /**
      * Constructs a new instance of <code>AndFileFilter</code>
      * with the specified list of filters.
-     * @param fileFilters a List of IOFileFilter instances
+     *
+     * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
      * @since Commons IO 1.1
      */
     public AndFileFilter(final List fileFilters) {
         if (fileFilters == null) {
-            throw new IllegalArgumentException("The filters List must not be null");
+            this.fileFilters = new ArrayList();
+        } else {
+            this.fileFilters = new ArrayList(fileFilters);
         }
-        this.fileFilters = new ArrayList(fileFilters);
     }
 
     /**

@@ -42,6 +42,7 @@ public class OrFileFilter
 
     /**
      * Constructs a new instance of <code>OrFileFilter</code>.
+     *
      * @since Commons IO 1.1
      */
     public OrFileFilter() {
@@ -52,11 +53,15 @@ public class OrFileFilter
      * Constructs a new instance of <code>OrFileFilter</code>
      * with the specified filters.
      *
-     * @param fileFilters the file filters for this filter
+     * @param fileFilters  the file filters for this filter, copied, null ignored
      * @since Commons IO 1.1
      */
     public OrFileFilter(final List fileFilters) {
-        this.fileFilters = new ArrayList(fileFilters);
+        if (fileFilters == null) {
+            this.fileFilters = new ArrayList();
+        } else {
+            this.fileFilters = new ArrayList(fileFilters);
+        }
     }
 
     /**
