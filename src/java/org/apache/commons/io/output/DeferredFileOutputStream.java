@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.apache.commons.io.output;
 
 import java.io.File;
@@ -49,13 +47,6 @@ public class DeferredFileOutputStream
      * being reached.
      */
     private ByteArrayOutputStream memoryOutputStream;
-
-
-    /**
-     * The output stream to which data will be written after the theshold is
-     * reached.
-     */
-    private FileOutputStream diskOutputStream;
 
 
     /**
@@ -121,7 +112,6 @@ public class DeferredFileOutputStream
     {
         FileOutputStream fos = new FileOutputStream(outputFile);
         memoryOutputStream.writeTo(fos);
-        diskOutputStream = fos;
         currentOutputStream = fos;
         memoryOutputStream = null;
     }
