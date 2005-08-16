@@ -21,7 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -663,6 +665,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(11, data[0]);
         assertEquals(21, data[1]);
         assertEquals(31, data[2]);
+    }
+
+    public void testReadLines_Reader() throws Exception {
+        File file = newFile("lines.txt");
+        try {
+            String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            createLineBasedFile(file, data);
+            
+            List lines = FileUtils.readLines(file, "UTF-8");
+            assertEquals(Arrays.asList(data), lines);
+        } finally {
+            deleteFile(file);
+        }
     }
 
     public void testWriteStringToFile() throws Exception {
