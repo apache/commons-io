@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2004 The Apache Software Foundation.
+ * Copyright 1999-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Arrays;
+import java.util.List;
 
-import org.apache.commons.io.testtools.*;
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 // Note: jdk1.2 dependency
 
@@ -345,6 +348,60 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             assertEqualContent( out, m_testFile );
         } finally {
             fr.close();
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    public void testReadLines_InputStream() throws Exception {
+        File file = newFile("lines.txt");
+        InputStream in = null;
+        try {
+            String[] data = new String[] {"hello", "world", "", "this is", "some text"};
+            createLineBasedFile(file, data);
+            
+            in = new FileInputStream(file);
+            List lines = IOUtils.readLines(in);
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            deleteFile(file);
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    public void testReadLines_InputStream_String() throws Exception {
+        File file = newFile("lines.txt");
+        InputStream in = null;
+        try {
+            String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            createLineBasedFile(file, data);
+            
+            in = new FileInputStream(file);
+            List lines = IOUtils.readLines(in, "UTF-8");
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            deleteFile(file);
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    public void testReadLines_Reader() throws Exception {
+        File file = newFile("lines.txt");
+        Reader in = null;
+        try {
+            String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            createLineBasedFile(file, data);
+            
+            in = new InputStreamReader(new FileInputStream(file));
+            List lines = IOUtils.readLines(in);
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            deleteFile(file);
         }
     }
 

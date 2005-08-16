@@ -16,16 +16,18 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileFilter;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
@@ -741,7 +743,7 @@ public class FileUtils {
         return true;
     }
 
-
+    //-----------------------------------------------------------------------
     /**
      * <p>
      * Reads the contents of a file into a String.
@@ -786,6 +788,33 @@ public class FileUtils {
         }
     }
 
+    /**
+     * <p>
+     * Reads the contents of a file line by line to a List of Strings.
+     * </p>
+     * <p>
+     * There is no readLines method without encoding parameter because
+     * the default encoding can differ between platforms and therefore results
+     * in inconsistent results.
+     * </p>
+     *
+     * @param file  the file to read
+     * @param encoding  the encoding to use
+     * @return the list of Strings representing each line in the file
+     * @throws IOException in case of an I/O error
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since 1.1
+     */
+    public static List readLines(File file, String encoding) throws IOException {
+        InputStream in = new FileInputStream(file);
+        try {
+            return IOUtils.readLines(in, encoding);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    //-----------------------------------------------------------------------
     /**
      * <p>
      * Writes a String to a file creating the file if it does not exist.

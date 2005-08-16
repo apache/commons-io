@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@ package org.apache.commons.io.testtools;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
 /**
  * Base class for testcases doing tests with files.
@@ -84,6 +87,22 @@ public abstract class FileBasedTestCase extends TestCase {
 
             // nice varied byte pattern compatible with Readers and Writers
             out.write( (byte)( (i % 127) + 1) );
+        }
+    }
+
+    protected void createLineBasedFile(File file, String[] data) throws IOException {
+        if (!file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file
+                    + " as the parent directory does not exist");
+        }
+        PrintWriter output = new PrintWriter(
+            new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+        try {
+            for (int i = 0; i < data.length; i++) {
+                output.println(data[i]);
+            }
+        } finally {
+            IOUtils.closeQuietly(output);
         }
     }
 
