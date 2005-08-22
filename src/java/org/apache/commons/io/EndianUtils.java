@@ -33,7 +33,9 @@ public class EndianUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public EndianUtils() { }
+    public EndianUtils() {
+        super();
+    }
 
     // ========================================== Swapping routines
 
