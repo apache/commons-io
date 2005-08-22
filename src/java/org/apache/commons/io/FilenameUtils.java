@@ -122,6 +122,7 @@ public class FilenameUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public FilenameUtils() {
+        super();
     }
 
     //-----------------------------------------------------------------------
@@ -989,9 +990,16 @@ public class FilenameUtils {
         return false;
     }
 
-    // used by wildcardMatch
-    // package level so a unit test may run on this
+    /**
+     * Splits a string into a number of tokens.
+     * 
+     * @param text  the text to split
+     * @return the tokens, never null
+     */
     static String[] splitOnTokens(String text) {
+        // used by wildcardMatch
+        // package level so a unit test may run on this
+        
         if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
             return new String[] { text };
         }
