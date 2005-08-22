@@ -114,7 +114,7 @@ import java.io.Writer;
 public class CopyUtils {
 
     /**
-     * The name says it all.
+     * The default size of the buffer.
      */
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
@@ -329,4 +329,4 @@ public class CopyUtils {
         output.write(input);
     }
 
-} // CopyUtils
+}
