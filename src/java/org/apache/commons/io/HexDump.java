@@ -1,5 +1,5 @@
 /*
- * Copyright 2002,2004 The Apache Software Foundation.
+ * Copyright 2002,2004-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import java.io.OutputStream;
 
 /**
  * Dumps data in hexadecimal format.
- *
+ * <p>
  * Derived from a HexDump utility I wrote in June 2001.
- *
+ * <p>
  * Taken from the POI project.
  *
  * @author Scott Sanders (sanders at apache dot org)
@@ -34,7 +34,9 @@ public class HexDump {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public HexDump() { }
+    public HexDump() {
+        super();
+    }
 
     /**
      * Dump an array of bytes to an OutputStream.
@@ -45,18 +47,18 @@ public class HexDump {
      *               written
      * @param index initial index into the byte array
      *
-     * @exception IOException is thrown if anything goes wrong writing
-     *            the data to stream
-     * @exception ArrayIndexOutOfBoundsException if the index is
-     *            outside the data array's bounds
-     * @exception IllegalArgumentException if the output stream is
-     *            null
+     * @throws IOException is thrown if anything goes wrong writing
+     *         the data to stream
+     * @throws ArrayIndexOutOfBoundsException if the index is
+     *         outside the data array's bounds
+     * @throws IllegalArgumentException if the output stream is null
      */
 
     public static void dump(byte[] data, long offset,
                             OutputStream stream, int index)
             throws IOException, ArrayIndexOutOfBoundsException,
             IllegalArgumentException {
+        
         if ((index < 0) || (index >= data.length)) {
             throw new ArrayIndexOutOfBoundsException(
                     "illegal index: " + index + " into array of length "
@@ -98,7 +100,9 @@ public class HexDump {
         }
     }
 
-    /** line-separator (initializes to "line.separator" system property. */
+    /**
+     * The line-separator (initializes to "line.separator" system property.
+     */
     public static final String EOL =
             System.getProperty("line.separator");
     private static final StringBuffer _lbuffer = new StringBuffer(8);
