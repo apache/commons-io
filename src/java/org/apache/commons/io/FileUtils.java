@@ -43,8 +43,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * There are methods to  create a {@link #toFile File from a URL}, copy a
  * {@link #copyFileToDirectory File to a directory},
- * copy a {@link #copyFile File to another File},
- * copy a {@link #copyURLToFile URL's contents to a File},
+ * copy a {@link #copyFile(File, File) File to another File},
+ * copy a {@link #copyURLToFile(URL, File) URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and
  * {@link #cleanDirectory(File) clean} a directory.
  * </p>
@@ -409,7 +409,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
-     * @see #copyFile
+     * @see #copyFile(File, File, boolean)
      */
     public static void copyFileToDirectory(File srcFile, File destDir) throws IOException {
         if (destDir == null) {
