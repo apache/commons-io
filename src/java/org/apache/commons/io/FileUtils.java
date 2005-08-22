@@ -75,7 +75,9 @@ public class FileUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public FileUtils() { }
+    public FileUtils() {
+        super();
+    }
 
     /**
      * The number of bytes in a kilobyte.
@@ -1021,7 +1023,6 @@ public class FileUtils {
       * be compared.
       * @param reference the <code>File</code> of which the modification date
       * is used.
-      * like reference
       * @return true if the <code>File</code> exists and has been modified more
       * recently than the reference <code>File</code>.
       */
@@ -1061,8 +1062,7 @@ public class FileUtils {
       * @param file the <code>File</code> of which the modification date must
       * be compared.
       * @param timeMillis the time reference measured in milliseconds since the
-      * epoch
-      * (00:00:00 GMT, January 1, 1970)
+      * epoch (00:00:00 GMT, January 1, 1970)
       * @return true if the <code>File</code> exists and has been modified after
       * the given time reference.
       */
