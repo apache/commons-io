@@ -1,14 +1,11 @@
 $Id$
 
 			 Commons IO Package
-			   Version 1.0
-			    Release Notes
+			    Version 1.1
+			   Release Notes
 
 
 INTRODUCTION:
-
-This document contains the release notes for this version of the Commons
-IO package.
 
 Commons IO is a package of Java utility classes for java.io's hierarchy.  
 Classes in this package are considered to be so standard and of such high 
@@ -17,11 +14,43 @@ reuse as to justify existence in java.io.
 Commons IO contains utility classes, stream implementations, file filters, 
 and endian transformation classes.
 
-NEW FEATURES:
 
-* This is the first release of Commons IO, so all features are new features. 
+Incompatible changes from 1.0
+-----------------------------
+Binary compatible - ???
 
-BUG FIXES:
+Source compatible - ???
 
-Since this is the first release, there are no declared bugfixes.
+Semantic compatible - ???
 
+
+Deprecations from 1.0
+---------------------
+CopyUtils has been deprecated.
+Its methods have been moved to IOUtils.
+The new IOUtils methods handle nulls better, and have clearer names.
+
+IOUtils.toByteArray(String) - Use {@link String#getBytes()}
+IOUtils.toString(byte[]) - Use {@link String#String(byte[])}
+IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
+
+
+Bug fixes from 1.0
+------------------
+
+
+Enhancements from 1.0
+---------------------
+
+
+Feedback
+--------
+Open source works best when you give feedback.
+
+Please direct all bug reports to Bugzilla.
+http://issues.apache.org/bugzilla/buglist.cgi?product=Commons&component=IO
+
+Or subscribe to the commons-user mailing list (prefix emails by [io])
+http://jakarta.apache.org/site/mail.html
+
+The Commons-IO Team
