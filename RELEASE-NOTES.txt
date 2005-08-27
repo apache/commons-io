@@ -37,10 +37,37 @@ IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
 
 Bug fixes from 1.0
 ------------------
+- FileUtils - touch()
+    Now creates the file if it did not previously exist
+
+- FileUtils - toFile(URL)
+    Now handles escape syntax such as %20
 
 
 Enhancements from 1.0
 ---------------------
+- FileUtils - toFiles(URL[])
+    Converts an array of URLs to an array of Files
+
+- FileUtils - copyDirectory()
+    New methods to copy a directory
+
+- FileUtils - readFileToByteArray(File)
+    Reads an entire file into a byte array
+
+- FileUtils - writeByteArrayToFile(File,byte[])
+    Writes a byte array to a file
+
+- FileUtils - readLines(File,encoding)
+    Reads a file line by line into a List of Strings
+
+- FilenameUtils - new class
+    A static utility class for working with filenames
+    Seeks to ease the pain of developing on Windows and deploying on Unix
+
+- FileSystemUtils - new class
+    A static utility class for working with file systems
+    Provides one method at present, to get the free space on the filing system
 
 
 Feedback
