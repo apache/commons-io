@@ -1,43 +1,24 @@
 <?xml version="1.0"?>
 <document>
   <body>
-    <section name="Action Items">
+    <section name="Tasks and Ideas for the future">
       <p>
-        The following classes will be excluded from the initial release:
+        The following are some of the proposed ideas and tasks for commons-io:
       </p>
       <ul>
-        <li>FilenameUtils: This class is still a big mess with many methods not working properly.</li>
-        <li>ClassLoaderObjectInputStream: Unless a unit test is written for it in time. </li>
-      </ul>
-    </section>
-    <section name="Post 1.0 release">
-      <ul>
-        <li>IOUtilsTestCase: Handle unit tests that test an IOUtils method and a CopyUtils method at the same time. </li>
-        <li>Write Unit Test for ClassLoaderObjectInputStream. </li>
-        <li>FilenameUtils: This class is a big mess ATM. We need to clean it up.</li>
-        <li>A CsvReader/Writer set of classes in a csv sub-package</li>
+        <li>A proper user guide.</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
         <li>A "hot folder" handler which triggers an action when a new file has been uploaded to an FTP directory, for example.</li>
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
         <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
         <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
-        <li>Finder system. Currently takes a Map for options; it needs to have the ability to set methods on the Finder. </li>
         <li>Add an additional ByteArrayOutputStream variant that saves content
             in memory just as the original but starts to write to a temp file when
             a given number of bytes is surpassed. This is to reduce the memory
             usage for big "things".</li>
         <li>FileUtils could use a copyDirectory() method (possibly making use of IOFileFilters)</li>
-      </ul>
-    </section>
-    <section name="Misc.">
-      <ul>
-        <li>
-          <strong>Integration</strong>. Seek and integrate various i/o related classes.
-        </li>
-        <li>
-          <strong>Install / Use Documentation</strong>.  Create simple
-          installation and User's Guide documentation for this component.
-        </li>
+        <li>A CsvReader/Writer set of classes in a csv sub-package. Will probably be commons-csv.</li>
+        <li>A Finder system. This may becomes commons-finder. </li>
       </ul>
     </section>
   </body>
