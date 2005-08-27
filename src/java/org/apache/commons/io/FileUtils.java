@@ -958,8 +958,10 @@ public class FileUtils {
 
 
     /**
-     * Make a directory. If there already exists a file with specified name or
+     * Make a directory, including any necessary but nonexistent parent
+     * directories. If there already exists a file with specified name or
      * the directory cannot be created then an exception is thrown.
+     *
      * @param directory directory to create
      * @throws IOException if the directory cannot be created.
      */
