@@ -26,13 +26,13 @@ Semantic compatible - ???
 
 Deprecations from 1.0
 ---------------------
-CopyUtils has been deprecated.
-Its methods have been moved to IOUtils.
-The new IOUtils methods handle nulls better, and have clearer names.
+- CopyUtils has been deprecated.
+    Its methods have been moved to IOUtils.
+    The new IOUtils methods handle nulls better, and have clearer names.
 
-IOUtils.toByteArray(String) - Use {@link String#getBytes()}
-IOUtils.toString(byte[]) - Use {@link String#String(byte[])}
-IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
+- IOUtils.toByteArray(String) - Use {@link String#getBytes()}
+- IOUtils.toString(byte[]) - Use {@link String#String(byte[])}
+- IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
 
 
 Bug fixes from 1.0
@@ -43,9 +43,47 @@ Bug fixes from 1.0
 - FileUtils - toFile(URL)
     Now handles escape syntax such as %20
 
+- FileFilterUtils - makeCVSAware(IOFileFilter)
+    Fixed bug that caused method to be completely broken
+
+- CountingInputStream
+    Fixed bug that caused the count to reduce by one at the end of the stream
+
+- CountingInputStream - skip(long)
+    Bytes from calls to this method were not previously counted
+
+- DeferredFileOutputStream
+    ???
+
 
 Enhancements from 1.0
 ---------------------
+- IOUtils - toByteArray(Reader,encoding)
+    Handles encodings when reading to a byte array
+
+- IOUtils - toCharArray(InputStream)
+          - toCharArray(InputStream,encoding)
+          - toCharArray(Reader)
+    Reads a stream/reader into a charatcter array
+
+- IOUtils - readLines(InputStream)
+          - readLines(InputStream,encoding)
+          - readLines(Reader)
+    Reads a stream/reader line by line into a List of Strings
+
+- IOUtils - toInputStream(String)
+          - toInputStream(String,encoding)
+    Creates an input stream that uses the string as a source of data
+
+- IOUtils - write(...)
+    Write data to a stream/writer (moved from CopyUtils with better null handling)
+
+- IOUtils - copy(...)
+    Copy data between streams (moved from CopyUtils with better null handling)
+
+- IOUtils - contentEquals(Reader,Reader)
+    Method to compare the contents of two readers
+
 - FileUtils - toFiles(URL[])
     Converts an array of URLs to an array of Files
 
@@ -68,6 +106,21 @@ Enhancements from 1.0
 - FileSystemUtils - new class
     A static utility class for working with file systems
     Provides one method at present, to get the free space on the filing system
+
+- ConditionalFileFilter - new interface
+    Defines the behaviour of list based filters
+
+- AndFileFilter, OrFileFilter
+    Now support a list of filters to and/or
+
+- WildcardFilter
+    New filter that can match using wildcard file names
+
+- FileFilterUtils - makeSVNAware(IOFileFilter)
+    New method, like makeCVSAware, that ignores Subversion source control directories
+
+- CountingInputStream,CountingOutputStream - resetCount()
+    Adds the ability to reset the count part way through reading/writing the stream
 
 
 Feedback
