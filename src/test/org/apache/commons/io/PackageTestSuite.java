@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.io;
-
-import org.apache.commons.io.filefilter.FileFilterTestCase;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.commons.io.filefilter.FileFilterTestCase;
 
 /**
  * A basic test suite that tests all the IO package.
@@ -42,6 +41,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(EndianUtilsTest.class));
         suite.addTest(new TestSuite(FilenameUtilsTestCase.class));
         suite.addTest(new TestSuite(FilenameUtilsWildcardTestCase.class));
+        suite.addTest(new TestSuite(FileSystemUtilsTestCase.class));
         suite.addTest(new TestSuite(FileUtilsFileNewerTestCase.class));
         suite.addTest(new TestSuite(FileUtilsListFilesTestCase.class));
         suite.addTest(new TestSuite(FileUtilsTestCase.class));
