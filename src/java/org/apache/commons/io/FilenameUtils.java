@@ -358,10 +358,11 @@ public class FilenameUtils {
      * <pre>
      * Windows:
      * a\b\c.txt           --> ""          --> relative
-     * \a\b\c.txt          --> "\"         --> drive relative
+     * \a\b\c.txt          --> "\"         --> drive absolute
+     * C:a\b\c.txt         --> "C:"        --> drive relative
      * C:\a\b\c.txt        --> "C:\"       --> absolute
      * \\server\a\b\c.txt  --> "\\server\" --> UNC
-     * 
+     *
      * Unix:
      * a/b/c.txt           --> ""          --> relative
      * /a/b/c.txt          --> "/"         --> absolute
@@ -406,10 +407,13 @@ public class FilenameUtils {
             char ch1 = filename.charAt(1);
             if (ch1 == ':') {
                 ch0 = Character.toUpperCase(ch0);
-                if (ch0 < 'A' || ch0 > 'Z' || len == 2 || isSeparator(filename.charAt(2)) == false) {
-                    return -1;
+                if (ch0 >= 'A' && ch0 <= 'Z') {
+                    if (len == 2 || isSeparator(filename.charAt(2)) == false) {
+                        return 2;
+                    }
+                    return 3;
                 }
-                return 3;
+                return -1;
                 
             } else if (isSeparator(ch0) && isSeparator(ch1)) {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
@@ -478,7 +482,8 @@ public class FilenameUtils {
      * <pre>
      * Windows:
      * a\b\c.txt           --> ""          --> relative
-     * \a\b\c.txt          --> "\"         --> drive relative
+     * \a\b\c.txt          --> "\"         --> drive absolute
+     * C:a\b\c.txt         --> "C:"        --> drive relative
      * C:\a\b\c.txt        --> "C:\"       --> absolute
      * \\server\a\b\c.txt  --> "\\server\" --> UNC
      * 
