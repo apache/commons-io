@@ -254,8 +254,8 @@ public class FileUtils {
      * @param recursive If true all subdirectories are searched, too.
      * @return an collection of java.io.File with the matching files
      */
-    public static Collection listFiles(File directory, String[] extensions,
-            boolean recursive) {
+    public static Collection listFiles(
+            File directory, String[] extensions, boolean recursive) {
         IOFileFilter filter;
         if (extensions == null) {
             filter = TrueFileFilter.INSTANCE;
@@ -347,7 +347,7 @@ public class FileUtils {
      * If the input contains null, the output array contains null at the same
      * index.
      * <p>
-     * From version 1.1 this method will decode the URL.
+     * This method will decode the URL.
      * Syntax such as <code>file:///my%20docs/file.txt</code> will be
      * correctly decoded to <code>/my docs/file.txt</code>.
      *
@@ -356,6 +356,7 @@ public class FileUtils {
      *  if there was a null at that index in the input array
      * @throws IllegalArgumentException if any file is not a URL file
      * @throws IllegalArgumentException if any file is incorrectly encoded
+     * @since Commons IO 1.1
      */
     public static File[] toFiles(URL[] urls) {
         if (urls == null || urls.length == 0) {
@@ -536,6 +537,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @since Commons IO 1.1
      */
     public static void copyDirectory(File srcDir, File destDir) throws IOException {
         copyDirectory(srcDir, destDir, true);
@@ -558,6 +560,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @since Commons IO 1.1
      */
     public static void copyDirectory(File srcDir, File destDir,
             boolean preserveFileDate) throws IOException {
@@ -586,6 +589,7 @@ public class FileUtils {
      * @param destDir  the validated destination directory, not null
      * @param preserveFileDate  whether to preserve the file date
      * @throws IOException if an error occurs
+     * @since Commons IO 1.1
      */
     private static void doCopyDirectory(File srcDir, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir.exists()) {
@@ -780,6 +784,7 @@ public class FileUtils {
      * @param file  the file to read
      * @return The file contents or null if read failed.
      * @throws IOException in case of an I/O error
+     * @since Commons IO 1.1
      */
     public static byte[] readFileToByteArray(File file) throws IOException {
         InputStream in = new FileInputStream(file);
@@ -852,6 +857,7 @@ public class FileUtils {
      * @param file  the file to write to
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
+     * @since Commons IO 1.1
      */
     public static void writeByteArrayToFile(
             File file, byte[] data) throws IOException {

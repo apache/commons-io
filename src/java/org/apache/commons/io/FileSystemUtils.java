@@ -30,6 +30,7 @@ import java.util.StringTokenizer;
  * @author Frank W. Zammetti
  * @author Stephen Colebourne
  * @version $Id$
+ * @since Commons IO 1.1
  */
 public class FileSystemUtils {
 
