@@ -16,6 +16,7 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -54,7 +55,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
-        assertEquals(true, FileSystemUtils.getFreeSpace("") > 0);
+        if (File.separatorChar == '/') {
+            assertEquals(true, FileSystemUtils.getFreeSpace("~") > 0);
+        } else {
+            assertEquals(true, FileSystemUtils.getFreeSpace("") > 0);
+        }
     }
 
     //-----------------------------------------------------------------------
