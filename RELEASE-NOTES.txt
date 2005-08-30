@@ -126,6 +126,7 @@ Enhancements from 1.0
 Feedback
 --------
 Open source works best when you give feedback.
+http://jakarta.apache.org/commons/io/
 
 Please direct all bug reports to Bugzilla.
 http://issues.apache.org/bugzilla/buglist.cgi?product=Commons&component=IO
