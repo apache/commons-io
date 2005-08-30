@@ -152,7 +152,7 @@ public class FileSystemUtils {
     protected long getFreeSpaceWindows(String path) throws IOException {
         path = FilenameUtils.normalize(path);
         if (path.length() > 2 && path.charAt(1) == ':') {
-            path = path.substring(0, 2);
+            path = path.substring(0, 2);  // seems to make it work
         }
 
         // build and run the 'dir' command
