@@ -47,17 +47,20 @@ import java.util.Stack;
  * <p>
  * This class only supports Unix and Windows style names. Prefixes are matched as follows:
  * <pre>
- * Windows style:
+ * Windows:
  * a\b\c.txt           --> ""          --> relative
- * \a\b\c.txt          --> "\"         --> drive relative
+ * \a\b\c.txt          --> "\"         --> current drive absolute
+ * C:a\b\c.txt         --> "C:"        --> drive relative
  * C:\a\b\c.txt        --> "C:\"       --> absolute
  * \\server\a\b\c.txt  --> "\\server\" --> UNC
- * 
- * Unix style:
+ *
+ * Unix:
  * a/b/c.txt           --> ""          --> relative
  * /a/b/c.txt          --> "/"         --> absolute
- * ~/a/b/c.txt         --> "~/"        --> current user relative
- * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+ * ~/a/b/c.txt         --> "~/"        --> current user absolute
+ * ~                   --> "~"         --> current user root (no path)
+ * ~user/a/b/c.txt     --> "~user/"    --> named user absolute
+ * ~user               --> "~user"     --> named user root (no path)
  * </pre>
  * Both prefix styles are matched always, irrespective of the machine that you are
  * currently running on.
@@ -354,11 +357,11 @@ public class FilenameUtils {
      * Returns the length of the filename prefix, such as <code>C:/</code> or <code>~/</code>.
      * <p>
      * This method will handle a file in either Unix or Windows format.
-     * The prefix includes the first slash in the full filename.
+     * The prefix includes the first slash in the full filename if present.
      * <pre>
      * Windows:
      * a\b\c.txt           --> ""          --> relative
-     * \a\b\c.txt          --> "\"         --> drive absolute
+     * \a\b\c.txt          --> "\"         --> current drive absolute
      * C:a\b\c.txt         --> "C:"        --> drive relative
      * C:\a\b\c.txt        --> "C:\"       --> absolute
      * \\server\a\b\c.txt  --> "\\server\" --> UNC
@@ -366,13 +369,15 @@ public class FilenameUtils {
      * Unix:
      * a/b/c.txt           --> ""          --> relative
      * /a/b/c.txt          --> "/"         --> absolute
-     * ~/a/b/c.txt         --> "~/"        --> current user relative
-     * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+     * ~/a/b/c.txt         --> "~/"        --> current user absolute
+     * ~                   --> "~"         --> current user root (no path)
+     * ~user/a/b/c.txt     --> "~user/"    --> named user absolute
+     * ~user               --> "~user"     --> named user root (no path)
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * ie. both Unix and Windows prefixes are matched regardless.
-     * 
+     *
      * @param filename  the filename to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
      */
@@ -390,7 +395,7 @@ public class FilenameUtils {
         }
         if (len == 1) {
             if (ch0 == '~') {
-                return -1;
+                return 1;
             }
             return (isSeparator(ch0) ? 1 : 0);
         } else {
@@ -398,7 +403,7 @@ public class FilenameUtils {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
                 int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
                 if (posUnix == -1 && posWin == -1) {
-                    return -1;
+                    return len;
                 }
                 posUnix = (posUnix == -1 ? posWin : posUnix);
                 posWin = (posWin == -1 ? posUnix : posWin);
@@ -482,16 +487,18 @@ public class FilenameUtils {
      * <pre>
      * Windows:
      * a\b\c.txt           --> ""          --> relative
-     * \a\b\c.txt          --> "\"         --> drive absolute
+     * \a\b\c.txt          --> "\"         --> current drive absolute
      * C:a\b\c.txt         --> "C:"        --> drive relative
      * C:\a\b\c.txt        --> "C:\"       --> absolute
      * \\server\a\b\c.txt  --> "\\server\" --> UNC
-     * 
+     *
      * Unix:
      * a/b/c.txt           --> ""          --> relative
      * /a/b/c.txt          --> "/"         --> absolute
-     * ~/a/b/c.txt         --> "~/"        --> current user relative
-     * ~user/a/b/c.txt     --> "~user/"    --> named user relative
+     * ~/a/b/c.txt         --> "~/"        --> current user absolute
+     * ~                   --> "~"         --> current user root (no path)
+     * ~user/a/b/c.txt     --> "~user/"    --> named user absolute
+     * ~user               --> "~user"     --> named user root (no path)
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
@@ -538,6 +545,9 @@ public class FilenameUtils {
         if (prefix < 0) {
             return null;
         }
+        if (prefix == filename.length()) {
+            return "";
+        }
         int index = indexOfLastSeparator(filename);
         if (index < 0) {
             return "";
@@ -572,6 +582,9 @@ public class FilenameUtils {
         int prefix = getPrefixLength(filename); // validate the prefix
         if (prefix < 0) {
             return null;
+        }
+        if (prefix == filename.length()) {
+            return filename;
         }
         int index = indexOfLastSeparator(filename);
         if (index < 0) {
