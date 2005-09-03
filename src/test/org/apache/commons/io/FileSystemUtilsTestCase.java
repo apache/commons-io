@@ -36,6 +36,12 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
 
     public static void main(String[] args) {
         TestRunner.run(suite());
+        
+//        try {
+//            System.out.println(FileSystemUtils.getFreeSpace("C:\\"));
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     public static Test suite() {
@@ -56,7 +62,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
-            assertEquals(true, FileSystemUtils.getFreeSpace("~") > 0);
+            assertEquals(true, FileSystemUtils.getFreeSpace("/") > 0);
         } else {
             assertEquals(true, FileSystemUtils.getFreeSpace("") > 0);
         }
