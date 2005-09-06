@@ -17,17 +17,22 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -75,6 +80,38 @@ public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
+
+    /**
+     * The Unix directory separator character.
+     */
+    public static final char DIR_SEPARATOR_UNIX = '/';
+    /**
+     * The Windows directory separator character.
+     */
+    public static final char DIR_SEPARATOR_WINDOWS = '\\';
+    /**
+     * The system directory separator character.
+     */
+    public static final char DIR_SEPARATOR = File.separatorChar;
+    /**
+     * The Unix line separator string.
+     */
+    public static final String LINE_SEPARATOR_UNIX = "\n";
+    /**
+     * The Windows line separator string.
+     */
+    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+    /**
+     * The system line separator string.
+     */
+    public static final String LINE_SEPARATOR;
+    static {
+        // avoid security issues
+        StringWriter buf = new StringWriter(4);
+        PrintWriter out = new PrintWriter(buf);
+        out.println();
+        LINE_SEPARATOR = buf.toString();
+    }
 
     /**
      * The default buffer size to use.
@@ -761,6 +798,102 @@ public class IOUtils {
             } else {
                 output.write(data.toString().getBytes(encoding));
             }
+        }
+    }
+
+    // writeLines
+    //-----------------------------------------------------------------------
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * an <code>OutputStream</code> line by line, using the default character
+     * encoding of the platform and the specified line ending.
+     *
+     * @param lines  the lines to write, null entries produce blank lines
+     * @param lineEnding  the line separator to use, null is system default
+     * @param output  the <code>OutputStream</code> to write to, not null, not closed
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(Collection lines, String lineEnding,
+            OutputStream output) throws IOException {
+        if (lines == null) {
+            return;
+        }
+        if (lineEnding == null) {
+            lineEnding = LINE_SEPARATOR;
+        }
+        for (Iterator it = lines.iterator(); it.hasNext(); ) {
+            Object line = it.next();
+            if (line != null) {
+                output.write(line.toString().getBytes());
+            }
+            output.write(lineEnding.getBytes());
+        }
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * an <code>OutputStream</code> line by line, using the specified character
+     * encoding and the specified line ending.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     *
+     * @param lines  the lines to write, null entries produce blank lines
+     * @param lineEnding  the line separator to use, null is system default
+     * @param output  the <code>OutputStream</code> to write to, not null, not closed
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(Collection lines, String lineEnding,
+            OutputStream output, String encoding) throws IOException {
+        if (encoding == null) {
+            writeLines(lines, lineEnding, output);
+        } else {
+            if (lines == null) {
+                return;
+            }
+            if (lineEnding == null) {
+                lineEnding = LINE_SEPARATOR;
+            }
+            for (Iterator it = lines.iterator(); it.hasNext(); ) {
+                Object line = it.next();
+                if (line != null) {
+                    output.write(line.toString().getBytes(encoding));
+                }
+                output.write(lineEnding.getBytes(encoding));
+            }
+        }
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * a <code>Writer</code> line by line, using the specified line ending.
+     *
+     * @param lines  the lines to write, null entries produce blank lines
+     * @param lineEnding  the line separator to use, null is system default
+     * @param writer  the <code>Writer</code> to write to, not null, not closed
+     * @throws NullPointerException if the input is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(Collection lines, String lineEnding,
+            Writer writer) throws IOException {
+        if (lines == null) {
+            return;
+        }
+        if (lineEnding == null) {
+            lineEnding = LINE_SEPARATOR;
+        }
+        for (Iterator it = lines.iterator(); it.hasNext(); ) {
+            Object line = it.next();
+            if (line != null) {
+                writer.write(line.toString());
+            }
+            writer.write(lineEnding);
         }
     }
 

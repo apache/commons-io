@@ -49,6 +49,9 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Ian Springer
  */
 public class IOUtilsTestCase extends FileBasedTestCase {
+    
+    /** Determine if this is windows. */
+    private static final boolean WINDOWS = (File.separatorChar == '\\');
     /*
      * Note: this is not particularly beautiful code. A better way to check for
      * flush and close status would be to implement "trojan horse" wrapper
@@ -93,6 +96,22 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         super( name );
     }
 
+    //-----------------------------------------------------------------------
+    public void testConstants() throws Exception {
+        assertEquals('/', IOUtils.DIR_SEPARATOR_UNIX);
+        assertEquals('\\', IOUtils.DIR_SEPARATOR_WINDOWS);
+        assertEquals("\n", IOUtils.LINE_SEPARATOR_UNIX);
+        assertEquals("\r\n", IOUtils.LINE_SEPARATOR_WINDOWS);
+        if (WINDOWS) {
+            assertEquals('\\', IOUtils.DIR_SEPARATOR);
+            assertEquals("\r\n", IOUtils.LINE_SEPARATOR);
+        } else {
+            assertEquals('/', IOUtils.DIR_SEPARATOR);
+            assertEquals("\n", IOUtils.LINE_SEPARATOR);
+        }
+    }
+
+    //-----------------------------------------------------------------------
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent( byte[] b0, byte[] b1 )
         throws IOException

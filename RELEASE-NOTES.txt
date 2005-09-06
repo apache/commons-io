@@ -58,6 +58,14 @@ Bug fixes from 1.0
 
 Enhancements from 1.0
 ---------------------
+- FilenameUtils - new class
+    A static utility class for working with filenames
+    Seeks to ease the pain of developing on Windows and deploying on Unix
+
+- FileSystemUtils - new class
+    A static utility class for working with file systems
+    Provides one method at present, to get the free space on the filing system
+
 - IOUtils - toByteArray(Reader,encoding)
     Handles encodings when reading to a byte array
 
@@ -74,6 +82,11 @@ Enhancements from 1.0
 - IOUtils - toInputStream(String)
           - toInputStream(String,encoding)
     Creates an input stream that uses the string as a source of data
+
+- IOUtils - writeLines(Collection,lineEnding,OutputStream)
+          - writeLines(Collection,lineEnding,OutputStream,encoding)
+          - writeLines(Collection,lineEnding,Writer)
+    Writes a collection to a file line by line
 
 - IOUtils - write(...)
     Write data to a stream/writer (moved from CopyUtils with better null handling)
@@ -98,14 +111,6 @@ Enhancements from 1.0
 
 - FileUtils - readLines(File,encoding)
     Reads a file line by line into a List of Strings
-
-- FilenameUtils - new class
-    A static utility class for working with filenames
-    Seeks to ease the pain of developing on Windows and deploying on Unix
-
-- FileSystemUtils - new class
-    A static utility class for working with file systems
-    Provides one method at present, to get the free space on the filing system
 
 - ConditionalFileFilter - new interface
     Defines the behaviour of list based filters
