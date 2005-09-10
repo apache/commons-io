@@ -166,6 +166,77 @@ public class DeferredFileOutputStreamTest extends TestCase
         // Ensure that the test starts from a clean base.
         testFile.delete();
     }
+    
+
+    /**
+     * Test wether writeTo() properly writes small content.
+     */
+    public void testWriteToSmall(){
+        File testFile = new File("testWriteToMem.dat");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // Ensure that the test starts from a clean base.
+        testFile.delete();
+
+        DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length *2, testFile);
+        try{
+            dfos.write(testBytes);
+
+            assertFalse(testFile.exists());
+            assertTrue(dfos.isInMemory());
+            
+            try {
+                dfos.writeTo(baos);
+                fail("Should not have been able to write before closing");
+            } catch (IOException ioe) {
+                // ok, as expected
+            }
+        
+            dfos.close();
+            dfos.writeTo(baos);
+        } catch (IOException ioe) {
+            fail("Unexpected IOException");
+        }
+        byte[] copiedBytes  = baos.toByteArray();
+        assertTrue(Arrays.equals(testBytes, copiedBytes));
+
+        testFile.delete();
+    }
+
+    /**
+     * Test wether writeTo() properly writes large content.
+     */
+    public void testWriteToLarge(){
+        File testFile = new File("testWriteToFile.dat");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // Ensure that the test starts from a clean base.
+        testFile.delete();
+
+        DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length /2, testFile);
+        try{
+            dfos.write(testBytes);
+
+            assertTrue(testFile.exists());
+            assertFalse(dfos.isInMemory());
+            
+            try {
+                dfos.writeTo(baos);
+                fail("Should not have been able to write before closeing");
+            } catch (IOException ioe) {
+                // ok, as expected
+            }
+        
+            dfos.close();
+            dfos.writeTo(baos);
+        } catch (IOException ioe) {
+            fail("Unexpected IOException");
+        }
+        byte[] copiedBytes  = baos.toByteArray();
+        assertTrue(Arrays.equals(testBytes, copiedBytes));
+        verifyResultFile(testFile);
+        testFile.delete();
+    }
 
     /**
      * Verifies that the specified file contains the same data as the original

@@ -52,9 +52,6 @@ Bug fixes from 1.0
 - CountingInputStream - skip(long)
     Bytes from calls to this method were not previously counted
 
-- DeferredFileOutputStream
-    ???
-
 
 Enhancements from 1.0
 ---------------------
@@ -126,6 +123,12 @@ Enhancements from 1.0
 
 - CountingInputStream,CountingOutputStream - resetCount()
     Adds the ability to reset the count part way through reading/writing the stream
+
+- DeferredFileOutputStream - writeTo(OutputStream)
+    New method to allow current contents to be written to a stream [34173]
+
+- DeferredFileOutputStream
+    Performance optimizations avoiding double buffering [34142]
 
 
 Feedback
