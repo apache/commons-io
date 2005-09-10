@@ -16,9 +16,12 @@
 package org.apache.commons.io.output;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.apache.commons.io.IOUtils;
+
 
 /**
  * <p>An output stream which will retain data in memory until a specified
@@ -32,6 +35,7 @@ import java.io.OutputStream;
  * to store it to file (to avoid memory issues).</p>
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
+ * @author gaxzerow
  *
  * @version $Id$
  */
@@ -62,6 +66,11 @@ public class DeferredFileOutputStream
      */
     private File outputFile;
 
+    
+    /**
+     * True when close() has been called successfully.
+     */
+    private boolean closed = false;
 
     // ----------------------------------------------------------- Constructors
 
@@ -152,9 +161,8 @@ public class DeferredFileOutputStream
 
 
     /**
-     * Returns the data for this output stream as a <code>File</code>, assuming
-     * that the data was written to disk. If the data was retained in memory,
-     * this method returns <code>null</code>.
+     * Returns the same output file specified in the constructor, even when
+     * threashold has not been reached.
      *
      * @return The file for this output stream, or <code>null</code> if no such
      *         file exists.
@@ -162,5 +170,50 @@ public class DeferredFileOutputStream
     public File getFile()
     {
         return outputFile;
+    }
+    
+        
+    /**
+     * Closes underlying output stream, and mark this as closed
+     *
+     * @exception IOException if an error occurs.
+     */
+    public void close() throws IOException
+    {
+        super.close();
+        closed = true;
+    }
+    
+    
+    /**
+     * Writes the data from this output stream to the specified output stream,
+     * after it has been closed.
+     *
+     * @param out output stream to write to.
+     * @exception IOException if this stream is not yet closed or an error occurs.
+     */
+    public void writeTo(OutputStream out) throws IOException 
+    {
+        // we may only need to check if this is closed if we are working with a file
+        // but we should force the habit of closing wether we are working with
+        // a file or memory.
+        if (!closed)
+        {
+            throw new IOException("Stream not closed");
+        }
+        
+        if(isInMemory())
+        {
+            memoryOutputStream.writeTo(out);
+        }
+        else
+        {
+            FileInputStream fis = new FileInputStream(outputFile);
+            try {
+                IOUtils.copy(fis, out);
+            } finally {
+                IOUtils.closeQuietly(fis);
+            }
+        }
     }
 }
