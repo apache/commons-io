@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2002-2004 The Apache Software Foundation.
+Copyright 2002-2005 The Apache Software Foundation.
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,62 +14,63 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific iouage governing permissions and
 limitations under the License.
 -->
-
 <document>
-
  <properties>
-  <title>Commons IO</title>
+  <title>Home</title>
   <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
  </properties>
-
- <body>
-
+<body>
+<!-- ================================================== -->
 <section name="Commons IO">
-
 <p>
+Commons IO is a library of utilities to assist with developing IO functionality.
+There are three main areas included:
+<ul>
+<li>Utility classes - with static methods to perform common tasks</li>
+<li>Filters - various implementations of file filters</li>
+<li>Streams - useful stream, reader and writer implementations</li>
+</ul>
 </p>
 </section>
-
-<section name="Latest Release">
-<p>The latest release of Apache Jakarta Commons IO is version 1.0. It is available (from mirrors) in <a href="http://jakarta.apache.org/site/binindex.cgi#commons-io">binary</a> and <a href="http://jakarta.apache.org/site/sourceindex.cgi#commons-io">source</a> downloads. </p>
-</section>
-
+<!-- ================================================== -->
 <section name="Documentation">
 <p>
-A top level description of some of the classes to be found in the IO component is available - <a href="description.html">Description</a>. 
+A getting started <a href="description.html">user guide</a> is available.
 </p>
-
 <p>
-The <a href="http://jakarta.apache.org/commons/io/apidocs/index.html">JavaDoc API documents</a> are available online.
+The JavaDoc API documents are available online:
+</p>
+<ul>
+<li>The <a href="api-release/index.html">current release 1.1</a></li>
+<li>The <a href="api-1.0/index.html">previous version 1.0</a></li>
+<li>The <a href="apidocs/index.html">latest SVN</a></li>
+</ul>
+<p>
+The <a href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/io/trunk/">SVN repository</a> can be browsed.
 </p>
 </section>
-
+<!-- ================================================== -->
+<section name="Releases">
+<p>
+The latest version is v1.1. - 
+<a href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi">Download now!</a>
+</p>
+<p>
+For previous releases, see the <a href="http://archive.apache.org/dist/jakarta/commons/io/">Apache Archive</a>
+</p>
+</section>
+<!-- ================================================== -->
 <section name="Bugs">
 <p>
 Bugs may be reported via the Bugzilla Management system. The following links may prove useful:
 </p>
 <ul>
- <li><a href="http://issues.apache.org/bugzilla/createaccount.cgi">Create a Bugzilla account</a></li>
- <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons">Submit a bug report</a></li>
- <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All IO bugs</a></li>
- <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All open IO bugs</a></li>
+<li><a href="http://issues.apache.org/bugzilla/createaccount.cgi">Create a Bugzilla account</a></li>
+<li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=3.0%20Final">Submit a bug report</a></li>
+<li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All open IO bugs</a></li>
+<li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;newqueryname=&amp;order=Reuse+same+sort+as+last+time">All IO bugs</a></li>
 </ul>
 </section>
-
-<section name="Releases">
-<ul>
-<li><a href="http://jakarta.apache.org/site/binindex.cgi#commons-io">Version 1.0</a></li>
-</ul>
-</section>
-
-<section name="Repository">
-<ul>
-<li>
-<a href="http://cvs.apache.org/viewcvs/jakarta-commons/io/">CVS Repository</a>
-</li>
-</ul>
-</section>
-
+<!-- ================================================== -->
 </body>
 </document>
-

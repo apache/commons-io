@@ -1,15 +1,24 @@
 <?xml version="1.0"?>
-
 <!--
-    Main index
-    $Id$
--->
+Copyright 2002-2005 The Apache Software Foundation.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific iouage governing permissions and
+limitations under the License.
+-->
 <document>
  <properties>
-   <title>About Commons IO</title>
-   <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
-  </properties>
+  <title>User guide</title>
+  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+ </properties>
   <body>
 
     <section name="Commons IO">
@@ -26,19 +35,12 @@
     </section>
 
     <section name="Utility classes">
-        <subsection name="CopyUtils and IOUtils">
-            <p>
-                <code>org.apache.commons.io.CopyUtils</code>
-                contains a comprehensive set of static methods for copying
-                from String, byte[], InputStream, Reader
-                to OutputStream, Writer.
-            </p>
+        <subsection name="IOUtils">
             <p>
                 <code>org.apache.commons.io.IOUtils</code>
-                contains additional IO-related tools for safely closing streams
-                and creating Strings and byte arrays from streams and Readers.
+                contains utility methods dealing with reading, writing and copying.
+                The methods work on InputStream, OutputStream, Reader and Writer.
             </p>
-
             <p>
                 As an example, consider the task of reading bytes
                 from a URL, and printing them. This would typically done like this:
@@ -83,12 +85,29 @@
 
         <subsection name="FileUtils">
             <p>
-                The <code>org.apache.commons.io.FileUtils</code>
-                class contains methods for retrieving different components of a file path
-                (directory name, file base name, file extension), methods
-                for copying files to other files and directories, and methods
-                for querying, deleting and cleaning directories. For more information,
-                see the class description.
+                The <code>org.apache.commons.io.FileUtils</code> class contains
+                utility methods for working with File objects.
+                These include reading, writing, copying and comparing files.
+            </p>
+        </subsection>
+
+        <subsection name="FilenameUtils">
+            <p>
+                The <code>org.apache.commons.io.FilenameUtils</code> class contains
+                utility methods for working with filenames <i>without</i>
+                using File objects. The class aims to be consistent
+                between Unix and Windows, to aid transitions between these
+                environments (such as moving from development to production).
+            </p>
+        </subsection>
+
+        <subsection name="FileSystemUtils">
+            <p>
+                The <code>org.apache.commons.io.FileSystemUtils</code> class contains
+                utility methods for working with the file system
+                to access functionality not supported by the JDK.
+                Currently, the only method is to get the free space on a drive.
+                Note that this uses the command line, not native code.
             </p>
         </subsection>
 
