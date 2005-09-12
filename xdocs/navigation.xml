@@ -10,16 +10,22 @@
     </links>
 
     <menu name="Commons IO">
-      <item name="Overview" href="index.html"/>
-      <item name="Description" href="description.html"/>
-      <item name="Javadoc" href="apidocs/index.html"/>
-      <item name="Best practices" href="bestpractices.html"/>
-      <item name="Building" href="building.html"/>
-      <item name="Mailing lists" href="mail-lists.html"/>
-      <item name="Team" href="team-list.html"/>
-      <item name="Tasks" href="tasks.html"/>
-      <item name="Proposal" href="proposal.html"/>
-      <item name="CVS" href="http://cvs.apache.org/viewcvs/jakarta-commons/io/"/>
+      <item name="Overview" href="/index.html"/>
+      <item name="Download" href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi"/>
+      <item name="Users guide" href="/description.html"/>
+      <item name="Best practices" href="/bestpractices.html"/>
+      <!--item name="History" href="/history.html"/-->
+      <item name="Javadoc (1.1 release)" href="api-release/index.html"/>
+    </menu>
+    
+    <menu name="Development">
+      <item name="Building" href="/building.html"/>
+      <item name="Mailing lists" href="/mail-lists.html"/>
+      <item name="Team" href="/team-list.html"/>
+      <item name="Tasks" href="/tasks.html"/>
+      <item name="Proposal" href="/proposal.html"/>
+      <item name="SVN repository" href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/io/trunk/"/>
+      <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
     </menu>
     
     &common-menus;

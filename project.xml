@@ -118,10 +118,11 @@
     <developer>
       <name>Stephen Colebourne</name>
       <id>scolebourne</id>
-      <organization>SITA ATS</organization>
+      <organization></organization>
       <roles>
         <role>Java Developer</role>
       </roles>
+      <timezone>0</timezone>
     </developer>
     <developer>
       <name>Jeremias Maerki</name>
@@ -189,10 +190,10 @@
   </contributors>
 
   <dependencies>
-    <dependency>
+    <!--dependency>
       <id>junit</id>
       <version>3.8.1</version>
-    </dependency>
+    </dependency-->
   </dependencies>
 
   <build>
