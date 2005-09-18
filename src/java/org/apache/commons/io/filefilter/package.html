@@ -1,5 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+Copyright 2002-2005 The Apache Software Foundation.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific iouage governing permissions and
+limitations under the License.
+-->
 <html>
-  <body>
+<body>
 <p>This package defines an interface (IOFileFilter) that combines both 
 {@link java.io.FileFilter} and {@link java.io.FilenameFilter}. Besides
 that the package offers a series of ready-to-use implementations of the
@@ -24,11 +40,14 @@ for example.</p>
       <td><a href="SuffixFileFilter.html">SuffixFileFilter</a></td>
       <td>Filter based on a suffix</td>
     </tr>
-       <tr>
+    <tr>
       <td><a href="NameFileFilter.html">NameFileFilter</a></td>
       <td>Filter based on a filename</td>
     </tr>
-     
+    <tr>
+      <td><a href="WildcardFileFilter.html">WildcardFileFilter</a></td>
+      <td>Filter based on wildcards</td>
+    </tr>
   </tbody>
 </table>
      
@@ -87,7 +106,7 @@ current directory, starting with "A", and ending in ".java" or ".class":</p>
 
 <p>This package also contains a utility class: 
 <a href="FileFilterUtils.html">FileFilterUtils</a>. It allows you to use all 
-file filters without having to put the in the import section. Here's how the 
+file filters without having to put them in the import section. Here's how the 
 above example will look using FileFilterUtils:</p>
 <pre>
   File dir = new File(".");

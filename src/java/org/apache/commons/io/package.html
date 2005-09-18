@@ -1,110 +1,46 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+Copyright 2002-2005 The Apache Software Foundation.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific iouage governing permissions and
+limitations under the License.
+-->
 <html>
-<head>
-  <title>Package Documentation for org.apache.avalon.excalibur.io Package</title>
-</head>
-   <body bgcolor="white">
-     Utility code for IO operations.     <br>
-<span style="font-style: italic;">NOTE: Some classes are not yet included
-in this description</span><br>
-<br>
-     <a name="doc.Description"></a>     
-<div align="center">       <a href="#doc.Intro">[Introduction]</a>      
-<a href="#doc.IOUtils">[IO Utilities]</a>       <a href="#doc.FileUtils">[File
-Utilities]</a>       <a href="#doc.Endian">[Endian Utilities]</a>     </div>
-      <a name="doc.Intro"></a>     
-<h2>Introduction</h2>
-     
-<p>The <code>org.apache.commons.io</code> package contains utility code for
-file- and stream-based IO operation. 
-    </p>
-
-
-        <a name="doc.IOUtils"></a>     
-<h2>The <a href="IOUtils.html">org.apache.commons.io.IOUtils</a> class</h2>
-     
-<p>     The <a href="IOUtils.html">IOUtils</a> class contains a     comprehensive
-set of static methods for copying from:     </p>
-<ul>
-       <li><code>String</code></li>
-       <li><code>byte[]</code></li>
-       <li><code>InputStream</code></li>
-       <li><code>Reader</code></li>
-     
-</ul>
-     To:     
-<ul>
-       <li><code>String</code></li>
-       <li><code>byte[]</code></li>
-       <li><code>OutputStream</code></li>
-       <li><code>Writer</code></li>
-     
-</ul>
-     
-<p></p>
-      
-<p>As an example, consider the task of reading bytes from a URL, and printing
-them. This would     typically done like this:</p>
-     
-<pre>import java.net.URL;<br>import java.io.*;<br><br>public class ManualCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    
-    <b>InputStreamReader inR = new InputStreamReader( in );
-    BufferedReader buf = new BufferedReader( inR );
-    String line;
-    while ( ( line = buf.readLine() ) != null )
-    {
-      System.out.println( line );
-    }</b>
-    in.close();
-  }
-}
-   </pre>
-     
-<p>With the IOUtils class, that could be done with:</p>
-     
-<pre>import java.net.URL;<br>import java.io.*;<br>import org.apache.commons.io.IOUtils;<br><br>public class IOUtilsCopy {<br>  public static void main(String args[]) throws IOException {<br>    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();<br>    
-<b>System.out.println( IOUtils.toString( in ) );</b>
-    in.close();
-  }   
-}
-    </pre>
-     
-<p>In certain application domains, such IO operations are common, and this
-class can save a     great deal of time.</p>
-     
-<p>For utility code such as this, flexibility and speed are of primary importance.
-In IOUtils,     each kind of copy method has a variant which allows the buffer
-size to be set. For methods that     convert bytes to chars, the encoding
-method may also be set.</p>
-       <a name="doc.FileUtils"></a>     
-<h2>The <a href="FileUtils.html">org.apache.commons.io.FileUtils</a> class</h2>
-      
-<p>The <a href="FileUtils.html">FileUtils</a> class contains     methods for
-retrieving different components of a file path (directory name, file base
-name, file     extension), methods for copying Files to other files and directories,
-and methods for deleting     and cleaning directories. For more information,
-see the <a href="FileUtils.html">class       description</a>     </p>
-       <a name="doc.Endian"></a>     
-<h2>The Endian classes</h2>
-       
-<p>Different computer architectures adopt different conventions for byte
-ordering. In so-called     "Little Endian" architectures (eg Intel), the
-low-order byte is stored in memory at the lowest     address, and subsequent
-bytes at higher addresses. For "Big Endian" architectures (eg Motorola), 
-   the situation is reversed.</p>
-     
-<p>There are two classes in this package of relevance:     </p>
-<ul>
-       <li>The <a href="EndianUtil.html">org.apache.commons.io.EndianUtil</a>
-class       contains static methods for swapping the Endian-ness of Java
-primitives and streams.</li>
-       <li>The       <a href="input/SwappedDataInputStream.html">org.apache.commons.io.input.SwappedDataInputStream</a> 
-      class is an implementation of the {@link java.io.DataInput} interface.
-With this, one can read       data from files of non-native Endian-ness.</li>
-     
-</ul>
-      
-<p>For more information, see <a
- href="http://www.cs.umass.edu/%7Everts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>.  </p>
-<br>
+<body bgcolor="white">
+<p>
+This package defines utility classes for working with streams, readers,
+writers and files. The most commonly used classes are described here:
+</p>
+<p>
+<b>IOUtils</b> is the most frequently used class.
+It provides operations to read, write, copy and close streams.
+</p>
+<p>
+<b>FileUtils</b> provides operations based around the JDK File class.
+These include reading, writing, copying, comparing and deleting.
+</p>
+<p>
+<b>FilenameUtils</b> provides utilities based on filenames.
+This utility class manipulates filenames without using File objects.
+It aims to simplify the transition between Windows and Unix.
+Before using this class however, you should consider whether you should
+be using File objects.
+</p>
+<p>
+<b>FileSystemUtils</b> allows access to the filing system in ways the JDK
+does not support. At present this allows you to get the free space on a drive.
+</p>
+<p>
+<b>EndianUtils</b> swaps data between Big-Endian and Little-Endian formats.
+</p>
 </body>
 </html>
