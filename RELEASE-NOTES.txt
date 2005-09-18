@@ -37,50 +37,59 @@ Deprecations from 1.0
 
 Bug fixes from 1.0
 ------------------
-- FileUtils - touch()
+- FileUtils - touch()  [29821]
     Now creates the file if it did not previously exist
 
-- FileUtils - toFile(URL)
+- FileUtils - toFile(URL)  [32575]
     Now handles escape syntax such as %20
 
-- FileFilterUtils - makeCVSAware(IOFileFilter)
+- FileFilterUtils - makeCVSAware(IOFileFilter)  [33023]
     Fixed bug that caused method to be completely broken
 
-- CountingInputStream
+- CountingInputStream  [33336]
     Fixed bug that caused the count to reduce by one at the end of the stream
 
-- CountingInputStream - skip(long)
+- CountingInputStream - skip(long)  [34311]
     Bytes from calls to this method were not previously counted
+
+- NullOutputStream  [33481]
+    Remove unecessary synchronization
+
+- AbstractFileFilter - accept(File, String)  [30992]
+    Fixed broken implementation
 
 
 Enhancements from 1.0
 ---------------------
-- FilenameUtils - new class
+- FilenameUtils - new class  [33303,29351]
     A static utility class for working with filenames
     Seeks to ease the pain of developing on Windows and deploying on Unix
 
-- FileSystemUtils - new class
+- FileSystemUtils - new class  [32982,36325]
     A static utility class for working with file systems
     Provides one method at present, to get the free space on the filing system
+
+- IOUtils - new public constants
+    Constants for directory and line separators on Windows and Unix
 
 - IOUtils - toByteArray(Reader,encoding)
     Handles encodings when reading to a byte array
 
-- IOUtils - toCharArray(InputStream)
+- IOUtils - toCharArray(InputStream)  [28979]
           - toCharArray(InputStream,encoding)
           - toCharArray(Reader)
     Reads a stream/reader into a charatcter array
 
-- IOUtils - readLines(InputStream)
+- IOUtils - readLines(InputStream)  [36214]
           - readLines(InputStream,encoding)
           - readLines(Reader)
     Reads a stream/reader line by line into a List of Strings
 
-- IOUtils - toInputStream(String)
+- IOUtils - toInputStream(String)  [32958]
           - toInputStream(String,encoding)
     Creates an input stream that uses the string as a source of data
 
-- IOUtils - writeLines(Collection,lineEnding,OutputStream)
+- IOUtils - writeLines(Collection,lineEnding,OutputStream)  [36214]
           - writeLines(Collection,lineEnding,OutputStream,encoding)
           - writeLines(Collection,lineEnding,Writer)
     Writes a collection to a file line by line
@@ -97,7 +106,7 @@ Enhancements from 1.0
 - FileUtils - toFiles(URL[])
     Converts an array of URLs to an array of Files
 
-- FileUtils - copyDirectory()
+- FileUtils - copyDirectory()  [32944]
     New methods to copy a directory
 
 - FileUtils - readFileToByteArray(File)
@@ -106,29 +115,32 @@ Enhancements from 1.0
 - FileUtils - writeByteArrayToFile(File,byte[])
     Writes a byte array to a file
 
-- FileUtils - readLines(File,encoding)
+- FileUtils - readLines(File,encoding)  [36214]
     Reads a file line by line into a List of Strings
 
-- ConditionalFileFilter - new interface
+- ConditionalFileFilter - new interface  [30705]
     Defines the behaviour of list based filters
 
-- AndFileFilter, OrFileFilter
+- AndFileFilter, OrFileFilter  [30705]
     Now support a list of filters to and/or
 
-- WildcardFilter
+- WildcardFilter  [31115]
     New filter that can match using wildcard file names
 
 - FileFilterUtils - makeSVNAware(IOFileFilter)
     New method, like makeCVSAware, that ignores Subversion source control directories
 
-- CountingInputStream,CountingOutputStream - resetCount()
+- CountingInputStream,CountingOutputStream - resetCount()  [28976]
     Adds the ability to reset the count part way through reading/writing the stream
 
-- DeferredFileOutputStream - writeTo(OutputStream)
-    New method to allow current contents to be written to a stream [34173]
+- DeferredFileOutputStream - writeTo(OutputStream)  [34173]
+    New method to allow current contents to be written to a stream
 
-- DeferredFileOutputStream
-    Performance optimizations avoiding double buffering [34142]
+- DeferredFileOutputStream  [34142]
+    Performance optimizations avoiding double buffering
+
+- IOUtils and EndianUtils are no longer final  [28978]
+    Allows developers to have subclasses if desired
 
 
 Feedback
