@@ -22,11 +22,19 @@ import java.io.OutputStream;
 
 /**
  * Utility code for dealing with different endian systems.
- * <br>
+ * <p>
+ * Different computer architectures adopt different conventions for
+ * byte ordering. In so-called "Little Endian" architectures (eg Intel),
+ * the low-order byte is stored in memory at the lowest address, and
+ * subsequent bytes at higher addresses. For "Big Endian" architectures
+ * (eg Motorola), the situation is reversed.
+ * This class helps you solve this incompatability.
+ * <p>
  * Origin of code: Apache Avalon (Excalibur)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @version CVS $Revision$ $Date$
+ * @version $Id$
+ * @see org.apache.commons.io.input.SwappedDataInputStream
  */
 public class EndianUtils {
 

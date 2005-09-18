@@ -100,7 +100,7 @@ import java.io.Writer;
  * method variants to specify the encoding, each row may
  * correspond to up to 2 methods.</p>
  *
- * <p>Origin of code: Apache Avalon (Excalibur)</p>
+ * <p>Origin of code: Excalibur.</p>
  *
  * @author Peter Donald
  * @author Jeff Turner

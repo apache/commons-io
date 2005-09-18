@@ -25,7 +25,12 @@ import java.util.StringTokenizer;
  * General File System utilities.
  * <p>
  * This class provides static utility methods for general file system
- * functions.
+ * functions not provided via the JDK {@link java.io.File File} class.
+ * <p>
+ * The current functions provided are:
+ * <ul>
+ * <li>Get the free space on a drive
+ * </ul>
  *
  * @author Frank W. Zammetti
  * @author Stephen Colebourne

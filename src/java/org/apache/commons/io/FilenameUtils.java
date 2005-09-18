@@ -22,11 +22,15 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
- * Utility class that provides methods to manipulate filenames and filepaths.
+ * General filename and filepath manipulation utilities.
  * <p>
  * When dealing with filenames you can hit problems when moving from a Windows
  * based development machine to a Unix based production machine.
  * This class aims to help avoid those problems.
+ * <p>
+ * <b>NOTE</b>: You may be able to avoid using this class entirely simply by
+ * using JDK {@link java.io.File File} objects and the two argument constructor
+ * {@link java.io.File#File(java.io.File, java.lang.String) File(File,String)}.
  * <p>
  * Most methods on this class are designed to work the same on both Unix and Windows.
  * Those that don't include 'System', 'Unix' or 'Windows' in their name.
@@ -34,7 +38,8 @@ import java.util.Stack;
  * Most methods recognise both separators (forward and back), and both
  * sets of prefixes. See the javadoc of each method for details.
  * <p>
- * This class defines six components within a filename (example C:\dev\project\file.txt):
+ * This class defines six components within a filename
+ * (example C:\dev\project\file.txt):
  * <ul>
  * <li>the prefix - C:\</li>
  * <li>the path - dev\project\</li>
@@ -69,13 +74,7 @@ import java.util.Stack;
  * Both prefix styles are matched always, irrespective of the machine that you are
  * currently running on.
  * <p>
- * <h3>Origin of code</h3>
- * <ul>
- *   <li>Commons Utils</li>
- *   <li>Alexandria's FileUtils</li>
- *   <li>Avalon Excalibur's IO</li>
- *   <li>Tomcat</li>
- * </ul>
+ * Origin of code: Excalibur, Alexandria, Tomcat, Commons-Utils.
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>

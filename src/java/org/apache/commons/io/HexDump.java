@@ -21,13 +21,14 @@ import java.io.OutputStream;
 /**
  * Dumps data in hexadecimal format.
  * <p>
- * Derived from a HexDump utility I wrote in June 2001.
+ * Provides a single function to take an array of bytes and display it
+ * in hexadecimal form.
  * <p>
- * Taken from the POI project.
+ * Origin of code: POI.
  *
- * @author Scott Sanders (sanders at apache dot org)
+ * @author Scott Sanders
  * @author Marc Johnson
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class HexDump {
 
