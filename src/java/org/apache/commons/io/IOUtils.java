@@ -17,7 +17,6 @@ package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
 import java.io.File;
@@ -38,12 +37,12 @@ import java.util.List;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
- * General IO Stream manipulation.
+ * General IO stream manipulation utilities.
  * <p>
  * This class provides static utility methods for input/output operations.
  * <ul>
  * <li>closeQuietly - these methods close a stream ignoring nulls and exceptions
- * <li>toXxx - these methods read data from a stream
+ * <li>toXxx/read - these methods read data from a stream
  * <li>write - these methods write data to a stream
  * <li>copy - these methods copy all the data from one stream to another
  * <li>contentEquals - these methods compare the content of two streams
@@ -58,7 +57,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * <p>
  * All the methods in this class that read a stream are buffered internally.
  * This means that there is no cause to use a <code>BufferedInputStream</code>
- * or <code>BufferedReader</code>. The default buffer size of 4K has been show
+ * or <code>BufferedReader</code>. The default buffer size of 4K has been shown
  * to be efficient in tests.
  * <p>
  * Wherever possible, the methods in this class do <em>not</em> flush or close
@@ -66,7 +65,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * streams' origin and further use. Thus the caller is still responsible for
  * closing streams after use.
  * <p>
- * Origin of code: Apache Avalon (Excalibur)
+ * Origin of code: Excalibur.
  *
  * @author Peter Donald
  * @author Jeff Turner
@@ -74,7 +73,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Stephen Colebourne
  * @author Gareth Davis
  * @author Ian Springer
- * @version CVS $Revision$ $Date$
+ * @version $Id$
  */
 public class IOUtils {
     // NOTE: This class is focussed on InputStream, OutputStream, Reader and

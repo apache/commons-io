@@ -37,26 +37,22 @@ import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * This class provides basic facilities for manipulating files.
- *
- * <h3>File-related methods</h3>
+ * General file manipulation utilities.
  * <p>
- * There are methods to  create a {@link #toFile File from a URL}, copy a
- * {@link #copyFileToDirectory File to a directory},
- * copy a {@link #copyFile(File, File) File to another File},
- * copy a {@link #copyURLToFile(URL, File) URL's contents to a File},
- * as well as methods to {@link #deleteDirectory(File) delete} and
- * {@link #cleanDirectory(File) clean} a directory.
- * </p>
- *
- * Common {@link java.io.File} manipulation routines.
- *
- * <h3>Origin of code</h3>
+ * Facilities are provided in the following areas:
  * <ul>
- *   <li>commons-utils repo</li>
- *   <li>Alexandria's FileUtils.</li>
- *   <li>Avalon Excalibur's IO.</li>
+ * <li>writing to a file
+ * <li>reading from a file
+ * <li>make a directory including parent directories
+ * <li>copying files and directories
+ * <li>deleting files and directories
+ * <li>converting to and from a URL
+ * <li>listing files and directories by filter and extension
+ * <li>comparing file content
+ * <li>file last changed date
  * </ul>
+ * <p>
+ * Origin of code: Excalibur, Alexandria, Commons-Utils
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>

@@ -24,10 +24,13 @@ import java.util.Vector;
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
  * marker object is reclaimed by the garbage collector.
+ * <p>
+ * This utility creates a background thread to handle file deletion.
+ * Each file to be deleted is registered with a handler object.
+ * When the handler object is garbage collected, the file is deleted.
  *
  * @author Noel Bergman
  * @author Martin Cooper
- *
  * @version $Id$
  */
 public class FileCleaner {
