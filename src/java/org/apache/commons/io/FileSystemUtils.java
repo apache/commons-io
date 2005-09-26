@@ -94,12 +94,13 @@ public class FileSystemUtils {
         super();
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
-     * FileSystemUtils.getFreeSpace("C:");  // Windows
-     * FileSystemUtils.getFreeSpace("/volume");  // *nix
+     * FileSystemUtils.freeSpace("C:");  // Windows
+     * FileSystemUtils.freeSpace("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows and 'df' on *nix.
@@ -110,16 +111,16 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      */
-    public static long getFreeSpace(String path) throws IOException {
-        return INSTANCE.getFreeSpaceOS(path, OS);
+    public static long freeSpace(String path) throws IOException {
+        return INSTANCE.freeSpaceOS(path, OS);
     }
 
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
-     * FileSystemUtils.getFreeSpace("C:");  // Windows
-     * FileSystemUtils.getFreeSpace("/volume");  // *nix
+     * FileSystemUtils.freeSpace("C:");  // Windows
+     * FileSystemUtils.freeSpace("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows and 'df' on *nix.
@@ -130,15 +131,15 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      */
-    protected long getFreeSpaceOS(String path, int os) throws IOException {
+    long freeSpaceOS(String path, int os) throws IOException {
         if (path == null) {
             throw new IllegalArgumentException("Path must not be empty");
         }
         switch (os) {
             case WINDOWS:
-                return getFreeSpaceWindows(path);
+                return freeSpaceWindows(path);
             case UNIX:
-                return getFreeSpaceUnix(path);
+                return freeSpaceUnix(path);
             case OTHER:
                 throw new IllegalStateException("Unsupported operating system");
             default:
@@ -154,7 +155,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
      */
-    protected long getFreeSpaceWindows(String path) throws IOException {
+    long freeSpaceWindows(String path) throws IOException {
         path = FilenameUtils.normalize(path);
         if (path.length() > 2 && path.charAt(1) == ':') {
             path = path.substring(0, 2);  // seems to make it work
@@ -245,7 +246,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    protected long getFreeSpaceUnix(String path) throws IOException {
+    long freeSpaceUnix(String path) throws IOException {
         if (path.length() == 0) {
             throw new IllegalArgumentException("Path must not be empty");
         }
@@ -315,7 +316,7 @@ public class FileSystemUtils {
      * @param params  the command parameters
      * @return a reader
      */
-    protected BufferedReader openProcessStream(String[] params) throws IOException {
+    BufferedReader openProcessStream(String[] params) throws IOException {
         Process proc = Runtime.getRuntime().exec(params);
         return new BufferedReader(
             new InputStreamReader(proc.getInputStream()));
