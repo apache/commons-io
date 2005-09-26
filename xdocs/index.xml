@@ -24,6 +24,8 @@ limitations under the License.
 <section name="Commons IO">
 <p>
 Commons IO is a library of utilities to assist with developing IO functionality.
+</p>
+<p>
 There are three main areas included:
 <ul>
 <li>Utility classes - with static methods to perform common tasks</li>
@@ -35,7 +37,8 @@ There are three main areas included:
 <!-- ================================================== -->
 <section name="Documentation">
 <p>
-A getting started <a href="description.html">user guide</a> is available.
+A getting started <a href="description.html">user guide</a> is available,
+as are some IO <a href="bestpractices.html">best practices</a>.
 </p>
 <p>
 The JavaDoc API documents are available online:

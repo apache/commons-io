@@ -21,23 +21,25 @@ limitations under the License.
  </properties>
   <body>
 
-    <section name="Commons IO">
+    <section name="User guide">
         <p>
-            Commons-IO contains <a href="#Utility classes">utility classes</a>,
-            stream implementations, <a href="#File filters">file filters</a>, and
-            <a href="#Endian classes">endian classes</a>.
+            Commons-IO contains
+            <a href="#Utility classes">utility classes</a>,
+            <a href="#Endian classes">endian classes</a>,
+            <a href="#File filters">file filters</a> and
+            <a href="#Streams">stream implementations</a>.
         </p>
 
         <p>
             For a more detailed descriptions, take a look at the
-            <a href="apidocs/index.html">JavaDocs</a>.
+            <a href="api-release/index.html">javadocs</a>.
         </p>
     </section>
 
     <section name="Utility classes">
         <subsection name="IOUtils">
             <p>
-                <code>org.apache.commons.io.IOUtils</code>
+                <a href="api-release/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
                 contains utility methods dealing with reading, writing and copying.
                 The methods work on InputStream, OutputStream, Reader and Writer.
             </p>
@@ -57,8 +59,7 @@ limitations under the License.
         }
     } finally {
         in.close();
-    }
-            </source>
+    }</source>
 
             <p>
                 With the IOUtils class, that could be done with:
@@ -70,62 +71,69 @@ limitations under the License.
         System.out.println( IOUtils.toString( in ) );
     } finally {
         IOUtils.closeQuietly(in);
-    }
-            </source>
+    }</source>
 
             <p>
                 In certain application domains, such IO operations are
                 common, and this class can save a great deal of time. And you can
                 rely on well-tested code.
-
+            </p>
+            <p>
                 For utility code such as this, flexibility and speed are of primary importance.
+                However you should also understand the limitations of this approach.
+                Using the above technique to read a 1GB file would result in an
+                attempt to create a 1GB String object!
             </p>
 
         </subsection>
 
         <subsection name="FileUtils">
             <p>
-                The <code>org.apache.commons.io.FileUtils</code> class contains
-                utility methods for working with File objects.
+                The <a href="api-release/index.html?org/apache/commons/io/FileUtils.html">FileUtils</a>
+                class contains utility methods for working with File objects.
                 These include reading, writing, copying and comparing files.
             </p>
+            <p>
+                For example to read an entire file line by line you could use:
+            </p>
+            <source>
+  File file = new File("/commons/io/project.properties");
+  List lines = FileUtils.readLines(file, "UTF-8");</source>
         </subsection>
 
         <subsection name="FilenameUtils">
             <p>
-                The <code>org.apache.commons.io.FilenameUtils</code> class contains
-                utility methods for working with filenames <i>without</i>
+                The <a href="api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>
+                class contains utility methods for working with filenames <i>without</i>
                 using File objects. The class aims to be consistent
                 between Unix and Windows, to aid transitions between these
                 environments (such as moving from development to production).
             </p>
+            <p>
+                For example to normalize a filename removing double dot segments:
+            </p>
+            <source>
+  String filename = "C:/commons/io/../lang/project.xml";
+  String normalized = FilenameUtils.normalize(filename);
+  // result is "C:/commons/lang/project.xml"</source>
         </subsection>
 
         <subsection name="FileSystemUtils">
             <p>
-                The <code>org.apache.commons.io.FileSystemUtils</code> class contains
+                The <a href="api-release/index.html?org/apache/commons/io/FileSystemUtils.html">FileSystemUtils</a>
+                class contains
                 utility methods for working with the file system
                 to access functionality not supported by the JDK.
                 Currently, the only method is to get the free space on a drive.
                 Note that this uses the command line, not native code.
             </p>
+            <p>
+                For example to find the free space on a drive:
+            </p>
+            <source>
+  long freeSpace = FileSystemUtils.freeSpace("C:/");</source>
         </subsection>
 
-    </section>
-
-    <section name="File filters">
-        <p>
-            The <code>org.apache.commons.io.filefilter</code>
-            package defines an interface (<code>IOFileFilter</code>) that
-            combines both <code>java.io.FileFilter</code> and
-            <code>java.io.FilenameFilter</code>. Besides
-            that the package offers a series of ready-to-use
-            implementations of the <code>IOFileFilter</code>
-            interface including
-            implementation that allow you to combine other such filters.
-
-            These filter can be used to list files or in FileDialog, for example.
-        </p>
     </section>
 
     <section name="Endian classes">
@@ -144,13 +152,13 @@ limitations under the License.
 
         <ul>
            <li>
-           The <code>org.apache.commons.io.EndianUtils</code>
+           The <a href="api-release/index.html?org/apache/commons/io/EndianUtils.html">EndianUtils</a>
            class contains static methods for swapping the Endian-ness
            of Java primitives and streams.
            </li>
 
            <li>
-           The <code>org.apache.commons.io.input.SwappedDataInputStream</code>
+           The <a href="api-release/index.html?org/apache/commons/io/input/SwappedDataInputStream.html">SwappedDataInputStream</a>
            class is an implementation of the <code>DataInput</code> interface. With
            this, one can read data from files of non-native Endian-ness.
            </li>
@@ -162,6 +170,50 @@ limitations under the License.
                 href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
          </p>
 
+    </section>
+
+    <section name="File filters">
+        <p>
+            The <code>org.apache.commons.io.filefilter</code>
+            package defines an interface
+            (<a href="api-release/index.html?org/apache/commons/io/filefilter/IOFileFilter.html">IOFileFilter</a>)
+            that combines both <code>java.io.FileFilter</code> and
+            <code>java.io.FilenameFilter</code>. Besides
+            that the package offers a series of ready-to-use
+            implementations of the <code>IOFileFilter</code>
+            interface including
+            implementation that allow you to combine other such filters.
+
+            These filters can be used to list files or in FileDialog, for example.
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+            package javadoc for more details.
+        </p>
+    </section>
+
+    <section name="Streams">
+        <p>
+            The <code>org.apache.commons.io.input</code> and
+            <code>org.apache.commons.io.output</code> packages
+            contain various useful implementations of streams.
+            These include:
+            <ul>
+            <li>Null output stream - that silently absorbs all data sent to it</li>
+            <li>Tee output stream - that sends output data to two streams instead of one</li>
+            <li>Byte array output stream - that is a faster version of the JDK class</li>
+            <li>Counting streams - that count the number of bytes passed</li>
+            <li>Proxy streams - that delegate to the correct method in the proxy</li>
+            <li>Lockable writer - that provides synchronization of writes using a lock file</li>
+            </ul>
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
+            <a href="api-release/index.html?org/apache/commons/io/output/package-summary.html">output</a>
+            package javadoc for more details.
+        </p>
     </section>
 
   </body>
