@@ -30,7 +30,7 @@ import java.io.OutputStream;
  * (eg Motorola), the situation is reversed.
  * This class helps you solve this incompatability.
  * <p>
- * Origin of code: Apache Avalon (Excalibur)
+ * Origin of code: Excalibur
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @version $Id$
