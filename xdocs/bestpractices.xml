@@ -21,9 +21,9 @@ limitations under the License.
  </properties>
   <body>
 
-    <section name="Overview">
+    <section name="Best practices">
         <p>
-            This document presents a number of "best practices" in the IO area.
+            This document presents a number of 'best practices' in the IO area.
         </p>
     </section>
 
@@ -40,20 +40,26 @@ limitations under the License.
             <li>etc. etc.</li>
         </ul>
         <p>
-            These are good reasons not to work with filenames as Strings. Use 
-            java.io.File instead which handles many of the above cases nicely. Too
-            many people are still always using Strings for filenames and risk
-            platform dependencies, for example.
+            These are good reasons not to work with filenames as Strings.
+            Using java.io.File instead handles many of the above cases nicely.
+            Thus, our best practice recommendation is to use java.io.File
+            instead of String for filenames to avoid platform dependencies.
         </p>
         <p>
-            Let's look at an example. BTW, it's one of the functions that made us
-            skip the class FilenameUtils for the initial release of Commons IO.
+            <i>
+            Version 1.1 of commons-io now includes a dedicated filename
+            handling class - <a href="api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>.
+            This does handle many of these filename issues, however we still
+            recommend, wherever possible, that you use java.io.File objects.
+            </i>
+        </p>
+        <p>
+            Let's look at an example.
         </p>
         <source>
     public static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');
-
-        if (-1 == index) {
+        if (index == -1) {
             return "";
         } else {
             return filename.substring(index + 1);
@@ -62,12 +68,15 @@ limitations under the License.
         <p>
             Easy enough? Right, but what happens if someone passes in a full path 
             instead of only a filename? Consider the following, perfectly legal path:
-            "C:\Temp\documentation.new\README" 
+            "C:\Temp\documentation.new\README".
+            The method as defined above would return "new\README" - definitely
+            not what you wanted.
         </p>
         <p>
-            Please use java.io.File for filenames instead of Strings. The functionality
-            that the class provides is well tested. In FileUtils you will find other
-            useful utility functions around java.io.File.
+            Please use java.io.File for filenames instead of Strings.
+            The functionality that the class provides is well tested.
+            In FileUtils you will find other useful utility functions
+            around java.io.File.
         </p>
         <p>
             Instead of:

@@ -25,7 +25,8 @@ limitations under the License.
         The following are some of the proposed ideas and tasks for commons-io:
       </p>
       <ul>
-        <li>A proper user guide.</li>
+        <li>A proper user guide</li>
+        <li>An iterator through the lines of a file</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
         <li>A "hot folder" handler which triggers an action when a new file has been uploaded to an FTP directory, for example.</li>
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
