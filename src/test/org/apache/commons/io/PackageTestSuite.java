@@ -44,6 +44,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(FileSystemUtilsTestCase.class));
         suite.addTest(new TestSuite(FileUtilsFileNewerTestCase.class));
         suite.addTest(new TestSuite(FileUtilsListFilesTestCase.class));
+        suite.addTest(new TestSuite(FileUtilsCleanDirectoryTestCase.class));
         suite.addTest(new TestSuite(FileUtilsTestCase.class));
         suite.addTest(new TestSuite(FileFilterTestCase.class));
         suite.addTest(new TestSuite(HexDumpTest.class));
