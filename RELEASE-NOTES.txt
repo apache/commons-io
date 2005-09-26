@@ -21,7 +21,9 @@ Binary compatible - ???
 
 Source compatible - ???
 
-Semantic compatible - ???
+Semantic compatible - Yes, except:
+- FileUtils.sizeOfDirectory()
+    May now return a size of 0 if the directory is security restricted
 
 
 Deprecations from 1.0
@@ -57,6 +59,10 @@ Bug fixes from 1.0
 
 - AbstractFileFilter - accept(File, String)  [30992]
     Fixed broken implementation
+
+- FileUtils  [36801]
+    Previously threw NPE when listing files in a security restricted directory
+    Now throw IOException with a better message
 
 
 Enhancements from 1.0

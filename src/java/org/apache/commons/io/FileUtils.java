@@ -64,6 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
  * @author Ian Springer
+ * @autor Chris Eldredge
  * @version $Id$
  */
 public class FileUtils {
@@ -605,6 +606,9 @@ public class FileUtils {
         }
         // recurse
         File[] files = srcDir.listFiles();
+        if (files == null) {  // null if security restricted
+            throw new IOException("Failed to list contents of " + srcDir);
+        }
         for (int i = 0; i < files.length; i++) {
             File copiedFile = new File(destDir, files[i].getName());
             if (files[i].isDirectory()) {
@@ -686,8 +690,7 @@ public class FileUtils {
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
      */
-    public static void cleanDirectory(File directory)
-        throws IOException {
+    public static void cleanDirectory(File directory) throws IOException {
         if (!directory.exists()) {
             String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
@@ -698,9 +701,12 @@ public class FileUtils {
             throw new IllegalArgumentException(message);
         }
 
-        IOException exception = null;
-
         File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            throw new IOException("Failed to list contents of " + directory);
+        }
+
+        IOException exception = null;
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             try {
@@ -929,8 +935,7 @@ public class FileUtils {
      * @param directory directory to clean.
      * @throws IOException in case cleaning is unsuccessful
      */
-    private static void cleanDirectoryOnExit(File directory)
-            throws IOException {
+    private static void cleanDirectoryOnExit(File directory) throws IOException {
         if (!directory.exists()) {
             String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
@@ -941,9 +946,12 @@ public class FileUtils {
             throw new IllegalArgumentException(message);
         }
 
-        IOException exception = null;
-
         File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            throw new IOException("Failed to list contents of " + directory);
+        }
+
+        IOException exception = null;
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             try {
@@ -990,7 +998,7 @@ public class FileUtils {
      * Recursively count size of a directory (sum of the length of all files).
      *
      * @param directory directory to inspect
-     * @return size of directory in bytes.
+     * @return size of directory in bytes, 0 if directory is security restricted
      */
     public static long sizeOfDirectory(File directory) {
         if (!directory.exists()) {
@@ -1006,6 +1014,9 @@ public class FileUtils {
         long size = 0;
 
         File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            return 0L;
+        }
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
 
