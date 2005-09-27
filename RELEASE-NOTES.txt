@@ -17,13 +17,22 @@ and endian transformation classes.
 
 Incompatible changes from 1.0
 -----------------------------
-Binary compatible - ???
+Binary compatible - Yes
 
-Source compatible - ???
+Source compatible - Yes
 
 Semantic compatible - Yes, except:
+- FileUtils - touch()
+    Now creates the file if it did not previously exist
+    (Bug fix 29821)
+
+- FileUtils - toFile(URL)
+    Now handles escape syntax such as %20
+    (Bug fix 32575)
+
 - FileUtils.sizeOfDirectory()
     May now return a size of 0 if the directory is security restricted
+    (Bug fix 36801)
 
 
 Deprecations from 1.0
@@ -124,6 +133,9 @@ Enhancements from 1.0
 - FileUtils - readLines(File,encoding)  [36214]
     Reads a file line by line into a List of Strings
 
+- FileUtils - EMPTY_FILE_ARRAY
+    Constant for an empty array of File objects
+
 - ConditionalFileFilter - new interface  [30705]
     Defines the behaviour of list based filters
 
@@ -135,6 +147,9 @@ Enhancements from 1.0
 
 - FileFilterUtils - makeSVNAware(IOFileFilter)
     New method, like makeCVSAware, that ignores Subversion source control directories
+
+- ClassLoaderObjectInputStream
+    An ObjectInputStream that supports a ClassLoader
 
 - CountingInputStream,CountingOutputStream - resetCount()  [28976]
     Adds the ability to reset the count part way through reading/writing the stream
