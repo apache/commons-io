@@ -236,6 +236,8 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-jxr-plugin</report>
     <report>maven-license-plugin</report>
+    <report>maven-jcoverage-plugin</report>
+    <report>maven-jdiff-plugin</report>
   </reports>
 
 </project>
