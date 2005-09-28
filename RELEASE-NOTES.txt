@@ -107,7 +107,7 @@ Enhancements from 1.0
 - IOUtils - writeLines(Collection,lineEnding,OutputStream)  [36214]
           - writeLines(Collection,lineEnding,OutputStream,encoding)
           - writeLines(Collection,lineEnding,Writer)
-    Writes a collection to a file line by line
+    Writes a collection to a stream/writer line by line
 
 - IOUtils - write(...)
     Write data to a stream/writer (moved from CopyUtils with better null handling)
@@ -132,6 +132,10 @@ Enhancements from 1.0
 
 - FileUtils - readLines(File,encoding)  [36214]
     Reads a file line by line into a List of Strings
+
+- FileUtils - writeLines(File,encoding,List)
+              writeLines(File,encoding,List,lineEnding)
+    Writes a collection to a file line by line
 
 - FileUtils - EMPTY_FILE_ARRAY
     Constant for an empty array of File objects

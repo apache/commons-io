@@ -812,7 +812,7 @@ public class FileUtils {
      * @return the list of Strings representing each line in the file
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since 1.1
+     * @since Commons IO 1.1
      */
     public static List readLines(File file, String encoding) throws IOException {
         InputStream in = new FileInputStream(file);
@@ -834,12 +834,11 @@ public class FileUtils {
      * in inconsistent results.
      * </p>
      *
-     * @param file the file to write.
-     * @param data The content to write to the file.
-     * @param encoding encoding to use
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  encoding to use
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported
-     *   by the VM
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file,
             String data, String encoding) throws IOException {
@@ -871,6 +870,61 @@ public class FileUtils {
         }
     }
 
+    /**
+     * <p>
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The specified character encoding and the default line ending will be used.
+     * </p>
+     * <p>
+     * There is no writeLines method without encoding parameter because
+     * the default encoding can differ between platforms and therefore results
+     * in inconsistent results.
+     * </p>
+     *
+     * @param file  the file to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @param lines  the lines to write, null entries produce blank lines
+     * @return the list of Strings representing each line in the file
+     * @throws IOException in case of an I/O error
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(File file, String encoding, Collection lines) throws IOException {
+        writeLines(file, encoding, lines, null);
+    }
+
+    /**
+     * <p>
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The specified character encoding and the line ending will be used.
+     * </p>
+     * <p>
+     * There is no writeLines method without encoding parameter because
+     * the default encoding can differ between platforms and therefore results
+     * in inconsistent results.
+     * </p>
+     *
+     * @param file  the file to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @param lines  the lines to write, null entries produce blank lines
+     * @param lineEnding  the line separator to use, null is system default
+     * @return the list of Strings representing each line in the file
+     * @throws IOException in case of an I/O error
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(File file, String encoding, Collection lines, String lineEnding) throws IOException {
+        OutputStream out = new FileOutputStream(file);
+        try {
+            IOUtils.writeLines(lines, lineEnding, out, encoding);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    //-----------------------------------------------------------------------
     /**
      * <p>
      * Delete a file. If file is a directory, delete it and all sub-directories.
