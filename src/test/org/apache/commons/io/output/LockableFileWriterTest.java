@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.apache.commons.io.output;
-
 
 import java.io.IOException;
 import java.io.File;
@@ -50,7 +47,7 @@ public class LockableFileWriterTest extends TestCase {
     public void testFileLocked() throws IOException {
         LockableFileWriter lfw = new LockableFileWriter(this.file);
         try {
-            LockableFileWriter lfw2 = new LockableFileWriter(this.file);
+            new LockableFileWriter(this.file);
             fail("Somehow able to open a locked file. ");
         } catch(IOException ioe) {
             String msg = ioe.getMessage();
