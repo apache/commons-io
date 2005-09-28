@@ -16,41 +16,50 @@
 package org.apache.commons.io.output;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 /**
  * FileWriter that will create and honor lock files to allow simple
- * cross thread file lock handling.  If <code>Writer</code> attributes
- * are unspecified, the default behavior is to overwrite (rather than
- * to append), and to use the value of the system property
- * <code>java.io.tmpdir</code> for the lock file directory.
+ * cross thread file lock handling.
+ * <p>
+ * This class provides a simple alternative to <code>FileWriter</code>
+ * that will use a lock file to prevent duplicate writes.
+ * <p>
+ * By default, the file will be overwritten, but this may be changed to append.
+ * The lock directory may be specified, but defaults to the system property
+ * <code>java.io.tmpdir</code>.
+ * The encoding may also be specified, and defaults to the platform default.
  *
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
  * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
  * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author Stephen Colebourne
+ * @author Andy Lehane
  * @version $Id$
  */
 public class LockableFileWriter extends Writer {
+    // Cannot extend ProxyWriter, as requires writer to be
+    // known when super() is called
 
     /** The extension for the lock file. */
     private static final String LCK = ".lck";
 
+    /** The writer to decorate. */
+    private Writer out;
     /** The lock file. */
     private File lockFile;
-    /** The write used to write to the file. */
-    private Writer writer;
-    /** Should we append to the file or not. */
-    private boolean append;
 
     /**
      * Constructs a LockableFileWriter.
      * If the file exists, it is overwritten.
      *
-     * @param fileName  the file to write to
+     * @param fileName  the file to write to, not null
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(String fileName) throws IOException {
@@ -60,8 +69,9 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param fileName  file to write to
+     * @param fileName  file to write to, not null
      * @param append  true if content should be appended, false to overwrite
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(String fileName, boolean append) throws IOException {
@@ -71,9 +81,10 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param fileName  the file to write to
+     * @param fileName  the file to write to, not null
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(String fileName, boolean append, String lockDir) throws IOException {
@@ -84,7 +95,8 @@ public class LockableFileWriter extends Writer {
      * Constructs a LockableFileWriter.
      * If the file exists, it is overwritten.
      *
-     * @param file  the file to write to
+     * @param file  the file to write to, not null
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(File file) throws IOException {
@@ -94,8 +106,9 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param file  the file to write to
+     * @param file  the file to write to, not null
      * @param append  true if content should be appended, false to overwrite
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(File file, boolean append) throws IOException {
@@ -105,22 +118,68 @@ public class LockableFileWriter extends Writer {
     /**
      * Constructs a LockableFileWriter.
      *
-     * @param file  the file to write to
+     * @param file  the file to write to, not null
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
+     * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(File file, boolean append, String lockDir) throws IOException {
-        this.append = append;
+        this(file, null, append, lockDir);
+    }
 
+    /**
+     * Constructs a LockableFileWriter with a file encoding.
+     *
+     * @param file  the file to write to, not null
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if the file is null
+     * @throws IOException in case of an I/O error
+     */
+    public LockableFileWriter(File file, String encoding) throws IOException {
+        this(file, encoding, false, null);
+    }
+
+    /**
+     * Constructs a LockableFileWriter with a file encoding.
+     *
+     * @param file  the file to write to, not null
+     * @param encoding  the encoding to use, null means platform default
+     * @param append  true if content should be appended, false to overwrite
+     * @param lockDir  the directory in which the lock file should be held
+     * @throws NullPointerException if the file is null
+     * @throws IOException in case of an I/O error
+     */
+    public LockableFileWriter(File file, String encoding, boolean append,
+            String lockDir) throws IOException {
+        super();
+        file = file.getAbsoluteFile();
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                throw new IOException("File specified is a directory");
+            }
+        } else if (file.getParentFile() != null) {
+            file.getParentFile().mkdirs();
+        }
         if (lockDir == null) {
             lockDir = System.getProperty("java.io.tmpdir");
         }
         testLockDir(new File(lockDir));
         this.lockFile = new File(lockDir, file.getName() + LCK);
-        createLock();
+        try {
+            createLock();
+            if (encoding == null) {
+                out = new FileWriter(file.getAbsolutePath(), append);
+            } else {
+                FileOutputStream fos = new FileOutputStream(file.getAbsolutePath(), append);
+                out = new OutputStreamWriter(fos, encoding);
+            }
+        } catch (IOException ioe) {
+            this.lockFile.delete();
+            throw ioe;
+        }
 
-        this.writer = new FileWriter(file.getAbsolutePath(), this.append);
+        this.out = new FileWriter(file.getAbsolutePath(), append);
     }
 
     //-----------------------------------------------------------------------
@@ -164,31 +223,41 @@ public class LockableFileWriter extends Writer {
      */
     public void close() throws IOException {
         try {
-            writer.close();
+            out.close();
         } finally {
             lockFile.delete();
         }
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Write a portion of a string.
-     *
-     * @param  cbuf  The characters to write
-     * @param  off  Offset from which to start writing characters
-     * @param  len  Number of characters to write
-     *
-     * @exception  IOException  If an I/O error occurs
-     */
-    public void write(char[] cbuf, int off, int len) throws IOException {
-        writer.write(cbuf, off, len);
+    /** @see java.io.Writer#write(int) */
+    public void write(int idx) throws IOException {
+        out.write(idx);
     }
 
-    /**
-     * Flushes the file writer.
-     */
+    /** @see java.io.Writer#write(char[]) */
+    public void write(char[] chr) throws IOException {
+        out.write(chr);
+    }
+
+    /** @see java.io.Writer#write(char[], int, int) */
+    public void write(char[] chr, int st, int end) throws IOException {
+        out.write(chr, st, end);
+    }
+
+    /** @see java.io.Writer#write(String) */
+    public void write(String str) throws IOException {
+        out.write(str);
+    }
+
+    /** @see java.io.Writer#write(String, int, int) */
+    public void write(String str, int st, int end) throws IOException {
+        out.write(str, st, end);
+    }
+
+    /** @see java.io.Writer#flush() */
     public void flush() throws IOException {
-        writer.flush();
+        out.flush();
     }
 
 }

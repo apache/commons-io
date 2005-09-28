@@ -171,6 +171,9 @@ Enhancements from 1.0
 - DeferredFileOutputStream  [34142]
     Performance optimizations avoiding double buffering
 
+- LockableFileWriter - encoding support [36825]
+    Add support for character encodings to LockableFileWriter
+
 - IOUtils and EndianUtils are no longer final  [28978]
     Allows developers to have subclasses if desired
 
