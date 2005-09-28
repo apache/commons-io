@@ -15,8 +15,8 @@
  */
 package org.apache.commons.io.output;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 import junit.framework.TestCase;
 
@@ -31,19 +31,25 @@ import junit.framework.TestCase;
 public class LockableFileWriterTest extends TestCase {
 
     private File file;
+    private File lockDir;
+    private File lockFile;
 
     public LockableFileWriterTest(String name) {
         super(name);
     }
 
     public void setUp() {
-        this.file = new File("testlockfile");
+        file = new File("testlockfile");
+        lockDir = new File(System.getProperty("java.io.tmpdir"));
+        lockFile = new File(lockDir, file.getName() + ".lck");
     }
 
     public void tearDown() {
-        this.file.delete();
+        file.delete();
+        lockFile.delete();
     }
 
+    //-----------------------------------------------------------------------
     public void testFileLocked() throws IOException {
         LockableFileWriter lfw = new LockableFileWriter(this.file);
         try {
@@ -56,6 +62,7 @@ public class LockableFileWriterTest extends TestCase {
         } finally {
             lfw.close();
         }
+        assertEquals(false, lockFile.exists());
     }
 
     public void testFileNotLocked() throws IOException {
@@ -70,6 +77,31 @@ public class LockableFileWriterTest extends TestCase {
                 fail("Somehow unable to open a unlocked file. ");
             }
         }
+        assertEquals(false, lockFile.exists());
+    }
+
+    public void testConstructor_File_encoding_badEncoding() throws IOException {
+        try {
+            new LockableFileWriter(file, "BAD-ENCODE");
+            fail();
+        } catch (IOException ex) {}
+        assertEquals(false, lockFile.exists());
+    }
+
+    public void testConstructor_File_nullFile() throws IOException {
+        try {
+            new LockableFileWriter((File) null);
+            fail();
+        } catch (NullPointerException ex) {}
+        assertEquals(false, lockFile.exists());
+    }
+
+    public void testConstructor_fileName_nullFile() throws IOException {
+        try {
+            new LockableFileWriter((String) null);
+            fail();
+        } catch (NullPointerException ex) {}
+        assertEquals(false, lockFile.exists());
     }
 
 }
