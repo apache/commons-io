@@ -763,7 +763,7 @@ public class FileUtils {
      * </p>
      *
      * @param file  the file to read
-     * @param encoding  the encoding to use
+     * @param encoding  the encoding to use, null means platform default
      * @return The file contents or null if read failed.
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
@@ -808,7 +808,7 @@ public class FileUtils {
      * </p>
      *
      * @param file  the file to read
-     * @param encoding  the encoding to use
+     * @param encoding  the encoding to use, null means platform default
      * @return the list of Strings representing each line in the file
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
@@ -836,7 +836,7 @@ public class FileUtils {
      *
      * @param file  the file to write
      * @param data  the content to write to the file
-     * @param encoding  encoding to use
+     * @param encoding  the encoding to use, null means platform default
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      */
@@ -844,7 +844,7 @@ public class FileUtils {
             String data, String encoding) throws IOException {
         OutputStream out = new FileOutputStream(file);
         try {
-            out.write(data.getBytes(encoding));
+            IOUtils.write(data, out, encoding);
         } finally {
             IOUtils.closeQuietly(out);
         }

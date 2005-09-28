@@ -22,17 +22,21 @@ Binary compatible - Yes
 Source compatible - Yes
 
 Semantic compatible - Yes, except:
-- FileUtils - touch()
+- FileUtils.touch()
     Now creates the file if it did not previously exist
     (Bug fix 29821)
 
-- FileUtils - toFile(URL)
+- FileUtils.toFile(URL)
     Now handles escape syntax such as %20
     (Bug fix 32575)
 
 - FileUtils.sizeOfDirectory()
     May now return a size of 0 if the directory is security restricted
     (Bug fix 36801)
+
+- FileUtils.writeStringToFile()
+    A null encoding previously used 'ISO-8859-1', now it uses the platform default
+    Generally this will make no difference
 
 
 Deprecations from 1.0
@@ -72,6 +76,9 @@ Bug fixes from 1.0
 - FileUtils  [36801]
     Previously threw NPE when listing files in a security restricted directory
     Now throw IOException with a better message
+
+- FileUtils - writeStringToFile()
+    Null encoding now correctly uses the platform default
 
 
 Enhancements from 1.0
