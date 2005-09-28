@@ -20,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -29,7 +31,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -667,7 +671,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(31, data[2]);
     }
 
-    public void testReadLines_Reader() throws Exception {
+    public void testReadLines() throws Exception {
         File file = newFile("lines.txt");
         try {
             String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
@@ -680,10 +684,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testWriteStringToFile() throws Exception {
+    public void testWriteStringToFile1() throws Exception {
         File file = new File(getTestDirectory(), "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
         byte[] text = "Hello /u1234".getBytes("UTF8");
+        assertEqualContent(text, file);
+    }
+
+    public void testWriteStringToFile2() throws Exception {
+        File file = new File(getTestDirectory(), "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", null);
+        byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
 
@@ -692,6 +703,56 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         byte[] data = new byte[] {11, 21, 31};
         FileUtils.writeByteArrayToFile(file, data);
         assertEqualContent(data, file);
+    }
+
+    public void testWriteLines_4arg() throws Exception {
+        Object[] data = new Object[] {
+            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        List list = Arrays.asList(data);
+        
+        File file = newFile("lines.txt");
+        FileUtils.writeLines(file, "US-ASCII", list, "*");
+        
+        String expected = "hello*world**this is**some text*";
+        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteLines_4arg_Writer_nullData() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeLines(file, "US-ASCII", (List) null, "*");
+        
+        assertEquals("Sizes differ", 0, file.length());
+    }
+
+    public void testWriteLines_4arg_nullSeparator() throws Exception {
+        Object[] data = new Object[] {
+            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        List list = Arrays.asList(data);
+        
+        File file = newFile("lines.txt");
+        FileUtils.writeLines(file, "US-ASCII", list, null);
+        
+        String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
+            IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
+            IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteLines_3arg_nullSeparator() throws Exception {
+        Object[] data = new Object[] {
+            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        List list = Arrays.asList(data);
+        
+        File file = newFile("lines.txt");
+        FileUtils.writeLines(file, "US-ASCII", list);
+        
+        String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
+            IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
+            IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        assertEquals(expected, actual);
     }
 
 }
