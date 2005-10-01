@@ -64,7 +64,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @author Stephen Colebourne
  * @author Ian Springer
- * @autor Chris Eldredge
+ * @author Chris Eldredge
  * @version $Id$
  */
 public class FileUtils {
@@ -885,7 +885,6 @@ public class FileUtils {
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
      * @param lines  the lines to write, null entries produce blank lines
-     * @return the list of Strings representing each line in the file
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
@@ -910,7 +909,6 @@ public class FileUtils {
      * @param encoding  the encoding to use, null means platform default
      * @param lines  the lines to write, null entries produce blank lines
      * @param lineEnding  the line separator to use, null is system default
-     * @return the list of Strings representing each line in the file
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
