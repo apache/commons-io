@@ -460,6 +460,12 @@ public class EndianUtils {
         return Double.longBitsToDouble( readSwappedLong( input ) );
     }
 
+    /**
+     * Reads the next byte from the input stream.
+     * @param input  the stream
+     * @return the byte
+     * @throws IOException if the end of file is reached
+     */
     private static int read(InputStream input)
         throws IOException
     {
