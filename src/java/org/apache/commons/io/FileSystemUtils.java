@@ -126,6 +126,7 @@ public class FileSystemUtils {
      * It uses 'dir /-c' on Windows and 'df' on *nix.
      *
      * @param path  the path to get free space for, not null, not empty on Unix
+     * @param os  the operating system code
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
@@ -315,6 +316,7 @@ public class FileSystemUtils {
      *
      * @param params  the command parameters
      * @return a reader
+     * @throws IOException if an error occurs
      */
     BufferedReader openProcessStream(String[] params) throws IOException {
         Process proc = Runtime.getRuntime().exec(params);

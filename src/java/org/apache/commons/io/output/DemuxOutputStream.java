@@ -91,6 +91,8 @@ public class DemuxOutputStream
 
     /**
      * Utility method to retrieve stream bound to current thread (if any).
+     *
+     * @return the output stream
      */
     private OutputStream getStream()
     {

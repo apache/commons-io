@@ -80,6 +80,8 @@ public class DemuxInputStream
 
     /**
      * Utility method to retrieve stream bound to current thread (if any).
+     *
+     * @return the input stream
      */
     private InputStream getStream()
     {
