@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
@@ -153,19 +155,25 @@ public class LockableFileWriter extends Writer {
     public LockableFileWriter(File file, String encoding, boolean append,
             String lockDir) throws IOException {
         super();
+        // init file to create/append
         file = file.getAbsoluteFile();
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                throw new IOException("File specified is a directory");
-            }
-        } else if (file.getParentFile() != null) {
-            file.getParentFile().mkdirs();
+        if (file.getParentFile() != null) {
+            FileUtils.forceMkdir(file.getParentFile());
         }
+        if (file.isDirectory()) {
+            throw new IOException("File specified is a directory");
+        }
+        
+        // init lock file
         if (lockDir == null) {
             lockDir = System.getProperty("java.io.tmpdir");
         }
-        testLockDir(new File(lockDir));
-        this.lockFile = new File(lockDir, file.getName() + LCK);
+        File lockDirFile = new File(lockDir);
+        FileUtils.forceMkdir(lockDirFile);
+        testLockDir(lockDirFile);
+        this.lockFile = new File(lockDirFile, file.getName() + LCK);
+        
+        // init wrapped writer
         try {
             createLock();
             if (encoding == null) {
@@ -178,7 +186,6 @@ public class LockableFileWriter extends Writer {
             this.lockFile.delete();
             throw ioe;
         }
-
         this.out = new FileWriter(file.getAbsolutePath(), append);
     }
 

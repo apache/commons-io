@@ -22,21 +22,22 @@ Binary compatible - Yes
 Source compatible - Yes
 
 Semantic compatible - Yes, except:
-- FileUtils.touch()
-    Now creates the file if it did not previously exist
-    (Bug fix 29821)
-
-- FileUtils.toFile(URL)
-    Now handles escape syntax such as %20
-    (Bug fix 32575)
-
-- FileUtils.sizeOfDirectory()
-    May now return a size of 0 if the directory is security restricted
-    (Bug fix 36801)
-
 - FileUtils.writeStringToFile()
     A null encoding previously used 'ISO-8859-1', now it uses the platform default
     Generally this will make no difference
+
+- LockableFileWriter
+    Improved validation and now create directories if necesssary
+
+plus these bug fixes may affect you semantically:
+- FileUtils.touch()  (Bug fix 29821)
+    Now creates the file if it did not previously exist
+
+- FileUtils.toFile(URL) (Bug fix 32575)
+    Now handles escape syntax such as %20
+
+- FileUtils.sizeOfDirectory()  (Bug fix 36801)
+    May now return a size of 0 if the directory is security restricted
 
 
 Deprecations from 1.0
@@ -173,6 +174,8 @@ Enhancements from 1.0
 
 - LockableFileWriter - encoding support [36825]
     Add support for character encodings to LockableFileWriter
+    Improve the validation
+    Create directories if necesssary
 
 - IOUtils and EndianUtils are no longer final  [28978]
     Allows developers to have subclasses if desired
