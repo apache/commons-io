@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2005 The Apache Software Foundation.
+ 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific iouage governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Issue tracking</title>
+  <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+<!-- ================================================== -->
+<section name="Issue tracking">
+<p>
+  If you would like to report a bug, or raise an enhancement request with
+  Commons IO please do the following:
+  <ol>
+  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bugidtype=include&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit">Search existing open bugs</a>.
+  Hopefully, you will find your issue already listed.</li>
+  <li><a href="http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/">Search the mailing list archive</a>.
+  You may find your issue or idea has already been discussed.</li>
+  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.1%20Final">Submit a bug report</a>.
+  To do this, you may need to <a href="http://issues.apache.org/bugzilla/createaccount.cgi">create an account</a> on Bugzilla.
+  Please prefix all new bug reports by [io] in the summary line.
+  </li>
+  </ol>
+</p>
+<p>
+  Please also remember these points:
+  <ul>
+  <li>the more information you provide, the better we can help you</li>
+  <li>test cases are vital, particularly for any proposed enhancements</li>
+  <li>the developers of Commons IO are all unpaid volunteers</li>
+  </ul>
+</p>
+</section>
+<!-- ================================================== -->
+</body>
+</document>
