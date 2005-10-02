@@ -1,5 +1,7 @@
-Extension-Name: @package@
+Extension-Name: commons-io
+Specification-Title: Commons IO
 Specification-Vendor: Apache Software Foundation
-Specification-Version: 1.0
+Specification-Version: 1.1
+Implementation-Title: org.apache.commons.io
 Implementation-Vendor: Apache Software Foundation
-Implementation-Version: @version@
+Implementation-Version: 1.1
