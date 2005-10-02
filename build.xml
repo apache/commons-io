@@ -92,7 +92,7 @@
     </copy>
   </target>
   <target name="jar" description="o Create the jar" depends="compile,test">
-    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/package.html" basedir="${classesdir}">
+    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/package.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF">
     </jar>
   </target>
   <target name="clean" description="o Clean up the generated directories">
