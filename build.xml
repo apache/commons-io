@@ -16,28 +16,28 @@
   </property>
   <!--Build properties-->
 
-  <property name="defaulttargetdir" value="${basedir}/target">
+  <property name="defaulttargetdir" value="${basedir}/build">
   </property>
   <property name="libdir" value="${user.home}/.maven/repository">
   </property>
-  <property name="classesdir" value="${basedir}/target/classes">
+  <property name="classesdir" value="${basedir}/build/classes" />
+  <property name="srcdir" value="${basedir}/build/src" />
+  <property name="testclassesdir" value="${basedir}/build/test-classes">
   </property>
-  <property name="testclassesdir" value="${basedir}/target/test-classes">
-  </property>
-  <property name="testreportdir" value="${basedir}/target/test-reports">
+  <property name="testreportdir" value="${basedir}/build/test-reports">
   </property>
   <property name="final.name" value="commons-io-1.1" />
-  <property name="dist.build.dir" value="${basedir}/target/dist-build" />
+  <property name="dist.build.dir" value="${basedir}/build/dist-build" />
   <property name="dist.bin" value="${dist.build.dir}/${final.name}" />
   <property name="dist.src" value="${dist.build.dir}/${final.name}-src" />
   <property name="javadocdir" value="${dist.bin}/docs" />
-  <property name="dist.zip.dir" value="${basedir}/target/dist" />
-  <property name="dist.bin.tar.name" value="${basedir}/target/dist/${final.name}.tar" />
-  <property name="dist.bin.gz.name" value="${basedir}/target/dist/${final.name}.tar.gz" />
-  <property name="dist.bin.zip.name" value="${basedir}/target/dist/${final.name}.zip" />
-  <property name="dist.src.tar.name" value="${basedir}/target/dist/${final.name}-src.tar" />
-  <property name="dist.src.gz.name" value="${basedir}/target/dist/${final.name}-src.tar.gz" />
-  <property name="dist.src.zip.name" value="${basedir}/target/dist/${final.name}-src.zip" />
+  <property name="dist.zip.dir" value="${basedir}/build/dist" />
+  <property name="dist.bin.tar.name" value="${basedir}/build/dist/${final.name}.tar" />
+  <property name="dist.bin.gz.name" value="${basedir}/build/dist/${final.name}.tar.gz" />
+  <property name="dist.bin.zip.name" value="${basedir}/build/dist/${final.name}.zip" />
+  <property name="dist.src.tar.name" value="${basedir}/build/dist/${final.name}-src.tar" />
+  <property name="dist.src.gz.name" value="${basedir}/build/dist/${final.name}-src.tar.gz" />
+  <property name="dist.src.zip.name" value="${basedir}/build/dist/${final.name}-src.zip" />
   <property name="proxy.host" value="">
   </property>
   <property name="proxy.port" value="">
@@ -91,10 +91,21 @@
       </fileset>
     </copy>
   </target>
+
   <target name="jar" description="o Create the jar" depends="compile,test">
-    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/package.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF">
-    </jar>
+    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/*.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF" />
   </target>
+  <target name="dist-jar" depends="compile">
+    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/*.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF" />
+    <copy todir="${srcdir}">
+      <fileset dir="${basedir}/src/java" includes="**/*.java" />
+    </copy>
+    <copy todir="${srcdir}/META-INF">
+      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
+    </copy>
+    <jar jarfile="${defaulttargetdir}/${final.name}-src-ide.zip" basedir="${srcdir}" />
+  </target>
+
   <target name="clean" description="o Clean up the generated directories">
     <delete dir="${defaulttargetdir}">
     </delete>
@@ -102,15 +113,13 @@
     </delete>
   </target>
 
-  <target name="dist" description="o Create a distribution" depends="jar, javadoc">
+  <target name="dist" description="o Create a distribution" depends="dist-jar, javadoc">
     <mkdir dir="${dist.bin}" />
     <mkdir dir="${dist.zip.dir}" />
   	<!-- Binary -->
     <copy todir="${dist.bin}">
-      <fileset dir="${defaulttargetdir}" includes="*.jar">
-      </fileset>
-      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*, README*, RELEASE-NOTES*">
-      </fileset>
+      <fileset dir="${defaulttargetdir}" includes="*.jar,*.zip" />
+      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*, README*, RELEASE-NOTES*" />
     </copy>
     <!-- Unix tar gz binary -->
   	<fixcrlf srcdir="${dist.bin}" eol="lf" includes="*.txt" />
@@ -134,7 +143,7 @@
       <fileset dir="${basedir}" includes="xdocs/**, src/**" />
     </copy>
     <!-- Unix tar gz source -->
-  	<fixcrlf srcdir="${dist.src}" eol="lf"  includes="*.txt,*.xml,*.css" />
+  	<fixcrlf srcdir="${dist.src}" eol="lf"  includes="*.txt,*.xml,*.css,*.properties" />
     <tar longfile="gnu" tarfile="${dist.src.tar.name}">
       <tarfileset dir="${dist.build.dir}"/>
     </tar>
@@ -142,7 +151,7 @@
     <checksum file="${dist.src.gz.name}"/>
     <delete file="${dist.src.tar.name}" />
     <!-- Windows zip source -->
-  	<fixcrlf srcdir="${dist.src}" eol="crlf" includes="*.txt,*.xml,*.css" />
+  	<fixcrlf srcdir="${dist.src}" eol="crlf" includes="*.txt,*.xml,*.css,*.properties" />
     <zip zipfile="${dist.src.zip.name}" >
       <zipfileset dir="${dist.build.dir}"/>
     </zip>
@@ -152,8 +161,7 @@
   </target>
 
   <target name="test" description="o Run the test cases" if="test.failure" depends="internal-test">
-    <fail message="There were test failures.">
-    </fail>
+    <fail message="There were test failures." />
   </target>
   <target name="internal-test" if="Junit.present" depends="junit-present,compile-tests">
     <mkdir dir="${testreportdir}">
@@ -178,6 +186,8 @@
           <include name="**/*Test*">
           </include>
           <exclude name="**/*AbstractTestCase*">
+          </exclude>
+          <exclude name="**/AllIOTestSuite*">
           </exclude>
           <exclude name="**/PackageTestSuite*">
           </exclude>

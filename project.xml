@@ -27,8 +27,8 @@
   </description>
   <logo>/images/io-logo-white.png</logo>
 
-  <url>http://jakarta.apache.org/commons/${pom.artifactId.substring(8)}/</url>
-  <package>org.apache.commons.${pom.artifactId.substring(8)}</package>
+  <url>http://jakarta.apache.org/commons/io/</url>
+  <package>org.apache.commons.io</package>
 
   <organization>
     <name>The Apache Software Foundation</name>
@@ -47,12 +47,12 @@
   <gumpRepositoryId>jakarta</gumpRepositoryId>
   <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/commons/${pom.artifactId.substring(8)}/</siteDirectory>
-  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons/${pom.artifactId.substring(8)}/</distributionDirectory>
+  <siteDirectory>/www/jakarta.apache.org/commons/io/</siteDirectory>
+  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons/io/</distributionDirectory>
 
   <repository>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/${pom.artifactId.substring(8)}/trunk</connection>
-    <url>http://svn.apache.org/repos/asf/jakarta/commons/proper/${pom.artifactId.substring(8)}/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/proper/io/trunk</connection>
+    <url>http://svn.apache.org/repos/asf/jakarta/commons/proper/io/trunk</url>
   </repository>
 
   <mailingLists>
@@ -214,6 +214,7 @@
       </includes>
       <excludes>
         <exclude>**/*AbstractTestCase*</exclude>
+        <exclude>**/AllIOTestSuite*</exclude>
         <exclude>**/PackageTestSuite*</exclude>
         <exclude>**/testtools/**</exclude>
       </excludes>
