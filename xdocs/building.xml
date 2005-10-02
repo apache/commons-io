@@ -23,10 +23,14 @@ limitations under the License.
   <body>
 
     <section name="Overview">
-        <p>
-            Jakarta Commons IO uses <a href="http://maven.apache.org">Maven</a> as 
-            build system. Please install Maven prior to attempting a build of IO.
-        </p>
+      <p>
+        Jakarta Commons IO uses <a href="http://maven.apache.org">Maven</a> as 
+        build system. Please install Maven prior to attempting a build of IO.
+      </p>
+      <p>
+        You may also be interested in the
+        <a href="upgradeto1_1.html">upgrade notes</a>.
+      </p>
     </section>
 
     <section name="Maven Goals">
