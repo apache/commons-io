@@ -127,14 +127,18 @@
       <tarfileset dir="${dist.build.dir}"/>
     </tar>
     <gzip zipfile="${dist.bin.gz.name}" src="${dist.bin.tar.name}"/>
-    <checksum file="${dist.bin.gz.name}"/>
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.bin.gz.name}"/>
+    </antcall>
     <delete file="${dist.bin.tar.name}" />
     <!-- Windows zip binary -->
   	<fixcrlf srcdir="${dist.bin}" eol="crlf" includes="*.txt" />
     <zip zipfile="${dist.bin.zip.name}" >
       <zipfileset dir="${dist.build.dir}"/>
     </zip>
-    <checksum file="${dist.bin.zip.name}"/>
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.bin.zip.name}"/>
+    </antcall>
   	<!-- Source -->
     <delete dir="${dist.bin}" />
     <copy todir="${dist.src}">
@@ -148,16 +152,25 @@
       <tarfileset dir="${dist.build.dir}"/>
     </tar>
     <gzip zipfile="${dist.src.gz.name}" src="${dist.src.tar.name}"/>
-    <checksum file="${dist.src.gz.name}"/>
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.src.gz.name}"/>
+    </antcall>
     <delete file="${dist.src.tar.name}" />
     <!-- Windows zip source -->
   	<fixcrlf srcdir="${dist.src}" eol="crlf" includes="*.txt,*.xml,*.css,*.properties" />
     <zip zipfile="${dist.src.zip.name}" >
       <zipfileset dir="${dist.build.dir}"/>
     </zip>
-    <checksum file="${dist.src.zip.name}"/>
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.src.zip.name}"/>
+    </antcall>
   	<!-- Tidy -->
     <delete dir="${dist.build.dir}" />
+  </target>
+  <target name="internal-md5">
+    <basename property="_base" file="${path}"/>
+    <checksum file="${path}" property="md5"/>
+   	<echo message="${md5} *${_base}" file="${path}.md5"/>
   </target>
 
   <target name="test" description="o Run the test cases" if="test.failure" depends="internal-test">
