@@ -19,7 +19,7 @@
 
   <name>IO</name>
   <id>commons-io</id>
-  <currentVersion>1.1</currentVersion>
+  <currentVersion>1.2-dev</currentVersion>
   <inceptionYear>2002</inceptionYear>
   <shortDescription>Commons IO</shortDescription>
   <description>
