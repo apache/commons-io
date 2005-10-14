@@ -268,6 +268,11 @@ public class FileUtils {
     /**
      * <p>Compare the contents of two files to determine if they are equal or
      * not.</p>
+     *
+     * <p>This method checks to see if the two files are different lengths
+     * or if they point to the same file, before resorting to byte-by-byte
+     * comparison of the contents.</p>
+     *
      * <p>Code origin: Avalon</p>
      *
      * @param file1 the first file
@@ -291,6 +296,16 @@ public class FileUtils {
         if (file1.isDirectory() || file2.isDirectory()) {
             // don't want to compare directory contents
             throw new IOException("Can't compare directories, only files");
+        }
+
+        if (file1.length() != file2.length()) {
+            // lengths differ, cannot be equal
+            return false;
+        }
+
+        if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
+            // same file
+            return true;
         }
 
         InputStream input1 = null;

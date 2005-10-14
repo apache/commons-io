@@ -20,8 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -31,9 +29,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -226,7 +222,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testContentEquals() throws Exception {
         // Non-existent files
         File file = new File(getTestDirectory(), getName());
+        File file2 = new File(getTestDirectory(), getName() + "2");
+        // both don't  exist
         assertTrue(FileUtils.contentEquals(file, file));
+        assertTrue(FileUtils.contentEquals(file, file2));
+        assertTrue(FileUtils.contentEquals(file2, file2));
+        assertTrue(FileUtils.contentEquals(file2, file));
 
         // Directories
         try {
@@ -244,6 +245,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             getClass().getResource("/java/lang/Object.class"),
             objFile1);
 
+        File objFile1b =
+            new File(getTestDirectory(), getName() + ".object2");
+        objFile1.deleteOnExit();
+        FileUtils.copyURLToFile(
+            getClass().getResource("/java/lang/Object.class"),
+            objFile1b);
+
         File objFile2 =
             new File(getTestDirectory(), getName() + ".collection");
         objFile2.deleteOnExit();
@@ -251,13 +259,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             getClass().getResource("/java/util/Collection.class"),
             objFile2);
 
-        assertTrue(
-            "Files should not be equal.",
-            !FileUtils.contentEquals(objFile1, objFile2));
+        assertEquals(false, FileUtils.contentEquals(objFile1, objFile2));
+        assertEquals(false, FileUtils.contentEquals(objFile1b, objFile2));
+        assertEquals(true, FileUtils.contentEquals(objFile1, objFile1b));
+
+        assertEquals(true, FileUtils.contentEquals(objFile1, objFile1));
+        assertEquals(true, FileUtils.contentEquals(objFile1b, objFile1b));
+        assertEquals(true, FileUtils.contentEquals(objFile2, objFile2));
 
         // Equal files
         file.createNewFile();
-        assertTrue(FileUtils.contentEquals(file, file));
+        file2.createNewFile();
+        assertEquals(true, FileUtils.contentEquals(file, file));
+        assertEquals(true, FileUtils.contentEquals(file, file2));
     }
 
     // copyURLToFile
