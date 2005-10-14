@@ -34,6 +34,8 @@ Bug fixes from 1.1
 
 Enhancements from 1.1
 ---------------------
+- FileUtils.contentEquals(File,File)
+  Performance improved by adding length and file location checking
 
 
 Feedback
