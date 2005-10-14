@@ -26,7 +26,7 @@
   </property>
   <property name="testreportdir" value="${basedir}/build/test-reports">
   </property>
-  <property name="final.name" value="commons-io-1.1" />
+  <property name="final.name" value="commons-io-1.2-dev" />
   <property name="dist.build.dir" value="${basedir}/build/dist-build" />
   <property name="dist.bin" value="${dist.build.dir}/${final.name}" />
   <property name="dist.src" value="${dist.build.dir}/${final.name}-src" />
