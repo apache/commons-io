@@ -38,7 +38,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         TestRunner.run(suite());
         
 //        try {
-//            System.out.println(FileSystemUtils.getFreeSpace("C:\\"));
+//            System.out.println(FileSystemUtils.freeSpace("C:\\"));
 //        } catch (IOException ex) {
 //            ex.printStackTrace();
 //        }
@@ -112,7 +112,9 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes() throws Exception {
+        // this is the format of response when calling dir /c
+        // we have now switched to dir /-c, so we should never get this
         String lines =
             " Volume in drive C is HDD\n" +
             " Volume Serial Number is XXXX-YYYY\n" +
@@ -128,7 +130,30 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         final StringReader reader = new StringReader(lines);
         FileSystemUtils fsu = new FileSystemUtils() {
             protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /c ", params[2]);
+                return new BufferedReader(reader);
+            }
+        };
+        assertEquals(41411551232L, fsu.freeSpaceWindows(""));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
+        String lines =
+            " Volume in drive C is HDD\n" +
+            " Volume Serial Number is XXXX-YYYY\n" +
+            "\n" +
+            " Directory of C:\\Documents and Settings\\Xxxx\n" +
+            "\n" +
+            "19/08/2005  22:43    <DIR>          .\n" +
+            "19/08/2005  22:43    <DIR>          ..\n" +
+            "11/08/2005  01:07                81 build.properties\n" +
+            "17/08/2005  21:44    <DIR>          Desktop\n" +
+            "               7 File(s)         180260 bytes\n" +
+            "              10 Dir(s)     41411551232 bytes free";
+        final StringReader reader = new StringReader(lines);
+        FileSystemUtils fsu = new FileSystemUtils() {
+            protected BufferedReader openProcessStream(String[] params) {
+                assertEquals("dir /-c ", params[2]);
                 return new BufferedReader(reader);
             }
         };
@@ -146,12 +171,12 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "19/08/2005  22:43    <DIR>          ..\n" +
             "11/08/2005  01:07                81 build.properties\n" +
             "17/08/2005  21:44    <DIR>          Desktop\n" +
-            "               7 File(s)        180,260 bytes\n" +
-            "              10 Dir(s)  41,411,551,232 bytes free";
+            "               7 File(s)         180260 bytes\n" +
+            "              10 Dir(s)     41411551232 bytes free";
         final StringReader reader = new StringReader(lines);
         FileSystemUtils fsu = new FileSystemUtils() {
             protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /c C:", params[2]);
+                assertEquals("dir /-c C:", params[2]);
                 return new BufferedReader(reader);
             }
         };
@@ -169,12 +194,12 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "19/08/2005  22:43    <DIR>          ..\n" +
             "11/08/2005  01:07                81 build.properties\n" +
             "17/08/2005  21:44    <DIR>          Desktop\n" +
-            "               7 File(s)        180,260 bytes\n" +
-            "              10 Dir(s)  41,411,551,232 bytes free";
+            "               7 File(s)         180260 bytes\n" +
+            "              10 Dir(s)     41411551232 bytes free";
         final StringReader reader = new StringReader(lines);
         FileSystemUtils fsu = new FileSystemUtils() {
             protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /c C:", params[2]);
+                assertEquals("dir /-c C:", params[2]);
                 return new BufferedReader(reader);
             }
         };
