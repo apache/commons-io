@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
  *
  * @author Frank W. Zammetti
  * @author Stephen Colebourne
+ * @author Thomas Ledoux
  * @version $Id$
  * @since Commons IO 1.1
  */
@@ -163,7 +164,7 @@ public class FileSystemUtils {
         }
 
         // build and run the 'dir' command
-        String[] cmdAttrbs = new String[] {"cmd.exe", "/C", "dir /c " + path};
+        String[] cmdAttrbs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
 
         // read in the output of the command to an ArrayList
         BufferedReader in = null;

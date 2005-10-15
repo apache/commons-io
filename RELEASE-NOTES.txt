@@ -30,6 +30,8 @@ Deprecations from 1.1
 
 Bug fixes from 1.1
 ------------------
+- FileSystemUtils.freeSpace(drive)
+  Fix to allow Windows based command to function in French locale
 
 
 Enhancements from 1.1
