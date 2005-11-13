@@ -23,16 +23,19 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Issue tracking">
 <p>
+  Commons IO uses <a href="http://issues.apache.org/bugzilla/">ASF Bugzilla</a> for tracking issues.
+  To use Bugzilla you may need to <a href="http://issues.apache.org/bugzilla/createaccount.cgi">create an account</a>.
+</p>
+<p>
   If you would like to report a bug, or raise an enhancement request with
   Commons IO please do the following:
   <ol>
-  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bugidtype=include&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Commons&amp;component=IO&amp;short_desc=&amp;short_desc_type=allwordssubstr&amp;long_desc=&amp;long_desc_type=allwordssubstr&amp;bug_file_loc=&amp;bug_file_loc_type=allwordssubstr&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit">Search existing open bugs</a>.
-  Hopefully, you will find your issue already listed.</li>
+  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;product=Commons&amp;component=IO">Search existing open bugs</a>.
+  If you find your issue listed then please add a comment with your details.</li>
   <li><a href="http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/">Search the mailing list archive</a>.
   You may find your issue or idea has already been discussed.</li>
-  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.1%20Final">Submit a bug report</a>.
-  To do this, you may need to <a href="http://issues.apache.org/bugzilla/createaccount.cgi">create an account</a> on Bugzilla.
-  Please prefix all new bug reports by [io] in the summary line.
+  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.1%20Final">Submit a bug report or enhancement request</a>.
+  Please prefix all new issues with [io] in the summary line.
   </li>
   </ol>
 </p>
@@ -42,6 +45,14 @@ limitations under the License.
   <li>the more information you provide, the better we can help you</li>
   <li>test cases are vital, particularly for any proposed enhancements</li>
   <li>the developers of Commons IO are all unpaid volunteers</li>
+  </ul>
+</p>
+<p>
+  You may also find these links useful:
+  <ul>
+  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;product=Commons&amp;component=IO">All Open IO bugs</a></li>
+  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;product=Commons&amp;component=IO">All Closed IO bugs</a></li>
+  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;product=Commons&amp;component=IO">All IO bugs</a></li>
   </ul>
 </p>
 </section>
