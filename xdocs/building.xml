@@ -19,43 +19,51 @@ limitations under the License.
   <title>Building</title>
   <author email="commons-dev@jakarta.apache.org">Commons Documentation Team</author>
  </properties>
-
-  <body>
-
-    <section name="Overview">
-      <p>
-        Jakarta Commons IO uses <a href="http://maven.apache.org">Maven</a> as 
-        build system. Please install Maven prior to attempting a build of IO.
-      </p>
-      <p>
-        You may also be interested in the
-        <a href="upgradeto1_1.html">upgrade notes</a>.
-      </p>
-    </section>
-
-    <section name="Maven Goals">
-    
-        <subsection name="Building a JAR file">
-            <p>
-                Change into IO's root directory and run "maven jar" to build the JAR 
-                file. After a successful build you will find it in the "target" 
-                subdirectory.
-            </p>
-        </subsection>
-
-        <subsection name="Other Goals">
-            <p>
-                To build the Javadocs, run "maven javadoc". The result will be in 
-                "target/docs/apidocs".
-            </p>
-            <p>
-                To build the full website, run "maven site". The result will be in 
-                "target/docs".
-            </p>
-        </subsection>
-
-    </section>
-
-  </body>
-
+<body>
+<!-- ================================================== -->
+<section name="Overview">
+<p>
+  Commons IO uses <a href="http://maven.apache.org">Maven</a> or
+  <a href="http://ant.apache.org">Ant</a> as a build system.
+</p>
+<p>
+  You may also be interested in the <a href="upgradeto1_1.html">upgrade notes</a>.
+</p>
+</section>
+<!-- ================================================== -->
+<section name="Maven Goals">
+<subsection name="Building a JAR file">
+  <p>
+    Change into IO's root directory and run "maven jar" to build the JAR file.
+    After a successful build you will find it in the "target" subdirectory.
+  </p>
+</subsection>
+<subsection name="Other Goals">
+  <p>
+    To build the Javadocs, run "maven javadoc".
+    The result will be in "target/docs/apidocs".
+  </p>
+  <p>
+    To build the full website, run "maven site".
+    The result will be in "target/docs".
+  </p>
+</subsection>
+</section>
+<!-- ================================================== -->
+<section name="Ant Goals">
+<subsection name="Building a JAR file">
+  <p>
+    Change into IO's root directory and run "ant jar" to build the JAR file.
+    After a successful build you will find it in the "build" subdirectory.
+  </p>
+</subsection>
+<subsection name="Javadoc">
+  <p>
+    To build the Javadocs, run "maven javadoc".
+    The result will be in "build/dist-build".
+  </p>
+</subsection>
+</section>
+<!-- ================================================== -->
+</body>
 </document>
