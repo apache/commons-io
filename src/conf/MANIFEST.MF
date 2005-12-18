@@ -1,7 +1,10 @@
+Manifest-Version: 1.0
+Package: org.apache.commons.io
 Extension-Name: commons-io
-Specification-Title: Commons IO
+Specification-Version: @version@
 Specification-Vendor: Apache Software Foundation
-Specification-Version: 1.1
-Implementation-Title: org.apache.commons.io
+Specification-Title: Commons IO
+Implementation-Version: @version@
 Implementation-Vendor: Apache Software Foundation
-Implementation-Version: 1.1
+Implementation-Title: Commons IO
+Implementation-Vendor-Id: org.apache
