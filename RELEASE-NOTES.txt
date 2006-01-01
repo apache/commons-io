@@ -39,6 +39,9 @@ Enhancements from 1.1
 - FileUtils.contentEquals(File,File)
   Performance improved by adding length and file location checking
 
+- FileUtils.iterateFiles
+  Two new method to provide direct access to iterators over files
+
 
 Feedback
 --------

@@ -24,12 +24,17 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.filefilter.WildcardFilter;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -37,6 +42,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Peter Donald
  * @author Matthew Hawthorne
  * @author Stephen Colebourne
+ * @author Jim Harrington
  * @version $Id$
  * @see FileUtils
  */
@@ -657,6 +663,81 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals("FileUtils.touch() changed lastModified", false, y2k == file.lastModified());
         assertEquals("FileUtils.touch() changed lastModified to more than now-3s", true, file.lastModified() >= (now - 3000));
         assertEquals("FileUtils.touch() changed lastModified to less than now+3s", true, file.lastModified() <= (now + 3000));
+    }
+
+    public void testListFiles() throws Exception {
+        File srcDir = getTestDirectory();
+        File subDir = new File(srcDir, "list_test" );
+        subDir.mkdir();
+
+        String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
+        int[] fileSizes = {123, 234, 345, 456, 678, 789};
+
+        for (int i = 0; i < fileNames.length; ++i) {
+            File theFile = new File(subDir, fileNames[i]);
+            createFile(theFile, fileSizes[i]);
+        }
+
+        Collection files = FileUtils.listFiles(subDir,
+                                               new WildcardFilter("*.*"),
+                                               new WildcardFilter("*"));
+
+        int count = files.size();
+        Object[] fileObjs = files.toArray();
+
+        assertEquals(files.size(), fileNames.length);
+
+        Map foundFileNames = new HashMap();
+
+        for (int i = 0; i < count; ++i) {
+            boolean found = false;
+            for(int j = 0; (( !found ) && (j < fileNames.length)); ++j) {
+                if ( fileNames[j].equals(((File) fileObjs[i]).getName())) {
+                    foundFileNames.put(fileNames[j], fileNames[j]);
+                    found = true;
+                }
+            }
+        }
+
+        assertEquals(foundFileNames.size(), fileNames.length);
+
+        subDir.delete();
+    }
+
+    public void testIterateFiles() throws Exception {
+        File srcDir = getTestDirectory();
+        File subDir = new File(srcDir, "list_test" );
+        subDir.mkdir();
+
+        String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
+        int[] fileSizes = {123, 234, 345, 456, 678, 789};
+
+        for (int i = 0; i < fileNames.length; ++i) {
+            File theFile = new File(subDir, fileNames[i]);
+            createFile(theFile, fileSizes[i]);
+        }
+
+        Iterator files = FileUtils.iterateFiles(subDir,
+                                                new WildcardFilter("*.*"),
+                                                new WildcardFilter("*"));
+
+        Map foundFileNames = new HashMap();
+
+        while (files.hasNext()) {
+            boolean found = false;
+            String fileName = ((File) files.next()).getName();
+
+            for (int j = 0; (( !found ) && (j < fileNames.length)); ++j) {
+                if ( fileNames[j].equals(fileName)) {
+                    foundFileNames.put(fileNames[j], fileNames[j]);
+                    found = true;
+                }
+            }
+        }
+
+        assertEquals(foundFileNames.size(), fileNames.length);
+
+        subDir.delete();
     }
 
     public void testReadFileToString() throws Exception {

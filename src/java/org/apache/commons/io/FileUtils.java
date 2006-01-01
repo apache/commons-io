@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Iterator;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
@@ -65,6 +66,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author Stephen Colebourne
  * @author Ian Springer
  * @author Chris Eldredge
+ * @author Jim Harrington
  * @version $Id$
  */
 public class FileUtils {
@@ -226,6 +228,26 @@ public class FileUtils {
         return files;
     }
 
+    /**
+     * <p>Allows iteration over the files in given directory (and optionally
+     * its subdirectories). All files found are filtered by an IOFileFilter.
+     * This method is based on {@link #listFiles(File, IOFileFilter, IOFileFilter)}.
+     * </p>
+     *
+     * @param directory  the directory to search in
+     * @param fileFilter  filter to apply when finding files.
+     * @param dirFilter  optional filter to apply when finding subdirectories.
+     * If this parameter is null, subdirectories will not be included in the
+     * search. Use TrueFileFilter.INSTANCE to match all directories.
+     * @return an iterator of java.io.File for the matching files
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     * @since Commons IO 1.2
+     */
+    public static Iterator iterateFiles(
+            File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+        return listFiles(directory, fileFilter, dirFilter).iterator();
+    }
 
     /**
      * Converts an array of file extensions to suffixes for use
@@ -264,6 +286,22 @@ public class FileUtils {
             (recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE));
     }
 
+    /**
+     * Allows iteration over the files in a given directory (and optionally
+     * its subdirectories) which match an array of extensions. This method
+     * is based on {@link #listFiles(File, String[], boolean)}.
+     *
+     * @param directory  the directory to search in
+     * @param extensions  an array of extensions, ex. {"java","xml"}. If this
+     * parameter is null, all files are returned.
+     * @param recursive  if true all subdirectories are searched as well
+     * @return an iterator of java.io.File with the matching files
+     * @since Commons IO 1.2
+     */
+    public static Iterator iterateFiles(
+            File directory, String[] extensions, boolean recursive) {
+        return listFiles(directory, extensions, recursive).iterator();
+    }
 
     /**
      * <p>Compare the contents of two files to determine if they are equal or
