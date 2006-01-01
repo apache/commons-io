@@ -98,13 +98,13 @@ public class FileUtils {
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
+    //-----------------------------------------------------------------------
     /**
-     * Returns a human-readable version of the file size (original is in
-     * bytes).
+     * Returns a human-readable version of the file size, where the input
+     * represents a specific number of bytes.
      *
-     * @param size The number of bytes.
-     * @return     A human-readable display value (includes units).
-     * @todo need for I18N?
+     * @param size  the number of bytes
+     * @return a human-readable display value (includes units)
      */
     public static String byteCountToDisplaySize(long size) {
         String displaySize;
@@ -118,16 +118,16 @@ public class FileUtils {
         } else {
             displaySize = String.valueOf(size) + " bytes";
         }
-
         return displaySize;
     }
 
-
+    //-----------------------------------------------------------------------
     /**
      * Implements the same behaviour as the "touch" utility on Unix. It creates
      * a new file with size 0 or, if the file exists already, it is opened and
      * closed without modifying it, but updating the file date and time.
-     * @param file the File to touch
+     *
+     * @param file  the File to touch
      * @throws IOException If an I/O problem occurs
      */
     public static void touch(File file) throws IOException {
@@ -138,10 +138,24 @@ public class FileUtils {
         file.setLastModified(System.currentTimeMillis());
     }
 
-
+    //-----------------------------------------------------------------------
     /**
-     * <p>Finds files within a given directory (and optionally its
-     * subdirectories). All files found are filtered by an IOFileFilter.</p>
+     * Converts a Collection containing java.io.File instanced into array
+     * representation. This is to account for the difference between
+     * File.listFiles() and FileUtils.listFiles().
+     *
+     * @param files  a Collection containing java.io.File instances
+     * @return an array of java.io.File
+     */
+    public static File[] convertFileCollectionToFileArray(Collection files) {
+         return (File[]) files.toArray(new File[files.size()]);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Finds files within a given directory (and optionally its
+     * subdirectories). All files found are filtered by an IOFileFilter.
+     *
      * @param files the collection of files found.
      * @param directory the directory to search in.
      * @param filter the filter to apply to files and directories.
@@ -160,46 +174,33 @@ public class FileUtils {
         }
     }
 
-
     /**
-     * Converts a Collection containing java.io.File instanced into array
-     * representation. This is to account for the difference between
-     * File.listFiles() and FileUtils.listFiles().
-     * @param files a Collection containing java.io.File instances
-     * @return an array of java.io.File
-     */
-    public static File[] convertFileCollectionToFileArray(Collection files) {
-         return (File[]) files.toArray(new File[files.size()]);
-    }
-
-
-    /**
-     * <p>Finds files within a given directory (and optionally its
+     * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
-     * </p>
-     * <p>If your search should recurse into subdirectories you can pass in
+     * <p>
+     * If your search should recurse into subdirectories you can pass in
      * an IOFileFilter for directories. You don't need to bind a
      * DirectoryFileFilter (via logical AND) to this filter. This method does
      * that for you.
-     * </p>
-     * <p>An example: If you want to search through all directories called
+     * <p>
+     * An example: If you want to search through all directories called
      * "temp" you pass in <code>FileFilterUtils.NameFileFilter("temp")</code>
-     * </p>
-     * <p>Another common usage of this method is find files in a directory
+     * <p>
+     * Another common usage of this method is find files in a directory
      * tree but ignoring the directories generated CVS. You can simply pass
      * in <code>FileFilterUtils.makeCVSAware(null)</code>.
-     * </p>
-     * @param directory the directory to search in
-     * @param fileFilter filter to apply when finding files.
-     * @param dirFilter optional filter to apply when finding subdirectories.
+     *
+     * @param directory  the directory to search in
+     * @param fileFilter  filter to apply when finding files.
+     * @param dirFilter  optional filter to apply when finding subdirectories.
      * If this parameter is null, subdirectories will not be included in the
      * search. Use TrueFileFilter.INSTANCE to match all directories.
      * @return an collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
-    public static Collection listFiles(File directory, IOFileFilter fileFilter,
-            IOFileFilter dirFilter) {
+    public static Collection listFiles(
+            File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(
                     "Parameter 'directory' is not a directory");
@@ -229,10 +230,11 @@ public class FileUtils {
     }
 
     /**
-     * <p>Allows iteration over the files in given directory (and optionally
-     * its subdirectories). All files found are filtered by an IOFileFilter.
-     * This method is based on {@link #listFiles(File, IOFileFilter, IOFileFilter)}.
-     * </p>
+     * Allows iteration over the files in given directory (and optionally
+     * its subdirectories).
+     * <p>
+     * All files found are filtered by an IOFileFilter. This method is
+     * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)}.
      *
      * @param directory  the directory to search in
      * @param fileFilter  filter to apply when finding files.
@@ -249,10 +251,12 @@ public class FileUtils {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
-     * @param extensions an array of extensions. Format: {"java", "xml"}
+     *
+     * @param extensions  an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
     private static String[] toSuffixes(String[] extensions) {
@@ -267,10 +271,11 @@ public class FileUtils {
     /**
      * Finds files within a given directory (and optionally its subdirectories)
      * which match an array of extensions.
-     * @param directory the directory to search in
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this
+     *
+     * @param directory  the directory to search in
+     * @param extensions  an array of extensions, ex. {"java","xml"}. If this
      * parameter is null, all files are returned.
-     * @param recursive If true all subdirectories are searched, too.
+     * @param recursive  if true all subdirectories are searched as well
      * @return an collection of java.io.File with the matching files
      */
     public static Collection listFiles(
@@ -303,24 +308,23 @@ public class FileUtils {
         return listFiles(directory, extensions, recursive).iterator();
     }
 
+    //-----------------------------------------------------------------------
     /**
-     * <p>Compare the contents of two files to determine if they are equal or
-     * not.</p>
-     *
-     * <p>This method checks to see if the two files are different lengths
+     * Compare the contents of two files to determine if they are equal or not.
+     * <p>
+     * This method checks to see if the two files are different lengths
      * or if they point to the same file, before resorting to byte-by-byte
-     * comparison of the contents.</p>
+     * comparison of the contents.
+     * <p>
+     * Code origin: Avalon
      *
-     * <p>Code origin: Avalon</p>
-     *
-     * @param file1 the first file
-     * @param file2 the second file
+     * @param file1  the first file
+     * @param file2  the second file
      * @return true if the content of the files are equal or they both don't
      * exist, false otherwise
      * @throws IOException in case of an I/O error
      */
-    public static boolean contentEquals(File file1, File file2)
-            throws IOException {
+    public static boolean contentEquals(File file1, File file2) throws IOException {
         boolean file1Exists = file1.exists();
         if (file1Exists != file2.exists()) {
             return false;
@@ -690,8 +694,7 @@ public class FileUtils {
      *  <li>an IO error occurs during copying</li>
      * </ul>
      */
-    public static void copyURLToFile(URL source, File destination)
-                throws IOException {
+    public static void copyURLToFile(URL source, File destination) throws IOException {
         //does destination directory exist ?
         if (destination.getParentFile() != null
             && !destination.getParentFile().exists()) {
@@ -721,7 +724,8 @@ public class FileUtils {
     //-----------------------------------------------------------------------
     /**
      * Recursively delete a directory.
-     * @param directory directory to delete
+     *
+     * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
     public static void deleteDirectory(File directory)
@@ -740,6 +744,7 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     *
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
      */
@@ -774,14 +779,17 @@ public class FileUtils {
         }
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Waits for NFS to propagate a file creation, imposing a timeout.
+     * <p>
+     * This method repeatedly tests {@link File#exists()} until it returns
+     * true up to the maximum time specified in seconds.
      *
-     * @param file The file
-     * @param seconds The maximum time in seconds to wait.
-     * @return True if file exists.
-     * @todo Needs a clearer javadoc to see its real purpose for someone without
-     *       NFS-knowledge.
+     * @param file  the file to check, not null
+     * @param seconds  the maximum time in seconds to wait
+     * @return true if file exists
+     * @throws NullPointerException if the file is null
      */
     public static boolean waitFor(File file, int seconds) {
         int timeout = 0;
@@ -806,18 +814,15 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * <p>
      * Reads the contents of a file into a String.
-     * </p>
      * <p>
      * There is no readFileToString method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
-     * </p>
      *
      * @param file  the file to read
      * @param encoding  the encoding to use, null means platform default
-     * @return The file contents or null if read failed.
+     * @return the file contents or null if read failed
      * @throws IOException in case of an I/O error
      * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      */
@@ -832,12 +837,10 @@ public class FileUtils {
     }
 
     /**
-     * <p>
      * Reads the contents of a file into a byte array.
-     * </p>
      *
      * @param file  the file to read
-     * @return The file contents or null if read failed.
+     * @return the file contents or null if read failed
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.1
      */
@@ -851,14 +854,11 @@ public class FileUtils {
     }
 
     /**
-     * <p>
      * Reads the contents of a file line by line to a List of Strings.
-     * </p>
      * <p>
      * There is no readLines method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
-     * </p>
      *
      * @param file  the file to read
      * @param encoding  the encoding to use, null means platform default
@@ -878,14 +878,11 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * <p>
      * Writes a String to a file creating the file if it does not exist.
-     * </p>
      * <p>
      * There is no writeStringToFile method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
-     * </p>
      *
      * @param file  the file to write
      * @param data  the content to write to the file
@@ -904,9 +901,7 @@ public class FileUtils {
     }
 
     /**
-     * <p>
      * Writes a byte array to a file creating the file if it does not exist.
-     * </p>
      *
      * @param file  the file to write to
      * @param data  the content to write to the file
@@ -924,16 +919,13 @@ public class FileUtils {
     }
 
     /**
-     * <p>
      * Writes the <code>toString()</code> value of each item in a collection to
      * the specified <code>File</code> line by line.
      * The specified character encoding and the default line ending will be used.
-     * </p>
      * <p>
      * There is no writeLines method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
-     * </p>
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
@@ -947,16 +939,13 @@ public class FileUtils {
     }
 
     /**
-     * <p>
      * Writes the <code>toString()</code> value of each item in a collection to
      * the specified <code>File</code> line by line.
      * The specified character encoding and the line ending will be used.
-     * </p>
      * <p>
      * There is no writeLines method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
      * in inconsistent results.
-     * </p>
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
@@ -977,18 +966,17 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * <p>
      * Delete a file. If file is a directory, delete it and all sub-directories.
-     * </p>
      * <p>
      * The difference between File.delete() and this method are:
-     * </p>
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
      * <li>You get exceptions when a file or directory cannot be deleted.
      *      (java.io.File methods returns a boolean)</li>
      * </ul>
-     * @param file file or directory to delete.
+     *
+     * @param file  file or directory to delete, not null
+     * @throws NullPointerException if the directory is null
      * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDelete(File file) throws IOException {
@@ -1009,7 +997,9 @@ public class FileUtils {
     /**
      * Schedule a file to be deleted when JVM exits.
      * If file is directory delete it and all sub-directories.
-     * @param file file or directory to delete.
+     *
+     * @param file  file or directory to delete, not null
+     * @throws NullPointerException if the file is null
      * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDeleteOnExit(File file) throws IOException {
@@ -1022,11 +1012,12 @@ public class FileUtils {
 
     /**
      * Recursively schedule directory for deletion on JVM exit.
-     * @param directory directory to delete.
+     *
+     * @param directory  directory to delete, not null
+     * @throws NullPointerException if the directory is null
      * @throws IOException in case deletion is unsuccessful
      */
-    private static void deleteDirectoryOnExit(File directory)
-            throws IOException {
+    private static void deleteDirectoryOnExit(File directory) throws IOException {
         if (!directory.exists()) {
             return;
         }
@@ -1037,7 +1028,9 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
-     * @param directory directory to clean.
+     *
+     * @param directory  directory to clean, not null
+     * @throws NullPointerException if the directory is null
      * @throws IOException in case cleaning is unsuccessful
      */
     private static void cleanDirectoryOnExit(File directory) throws IOException {
@@ -1071,14 +1064,14 @@ public class FileUtils {
         }
     }
 
-
     /**
      * Make a directory, including any necessary but nonexistent parent
      * directories. If there already exists a file with specified name or
      * the directory cannot be created then an exception is thrown.
      *
-     * @param directory directory to create
-     * @throws IOException if the directory cannot be created.
+     * @param directory  directory to create, not null
+     * @throws NullPointerException if the directory is null
+     * @throws IOException if the directory cannot be created
      */
     public static void forceMkdir(File directory) throws IOException {
         if (directory.exists()) {
@@ -1099,11 +1092,13 @@ public class FileUtils {
         }
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Recursively count size of a directory (sum of the length of all files).
      *
-     * @param directory directory to inspect
+     * @param directory  directory to inspect, not null
      * @return size of directory in bytes, 0 if directory is security restricted
+     * @throws NullPointerException if the directory is null
      */
     public static long sizeOfDirectory(File directory) {
         if (!directory.exists()) {
@@ -1135,66 +1130,70 @@ public class FileUtils {
         return size;
     }
 
-     /**
-      * Tests if the specified <code>File</code> is newer than the reference
-      * <code>File</code>.
-      *
-      * @param file the <code>File</code> of which the modification date must
-      * be compared.
-      * @param reference the <code>File</code> of which the modification date
-      * is used.
-      * @return true if the <code>File</code> exists and has been modified more
-      * recently than the reference <code>File</code>.
-      */
+    //-----------------------------------------------------------------------
+    /**
+     * Tests if the specified <code>File</code> is newer than the reference
+     * <code>File</code>.
+     *
+     * @param file  the <code>File</code> of which the modification date must
+     * be compared, not null
+     * @param reference  the <code>File</code> of which the modification date
+     * is used, not null
+     * @return true if the <code>File</code> exists and has been modified more
+     * recently than the reference <code>File</code>
+     * @throws IllegalArgumentException if the file is null
+     * @throws IllegalArgumentException if the reference file is null or doesn't exist
+     */
      public static boolean isFileNewer(File file, File reference) {
-         if (reference == null) {
-             throw new IllegalArgumentException("No specified reference file");
-         }
-         if (!reference.exists()) {
-             throw new IllegalArgumentException(
-                    "The reference file '" + file + "' doesn't exist");
-         }
+        if (reference == null) {
+            throw new IllegalArgumentException("No specified reference file");
+        }
+        if (!reference.exists()) {
+            throw new IllegalArgumentException("The reference file '"
+                    + file + "' doesn't exist");
+        }
+        return isFileNewer(file, reference.lastModified());
+    }
 
-         return isFileNewer(file, reference.lastModified());
-     }
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>Date</code>.
+     * 
+     * @param file  the <code>File</code> of which the modification date
+     * must be compared, not null
+     * @param date  the date reference, not null
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>Date</code>.
+     * @throws IllegalArgumentException if the file is null
+     * @throws IllegalArgumentException if the date is null
+     */
+    public static boolean isFileNewer(File file, Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("No specified date");
+        }
+        return isFileNewer(file, date.getTime());
+    }
 
-     /**
-      * Tests if the specified <code>File</code> is newer than the specified
-      * <code>Date</code>.
-      *
-      * @param file the <code>File</code> of which the modification date must be
-      * compared.
-      * @param date the date reference
-      * @return true if the <code>File</code> exists and has been modified after
-      * the given <code>Date</code>.
-      */
-     public static boolean isFileNewer(File file, Date date) {
-         if (date == null) {
-             throw new IllegalArgumentException("No specified date");
-         }
-         return isFileNewer(file, date.getTime());
-     }
-
-     /**
-      * Tests if the specified <code>File</code> is newer than the specified
-      * time reference.
-      *
-      * @param file the <code>File</code> of which the modification date must
-      * be compared.
-      * @param timeMillis the time reference measured in milliseconds since the
-      * epoch (00:00:00 GMT, January 1, 1970)
-      * @return true if the <code>File</code> exists and has been modified after
-      * the given time reference.
-      */
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * time reference.
+     *
+     * @param file  the <code>File</code> of which the modification date must
+     * be compared, not null
+     * @param timeMillis  the time reference measured in milliseconds since the
+     * epoch (00:00:00 GMT, January 1, 1970)
+     * @return true if the <code>File</code> exists and has been modified after
+     * the given time reference.
+     * @throws IllegalArgumentException if the file is null
+     */
      public static boolean isFileNewer(File file, long timeMillis) {
-         if (file == null) {
-             throw new IllegalArgumentException("No specified file");
-         }
-         if (!file.exists()) {
-             return false;
-         }
-
-         return file.lastModified() > timeMillis;
+        if (file == null) {
+            throw new IllegalArgumentException("No specified file");
+        }
+        if (!file.exists()) {
+            return false;
+        }
+        return file.lastModified() > timeMillis;
     }
 
 }
