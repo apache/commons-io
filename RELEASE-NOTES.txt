@@ -36,6 +36,9 @@ Bug fixes from 1.1
 
 Enhancements from 1.1
 ---------------------
+- AgeFileFilter/SizeFileFilter
+  New file filters that compares against the age and size of the file
+
 - FileUtils.contentEquals(File,File)
   Performance improved by adding length and file location checking
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2005 The Apache Software Foundation.
+ * Copyright 2002-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestSuite;
@@ -456,6 +457,76 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
     }
-         
+
+    public void testAgeFilter() throws Exception {
+        File oldFile = new File(getTestDirectory(), "old.txt");
+        createFile(oldFile, 0);
+        spin();
+        long now = System.currentTimeMillis();
+        IOFileFilter filter1 = FileFilterUtils.ageFileFilter(now);
+        IOFileFilter filter2 = FileFilterUtils.ageFileFilter(now, true);
+        IOFileFilter filter3 = FileFilterUtils.ageFileFilter(now, false);
+        Date date = new Date();
+        IOFileFilter filter4 = FileFilterUtils.ageFileFilter(date);
+        IOFileFilter filter5 = FileFilterUtils.ageFileFilter(date, true);
+        IOFileFilter filter6 = FileFilterUtils.ageFileFilter(date, false);
+        File reference = new File(getTestDirectory(), "reference.txt");
+        createFile(reference, 0);
+        IOFileFilter filter7 = FileFilterUtils.ageFileFilter(reference);
+        IOFileFilter filter8 = FileFilterUtils.ageFileFilter(reference, true);
+        IOFileFilter filter9 = FileFilterUtils.ageFileFilter(reference, false);
+        spin();
+        File newFile = new File(getTestDirectory(), "new.txt");
+        createFile(newFile, 0);
+
+        assertFiltering(filter1, oldFile, true);
+        assertFiltering(filter2, oldFile, true);
+        assertFiltering(filter3, oldFile, false);
+        assertFiltering(filter4, oldFile, true);
+        assertFiltering(filter5, oldFile, true);
+        assertFiltering(filter6, oldFile, false);
+        assertFiltering(filter7, oldFile, true);
+        assertFiltering(filter8, oldFile, true);
+        assertFiltering(filter9, oldFile, false);
+        assertFiltering(filter1, newFile, false);
+        assertFiltering(filter2, newFile, false);
+        assertFiltering(filter3, newFile, true);
+        assertFiltering(filter4, newFile, false);
+        assertFiltering(filter5, newFile, false);
+        assertFiltering(filter6, newFile, true);
+        assertFiltering(filter7, newFile, false);
+        assertFiltering(filter8, newFile, false);
+        assertFiltering(filter9, newFile, true);
+    }
+
+    public void testSizeFilter() throws Exception {
+        File smallFile = new File(getTestDirectory(), "small.txt");
+        createFile(smallFile, 32);
+        File largeFile = new File(getTestDirectory(), "large.txt");
+        createFile(largeFile, 128);
+        IOFileFilter filter1 = FileFilterUtils.sizeFileFilter(64);
+        IOFileFilter filter2 = FileFilterUtils.sizeFileFilter(64, true);
+        IOFileFilter filter3 = FileFilterUtils.sizeFileFilter(64, false);
+
+        assertFiltering(filter1, smallFile, false);
+        assertFiltering(filter2, smallFile, false);
+        assertFiltering(filter3, smallFile, true);
+        assertFiltering(filter1, largeFile, true);
+        assertFiltering(filter2, largeFile, true);
+        assertFiltering(filter3, largeFile, false);
+
+        try {
+            FileFilterUtils.sizeFileFilter(-1);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+    }
+
+    private void spin() {
+        long now = System.currentTimeMillis();
+        while (System.currentTimeMillis() <= now);
+    }
+
 }
 

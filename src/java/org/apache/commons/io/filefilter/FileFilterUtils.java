@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2005 The Apache Software Foundation.
+ * Copyright 2002-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@
  */
 package org.apache.commons.io.filefilter;
 
+import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.util.Date;
 
 /**
  * Useful utilities for working with file filters. It provides access to all
@@ -30,6 +32,7 @@ import java.io.FilenameFilter;
  * @author Stephen Colebourne
  * @author Jeremias Maerki
  * @author Masato Tezuka
+ * @author Rahul Akolkar
  */
 public class FileFilterUtils {
     
@@ -202,6 +205,104 @@ public class FileFilterUtils {
         } else {
             return andFileFilter(filter, svnFilter);
         }
+    }
+
+    //-----------------------------------------------------------------------
+
+    /**
+     * Returns a filter that returns true if the file was last modified after
+     * the specified cutoff time.
+     *
+     * @param cutoff  the time threshold
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(long cutoff) {
+        return new AgeFileFilter(cutoff);
+    }
+
+    /**
+     * Returns a filter that filters files based on a cutoff time.
+     *
+     * @param cutoff  the time threshold
+     * @param acceptOlder  if true, older files get accepted, if false, newer
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(long cutoff, boolean acceptOlder) {
+        return new AgeFileFilter(cutoff, acceptOlder);
+    }
+
+    /**
+     * Returns a filter that returns true if the file was last modified after
+     * the specified cutoff date.
+     *
+     * @param cutoff  the time threshold
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(Date cutoffDate) {
+        return new AgeFileFilter(cutoffDate);
+    }
+
+    /**
+     * Returns a filter that filters files based on a cutoff date.
+     *
+     * @param cutoff  the time threshold
+     * @param acceptOlder  if true, older files get accepted, if false, newer
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(Date cutoffDate, boolean acceptOlder) {
+        return new AgeFileFilter(cutoffDate, acceptOlder);
+    }
+
+    /**
+     * Returns a filter that returns true if the file was last modified after
+     * the specified reference file.
+     *
+     * @param cutoff  the time threshold
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(File cutoffReference) {
+        return new AgeFileFilter(cutoffReference);
+    }
+
+    /**
+     * Returns a filter that filters files based on a cutoff reference file.
+     *
+     * @param cutoff  the time threshold
+     * @param acceptOlder  if true, older files get accepted, if false, newer
+     * @return an appropriately configured age file filter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter ageFileFilter(File cutoffReference, boolean acceptOlder) {
+        return new AgeFileFilter(cutoffReference, acceptOlder);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Returns a filter that returns true if the file is bigger than a certain size.
+     *
+     * @param long  the file size threshold
+     * @return an appropriately configured SizeFileFilter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter sizeFileFilter(long threshold) {
+        return new SizeFileFilter(threshold);
+    }
+
+    /**
+     * Returns a filter that filters based on file size.
+     *
+     * @param long  the file size threshold
+     * @param acceptLarger  if true, larger files get accepted, if false, smaller
+     * @return an appropriately configured SizeFileFilter
+     * @since Commons IO 1.2
+     */
+    public static IOFileFilter sizeFileFilter(long threshold, boolean acceptLarger) {
+        return new SizeFileFilter(threshold, acceptLarger);
     }
 
 }
