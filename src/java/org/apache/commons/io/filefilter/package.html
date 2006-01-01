@@ -48,6 +48,14 @@ for example.</p>
       <td><a href="WildcardFileFilter.html">WildcardFileFilter</a></td>
       <td>Filter based on wildcards</td>
     </tr>
+    <tr>
+      <td><a href="AgeFileFilter.html">AgeFileFilter</a></td>
+      <td>Filter based on last modified time of file</td>
+    </tr>
+    <tr>
+      <td><a href="SizeFileFilter.html">SizeFileFilter</a></td>
+      <td>Filter based on file size</td>
+    </tr>
   </tbody>
 </table>
      
@@ -94,7 +102,7 @@ current directory, starting with "A", and ending in ".java" or ".class":</p>
           new SuffixFileFilter(".java")
         )
       ),
-      new NotdFileFilter(
+      new NotFileFilter(
         new DirectoryFileFilter()
       )
     )
