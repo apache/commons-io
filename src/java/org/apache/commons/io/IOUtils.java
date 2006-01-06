@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Stephen Colebourne
  * @author Gareth Davis
  * @author Ian Springer
+ * @author Niall Pemberton
  * @version $Id$
  */
 public class IOUtils {
@@ -502,6 +503,42 @@ public class IOUtils {
             line = reader.readLine();
         }
         return list;
+    }
+
+    // lineIterator
+    //-----------------------------------------------------------------------
+    /**
+     * Return an Iterator for the lines in a <code>Reader</code>.
+     *
+     * @param reader  the <code>Reader</code> to read from, not null
+     * @return an Iterator of the lines in the reader, never null
+     * @throws NullPointerException if the reader is null
+     * @since Commons IO 1.2
+     */
+    public static Iterator lineIterator(Reader reader) {
+        return new LineIterator(reader);
+    }
+
+    /**
+     * Return an Iterator for the lines in an <code>InputStream</code>, using
+     * the character encoding specified (or default encoding if null).
+     *
+     * @param input  the <code>InputStream</code> to read from, not null
+     * @param encoding  the encoding to use, null means platform default
+     * @return an Iterator of the lines in the reader, never null
+     * @throws NullPointerException if the input is null
+     * @throws IOException if an I/O error occurs, such as if the encoding is invalid
+     * @since Commons IO 1.2
+     */
+    public static LineIterator lineIterator(InputStream input, String encoding) 
+                     throws IOException {
+        InputStreamReader reader = null;
+        if (encoding == null) {
+            reader = new InputStreamReader(input);
+        } else {
+            reader = new InputStreamReader(input, encoding);
+        }
+        return new LineIterator(reader);
     }
 
     //-----------------------------------------------------------------------

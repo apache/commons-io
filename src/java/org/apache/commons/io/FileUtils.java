@@ -67,6 +67,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * @author Ian Springer
  * @author Chris Eldredge
  * @author Jim Harrington
+ * @author Niall Pemberton
  * @version $Id$
  */
 public class FileUtils {
@@ -879,6 +880,36 @@ public class FileUtils {
             return IOUtils.readLines(in, encoding);
         } finally {
             IOUtils.closeQuietly(in);
+        }
+    }
+
+    /**
+     * Return an Iterator for the lines in a <code>File</code>.
+     * Please read the javadoc of {@link LineIterator} to understand
+     * whether you should close the iterator.
+     * The file is closed if an exception is thrown.
+     * <p>
+     * There is no readLines method without encoding parameter because
+     * the default encoding can differ between platforms and therefore results
+     * in inconsistent results.
+     *
+     * @param file  the file to read
+     * @param encoding  the encoding to use, null means platform default
+     * @return an Iterator of the lines in the file, never null
+     * @throws IOException in case of an I/O error (file closed)
+     * @since Commons IO 1.2
+     */
+    public static LineIterator lineIterator(File file, String encoding) throws IOException {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(file);
+            return IOUtils.lineIterator(in, encoding);
+        } catch (IOException ex) {
+            IOUtils.closeQuietly(in);
+            throw ex;
+        } catch (RuntimeException ex) {
+            IOUtils.closeQuietly(in);
+            throw ex;
         }
     }
 
