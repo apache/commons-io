@@ -33,6 +33,9 @@ Bug fixes from 1.1
 - FileSystemUtils.freeSpace(drive)
   Fix to allow Windows based command to function in French locale
 
+- FileUtils.read*
+  Increase certainty that files are closed in case of error
+
 
 Enhancements from 1.1
 ---------------------
