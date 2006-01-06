@@ -48,6 +48,10 @@ Enhancements from 1.1
 - FileUtils.iterateFiles
   Two new method to provide direct access to iterators over files
 
+- FileUtils.lineIterator
+  IOUtils.lineIterator
+  New methods to provide an iterator over the lines in a file
+
 
 Feedback
 --------
