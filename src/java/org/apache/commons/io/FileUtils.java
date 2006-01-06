@@ -27,8 +27,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
@@ -815,6 +815,7 @@ public class FileUtils {
     //-----------------------------------------------------------------------
     /**
      * Reads the contents of a file into a String.
+     * The file is always closed.
      * <p>
      * There is no readFileToString method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
@@ -828,8 +829,9 @@ public class FileUtils {
      */
     public static String readFileToString(
             File file, String encoding) throws IOException {
-        InputStream in = new FileInputStream(file);
+        InputStream in = null;
         try {
+            in = new FileInputStream(file);
             return IOUtils.toString(in, encoding);
         } finally {
             IOUtils.closeQuietly(in);
@@ -838,6 +840,7 @@ public class FileUtils {
 
     /**
      * Reads the contents of a file into a byte array.
+     * The file is always closed.
      *
      * @param file  the file to read
      * @return the file contents or null if read failed
@@ -845,8 +848,9 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static byte[] readFileToByteArray(File file) throws IOException {
-        InputStream in = new FileInputStream(file);
+        InputStream in = null;
         try {
+            in = new FileInputStream(file);
             return IOUtils.toByteArray(in);
         } finally {
             IOUtils.closeQuietly(in);
@@ -855,6 +859,7 @@ public class FileUtils {
 
     /**
      * Reads the contents of a file line by line to a List of Strings.
+     * The file is always closed.
      * <p>
      * There is no readLines method without encoding parameter because
      * the default encoding can differ between platforms and therefore results
@@ -868,8 +873,9 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static List readLines(File file, String encoding) throws IOException {
-        InputStream in = new FileInputStream(file);
+        InputStream in = null;
         try {
+            in = new FileInputStream(file);
             return IOUtils.readLines(in, encoding);
         } finally {
             IOUtils.closeQuietly(in);
