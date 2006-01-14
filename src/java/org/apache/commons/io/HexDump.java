@@ -1,5 +1,5 @@
 /*
- * Copyright 2002,2004-2005 The Apache Software Foundation.
+ * Copyright 2002,2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +42,9 @@ public class HexDump {
     /**
      * Dump an array of bytes to an OutputStream.
      *
-     * @param data the byte array to be dumped
-     * @param offset its offset, whatever that might mean
-     * @param stream the OutputStream to which the data is to be
+     * @param data  the byte array to be dumped
+     * @param offset  its offset, whatever that might mean
+     * @param stream  the OutputStream to which the data is to be
      *               written
      * @param index initial index into the byte array
      *
@@ -118,6 +118,12 @@ public class HexDump {
                 28, 24, 20, 16, 12, 8, 4, 0
             };
 
+    /**
+     * Dump a long value into a StringBuffer.
+     *
+     * @param value  the long value to be dumped
+     * @return StringBuffer containing the dumped value.
+     */
     private static StringBuffer dump(long value) {
         _lbuffer.setLength(0);
         for (int j = 0; j < 8; j++) {
@@ -127,6 +133,12 @@ public class HexDump {
         return _lbuffer;
     }
 
+    /**
+     * Dump a byte value into a StringBuffer.
+     *
+     * @param value  the byte value to be dumped
+     * @return StringBuffer containing the dumped value.
+     */
     private static StringBuffer dump(byte value) {
         _cbuffer.setLength(0);
         for (int j = 0; j < 2; j++) {
@@ -134,4 +146,5 @@ public class HexDump {
         }
         return _cbuffer;
     }
+
 }
