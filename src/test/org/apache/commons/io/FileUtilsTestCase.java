@@ -431,6 +431,27 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             testFile1.lastModified() != destination.lastModified());*/    
     }
 
+    public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
+        createFile(testFile1, 1234);
+        createFile(testFile2, 4321);
+        File srcDir = getTestDirectory();
+        File subDir = new File(srcDir, "sub");
+        subDir.mkdir();
+        File subFile = new File(subDir, "A.txt");
+        FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
+        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        FileUtils.deleteDirectory(destDir);
+        File actualDestDir = new File(destDir, srcDir.getName());
+        
+        FileUtils.copyDirectoryToDirectory(srcDir, destDir);
+        
+        assertTrue("Check exists", destDir.exists());
+        assertTrue("Check exists", actualDestDir.exists());
+        assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(actualDestDir));
+        assertEquals(true, new File(actualDestDir, "sub/A.txt").exists());
+        FileUtils.deleteDirectory(destDir);
+    }
+
     public void testCopyDirectoryToNonExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);

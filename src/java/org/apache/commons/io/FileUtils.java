@@ -579,12 +579,48 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Copies a directory to within another directory preserving the file dates.
+     * <p>
+     * This method copies the source directory and all its contents to a
+     * directory of the same name in the specified destination directory.
+     * <p>
+     * The destination directory is created if it does not exist.
+     * If the destination directory did exist, then this method merges
+     * the source with the destination, with the source taking precedence.
+     *
+     * @param srcDir  an existing directory to copy, must not be null
+     * @param destDir  the directory to place the copy in, must not be null
+     *
+     * @throws NullPointerException if source or destination is null
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying
+     */
+    public static void copyDirectoryToDirectory(File srcDir, File destDir) throws IOException {
+        if (srcDir == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (srcDir.exists() && srcDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Source '" + destDir + "' is not a directory");
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (destDir.exists() && destDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
+        }
+        copyDirectory(srcDir, new File(destDir, srcDir.getName()), true);
+    }
+
+    /**
      * Copies a whole directory to a new location preserving the file dates.
      * <p>
      * This method copies the specified directory and all its child
      * directories and files to the specified destination.
      * The destination is the new location and name of the directory.
-     * If it already exists, the contents will be overwritten.
+     * <p>
+     * The destination directory is created if it does not exist.
+     * If the destination directory did exist, then this method merges
+     * the source with the destination, with the source taking precedence.
      *
      * @param srcDir  an existing directory to copy, must not be null
      * @param destDir  the new directory, must not be null
@@ -603,6 +639,7 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
+     * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
