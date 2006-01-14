@@ -28,7 +28,6 @@ limitations under the License.
         <li>A proper user guide</li>
         <li>A FileWriter that takes an encoding (base on LockableFileWriter)</li>
         <li>A URLUtils class that has many of the FileUtils operations, but for a URL</li>
-        <li>An iterator over the lines in a file</li>
         <li>FilePoller for telling when a file changes. Look in Tomcat, or GenJava[bayard]</li>
         <li>A "hot folder" handler which triggers an action when a new file has been uploaded to an FTP directory, for example.</li>
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
