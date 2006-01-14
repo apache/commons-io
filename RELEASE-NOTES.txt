@@ -50,15 +50,18 @@ Enhancements from 1.1
 
 - FileUtils.lineIterator
   IOUtils.lineIterator
-  New methods to provide an iterator over the lines in a file
+  New methods to provide an iterator over the lines in a file [38083]
+
+- FileUtils.copyDirectoryToDirectory
+  New method to copy a directory to within another directory [36315]
 
 
 Feedback
 --------
-Open source works best when you give feedback.
+Open source works best when you give feedback:
 http://jakarta.apache.org/commons/io/
 
-Please direct all bug reports to Bugzilla.
+Please direct all bug reports to Bugzilla (prefix bug reports by [io])
 http://issues.apache.org/bugzilla/buglist.cgi?product=Commons&component=IO
 
 Or subscribe to the commons-user mailing list (prefix emails by [io])
