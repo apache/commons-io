@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,15 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
         this.classLoader = classLoader;
     }
 
-    /** @inheritDoc */
+    /**
+     * Resolve a class specified by the descriptor using the
+     * specified ClassLoader or the super ClassLoader.
+     *
+     * @param objectStreamClass  descriptor of the class
+     * @return the Class object described by the ObjectStreamClass
+     * @throws IOException in case of an I/O error
+     * @throws ClassNotFoundException if the Class cannot be found
+     */
     protected Class resolveClass(ObjectStreamClass objectStreamClass)
             throws IOException, ClassNotFoundException {
         

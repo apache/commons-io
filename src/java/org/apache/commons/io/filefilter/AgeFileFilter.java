@@ -50,7 +50,7 @@ public class AgeFileFilter extends AbstractFileFilter {
     /**
      * Constructs a new age file filter for files older than a certain cutoff.
      *
-     * @param age  the threshold age of the files
+     * @param cutoff  the threshold age of the files
      */
     public AgeFileFilter(long cutoff) {
         this(cutoff, true);
@@ -60,7 +60,7 @@ public class AgeFileFilter extends AbstractFileFilter {
      * Constructs a new age file filter for files on any one side
      * of a certain cutoff.
      *
-     * @param age  the threshold age of the files
+     * @param cutoff  the threshold age of the files
      * @param acceptOlder  if true, older files are accepted, else newer ones
      */
     public AgeFileFilter(long cutoff, boolean acceptOlder) {
@@ -72,7 +72,7 @@ public class AgeFileFilter extends AbstractFileFilter {
      * Constructs a new age file filter for files older than a certain
      * cutoff date.
      *
-     * @param age  the threshold age of the files
+     * @param cutoffDate  the threshold age of the files
      */
     public AgeFileFilter(Date cutoffDate) {
         this(cutoffDate, true);
@@ -82,7 +82,7 @@ public class AgeFileFilter extends AbstractFileFilter {
      * Constructs a new age file filter for files on any one side
      * of a certain cutoff date.
      *
-     * @param age  the threshold age of the files
+     * @param cutoffDate  the threshold age of the files
      * @param acceptOlder  if true, older files are accepted, else newer ones
      */
     public AgeFileFilter(Date cutoffDate, boolean acceptOlder) {
@@ -93,7 +93,8 @@ public class AgeFileFilter extends AbstractFileFilter {
      * Constructs a new age file filter for files older than a certain
      * File (whose last modification time will be used as reference).
      *
-     * @param age  the threshold age of the files
+     * @param cutoffReference  the file whose last modification
+     *        time is usesd as the threshold age of the files
      */
     public AgeFileFilter(File cutoffReference) {
         this(cutoffReference, true);
@@ -104,7 +105,8 @@ public class AgeFileFilter extends AbstractFileFilter {
      * of a certain File (whose last modification time will be used as
      * reference).
      *
-     * @param age  the threshold age of the files
+     * @param cutoffReference  the file whose last modification
+     *        time is usesd as the threshold age of the files
      * @param acceptOlder  if true, older files are accepted, else newer ones
      */
     public AgeFileFilter(File cutoffReference, boolean acceptOlder) {

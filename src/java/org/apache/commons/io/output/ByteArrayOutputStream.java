@@ -1,5 +1,5 @@
 /*
- * Copyright 2003,2004 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,8 +64,8 @@ public class ByteArrayOutputStream extends OutputStream {
      * Creates a new byte array output stream, with a buffer capacity of 
      * the specified size, in bytes. 
      *
-     * @param size the initial size.
-     * @exception IllegalArgumentException if size is negative.
+     * @param size  the initial size
+     * @throws IllegalArgumentException if size is negative
      */
     public ByteArrayOutputStream(int size) {
         if (size < 0) {
@@ -75,10 +75,23 @@ public class ByteArrayOutputStream extends OutputStream {
         needNewBuffer(size);
     }
 
+    /**
+     * Return the appropriate <code>byte[]</code> buffer 
+     * specified by index.
+     *
+     * @param index  the index of the buffer required
+     * @return the buffer
+     */
     private byte[] getBuffer(int index) {
         return (byte[])buffers.get(index);
     }
 
+    /**
+     * Makes a new buffer available either by allocating
+     * a new one or re-cycling an existing one.
+     *
+     * @param newcount  the size of the buffer if one is created
+     */
     private void needNewBuffer(int newcount) {
         if (currentBufferIndex < buffers.size() - 1) {
             //Recycling old buffer
@@ -168,7 +181,7 @@ public class ByteArrayOutputStream extends OutputStream {
         currentBufferIndex = 0;
         currentBuffer = getBuffer(currentBufferIndex);
     }
-    
+
     /**
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */

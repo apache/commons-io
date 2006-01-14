@@ -237,7 +237,7 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file was last modified after
      * the specified cutoff date.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffDate  the time threshold
      * @return an appropriately configured age file filter
      * @since Commons IO 1.2
      */
@@ -248,7 +248,7 @@ public class FileFilterUtils {
     /**
      * Returns a filter that filters files based on a cutoff date.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffDate  the time threshold
      * @param acceptOlder  if true, older files get accepted, if false, newer
      * @return an appropriately configured age file filter
      * @since Commons IO 1.2
@@ -261,7 +261,8 @@ public class FileFilterUtils {
      * Returns a filter that returns true if the file was last modified after
      * the specified reference file.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffReference  the file whose last modification
+     *        time is usesd as the threshold age of the files
      * @return an appropriately configured age file filter
      * @since Commons IO 1.2
      */
@@ -272,7 +273,8 @@ public class FileFilterUtils {
     /**
      * Returns a filter that filters files based on a cutoff reference file.
      *
-     * @param cutoff  the time threshold
+     * @param cutoffReference  the file whose last modification
+     *        time is usesd as the threshold age of the files
      * @param acceptOlder  if true, older files get accepted, if false, newer
      * @return an appropriately configured age file filter
      * @since Commons IO 1.2
@@ -285,7 +287,7 @@ public class FileFilterUtils {
     /**
      * Returns a filter that returns true if the file is bigger than a certain size.
      *
-     * @param long  the file size threshold
+     * @param threshold  the file size threshold
      * @return an appropriately configured SizeFileFilter
      * @since Commons IO 1.2
      */
@@ -296,7 +298,7 @@ public class FileFilterUtils {
     /**
      * Returns a filter that filters based on file size.
      *
-     * @param long  the file size threshold
+     * @param threshold  the file size threshold
      * @param acceptLarger  if true, larger files get accepted, if false, smaller
      * @return an appropriately configured SizeFileFilter
      * @since Commons IO 1.2
