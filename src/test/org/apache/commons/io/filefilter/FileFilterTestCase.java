@@ -461,7 +461,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void testAgeFilter() throws Exception {
         File oldFile = new File(getTestDirectory(), "old.txt");
         createFile(oldFile, 0);
-        spin();
+        spin(oldFile.lastModified());
         long now = System.currentTimeMillis();
         IOFileFilter filter1 = FileFilterUtils.ageFileFilter(now);
         IOFileFilter filter2 = FileFilterUtils.ageFileFilter(now, true);
@@ -475,7 +475,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         IOFileFilter filter7 = FileFilterUtils.ageFileFilter(reference);
         IOFileFilter filter8 = FileFilterUtils.ageFileFilter(reference, true);
         IOFileFilter filter9 = FileFilterUtils.ageFileFilter(reference, false);
-        spin();
+        spin(reference.lastModified());
         File newFile = new File(getTestDirectory(), "new.txt");
         createFile(newFile, 0);
 
@@ -523,8 +523,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
     }
 
-    private void spin() {
-        long now = System.currentTimeMillis();
+    private void spin(long now) {
         while (System.currentTimeMillis() <= now);
     }
 

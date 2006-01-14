@@ -1,5 +1,5 @@
 /*
- * Copyright 2003,2004 The Apache Software Foundation.
+ * Copyright 2003-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,11 +67,11 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
             throw new IllegalStateException("The m_testFile1 should exist");
 
         long fileLastModified = m_testFile1.lastModified();
-        final long ONE_SECOND = 1000;
+        final long TWO_SECOND = 2000;
 
-        testIsFileNewer("one second earlier is not newer" , m_testFile1, fileLastModified + ONE_SECOND, false);
+        testIsFileNewer("two second earlier is not newer" , m_testFile1, fileLastModified + TWO_SECOND, false);
         testIsFileNewer("same time is not newer" , m_testFile1, fileLastModified, false);
-        testIsFileNewer("one second later is newer" , m_testFile1, fileLastModified - ONE_SECOND, true);
+        testIsFileNewer("two second later is newer" , m_testFile1, fileLastModified - TWO_SECOND, true);
     }
 
     /**
@@ -86,7 +86,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         if (imaginaryFile.exists())
             throw new IllegalStateException("The imaginary File exists");
 
-        testIsFileNewer("imaginary file can be newer" , imaginaryFile, 0, false);
+        testIsFileNewer("imaginary file can be newer" , imaginaryFile, m_testFile2.lastModified(), false);
     }
 
     /**
@@ -118,8 +118,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         File temporaryFile = m_testFile2;
 
         temporaryFile.setLastModified(time);
-        if (temporaryFile.lastModified() != time)
-            throw new IllegalStateException("The temporary file hasn't the right last modification date");
+        assertEquals("The temporary file hasn't the right last modification date", time, temporaryFile.lastModified());
         assertEquals(description + " - file", wantedResult, FileUtils.isFileNewer(file, temporaryFile));
     }
 
