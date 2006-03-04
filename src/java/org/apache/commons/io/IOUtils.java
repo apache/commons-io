@@ -509,19 +509,25 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Return an Iterator for the lines in a <code>Reader</code>.
+     * Please read the javadoc of {@link LineIterator} to understand
+     * whether you should close the iterator.
+     * The file is closed if an exception is thrown.
      *
      * @param reader  the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
      * @throws NullPointerException if the reader is null
      * @since Commons IO 1.2
      */
-    public static Iterator lineIterator(Reader reader) {
+    public static LineIterator lineIterator(Reader reader) {
         return new LineIterator(reader);
     }
 
     /**
      * Return an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
+     * Please read the javadoc of {@link LineIterator} to understand
+     * whether you should close the iterator.
+     * The file is closed if an exception is thrown.
      *
      * @param input  the <code>InputStream</code> to read from, not null
      * @param encoding  the encoding to use, null means platform default
