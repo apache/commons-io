@@ -524,7 +524,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     private void spin(long now) {
-        while (System.currentTimeMillis() <= now);
+        while (System.currentTimeMillis() <= now + 1000);
     }
 
 }
