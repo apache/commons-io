@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,9 +62,14 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
-            assertEquals(true, FileSystemUtils.freeSpace("/") > 0);
+            // test assumes Unix using 1kb blocks
+            long free = FileSystemUtils.freeSpace("/");
+            long kb = FileSystemUtils.freeSpaceKb("/");
+            assertEquals((double) free, (double) kb, 256d);
         } else {
-            assertEquals(true, FileSystemUtils.freeSpace("") > 0);
+            long bytes = FileSystemUtils.freeSpace("");
+            long kb = FileSystemUtils.freeSpaceKb("");
+            assertEquals((double) bytes / 1024, (double) kb, 256d);
         }
     }
 
@@ -72,7 +77,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_NullPath() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS(null, 1);
+            fsu.freeSpaceOS(null, 1, false);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+        try {
+            fsu.freeSpaceOS(null, 1, true);
             fail();
         } catch (IllegalArgumentException ex) {}
     }
@@ -80,7 +89,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_InitError() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS("", -1);
+            fsu.freeSpaceOS("", -1, false);
+            fail();
+        } catch (IllegalStateException ex) {}
+        try {
+            fsu.freeSpaceOS("", -1, true);
             fail();
         } catch (IllegalStateException ex) {}
     }
@@ -88,7 +101,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_Other() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS("", 0);
+            fsu.freeSpaceOS("", 0, false);
+            fail();
+        } catch (IllegalStateException ex) {}
+        try {
+            fsu.freeSpaceOS("", 0, true);
             fail();
         } catch (IllegalStateException ex) {}
     }
@@ -99,16 +116,18 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 return 12345L;
             }
         };
-        assertEquals(12345L, fsu.freeSpaceOS("", 1));
+        assertEquals(12345L, fsu.freeSpaceOS("", 1, false));
+        assertEquals(12345L / 1024, fsu.freeSpaceOS("", 1, true));
     }
 
     public void testGetFreeSpaceOS_String_Unix() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils() {
-            protected long freeSpaceUnix(String path) throws IOException {
-                return 12345L;
+            protected long freeSpaceUnix(String path, boolean kb) throws IOException {
+                return (kb ? 12345L : 54321);
             }
         };
-        assertEquals(12345L, fsu.freeSpaceOS("", 2));
+        assertEquals(54321L, fsu.freeSpaceOS("", 2, false));
+        assertEquals(12345L, fsu.freeSpaceOS("", 2, true));
     }
 
     //-----------------------------------------------------------------------
@@ -232,7 +251,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("");
+            fsu.freeSpaceUnix("", false);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+        try {
+            fsu.freeSpaceUnix("", true);
             fail();
         } catch (IllegalArgumentException ex) {}
     }
@@ -247,7 +270,20 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 return new BufferedReader(reader);
             }
         };
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s"));
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false));
+    }
+
+    public void testGetFreeSpaceUnix_String_NormalResponseKb() throws Exception {
+        String lines =
+            "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+            "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
+        final StringReader reader = new StringReader(lines);
+        FileSystemUtils fsu = new FileSystemUtils() {
+            protected BufferedReader openProcessStream(String[] params) {
+                return new BufferedReader(reader);
+            }
+        };
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true));
     }
 
     public void testGetFreeSpaceUnix_String_LongResponse() throws Exception {
@@ -261,7 +297,21 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 return new BufferedReader(reader);
             }
         };
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s"));
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false));
+    }
+
+    public void testGetFreeSpaceUnix_String_LongResponseKb() throws Exception {
+        String lines =
+            "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
+            "xxx-yyyyyyy-zzz:/home/users/s\n" +
+            "                      14428928  12956424   1472504  90% /home/users/s";
+        final StringReader reader = new StringReader(lines);
+        FileSystemUtils fsu = new FileSystemUtils() {
+            protected BufferedReader openProcessStream(String[] params) {
+                return new BufferedReader(reader);
+            }
+        };
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true));
     }
 
     public void testGetFreeSpaceUnix_String_EmptyResponse() throws Exception {
@@ -273,7 +323,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("/home/users/s");
+            fsu.freeSpaceUnix("/home/users/s", false);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            fsu.freeSpaceUnix("/home/users/s", true);
             fail();
         } catch (IOException ex) {}
     }
@@ -289,7 +343,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("/home/users/s");
+            fsu.freeSpaceUnix("/home/users/s", false);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            fsu.freeSpaceUnix("/home/users/s", true);
             fail();
         } catch (IOException ex) {}
     }
@@ -305,7 +363,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("/home/users/s");
+            fsu.freeSpaceUnix("/home/users/s", false);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            fsu.freeSpaceUnix("/home/users/s", true);
             fail();
         } catch (IOException ex) {}
     }
@@ -321,7 +383,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("/home/users/s");
+            fsu.freeSpaceUnix("/home/users/s", false);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            fsu.freeSpaceUnix("/home/users/s", true);
             fail();
         } catch (IOException ex) {}
     }
@@ -337,7 +403,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
         };
         try {
-            fsu.freeSpaceUnix("/home/users/s");
+            fsu.freeSpaceUnix("/home/users/s", false);
+            fail();
+        } catch (IOException ex) {}
+        try {
+            fsu.freeSpaceUnix("/home/users/s", true);
             fail();
         } catch (IOException ex) {}
     }
