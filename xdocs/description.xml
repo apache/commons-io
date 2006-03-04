@@ -172,6 +172,26 @@ limitations under the License.
 
     </section>
 
+    <section name="Line iterator">
+        <p>
+			The <code>org.apache.commons.io.LineIterator</code> class
+			provides a flexible way for working with a line-based file.
+			An instance can be created directly, or via factory methods on
+			<code>FileUtils</code> or <code>IOUtils</code>.
+			The recommended usage pattern is:
+        </p>
+        <pre>
+  LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+  try {
+    while (it.hasNext()) {
+      String line = it.nextLine();
+      /// do something with line
+    }
+  } finally {
+    LineIterator.closeQuietly(iterator);
+  }</pre>
+    </section>
+
     <section name="File filters">
         <p>
             The <code>org.apache.commons.io.filefilter</code>
