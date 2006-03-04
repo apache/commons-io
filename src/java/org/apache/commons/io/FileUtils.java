@@ -594,6 +594,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @since Commons IO 1.2
      */
     public static void copyDirectoryToDirectory(File srcDir, File destDir) throws IOException {
         if (srcDir == null) {
@@ -856,8 +857,8 @@ public class FileUtils {
      * The file is always closed.
      * <p>
      * There is no readFileToString method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to read
      * @param encoding  the encoding to use, null means platform default
@@ -900,8 +901,8 @@ public class FileUtils {
      * The file is always closed.
      * <p>
      * There is no readLines method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to read
      * @param encoding  the encoding to use, null means platform default
@@ -924,11 +925,24 @@ public class FileUtils {
      * Return an Iterator for the lines in a <code>File</code>.
      * Please read the javadoc of {@link LineIterator} to understand
      * whether you should close the iterator.
-     * The file is closed if an exception is thrown.
+     * The file is closed if an exception is thrown during this method.
      * <p>
-     * There is no readLines method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * The recommended usage patterm is:
+     * <pre>
+     * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+     * try {
+     *   while (it.hasNext()) {
+     *     String line = it.nextLine();
+     *     /// do something with line
+     *   }
+     * } finally {
+     *   LineIterator.closeQuietly(iterator);
+     * }
+     * </pre>
+     * <p>
+     * There is no lineIterator method without encoding parameter because
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to read
      * @param encoding  the encoding to use, null means platform default
@@ -955,8 +969,8 @@ public class FileUtils {
      * Writes a String to a file creating the file if it does not exist.
      * <p>
      * There is no writeStringToFile method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to write
      * @param data  the content to write to the file
@@ -998,8 +1012,8 @@ public class FileUtils {
      * The specified character encoding and the default line ending will be used.
      * <p>
      * There is no writeLines method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1018,8 +1032,8 @@ public class FileUtils {
      * The specified character encoding and the line ending will be used.
      * <p>
      * There is no writeLines method without encoding parameter because
-     * the default encoding can differ between platforms and therefore results
-     * in inconsistent results.
+     * the default encoding can differ between platforms and will have
+     * inconsistent results.
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default

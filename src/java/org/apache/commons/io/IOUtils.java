@@ -511,7 +511,19 @@ public class IOUtils {
      * Return an Iterator for the lines in a <code>Reader</code>.
      * Please read the javadoc of {@link LineIterator} to understand
      * whether you should close the iterator.
-     * The file is closed if an exception is thrown.
+     * <p>
+     * The recommended usage pattern is:
+     * <pre>
+     * LineIterator it = IOUtils.lineIterator(reader);
+     * try {
+     *   while (it.hasNext()) {
+     *     String line = it.nextLine();
+     *     /// do something with line
+     *   }
+     * } finally {
+     *   LineIterator.closeQuietly(iterator);
+     * }
+     * </pre>
      *
      * @param reader  the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
@@ -527,7 +539,19 @@ public class IOUtils {
      * the character encoding specified (or default encoding if null).
      * Please read the javadoc of {@link LineIterator} to understand
      * whether you should close the iterator.
-     * The file is closed if an exception is thrown.
+     * <p>
+     * The recommended usage pattern is:
+     * <pre>
+     * LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
+     * try {
+     *   while (it.hasNext()) {
+     *     String line = it.nextLine();
+     *     /// do something with line
+     *   }
+     * } finally {
+     *   LineIterator.closeQuietly(iterator);
+     * }
+     * </pre>
      *
      * @param input  the <code>InputStream</code> to read from, not null
      * @param encoding  the encoding to use, null means platform default
