@@ -105,7 +105,7 @@ public class FileSystemUtils {
      * <p>
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
-     * FileSystemUtils.freeSpace("C:");  // Windows
+     * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
@@ -127,8 +127,8 @@ public class FileSystemUtils {
      * the command line.
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
-     * FileSystemUtils.freeSpace("C:");  // Windows
-     * FileSystemUtils.freeSpace("/volume");  // *nix
+     * FileSystemUtils.freeSpaceKb("C:");       // Windows
+     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows and 'df -k' on *nix.
