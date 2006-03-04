@@ -77,6 +77,11 @@
       <name>1.0</name>
       <tag>IO_1_0</tag>
     </version>
+    <version>
+      <id>1.1</id>
+      <name>1.1</name>
+      <tag>IO_1_1</tag>
+    </version>
   </versions>
 
   <developers>
