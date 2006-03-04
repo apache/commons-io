@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 The Apache Software Foundation.
+ * Copyright 2005-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,12 @@ public class FileSystemUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Returns the free space on a drive or volume in a cross-platform manner.
+     * Returns the free space on a drive or volume by invoking
+     * the command line.
+     * This method does not normalize the result, and typically returns
+     * bytes on Windows and Kilobytes on Unix.
+     * See also {@link #freeSpaceKb(String)}.
+     * <p>
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
      * FileSystemUtils.freeSpace("C:");  // Windows
@@ -113,9 +118,33 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs when finding the free space
      */
     public static long freeSpace(String path) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS);
+        return INSTANCE.freeSpaceOS(path, OS, false);
     }
 
+    //-----------------------------------------------------------------------
+    /**
+     * Returns the free space on a drive or volume in kilobytes by invoking
+     * the command line.
+     * Note that some OS's are NOT currently supported, including OS/390.
+     * <pre>
+     * FileSystemUtils.freeSpace("C:");  // Windows
+     * FileSystemUtils.freeSpace("/volume");  // *nix
+     * </pre>
+     * The free space is calculated via the command line.
+     * It uses 'dir /-c' on Windows and 'df -k' on *nix.
+     *
+     * @param path  the path to get free space for, not null, not empty on Unix
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalArgumentException if the path is invalid
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     * @since Commons IO 1.2
+     */
+    public static long freeSpaceKb(String path) throws IOException {
+        return INSTANCE.freeSpaceOS(path, OS, true);
+    }
+
+    //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
      * Note that some OS's are NOT currently supported, including OS/390.
@@ -128,20 +157,21 @@ public class FileSystemUtils {
      *
      * @param path  the path to get free space for, not null, not empty on Unix
      * @param os  the operating system code
+     * @param kb  whether to normalize to kilobytes
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      */
-    long freeSpaceOS(String path, int os) throws IOException {
+    long freeSpaceOS(String path, int os, boolean kb) throws IOException {
         if (path == null) {
             throw new IllegalArgumentException("Path must not be empty");
         }
         switch (os) {
             case WINDOWS:
-                return freeSpaceWindows(path);
+                return (kb ? freeSpaceWindows(path) / 1024 : freeSpaceWindows(path));
             case UNIX:
-                return freeSpaceUnix(path);
+                return freeSpaceUnix(path, kb);
             case OTHER:
                 throw new IllegalStateException("Unsupported operating system");
             default:
@@ -245,17 +275,19 @@ public class FileSystemUtils {
      * Find free space on the *nix platform using the 'df' command.
      *
      * @param path  the path to get free space for
+     * @param kb  whether to normalize to kilobytes
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    long freeSpaceUnix(String path) throws IOException {
+    long freeSpaceUnix(String path, boolean kb) throws IOException {
         if (path.length() == 0) {
             throw new IllegalArgumentException("Path must not be empty");
         }
         path = FilenameUtils.normalize(path);
 
         // build and run the 'dir' command
-        String[] cmdAttribs = new String[] {"df", path};
+        String[] cmdAttribs = 
+            (kb ? new String[] {"df", "-k", path} : new String[] {"df", path});
 
         // read the output from the command until we come to the second line
         long bytes = -1;
