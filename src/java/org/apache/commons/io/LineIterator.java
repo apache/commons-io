@@ -150,14 +150,6 @@ public class LineIterator implements IOIterator {
         throw new UnsupportedOperationException("Remove unsupported on LineIterator");
     }
 
-    /**
-     * Finalize which closes the underlying reader.
-     * Do not rely on this method to handle cleanup - call closeQuietly yourself.
-     */
-    protected void finalize() throws Throwable {
-        close();
-    }
-
     //-----------------------------------------------------------------------
     /**
      * Closes the iterator, handling null and ignoring exceptions.
