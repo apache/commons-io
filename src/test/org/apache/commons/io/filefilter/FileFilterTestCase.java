@@ -523,8 +523,11 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
     }
 
-    private void spin(long now) {
-        while (System.currentTimeMillis() <= now + 1000);
+    private void spin(long now) throws InterruptedException {
+        final long end = now + 1000;
+        while (System.currentTimeMillis() <= end) {
+            Thread.sleep(Math.max(1, end - System.currentTimeMillis()));
+        }
     }
 
 }
