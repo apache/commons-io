@@ -121,6 +121,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 }
 
     public void testDirectory() throws Exception {
+        // XXX: This test presumes the current working dir is the base dir of the source checkout.
         IOFileFilter filter = new DirectoryFileFilter();
 
         assertFiltering(filter, new File("src/"), true);
