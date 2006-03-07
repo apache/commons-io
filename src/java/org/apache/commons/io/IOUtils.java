@@ -74,6 +74,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  * @author Gareth Davis
  * @author Ian Springer
  * @author Niall Pemberton
+ * @author Sandy McArthur
  * @version $Id$
  */
 public class IOUtils {
@@ -509,13 +510,30 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Return an Iterator for the lines in a <code>Reader</code>.
-     * Unless you keep a reference to the <code>InputStream</code> the
-     * only way to close it is to call {@link LineIterator#close()} or
-     * wait for the garbage collector.
+     * <p>
+     * <code>LineIterator</code> holds a reference to the open
+     * <code>Reader</code> specified here. When you have finished with the
+     * iterator you should close the reader to free internal resources.
+     * This can be done by closing the reader directly, or by calling the
+     * {@link #close()} or {@link #closeQuietly(LineIterator)} method on
+     * the iterator.
+     * <p>
+     * The recommended usage pattern is:
+     * <pre>
+     * try {
+     *   LineIterator it = IOUtils.lineIterator(reader);
+     *   while (it.hasNext()) {
+     *     String line = it.nextLine();
+     *     /// do something with line
+     *   }
+     * } finally {
+     *   IOUtils.closeQuietly(reader);
+     * }
+     * </pre>
      *
      * @param reader  the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
-     * @throws NullPointerException if the reader is null
+     * @throws IllegalArgumentException if the reader is null
      * @since Commons IO 1.2
      */
     public static LineIterator lineIterator(Reader reader) {
@@ -525,14 +543,31 @@ public class IOUtils {
     /**
      * Return an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
-     * Unless you keep a reference to the <code>InputStream</code> the
-     * only way to close it is to call {@link LineIterator#close()} or
-     * wait for the garbage collector.
+     * <p>
+     * <code>LineIterator</code> holds a reference to the open
+     * <code>InputStream</code> specified here. When you have finished with
+     * the iterator you should close the reader to free internal resources.
+     * This can be done by closing the reader directly, or by calling the
+     * {@link #close()} or {@link #closeQuietly(LineIterator)} method on
+     * the iterator.
+     * <p>
+     * The recommended usage pattern is:
+     * <pre>
+     * try {
+     *   LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
+     *   while (it.hasNext()) {
+     *     String line = it.nextLine();
+     *     /// do something with line
+     *   }
+     * } finally {
+     *   IOUtils.closeQuietly(stream);
+     * }
+     * </pre>
      *
      * @param input  the <code>InputStream</code> to read from, not null
      * @param encoding  the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
-     * @throws NullPointerException if the input is null
+     * @throws IllegalArgumentException if the input is null
      * @throws IOException if an I/O error occurs, such as if the encoding is invalid
      * @since Commons IO 1.2
      */
