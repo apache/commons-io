@@ -74,7 +74,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         try {
             new LineIterator((Reader) null);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (IllegalArgumentException ex) {
             // expected
         }
     }
@@ -116,11 +116,10 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(testFile, "UTF-8");
+            iterator.close();
             fail("Expected FileNotFoundException");
         } catch(FileNotFoundException expected) {
             // ignore, expected result
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -134,16 +133,13 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         createFile(testFile, encoding, 3);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
-            int count = 0;
-            while (iterator.hasNext()) {
-                assertTrue(iterator.next() instanceof String);
-                count++;
-            }
-            assertEquals(3, count);
-        } finally {
-            LineIterator.closeQuietly(iterator);
+        int count = 0;
+        while (iterator.hasNext()) {
+            assertTrue(iterator.next() instanceof String);
+            count++;
         }
+        iterator.close();
+        assertEquals(3, count);
     }
 
     /**
@@ -158,11 +154,10 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(testFile, encoding);
+            iterator.close();
             fail("Expected UnsupportedEncodingException");
         } catch(UnsupportedEncodingException expected) {
             // ignore, expected result
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -176,15 +171,12 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         List lines = createFile(testFile, encoding, 3);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
-            for (int i = 0; i < lines.size(); i++) {
-                String line = (String) iterator.next();
-                assertEquals("next() line " + i, lines.get(i), line);
-            }
-            assertEquals("No more expected", false, iterator.hasNext());
-        } finally {
-            LineIterator.closeQuietly(iterator);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = (String)iterator.next();
+            assertEquals("next() line " + i, lines.get(i), line);
         }
+        assertEquals("No more expected", false, iterator.hasNext());
+        iterator.close();
     }
 
     /**
@@ -197,15 +189,12 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         List lines = createFile(testFile, encoding, 3);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
-            for (int i = 0; i < lines.size(); i++) {
-                String line = iterator.nextLine();
-                assertEquals("nextLine() line " + i, lines.get(i), line);
-            }
-            assertFalse("No more expected", iterator.hasNext());
-        } finally {
-            LineIterator.closeQuietly(iterator);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = iterator.nextLine();
+            assertEquals("nextLine() line " + i, lines.get(i), line);
         }
+        assertFalse("No more expected", iterator.hasNext());
+        iterator.close();
     }
 
     /**
@@ -218,47 +207,44 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         File testFile = new File(getTestDirectory(), "LineIterator-closeEarly.txt");
         createFile(testFile, encoding, 3);
         
-        LineIterator iterator = null;
+        LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+
+        // get
+        assertTrue("Line expected", iterator.next() instanceof String);
+        assertTrue("More expected", iterator.hasNext());
+
+        // close
+        iterator.close();
+        assertFalse("No more expected", iterator.hasNext());
         try {
-            iterator = FileUtils.lineIterator(testFile, encoding);
-            
-            // get
-            assertTrue("Line expected", iterator.next() instanceof String);
-            assertTrue("More expected", iterator.hasNext());
-            
-            // close
-            iterator.close();
-            assertFalse("No more expected", iterator.hasNext());
-            try {
-                iterator.next();
-                fail();
-            } catch (NoSuchElementException ex) {
-                // expected
-            }
-            try {
-                iterator.nextLine();
-                fail();
-            } catch (NoSuchElementException ex) {
-                // expected
-            }
-            
-            // try closing again
-            iterator.close();
-            try {
-                iterator.next();
-                fail();
-            } catch (NoSuchElementException ex) {
-                // expected
-            }
-            try {
-                iterator.nextLine();
-                fail();
-            } catch (NoSuchElementException ex) {
-                // expected
-            }
-        } finally {
-            LineIterator.closeQuietly(iterator);
+            iterator.next();
+            fail();
+        } catch (NoSuchElementException ex) {
+            // expected
         }
+        try {
+            iterator.nextLine();
+            fail();
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
+
+        // try closing again
+        iterator.close();
+        try {
+            iterator.next();
+            fail();
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
+        try {
+            iterator.nextLine();
+            fail();
+        } catch (NoSuchElementException ex) {
+            // expected
+        }
+
+        iterator.close();
     }
 
     /**
@@ -272,42 +258,39 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         File testFile = new File(getTestDirectory(), fileName);
         List lines = createFile(testFile, encoding, lineCount);
         
-        LineIterator iterator = null;
+        LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+
         try {
-            iterator = FileUtils.lineIterator(testFile, encoding);
-            
-            try {
-                iterator.remove();
-                fail("Remove is unsupported");
-            } catch (UnsupportedOperationException ex) {
-                // expected
-            }
-            
-            int idx = 0;
-            while (iterator.hasNext()) {
-                String line = (String)iterator.next();
-                assertEquals("Comparing line " + idx, lines.get(idx), line);
-                assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());
-                idx++;
-            }
-            assertEquals("Line Count doesn't match", idx, lines.size());
-            
-            // try calling next() after file processed
-            try {
-                iterator.next();
-                fail("Expected NoSuchElementException");
-            } catch (NoSuchElementException expected) {
-                // ignore, expected result
-            }
-            try {
-                iterator.nextLine();
-                fail("Expected NoSuchElementException");
-            } catch (NoSuchElementException expected) {
-                // ignore, expected result
-            }
-        } finally {
-            LineIterator.closeQuietly(iterator);
+            iterator.remove();
+            fail("Remove is unsupported");
+        } catch (UnsupportedOperationException ex) {
+            // expected
         }
+
+        int idx = 0;
+        while (iterator.hasNext()) {
+            String line = (String)iterator.next();
+            assertEquals("Comparing line " + idx, lines.get(idx), line);
+            assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());
+            idx++;
+        }
+        assertEquals("Line Count doesn't match", idx, lines.size());
+
+        // try calling next() after file processed
+        try {
+            iterator.next();
+            fail("Expected NoSuchElementException");
+        } catch (NoSuchElementException expected) {
+            // ignore, expected result
+        }
+        try {
+            iterator.nextLine();
+            fail("Expected NoSuchElementException");
+        } catch (NoSuchElementException expected) {
+            // ignore, expected result
+        }
+
+        iterator.close();
     }
 
     /**

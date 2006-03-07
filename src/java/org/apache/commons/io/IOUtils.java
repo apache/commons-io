@@ -509,21 +509,9 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Return an Iterator for the lines in a <code>Reader</code>.
-     * Please read the javadoc of {@link LineIterator} to understand
-     * whether you should close the iterator.
-     * <p>
-     * The recommended usage pattern is:
-     * <pre>
-     * LineIterator it = IOUtils.lineIterator(reader);
-     * try {
-     *   while (it.hasNext()) {
-     *     String line = it.nextLine();
-     *     /// do something with line
-     *   }
-     * } finally {
-     *   LineIterator.closeQuietly(iterator);
-     * }
-     * </pre>
+     * Unless you keep a reference to the <code>InputStream</code> the
+     * only way to close it is to call {@link LineIterator#close()} or
+     * wait for the garbage collector.
      *
      * @param reader  the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
@@ -537,21 +525,9 @@ public class IOUtils {
     /**
      * Return an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
-     * Please read the javadoc of {@link LineIterator} to understand
-     * whether you should close the iterator.
-     * <p>
-     * The recommended usage pattern is:
-     * <pre>
-     * LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
-     * try {
-     *   while (it.hasNext()) {
-     *     String line = it.nextLine();
-     *     /// do something with line
-     *   }
-     * } finally {
-     *   LineIterator.closeQuietly(iterator);
-     * }
-     * </pre>
+     * Unless you keep a reference to the <code>InputStream</code> the
+     * only way to close it is to call {@link LineIterator#close()} or
+     * wait for the garbage collector.
      *
      * @param input  the <code>InputStream</code> to read from, not null
      * @param encoding  the encoding to use, null means platform default
@@ -562,7 +538,7 @@ public class IOUtils {
      */
     public static LineIterator lineIterator(InputStream input, String encoding) 
                      throws IOException {
-        InputStreamReader reader = null;
+        Reader reader = null;
         if (encoding == null) {
             reader = new InputStreamReader(input);
         } else {
