@@ -22,32 +22,23 @@ import java.util.NoSuchElementException;
 
 /**
  * An Iterator over the lines in a <code>Reader</code>.
+ *
  * <p>
- * This iterator must be closed after use to avoid a resource leak.
- * If you read every line, then the final {@link #hasNext()} method
- * will close the iterator. If you do not fully read the iterator
- * then you must call the {@link #close()} method.
- * <p>
- * However, since the iterator methods can throw exception, we recommend
- * always calling close in a finally block:
- * <pre>
- * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
- * try {
- *   while (it.hasNext()) {
- *     String line = it.nextLine();
- *     /// do something with line
- *   }
- * } finally {
- *   LineIterator.closeQuietly(iterator);
- * }
- * </pre>
+ * If you do not wish to maintain a reference to the <code>Reader</code>
+ * you can call {@link #close()} to close the backing <code>Reader</code>
+ * and free an interal resources.
  *
  * @author Niall Pemberton
  * @author Stephen Colebourne
+ * @author Sandy McArthur
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class LineIterator implements IOIterator {
+/*
+ * XXX: hasNext() should be reworked so this class can be
+ * meaningfully subclassed before the final below is removed.
+ */
+public final class LineIterator {
 
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
@@ -60,22 +51,24 @@ public class LineIterator implements IOIterator {
      * Constructs an iterator of the lines for a <code>Reader</code>.
      *
      * @param reader the <code>Reader</code> to read from, not null
-     * @throws NullPointerException if the reader is null
+     * @throws IllegalArgumentException if the reader is null
      */
-    public LineIterator(Reader reader) {
+    public LineIterator(final Reader reader) throws IllegalArgumentException {
         if (reader == null) {
-            throw new NullPointerException("Reader must not be null");
+            throw new IllegalArgumentException("Reader must not be null.");
         }
         if (reader instanceof BufferedReader) {
-            this.bufferedReader = (BufferedReader) reader;
+            bufferedReader = (BufferedReader) reader;
         } else {
-            this.bufferedReader = new BufferedReader(reader);
+            bufferedReader = new BufferedReader(reader);
         }
     }
 
     //-----------------------------------------------------------------------
     /**
      * Indicates whether the <code>Reader</code> has more lines.
+     * If there is an <code>IOException</code> then {@link #close()} will
+     * be called on this instance.
      *
      * @return <code>true</code> if the Reader has more lines
      * @throws IllegalStateException if an IO exception occurs
@@ -89,7 +82,7 @@ public class LineIterator implements IOIterator {
             try {
                 cachedLine = bufferedReader.readLine();
                 if (cachedLine == null) {
-                    close();
+                    finished = true;
                     return false;
                 } else {
                     return true;
@@ -130,15 +123,13 @@ public class LineIterator implements IOIterator {
      * Closes the underlying <code>Reader</code> quietly.
      * This method is useful if you only want to process the first few
      * lines of a larger file. If you do not close the iterator
-     * then the <code>Reader</code> remains open and is a resource leak.
+     * then the <code>Reader</code> remains open.
      * This method can safely be called multiple times.
      */
     public void close() {
-        if (!finished) {
-            IOUtils.closeQuietly(bufferedReader);
-            finished = true;
-            cachedLine = null;
-        }
+        finished = true;
+        IOUtils.closeQuietly(bufferedReader);
+        cachedLine = null;
     }
 
     /**

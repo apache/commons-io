@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -923,22 +925,9 @@ public class FileUtils {
 
     /**
      * Return an Iterator for the lines in a <code>File</code>.
-     * Please read the javadoc of {@link LineIterator} to understand
-     * whether you should close the iterator.
-     * The file is closed if an exception is thrown during this method.
-     * <p>
-     * The recommended usage patterm is:
-     * <pre>
-     * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
-     * try {
-     *   while (it.hasNext()) {
-     *     String line = it.nextLine();
-     *     /// do something with line
-     *   }
-     * } finally {
-     *   LineIterator.closeQuietly(iterator);
-     * }
-     * </pre>
+     * This neccessitates creating an InputStream for the file. The only ways
+     * to close this stream are to call {@link LineIterator#close()} or let
+     * the <code>LineIterator</code> be garbage collected.
      * <p>
      * There is no lineIterator method without encoding parameter because
      * the default encoding can differ between platforms and will have
