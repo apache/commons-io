@@ -15,8 +15,8 @@ Commons IO contains utility classes, stream implementations, file filters,
 and endian transformation classes.
 
 
-Incompatible changes from 1.1
------------------------------
+Compatibility with 1.1
+----------------------
 Binary compatible - Yes
 
 Source compatible - Yes
