@@ -514,9 +514,8 @@ public class IOUtils {
      * <code>LineIterator</code> holds a reference to the open
      * <code>Reader</code> specified here. When you have finished with the
      * iterator you should close the reader to free internal resources.
-     * This can be done by closing the reader directly, or by calling the
-     * {@link #close()} or {@link #closeQuietly(LineIterator)} method on
-     * the iterator.
+     * This can be done by closing the reader directly, or by calling
+     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
      * <p>
      * The recommended usage pattern is:
      * <pre>
@@ -546,10 +545,9 @@ public class IOUtils {
      * <p>
      * <code>LineIterator</code> holds a reference to the open
      * <code>InputStream</code> specified here. When you have finished with
-     * the iterator you should close the reader to free internal resources.
-     * This can be done by closing the reader directly, or by calling the
-     * {@link #close()} or {@link #closeQuietly(LineIterator)} method on
-     * the iterator.
+     * the iterator you should close the stream to free internal resources.
+     * This can be done by closing the stream directly, or by calling
+     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
      * <p>
      * The recommended usage pattern is:
      * <pre>
