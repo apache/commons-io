@@ -52,6 +52,7 @@ public abstract class FileBasedTestCase extends TestCase {
         if (testDir == null) {
             testDir = (new File("test/io/")).getAbsoluteFile();
         }
+        testDir.mkdirs();
         return testDir;
     }
     
