@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2002-2005 The Apache Software Foundation.
+Copyright 2002-2006 The Apache Software Foundation.
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ limitations under the License.
             Commons-IO contains
             <a href="#Utility classes">utility classes</a>,
             <a href="#Endian classes">endian classes</a>,
+            <a href="#Line iterator">line iterator</a>,
             <a href="#File filters">file filters</a> and
             <a href="#Streams">stream implementations</a>.
         </p>
@@ -49,29 +50,29 @@ limitations under the License.
             </p>
 
             <source>
-    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-    try {
-        InputStreamReader inR = new InputStreamReader( in );
-        BufferedReader buf = new BufferedReader( inR );
-        String line;
-        while ( ( line = buf.readLine() ) != null ) {
-            System.out.println( line );
-        }
-    } finally {
-        in.close();
-    }</source>
+ InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+ try {
+   InputStreamReader inR = new InputStreamReader( in );
+   BufferedReader buf = new BufferedReader( inR );
+   String line;
+   while ( ( line = buf.readLine() ) != null ) {
+     System.out.println( line );
+   }
+ } finally {
+   in.close();
+ }</source>
 
             <p>
                 With the IOUtils class, that could be done with:
             </p>
 
             <source>
-    InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
-    try {
-        System.out.println( IOUtils.toString( in ) );
-    } finally {
-        IOUtils.closeQuietly(in);
-    }</source>
+ InputStream in = new URL( "http://jakarta.apache.org" ).openStream();
+ try {
+   System.out.println( IOUtils.toString( in ) );
+ } finally {
+   IOUtils.closeQuietly(in);
+ }</source>
 
             <p>
                 In certain application domains, such IO operations are
@@ -97,8 +98,8 @@ limitations under the License.
                 For example to read an entire file line by line you could use:
             </p>
             <source>
-  File file = new File("/commons/io/project.properties");
-  List lines = FileUtils.readLines(file, "UTF-8");</source>
+ File file = new File("/commons/io/project.properties");
+ List lines = FileUtils.readLines(file, "UTF-8");</source>
         </subsection>
 
         <subsection name="FilenameUtils">
@@ -113,9 +114,9 @@ limitations under the License.
                 For example to normalize a filename removing double dot segments:
             </p>
             <source>
-  String filename = "C:/commons/io/../lang/project.xml";
-  String normalized = FilenameUtils.normalize(filename);
-  // result is "C:/commons/lang/project.xml"</source>
+ String filename = "C:/commons/io/../lang/project.xml";
+ String normalized = FilenameUtils.normalize(filename);
+ // result is "C:/commons/lang/project.xml"</source>
         </subsection>
 
         <subsection name="FileSystemUtils">
@@ -131,7 +132,7 @@ limitations under the License.
                 For example to find the free space on a drive:
             </p>
             <source>
-  long freeSpace = FileSystemUtils.freeSpace("C:/");</source>
+ long freeSpace = FileSystemUtils.freeSpace("C:/");</source>
         </subsection>
 
     </section>
@@ -180,16 +181,16 @@ limitations under the License.
 			<code>FileUtils</code> or <code>IOUtils</code>.
 			The recommended usage pattern is:
         </p>
-        <pre>
-  LineIterator it = FileUtils.lineIterator(file, "UTF-8");
-  try {
-    while (it.hasNext()) {
-      String line = it.nextLine();
-      /// do something with line
-    }
-  } finally {
-    LineIterator.closeQuietly(iterator);
-  }</pre>
+        <source>
+ LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+ try {
+   while (it.hasNext()) {
+     String line = it.nextLine();
+     /// do something with line
+   }
+ } finally {
+   LineIterator.closeQuietly(iterator);
+ }</source>
     </section>
 
     <section name="File filters">

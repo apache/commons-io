@@ -57,14 +57,14 @@ limitations under the License.
             Let's look at an example.
         </p>
         <source>
-    public static String getExtension(String filename) {
-        int index = filename.lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        } else {
-            return filename.substring(index + 1);
-        }
-    }</source>
+ public static String getExtension(String filename) {
+   int index = filename.lastIndexOf('.');
+   if (index == -1) {
+     return "";
+   } else {
+     return filename.substring(index + 1);
+   }
+ }</source>
         <p>
             Easy enough? Right, but what happens if someone passes in a full path 
             instead of only a filename? Consider the following, perfectly legal path:
@@ -82,16 +82,16 @@ limitations under the License.
             Instead of:
         </p>
         <source>
-    String tmpdir = "/var/tmp";
-    String tmpfile = tmpdir + System.getProperty("file.separator") + "test.tmp";
-    InputStream in = new java.io.FileInputStream(tmpfile);</source>
+ String tmpdir = "/var/tmp";
+ String tmpfile = tmpdir + System.getProperty("file.separator") + "test.tmp";
+ InputStream in = new java.io.FileInputStream(tmpfile);</source>
         <p>
             ...write:
         </p>
         <source>
-    File tmpdir = new File("/var/tmp");
-    File tmpfile = new File(tmpdir, "test.tmp");
-    InputStream in = new java.io.FileInputStream(tmpfile);</source>
+ File tmpdir = new File("/var/tmp");
+ File tmpfile = new File(tmpdir, "test.tmp");
+ InputStream in = new java.io.FileInputStream(tmpfile);</source>
 
     </section>
     
@@ -109,15 +109,14 @@ limitations under the License.
             FileInputStream with a BufferedInputStream:
         </p>
         <source>
-            InputStream in = new java.io.FileInputStream(myfile);
-            try {
-                in = new java.io.BufferedInputStream(in);
-                
-                in.read(.....
-            } finally {
-                IOUtils.closeQuietly(in);
-            }
-        </source>
+ InputStream in = new java.io.FileInputStream(myfile);
+ try {
+   in = new java.io.BufferedInputStream(in);
+   
+   in.read(.....
+ } finally {
+   IOUtils.closeQuietly(in);
+ }</source>
         <p>
             Pay attention that you're not buffering an already buffered stream. Some
             components like XML parsers may do their own buffering so decorating
