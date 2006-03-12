@@ -214,11 +214,30 @@
   </contributors>
 
   <dependencies>
-    <!--dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
-    </dependency-->
+      <properties>
+       <scope>test</scope>
+       <comment>
+        Required only for testing.
+       </comment>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>maven-plugins</groupId>
+      <artifactId>maven-cobertura-plugin</artifactId>
+      <version>1.1.1</version>
+      <url>http://maven-plugins.sourceforge.net/maven-cobertura-plugin/</url>
+      <type>plugin</type>
+      <properties>
+       <scope>test</scope>
+       <comment>
+        Required only for generating test coverage reports.
+       </comment>
+      </properties>
+    </dependency>
   </dependencies>
 
   <build>
