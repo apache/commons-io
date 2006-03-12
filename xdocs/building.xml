@@ -45,6 +45,7 @@ limitations under the License.
   <p>
     To build the full website, run "maven site".
     The result will be in "target/docs".
+	You must be online and using JDK 1.4 or higher to successfully complete this target.
   </p>
   <p>
 	Further details can be found in the
