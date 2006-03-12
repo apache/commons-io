@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2005 The Apache Software Foundation.
+Copyright 2005-2006 The Apache Software Foundation.
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ limitations under the License.
   If you find your issue listed then please add a comment with your details.</li>
   <li><a href="http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/">Search the mailing list archive</a>.
   You may find your issue or idea has already been discussed.</li>
-  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.1%20Final&amp;short_desc=%5Bio%5D%20%22Your%20subject%20heading%20here%22&amp;comment=Please%20provide%20details%20here.%20Its%20best%20to%20submit%20patches%20that%20alter%0D%0Aexisting%20file%20content%20in%20%22unified%20diff%22%20format.%20%0D%0A%0D%0ASubmissions%20that%20provide%20new%20files%20can%20be%20supplied%20as%20direct%20file%0D%0Aattachments%20or%20archives%20in%20zip%20or%20tar.gz%20format.%20please%20be%20kind%20%0D%0Aenough%20to%20identify%20the%20format%20of%20the%20attached%20archive%20as%20bugzilla%0D%0Atends%20to%20strip%20these%20characterstics%20by%20removing%20the%20files%20extension.">Submit a bug report or enhancement request</a>.
+  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.2%20Final&amp;short_desc=%5Bio%5D%20%22Your%20subject%20heading%20here%22&amp;comment=Please%20provide%20details%20here.%20Its%20best%20to%20submit%20patches%20that%20alter%0D%0Aexisting%20file%20content%20in%20%22unified%20diff%22%20format.%20%0D%0A%0D%0ASubmissions%20that%20provide%20new%20files%20can%20be%20supplied%20as%20direct%20file%0D%0Aattachments%20or%20archives%20in%20zip%20or%20tar.gz%20format.%20please%20be%20kind%20%0D%0Aenough%20to%20identify%20the%20format%20of%20the%20attached%20archive%20as%20bugzilla%0D%0Atends%20to%20strip%20these%20characterstics%20by%20removing%20the%20files%20extension.">Submit a bug report or enhancement request</a>.
   Please prefix all new issues with [io] in the summary line.
   </li>
   </ol>

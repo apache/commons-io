@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2002-2005 The Apache Software Foundation.
+Copyright 2002-2006 The Apache Software Foundation.
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ limitations under the License.
   <a href="http://ant.apache.org">Ant</a> as a build system.
 </p>
 <p>
-  You may also be interested in the <a href="upgradeto1_1.html">upgrade notes</a>.
+  You may also be interested in the upgrade notes:<br />
+  Upgrade <a href="upgradeto1_2.html">from 1.1 to 1.2</a><br />
+  Upgrade <a href="upgradeto1_1.html">from 1.0 to 1.1</a><br />
 </p>
 </section>
 <!-- ================================================== -->
@@ -43,6 +45,10 @@ limitations under the License.
   <p>
     To build the full website, run "maven site".
     The result will be in "target/docs".
+  </p>
+  <p>
+	Further details can be found in the
+	<a href="http://jakarta.apache.org/commons/building.html">commons build instructions</a>.
   </p>
 </section>
 <!-- ================================================== -->
