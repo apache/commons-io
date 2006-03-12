@@ -17,8 +17,10 @@ package org.apache.commons.io.output;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 
-import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * Tests that files really lock, although no writing is done as 
@@ -27,80 +29,198 @@ import junit.framework.TestCase;
  * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
-
-public class LockableFileWriterTest extends TestCase {
+public class LockableFileWriterTest extends FileBasedTestCase {
 
     private File file;
     private File lockDir;
     private File lockFile;
+    private File altLockDir;
+    private File altLockFile;
 
     public LockableFileWriterTest(String name) {
         super(name);
     }
 
     public void setUp() {
-        file = new File("testlockfile");
+        file = new File(getTestDirectory(), "testlockfile");
         lockDir = new File(System.getProperty("java.io.tmpdir"));
         lockFile = new File(lockDir, file.getName() + ".lck");
+        altLockDir = getTestDirectory();
+        altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
     public void tearDown() {
         file.delete();
         lockFile.delete();
+        altLockFile.delete();
     }
 
     //-----------------------------------------------------------------------
     public void testFileLocked() throws IOException {
-        LockableFileWriter lfw = new LockableFileWriter(this.file);
+        LockableFileWriter lfw1 = null;
+        LockableFileWriter lfw2 = null;
+        LockableFileWriter lfw3 = null;
         try {
-            new LockableFileWriter(this.file);
-            fail("Somehow able to open a locked file. ");
-        } catch(IOException ioe) {
-            String msg = ioe.getMessage();
-            assertTrue( "Exception message does not start correctly. ", 
-                        msg.startsWith("Can't write file, lock ") );
-        } finally {
-            lfw.close();
-        }
-        assertEquals(false, lockFile.exists());
-    }
-
-    public void testFileNotLocked() throws IOException {
-        LockableFileWriter lfw = new LockableFileWriter(this.file);
-        lfw.close();
-        try {
-            LockableFileWriter lfw2 = new LockableFileWriter(this.file);
-            lfw2.close();
-        } catch(IOException ioe) {
-            String msg = ioe.getMessage();
-            if( msg.startsWith("Can't write file, lock ") ) {
-                fail("Somehow unable to open a unlocked file. ");
+            // open a valid locakable writer
+            lfw1 = new LockableFileWriter(file);
+            assertEquals(true, file.exists());
+            assertEquals(true, lockFile.exists());
+            
+            // try to open a second writer
+            try {
+                lfw2 = new LockableFileWriter(file);
+                fail("Somehow able to open a locked file. ");
+            } catch(IOException ioe) {
+                String msg = ioe.getMessage();
+                assertTrue( "Exception message does not start correctly. ", 
+                            msg.startsWith("Can't write file, lock ") );
+                assertEquals(true, file.exists());
+                assertEquals(true, lockFile.exists());
             }
+            
+            // try to open a third writer
+            try {
+                lfw3 = new LockableFileWriter(file);
+                fail("Somehow able to open a locked file. ");
+            } catch(IOException ioe) {
+                String msg = ioe.getMessage();
+                assertTrue( "Exception message does not start correctly. ", 
+                            msg.startsWith("Can't write file, lock ") );
+                assertEquals(true, file.exists());
+                assertEquals(true, lockFile.exists());
+            }
+            
+        } finally {
+            IOUtils.closeQuietly(lfw1);
+            IOUtils.closeQuietly(lfw2);
+            IOUtils.closeQuietly(lfw3);
         }
+        assertEquals(true, file.exists());
         assertEquals(false, lockFile.exists());
     }
 
+    //-----------------------------------------------------------------------
+    public void testAlternateLockDir() throws IOException {
+        LockableFileWriter lfw1 = null;
+        LockableFileWriter lfw2 = null;
+        try {
+            // open a valid locakable writer
+            lfw1 = new LockableFileWriter(file, true, altLockDir.getAbsolutePath());
+            assertEquals(true, file.exists());
+            assertEquals(true, altLockFile.exists());
+            
+            // try to open a second writer
+            try {
+                lfw2 = new LockableFileWriter(file, true, altLockDir.getAbsolutePath());
+                fail("Somehow able to open a locked file. ");
+            } catch(IOException ioe) {
+                String msg = ioe.getMessage();
+                assertTrue( "Exception message does not start correctly. ", 
+                            msg.startsWith("Can't write file, lock ") );
+                assertEquals(true, file.exists());
+                assertEquals(true, altLockFile.exists());
+            }
+            
+        } finally {
+            IOUtils.closeQuietly(lfw1);
+            IOUtils.closeQuietly(lfw2);
+        }
+        assertEquals(true, file.exists());
+        assertEquals(false, altLockFile.exists());
+    }
+
+    //-----------------------------------------------------------------------
+    public void testFileNotLocked() throws IOException {
+        // open a valid locakable writer
+        LockableFileWriter lfw1 = null;
+        try {
+            lfw1 = new LockableFileWriter(file);
+            assertEquals(true, file.exists());
+            assertEquals(true, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(lfw1);
+        }
+        assertEquals(true, file.exists());
+        assertEquals(false, lockFile.exists());
+        
+        // open a second valid writer on the same file
+        LockableFileWriter lfw2 = null;
+        try {
+            lfw2 = new LockableFileWriter(file);
+            assertEquals(true, file.exists());
+            assertEquals(true, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(lfw2);
+        }
+        assertEquals(true, file.exists());
+        assertEquals(false, lockFile.exists());
+    }
+
+    //-----------------------------------------------------------------------
     public void testConstructor_File_encoding_badEncoding() throws IOException {
+        Writer writer = null;
         try {
-            new LockableFileWriter(file, "BAD-ENCODE");
+            writer = new LockableFileWriter(file, "BAD-ENCODE");
             fail();
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+            // expected
+            assertEquals(false, file.exists());
+            assertEquals(false, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+        assertEquals(false, file.exists());
         assertEquals(false, lockFile.exists());
     }
 
+    //-----------------------------------------------------------------------
+    public void testConstructor_File_directory() throws IOException {
+        Writer writer = null;
+        try {
+            writer = new LockableFileWriter(getTestDirectory());
+            fail();
+        } catch (IOException ex) {
+            // expected
+            assertEquals(false, file.exists());
+            assertEquals(false, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+        assertEquals(false, file.exists());
+        assertEquals(false, lockFile.exists());
+    }
+
+    //-----------------------------------------------------------------------
     public void testConstructor_File_nullFile() throws IOException {
+        Writer writer = null;
         try {
-            new LockableFileWriter((File) null);
+            writer = new LockableFileWriter((File) null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (NullPointerException ex) {
+            // expected
+            assertEquals(false, file.exists());
+            assertEquals(false, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+        assertEquals(false, file.exists());
         assertEquals(false, lockFile.exists());
     }
 
+    //-----------------------------------------------------------------------
     public void testConstructor_fileName_nullFile() throws IOException {
+        Writer writer = null;
         try {
-            new LockableFileWriter((String) null);
+            writer = new LockableFileWriter((String) null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (NullPointerException ex) {
+            // expected
+            assertEquals(false, file.exists());
+            assertEquals(false, lockFile.exists());
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+        assertEquals(false, file.exists());
         assertEquals(false, lockFile.exists());
     }
 

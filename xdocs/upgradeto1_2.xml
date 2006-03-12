@@ -55,6 +55,10 @@ Bug fixes from 1.1
 - FileUtils.read*
   Increase certainty that files are closed in case of error
 
+- LockableFileWriter
+  Locking mechanism was broken and only provided limited protection [38942]
+  File deletion and locking in case of constructor error was broken
+
 
 Enhancements from 1.1
 ---------------------
