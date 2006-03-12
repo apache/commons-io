@@ -15,7 +15,7 @@
       <item name="Users guide" href="/description.html"/>
       <item name="Best practices" href="/bestpractices.html"/>
       <!--item name="History" href="/history.html"/-->
-      <item name="Javadoc (1.1 release)" href="api-release/index.html"/>
+      <item name="Javadoc (1.2 release)" href="api-release/index.html"/>
     </menu>
     
     <menu name="Development">

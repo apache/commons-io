@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2002-2005 The Apache Software Foundation.
+Copyright 2002-2006 The Apache Software Foundation.
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,8 +45,8 @@ and various <a href="maven-reports.html">project reports</a>.
 The JavaDoc API documents are available online:
 </p>
 <ul>
-<li>The <a href="api-release/index.html">current release 1.1</a></li>
-<li>The <a href="api-1.0/index.html">previous version 1.0</a></li>
+<li>The <a href="api-release/index.html">current release 1.2</a></li>
+<li>The <a href="api-1.1/index.html">previous version 1.1</a></li>
 <li>The <a href="apidocs/index.html">latest SVN</a></li>
 </ul>
 <p>
@@ -57,9 +57,9 @@ The <a href="cvs-usage.html">subversion repository</a> can be
 <!-- ================================================== -->
 <section name="Releases">
 <p>
-The latest version is v1.1. - 
+The latest version is v1.2. - 
 <a href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi">Download now!</a><br />
-The <a href="upgradeto1_1.html">upgrade notes</a> are also available.
+The <a href="upgradeto1_2.html">upgrade notes</a> are also available.
 
 </p>
 <p>
