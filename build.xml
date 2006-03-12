@@ -104,6 +104,9 @@
       <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
     </copy>
     <jar jarfile="${defaulttargetdir}/${final.name}-src-ide.zip" basedir="${srcdir}" />
+    <antcall target="internal-md5">
+      <param name="path" value="${defaulttargetdir}/${final.name}.jar"/>
+    </antcall>
   </target>
 
   <target name="clean" description="o Clean up the generated directories">
@@ -113,7 +116,11 @@
     </delete>
   </target>
 
-  <target name="dist" description="o Create a distribution" depends="dist-jar, javadoc">
+  <target name="dist" description="o Create a distribution" depends="dist-jar, dist-existing-jar">
+  </target>
+  <target name="dist-existing-jar" depends="javadoc">
+    <!-- this is used in a release where the jar is built on JDK1.3 -->
+    <!-- but the javadoc is built on JDK1.4 -->
     <mkdir dir="${dist.bin}" />
     <mkdir dir="${dist.zip.dir}" />
   	<!-- Binary -->
@@ -180,32 +187,47 @@
     <mkdir dir="${testreportdir}">
     </mkdir>
     <junit dir="${basedir}" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
-      <sysproperty key="basedir" value=".">
-      </sysproperty>
-      <formatter type="xml">
-      </formatter>
-      <formatter usefile="false" type="plain">
-      </formatter>
+      <sysproperty key="basedir" value="." />
+      <formatter type="xml" />
+      <formatter usefile="false" type="plain" />
       <classpath>
-        <path refid="build.classpath">
-        </path>
-        <pathelement path="${testclassesdir}">
-        </pathelement>
-        <pathelement path="${classesdir}">
-        </pathelement>
+        <path refid="build.classpath" />
+        <pathelement path="${testclassesdir}" />
+        <pathelement path="${classesdir}" />
       </classpath>
       <batchtest todir="${testreportdir}">
         <fileset dir="${basedir}/src/test">
-          <include name="**/*Test*">
-          </include>
-          <exclude name="**/*AbstractTestCase*">
-          </exclude>
-          <exclude name="**/AllIOTestSuite*">
-          </exclude>
-          <exclude name="**/PackageTestSuite*">
-          </exclude>
-          <exclude name="**/testtools/**">
-          </exclude>
+          <include name="**/*Test*" />
+          <exclude name="**/*AbstractTestCase*" />
+          <exclude name="**/AllIOTestSuite*" />
+          <exclude name="**/PackageTestSuite*" />
+          <exclude name="**/testtools/**" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+  <target name="testjar" description="o Run the test cases against the jar" if="test.failure" depends="internal-testjar">
+    <fail message="There were test failures." />
+  </target>
+  <target name="internal-testjar" if="Junit.present" depends="junit-present,compile-tests">
+    <mkdir dir="${testreportdir}">
+    </mkdir>
+    <junit dir="${basedir}" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
+      <sysproperty key="basedir" value="." />
+      <formatter type="xml" />
+      <formatter usefile="false" type="plain" />
+      <classpath>
+        <path refid="build.classpath" />
+        <pathelement path="${testclassesdir}" />
+        <pathelement location="${defaulttargetdir}/${final.name}.jar"/>
+      </classpath>
+      <batchtest todir="${testreportdir}">
+        <fileset dir="${basedir}/src/test">
+          <include name="**/*Test*" />
+          <exclude name="**/*AbstractTestCase*" />
+          <exclude name="**/AllIOTestSuite*" />
+          <exclude name="**/PackageTestSuite*" />
+          <exclude name="**/testtools/**" />
         </fileset>
       </batchtest>
     </junit>
@@ -240,7 +262,7 @@
     </tstamp>
     <property name="copyright" value="Copyright &amp;copy;  The Apache Software Foundation. All Rights Reserved.">
     </property>
-    <property name="title" value="IO 1.1">
+    <property name="title" value="IO 1.2">
     </property>
     <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="${basedir}/src/java" packagenames="org.apache.commons.io.*" overview="src/java/org/apache/commons/io/overview.html">
       <classpath>
@@ -270,4 +292,17 @@
     <unjar dest="${maven.home}" src="${user.home}/maven-install-latest.jar">
     </unjar>
   </target>
+
+<!-- ====================================================================== -->
+  <target name="clirr">
+    <taskdef resource="clirrtask.properties">
+      <classpath path="../clirr/clirr-core-0.6-uber.jar;" />
+    </taskdef>
+    <clirr>
+      <origfiles dir="${libdir}/commons-io/jars" includes="commons-io-1.1.jar"/>
+      <newfiles dir="${defaulttargetdir}" includes="${final.name}.jar" />
+      <formatter type="plain" outfile="${defaulttargetdir}/clirr.txt" />
+    </clirr>
+  </target>
+
 </project>
