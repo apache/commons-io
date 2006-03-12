@@ -28,7 +28,7 @@
       <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
     </menu>
     
-    &common-menus;
+    &commons;
 
   </body>
 </project>
