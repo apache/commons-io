@@ -52,6 +52,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(IOUtilsTestCase.class));
         suite.addTest(new TestSuite(IOUtilsWriteTestCase.class));
         suite.addTest(new TestSuite(LineIteratorTestCase.class));
+        suite.addTest(new TestSuite(FileUtilsWaitForTestCase.class));
         return suite;
     }
 }
