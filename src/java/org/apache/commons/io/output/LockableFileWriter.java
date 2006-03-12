@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * FileWriter that will create and honor lock files to allow simple
@@ -52,9 +54,9 @@ public class LockableFileWriter extends Writer {
     private static final String LCK = ".lck";
 
     /** The writer to decorate. */
-    private Writer out;
+    private final Writer out;
     /** The lock file. */
-    private File lockFile;
+    private final File lockFile;
 
     /**
      * Constructs a LockableFileWriter.
@@ -171,22 +173,13 @@ public class LockableFileWriter extends Writer {
         File lockDirFile = new File(lockDir);
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
-        this.lockFile = new File(lockDirFile, file.getName() + LCK);
+        lockFile = new File(lockDirFile, file.getName() + LCK);
+        
+        // check if locked
+        createLock();
         
         // init wrapped writer
-        try {
-            createLock();
-            if (encoding == null) {
-                out = new FileWriter(file.getAbsolutePath(), append);
-            } else {
-                FileOutputStream fos = new FileOutputStream(file.getAbsolutePath(), append);
-                out = new OutputStreamWriter(fos, encoding);
-            }
-        } catch (IOException ioe) {
-            this.lockFile.delete();
-            throw ioe;
-        }
-        this.out = new FileWriter(file.getAbsolutePath(), append);
+        out = initWriter(file, encoding, append);
     }
 
     //-----------------------------------------------------------------------
@@ -223,6 +216,47 @@ public class LockableFileWriter extends Writer {
         }
     }
 
+    /**
+     * Initialise the wrapped file writer.
+     * Ensure that a cleanup occurs if the writer creation fails.
+     *
+     * @param file  the file to be accessed
+     * @param encoding  the encoding to use
+     * @param append  true to append
+     * @throws IOException if an error occurs
+     */
+    private Writer initWriter(File file, String encoding, boolean append) throws IOException {
+        boolean fileExistedAlready = file.exists();
+        OutputStream stream = null;
+        Writer writer = null;
+        try {
+            if (encoding == null) {
+                writer = new FileWriter(file.getAbsolutePath(), append);
+            } else {
+                stream = new FileOutputStream(file.getAbsolutePath(), append);
+                writer = new OutputStreamWriter(stream, encoding);
+            }
+        } catch (IOException ex) {
+            IOUtils.closeQuietly(writer);
+            IOUtils.closeQuietly(stream);
+            lockFile.delete();
+            if (fileExistedAlready == false) {
+                file.delete();
+            }
+            throw ex;
+        } catch (RuntimeException ex) {
+            IOUtils.closeQuietly(writer);
+            IOUtils.closeQuietly(stream);
+            lockFile.delete();
+            if (fileExistedAlready == false) {
+                file.delete();
+            }
+            throw ex;
+        }
+        return writer;
+    }
+
+    //-----------------------------------------------------------------------
     /**
      * Closes the file writer.
      *
