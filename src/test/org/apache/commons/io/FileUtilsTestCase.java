@@ -109,14 +109,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             "1 GB");
     }
 
-    // waitFor
-
-    public void testWaitFor() {
-        FileUtils.waitFor(new File(""), -1);
-
-        FileUtils.waitFor(new File(""), 2);
-    }
-
     //-----------------------------------------------------------------------
     public void testToFile1() throws Exception {
         URL url = new URL("file", null, "a/b/c/file.txt");
