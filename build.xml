@@ -214,7 +214,7 @@
     </mkdir>
     <junit dir="${basedir}" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
       <sysproperty key="basedir" value="." />
-      <formatter type="xml" />
+      <formatter type="plain" />
       <formatter usefile="false" type="plain" />
       <classpath>
         <path refid="build.classpath" />
