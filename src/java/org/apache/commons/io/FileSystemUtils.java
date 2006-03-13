@@ -100,8 +100,10 @@ public class FileSystemUtils {
      * Returns the free space on a drive or volume by invoking
      * the command line.
      * This method does not normalize the result, and typically returns
-     * bytes on Windows and Kilobytes on Unix.
-     * See also {@link #freeSpaceKb(String)}.
+     * bytes on Windows, 512 byte units on OS X and kilobytes on Unix.
+     * <p>
+     * See also {@link #freeSpaceKb(String)} for a better implementation
+     * which normalizes to kilobytes.
      * <p>
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>

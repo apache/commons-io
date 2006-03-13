@@ -18,6 +18,7 @@ package org.apache.commons.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import junit.framework.Test;
@@ -62,10 +63,28 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
-            // test assumes Unix using 1kb blocks
+            // have to figure out unix block size
+            Process proc = Runtime.getRuntime().exec(new String[] {"df", "/"});
+            boolean kilobyteBlock = true;
+            BufferedReader r = null;
+            try {
+                r = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                String line = r.readLine();
+                if (line.toLowerCase().indexOf("512") >= 0) {
+                    kilobyteBlock = false;
+                }
+            } finally {
+                IOUtils.closeQuietly(r);
+            }
+            
+            // now perform the test
             long free = FileSystemUtils.freeSpace("/");
             long kb = FileSystemUtils.freeSpaceKb("/");
-            assertEquals((double) free, (double) kb, 256d);
+            if (kilobyteBlock) {
+                assertEquals((double) free, (double) kb, 256d);
+            } else {
+                assertEquals((double) free / 2d, (double) kb, 256d);
+            }
         } else {
             long bytes = FileSystemUtils.freeSpace("");
             long kb = FileSystemUtils.freeSpaceKb("");
