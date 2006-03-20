@@ -844,7 +844,7 @@ public class FileUtils {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ignore) {
-                ;
+                // ignore exception
             } catch (Exception ex) {
                 break;
             }
