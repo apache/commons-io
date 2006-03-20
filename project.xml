@@ -20,7 +20,7 @@
   <name>IO</name>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <currentVersion>1.2</currentVersion>
+  <currentVersion>1.3-SNAPSHOT</currentVersion>
   <inceptionYear>2002</inceptionYear>
   <shortDescription>Commons IO</shortDescription>
   <description>
@@ -81,6 +81,11 @@
       <id>1.1</id>
       <name>1.1</name>
       <tag>IO_1_1</tag>
+    </version>
+    <version>
+      <id>1.2</id>
+      <name>1.2</name>
+      <tag>IO_1_2</tag>
     </version>
   </versions>
 

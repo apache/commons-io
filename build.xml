@@ -26,7 +26,7 @@
   </property>
   <property name="testreportdir" value="${basedir}/build/test-reports">
   </property>
-  <property name="final.name" value="commons-io-1.2" />
+  <property name="final.name" value="commons-io-1.3-SNAPSHOT" />
   <property name="dist.build.dir" value="${basedir}/build/dist-build" />
   <property name="dist.bin" value="${dist.build.dir}/${final.name}" />
   <property name="dist.src" value="${dist.build.dir}/${final.name}-src" />
@@ -170,6 +170,11 @@
     </zip>
     <antcall target="internal-md5">
       <param name="path" value="${dist.src.zip.name}"/>
+    </antcall>
+  	<!-- POM -->
+  	<copy file="project.xml" tofile="${defaulttargetdir}/${final.name}.pom" />
+    <antcall target="internal-md5">
+      <param name="path" value="${defaulttargetdir}/${final.name}.pom"/>
     </antcall>
   	<!-- Tidy -->
     <delete dir="${dist.build.dir}" />
