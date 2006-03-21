@@ -181,7 +181,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedUnsignedInteger(byte[] data, int offset) {
-        return (long)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
@@ -213,16 +213,16 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedLong(byte[] data, int offset) {
-        long low = (long)(
+        long low = 
             ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
-        long high = (long)(
+            ( ( data[ offset + 3 ] & 0xff ) << 24 );
+        long high = 
             ( ( data[ offset + 4 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 5 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 6 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 7 ] & 0xff ) << 24 ) );
+            ( ( data[ offset + 7 ] & 0xff ) << 24 );
         return low + (high << 32);
     }
 
@@ -346,10 +346,10 @@ public class EndianUtils {
         int value3 = read( input );
         int value4 = read( input );
 
-        return ( ( ( value1 & 0xff ) << 0 ) +
+        return ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
             ( ( value3 & 0xff ) << 16 ) +
-            ( ( value4 & 0xff ) << 24 ) );
+            ( ( value4 & 0xff ) << 24 );
     }
 
     /**
@@ -367,10 +367,10 @@ public class EndianUtils {
         int value3 = read( input );
         int value4 = read( input );
 
-        return (long)( ( ( value1 & 0xff ) << 0 ) +
+        return ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
             ( ( value3 & 0xff ) << 16 ) +
-            ( ( value4 & 0xff ) << 24 ) );
+            ( ( value4 & 0xff ) << 24 );
     }
 
     /**
