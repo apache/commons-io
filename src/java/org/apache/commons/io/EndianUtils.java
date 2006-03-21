@@ -140,7 +140,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static int readSwappedUnsignedShort(byte[] data, int offset) {
-        return (int)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) );
     }
 
@@ -166,7 +166,7 @@ public class EndianUtils {
      * @return the value read
      */
     public static int readSwappedInteger(byte[] data, int offset) {
-        return (int)( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
@@ -311,7 +311,7 @@ public class EndianUtils {
         int value1 = read( input );
         int value2 = read( input );
 
-        return (int)( ( ( value1 & 0xff ) << 0 ) +
+        return ( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) );
     }
 
@@ -346,7 +346,7 @@ public class EndianUtils {
         int value3 = read( input );
         int value4 = read( input );
 
-        return (int)( ( ( value1 & 0xff ) << 0 ) +
+        return ( ( ( value1 & 0xff ) << 0 ) +
             ( ( value2 & 0xff ) << 8 ) +
             ( ( value3 & 0xff ) << 16 ) +
             ( ( value4 & 0xff ) << 24 ) );
