@@ -183,6 +183,9 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * @exception IOException
+     *                if an I/O error occurs. In particular, an <code>IOException</code> is thrown if the output
+     *                stream is closed.
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     public synchronized void writeTo(OutputStream out) throws IOException {
@@ -226,6 +229,8 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * @exception UnsupportedEncodingException
+     *                If the named charset is not supported
      * @see java.io.ByteArrayOutputStream#toString(String)
      */
     public String toString(String enc) throws UnsupportedEncodingException {
