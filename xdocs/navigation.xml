@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE org.apache.commons.menus SYSTEM 'http://jakarta.apache.org/commons/build/maven-build.dtd'>
-<project name="IO">
+<project name="Commons IO">
 
-  <title>IO</title>
+  <title>Commons IO</title>
 
   <body>
     <links>
@@ -12,7 +12,7 @@
     <menu name="Commons IO">
       <item name="Overview" href="/index.html"/>
       <item name="Download" href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi"/>
-      <item name="Users guide" href="/description.html"/>
+      <item name="User guide" href="/description.html"/>
       <item name="Best practices" href="/bestpractices.html"/>
       <!--item name="History" href="/history.html"/-->
       <item name="Javadoc (1.2 release)" href="api-release/index.html"/>
