@@ -46,7 +46,7 @@
   </licenses>
 
   <gumpRepositoryId>jakarta</gumpRepositoryId>
-  <issueTrackingUrl>http://issues.apache.org/bugzilla/</issueTrackingUrl>
+  <issueTrackingUrl>http://issues.apache.org/jira/</issueTrackingUrl>
   <siteAddress>people.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/commons/io/</siteDirectory>
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-commons/io/</distributionDirectory>
