@@ -23,20 +23,23 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Issue tracking">
 <p>
-  Commons IO uses <a href="http://issues.apache.org/bugzilla/">ASF Bugzilla</a> for tracking issues.
-  To use Bugzilla you may need to <a href="http://issues.apache.org/bugzilla/createaccount.cgi">create an account</a>.
+  Commons IO uses <a href="http://issues.apache.org/jira/browse/IO">ASF Jira</a> for tracking issues.
+</p>
+<p>
+  To use Jira you may need to <a href="http://issues.apache.org/jira/secure/Signup!default.jspa">create an account</a>
+  (if you have previously created/updated Commons issues using Bugzilla an account will have been automatically
+  created and you can use the <a href="http://issues.apache.org/jira/secure/ForgotPassword!default.jspa">Forgot Password</a>
+  page to get a new password).
 </p>
 <p>
   If you would like to report a bug, or raise an enhancement request with
   Commons IO please do the following:
   <ol>
-  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;product=Commons&amp;component=IO">Search existing open bugs</a>.
+  <li><a href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?reset=true&amp;pid=12310477&amp;sorter/field=issuekey&amp;sorter/order=DESC&amp;status=1&amp;status=4">Search existing open bugs</a>.
   If you find your issue listed then please add a comment with your details.</li>
   <li><a href="http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/">Search the mailing list archive</a>.
   You may find your issue or idea has already been discussed.</li>
-  <li><a href="http://issues.apache.org/bugzilla/enter_bug.cgi?product=Commons&amp;component=IO&amp;version=1.2%20Final&amp;short_desc=%5Bio%5D%20%22Your%20subject%20heading%20here%22&amp;comment=Please%20provide%20details%20here.%20Its%20best%20to%20submit%20patches%20that%20alter%0D%0Aexisting%20file%20content%20in%20%22unified%20diff%22%20format.%20%0D%0A%0D%0ASubmissions%20that%20provide%20new%20files%20can%20be%20supplied%20as%20direct%20file%0D%0Aattachments%20or%20archives%20in%20zip%20or%20tar.gz%20format.%20please%20be%20kind%20%0D%0Aenough%20to%20identify%20the%20format%20of%20the%20attached%20archive%20as%20bugzilla%0D%0Atends%20to%20strip%20these%20characterstics%20by%20removing%20the%20files%20extension.">Submit a bug report or enhancement request</a>.
-  Please prefix all new issues with [io] in the summary line.
-  </li>
+  <li><a href="http://issues.apache.org/jira/browse/IO">Submit a bug report or enhancement request</a>.</li>
   </ol>
 </p>
 <p>
@@ -50,9 +53,9 @@ limitations under the License.
 <p>
   You may also find these links useful:
   <ul>
-  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;product=Commons&amp;component=IO">All Open IO bugs</a></li>
-  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;product=Commons&amp;component=IO">All Closed IO bugs</a></li>
-  <li><a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=NEEDINFO&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;product=Commons&amp;component=IO">All IO bugs</a></li>
+  <li><a href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?reset=true&amp;pid=12310477&amp;sorter/field=issuekey&amp;sorter/order=DESC&amp;status=1&amp;status=4">All Open IO bugs</a></li>
+  <li><a href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?reset=true&amp;pid=12310477&amp;sorter/field=issuekey&amp;sorter/order=DESC&amp;status=5&amp;status=6">All Resolved IO bugs</a></li>
+  <li><a href="http://issues.apache.org/jira/secure/IssueNavigator.jspa?reset=true&amp;pid=12310477&amp;sorter/field=issuekey&amp;sorter/order=DESC">All IO bugs</a></li>
   </ul>
 </p>
 </section>
