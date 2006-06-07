@@ -18,6 +18,7 @@ package org.apache.commons.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -48,7 +49,7 @@ import java.util.NoSuchElementException;
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class LineIterator {
+public class LineIterator implements Iterator {
 
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
