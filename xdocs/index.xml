@@ -76,9 +76,7 @@ Please remember that the lists are shared between all commons components,
 so prefix your email by [io].
 </p>
 <p>
-Issues may be reported via <a href="issue-tracking.html">ASF Bugzilla</a>.
-Please remember that Bugzilla is shared between all commons components,
-so prefix your issue by [io].
+Issues may be reported via <a href="issue-tracking.html">ASF Jira</a>.
 </p>
 </section>
 <!-- ================================================== -->
