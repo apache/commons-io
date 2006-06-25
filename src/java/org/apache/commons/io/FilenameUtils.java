@@ -116,7 +116,7 @@ public class FilenameUtils {
      */
     private static final char OTHER_SEPARATOR;
     static {
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+        if (isSystemWindows()) {
             OTHER_SEPARATOR = UNIX_SEPARATOR;
         } else {
             OTHER_SEPARATOR = WINDOWS_SEPARATOR;
@@ -128,6 +128,16 @@ public class FilenameUtils {
      */
     public FilenameUtils() {
         super();
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Determines if Windows file system is in use.
+     * 
+     * @return true if the system is Windows
+     */
+    static boolean isSystemWindows() {
+        return SYSTEM_SEPARATOR == WINDOWS_SEPARATOR;
     }
 
     //-----------------------------------------------------------------------
@@ -432,7 +442,7 @@ public class FilenameUtils {
         if (path == null) {
             return null;
         }
-        if (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR) {
+        if (isSystemWindows()) {
             return separatorsToWindows(path);
         } else {
             return separatorsToUnix(path);
@@ -966,7 +976,7 @@ public class FilenameUtils {
             filename1 = normalize(filename1);
             filename2 = normalize(filename2);
         }
-        if (system && (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR)) {
+        if (system && isSystemWindows()) {
             return filename1.equalsIgnoreCase(filename2);
         } else {
             return filename1.equals(filename2);
@@ -1117,7 +1127,7 @@ public class FilenameUtils {
         if (filename == null || wildcardMatcher == null) {
             return false;
         }
-        if (system && (SYSTEM_SEPARATOR == WINDOWS_SEPARATOR)) {
+        if (system && isSystemWindows()) {
             filename = filename.toLowerCase();
             wildcardMatcher = wildcardMatcher.toLowerCase();
         }
