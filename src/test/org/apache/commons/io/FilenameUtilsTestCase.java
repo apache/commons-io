@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2005 The Apache Software Foundation.
+ * Copyright 1999-2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -781,6 +781,13 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(WINDOWS, FilenameUtils.equalsNormalizedOnSystem("file.txt", "FILE.TXT"));
         assertEquals(true, FilenameUtils.equalsNormalizedOnSystem("a\\b\\file.txt", "a/b/file.txt"));
         assertEquals(false, FilenameUtils.equalsNormalizedOnSystem("a/b/", "a/b"));
+    }
+
+    public void testEquals_fullControl() {
+        assertEquals(false, FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.INSENSITIVE));
+        assertEquals(WINDOWS, FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.SYSTEM));
+        assertEquals(false, FilenameUtils.equals("file.txt", "FILE.TXT", true, null));
     }
 
     //-----------------------------------------------------------------------
