@@ -26,6 +26,8 @@ Semantic compatible - Yes
 
 Deprecations from 1.2
 ---------------------
+- WildcardFilter deprecated, replaced by WildcardFileFilter
+  - old class only accepted files, thus had a confusing dual purpose
 
 
 Bug fixes from 1.2
@@ -36,6 +38,18 @@ Bug fixes from 1.2
 
 Enhancements from 1.2
 ---------------------
+- IOCase
+  - New class/enumeration for case-sensitivity control
+
+- FilenameUtils
+  - New methods to handle case-sensitivity
+  - wildcardMatch - new method that has IOCase as a parameter
+  - equals - new method that has IOCase as a parameter
+
+- WildcardFileFilter
+  - Replacement for WildcardFilter
+  - Accepts both files and directories
+  - Ability to control case-sensitivity
 
 
 Feedback
