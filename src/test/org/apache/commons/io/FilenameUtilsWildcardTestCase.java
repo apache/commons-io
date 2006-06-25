@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,26 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "*Foo"));
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Foo*"));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
+    }
+
+    public void testMatchCaseSpecified() {
+        assertEquals(false, FilenameUtils.wildcardMatch(null, "Foo", IOCase.SENSITIVE));
+        assertEquals(false, FilenameUtils.wildcardMatch("Foo", null, IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch(null, null, IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("", "", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo?", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar and Catflap", "Fo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("New Bookmarks", "N?w ?o?k??r?s", IOCase.SENSITIVE));
+        assertEquals(false, FilenameUtils.wildcardMatch("Foo", "Bar", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar Foo", "F*o Bar*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "*Foo", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo*", IOCase.SENSITIVE));
+        assertEquals(false, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.INSENSITIVE));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.SYSTEM));
     }
 
     public void testSplitOnTokens() {
