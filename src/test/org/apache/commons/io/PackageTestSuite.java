@@ -19,8 +19,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.commons.io.filefilter.FileFilterTestCase;
-
 /**
  * A basic test suite that tests all the IO package.
  * 
@@ -46,7 +44,6 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(FileUtilsListFilesTestCase.class));
         suite.addTest(new TestSuite(FileUtilsCleanDirectoryTestCase.class));
         suite.addTest(new TestSuite(FileUtilsTestCase.class));
-        suite.addTest(new TestSuite(FileFilterTestCase.class));
         suite.addTest(new TestSuite(HexDumpTest.class));
         suite.addTest(new TestSuite(IOCaseTestCase.class));
         suite.addTest(new TestSuite(IOUtilsCopyTestCase.class));
