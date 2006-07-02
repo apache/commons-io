@@ -1134,6 +1134,8 @@ public class FilenameUtils {
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;
         }
+        filename = caseSensitivity.convertCase(filename);
+        wildcardMatcher = caseSensitivity.convertCase(wildcardMatcher);
         String[] wcs = splitOnTokens(wildcardMatcher);
         boolean anyChars = false;
         int textIdx = 0;
@@ -1179,7 +1181,7 @@ public class FilenameUtils {
                         }
                     } else {
                         // matching from current position
-                        if (!caseSensitivity.checkRegionMatches(filename, textIdx, wcs[wcsIdx])) {
+                        if (!filename.startsWith(wcs[wcsIdx], textIdx)) {
                             // couldnt match token
                             break;
                         }
