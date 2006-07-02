@@ -193,6 +193,30 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("fred"), false);
+        
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.SENSITIVE);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("FOO"), false);
+        assertFiltering(filter, new File("BAR"), false);
+        
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("FOO"), true);
+        assertFiltering(filter, new File("BAR"), true);
+        
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, IOCase.SYSTEM);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("FOO"), WINDOWS);
+        assertFiltering(filter, new File("BAR"), WINDOWS);
+        
+        filter = new NameFileFilter(new String[] { "foo", "bar" }, (IOCase) null);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("bar"), true);
+        assertFiltering(filter, new File("FOO"), false);
+        assertFiltering(filter, new File("BAR"), false);
 
         // repeat for a List
         java.util.ArrayList list = new java.util.ArrayList();
