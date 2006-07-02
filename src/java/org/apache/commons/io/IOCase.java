@@ -31,7 +31,7 @@ import java.io.Serializable;
  * class to compare filenames.
  *
  * @author Stephen Colebourne
- * @version $Id$
+ * @version $Id: IOCase.java 417090 2006-06-25 23:18:33Z scolebourne $
  * @since Commons IO 1.3
  */
 public final class IOCase implements Serializable {
@@ -187,6 +187,20 @@ public final class IOCase implements Serializable {
      */
     public boolean checkRegionMatches(String str, int strStartIndex, String search) {
         return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
+    }
+
+    /**
+     * Converts the case of the input String to a standard format.
+     * Subsequent operations can then use standard String methods.
+     * 
+     * @param str  the string to convert, null returns null
+     * @return the lower-case version if case-insensitive
+     */
+    String convertCase(String str) {
+        if (str == null) {
+            return null;
+        }
+        return sensitive ? str : str.toLowerCase();
     }
 
     //-----------------------------------------------------------------------

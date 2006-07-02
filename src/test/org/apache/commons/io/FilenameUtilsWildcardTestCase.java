@@ -45,8 +45,13 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar Foo", "F*o Bar*"));
         assertEquals(true, FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er"));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "*Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatch("BarFoo", "*Foo"));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo*"));
+        assertEquals(true, FilenameUtils.wildcardMatch("FooBar", "Foo*"));
+        assertEquals(false, FilenameUtils.wildcardMatch("FOO", "*Foo"));
+        assertEquals(false, FilenameUtils.wildcardMatch("BARFOO", "*Foo"));
         assertEquals(false, FilenameUtils.wildcardMatch("FOO", "Foo*"));
+        assertEquals(false, FilenameUtils.wildcardMatch("FOOBAR", "Foo*"));
     }
 
     public void testMatchOnSystem() {
@@ -63,8 +68,13 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo Bar Foo", "F*o Bar*"));
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Adobe Acrobat Installer", "Ad*er"));
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "*Foo"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("BarFoo", "*Foo"));
         assertEquals(true, FilenameUtils.wildcardMatchOnSystem("Foo", "Foo*"));
+        assertEquals(true, FilenameUtils.wildcardMatchOnSystem("FooBar", "Foo*"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "*Foo"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("BARFOO", "*Foo"));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOO", "Foo*"));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatchOnSystem("FOOBAR", "Foo*"));
     }
 
     public void testMatchCaseSpecified() {
@@ -82,9 +92,23 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertEquals(true, FilenameUtils.wildcardMatch("Adobe Acrobat Installer", "Ad*er", IOCase.SENSITIVE));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "*Foo", IOCase.SENSITIVE));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "*Foo", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("BarFoo", "*Foo", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("FooBar", "Foo*", IOCase.SENSITIVE));
+        
+        assertEquals(false, FilenameUtils.wildcardMatch("FOO", "*Foo", IOCase.SENSITIVE));
+        assertEquals(false, FilenameUtils.wildcardMatch("BARFOO", "*Foo", IOCase.SENSITIVE));
         assertEquals(false, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.SENSITIVE));
+        assertEquals(false, FilenameUtils.wildcardMatch("FOOBAR", "Foo*", IOCase.SENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("FOO", "*Foo", IOCase.INSENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("BARFOO", "*Foo", IOCase.INSENSITIVE));
         assertEquals(true, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.INSENSITIVE));
+        assertEquals(true, FilenameUtils.wildcardMatch("FOOBAR", "Foo*", IOCase.INSENSITIVE));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOO", "*Foo", IOCase.SYSTEM));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatch("BARFOO", "*Foo", IOCase.SYSTEM));
         assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOO", "Foo*", IOCase.SYSTEM));
+        assertEquals(WINDOWS, FilenameUtils.wildcardMatch("FOOBAR", "Foo*", IOCase.SYSTEM));
     }
 
     public void testSplitOnTokens() {

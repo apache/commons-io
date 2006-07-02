@@ -27,12 +27,15 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * Used to test FileFilterUtils.
  */
 public class FileFilterTestCase extends FileBasedTestCase {
+
+    private static final boolean WINDOWS = (File.separatorChar == '\\');
 
     public FileFilterTestCase(String name) {
         super(name);
@@ -320,7 +323,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(true, f.getFileFilters().isEmpty());
     }
 
-    public void testWildcard() throws Exception {
+    public void testDeprecatedWildcard() throws Exception {
         IOFileFilter filter = new WildcardFilter("*.txt");
         List patternList = Arrays.asList( new String[] { "*.txt", "*.xml", "*.gif" } );
         IOFileFilter listFilter = new WildcardFilter( patternList );
@@ -380,7 +383,81 @@ public class FileFilterTestCase extends FileBasedTestCase {
             // expected
         }
     }
-    
+
+    public void testWildcard() throws Exception {
+        IOFileFilter filter = new WildcardFileFilter("*.txt");
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), false);
+        
+        filter = new WildcardFileFilter("*.txt", IOCase.SENSITIVE);
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), false);
+        
+        filter = new WildcardFileFilter("*.txt", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), true);
+        
+        filter = new WildcardFileFilter("*.txt", IOCase.SYSTEM);
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), WINDOWS);
+        
+        filter = new WildcardFileFilter("*.txt", (IOCase) null);
+        assertFiltering(filter, new File("log.txt"), true);
+        assertFiltering(filter, new File("log.TXT"), false);
+        
+        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"});
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.class"), true);
+        assertFiltering(filter, new File("Test.jsp"), false);
+        
+        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.SENSITIVE);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.JAVA"), false);
+        
+        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.JAVA"), true);
+        
+        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, IOCase.SYSTEM);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.JAVA"), WINDOWS);
+        
+        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, (IOCase) null);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("Test.JAVA"), false);
+        
+        List patternList = Arrays.asList( new String[] { "*.txt", "*.xml", "*.gif" } );
+        IOFileFilter listFilter = new WildcardFileFilter( patternList );
+        assertFiltering(listFilter, new File("Test.txt"), true);
+        assertFiltering(listFilter, new File("Test.xml"), true);
+        assertFiltering(listFilter, new File("Test.gif"), true);
+        assertFiltering(listFilter, new File("Test.bmp"), false);
+        
+        File txtFile = new File( "test.txt" );
+        File bmpFile = new File( "test.bmp" );
+        File dir = new File( "src/java" );
+        assertTrue( listFilter.accept( txtFile ) );
+        assertTrue( !listFilter.accept( bmpFile ) );
+        assertTrue( !listFilter.accept( dir ) );
+        
+        assertTrue( listFilter.accept( txtFile.getParentFile(), txtFile.getName() ) );
+        assertTrue( !listFilter.accept( bmpFile.getParentFile(), bmpFile.getName() ) );
+        assertTrue( !listFilter.accept( dir.getParentFile(), dir.getName() ) );
+        
+        try {
+            new WildcardFileFilter((String) null);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+        try {
+            new WildcardFileFilter((String[]) null);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+        try {
+            new WildcardFileFilter((List) null);
+            fail();
+        } catch (IllegalArgumentException ex) {}
+    }
+
     public void testDelegateFileFilter() throws Exception {
     	OrFileFilter orFilter = new OrFileFilter();
     	File testFile = new File( "test.txt" );
