@@ -29,7 +29,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * @author Jason Anderson
- * @version $Revision: 155419 $ $Date$
+ * @version $Revision: 155419 $ $Date: 2006-06-26 00:19:58 +0100 (Mon, 26 Jun 2006) $
  * @since Commons IO 1.3
  */
 public class WildcardFileFilter extends AbstractFileFilter {
@@ -66,6 +66,9 @@ public class WildcardFileFilter extends AbstractFileFilter {
 
     /**
      * Construct a new case-sensitive wildcard filter for an array of wildcards.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
      *
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
@@ -76,6 +79,9 @@ public class WildcardFileFilter extends AbstractFileFilter {
 
     /**
      * Construct a new wildcard filter for an array of wildcards specifying case-sensitivity.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
      *
      * @param wildcards  the array of wildcards to match, not null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
