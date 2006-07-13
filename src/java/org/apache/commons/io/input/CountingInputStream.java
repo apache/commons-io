@@ -22,6 +22,8 @@ import java.io.InputStream;
  * A decorating input stream that counts the number of bytes that
  * have passed through so far.
  *
+ * @deprecated now found in Commons IO
+ *
  * @author Henri Yandell
  * @author Marcelo Liberato
  * @version $Id$
