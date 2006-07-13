@@ -22,6 +22,8 @@ import java.io.OutputStream;
  * Used in debugging, it counts the number of bytes that pass 
  * through it.
  *
+ * @deprecated now found in Commons IO
+ *
  * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
  * @version $Id$
  */
