@@ -61,13 +61,13 @@
       <name>Commons Dev List</name>
       <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-dev@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/</archive>
     </mailingList>
     <mailingList>
       <name>Commons User List</name>
       <subscribe>commons-user-subscribe@jakarta.apache.org</subscribe>
       <unsubscribe>commons-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=commons-user@jakarta.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-user/</archive>
     </mailingList>
   </mailingLists>
 
@@ -285,7 +285,7 @@
     <report>maven-jxr-plugin</report>
     <report>maven-license-plugin</report>
     <report>maven-cobertura-plugin</report>
-    <report>maven-jdiff-plugin</report>
+    <!-- report>maven-jdiff-plugin</report -->
   </reports>
 
 </project>
