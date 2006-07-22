@@ -223,6 +223,7 @@ public class LockableFileWriter extends Writer {
      * @param file  the file to be accessed
      * @param encoding  the encoding to use
      * @param append  true to append
+     * @return The initialised writer
      * @throws IOException if an error occurs
      */
     private Writer initWriter(File file, String encoding, boolean append) throws IOException {

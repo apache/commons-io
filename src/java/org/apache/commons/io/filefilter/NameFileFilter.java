@@ -63,6 +63,7 @@ public class NameFileFilter extends AbstractFileFilter {
     /**
      * Construct a new name file filter specifying case-sensitivity.
      *
+     * @param name  the name to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the name is null
      */
