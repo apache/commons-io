@@ -138,6 +138,21 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("STATUS.html"), false);
     }
 
+    public void testFiles() throws Exception {
+        // XXX: This test presumes the current working dir is the base dir of the source checkout.
+        IOFileFilter filter = FileFileFilter.FILE;
+        
+        assertFiltering(filter, new File("src/"), false);
+        assertFiltering(filter, new File("src/java/"), false);
+        
+        assertFiltering(filter, new File("project.xml"), true);
+        
+        assertFiltering(filter, new File("imaginary"), false);
+        assertFiltering(filter, new File("imaginary/"), false);
+        
+        assertFiltering(filter, new File("STATUS.html"), true);
+    }
+
     public void testPrefix() throws Exception {
         IOFileFilter filter = new PrefixFileFilter(new String[] { "foo", "bar" });
         File testFile = new File( "test" );

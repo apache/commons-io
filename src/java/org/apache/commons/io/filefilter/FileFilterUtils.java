@@ -76,12 +76,21 @@ public class FileFilterUtils {
     /**
      * Returns a filter that checks if the file is a directory.
      * 
-     * @return directory file filter
+     * @return file filter that accepts only directories and not files
      */
     public static IOFileFilter directoryFileFilter() {
         return DirectoryFileFilter.INSTANCE;
     }
-    
+
+    /**
+     * Returns a filter that checks if the file is a file (and not a directory).
+     * 
+     * @return file filter that accepts only files and not directories
+     */
+    public static IOFileFilter fileFileFilter() {
+        return FileFileFilter.FILE;
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Returns a filter that ANDs the two specified filters.
