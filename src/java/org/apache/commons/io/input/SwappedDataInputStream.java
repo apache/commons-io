@@ -26,8 +26,8 @@ import org.apache.commons.io.EndianUtils;
  * DataInput for systems relying on little endian data formats.
  * When read, values will be changed from little endian to big 
  * endian formats for internal usage. 
- *
- * <p><b>Origin of code: </b>Avalon Excalibur (IO)</p>
+ * <p>
+ * <b>Origin of code: </b>Avalon Excalibur (IO)
  *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @version CVS $Revision$ $Date$

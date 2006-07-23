@@ -24,15 +24,15 @@ import org.apache.commons.io.IOUtils;
 
 
 /**
- * <p>An output stream which will retain data in memory until a specified
+ * An output stream which will retain data in memory until a specified
  * threshold is reached, and only then commit it to disk. If the stream is
  * closed before the threshold is reached, the data will not be written to
- * disk at all.</p>
- * 
- * <p>This class originated in FileUpload processing. In this use case, you do
+ * disk at all.
+ * <p>
+ * This class originated in FileUpload processing. In this use case, you do
  * not know in advance the size of the file being uploaded. If the file is small
  * you want to store it in memory (for speed), but if the file is large you want
- * to store it to file (to avoid memory issues).</p>
+ * to store it to file (to avoid memory issues).
  *
  * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
  * @author gaxzerow
