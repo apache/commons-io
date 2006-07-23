@@ -18,14 +18,12 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
-import java.util.ArrayList;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
 /**
- * Finds files in a directory hierarchy, with the potential for subclasses
- * to add additiional behaviour.
+ * Finds files in a directory hierarchy applying a file filter.
  * <p>
  * FileFinder can be used without changes to provide a list of the files
  * and directories in a file hierarchy starting from a specified point.
@@ -34,8 +32,11 @@ import org.apache.commons.io.filefilter.IOFileFilter;
  * <p>
  * Commons IO supplies many common filter implementations in the
  * <code>filefilter</code> package, see {@link FileFilterUtils}.
- * You can also create your own custom implementation, such as in the
- * file cleaner example below.
+ * <p>
+ * In addition to using FileFinder directly, you can create more advanced
+ * subclasses. FileFinder is a subclass of {@link DirectoryWalker} which
+ * provides a structured approach to walking the directory structure of
+ * a filing system. See that class for more details.
  *
  * <h4>Example 1 - List all files and directories</h4>
  * Example, showing how to list all files and directories starting from
@@ -65,46 +66,19 @@ import org.apache.commons.io.filefilter.IOFileFilter;
  * }
  * </pre>
  *
- * <h4>Example 3 - Custom Implementation</h4>
- * Example, showing how to create an implementation that deletes files
- * and directories and returns a list of what has been deleted.
- *
- * <pre>
- *  public class FileDelete extends FileFinder {
- *
- *    public FileDelete() {
- *    }
- *
- *    protected void handleDirectoryStart(File directory, int depth, List results) {
- *    }
- *
- *    protected void handleDirectoryEnd(File directory, int depth, List results) {
- *      directory.delete();
- *      results.add(directory);
- *    }
- *
- *    protected void handleFile(File file, int depth, List results) {
- *      file.delete();
- *      results.add(file);
- *    }
- *  }
- * </pre>
- *
  * @since Commons IO 1.3
  * @version $Revision$
  */
-public class FileFinder {
+public class FileFinder extends DirectoryWalker {
 
     /** Singleton instance that finds all files */
     public static final FileFinder ALL_FILES = new FileFinder();
-
-    private FileFilter filter;
-    private int depthLimit = -1;
 
     /**
      * Restrictive consructor - use <code>ALL_FILES</code> singleton instance.
      */
     protected FileFinder() {
+        super(null, -1);
     }
 
     /**
@@ -113,7 +87,7 @@ public class FileFinder {
      * @param filter  the filter to limit the navigation/results
      */
     public FileFinder(FileFilter filter) {
-        this(filter, -1);
+        super(filter, -1);
     }
 
     /**
@@ -123,7 +97,7 @@ public class FileFinder {
      *  navigated to (less than 0 means unlimited)
      */
     public FileFinder(int depthLimit) {
-        this(null, depthLimit);
+        super(null, depthLimit);
     }
 
     /**
@@ -134,8 +108,7 @@ public class FileFinder {
      *  navigated to (less than 0 means unlimited)
      */
     public FileFinder(FileFilter filter, int depthLimit) {
-        this.filter = filter;
-        this.depthLimit = depthLimit;
+        super(filter, depthLimit);
     }
 
     //-----------------------------------------------------------------------
@@ -167,75 +140,12 @@ public class FileFinder {
             String message = "Not a directory: " + startDirectory;
             throw new IllegalArgumentException(message);
         }
-        return examine(startDirectory);
+        return walk(startDirectory);
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Examines the directory hierarchy.
-     *
-     * @param startDirectory  the directory to start from
-     * @return the collection of result objects
-     */
-    private List examine(File startDirectory) {
-        List results = new ArrayList();
-        handleStart(startDirectory, results);
-        examine(startDirectory, 0, results);
-        handleEnd(results);
-        return results;
-    }
-
-    /**
-     * Main recursive method to examine the directory hierarchy.
-     *
-     * @param directory  the directory to examine
-     * @param depth  the directory level (starting directory = 0)
-     * @return the collection of result objects
-     */
-    private void examine(File directory, int depth, List results) {
-        boolean process = handleDirectoryStart(directory, depth, results);
-        if (process) {
-            int childDepth = depth + 1;
-            if (depthLimit < 0 || childDepth <= depthLimit) {
-                File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
-                if (files == null) {
-                    handleRestricted(directory);
-                } else {
-                    for (int i = 0; i < files.length; i++) {
-                        if (files[i].isDirectory()) {
-                            examine(files[i], childDepth, results);
-                        } else {
-                            handleFile(files[i], childDepth, results);
-                        }
-                    }
-                }
-            }
-        }
-        handleDirectoryEnd(directory, depth, results);
-    }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Overridable callback method invoked at the start of processing.
-     * <p>
-     * This implementation does nohting.
-     *
-     * @param startDirectory  the directory to start from
-     * @param results  the collection of result objects, may be updated
-     */
-    protected void handleStart(File startDirectory, List results) {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked at the start of processing each directory.
-     * <p>
-     * This method returns a boolean to indicate if the directory should be examined
-     * or not. If you return false, the next event received will be the
-     * {@link #handleDirectoryEnd} for that directory. Note that this functionality
-     * is in addition to the filtering by file filter.
-     * <p>
-     * This implementation adds the directory to the results collection.
+     * Handles a directory start by adding the File to the result set.
      *
      * @param directory  the current directory being processed
      * @param depth  the current directory level (starting directory = 0)
@@ -248,9 +158,7 @@ public class FileFinder {
     }
 
     /**
-     * Overridable callback method invoked for each (non-directory) file.
-     * <p>
-     * This implementation adds the file to the results collection.
+     * Handles a file by adding the File to the result set.
      *
      * @param file  the current file being processed
      * @param depth  the current directory level (starting directory = 0)
@@ -258,39 +166,6 @@ public class FileFinder {
      */
     protected void handleFile(File file, int depth, List results) {
         results.add(file);
-    }
-
-    /**
-     * Overridable callback method invoked for each restricted directory.
-     *
-     * @param directory  the restricted directory
-     */
-    protected void handleRestricted(File directory) {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked at the end of processing each directory.
-     * <p>
-     * This implementation does nothing.
-     *
-     * @param directory The directory being processed
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
-     */
-    protected void handleDirectoryEnd(File directory, int depth, List results) {
-        // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked at the end of processing.
-     * <p>
-     * This implementation does nothing.
-     *
-     * @param results  the collection of result objects, may be updated
-     */
-    protected void handleEnd(List results) {
-        // do nothing - overridable by subclass
     }
 
 }
