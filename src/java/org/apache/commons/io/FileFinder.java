@@ -20,26 +20,26 @@ import java.io.FileFilter;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+
 /**
- * <p>Navigate/search through a File Hierarchy.</p>
- *
- * <p>FileFinder can be used as it is to provide a list
- * of the files and directories in a file hierarchy,
- * starting from a specified point.</p>
- * 
- * <p>It can be used in conjunction with a <code>FileFilter</code>
- * to selectively filter the results produced. Commons IO
- * provides a number of useful
- * {@link org.apache.commons.io.filefilter.IOFileFilter} implementations
- * which can be used in conjunction with this class.</p>
- * 
- * <p>FileFinder can also be extended to provide custom implementations
- * that process the file hierarchy further (see example file cleaner below).</p>
+ * Finds files in a directory hierarchy, with the potential for subclasses
+ * to add additiional behaviour.
+ * <p>
+ * FileFinder can be used without changes to provide a list of the files
+ * and directories in a file hierarchy starting from a specified point.
+ * This list can be filtered by hierarchy depth and using a
+ * {@link IOFileFilter file filter}.
+ * <p>
+ * Commons IO supplies many common filter implementations in the
+ * <code>filefilter</code> package, see {@link FileFilterUtils}.
+ * You can also create your own custom implementation, such as in the
+ * file cleaner example below.
  *
  * <h4>Example 1 - List all files and directories</h4>
- * <p>Example, showing how to list all files and directories
- * starting from the current directory:</p>
- *
+ * Example, showing how to list all files and directories starting from
+ * the current directory:
  * <pre>
  * List files = FileFinder.ALL_FILES.find();
  * for (int i = 0; i < files.size(); i++) {
@@ -49,14 +49,12 @@ import java.util.ArrayList;
  * </pre>
  *
  * <h4>Example 2 - Filtered list of files and directories</h4>
- * <p>Example, showing how to list all directories and
- * files ending in ".java" starting in a directory called
- * "src":</p>
- *
+ * Example, showing how to list all files ending in ".java" starting in
+ * a directory called "src":
  * <pre>
- * IOFileFilter dirFilter  = DirectoryFileFilter.INSTANCE;
- * IOFileFilter fileFilter = new SuffixFileFilter(".java");
- * IOFileFilter filter     = new OrFileFilter(directories, txtFiles);
+ * IOFileFilter filesFilter = FileFileFilter.FILE;
+ * IOFileFilter javaFilter  = new SuffixFileFilter(".java");
+ * IOFileFilter filter      = new AndFileFilter(filesFilter, javaFilter);
  * 
  * FileFinder finder = new FileFinder(filter);
  * 
@@ -68,28 +66,27 @@ import java.util.ArrayList;
  * </pre>
  *
  * <h4>Example 3 - Custom Implementation</h4>
- * <p>Example, showing how to create an implementation that
- * deletes files and directories and returns a list of
- * what has been deleted.</p>
+ * Example, showing how to create an implementation that deletes files
+ * and directories and returns a list of what has been deleted.
  *
  * <pre>
  *  public class FileDelete extends FileFinder {
  *
- *      public FileDelete() {
- *      }
- *      
- *      protected void handleDirectoryStart(File directory, int depth, List results) {
- *      }
+ *    public FileDelete() {
+ *    }
  *
- *      protected void handleDirectoryEnd(File directory, int depth, List results) {
- *          directory.delete();
- *          results.add(directory);
- *      }
+ *    protected void handleDirectoryStart(File directory, int depth, List results) {
+ *    }
  *
- *      protected void handleFile(File file, int depth, List results) {
- *          file.delete();
- *          results.add(file);
- *      }
+ *    protected void handleDirectoryEnd(File directory, int depth, List results) {
+ *      directory.delete();
+ *      results.add(directory);
+ *    }
+ *
+ *    protected void handleFile(File file, int depth, List results) {
+ *      file.delete();
+ *      results.add(file);
+ *    }
  *  }
  * </pre>
  *
@@ -111,19 +108,18 @@ public class FileFinder {
     }
 
     /**
-     * <p>Construct an instance with a filter.</p>
+     * Construct an instance with a filter.
      *
-     * @param filter Filter to limit the navigation/results
+     * @param filter  the filter to limit the navigation/results
      */
     public FileFinder(FileFilter filter) {
         this(filter, -1);
     }
 
     /**
-     * <p>Construct an instance limiting the <i>depth</i>
-     * navigated to.</p>
+     * Construct an instance limiting the <i>depth</i> navigated to.
      * 
-     * @param depthLimit Controls how <i>deep</i> the hierarchy is
+     * @param depthLimit  cntrols how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     public FileFinder(int depthLimit) {
@@ -131,11 +127,10 @@ public class FileFinder {
     }
 
     /**
-     * <p>Construct an instance with a filter and limit
-     * the <i>depth</i> navigated to.</p>
+     * Construct an instance with a filter and limit the <i>depth</i> navigated to.
      *
-     * @param filter Filter to limit the navigation/results
-     * @param depthLimit Controls how <i>deep</i> the hierarchy is
+     * @param filter  the filter to limit the navigation/results
+     * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     public FileFinder(FileFilter filter, int depthLimit) {
@@ -143,22 +138,25 @@ public class FileFinder {
         this.depthLimit = depthLimit;
     }
 
+    //-----------------------------------------------------------------------
     /**
-     * <p>Walk the file hierarchy starting from the current
-     * directory.</p>
+     * Finds all the files and directories in the directory hierarchy starting
+     * from the current directory.
      *
-     * @return The collection of files found.
+     * @return the collection of files found
      */
     public List find() {
         return find(new File("."));
     }
 
     /**
-     * <p>Walk the file hierarchy starting from the specified
-     * directory.</p>
+     * Finds all the files and directories in the directory hierarchy starting
+     * from the specified directory.
      *
-     * @param startDirectory The directory to start from
-     * @return The collection of files found.
+     * @param startDirectory  the directory to start from, must be valid
+     * @return the collection of files found
+     * @throws IllegalArgumentException if the start directory is null,
+     * doesn't exist or isn't a directory
      */
     public List find(File startDirectory) {
         if (startDirectory == null || !startDirectory.exists()) {
@@ -169,31 +167,46 @@ public class FileFinder {
             String message = "Not a directory: " + startDirectory;
             throw new IllegalArgumentException(message);
         }
+        return examine(startDirectory);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Examines the directory hierarchy.
+     *
+     * @param startDirectory  the directory to start from
+     * @return the collection of result objects
+     */
+    private List examine(File startDirectory) {
         List results = new ArrayList();
-        handleDirectory(startDirectory, 0, results);
+        handleStart(startDirectory, results);
+        examine(startDirectory, 0, results);
+        handleEnd(results);
         return results;
     }
 
     /**
-     * <p>Process a directory.</p>
+     * Main recursive method to examine the directory hierarchy.
      *
-     * @param directory The directory to process
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
+     * @param directory  the directory to examine
+     * @param depth  the directory level (starting directory = 0)
+     * @return the collection of result objects
      */
-    private void handleDirectory(File directory, int depth, List results) {
-        handleDirectoryStart(directory, depth, results);
-        int childDepth = depth + 1;
-        if (depthLimit < 0 || childDepth <= depthLimit) {
-            File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
-            if (files == null) {
-                handleRestricted(directory);
-            } else {
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isDirectory()) {
-                        handleDirectory(files[i], childDepth, results);
-                    } else {
-                        handleFile(files[i], childDepth, results);
+    private void examine(File directory, int depth, List results) {
+        boolean process = handleDirectoryStart(directory, depth, results);
+        if (process) {
+            int childDepth = depth + 1;
+            if (depthLimit < 0 || childDepth <= depthLimit) {
+                File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
+                if (files == null) {
+                    handleRestricted(directory);
+                } else {
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].isDirectory()) {
+                            examine(files[i], childDepth, results);
+                        } else {
+                            handleFile(files[i], childDepth, results);
+                        }
                     }
                 }
             }
@@ -201,52 +214,83 @@ public class FileFinder {
         handleDirectoryEnd(directory, depth, results);
     }
 
+    //-----------------------------------------------------------------------
     /**
-     * <p>Initial directory processing.</p>
+     * Overridable callback method invoked at the start of processing.
+     * <p>
+     * This implementation does nohting.
      *
-     * <p>This implementation adds the directory to the
-     * results collection.</p>
-     *
-     * @param directory The directory being processed
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
+     * @param startDirectory  the directory to start from
+     * @param results  the collection of result objects, may be updated
      */
-    protected void handleDirectoryStart(File directory, int depth, List results) {
+    protected void handleStart(File startDirectory, List results) {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked at the start of processing each directory.
+     * <p>
+     * This method returns a boolean to indicate if the directory should be examined
+     * or not. If you return false, the next event received will be the
+     * {@link #handleDirectoryEnd} for that directory. Note that this functionality
+     * is in addition to the filtering by file filter.
+     * <p>
+     * This implementation adds the directory to the results collection.
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @return true to process this directory, false to skip this directory
+     */
+    protected boolean handleDirectoryStart(File directory, int depth, List results) {
         results.add(directory);
+        return true;
     }
 
     /**
-     * <p>Final directory processing.</p>
-     * 
-     * <p>This implementation does nothing.</p>
+     * Overridable callback method invoked for each (non-directory) file.
+     * <p>
+     * This implementation adds the file to the results collection.
      *
-     * @param directory The directory being processed
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
-     */
-    protected void handleDirectoryEnd(File directory, int depth, List results) {
-    }
-
-
-    /**
-     * <p>File processing.</p>
-     * 
-     * <p>This implementation adds the file to the results
-     * collection.</p>
-     *
-     * @param file The file being processed
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
+     * @param file  the current file being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
      */
     protected void handleFile(File file, int depth, List results) {
         results.add(file);
     }
 
     /**
-     * <p>Handle directories which are restricted.</p>
-     * 
-     * @param directory Restricted directory
+     * Overridable callback method invoked for each restricted directory.
+     *
+     * @param directory  the restricted directory
      */
     protected void handleRestricted(File directory) {
+        // do nothing - overridable by subclass
     }
+
+    /**
+     * Overridable callback method invoked at the end of processing each directory.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @param directory The directory being processed
+     * @param depth The directory level (starting directory = 0)
+     * @param results The collection of files found.
+     */
+    protected void handleDirectoryEnd(File directory, int depth, List results) {
+        // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked at the end of processing.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @param results  the collection of result objects, may be updated
+     */
+    protected void handleEnd(List results) {
+        // do nothing - overridable by subclass
+    }
+
 }
