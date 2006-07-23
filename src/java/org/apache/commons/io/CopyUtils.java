@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2004,2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import java.io.StringReader;
 import java.io.Writer;
 
 /**
- * <p>This class provides static utility methods for buffered
+ * This class provides static utility methods for buffered
  * copying between sources (<code>InputStream</code>, <code>Reader</code>,
  * <code>String</code> and <code>byte[]</code>) and destinations
  * (<code>OutputStream</code>, <code>Writer</code>, <code>String</code> and
- * <code>byte[]</code>).</p>
- *
- * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em>
+ * <code>byte[]</code>).
+ * <p>
+ * Unless otherwise noted, these <code>copy</code> methods do <em>not</em>
  * flush or close the streams. Often doing so would require making non-portable
  * assumptions about the streams' origin and further use. This means that both
  * streams' <code>close()</code> methods must be called after copying. if one
@@ -41,43 +41,42 @@ import java.io.Writer;
  * idea to rely on this mechanism. For a good overview of the distinction
  * between "memory management" and "resource management", see
  * <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
- * UnixReview article</a>.</p>
- *
- * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding
+ * UnixReview article</a>.
+ * <p>
+ * For byte-to-char methods, a <code>copy</code> variant allows the encoding
  * to be selected (otherwise the platform default is used). We would like to
  * encourage you to always specify the encoding because relying on the platform
- * default can lead to unexpected results.</p>
- *
- * <p>We don't provide special variants for the <code>copy</code> methods that
+ * default can lead to unexpected results.
+ * <p
+ * We don't provide special variants for the <code>copy</code> methods that
  * let you specify the buffer size because in modern VMs the impact on speed
- * seems to be minimal. We're using a default buffer size of 4 KB.</p>
- *
- * <p>The <code>copy</code> methods use an internal buffer when copying. It is
+ * seems to be minimal. We're using a default buffer size of 4 KB.
+ * <p>
+ * The <code>copy</code> methods use an internal buffer when copying. It is
  * therefore advisable <em>not</em> to deliberately wrap the stream arguments
  * to the <code>copy</code> methods in <code>Buffered*</code> streams. For
- * example, don't do the following:</p>
- *
- * <code>copy( new BufferedInputStream( in ),
- *   new BufferedOutputStream( out ) );</code>
- *
- * <p>The rationale is as follows:</p>
- *
- * <p>Imagine that an InputStream's read() is a very expensive operation, which
+ * example, don't do the following:
+ * <pre>
+ *  copy( new BufferedInputStream( in ), new BufferedOutputStream( out ) );
+ *  </pre>
+ * The rationale is as follows:
+ * <p>
+ * Imagine that an InputStream's read() is a very expensive operation, which
  * would usually suggest wrapping in a BufferedInputStream. The
  * BufferedInputStream works by issuing infrequent
  * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the
  * underlying InputStream, to fill an internal buffer, from which further
  * <code>read</code> requests can inexpensively get their data (until the buffer
- * runs out).</p>
- *
- * <p>However, the <code>copy</code> methods do the same thing, keeping an
+ * runs out).
+ * <p>
+ * However, the <code>copy</code> methods do the same thing, keeping an
  * internal buffer, populated by
  * {@link InputStream#read(byte[] b, int off, int len)} requests. Having two
  * buffers (or three if the destination stream is also buffered) is pointless,
  * and the unnecessary buffer management hurts performance slightly (about 3%,
- * according to some simple experiments).</p>
- *
- * <p>Behold, intrepid explorers; a map of this class:</p>
+ * according to some simple experiments).
+ * <p>
+ * Behold, intrepid explorers; a map of this class:
  * <pre>
  *       Method      Input               Output          Dependency
  *       ------      -----               ------          -------
@@ -94,13 +93,13 @@ import java.io.Writer;
  * 7     copy        byte[]              Writer          3
  * 8     copy        byte[]              OutputStream    (trivial)
  * </pre>
- *
- * <p>Note that only the first two methods shuffle bytes; the rest use these
+ * <p>
+ * Note that only the first two methods shuffle bytes; the rest use these
  * two, or (if possible) copy using native Java copy methods. As there are
  * method variants to specify the encoding, each row may
- * correspond to up to 2 methods.</p>
- *
- * <p>Origin of code: Excalibur.</p>
+ * correspond to up to 2 methods.
+ * <p>
+ * Origin of code: Excalibur.
  *
  * @author Peter Donald
  * @author Jeff Turner
