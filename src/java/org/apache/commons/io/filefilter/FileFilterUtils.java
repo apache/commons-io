@@ -79,7 +79,7 @@ public class FileFilterUtils {
      * @return file filter that accepts only directories and not files
      */
     public static IOFileFilter directoryFileFilter() {
-        return DirectoryFileFilter.INSTANCE;
+        return DirectoryFileFilter.DIRECTORY;
     }
 
     /**
@@ -131,7 +131,7 @@ public class FileFilterUtils {
      * @return a true filter
      */
     public static IOFileFilter trueFileFilter() {
-        return TrueFileFilter.INSTANCE;
+        return TrueFileFilter.TRUE;
     }
 
     /**
@@ -140,7 +140,7 @@ public class FileFilterUtils {
      * @return a false filter
      */
     public static IOFileFilter falseFileFilter() {
-        return FalseFileFilter.INSTANCE;
+        return FalseFileFilter.FALSE;
     }
     
     //-----------------------------------------------------------------------

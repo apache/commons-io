@@ -75,6 +75,12 @@ Enhancements from 1.2
   - New IOFileFilter implementation
   - Accepts files or directories that are empty
 
+- TrueFileFilter/FalseFileFilter/DirectoryFileFilter
+  - New singleton instance constants (TRUE/FALSE/DIRECTORY)
+  - The new constants are more JDK 1.5 friendly with regards to static imports
+    (whereas if everything uses INSTANCE, then they just clash)
+  - The old INSTANCE constants are still present and have not been deprecated
+
 
 Feedback
 --------
