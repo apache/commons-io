@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation.
+ * Copyright 2002-2004,2006 The Apache Software Foundation.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,30 +33,40 @@ import java.io.File;
  *
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
- * 
+ *
  * @author Henri Yandell
  * @author Stephen Colebourne
  * @author Peter Donald
  */
 public class DirectoryFileFilter extends AbstractFileFilter {
-    
-    /** Singleton instance of directory filter */
-    public static final IOFileFilter INSTANCE = new DirectoryFileFilter();
-    
+
+    /**
+     * Singleton instance of directory filter.
+     * @since Commons IO 1.3
+     */
+    public static final IOFileFilter DIRECTORY = new DirectoryFileFilter();
+    /**
+     * Singleton instance of directory filter.
+     * Please use the identical DirectoryFileFilter.DIRECTORY constant.
+     * The new name is more JDK 1.5 friendly as it doesn't clash with other
+     * values when using static imports.
+     */
+    public static final IOFileFilter INSTANCE = DIRECTORY;
+
     /**
      * Restrictive consructor.
      */
     protected DirectoryFileFilter() {
     }
-    
+
     /**
      * Checks to see if the file is a directory.
-     * 
+     *
      * @param file  the File to check
      * @return true if the file is a directory
      */
     public boolean accept(File file) {
         return file.isDirectory();
     }
-    
+
 }
