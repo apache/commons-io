@@ -17,42 +17,44 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.io.filefilter.IOFileFilter;
+import java.util.Collection;
 
 /**
  * Abstract class that walks through a directory hierarchy and provides
  * subclasses with convenient hooks to add specific behaviour.
  * <p>
- * This class operates with a {@link IOFileFilter file filter} and maximum
- * depth to limit the files and direcories visited. Commons IO supplies many
- * common filter implementations in the <code>filefilter</code> package.
+ * This class operates with a {@link FileFilter} and maximum depth to
+ * limit the files and direcories visited.
+ * Commons IO supplies many common filter implementations in the 
+ * <a href="filefilter/package-summary.html"> filefilter</a> package.
  * <p>
- * This class is extended within Commons IO to provide a file finder facility.
- * However there are many other possible extensions. For example, to delete all
+ * There are many possible extensions, for example, to delete all
  * files and '.svn' directories, and return a list of deleted files:
  * <pre>
  *  public class FileCleaner extends DirectoryWalker {
  *
+ *    public FileCleaner() {
+ *      super(null, -1);
+ *    }
+ *
  *    public List clean(File startDirectory) {
- *      return walk(startDirectory);
+ *      List results = new ArrayList();
+ *      walk(startDirectory, results);
+ *      return results;
  *    }
  *
- *    protected boolean handleDirectoryStart(File directory, int depth, List results) {
- *      // skip contents of svn directories
- *      return !".svn".equals(directory.getName());
- *    }
- *
- *    protected void handleDirectoryEnd(File directory, int depth, List results) {
- *      // delete svn directories
+ *    protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
+ *      // delete svn directories and then skip
  *      if (".svn".equals(directory.getName())) {
  *        directory.delete();
+ *        return false;
+ *      } else {
+ *        return true;
  *      }
+ *
  *    }
  *
- *    protected void handleFile(File file, int depth, List results) {
+ *    protected void handleFile(File file, int depth, Collection results) {
  *      // delete file and add to list of deleted
  *      file.delete();
  *      results.add(file);
@@ -98,14 +100,12 @@ public abstract class DirectoryWalker {
      * The event methods have the prefix <code>handle</code>.
      *
      * @param startDirectory  the directory to start from
-     * @return the collection of result objects, typically File objects
+     * @param results  the collection of result objects, may be updated
      */
-    protected List walk(File startDirectory) {
-        List results = new ArrayList();
+    protected void walk(File startDirectory, Collection results) {
         handleStart(startDirectory, results);
         walk(startDirectory, 0, results);
         handleEnd(results);
-        return results;
     }
 
     /**
@@ -113,9 +113,9 @@ public abstract class DirectoryWalker {
      *
      * @param directory  the directory to examine
      * @param depth  the directory level (starting directory = 0)
-     * @return the collection of result objects
+     * @param results  the collection of result objects, may be updated
      */
-    private void walk(File directory, int depth, List results) {
+    private void walk(File directory, int depth, Collection results) {
         boolean process = handleDirectoryStart(directory, depth, results);
         if (process) {
             int childDepth = depth + 1;
@@ -133,8 +133,8 @@ public abstract class DirectoryWalker {
                     }
                 }
             }
+            handleDirectoryEnd(directory, depth, results);
         }
-        handleDirectoryEnd(directory, depth, results);
     }
 
     //-----------------------------------------------------------------------
@@ -146,7 +146,7 @@ public abstract class DirectoryWalker {
      * @param startDirectory  the directory to start from
      * @param results  the collection of result objects, may be updated
      */
-    protected void handleStart(File startDirectory, List results) {
+    protected void handleStart(File startDirectory, Collection results) {
         // do nothing - overridable by subclass
     }
 
@@ -165,7 +165,7 @@ public abstract class DirectoryWalker {
      * @param results  the collection of result objects, may be updated
      * @return true to process this directory, false to skip this directory
      */
-    protected boolean handleDirectoryStart(File directory, int depth, List results) {
+    protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
         return true;
     }
@@ -179,7 +179,7 @@ public abstract class DirectoryWalker {
      * @param depth  the current directory level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
      */
-    protected void handleFile(File file, int depth, List results) {
+    protected void handleFile(File file, int depth, Collection results) {
         // do nothing - overridable by subclass
     }
 
@@ -201,7 +201,7 @@ public abstract class DirectoryWalker {
      * @param depth The directory level (starting directory = 0)
      * @param results The collection of files found.
      */
-    protected void handleDirectoryEnd(File directory, int depth, List results) {
+    protected void handleDirectoryEnd(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
     }
 
@@ -212,7 +212,7 @@ public abstract class DirectoryWalker {
      *
      * @param results  the collection of result objects, may be updated
      */
-    protected void handleEnd(List results) {
+    protected void handleEnd(Collection results) {
         // do nothing - overridable by subclass
     }
 
