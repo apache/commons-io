@@ -16,7 +16,10 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,9 +29,17 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.OrFileFilter;
 
-public class FileFinderTestCase extends TestCase {
+/**
+ * This is used to test DirectoryWalker for correctness.
+ *
+ * @version $Id$
+ * @see DirectoryWalker
+ *
+ */
+public class DirectoryWalkerTestCase extends TestCase {
 
     // Directories
+    private static final File current      = new File(".");
     private static final File javaDir      = new File("src/java");
     private static final File orgDir       = new File(javaDir, "org");
     private static final File apacheDir    = new File(orgDir, "apache");
@@ -56,11 +67,11 @@ public class FileFinderTestCase extends TestCase {
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
     public static Test suite() {
-        return new TestSuite(FileFinderTestCase.class);
+        return new TestSuite(DirectoryWalkerTestCase.class);
     }
 
     /** Construct the TestCase using the name */
-    public FileFinderTestCase(String name) {
+    public DirectoryWalkerTestCase(String name) {
         super(name);
     }
 
@@ -80,7 +91,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Filtering
      */
     public void testFilter() {
-        List results = new FileFinder(dirsAndFilesFilter).find(javaDir);
+        List results = new TestFileFinder(dirsAndFilesFilter, -1).find(javaDir);
         assertEquals("Result Size", (1 + dirs.length + ioFiles.length + outputFiles.length), results.size());
         assertTrue("Start Dir", results.contains(javaDir));
         checkContainsFiles("Dir", dirs, results);
@@ -92,7 +103,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Filtering and limit to depth 0
      */
     public void testFilterAndLimitA() {
-        List results = new FileFinder(NOT_SVN, 0).find(javaDir);
+        List results = new TestFileFinder(NOT_SVN, 0).find(javaDir);
         assertEquals("[A] Result Size", 1, results.size());
         assertTrue("[A] Start Dir",   results.contains(javaDir));
     }
@@ -101,7 +112,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Filtering and limit to depth 1
      */
     public void testFilterAndLimitB() {
-        List results = new FileFinder(NOT_SVN, 1).find(javaDir);
+        List results = new TestFileFinder(NOT_SVN, 1).find(javaDir);
         assertEquals("[B] Result Size", 2, results.size());
         assertTrue("[B] Start Dir",   results.contains(javaDir));
         assertTrue("[B] Org Dir",     results.contains(orgDir));
@@ -111,7 +122,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Filtering and limit to depth 3
      */
     public void testFilterAndLimitC() {
-        List results = new FileFinder(NOT_SVN, 3).find(javaDir);
+        List results = new TestFileFinder(NOT_SVN, 3).find(javaDir);
         assertEquals("[A] Result Size", 4, results.size());
         assertTrue("[A] Start Dir",   results.contains(javaDir));
         assertTrue("[A] Org Dir",     results.contains(orgDir));
@@ -123,7 +134,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Filtering and limit to depth 5
      */
     public void testFilterAndLimitD() {
-        List results = new FileFinder(dirsAndFilesFilter, 5).find(javaDir);
+        List results = new TestFileFinder(dirsAndFilesFilter, 5).find(javaDir);
         assertEquals("[D] Result Size", (1 + dirs.length + ioFiles.length), results.size());
         assertTrue("[D] Start Dir", results.contains(javaDir));
         checkContainsFiles("[D] Dir", dirs, results);
@@ -134,7 +145,7 @@ public class FileFinderTestCase extends TestCase {
      * Test Limiting to current directory
      */
     public void testLimitToCurrent() {
-        List results = new FileFinder(0).find();
+        List results = new TestFileFinder(null, 0).find(current);
         assertEquals("Result Size", 1, results.size());
         assertTrue("Current Dir", results.contains(new File(".")));
     }
@@ -143,24 +154,38 @@ public class FileFinderTestCase extends TestCase {
      * test an invalid start directory
      */
     public void testMissingStartDirectory() {
+
+        // TODO is this what we want with invalid directory?
+        File invalidDir = new File("invalid-dir");
+        List results = new TestFileFinder(null, -1).find(invalidDir);
+        assertEquals("Result Size", 1, results.size());
+        assertTrue("Current Dir", results.contains(invalidDir));
+ 
+        // TODO is this what we want with Null directory?
         try {
-            FileFinder.ALL_FILES.find(new File("invalid-dir"));
-            fail("Invalid start directory didn't throw Exception");
-        } catch (IllegalArgumentException ignore) {
-            // expected result
-        }
-        try {
-            FileFinder.ALL_FILES.find(null);
+            new TestFileFinder(null, -1).find(null);
             fail("Null start directory didn't throw Exception");
-        } catch (IllegalArgumentException ignore) {
+        } catch (NullPointerException ignore) {
             // expected result
         }
     }
 
     /**
+     * test an invalid start directory
+     */
+    public void testHandleStartDirectoryFalse() {
+
+        List results = new TestFalseFileFinder(null, -1).find(current);
+        assertEquals("Result Size", 0, results.size());
+
+    }
+
+    // ------------ Convenience Test Methods ------------------------------------
+
+    /**
      * Check the files in the array are in the results list.
      */
-    private void checkContainsFiles(String prefix, File[] files, List results) {
+    private void checkContainsFiles(String prefix, File[] files, Collection results) {
         for (int i = 0; i < files.length; i++) {
             assertTrue(prefix + "["+i+"] " + files[i], results.contains(files[i]));
         }
@@ -176,6 +201,54 @@ public class FileFinderTestCase extends TestCase {
             names[i] = files[i].getName();
         }
         return new NameFileFilter(names);
+    }
+
+    // ------------ Test DirectoryWalker implementation --------------------------
+
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    private static class TestFileFinder extends DirectoryWalker {
+
+        protected TestFileFinder(FileFilter filter, int depthLimit) {
+            super(filter, depthLimit);
+        }
+
+        /** find files. */
+        protected List find(File startDirectory) {
+           List results = new ArrayList();
+           walk(startDirectory, results);
+           return results;
+        }
+
+        /** Handles a directory end by adding the File to the result set. */
+        protected void handleDirectoryEnd(File directory, int depth, Collection results) {
+            results.add(directory);
+        }
+
+        /** Handles a file by adding the File to the result set. */
+        protected void handleFile(File file, int depth, Collection results) {
+            results.add(file);
+        }
+    }
+
+    // ------------ Test DirectoryWalker implementation --------------------------
+
+    /**
+     * Test DirectoryWalker implementation that always returns false
+     * from handleDirectoryStart()
+     */
+    private static class TestFalseFileFinder extends TestFileFinder {
+
+        protected TestFalseFileFinder(FileFilter filter, int depthLimit) {
+            super(filter, depthLimit);
+        }
+
+        /** Always returns false. */
+        protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
+            return false;
+        }
     }
 
 }
