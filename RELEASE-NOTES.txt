@@ -58,22 +58,27 @@ Enhancements from 1.2
   - New IOFileFilter implementation
   - Accepts files where File.isFile() is true
   - In other words it filters out directories
+  - Singleton instance provided (FILE)
 
 - CanReadFileFilter
   - New IOFileFilter implementation
   - Accepts files where File.canRead() is true
+  - Singleton instances provided (CAN_READ/CANNOT_READ/READ_ONLY)
 
 - CanWriteFileFilter
   - New IOFileFilter implementation
   - Accepts files where File.canWrite() is true
+  - Singleton instances provided (CAN_WRITE/CANNOT_WRITE)
 
 - HiddenFileFilter
   - New IOFileFilter implementation
   - Accepts files where File.isHidden() is true
+  - Singleton instances provided (HIDDEN/VISIBLE)
 
 - EmptyFileFilter
   - New IOFileFilter implementation
   - Accepts files or directories that are empty
+  - Singleton instances provided (EMPTY/NO_EMPTY)
 
 - TrueFileFilter/FalseFileFilter/DirectoryFileFilter
   - New singleton instance constants (TRUE/FALSE/DIRECTORY)
@@ -81,14 +86,23 @@ Enhancements from 1.2
     (whereas if everything uses INSTANCE, then they just clash)
   - The old INSTANCE constants are still present and have not been deprecated
 
+- FileFilterUtils
+  - new sizeFileFilter(long minimumSize, long maximumSize) method which 
+    creates a filter that accepts files within the specified size range.
+
+- FileUtils
+  - add methods to check if a file is older (i.e. isFileOlder()) - counterparts
+    to the existing isFileNewer() methods.
+
+
 
 Feedback
 --------
 Open source works best when you give feedback:
 http://jakarta.apache.org/commons/io/
 
-Please direct all bug reports to Bugzilla (prefix bug reports by [io])
-http://issues.apache.org/bugzilla/buglist.cgi?product=Commons&component=IO
+Please direct all bug reports to JIRA
+http://issues.apache.org/jira/browse/IO
 
 Or subscribe to the commons-user mailing list (prefix emails by [io])
 http://jakarta.apache.org/site/mail.html
