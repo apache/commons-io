@@ -1291,4 +1291,70 @@ public class FileUtils {
         return file.lastModified() > timeMillis;
     }
 
+
+    //-----------------------------------------------------------------------
+    /**
+     * Tests if the specified <code>File</code> is older than the reference
+     * <code>File</code>.
+     *
+     * @param file  the <code>File</code> of which the modification date must
+     * be compared, not null
+     * @param reference  the <code>File</code> of which the modification date
+     * is used, not null
+     * @return true if the <code>File</code> exists and has been modified before
+     * the reference <code>File</code>
+     * @throws IllegalArgumentException if the file is null
+     * @throws IllegalArgumentException if the reference file is null or doesn't exist
+     */
+     public static boolean isFileOlder(File file, File reference) {
+        if (reference == null) {
+            throw new IllegalArgumentException("No specified reference file");
+        }
+        if (!reference.exists()) {
+            throw new IllegalArgumentException("The reference file '"
+                    + file + "' doesn't exist");
+        }
+        return isFileOlder(file, reference.lastModified());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is older than the specified
+     * <code>Date</code>.
+     * 
+     * @param file  the <code>File</code> of which the modification date
+     * must be compared, not null
+     * @param date  the date reference, not null
+     * @return true if the <code>File</code> exists and has been modified
+     * before the given <code>Date</code>.
+     * @throws IllegalArgumentException if the file is null
+     * @throws IllegalArgumentException if the date is null
+     */
+    public static boolean isFileOlder(File file, Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("No specified date");
+        }
+        return isFileOlder(file, date.getTime());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is older than the specified
+     * time reference.
+     *
+     * @param file  the <code>File</code> of which the modification date must
+     * be compared, not null
+     * @param timeMillis  the time reference measured in milliseconds since the
+     * epoch (00:00:00 GMT, January 1, 1970)
+     * @return true if the <code>File</code> exists and has been modified before
+     * the given time reference.
+     * @throws IllegalArgumentException if the file is null
+     */
+     public static boolean isFileOlder(File file, long timeMillis) {
+        if (file == null) {
+            throw new IllegalArgumentException("No specified file");
+        }
+        if (!file.exists()) {
+            return false;
+        }
+        return file.lastModified() < timeMillis;
+    }
 }

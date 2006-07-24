@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -353,11 +354,110 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             FileUtils.sizeOfDirectory(file));
     }
 
-    // isFileNewer
+    // isFileNewer / isFileOlder
+    public void testIsFileNewerOlder() throws Exception {
+        File reference   = new File(getTestDirectory(), "FileUtils-reference.txt");
+        File oldFile     = new File(getTestDirectory(), "FileUtils-old.txt");
+        File newFile     = new File(getTestDirectory(), "FileUtils-new.txt");
+        File invalidFile = new File(getTestDirectory(), "FileUtils-invalid-file.txt");
 
-//    // TODO Finish test
-//    public void XtestIsFileNewer() {}
-//
+        // Create Files
+        createFile(oldFile, 0);
+        spin(oldFile.lastModified());
+        long now = System.currentTimeMillis();
+        Date date = new Date();
+        createFile(reference, 0);
+        spin(reference.lastModified());
+        createFile(newFile, 0);
+
+        // Test isFileNewer()
+        assertFalse("Old File - Newer - File", FileUtils.isFileNewer(oldFile, reference));
+        assertFalse("Old File - Newer - Date", FileUtils.isFileNewer(oldFile, date));
+        assertFalse("Old File - Newer - Mili", FileUtils.isFileNewer(oldFile, now));
+        assertTrue("New File - Newer - File", FileUtils.isFileNewer(newFile, reference));
+        assertTrue("New File - Newer - Date", FileUtils.isFileNewer(newFile, date));
+        assertTrue("New File - Newer - Mili", FileUtils.isFileNewer(newFile, now));
+        assertFalse("Invalid - Newer - File", FileUtils.isFileNewer(invalidFile, reference));
+        
+        // Test isFileOlder()
+        assertTrue("Old File - Older - File", FileUtils.isFileOlder(oldFile, reference));
+        assertTrue("Old File - Older - Date", FileUtils.isFileOlder(oldFile, date));
+        assertTrue("Old File - Older - Mili", FileUtils.isFileOlder(oldFile, now));
+        assertFalse("New File - Older - File", FileUtils.isFileOlder(newFile, reference));
+        assertFalse("New File - Older - Date", FileUtils.isFileOlder(newFile, date));
+        assertFalse("New File - Older - Mili", FileUtils.isFileOlder(newFile, now));
+        assertFalse("Invalid - Older - File", FileUtils.isFileOlder(invalidFile, reference));
+        
+        
+        // ----- Test isFileNewer() exceptions -----
+        // Null File
+        try {
+            FileUtils.isFileNewer(null, now);
+            fail("Newer Null, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Null reference File
+        try {
+            FileUtils.isFileNewer(oldFile, (File)null);
+            fail("Newer Null reference, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Invalid reference File
+        try {
+            FileUtils.isFileNewer(oldFile, invalidFile);
+            fail("Newer invalid reference, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Null reference Date
+        try {
+            FileUtils.isFileNewer(oldFile, (Date)null);
+            fail("Newer Null date, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+
+
+        // ----- Test isFileOlder() exceptions -----
+        // Null File
+        try {
+            FileUtils.isFileOlder(null, now);
+            fail("Older Null, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Null reference File
+        try {
+            FileUtils.isFileOlder(oldFile, (File)null);
+            fail("Older Null reference, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Invalid reference File
+        try {
+            FileUtils.isFileOlder(oldFile, invalidFile);
+            fail("Older invalid reference, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+        
+        // Null reference Date
+        try {
+            FileUtils.isFileOlder(oldFile, (Date)null);
+            fail("Older Null date, expected IllegalArgumentExcepion");
+        } catch (IllegalArgumentException expected) {
+            // expected result
+        }
+
+    }
+
 //    // TODO Remove after debugging
 //    private void log(Object obj) {
 //        System.out.println(
@@ -828,6 +928,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
         String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
+    }
+
+    private void spin(long now) throws InterruptedException {
+        final long end = now + 1000;
+        while (System.currentTimeMillis() <= end) {
+            Thread.sleep(Math.max(1, end - System.currentTimeMillis()));
+        }
     }
 
 }
