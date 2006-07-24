@@ -316,4 +316,19 @@ public class FileFilterUtils {
         return new SizeFileFilter(threshold, acceptLarger);
     }
 
+    /**
+     * Returns a filter that returns true if the file size is within
+     * the specified range.
+     *
+     * @param minimumSize the minimum file size
+     * @param maximumSize the maximum file size
+     * @return an appropriately configured IOFileFilter
+     * @since Commons IO 1.3
+     */
+    public static IOFileFilter sizeFileFilter(long minimumSize, long maximumSize) {
+        IOFileFilter minimumFilter = new SizeFileFilter(minimumSize, true);
+        IOFileFilter maximumFilter = new SizeFileFilter(maximumSize + 1L, false);
+        return new AndFileFilter(minimumFilter, maximumFilter);
+    }
+
 }
