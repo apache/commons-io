@@ -87,7 +87,7 @@ Enhancements from 1.2
   - The old INSTANCE constants are still present and have not been deprecated
 
 - FileFilterUtils
-  - new sizeFileFilter(long minimumSize, long maximumSize) method which 
+  - new sizeRangeFileFilter(long minimumSize, long maximumSize) method which 
     creates a filter that accepts files within the specified size range.
 
 - FileUtils
