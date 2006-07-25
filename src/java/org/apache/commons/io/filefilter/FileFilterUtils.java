@@ -317,17 +317,17 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the file size is within
-     * the specified range.
+     * Returns a filter that accepts files whose size is &gt;= minimum size
+     * and &lt;= maximum size.
      *
-     * @param minimumSize the minimum file size
-     * @param maximumSize the maximum file size
+     * @param minSizeInclusive the minimum file size (inclusive)
+     * @param maxSizeInclusive the maximum file size (inclusive)
      * @return an appropriately configured IOFileFilter
      * @since Commons IO 1.3
      */
-    public static IOFileFilter sizeFileFilter(long minimumSize, long maximumSize) {
-        IOFileFilter minimumFilter = new SizeFileFilter(minimumSize, true);
-        IOFileFilter maximumFilter = new SizeFileFilter(maximumSize + 1L, false);
+    public static IOFileFilter sizeRangeFileFilter(long minSizeInclusive, long maxSizeInclusive ) {
+        IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
+        IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
     }
 

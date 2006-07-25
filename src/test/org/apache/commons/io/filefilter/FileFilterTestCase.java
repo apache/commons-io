@@ -637,11 +637,11 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter3, largeFile, false);
 
         // size range tests
-        IOFileFilter filter4 = FileFilterUtils.sizeFileFilter(33, 127);
-        IOFileFilter filter5 = FileFilterUtils.sizeFileFilter(32, 127);
-        IOFileFilter filter6 = FileFilterUtils.sizeFileFilter(33, 128);
-        IOFileFilter filter7 = FileFilterUtils.sizeFileFilter(31, 129);
-        IOFileFilter filter8 = FileFilterUtils.sizeFileFilter(128, 128);
+        IOFileFilter filter4 = FileFilterUtils.sizeRangeFileFilter(33, 127);
+        IOFileFilter filter5 = FileFilterUtils.sizeRangeFileFilter(32, 127);
+        IOFileFilter filter6 = FileFilterUtils.sizeRangeFileFilter(33, 128);
+        IOFileFilter filter7 = FileFilterUtils.sizeRangeFileFilter(31, 129);
+        IOFileFilter filter8 = FileFilterUtils.sizeRangeFileFilter(128, 128);
 
         assertFiltering(filter4, smallFile, false);
         assertFiltering(filter4, largeFile, false);
