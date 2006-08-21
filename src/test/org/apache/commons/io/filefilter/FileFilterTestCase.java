@@ -581,24 +581,41 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     public void testAgeFilter() throws Exception {
         File oldFile = new File(getTestDirectory(), "old.txt");
+        File reference = new File(getTestDirectory(), "reference.txt");
+        File newFile = new File(getTestDirectory(), "new.txt");
+
         createFile(oldFile, 0);
-        spin(oldFile.lastModified());
-        long now = System.currentTimeMillis();
+
+        do {
+            try { 
+                Thread.sleep(1000);
+            } catch(InterruptedException ie) {
+                // ignore
+            }
+            createFile(reference, 0);
+        } while( oldFile.lastModified() == reference.lastModified() );
+
+        Date date = new Date();
+        long now = date.getTime();
+
+        do {
+            try { 
+                Thread.sleep(1000);
+            } catch(InterruptedException ie) {
+                // ignore
+            }
+            createFile(newFile, 0);
+        } while( reference.lastModified() == newFile.lastModified() );
+
         IOFileFilter filter1 = FileFilterUtils.ageFileFilter(now);
         IOFileFilter filter2 = FileFilterUtils.ageFileFilter(now, true);
         IOFileFilter filter3 = FileFilterUtils.ageFileFilter(now, false);
-        Date date = new Date();
         IOFileFilter filter4 = FileFilterUtils.ageFileFilter(date);
         IOFileFilter filter5 = FileFilterUtils.ageFileFilter(date, true);
         IOFileFilter filter6 = FileFilterUtils.ageFileFilter(date, false);
-        File reference = new File(getTestDirectory(), "reference.txt");
-        createFile(reference, 0);
         IOFileFilter filter7 = FileFilterUtils.ageFileFilter(reference);
         IOFileFilter filter8 = FileFilterUtils.ageFileFilter(reference, true);
         IOFileFilter filter9 = FileFilterUtils.ageFileFilter(reference, false);
-        spin(reference.lastModified());
-        File newFile = new File(getTestDirectory(), "new.txt");
-        createFile(newFile, 0);
 
         assertFiltering(filter1, oldFile, true);
         assertFiltering(filter2, oldFile, true);
@@ -716,13 +733,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(EmptyFileFilter.EMPTY, notEmptyFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, notEmptyFile, true);
         FileUtils.forceDelete(emptyDir);
-    }
-
-    private void spin(long now) throws InterruptedException {
-        final long end = now + 1000;
-        while (System.currentTimeMillis() <= end) {
-            Thread.sleep(Math.max(1, end - System.currentTimeMillis()));
-        }
     }
 
 }
