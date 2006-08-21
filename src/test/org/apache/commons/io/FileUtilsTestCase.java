@@ -363,12 +363,27 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         // Create Files
         createFile(oldFile, 0);
-        spin(oldFile.lastModified());
-        long now = System.currentTimeMillis();
+
+        do {
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException ie) {
+                // ignore
+            }
+            createFile(reference, 0);
+        } while( oldFile.lastModified() == reference.lastModified() );
+
         Date date = new Date();
-        createFile(reference, 0);
-        spin(reference.lastModified());
-        createFile(newFile, 0);
+        long now = date.getTime();
+
+        do {
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException ie) {
+                // ignore
+            }
+            createFile(newFile, 0);
+        } while( reference.lastModified() == newFile.lastModified() );
 
         // Test isFileNewer()
         assertFalse("Old File - Newer - File", FileUtils.isFileNewer(oldFile, reference));
@@ -928,13 +943,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
         String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
-    }
-
-    private void spin(long now) throws InterruptedException {
-        final long end = now + 1000;
-        while (System.currentTimeMillis() <= end) {
-            Thread.sleep(Math.max(1, end - System.currentTimeMillis()));
-        }
     }
 
 }
