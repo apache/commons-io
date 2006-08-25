@@ -33,7 +33,10 @@ Deprecations from 1.2
 Bug fixes from 1.2
 ------------------
 - LineIterator now implements Iterator
-  (It was always supposed to...)
+  - It was always supposed to...
+
+- FileSystemUtils.freeSpace/freeSpaceKb [IO-83]
+  - These should now work on AIX and HP-UX
 
 
 Enhancements from 1.2

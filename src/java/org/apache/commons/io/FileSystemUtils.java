@@ -35,6 +35,8 @@ import java.util.StringTokenizer;
  * @author Frank W. Zammetti
  * @author Stephen Colebourne
  * @author Thomas Ledoux
+ * @author James Urie
+ * @author Magnus Grimsell
  * @version $Id$
  * @since Commons IO 1.1
  */
@@ -51,6 +53,8 @@ public class FileSystemUtils {
     private static final int WINDOWS = 1;
     /** Operating system state flag for Unix. */
     private static final int UNIX = 2;
+    /** Operating system state flag for Posix flavour Unix. */
+    private static final int POSIX_UNIX = 3;
 
     /** The operating system flag. */
     private static final int OS;
@@ -70,14 +74,15 @@ public class FileSystemUtils {
                 osName.indexOf("sunos") != -1 ||
                 osName.indexOf("solaris") != -1 ||
                 osName.indexOf("mpe/ix") != -1 ||
-                osName.indexOf("hp-ux") != -1 ||
-                osName.indexOf("aix") != -1 ||
                 osName.indexOf("freebsd") != -1 ||
                 osName.indexOf("irix") != -1 ||
                 osName.indexOf("digital unix") != -1 ||
                 osName.indexOf("unix") != -1 ||
                 osName.indexOf("mac os x") != -1) {
                 os = UNIX;
+            } else if (osName.indexOf("hp-ux") != -1 ||
+                osName.indexOf("aix") != -1) {
+                os = POSIX_UNIX;
             } else {
                 os = OTHER;
             }
@@ -133,7 +138,7 @@ public class FileSystemUtils {
      * FileSystemUtils.freeSpaceKb("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
-     * It uses 'dir /-c' on Windows and 'df -k' on *nix.
+     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
      *
      * @param path  the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume in kilobytes
@@ -173,7 +178,9 @@ public class FileSystemUtils {
             case WINDOWS:
                 return (kb ? freeSpaceWindows(path) / 1024 : freeSpaceWindows(path));
             case UNIX:
-                return freeSpaceUnix(path, kb);
+                return freeSpaceUnix(path, kb, false);
+            case POSIX_UNIX:
+                return freeSpaceUnix(path, kb, true);
             case OTHER:
                 throw new IllegalStateException("Unsupported operating system");
             default:
@@ -278,19 +285,27 @@ public class FileSystemUtils {
      *
      * @param path  the path to get free space for
      * @param kb  whether to normalize to kilobytes
+     * @param posix  whether to use the posix standard format flag
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    long freeSpaceUnix(String path, boolean kb) throws IOException {
+    long freeSpaceUnix(String path, boolean kb, boolean posix) throws IOException {
         if (path.length() == 0) {
             throw new IllegalArgumentException("Path must not be empty");
         }
         path = FilenameUtils.normalize(path);
 
         // build and run the 'dir' command
+        String flags = "-";
+        if (kb) {
+            flags += "k";
+        }
+        if (posix) {
+            flags += "P";
+        }
         String[] cmdAttribs = 
-            (kb ? new String[] {"df", "-k", path} : new String[] {"df", path});
-
+            (flags.length() > 1 ? new String[] {"df", flags, path} : new String[] {"df", path});
+        
         // read the output from the command until we come to the second line
         long bytes = -1;
         BufferedReader in = null;
