@@ -16,9 +16,11 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -37,6 +39,7 @@ import java.util.StringTokenizer;
  * @author Thomas Ledoux
  * @author James Urie
  * @author Magnus Grimsell
+ * @author Thomas Ledoux
  * @version $Id$
  * @since Commons IO 1.1
  */
@@ -189,6 +192,7 @@ public class FileSystemUtils {
         }
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Find free space on the Windows platform using the 'dir' command.
      *
@@ -201,74 +205,71 @@ public class FileSystemUtils {
         if (path.length() > 2 && path.charAt(1) == ':') {
             path = path.substring(0, 2);  // seems to make it work
         }
-
+        
         // build and run the 'dir' command
-        String[] cmdAttrbs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
-
+        String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
+        
         // read in the output of the command to an ArrayList
-        BufferedReader in = null;
-        String line = null;
-        ArrayList lines = new ArrayList();
-        try {
-            in = openProcessStream(cmdAttrbs);
-            line = in.readLine();
-            while (line != null) {
-                line = line.toLowerCase().trim();
-                lines.add(line);
-                line = in.readLine();
-            }
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
-
-        if (lines.size() == 0) {
-            // unknown problem, throw exception
-            throw new IOException(
-                    "Command line 'dir /c' did not return any info " +
-                    "for command '" + cmdAttrbs[2] + "'");
-        }
-
+        List lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
+        
         // now iterate over the lines we just read and find the LAST
         // non-empty line (the free space bytes should be in the last element
         // of the ArrayList anyway, but this will ensure it works even if it's
         // not, still assuming it is on the last non-blank line)
-        long bytes = -1;
-        int i = lines.size() - 1;
-        int bytesStart = 0;
-        int bytesEnd = 0;
-        outerLoop: while (i > 0) {
-            line = (String) lines.get(i);
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            String line = (String) lines.get(i);
             if (line.length() > 0) {
-                // found it, so now read from the end of the line to find the
-                // last numeric character on the line, then continue until we
-                // find the first non-numeric character, and everything between
-                // that and the last numeric character inclusive is our free
-                // space bytes count
-                int j = line.length() - 1;
-                innerLoop1: while (j >= 0) {
-                    char c = line.charAt(j);
-                    if (Character.isDigit(c)) {
-                      // found the last numeric character, this is the end of
-                      // the free space bytes count
-                      bytesEnd = j + 1;
-                      break innerLoop1;
-                    }
-                    j--;
-                }
-                innerLoop2: while (j >= 0) {
-                    char c = line.charAt(j);
-                    if (!Character.isDigit(c) && c != ',' && c != '.') {
-                      // found the next non-numeric character, this is the
-                      // beginning of the free space bytes count
-                      bytesStart = j + 1;
-                      break innerLoop2;
-                    }
-                    j--;
-                }
-                break outerLoop;
+                return parseDir(line, path);
             }
         }
+        // all lines are blank
+        throw new IOException(
+                "Command line 'dir /-c' did not return any info " +
+                "for path '" + path + "'");
+    }
 
+    /**
+     * Parses the Windows dir response last line
+     *
+     * @param line  the line to parse
+     * @param path  the path that was sent
+     * @return the number of bytes
+     * @throws IOException if an error occurs
+     */
+    long parseDir(String line, String path) throws IOException {
+        // read from the end of the line to find the last numeric
+        // character on the line, then continue until we find the first
+        // non-numeric character, and everything between that and the last
+        // numeric character inclusive is our free space bytes count
+        int bytesStart = 0;
+        int bytesEnd = 0;
+        int j = line.length() - 1;
+        innerLoop1: while (j >= 0) {
+            char c = line.charAt(j);
+            if (Character.isDigit(c)) {
+              // found the last numeric character, this is the end of
+              // the free space bytes count
+              bytesEnd = j + 1;
+              break innerLoop1;
+            }
+            j--;
+        }
+        innerLoop2: while (j >= 0) {
+            char c = line.charAt(j);
+            if (!Character.isDigit(c) && c != ',' && c != '.') {
+              // found the next non-numeric character, this is the
+              // beginning of the free space bytes count
+              bytesStart = j + 1;
+              break innerLoop2;
+            }
+            j--;
+        }
+        if (j < 0) {
+            throw new IOException(
+                    "Command line 'dir /-c' did not return valid info " +
+                    "for path '" + path + "'");
+        }
+        
         // remove commas and dots in the bytes count
         StringBuffer buf = new StringBuffer(line.substring(bytesStart, bytesEnd));
         for (int k = 0; k < buf.length(); k++) {
@@ -276,10 +277,10 @@ public class FileSystemUtils {
                 buf.deleteCharAt(k--);
             }
         }
-        bytes = Long.parseLong(buf.toString());
-        return bytes;
+        return parseBytes(buf.toString(), path);
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Find free space on the *nix platform using the 'df' command.
      *
@@ -306,70 +307,126 @@ public class FileSystemUtils {
         String[] cmdAttribs = 
             (flags.length() > 1 ? new String[] {"df", flags, path} : new String[] {"df", path});
         
-        // read the output from the command until we come to the second line
-        long bytes = -1;
-        BufferedReader in = null;
-        try {
-            in = openProcessStream(cmdAttribs);
-            String line1 = in.readLine(); // header line (ignore it)
-            String line2 = in.readLine(); // the line we're interested in
-            String line3 = in.readLine(); // possibly interesting line
-            if (line2 == null) {
-                // unknown problem, throw exception
-                throw new IOException(
-                        "Command line 'df' did not return info as expected " +
-                        "for path '" + path +
-                        "'- response on first line was '" + line1 + "'");
-            }
-            line2 = line2.trim();
-
-            // Now, we tokenize the string. The fourth element is what we want.
-            StringTokenizer tok = new StringTokenizer(line2, " ");
-            if (tok.countTokens() < 4) {
-                // could be long Filesystem, thus data on third line
-                if (tok.countTokens() == 1 && line3 != null) {
-                    line3 = line3.trim();
-                    tok = new StringTokenizer(line3, " ");
-                } else {
-                    throw new IOException(
-                            "Command line 'df' did not return data as expected " +
-                            "for path '" + path + "'- check path is valid");
-                }
+        // perform the command, asking for up to 3 lines (header, interesting, overflow)
+        List lines = performCommand(cmdAttribs, 3);
+        if (lines.size() < 2) {
+            // unknown problem, throw exception
+            throw new IOException(
+                    "Command line 'df' did not return info as expected " +
+                    "for path '" + path + "'- response was " + lines);
+        }
+        String line2 = (String) lines.get(1); // the line we're interested in
+        
+        // Now, we tokenize the string. The fourth element is what we want.
+        StringTokenizer tok = new StringTokenizer(line2, " ");
+        if (tok.countTokens() < 4) {
+            // could be long Filesystem, thus data on third line
+            if (tok.countTokens() == 1 && lines.size() >= 3) {
+                String line3 = (String) lines.get(2); // the line may be interested in
+                tok = new StringTokenizer(line3, " ");
             } else {
-                tok.nextToken(); // Ignore Filesystem
-            }
-            tok.nextToken(); // Ignore 1K-blocks
-            tok.nextToken(); // Ignore Used
-            String freeSpace = tok.nextToken();
-            try {
-                bytes = Long.parseLong(freeSpace);
-            } catch (NumberFormatException ex) {
                 throw new IOException(
-                        "Command line 'df' did not return numeric data as expected " +
+                        "Command line 'df' did not return data as expected " +
                         "for path '" + path + "'- check path is valid");
             }
-
-        } finally {
-            IOUtils.closeQuietly(in);
+        } else {
+            tok.nextToken(); // Ignore Filesystem
         }
+        tok.nextToken(); // Ignore 1K-blocks
+        tok.nextToken(); // Ignore Used
+        String freeSpace = tok.nextToken();
+        return parseBytes(freeSpace, path);
+    }
 
-        if (bytes < 0) {
+    //-----------------------------------------------------------------------
+    /**
+     * Parses the bytes from a string.
+     * 
+     * @param freeSpace  the free space string
+     * @param path  the path
+     * @return the number of bytes
+     * @throws IOException if an error occurs
+     */
+    long parseBytes(String freeSpace, String path) throws IOException {
+        try {
+            long bytes = Long.parseLong(freeSpace);
+            if (bytes < 0) {
+                throw new IOException(
+                        "Command line 'df' did not find free space in response " +
+                        "for path '" + path + "'- check path is valid");
+            }
+            return bytes;
+            
+        } catch (NumberFormatException ex) {
             throw new IOException(
-                    "Command line 'df' did not find free space in response " +
+                    "Command line 'df' did not return numeric data as expected " +
                     "for path '" + path + "'- check path is valid");
         }
-        return bytes;
     }
 
     /**
-     * Opens the stream to be operating system.
+     * Performs the os command.
      *
-     * @param params  the command parameters
+     * @param cmdAttribs  the command line parameters
+     * @return the parsed data
+     * @throws IOException if an error occurs
+     */
+    List performCommand(String[] cmdAttribs, int max) throws IOException {
+        List lines = new ArrayList();
+        BufferedReader in = null;
+        try {
+            Process proc = openProcess(cmdAttribs);
+            in = openProcessStream(proc);
+            String line = in.readLine();
+            while (line != null && lines.size() < max) {
+                line = line.toLowerCase().trim();
+                lines.add(line);
+                line = in.readLine();
+            }
+            
+            proc.waitFor();
+            if (proc.exitValue() != 0) {
+                // os command problem, throw exception
+                throw new IOException(
+                        "Command line returned OS error code '" + proc.exitValue() +
+                        "' for command " + Arrays.asList(cmdAttribs));
+            }
+            if (lines.size() == 0) {
+                // unknown problem, throw exception
+                throw new IOException(
+                        "Command line did not return any info " +
+                        "for command " + Arrays.asList(cmdAttribs));
+            }
+            return lines;
+            
+        } catch (InterruptedException ex) {
+            throw new IOException(
+                    "Command line threw an InterruptedException '" + ex.getMessage() +
+                    "' for command " + Arrays.asList(cmdAttribs));
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    /**
+     * Opens the process to the operating system.
+     *
+     * @param cmdAttribs  the command line parameters
+     * @return the process
+     * @throws IOException if an error occurs
+     */
+    Process openProcess(String[] cmdAttribs) throws IOException {
+        return Runtime.getRuntime().exec(cmdAttribs);
+    }
+
+    /**
+     * Opens the stream to the operating system.
+     *
+     * @param proc  the process
      * @return a reader
      * @throws IOException if an error occurs
      */
-    BufferedReader openProcessStream(String[] params) throws IOException {
-        Process proc = Runtime.getRuntime().exec(params);
+    BufferedReader openProcessStream(Process proc) throws IOException {
         return new BufferedReader(
             new InputStreamReader(proc.getInputStream()));
     }

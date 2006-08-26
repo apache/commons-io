@@ -18,7 +18,9 @@ package org.apache.commons.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringReader;
 
 import junit.framework.Test;
@@ -171,12 +173,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)        180,260 bytes\n" +
             "              10 Dir(s)  41,411,551,232 bytes free";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         assertEquals(41411551232L, fsu.freeSpaceWindows(""));
     }
 
@@ -194,13 +191,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /-c ", params[2]);
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c ");
         assertEquals(41411551232L, fsu.freeSpaceWindows(""));
     }
 
@@ -217,13 +208,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /-c C:", params[2]);
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c C:");
         assertEquals(41411551232L, fsu.freeSpaceWindows("C:"));
     }
 
@@ -240,24 +225,45 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                assertEquals("dir /-c C:", params[2]);
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c C:");
         assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir"));
     }
 
     public void testGetFreeSpaceWindows_String_EmptyResponse() throws Exception {
         String lines = "";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        try {
+            fsu.freeSpaceWindows("C:");
+            fail();
+        } catch (IOException ex) {}
+    }
+
+    public void testGetFreeSpaceWindows_String_EmptyMultiLineResponse() throws Exception {
+        String lines = "\n\n";
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        try {
+            fsu.freeSpaceWindows("C:");
+            fail();
+        } catch (IOException ex) {}
+    }
+
+    public void testGetFreeSpaceWindows_String_InvalidTextResponse() throws Exception {
+        String lines = "BlueScreenOfDeath";
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        try {
+            fsu.freeSpaceWindows("C:");
+            fail();
+        } catch (IOException ex) {}
+    }
+
+    public void testGetFreeSpaceWindows_String_NoSuchDirectoryResponse() throws Exception {
+        String lines =
+            " Volume in drive C is HDD\n" +
+            " Volume Serial Number is XXXX-YYYY\n" +
+            "\n" +
+            " Directory of C:\\Documents and Settings\\empty" +
+            "\n";
+        FileSystemUtils fsu = new MockFileSystemUtils(1, lines);
         try {
             fsu.freeSpaceWindows("C:");
             fail();
@@ -269,12 +275,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("", false, false);
             fail();
@@ -298,12 +299,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false));
     }
 
@@ -311,12 +307,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false));
     }
 
@@ -325,12 +316,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx-yyyyyyy-zzz:/home/users/s\n" +
             "                      14428928  12956424   1472504  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false));
     }
 
@@ -339,23 +325,13 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx-yyyyyyy-zzz:/home/users/s\n" +
             "                      14428928  12956424   1472504  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false));
     }
 
     public void testGetFreeSpaceUnix_String_EmptyResponse() throws Exception {
         String lines = "";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("/home/users/s", false, false);
             fail();
@@ -378,12 +354,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "                      14428928  12956424       100";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("/home/users/s", false, false);
             fail();
@@ -406,12 +377,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx:/home/users/s     14428928  12956424   nnnnnnn  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("/home/users/s", false, false);
             fail();
@@ -434,12 +400,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx:/home/users/s     14428928  12956424        -1  90% /home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("/home/users/s", false, false);
             fail();
@@ -462,12 +423,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "xxx-yyyyyyy-zzz:/home/users/s";
-        final StringReader reader = new StringReader(lines);
-        FileSystemUtils fsu = new FileSystemUtils() {
-            protected BufferedReader openProcessStream(String[] params) {
-                return new BufferedReader(reader);
-            }
-        };
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
             fsu.freeSpaceUnix("/home/users/s", false, false);
             fail();
@@ -484,6 +440,48 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             fsu.freeSpaceUnix("/home/users/s", true, true);
             fail();
         } catch (IOException ex) {}
+    }
+
+    //-----------------------------------------------------------------------
+    static class MockFileSystemUtils extends FileSystemUtils {
+        private final int exitCode;
+        private final StringReader reader;
+        private final String cmd;
+        public MockFileSystemUtils(int exitCode, String lines) {
+            this(exitCode, lines, null);
+        }
+        public MockFileSystemUtils(int exitCode, String lines, String cmd) {
+            this.exitCode = exitCode;
+            this.reader = new StringReader(lines);
+            this.cmd = cmd;
+        }
+        protected Process openProcess(String[] params) {
+            if (cmd != null) {
+                assertEquals(cmd, params[params.length - 1]);
+            }
+            return new Process() {
+                public InputStream getErrorStream() {
+                    return null;
+                }
+                public InputStream getInputStream() {
+                    return null;
+                }
+                public OutputStream getOutputStream() {
+                    return null;
+                }
+                public int waitFor() throws InterruptedException {
+                    return exitCode;
+                }
+                public int exitValue() {
+                    return exitCode;
+                }
+                public void destroy() {
+                }
+            };
+        }
+        protected BufferedReader openProcessStream(Process p) {
+            return new BufferedReader(reader);
+        }
     }
 
 }

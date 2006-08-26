@@ -38,6 +38,10 @@ Bug fixes from 1.2
 - FileSystemUtils.freeSpace/freeSpaceKb [IO-83]
   - These should now work on AIX and HP-UX
 
+- FileSystemUtils.freeSpace/freeSpaceKb [IO-90]
+  - Avoid infinite looping in Windows
+  - Catch more errors with nice messages
+
 
 Enhancements from 1.2
 ---------------------
