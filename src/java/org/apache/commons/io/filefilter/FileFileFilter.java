@@ -1,9 +1,10 @@
 /*
- * Copyright 2006 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  * 
  *      http://www.apache.org/licenses/LICENSE-2.0
  * 
@@ -32,7 +33,7 @@ import java.io.File;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision: 155419 $ $Date: 2005-02-26 13:02:41 +0000 (Sat, 26 Feb 2005) $
+ * @version $Revision: 155419 $ $Date$
  */
 public class FileFileFilter extends AbstractFileFilter {
 
