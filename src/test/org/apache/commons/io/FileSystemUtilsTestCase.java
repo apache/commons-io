@@ -296,20 +296,53 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         
     }
 
-    public void testGetFreeSpaceUnix_String_NormalResponse() throws Exception {
+    public void testGetFreeSpaceUnix_String_NormalResponseLinux() throws Exception {
+        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-            "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
+            "/dev/xxx                497944    308528    189416  62% /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false));
+        assertEquals(189416L, fsu.freeSpaceUnix("/", false, false));
     }
 
-    public void testGetFreeSpaceUnix_String_NormalResponseKb() throws Exception {
+    public void testGetFreeSpaceUnix_String_NormalResponseFreeBSD() throws Exception {
+        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
+        String lines =
+            "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
+            "/dev/xxxxxx    128990    102902    15770    87%    /";
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(15770L, fsu.freeSpaceUnix("/", false, false));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testGetFreeSpaceUnix_String_NormalResponseKbLinux() throws Exception {
+        // from Sourceforge 'GNU bash, version 2.05b.0(1)-release (i386-redhat-linux-gnu)'
+        // df, df -k and df -kP are all identical
         String lines =
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
-            "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
+            "/dev/xxx                497944    308528    189416  62% /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false));
+        assertEquals(189416L, fsu.freeSpaceUnix("/", true, false));
+    }
+
+    public void testGetFreeSpaceUnix_String_NormalResponseKbFreeBSD() throws Exception {
+        // from Apache 'FreeBSD 6.1-RELEASE (SMP-turbo)'
+        // df and df -k are identical, but df -kP uses 512 blocks (not relevant as not used)
+        String lines =
+            "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
+            "/dev/xxxxxx    128990    102902    15770    87%    /";
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(15770L, fsu.freeSpaceUnix("/", true, false));
+    }
+
+    public void testGetFreeSpaceUnix_String_NormalResponseKbSolaris() throws Exception {
+        // from IO-91 - ' SunOS et 5.10 Generic_118822-25 sun4u sparc SUNW,Ultra-4'
+        // non-kb response does not contain free space - see IO-91
+        String lines =
+            "Filesystem            kbytes    used   avail capacity  Mounted on\n" +
+            "/dev/dsk/x0x0x0x0    1350955  815754  481163    63%";
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(481163L, fsu.freeSpaceUnix("/dev/dsk/x0x0x0x0", true, false));
     }
 
     public void testGetFreeSpaceUnix_String_LongResponse() throws Exception {
