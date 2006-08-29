@@ -247,7 +247,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         }
 
         /** Always returns false. */
-        protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
+        protected boolean handleDirectory(File directory, int depth, Collection results) {
             return false;
         }
     }
