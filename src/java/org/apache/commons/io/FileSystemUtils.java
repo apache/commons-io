@@ -110,11 +110,11 @@ public class FileSystemUtils {
      * the command line.
      * This method does not normalize the result, and typically returns
      * bytes on Windows, 512 byte units on OS X and kilobytes on Unix.
+     * As this is not very useful, this method is deprecated in favour
+     * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
-     * See also {@link #freeSpaceKb(String)} for a better implementation
-     * which normalizes to kilobytes.
-     * <p>
-     * Note that some OS's are NOT currently supported, including OS/390.
+     * Note that some OS's are NOT currently supported, including OS/390
+     * and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
      * <pre>
      * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -127,6 +127,9 @@ public class FileSystemUtils {
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
+     * @since Commons IO 1.1, enhanced OS support in 1.2 and 1.3
+     * @deprecated Use freeSpaceKb(String)
+     *  Deprecated from 1.3, may be removed in 2.0
      */
     public static long freeSpace(String path) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, false);
@@ -136,20 +139,26 @@ public class FileSystemUtils {
     /**
      * Returns the free space on a drive or volume in kilobytes by invoking
      * the command line.
-     * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
      * FileSystemUtils.freeSpaceKb("C:");       // Windows
      * FileSystemUtils.freeSpaceKb("/volume");  // *nix
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
+     * <p>
+     * In order to work, you must be running Windows, or have a implementation of
+     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+     * to rely on this code, please check that it works on your OS by running
+     * some simple tests to compare the command line with the output from this class.
+     * If your operating system isn't supported, please raise a JIRA call detailing
+     * the exact result from df -k and as much other detail as possible, thanks.
      *
      * @param path  the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 1.2
+     * @since Commons IO 1.2, enhanced OS support in 1.3
      */
     public static long freeSpaceKb(String path) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, true);
