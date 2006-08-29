@@ -91,7 +91,7 @@ public abstract class DirectoryWalker {
 
     //-----------------------------------------------------------------------
     /**
-     * Internal method that walks the directory hierarchy.
+     * Internal method that walks the directory hierarchy in a depth-first manner.
      * <p>
      * Most users of this class do not need to call this method. This method will
      * be called automatically by another (public) method on the specific subclass.
@@ -117,13 +117,13 @@ public abstract class DirectoryWalker {
      * @param results  the collection of result objects, may be updated
      */
     private void walk(File directory, int depth, Collection results) {
-        boolean process = handleDirectoryStart(directory, depth, results);
-        if (process) {
+        if (handleDirectory(directory, depth, results)) {
+            handleDirectoryStart(directory, depth, results);
             int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
                 if (files == null) {
-                    handleRestricted(directory);
+                    handleRestricted(directory, results);
                 } else {
                     for (int i = 0; i < files.length; i++) {
                         if (files[i].isDirectory()) {
@@ -152,12 +152,11 @@ public abstract class DirectoryWalker {
     }
 
     /**
-     * Overridable callback method invoked at the start of processing each directory.
+     * Overridable callback method invoked to determine if a directory should be processed.
      * <p>
-     * This method returns a boolean to indicate if the directory should be examined
-     * or not. If you return false, the next event received will be the
-     * {@link #handleDirectoryEnd} for that directory. Note that this functionality
-     * is in addition to the filtering by file filter.
+     * This method returns a boolean to indicate if the directory should be examined or not.
+     * If you return false, the entire directory and any subdirectories will be skipped.
+     * Note that this functionality is in addition to the filtering by file filter.
      * <p>
      * This implementation does nothing and returns true.
      *
@@ -166,9 +165,22 @@ public abstract class DirectoryWalker {
      * @param results  the collection of result objects, may be updated
      * @return true to process this directory, false to skip this directory
      */
-    protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
+    protected boolean handleDirectory(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
         return true;
+    }
+
+    /**
+     * Overridable callback method invoked at the start of processing each directory.
+     * <p>
+     * This implementation does nothing.
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     */
+    protected void handleDirectoryStart(File directory, int depth, Collection results) {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -186,10 +198,13 @@ public abstract class DirectoryWalker {
 
     /**
      * Overridable callback method invoked for each restricted directory.
+     * <p>
+     * This implementation does nothing.
      *
      * @param directory  the restricted directory
+     * @param results  the collection of result objects, may be updated
      */
-    protected void handleRestricted(File directory) {
+    protected void handleRestricted(File directory, Collection results) {
         // do nothing - overridable by subclass
     }
 
@@ -198,9 +213,9 @@ public abstract class DirectoryWalker {
      * <p>
      * This implementation does nothing.
      *
-     * @param directory The directory being processed
-     * @param depth The directory level (starting directory = 0)
-     * @param results The collection of files found.
+     * @param directory  the directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
      */
     protected void handleDirectoryEnd(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
