@@ -110,6 +110,8 @@ Enhancements from 1.2
   - add methods to check if a file is older (i.e. isFileOlder()) - counterparts
     to the existing isFileNewer() methods.
 
+- FileUtils.checksum, FileUtils.checksumCRC32
+  - add methods to create a checksum of a file
 
 
 Feedback

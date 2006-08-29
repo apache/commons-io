@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -944,6 +946,101 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
         String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
+    }
+
+    //-----------------------------------------------------------------------
+    public void testChecksumCRC32() throws Exception {
+        // create a test file
+        String text = "Imagination is more important than knowledge - Einstein";
+        File file = new File(getTestDirectory(), "checksum-test.txt");
+        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        
+        // compute the expected checksum
+        Checksum expectedChecksum = new CRC32();
+        expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
+        long expectedValue = expectedChecksum.getValue();
+        
+        // compute the checksum of the file
+        long resultValue = FileUtils.checksumCRC32(file);
+        
+        assertEquals(expectedValue, resultValue);
+    }
+
+    public void testChecksum() throws Exception {
+        // create a test file
+        String text = "Imagination is more important than knowledge - Einstein";
+        File file = new File(getTestDirectory(), "checksum-test.txt");
+        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        
+        // compute the expected checksum
+        Checksum expectedChecksum = new CRC32();
+        expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
+        long expectedValue = expectedChecksum.getValue();
+        
+        // compute the checksum of the file
+        Checksum testChecksum = new CRC32();
+        Checksum resultChecksum = FileUtils.checksum(file, testChecksum);
+        long resultValue = resultChecksum.getValue();
+        
+        assertSame(testChecksum, resultChecksum);
+        assertEquals(expectedValue, resultValue);
+    }
+
+    public void testChecksumOnNullFile() throws Exception {
+        try {
+            FileUtils.checksum((File) null, new CRC32());
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+    }
+
+    public void testChecksumOnNullChecksum() throws Exception {
+        // create a test file
+        String text = "Imagination is more important than knowledge - Einstein";
+        File file = new File(getTestDirectory(), "checksum-test.txt");
+        FileUtils.writeStringToFile(file, text, "US-ASCII");
+        try {
+            FileUtils.checksum(file, (Checksum) null);
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+    }
+
+    public void testChecksumOnDirectory() throws Exception {
+        try {
+            FileUtils.checksum(new File("."), new CRC32());
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+    }
+
+    public void testChecksumDouble() throws Exception {
+        // create a test file
+        String text1 = "Imagination is more important than knowledge - Einstein";
+        File file1 = new File(getTestDirectory(), "checksum-test.txt");
+        FileUtils.writeStringToFile(file1, text1, "US-ASCII");
+        
+        // create a second test file
+        String text2 = "To be or not to be - Shakespeare";
+        File file2 = new File(getTestDirectory(), "checksum-test2.txt");
+        FileUtils.writeStringToFile(file2, text2, "US-ASCII");
+        
+        // compute the expected checksum
+        Checksum expectedChecksum = new CRC32();
+        expectedChecksum.update(text1.getBytes("US-ASCII"), 0, text1.length());
+        expectedChecksum.update(text2.getBytes("US-ASCII"), 0, text2.length());
+        long expectedValue = expectedChecksum.getValue();
+        
+        // compute the checksum of the file
+        Checksum testChecksum = new CRC32();
+        FileUtils.checksum(file1, testChecksum);
+        FileUtils.checksum(file2, testChecksum);
+        long resultValue = testChecksum.getValue();
+        
+        assertEquals(expectedValue, resultValue);
     }
 
 }

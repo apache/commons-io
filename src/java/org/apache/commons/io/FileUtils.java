@@ -30,6 +30,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedInputStream;
+import java.util.zip.Checksum;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
@@ -37,6 +40,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.output.NullOutputStream;
 
 /**
  * General file manipulation utilities.
@@ -52,6 +56,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <li>listing files and directories by filter and extension
  * <li>comparing file content
  * <li>file last changed date
+ * <li>calculating a checksum
  * </ul>
  * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
@@ -1358,4 +1363,53 @@ public class FileUtils {
         }
         return file.lastModified() < timeMillis;
     }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Computes the checksum of a file using the CRC32 checksum routine.
+     * The value of the checksum is returned.
+     *
+     * @param file  the file to checksum, not null
+     * @param checksum  the checksum object to be used, not null
+     * @return the checksum value
+     * @throws NullPointerException if the file or checksum is null
+     * @throws IllegalArgumentException if the file is a directory
+     * @since Commons IO 1.3
+     */
+    public static long checksumCRC32(File file) throws IOException {
+        CRC32 crc = new CRC32();
+        checksum(file, crc);
+        return crc.getValue();
+    }
+
+    /**
+     * Computes the checksum of a file using the specified checksum object.
+     * Multiple files may be checked using one <code>Checksum</code> instance
+     * if desired simply by reusing the same checksum object.
+     * For example:
+     * <pre>
+     *   long csum = FileUtils.checksum(file, new CRC32()).getValue();
+     * </pre>
+     *
+     * @param file  the file to checksum, not null
+     * @param checksum  the checksum object to be used, not null
+     * @return the checksum specified, updated with the content of the file
+     * @throws NullPointerException if the file or checksum is null
+     * @throws IllegalArgumentException if the file is a directory
+     * @since Commons IO 1.3
+     */
+    public static Checksum checksum(File file, Checksum checksum) throws IOException {
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException("Checksums can't be computed on directories");
+        }
+        InputStream in = null;
+        try {
+            in = new CheckedInputStream(new FileInputStream(file), checksum);
+            IOUtils.copy(in, new NullOutputStream());
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+        return checksum;
+    }
+
 }
