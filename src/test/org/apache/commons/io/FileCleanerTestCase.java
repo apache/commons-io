@@ -64,29 +64,114 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
-    /**
-     *  Test the FileCleaner implementation.
-     */
-    public void testFileCleaner() throws Exception {
+    //-----------------------------------------------------------------------
+    public void testFileCleanerFile() throws Exception {
         String path = testFile.getPath();
-
-        assertFalse("File does not exist", testFile.exists());
+        
+        assertEquals(false, testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
-        assertTrue("File exists", testFile.exists());
-
-        assertTrue("No files tracked", FileCleaner.getTrackCount() == 0);
+        assertEquals(true, testFile.exists());
+        
+        assertEquals(0, FileCleaner.getTrackCount());
         FileCleaner.track(path, r);
-        assertTrue("One file tracked", FileCleaner.getTrackCount() == 1);
-
+        assertEquals(1, FileCleaner.getTrackCount());
+        
         r.close();
         testFile = null;
         r = null;
-
         while (FileCleaner.getTrackCount() != 0) {
             System.gc();
         }
-
-        assertTrue("No files tracked", FileCleaner.getTrackCount() == 0);
-        assertFalse("File does not exist", new File(path).exists());
+        
+        assertEquals(0, FileCleaner.getTrackCount());
+        assertEquals(false, new File(path).exists());
     }
+
+    public void testFileCleanerDirectory() throws Exception {
+        createFile(testFile, 100);
+        assertEquals(true, testFile.exists());
+        assertEquals(true, getTestDirectory().exists());
+        
+        Object obj = new Object();
+        assertEquals(0, FileCleaner.getTrackCount());
+        FileCleaner.track(getTestDirectory(), obj);
+        assertEquals(1, FileCleaner.getTrackCount());
+        
+        obj = null;
+        while (FileCleaner.getTrackCount() != 0) {
+            System.gc();
+        }
+        
+        assertEquals(0, FileCleaner.getTrackCount());
+        assertEquals(true, testFile.exists());  // not deleted, as dir not empty
+        assertEquals(true, testFile.getParentFile().exists());  // not deleted, as dir not empty
+    }
+
+    public void testFileCleanerDirectory_NullStrategy() throws Exception {
+        createFile(testFile, 100);
+        assertEquals(true, testFile.exists());
+        assertEquals(true, getTestDirectory().exists());
+        
+        Object obj = new Object();
+        assertEquals(0, FileCleaner.getTrackCount());
+        FileCleaner.track(getTestDirectory(), obj, (FileDeleteStrategy) null);
+        assertEquals(1, FileCleaner.getTrackCount());
+        
+        obj = null;
+        while (FileCleaner.getTrackCount() != 0) {
+            System.gc();
+        }
+        
+        assertEquals(0, FileCleaner.getTrackCount());
+        assertEquals(true, testFile.exists());  // not deleted, as dir not empty
+        assertEquals(true, testFile.getParentFile().exists());  // not deleted, as dir not empty
+    }
+
+    public void testFileCleanerDirectory_ForceStrategy() throws Exception {
+        createFile(testFile, 100);
+        assertEquals(true, testFile.exists());
+        assertEquals(true, getTestDirectory().exists());
+        
+        Object obj = new Object();
+        assertEquals(0, FileCleaner.getTrackCount());
+        FileCleaner.track(getTestDirectory(), obj, FileDeleteStrategy.FORCE);
+        assertEquals(1, FileCleaner.getTrackCount());
+        
+        obj = null;
+        while (FileCleaner.getTrackCount() != 0) {
+            System.gc();
+        }
+        
+        assertEquals(0, FileCleaner.getTrackCount());
+        assertEquals(false, testFile.exists());
+        assertEquals(false, testFile.getParentFile().exists());
+    }
+
+    public void testFileCleanerNull() throws Exception {
+        try {
+            FileCleaner.track((File) null, new Object());
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+        try {
+            FileCleaner.track((File) null, new Object(), FileDeleteStrategy.NORMAL);
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+        try {
+            FileCleaner.track((String) null, new Object());
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+        try {
+            FileCleaner.track((String) null, new Object(), FileDeleteStrategy.NORMAL);
+            fail();
+        } catch (NullPointerException ex) {
+            // expected
+        }
+    }
+
 }

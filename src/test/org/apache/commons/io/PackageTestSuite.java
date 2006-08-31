@@ -38,6 +38,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(CopyUtilsTest.class));
         suite.addTest(new TestSuite(DemuxTestCase.class));
         suite.addTest(new TestSuite(EndianUtilsTest.class));
+        suite.addTest(new TestSuite(FileCleanerTestCase.class));
         suite.addTest(new TestSuite(FilenameUtilsTestCase.class));
         suite.addTest(new TestSuite(FilenameUtilsWildcardTestCase.class));
         suite.addTest(new TestSuite(FileSystemUtilsTestCase.class));

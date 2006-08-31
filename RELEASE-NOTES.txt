@@ -51,6 +51,9 @@ Bug fixes from 1.2
 - FileSystemUtils.freeSpace [IO-91]
   - This is now documented not to work on SunOS 5
 
+- FileCleaner
+  - This now handles the situation where an error occurs when deleting the file
+
 
 Enhancements from 1.2
 ---------------------
@@ -61,6 +64,19 @@ Enhancements from 1.2
   - New methods to handle case-sensitivity
   - wildcardMatch - new method that has IOCase as a parameter
   - equals - new method that has IOCase as a parameter
+
+- FileUtils.isFileOlder
+  - add methods to check if a file is older (i.e. isFileOlder()) - counterparts
+    to the existing isFileNewer() methods.
+
+- FileUtils.checksum, FileUtils.checksumCRC32
+  - add methods to create a checksum of a file
+
+- FileDeleteStrategy
+- FileCleaner    [IO-56,IO-70]
+  - FileDeleteStrategy is a strategy for handling file deletion
+  - This can be used as a calback in FileCleaner
+  - Together these allow FileCleaner to do a forceDelete to kill directories
 
 - WildcardFileFilter
   - Replacement for WildcardFilter
@@ -105,13 +121,6 @@ Enhancements from 1.2
 - FileFilterUtils
   - new sizeRangeFileFilter(long minimumSize, long maximumSize) method which 
     creates a filter that accepts files within the specified size range.
-
-- FileUtils
-  - add methods to check if a file is older (i.e. isFileOlder()) - counterparts
-    to the existing isFileNewer() methods.
-
-- FileUtils.checksum, FileUtils.checksumCRC32
-  - add methods to create a checksum of a file
 
 
 Feedback
