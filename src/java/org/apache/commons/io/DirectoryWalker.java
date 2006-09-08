@@ -44,7 +44,7 @@ import java.util.Collection;
  *      return results;
  *    }
  *
- *    protected boolean handleDirectoryStart(File directory, int depth, Collection results) {
+ *    protected boolean handleDirectory(File directory, int depth, Collection results) {
  *      // delete svn directories and then skip
  *      if (".svn".equals(directory.getName())) {
  *        directory.delete();
