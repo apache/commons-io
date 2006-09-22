@@ -28,7 +28,9 @@ import java.util.Collection;
  * limit the files and direcories visited.
  * Commons IO supplies many common filter implementations in the 
  * <a href="filefilter/package-summary.html"> filefilter</a> package.
- * <p>
+ *
+ * <h3>Example Implementation</h3>
+ *
  * There are many possible extensions, for example, to delete all
  * files and '.svn' directories, and return a list of deleted files:
  * <pre>
@@ -61,6 +63,35 @@ import java.util.Collection;
  *      results.add(file);
  *    }
  *  }
+ * </pre>
+ *
+ * <h3>Filter Example</h3>
+ *
+ * If you wanted all directories which are not hidden
+ * and files which end in ".txt" - you could build a composite filter
+ * using the filter implementations in the Commons IO
+ * <a href="filefilter/package-summary.html">filefilter</a> package
+ * in the following way:
+ *
+ * <pre>
+ *
+ *    // Create a filter for Non-hidden directories
+ *    IOFileFilter fooDirFilter = 
+ *        FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
+ *                                      HiddenFileFilter.VISIBLE);
+ *
+ *    // Create a filter for Files ending in ".txt"
+ *    IOFileFilter fooFileFilter = 
+ *        FileFilterUtils.andFileFilter(FileFilterUtils.fileFileFilter,
+ *                                      FileFilterUtils.suffixFileFilter(".txt"));
+ *
+ *    // Combine the directory and file filters using an OR condition
+ *    java.io.FileFilter fooFilter = 
+ *        FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
+ *
+ *    // Use the filter to construct a DirectoryWalker implementation
+ *    FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter, -1);
+ *
  * </pre>
  *
  * @since Commons IO 1.3

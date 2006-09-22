@@ -1370,10 +1370,10 @@ public class FileUtils {
      * The value of the checksum is returned.
      *
      * @param file  the file to checksum, not null
-     * @param checksum  the checksum object to be used, not null
      * @return the checksum value
      * @throws NullPointerException if the file or checksum is null
      * @throws IllegalArgumentException if the file is a directory
+     * @throws IOException if an IO error occurs reading the file
      * @since Commons IO 1.3
      */
     public static long checksumCRC32(File file) throws IOException {
@@ -1396,6 +1396,7 @@ public class FileUtils {
      * @return the checksum specified, updated with the content of the file
      * @throws NullPointerException if the file or checksum is null
      * @throws IllegalArgumentException if the file is a directory
+     * @throws IOException if an IO error occurs reading the file
      * @since Commons IO 1.3
      */
     public static Checksum checksum(File file, Checksum checksum) throws IOException {
