@@ -378,6 +378,7 @@ public class FileSystemUtils {
      * Performs the os command.
      *
      * @param cmdAttribs  the command line parameters
+     * @param max The maximum limit for the lines returned
      * @return the parsed data
      * @throws IOException if an error occurs
      */

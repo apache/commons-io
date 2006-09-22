@@ -131,9 +131,22 @@ public class FileDeleteStrategy {
      * Force file deletion strategy.
      */
     static class ForceFileDeleteStrategy extends FileDeleteStrategy {
+        /** Default Constructor */
         ForceFileDeleteStrategy() {
             super("Force");
         }
+
+        /**
+         * Deletes the file object.
+         * <p>
+         * This implementation uses <code>FileUtils.forceDelete() <code>
+         * if the file exists.
+         *
+         * @param fileToDelete  the file to delete, not null
+         * @return Always returns <code>true</code>
+         * @throws NullPointerException if the file is null
+         * @throws IOException if an error occurs during file deletion
+         */
         protected boolean doDelete(File fileToDelete) throws IOException {
             if (fileToDelete.exists()) {
                 FileUtils.forceDelete(fileToDelete);
