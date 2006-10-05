@@ -110,7 +110,7 @@ Enhancements from 1.2
 - EmptyFileFilter
   - New IOFileFilter implementation
   - Accepts files or directories that are empty
-  - Singleton instances provided (EMPTY/NO_EMPTY)
+  - Singleton instances provided (EMPTY/NOT_EMPTY)
 
 - TrueFileFilter/FalseFileFilter/DirectoryFileFilter
   - New singleton instance constants (TRUE/FALSE/DIRECTORY)
