@@ -51,6 +51,11 @@ Bug fixes from 1.2
 - FileSystemUtils.freeSpace [IO-91]
   - This is now documented not to work on SunOS 5
 
+- FileSystemUtils [IO-93]
+  - Fixed resource leak leading to 'Too many open files' error
+  - Previously did not destroy Process instances (as JDK Javadoc is so poor)
+  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+
 - FileCleaner
   - This now handles the situation where an error occurs when deleting the file
 
