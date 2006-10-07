@@ -119,7 +119,7 @@ public class FileDeleteStrategy {
     //-----------------------------------------------------------------------
     /**
      * Gets a string describing the delete strategy.
-     * 
+     *
      * @return a string describing the delete strategy
      */
     public String toString() {
