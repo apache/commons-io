@@ -59,6 +59,10 @@ Bug fixes from 1.2
 - FileCleaner
   - This now handles the situation where an error occurs when deleting the file
 
+- IOUtils.copy [IO-84]
+  - Comment about result byte/char count being limited to an int, thus
+    being inacurate for large streams
+
 
 Enhancements from 1.2
 ---------------------
