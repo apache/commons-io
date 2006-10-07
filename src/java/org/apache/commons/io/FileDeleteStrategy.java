@@ -29,7 +29,7 @@ import java.io.IOException;
  * This class captures the strategy to use and is designed for user subclassing.
  *
  * @author Stephen Colebourne
- * @version $Id: $
+ * @version $Id$
  * @since Commons IO 1.3
  */
 public class FileDeleteStrategy {
@@ -70,7 +70,7 @@ public class FileDeleteStrategy {
      * @return true if the file was deleted, or there was no such file
      */
     public boolean deleteQuietly(File fileToDelete) {
-        if (fileToDelete == null) {
+        if (fileToDelete == null || fileToDelete.exists() == false) {
             return true;
         }
         try {
@@ -91,7 +91,7 @@ public class FileDeleteStrategy {
      * @throws IOException if an error occurs during file deletion
      */
     public void delete(File fileToDelete) throws IOException {
-        if (doDelete(fileToDelete) == false) {
+        if (fileToDelete.exists() && doDelete(fileToDelete) == false) {
             throw new IOException("Deletion failed: " + fileToDelete);
         }
     }
@@ -103,12 +103,12 @@ public class FileDeleteStrategy {
      * The implementation may return either false or an <code>IOException</code>
      * when deletion fails. The {@link #delete(File)} and {@link #deleteQuietly(File)}
      * methods will handle either response appropriately.
-     * If the file does not exist, the implementation must return true.
+     * A check has been made to ensure that the file will exist.
      * <p>
      * This implementation uses {@link File#delete()}.
      *
-     * @param fileToDelete  the file to delete, not null
-     * @return true if the file was deleted, or there was no such file
+     * @param fileToDelete  the file to delete, exists, not null
+     * @return true if the file was deleteds
      * @throws NullPointerException if the file is null
      * @throws IOException if an error occurs during file deletion
      */
@@ -123,7 +123,7 @@ public class FileDeleteStrategy {
      * @return a string describing the delete strategy
      */
     public String toString() {
-        return "FileDelete[" + name + "]";
+        return "FileDeleteStrategy[" + name + "]";
     }
 
     //-----------------------------------------------------------------------
@@ -148,9 +148,7 @@ public class FileDeleteStrategy {
          * @throws IOException if an error occurs during file deletion
          */
         protected boolean doDelete(File fileToDelete) throws IOException {
-            if (fileToDelete.exists()) {
-                FileUtils.forceDelete(fileToDelete);
-            }
+            FileUtils.forceDelete(fileToDelete);
             return true;
         }
     }
