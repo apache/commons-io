@@ -17,12 +17,12 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.StringReader;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -479,17 +479,17 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     static class MockFileSystemUtils extends FileSystemUtils {
         private final int exitCode;
-        private final StringReader reader;
+        private final byte[] bytes;
         private final String cmd;
         public MockFileSystemUtils(int exitCode, String lines) {
             this(exitCode, lines, null);
         }
         public MockFileSystemUtils(int exitCode, String lines, String cmd) {
             this.exitCode = exitCode;
-            this.reader = new StringReader(lines);
+            this.bytes = lines.getBytes();
             this.cmd = cmd;
         }
-        protected Process openProcess(String[] params) {
+        Process openProcess(String[] params) {
             if (cmd != null) {
                 assertEquals(cmd, params[params.length - 1]);
             }
@@ -498,7 +498,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                     return null;
                 }
                 public InputStream getInputStream() {
-                    return null;
+                    return new ByteArrayInputStream(bytes);
                 }
                 public OutputStream getOutputStream() {
                     return null;
@@ -512,9 +512,6 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 public void destroy() {
                 }
             };
-        }
-        protected BufferedReader openProcessStream(Process p) {
-            return new BufferedReader(reader);
         }
     }
 

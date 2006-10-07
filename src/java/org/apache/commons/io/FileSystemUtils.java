@@ -18,7 +18,9 @@ package org.apache.commons.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -113,8 +115,8 @@ public class FileSystemUtils {
      * As this is not very useful, this method is deprecated in favour
      * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
-     * Note that some OS's are NOT currently supported, including OS/390
-     * and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
+     * Note that some OS's are NOT currently supported, including OS/390,
+     * OpenVMS and and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
      * <pre>
      * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -374,6 +376,7 @@ public class FileSystemUtils {
         }
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Performs the os command.
      *
@@ -383,16 +386,31 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     List performCommand(String[] cmdAttribs, int max) throws IOException {
-        List lines = new ArrayList();
-        BufferedReader in = null;
+        // this method does what it can to avoid the 'Too many open files' error
+        // based on trial and error and these links:
+        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
+        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+        // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
+        // however, its still not perfect as the JDK support is so poor
+        // (see commond-exec or ant for a better multi-threaded multi-os solution)
+        
+        List lines = new ArrayList(20);
+        Process proc = null;
+        InputStream in = null;
+        OutputStream out = null;
+        InputStream err = null;
+        BufferedReader inr = null;
         try {
-            Process proc = openProcess(cmdAttribs);
-            in = openProcessStream(proc);
-            String line = in.readLine();
+            proc = openProcess(cmdAttribs);
+            in = proc.getInputStream();
+            out = proc.getOutputStream();
+            err = proc.getErrorStream();
+            inr = new BufferedReader(new InputStreamReader(in));
+            String line = inr.readLine();
             while (line != null && lines.size() < max) {
                 line = line.toLowerCase().trim();
                 lines.add(line);
-                line = in.readLine();
+                line = inr.readLine();
             }
             
             proc.waitFor();
@@ -416,6 +434,12 @@ public class FileSystemUtils {
                     "' for command " + Arrays.asList(cmdAttribs));
         } finally {
             IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(err);
+            IOUtils.closeQuietly(inr);
+            if (proc != null) {
+                proc.destroy();
+            }
         }
     }
 
@@ -428,18 +452,6 @@ public class FileSystemUtils {
      */
     Process openProcess(String[] cmdAttribs) throws IOException {
         return Runtime.getRuntime().exec(cmdAttribs);
-    }
-
-    /**
-     * Opens the stream to the operating system.
-     *
-     * @param proc  the process
-     * @return a reader
-     * @throws IOException if an error occurs
-     */
-    BufferedReader openProcessStream(Process proc) throws IOException {
-        return new BufferedReader(
-            new InputStreamReader(proc.getInputStream()));
     }
 
 }
