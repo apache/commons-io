@@ -21,6 +21,8 @@ import java.io.FileFilter;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -124,11 +126,11 @@ public class DirectoryWalkerTestCase extends TestCase {
      */
     public void testFilterAndLimitC() {
         List results = new TestFileFinder(NOT_SVN, 3).find(javaDir);
-        assertEquals("[A] Result Size", 4, results.size());
-        assertTrue("[A] Start Dir",   results.contains(javaDir));
-        assertTrue("[A] Org Dir",     results.contains(orgDir));
-        assertTrue("[A] Apache Dir",  results.contains(apacheDir));
-        assertTrue("[A] Commons Dir", results.contains(commonsDir));
+        assertEquals("[C] Result Size", 4, results.size());
+        assertTrue("[C] Start Dir",   results.contains(javaDir));
+        assertTrue("[C] Org Dir",     results.contains(orgDir));
+        assertTrue("[C] Apache Dir",  results.contains(apacheDir));
+        assertTrue("[C] Commons Dir", results.contains(commonsDir));
     }
 
     /**
@@ -162,7 +164,6 @@ public class DirectoryWalkerTestCase extends TestCase {
         assertEquals("Result Size", 1, results.size());
         assertTrue("Current Dir", results.contains(invalidDir));
  
-        // TODO is this what we want with Null directory?
         try {
             new TestFileFinder(null, -1).find(null);
             fail("Null start directory didn't throw Exception");
@@ -204,6 +205,20 @@ public class DirectoryWalkerTestCase extends TestCase {
         return new NameFileFilter(names);
     }
 
+    /**
+     * Test Cancel
+     */
+    public void testCancel() {
+        List results = new TestCancelWalker(2, true).find(javaDir);
+        assertEquals(2, results.size());
+        
+        results = new TestCancelWalker(3, true).find(javaDir);
+        assertEquals(3, results.size());
+        
+        results = new TestCancelWalker(3, false).find(javaDir);
+        assertEquals(6, results.size());
+    }
+
     // ------------ Test DirectoryWalker implementation --------------------------
 
     /**
@@ -219,7 +234,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         /** find files. */
         protected List find(File startDirectory) {
            List results = new ArrayList();
-           walk(startDirectory, results);
+           Assert.assertEquals(true, walk(startDirectory, results));
            return results;
         }
 
@@ -249,6 +264,84 @@ public class DirectoryWalkerTestCase extends TestCase {
         /** Always returns false. */
         protected boolean handleDirectory(File directory, int depth, Collection results) {
             return false;
+        }
+    }
+
+    // ------------ Test DirectoryWalker implementation --------------------------
+
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    static class TestCancelWalker extends DirectoryWalker {
+        private boolean cancelled;
+        private int count;
+        private boolean accept;
+
+        TestCancelWalker(int count, boolean accept) {
+            super();
+            this.count = count;
+            this.accept = accept;
+        }
+
+        /** find files. */
+        public List find(File startDirectory) {
+           List results = new ArrayList();
+           Assert.assertEquals(false, walk(startDirectory, results));
+           return results;
+        }
+
+        /** Return cancelled flag. */
+        protected boolean isCancelled() {
+            return cancelled;
+        }
+
+        /** Handles a directory start. */
+        protected void handleDirectoryStart(File directory, int depth, Collection results) {
+            if (accept) {
+                Assert.assertEquals(false, cancelled);
+            }
+        }
+
+        /** Handles a directory end by adding the File to the result set. */
+        protected void handleDirectoryEnd(File directory, int depth, Collection results) {
+            if (accept) {
+                Assert.assertEquals(false, cancelled);
+            }
+            results.add(directory);
+            cancelled = (results.size() >= count);
+        }
+
+        /** Handles a file by adding the File to the result set. */
+        protected void handleFile(File file, int depth, Collection results) {
+            if (accept) {
+                Assert.assertEquals(false, cancelled);
+            }
+            results.add(file);
+            cancelled = (results.size() >= count);
+        }
+
+        /** Handles start. */
+        protected void handleStart(File directory, Collection results) {
+            if (accept) {
+                Assert.assertEquals(false, cancelled);
+            }
+        }
+
+        /** Handles end. */
+        protected void handleEnd(Collection results) {
+            if (accept) {
+                Assert.assertEquals(false, cancelled);
+            }
+        }
+
+        /** Handles end. */
+        protected boolean handleCancelled(File file, int depth, Collection results) {
+            Assert.assertEquals(true, cancelled);
+            if (accept) {
+                return true;
+            }
+            return (results.size() >= (count * 2));
         }
     }
 

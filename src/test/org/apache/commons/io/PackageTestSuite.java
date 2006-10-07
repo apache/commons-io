@@ -37,6 +37,7 @@ public class PackageTestSuite {
         TestSuite suite = new TestSuite("IO Utilities");
         suite.addTest(new TestSuite(CopyUtilsTest.class));
         suite.addTest(new TestSuite(DemuxTestCase.class));
+        suite.addTest(new TestSuite(DirectoryWalkerTestCase.class));
         suite.addTest(new TestSuite(EndianUtilsTest.class));
         suite.addTest(new TestSuite(FileCleanerTestCase.class));
         suite.addTest(new TestSuite(FileDeleteStrategyTestCase.class));
