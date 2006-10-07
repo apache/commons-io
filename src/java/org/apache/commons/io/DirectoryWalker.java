@@ -94,6 +94,49 @@ import java.util.Collection;
  *
  * </pre>
  *
+ * <h3>Cancellation</h3>
+ *
+ * The DirectoryWalker contains some of the logic required for cancel processing.
+ * Subclasses must complete the implementation.
+ * This is for performance and to ensure you think about the multihreaded implications.
+ * <p>
+ * Before any processing occurs on each file or directory the
+ * <code>isCancelled()</code> method is called. If it returns <code>true</code>
+ * then <code>handleCancelled()<code> is called. This method can decide whether
+ * to accept or ignore the cancellation. If it accepts it then all further
+ * processing is skipped and the operation returns. If it rejects it then
+ * processing continues on as before. This is useful if a group of files has
+ * meaning and cancellation cannot occur in the middle of the group.
+ * <p>
+ * The default implementation of <code>isCancelled()</code> always
+ * returns <code>false</code> and it is down to the implementation
+ * to fully implement the <code>isCancelled()</code> behaviour.
+ * <p>
+ * The following example uses the
+ * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">
+ * volatile</a> keyword to (hopefully) ensure it will work properly in
+ * a multi-threaded environment.
+ *
+ * <pre>
+ *  public class FooDirectoryWalker extends DirectoryWalker {
+ *
+ *    private volatile boolean cancelled = false;
+ *
+ *    public void cancel() {
+ *        cancelled = true;
+ *    }
+ *
+ *    public boolean isCancelled() {
+ *        return cancelled;
+ *    }
+ *
+ *    protected boolean handleCancelled(File file, int depth, Collection results) {
+ *       // implement any cancel processing here
+ *       return true;  // accept cancellation
+ *    }
+ *  }
+ * </pre>
+ *
  * @since Commons IO 1.3
  * @version $Revision: 424748 $
  */
@@ -107,6 +150,13 @@ public abstract class DirectoryWalker {
      * The limit on the directory depth to walk.
      */
     private final int depthLimit;
+
+    /**
+     * Construct an instance with no filtering and unlimited <i>depth</i>.
+     */
+    protected DirectoryWalker() {
+        this(null, -1);
+    }
 
     /**
      * Construct an instance with a filter and limit the <i>depth</i> navigated to.
@@ -131,35 +181,49 @@ public abstract class DirectoryWalker {
      * Once called, this method will emit events as it walks the hierarchy.
      * The event methods have the prefix <code>handle</code>.
      *
-     * @param startDirectory  the directory to start from
+     * @param startDirectory  the directory to start from, not null
      * @param results  the collection of result objects, may be updated
+     * @return true if completed, false if cancelled
+     * @throws NullPointerException if the start directory is null
      */
-    protected void walk(File startDirectory, Collection results) {
+    protected boolean walk(File startDirectory, Collection results) {
         handleStart(startDirectory, results);
-        walk(startDirectory, 0, results);
+        if (walk(startDirectory, 0, results) == false) {
+            return false;  // cancelled
+        }
         handleEnd(results);
+        return true;
     }
 
     /**
      * Main recursive method to examine the directory hierarchy.
      *
-     * @param directory  the directory to examine
+     * @param directory  the directory to examine, not null
      * @param depth  the directory level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
+     * @return false if cancelled
      */
-    private void walk(File directory, int depth, Collection results) {
+    private boolean walk(File directory, int depth, Collection results) {
+        if (isCancelled() && handleCancelled(directory, depth, results)) {
+            return false;  // cancelled
+        }
         if (handleDirectory(directory, depth, results)) {
             handleDirectoryStart(directory, depth, results);
             int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
                 if (files == null) {
-                    handleRestricted(directory, results);
+                    handleRestricted(directory, childDepth, results);
                 } else {
                     for (int i = 0; i < files.length; i++) {
                         if (files[i].isDirectory()) {
-                            walk(files[i], childDepth, results);
+                            if (walk(files[i], childDepth, results) == false) {
+                                return false;  // cancelled
+                            }
                         } else {
+                            if (isCancelled() && handleCancelled(files[i], childDepth, results)) {
+                                return false;  // cancelled
+                            }
                             handleFile(files[i], childDepth, results);
                         }
                     }
@@ -167,6 +231,7 @@ public abstract class DirectoryWalker {
             }
             handleDirectoryEnd(directory, depth, results);
         }
+        return true;
     }
 
     //-----------------------------------------------------------------------
@@ -198,7 +263,7 @@ public abstract class DirectoryWalker {
      */
     protected boolean handleDirectory(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
-        return true;
+        return true;  // process directory
     }
 
     /**
@@ -233,9 +298,10 @@ public abstract class DirectoryWalker {
      * This implementation does nothing.
      *
      * @param directory  the restricted directory
+     * @param depth  the current directory level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
      */
-    protected void handleRestricted(File directory, Collection results) {
+    protected void handleRestricted(File directory, int depth, Collection results) {
         // do nothing - overridable by subclass
     }
 
@@ -261,6 +327,48 @@ public abstract class DirectoryWalker {
      */
     protected void handleEnd(Collection results) {
         // do nothing - overridable by subclass
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Indicates whether the operation has been cancelled or not.
+     * <p>
+     * This implementation always returns <code>false</code>.
+     *
+     * @return true if the operation has been cancelled
+     */
+    protected boolean isCancelled() {
+        return false;
+    }
+
+    /**
+     * Overridable callback method invoked when the operation is cancelled.
+     * <p>
+     * This method returns a boolean to indicate if the cancellation is being
+     * accepted or rejected. This could be useful if you need to finish processing
+     * all the files in a directory before accepting the cancellation request.
+     * For example, this only accepts the cancel when the current directory is complete:
+     * <pre>
+     * protected boolean handleCancelled(File file, int depth, Collection results) {
+     *   return file.isDirectory();
+     * }
+     * </pre>
+     * If you return true, then the whole operation is cancelled and no more event
+     * methods will be called.
+     * <p>
+     * If you return false, then normal processing will continue until the next time
+     * the <code>isCancelled()</code> method returns false.
+     * <p>
+     * This implementation returns true, accepting the cancellation.
+     *
+     * @param file  the file about to be processed which may be a file or a directory
+     * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @return true to accept the cancellation, false to reject it
+     */
+    protected boolean handleCancelled(File file, int depth, Collection results) {
+        // do nothing - overridable by subclass
+        return true;  // accept cancellation
     }
 
 }
