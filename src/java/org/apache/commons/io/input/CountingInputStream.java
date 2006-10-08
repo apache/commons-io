@@ -30,7 +30,7 @@ import java.io.InputStream;
 public class CountingInputStream extends ProxyInputStream {
 
     /** The count of bytes that have passed. */
-    private int count;
+    private long count;
 
     /**
      * Constructs a new CountingInputStream.
@@ -86,20 +86,58 @@ public class CountingInputStream extends ProxyInputStream {
 
     /**
      * The number of bytes that have passed through this stream.
+     * <p>
+     * <strong>WARNING</strong> This method will return an
+     * incorrect count for files over 2GB - use
+     * <code>getByteCount()</code> instead.
      *
      * @return the number of bytes accumulated
+     * @deprecated use <code>getByteCount()</code> - see issue IO-84
      */
     public int getCount() {
+        return (int)getByteCount();
+    }
+
+    /** 
+     * Set the count back to 0. 
+     * <p>
+     * <strong>WARNING</strong> This method will return an
+     * incorrect count for files over 2GB - use
+     * <code>resetByteCount()</code> instead.
+     *
+     * @return the count previous to resetting.
+     * @deprecated use <code>resetByteCount()</code> - see issue IO-84
+     */
+    public synchronized int resetCount() {
+        return (int)resetByteCount();
+    }
+
+    /**
+     * The number of bytes that have passed through this stream.
+     * <p>
+     * <strong>N.B.</strong> This method was introduced as an
+     * alternative for the <code>getCount()</code> method
+     * because that method returns an integer which will result
+     * in incorrect count for files over 2GB being returned.
+     * 
+     * @return the number of bytes accumulated
+     */
+    public long getByteCount() {
         return this.count;
     }
 
     /** 
      * Set the count back to 0. 
+     * <p>
+     * <strong>N.B.</strong> This method was introduced as an
+     * alternative for the <code>resetCount()</code> method
+     * because that method returns an integer which will result
+     * in incorrect count for files over 2GB being returned.
      *
      * @return the count previous to resetting.
      */
-    public synchronized int resetCount() {
-        int tmp = this.count;
+    public synchronized long resetByteCount() {
+        long tmp = this.count;
         this.count = 0;
         return tmp;
     }
