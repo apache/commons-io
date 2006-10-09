@@ -151,7 +151,7 @@ public class MockInputStream extends InputStream {
     /**
      * Read a byte.
      *
-     * @return Either The byte value returned by <code>readValue()</code>
+     * @return Either The byte value returned by <code>processByte()</code>
      * or <code>-1</code> if the end of file has been reached and
      * <code>throwEofException</code> is set to <code>false</code>.
      * @throws EOFException if the end of file is reached and
