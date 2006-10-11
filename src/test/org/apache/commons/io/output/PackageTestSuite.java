@@ -38,6 +38,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(DeferredFileOutputStreamTest.class));
         suite.addTest(new TestSuite(LockableFileWriterTest.class));
         suite.addTest(new TestSuite(NullOutputStreamTest.class));
+        suite.addTest(new TestSuite(NullWriterTest.class));
         suite.addTest(new TestSuite(TeeOutputStreamTest.class));
         return suite;
     }
