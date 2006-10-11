@@ -16,11 +16,7 @@
  */
 package org.apache.commons.io.output;
 
-
-import java.io.IOException;
-
 import junit.framework.TestCase;
-
 
 /**
  * Really not a lot to do here, but checking that no 
@@ -28,14 +24,13 @@ import junit.framework.TestCase;
  *
  * @version $Revision$
  */
-
 public class NullWriterTest extends TestCase {
 
     public NullWriterTest(String name) {
         super(name);
     }
 
-    public void testNull() throws IOException {
+    public void testNull() {
         char[] chars = new char[] {'A', 'B', 'C'};
         NullWriter writer = new NullWriter();
         writer.write(1);

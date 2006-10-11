@@ -16,13 +16,12 @@
  */
 package org.apache.commons.io.output;
 
-import java.io.IOException;
 import java.io.Writer;
 
 /**
  * This {@link Writer} writes all data to the famous <b>/dev/null</b>.
  * <p>
- * This {@link Writer} has no destination (file/socket etc.) and all
+ * This <code>Writer</code> has no destination (file/socket etc.) and all
  * characters written to it are ignored and lost.
  * 
  * @version $Id$
@@ -36,37 +35,37 @@ public class NullWriter extends Writer {
     }
 
     /** @see java.io.Writer#write(int) */
-    public void write(int idx) throws IOException {
+    public void write(int idx) {
         //to /dev/null
     }
 
     /** @see java.io.Writer#write(char[]) */
-    public void write(char[] chr) throws IOException {
+    public void write(char[] chr) {
         //to /dev/null
     }
 
     /** @see java.io.Writer#write(char[], int, int) */
-    public void write(char[] chr, int st, int end) throws IOException {
+    public void write(char[] chr, int st, int end) {
         //to /dev/null
     }
 
     /** @see java.io.Writer#write(String) */
-    public void write(String str) throws IOException {
+    public void write(String str) {
         //to /dev/null
     }
 
     /** @see java.io.Writer#write(String, int, int) */
-    public void write(String str, int st, int end) throws IOException {
+    public void write(String str, int st, int end) {
         //to /dev/null
     }
 
     /** @see java.io.Writer#flush() */
-    public void flush() throws IOException {
+    public void flush() {
         //to /dev/null
     }
 
     /** @see java.io.Writer#close() */
-    public void close() throws IOException {
+    public void close() {
         //to /dev/null
     }
 
