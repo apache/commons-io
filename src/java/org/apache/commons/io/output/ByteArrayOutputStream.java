@@ -183,6 +183,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * @param out The OutputStream to write to.
      * @exception IOException
      *                if an I/O error occurs. In particular, an <code>IOException</code> is thrown if the output
      *                stream is closed.
@@ -229,6 +230,8 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * @param enc The name of the character encoding
+     * @return String converted from the byte array.
      * @exception UnsupportedEncodingException
      *                If the named charset is not supported
      * @see java.io.ByteArrayOutputStream#toString(String)
