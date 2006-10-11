@@ -63,6 +63,11 @@ Bug fixes from 1.2
   - Comment about result byte/char count being limited to an int, thus
     being inacurate for large streams
 
+- CountingInputStream/CountingOutputStream [IO-84]
+  - methods were declared as int thus the count was innacurate for large streams
+  - new long based methods getByteCount()/resetByteCount() added
+  - existing methods changed to throw an exception if the count is greater than an int
+
 
 Enhancements from 1.2
 ---------------------
