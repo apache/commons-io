@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A decorating input stream that counts the number of bytes that
- * have passed through so far.
+ * A decorating input stream that counts the number of bytes that have passed
+ * through the stream so far.
+ * <p>
+ * A typical use case would be during debugging, to ensure that data is being
+ * read as expected.
  *
  * @author Henri Yandell
  * @author Marcelo Liberato
@@ -34,15 +37,21 @@ public class CountingInputStream extends ProxyInputStream {
 
     /**
      * Constructs a new CountingInputStream.
-     * @param in InputStream to delegate to
+     *
+     * @param in  the InputStream to delegate to
      */
     public CountingInputStream(InputStream in) {
         super(in);
     }
 
+    //-----------------------------------------------------------------------
     /**
-     * Increases the count by super.read(b)'s return count
-     * 
+     * Reads a number of bytes into the byte array, keeping count of the
+     * number read.
+     *
+     * @param b  the buffer into which the data is read, not null
+     * @return the total number of bytes read into the buffer, -1 if end of stream
+     * @throws IOException if an I/O error occurs
      * @see java.io.InputStream#read(byte[]) 
      */
     public int read(byte[] b) throws IOException {
@@ -52,8 +61,14 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * Increases the count by super.read(b, off, len)'s return count
+     * Reads a number of bytes into the byte array at a specific offset,
+     * keeping count of the number read.
      *
+     * @param b  the buffer into which the data is read, not null
+     * @param off  the start offset in the buffer
+     * @param len  the maximum number of bytes to read
+     * @return the total number of bytes read into the buffer, -1 if end of stream
+     * @throws IOException if an I/O error occurs
      * @see java.io.InputStream#read(byte[], int, int)
      */
     public int read(byte[] b, int off, int len) throws IOException {
@@ -63,8 +78,11 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     /**
-     * Increases the count by 1 if a byte is successfully read. 
+     * Reads the next byte of data adding to the count of bytes received
+     * if a byte is successfully read. 
      *
+     * @return the byte read, -1 if end of stream
+     * @throws IOException if an I/O error occurs
      * @see java.io.InputStream#read()
      */
     public int read() throws IOException {
@@ -72,10 +90,14 @@ public class CountingInputStream extends ProxyInputStream {
         this.count += (found >= 0) ? 1 : 0;
         return found;
     }
-    
+
     /**
-     * Increases the count by the number of skipped bytes.
-     * 
+     * Skips the stream over the specified number of bytes, adding the skipped
+     * amount to the count.
+     *
+     * @param length  the number of bytes to skip
+     * @return the actual number of bytes skipped
+     * @throws IOException if an I/O error occurs
      * @see java.io.InputStream#skip(long)
      */
     public long skip(final long length) throws IOException {
@@ -84,6 +106,7 @@ public class CountingInputStream extends ProxyInputStream {
         return skip;
     }
 
+    //-----------------------------------------------------------------------
     /**
      * The number of bytes that have passed through this stream.
      * <p>
@@ -120,19 +143,21 @@ public class CountingInputStream extends ProxyInputStream {
      * result in incorrect count for files over 2GB.
      *
      * @return the number of bytes accumulated
+     * @since Commons IO 1.3
      */
     public long getByteCount() {
         return this.count;
     }
 
     /** 
-     * Set the count back to 0. 
+     * Set the byte count back to 0. 
      * <p>
      * NOTE: This method is a replacement for <code>resetCount()</code>
      * and was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
      *
-     * @return the count previous to resetting.
+     * @return the count previous to resetting
+     * @since Commons IO 1.3
      */
     public synchronized long resetByteCount() {
         long tmp = this.count;
