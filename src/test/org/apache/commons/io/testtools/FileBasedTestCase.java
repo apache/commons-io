@@ -165,38 +165,38 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     /** Assert that the content of a file is equal to that in a byte[]. */
-    protected void assertEqualContent( byte[] b0, File file )
-        throws IOException
-    {
-        InputStream is = new java.io.FileInputStream( file );
+    protected void assertEqualContent(byte[] b0, File file) throws IOException {
+        InputStream is = new java.io.FileInputStream(file);
+        int count = 0, numRead = 0;
+        byte[] b1 = new byte[b0.length];
         try {
-            byte[] b1 = new byte[ b0.length ];
-            int numRead = is.read( b1 );
-            assertTrue( "Different number of bytes", numRead == b0.length && is.available() == 0 );
-            for( int i = 0;
-                 i < numRead;
-                 assertTrue( "Byte " + i + " differs (" + b0[ i ] + " != " + b1[ i ] + ")", 
-                    b0[ i ] == b1[ i ] ), i++
-                );
+            while (count < b0.length && numRead >= 0) {
+                numRead = is.read(b1, count, b0.length);
+                count += numRead;
+            }
+            assertEquals("Different number of bytes: ", b0.length, count);
+            for (int i = 0; i < count; i++) {
+                assertEquals("byte " + i + " differs", b0[i], b1[i]);
+            }
         } finally {
             is.close();
         }
     }
 
     /** Assert that the content of a file is equal to that in a char[]. */
-    protected void assertEqualContent( char[] c0, File file )
-        throws IOException
-    {
-        Reader ir = new java.io.FileReader( file );
+    protected void assertEqualContent(char[] c0, File file) throws IOException {
+        Reader ir = new java.io.FileReader(file);
+        int count = 0, numRead = 0;
+        char[] c1 = new char[c0.length];
         try {
-            char[] c1 = new char[ c0.length ];
-            int numRead = ir.read( c1 );
-            assertTrue( "Different number of bytes", numRead == c0.length );
-            for( int i = 0;
-                 i < numRead;
-                 assertTrue( "Byte " + i + " differs (" + c0[ i ] + " != " + c1[ i ] + ")", 
-                    c0[ i ] == c1[ i ] ), i++
-                );
+            while (count < c0.length && numRead >= 0) {
+                numRead = ir.read(c1, count, c0.length);
+                count += numRead;
+            }
+            assertEquals("Different number of chars: ", c0.length, count);
+            for (int i = 0; i < count; i++) {
+                assertEquals("char " + i + " differs", c0[i], c1[i]);
+            }
         } finally {
             ir.close();
         }

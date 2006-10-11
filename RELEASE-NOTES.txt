@@ -68,6 +68,9 @@ Bug fixes from 1.2
   - new long based methods getByteCount()/resetByteCount() added
   - existing methods changed to throw an exception if the count is greater than an int
 
+- FileBasedTestCase
+  - Fixed bug in compare content methods identified by GNU classpath
+
 
 Enhancements from 1.2
 ---------------------
