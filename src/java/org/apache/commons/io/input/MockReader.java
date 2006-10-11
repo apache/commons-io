@@ -38,7 +38,6 @@ import java.io.Reader;
  * <code>processChars()</code> methods can be implemented to generate
  * test data.
  *
- *
  * @since Commons IO 1.3
  * @version $Revision$
  */
@@ -53,7 +52,8 @@ public class MockReader extends Reader {
     private boolean markSupported;
 
     /**
-     * Create a mock {@link Reader} of the specified size.
+     * Create a mock {@link Reader} of the specified size
+     * which supports marking and does not throw EOFException.
      *
      * @param size The size of the mock Reader.
      */
@@ -252,12 +252,12 @@ public class MockReader extends Reader {
     /**
      * Return a character value for the  <code>read()</code> method.
      * <p>
-     * <strong>N.B.</strong> This implementation returns
-     * zero.
+     * This implementation returns zero.
      *
      * @return This implementation always returns zero.
      */
     protected int processChar() {
+        // do nothing - overridable by subclass
         return 0;
     }
 
@@ -265,14 +265,14 @@ public class MockReader extends Reader {
      * Process the characters for the <code>read(char[], offset, length)</code>
      * method.
      * <p>
-     * <strong>N.B.</strong> This implementation leaves the character
-     * array unchanged.
+     * This implementation leaves the character array unchanged.
      *
      * @param chars The character array
      * @param offset The offset to start at.
      * @param length The number of characters.
      */
     protected void processChars(char[] chars, int offset, int length) {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -290,4 +290,5 @@ public class MockReader extends Reader {
         }
         return -1;
     }
+
 }

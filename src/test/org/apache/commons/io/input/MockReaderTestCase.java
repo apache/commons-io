@@ -211,7 +211,6 @@ public class MockReaderTestCase extends TestCase {
      * Test <code>skip()</code> method.
      */
    public void testSkip() throws Exception {
-        int skip = 20;
         Reader reader = new TestMockReader(10, true, false);
         assertEquals("Read 1", 0, reader.read());
         assertEquals("Read 2", 1, reader.read());
