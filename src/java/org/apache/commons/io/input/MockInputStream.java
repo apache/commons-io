@@ -38,7 +38,6 @@ import java.io.InputStream;
  * <code>processBytes()</code> methods can be implemented to generate
  * test data.
  *
- *
  * @since Commons IO 1.3
  * @version $Revision$
  */
@@ -53,7 +52,8 @@ public class MockInputStream extends InputStream {
     private boolean markSupported;
 
     /**
-     * Create a mock {@link InputStream} of the specified size.
+     * Create a mock {@link InputStream} of the specified size
+     * which supports marking and does not throw EOFException.
      *
      * @param size The size of the mock input stream.
      */
@@ -113,7 +113,7 @@ public class MockInputStream extends InputStream {
     }
 
     /**
-     * Close this inputstream - resets the internal state to
+     * Close this input stream - resets the internal state to
      * the initial values.
      *
      * @throws IOException If an error occurs.
@@ -268,12 +268,12 @@ public class MockInputStream extends InputStream {
     /**
      * Return a byte value for the  <code>read()</code> method.
      * <p>
-     * <strong>N.B.</strong> This implementation returns
-     * zero.
+     * This implementation returns zero.
      *
      * @return This implementation always returns zero.
      */
     protected int processByte() {
+        // do nothing - overridable by subclass
         return 0;
     }
 
@@ -281,14 +281,14 @@ public class MockInputStream extends InputStream {
      * Process the bytes for the <code>read(byte[], offset, length)</code>
      * method.
      * <p>
-     * <strong>N.B.</strong> This implementation leaves the byte
-     * array unchanged.
+     * This implementation leaves the byte array unchanged.
      *
      * @param bytes The byte array
      * @param offset The offset to start at.
      * @param length The number of bytes.
      */
     protected void processBytes(byte[] bytes, int offset, int length) {
+        // do nothing - overridable by subclass
     }
 
     /**
@@ -306,4 +306,5 @@ public class MockInputStream extends InputStream {
         }
         return -1;
     }
+
 }

@@ -35,6 +35,8 @@ public class PackageTestSuite {
         TestSuite suite = new TestSuite("IO Utilities - input");
         suite.addTest(new TestSuite(ClassLoaderObjectInputStreamTest.class));
         suite.addTest(new TestSuite(CountingInputStreamTest.class));
+        suite.addTest(new TestSuite(MockInputStreamTestCase.class));
+        suite.addTest(new TestSuite(MockReaderTestCase.class));
         suite.addTest(new TestSuite(SwappedDataInputStreamTest.class));
         return suite;
     }

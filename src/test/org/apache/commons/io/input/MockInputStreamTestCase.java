@@ -214,7 +214,6 @@ public class MockInputStreamTestCase extends TestCase {
      * Test <code>skip()</code> method.
      */
    public void testSkip() throws Exception {
-        int skip = 20;
         InputStream input = new TestMockInputStream(10, true, false);
         assertEquals("Read 1", 0, input.read());
         assertEquals("Read 2", 1, input.read());
