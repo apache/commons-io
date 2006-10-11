@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,12 +42,13 @@ import java.util.List;
  * the contents don't have to be copied to the new buffer. This class is
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
+ * 
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @version $Id$
  */
 public class ByteArrayOutputStream extends OutputStream {
 
-    private List buffers = new java.util.ArrayList();
+    private List buffers = new ArrayList();
     private int currentBufferIndex;
     private int filledBufferSum;
     private byte[] currentBuffer;
@@ -166,7 +168,9 @@ public class ByteArrayOutputStream extends OutputStream {
      * Closing a <tt>ByteArrayOutputStream</tt> has no effect. The methods in
      * this class can be called after the stream has been closed without
      * generating an <tt>IOException</tt>.
-     * @throws IOException in case an I/O error occurs
+     *
+     * @throws IOException never (this method should not declare this exception
+     * but it has to now due to backwards compatability)
      */
     public void close() throws IOException {
         //nop
@@ -183,10 +187,11 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @param out The OutputStream to write to.
-     * @exception IOException
-     *                if an I/O error occurs. In particular, an <code>IOException</code> is thrown if the output
-     *                stream is closed.
+     * Writes the entire contents of this byte stream to the
+     * specified output stream.
+     *
+     * @param out  the output stream to write to
+     * @throws IOException if an I/O error occurs, such as if the stream is closed
      * @see java.io.ByteArrayOutputStream#writeTo(OutputStream)
      */
     public synchronized void writeTo(OutputStream out) throws IOException {
@@ -203,9 +208,13 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * Gets the curent contents of this byte stream as a byte array.
+     * The result is independent of this stream.
+     *
+     * @return the current contents of this output stream, as a byte array
      * @see java.io.ByteArrayOutputStream#toByteArray()
      */
-    public synchronized byte toByteArray()[] {
+    public synchronized byte[] toByteArray() {
         int remaining = count;
         int pos = 0;
         byte newbuf[] = new byte[count];
@@ -223,6 +232,8 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
+     * Gets the curent contents of this byte stream as a string.
+     *
      * @see java.io.ByteArrayOutputStream#toString()
      */
     public String toString() {
@@ -230,10 +241,12 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @param enc The name of the character encoding
-     * @return String converted from the byte array.
-     * @exception UnsupportedEncodingException
-     *                If the named charset is not supported
+     * Gets the curent contents of this byte stream as a string
+     * using the specified encoding.
+     *
+     * @param enc  the name of the character encoding
+     * @return the string converted from the byte array
+     * @throws UnsupportedEncodingException if the encoding is not supported
      * @see java.io.ByteArrayOutputStream#toString(String)
      */
     public String toString(String enc) throws UnsupportedEncodingException {
