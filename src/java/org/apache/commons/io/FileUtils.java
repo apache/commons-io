@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -871,7 +870,7 @@ public class FileUtils {
      * @param encoding  the encoding to use, null means platform default
      * @return the file contents or null if read failed
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static String readFileToString(
             File file, String encoding) throws IOException {
@@ -915,7 +914,7 @@ public class FileUtils {
      * @param encoding  the encoding to use, null means platform default
      * @return the list of Strings representing each line in the file
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
     public static List readLines(File file, String encoding) throws IOException {
@@ -989,7 +988,7 @@ public class FileUtils {
      * @param data  the content to write to the file
      * @param encoding  the encoding to use, null means platform default
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file,
             String data, String encoding) throws IOException {
@@ -1032,7 +1031,7 @@ public class FileUtils {
      * @param encoding  the encoding to use, null means platform default
      * @param lines  the lines to write, null entries produce blank lines
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
     public static void writeLines(File file, String encoding, Collection lines) throws IOException {
@@ -1053,7 +1052,7 @@ public class FileUtils {
      * @param lines  the lines to write, null entries produce blank lines
      * @param lineEnding  the line separator to use, null is system default
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
     public static void writeLines(File file, String encoding, Collection lines, String lineEnding) throws IOException {
