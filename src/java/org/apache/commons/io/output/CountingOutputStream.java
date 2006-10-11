@@ -20,42 +20,71 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Used in debugging, it counts the number of bytes that pass 
- * through it.
+ * A decorating output stream that counts the number of bytes that have passed
+ * through the stream so far.
+ * <p>
+ * A typical use case would be during debugging, to ensure that data is being
+ * written as expected.
  *
- * @author <a href="mailto:bayard@apache.org">Henri Yandell</a>
+ * @author Henri Yandell
  * @version $Id$
  */
 public class CountingOutputStream extends ProxyOutputStream {
 
+    /** The count of bytes that have passed. */
     private long count;
 
     /**
-     * Constructs a CountingOutputStream.
-     * @param out the OutputStream to write to
+     * Constructs a new CountingOutputStream.
+     * 
+     * @param out  the OutputStream to write to
      */
     public CountingOutputStream( OutputStream out ) {
         super(out);
     }
 
-    /** @see java.io.OutputStream#write(byte[]) */
+    //-----------------------------------------------------------------------
+    /**
+     * Writes the contents of the specified byte array to this output stream
+     * keeping count of the number of bytes written.
+     *
+     * @param b  the bytes to write, not null
+     * @throws IOException if an I/O error occurs
+     * @see java.io.OutputStream#write(byte[])
+     */
     public void write(byte[] b) throws IOException {
         count += b.length;
         super.write(b);
     }
 
-    /** @see java.io.OutputStream#write(byte[], int, int) */
+    /**
+     * Writes a portion of the specified byte array to this output stream
+     * keeping count of the number of bytes written.
+     *
+     * @param b  the bytes to write, not null
+     * @param off  the start offset in the buffer
+     * @param len  the maximum number of bytes to write
+     * @throws IOException if an I/O error occurs
+     * @see java.io.OutputStream#write(byte[], int, int)
+     */
     public void write(byte[] b, int off, int len) throws IOException {
         count += len;
         super.write(b, off, len);
     }
 
-    /** @see java.io.OutputStream#write(int) */
+    /**
+     * Writes a single byte to the output stream adding to the count of the
+     * number of bytes written.
+     *
+     * @param b  the byte to write
+     * @see java.io.OutputStream#write(int)
+     */
     public void write(int b) throws IOException {
         count++;
         super.write(b);
     }
 
+    //-----------------------------------------------------------------------
     /**
      * The number of bytes that have passed through this stream.
      * <p>
@@ -67,7 +96,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @deprecated use <code>getByteCount()</code> - see issue IO-84
      */
     public int getCount() {
-        return (int)getByteCount();
+        return (int) getByteCount();
     }
 
     /** 
@@ -81,36 +110,37 @@ public class CountingOutputStream extends ProxyOutputStream {
       * @deprecated use <code>resetByteCount()</code> - see issue IO-84
       */
     public synchronized int resetCount() {
-        return (int)resetByteCount();
+        return (int) resetByteCount();
     }
 
     /**
      * The number of bytes that have passed through this stream.
      * <p>
-     * <strong>N.B.</strong> This method was introduced as an
-     * alternative for the <code>getCount()</code> method
-     * because that method returns an integer which will result
-     * in incorrect count for files over 2GB being returned.
+     * NOTE: This method is a replacement for <code>getCount()</code>.
+     * It was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
      *
      * @return the number of bytes accumulated
+     * @since Commons IO 1.3
      */
     public long getByteCount() {
         return this.count;
     }
 
     /** 
-     * Set the count back to 0. 
+     * Set the byte count back to 0. 
      * <p>
-     * <strong>N.B.</strong> This method was introduced as an
-     * alternative for the <code>resetCount()</code> method
-     * because that method returns an integer which will result
-     * in incorrect count for files over 2GB being returned.
+     * NOTE: This method is a replacement for <code>resetCount()</code>.
+     * It was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
      *
-     * @return the count previous to resetting.
+     * @return the count previous to resetting
+     * @since Commons IO 1.3
      */
     public synchronized long resetByteCount() {
         long tmp = this.count;
         this.count = 0;
         return tmp;
     }
+
 }
