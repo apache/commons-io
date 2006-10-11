@@ -95,7 +95,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @deprecated use <code>getByteCount()</code> - see issue IO-84
      */
     public int getCount() {
-        return (int)getByteCount();
+        return (int) getByteCount();
     }
 
     /** 
@@ -109,17 +109,16 @@ public class CountingInputStream extends ProxyInputStream {
      * @deprecated use <code>resetByteCount()</code> - see issue IO-84
      */
     public synchronized int resetCount() {
-        return (int)resetByteCount();
+        return (int) resetByteCount();
     }
 
     /**
      * The number of bytes that have passed through this stream.
      * <p>
-     * <strong>N.B.</strong> This method was introduced as an
-     * alternative for the <code>getCount()</code> method
-     * because that method returns an integer which will result
-     * in incorrect count for files over 2GB being returned.
-     * 
+     * NOTE: This method is a replacement for <code>getCount()</code>
+     * and was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
+     *
      * @return the number of bytes accumulated
      */
     public long getByteCount() {
@@ -129,10 +128,9 @@ public class CountingInputStream extends ProxyInputStream {
     /** 
      * Set the count back to 0. 
      * <p>
-     * <strong>N.B.</strong> This method was introduced as an
-     * alternative for the <code>resetCount()</code> method
-     * because that method returns an integer which will result
-     * in incorrect count for files over 2GB being returned.
+     * NOTE: This method is a replacement for <code>resetCount()</code>
+     * and was added because that method returns an integer which will
+     * result in incorrect count for files over 2GB.
      *
      * @return the count previous to resetting.
      */
