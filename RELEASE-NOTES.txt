@@ -60,8 +60,12 @@ Bug fixes from 1.2
   - This now handles the situation where an error occurs when deleting the file
 
 - IOUtils.copy [IO-84]
-  - Comment about result byte/char count being limited to an int, thus
-    being inacurate for large streams
+  - The copy(InputStream, OutputStream) method now throws an exception if
+    the count is greater than an int
+  - The copy(Reader, Writer) method now throws an exception if
+    the count is greater than an int
+  - Added a new copyLarge(InputStream, OutputStream) method that returns a long
+  - Added a new copyLarge(Reader, Writer) method that returns a long
 
 - CountingInputStream/CountingOutputStream [IO-84]
   - methods were declared as int thus the count was innacurate for large streams
