@@ -79,9 +79,8 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         r.close();
         testFile = null;
         r = null;
-        while (FileCleaner.getTrackCount() != 0) {
-            System.gc();
-        }
+
+        waitUntilTrackCount();
         
         assertEquals(0, FileCleaner.getTrackCount());
         assertEquals(false, new File(path).exists());
@@ -98,10 +97,9 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         assertEquals(1, FileCleaner.getTrackCount());
         
         obj = null;
-        while (FileCleaner.getTrackCount() != 0) {
-            System.gc();
-        }
-        
+
+        waitUntilTrackCount();
+
         assertEquals(0, FileCleaner.getTrackCount());
         assertEquals(true, testFile.exists());  // not deleted, as dir not empty
         assertEquals(true, testFile.getParentFile().exists());  // not deleted, as dir not empty
@@ -118,9 +116,8 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         assertEquals(1, FileCleaner.getTrackCount());
         
         obj = null;
-        while (FileCleaner.getTrackCount() != 0) {
-            System.gc();
-        }
+
+        waitUntilTrackCount();
         
         assertEquals(0, FileCleaner.getTrackCount());
         assertEquals(true, testFile.exists());  // not deleted, as dir not empty
@@ -138,9 +135,8 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         assertEquals(1, FileCleaner.getTrackCount());
         
         obj = null;
-        while (FileCleaner.getTrackCount() != 0) {
-            System.gc();
-        }
+
+        waitUntilTrackCount();
         
         assertEquals(0, FileCleaner.getTrackCount());
         assertEquals(false, testFile.exists());
@@ -174,4 +170,15 @@ public class FileCleanerTestCase extends FileBasedTestCase {
         }
     }
 
+    private void waitUntilTrackCount() {
+        while (FileCleaner.getTrackCount() != 0) {
+            int total = 0;
+            while (FileCleaner.getTrackCount() != 0) {
+                byte[] b = new byte[1024 * 1024];
+                b[0] = (byte) System.currentTimeMillis();
+                total = total + b[0];
+                System.gc();
+            }
+        }
+    }
 }
