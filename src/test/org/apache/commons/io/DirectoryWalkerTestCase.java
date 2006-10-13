@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -209,14 +210,41 @@ public class DirectoryWalkerTestCase extends TestCase {
      * Test Cancel
      */
     public void testCancel() {
-        List results = new TestCancelWalker(2, true).find(javaDir);
-        assertEquals(2, results.size());
-        
-        results = new TestCancelWalker(3, true).find(javaDir);
-        assertEquals(3, results.size());
-        
-        results = new TestCancelWalker(3, false).find(javaDir);
-        assertEquals(6, results.size());
+        String cancelName = null;
+
+        // Cancel on a file
+        try {
+            cancelName = "DirectoryWalker.java";
+            List results = new TestCancelWalker(cancelName, false).find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (DirectoryWalker.CancelException cancel) {
+            assertEquals("File:  " + cancelName,   cancelName, cancel.getFile().getName());
+            assertEquals("Depth: " + cancelName,  5, cancel.getDepth());
+        } catch(IOException ex) {
+            fail("IOException: " + cancelName + " " + ex);
+        }
+
+        // Cancel on a directory
+        try {
+            cancelName = "commons";
+            List results = new TestCancelWalker(cancelName, false).find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (DirectoryWalker.CancelException cancel) {
+            assertEquals("File:  " + cancelName,   cancelName, cancel.getFile().getName());
+            assertEquals("Depth: " + cancelName,  3, cancel.getDepth());
+        } catch(IOException ex) {
+            fail("IOException: " + cancelName + " " + ex);
+        }
+
+        // Suppress CancelException (use same file name as preceeding test)
+        try {
+            List results = new TestCancelWalker(cancelName, true).find(javaDir);
+            File lastFile = (File)results.get(results.size() - 1);
+            assertEquals("Suppress:  " + cancelName,   cancelName, lastFile.getName());
+        } catch(IOException ex) {
+            fail("Suppress threw " + ex);
+        }
+
     }
 
     // ------------ Test DirectoryWalker implementation --------------------------
@@ -234,7 +262,11 @@ public class DirectoryWalkerTestCase extends TestCase {
         /** find files. */
         protected List find(File startDirectory) {
            List results = new ArrayList();
-           Assert.assertEquals(true, walk(startDirectory, results));
+           try {
+               walk(startDirectory, results);
+           } catch(IOException ex) {
+               Assert.fail(ex.toString());
+           }
            return results;
         }
 
@@ -274,74 +306,44 @@ public class DirectoryWalkerTestCase extends TestCase {
      * applying a file filter.
      */
     static class TestCancelWalker extends DirectoryWalker {
-        private boolean cancelled;
-        private int count;
-        private boolean accept;
+        private String cancelFileName;
+        private boolean suppressCancel;
 
-        TestCancelWalker(int count, boolean accept) {
+        TestCancelWalker(String cancelFileName,boolean suppressCancel) {
             super();
-            this.count = count;
-            this.accept = accept;
+            this.cancelFileName = cancelFileName;
+            this.suppressCancel = suppressCancel;
         }
 
         /** find files. */
-        public List find(File startDirectory) {
+        protected List find(File startDirectory) throws IOException {
            List results = new ArrayList();
-           Assert.assertEquals(false, walk(startDirectory, results));
+           walk(startDirectory, results);
            return results;
         }
 
-        /** Return cancelled flag. */
-        protected boolean isCancelled() {
-            return cancelled;
-        }
-
-        /** Handles a directory start. */
-        protected void handleDirectoryStart(File directory, int depth, Collection results) {
-            if (accept) {
-                Assert.assertEquals(false, cancelled);
-            }
-        }
-
         /** Handles a directory end by adding the File to the result set. */
-        protected void handleDirectoryEnd(File directory, int depth, Collection results) {
-            if (accept) {
-                Assert.assertEquals(false, cancelled);
-            }
+        protected void handleDirectoryEnd(File directory, int depth, Collection results) throws IOException {
             results.add(directory);
-            cancelled = (results.size() >= count);
+            if (cancelFileName.equals(directory.getName())) {
+                throw new CancelException(directory, depth);
+            }
         }
 
         /** Handles a file by adding the File to the result set. */
-        protected void handleFile(File file, int depth, Collection results) {
-            if (accept) {
-                Assert.assertEquals(false, cancelled);
-            }
+        protected void handleFile(File file, int depth, Collection results) throws IOException {
             results.add(file);
-            cancelled = (results.size() >= count);
-        }
-
-        /** Handles start. */
-        protected void handleStart(File directory, Collection results) {
-            if (accept) {
-                Assert.assertEquals(false, cancelled);
+            if (cancelFileName.equals(file.getName())) {
+                throw new CancelException(file, depth);
             }
         }
 
-        /** Handles end. */
-        protected void handleEnd(Collection results) {
-            if (accept) {
-                Assert.assertEquals(false, cancelled);
+        /** Handles Cancel. */
+        protected void handleCancelled(File startDirectory, Collection results,
+                       CancelException cancel) throws IOException {
+            if (!suppressCancel) {
+                super.handleCancelled(startDirectory, results, cancel);
             }
-        }
-
-        /** Handles end. */
-        protected boolean handleCancelled(File file, int depth, Collection results) {
-            Assert.assertEquals(true, cancelled);
-            if (accept) {
-                return true;
-            }
-            return (results.size() >= (count * 2));
         }
     }
 
