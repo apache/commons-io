@@ -17,9 +17,12 @@
 package org.apache.commons.io.input;
 
 import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
 
 /**
  * Tests the CountingInputStream.
@@ -65,6 +68,39 @@ public class CountingInputStreamTest extends TestCase {
         // trim to get rid of the 6 empty values
         String textResult = new String(result).trim();
         assertEquals(textResult, text);
+    }
+
+
+    /**
+     * Test for files > 2GB in size - see issue IO-84
+     */
+    public void testLargeFiles_IO84() throws Exception {
+        long size = (long)Integer.MAX_VALUE + (long)1;
+        NullInputStream mock    = new NullInputStream(size);
+        CountingInputStream cis = new CountingInputStream(mock);
+        OutputStream out        = new NullOutputStream();
+
+        // Test integer methods
+        IOUtils.copyLarge(cis, out);
+        try {
+            cis.getCount();
+            fail("Expected getCount() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+        try {
+            cis.resetCount();
+            fail("Expected resetCount() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+
+        mock.close();
+
+        // Test long methods
+        IOUtils.copyLarge(cis, out);
+        assertEquals("getByteCount()",   size, cis.getByteCount());
+        assertEquals("resetByteCount()", size, cis.resetByteCount());
     }
 
     public void testResetting() throws Exception {

@@ -17,10 +17,13 @@
 package org.apache.commons.io.output;
 
 
+import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.NullInputStream;
 
 
 /**
@@ -68,6 +71,39 @@ public class CountingOutputStreamTest extends TestCase {
         assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
         assertEquals("CountingOutputStream.getCount()", cos.getCount(), 10);
 
+    }
+
+    /**
+     * Test for files > 2GB in size - see issue IO-84
+     */
+    public void testLargeFiles_IO84() throws Exception {
+        long size = (long)Integer.MAX_VALUE + (long)1;
+
+        NullInputStream mock     = new NullInputStream(size);
+        OutputStream nos         = new NullOutputStream();
+        CountingOutputStream cos = new CountingOutputStream(nos);
+
+        // Test integer methods
+        IOUtils.copyLarge(mock, cos);
+        try {
+            cos.getCount();
+            fail("Expected getCount() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+        try {
+            cos.resetCount();
+            fail("Expected resetCount() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+
+        mock.close();
+
+        // Test long methods
+        IOUtils.copyLarge(mock, cos);
+        assertEquals("getByteCount()",   size, cos.getByteCount());
+        assertEquals("resetByteCount()", size, cos.resetByteCount());
     }
 
     private void assertByteArrayEquals(String msg, byte[] array, int start, int end) {
