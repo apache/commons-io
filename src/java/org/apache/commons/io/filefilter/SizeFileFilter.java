@@ -19,8 +19,8 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 
 /**
- * Filters files based on size, can filter either larger or smaller files
- * as compared to a given threshold.
+ * Filters files based on size, can filter either smaller files or
+ * files equal to or larger than a given threshold.
  * <p>
  * For example, to print all files and directories in the
  * current directory whose size is greater than 1 MB:
@@ -45,7 +45,8 @@ public class SizeFileFilter extends AbstractFileFilter {
     private boolean acceptLarger;
 
     /**
-     * Constructs a new size file filter for files larger than a certain size.
+     * Constructs a new size file filter for files equal to or 
+     * larger than a certain size.
      *
      * @param size  the threshold size of the files
      * @throws IllegalArgumentException if the size is negative
@@ -59,7 +60,8 @@ public class SizeFileFilter extends AbstractFileFilter {
      * threshold.
      *
      * @param size  the threshold size of the files
-     * @param acceptLarger  if true, larger files are accepted, else smaller ones
+     * @param acceptLarger  if true, files equal to or larger are accepted,
+     * otherwise smaller ones (but not equal to)
      * @throws IllegalArgumentException if the size is negative
      */
     public SizeFileFilter(long size, boolean acceptLarger) {
@@ -73,7 +75,11 @@ public class SizeFileFilter extends AbstractFileFilter {
     //-----------------------------------------------------------------------
     /**
      * Checks to see if the size of the file is favorable.
-     * If size equals threshold, file is not selected.
+     * <p>
+     * If size equals threshold and smaller files are required,
+     * file <b>IS NOT</b> selected.
+     * If size equals threshold and larger files are required,
+     * file <b>IS</b> selected.
      *
      * @param file  the File to check
      * @return true if the filename matches
