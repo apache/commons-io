@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
@@ -29,7 +30,11 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.commons.io.input.NullInputStream;
+import org.apache.commons.io.input.NullReader;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
@@ -109,6 +114,29 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
             IOUtils.copy(in, (OutputStream) null);
             fail();
         } catch (NullPointerException ex) {}
+    }
+
+    /**
+     * Test Copying file > 2GB  - see issue# IO-84
+     */
+    public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
+        long size = (long)Integer.MAX_VALUE + (long)1;
+        InputStream  in  = new NullInputStream(size);
+        OutputStream out = new NullOutputStream();
+
+        // Test copy() method
+        try {
+            IOUtils.copy(in, out);
+            fail("Expected copy() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+
+        // reset the input
+        in.close();
+
+        // Test copyLarge() method
+        assertEquals("copyLarge()", size, IOUtils.copyLarge(in, out));
     }
 
     //-----------------------------------------------------------------------
@@ -330,6 +358,30 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
             IOUtils.copy(reader, (Writer) null);
             fail();
         } catch (NullPointerException ex) {}
+    }
+
+    /**
+     * Test Copying file > 2GB  - see issue# IO-84
+     */
+    public void testCopy_readerToWriter_IO84() throws Exception {
+        long size = (long)Integer.MAX_VALUE + (long)1;
+        Reader reader = new NullReader(size);
+        Writer writer = new NullWriter();
+
+        // Test copy() method
+        try {
+            IOUtils.copy(reader, writer);
+            fail("Expected copy() to throw an ArithmeticException");
+        } catch (ArithmeticException ae) {
+            // expected result
+        }
+
+        // reset the input
+        reader.close();
+
+        // Test copyLarge() method
+        assertEquals("copyLarge()", size, IOUtils.copyLarge(reader, writer));
+
     }
 
 }
