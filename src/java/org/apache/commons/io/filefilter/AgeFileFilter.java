@@ -22,7 +22,8 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Filters files based on a cutoff time, can filter either older or newer files.
+ * Filters files based on a cutoff time, can filter either newer
+ * files or files equal to or older.
  * <p>
  * For example, to print all files and directories in the
  * current directory older than one day:
@@ -49,7 +50,8 @@ public class AgeFileFilter extends AbstractFileFilter {
     private boolean acceptOlder;
 
     /**
-     * Constructs a new age file filter for files older than a certain cutoff.
+     * Constructs a new age file filter for files equal to or older than
+     * a certain cutoff
      *
      * @param cutoff  the threshold age of the files
      */
@@ -62,7 +64,8 @@ public class AgeFileFilter extends AbstractFileFilter {
      * of a certain cutoff.
      *
      * @param cutoff  the threshold age of the files
-     * @param acceptOlder  if true, older files are accepted, else newer ones
+     * @param acceptOlder  if true, older files (at or before the cutoff)
+     * are accepted, else newer ones (after the cutoff).
      */
     public AgeFileFilter(long cutoff, boolean acceptOlder) {
         this.acceptOlder = acceptOlder;
@@ -70,8 +73,8 @@ public class AgeFileFilter extends AbstractFileFilter {
     }
 
     /**
-     * Constructs a new age file filter for files older than a certain
-     * cutoff date.
+     * Constructs a new age file filter for files older than (at or before)
+     * a certain cutoff date.
      *
      * @param cutoffDate  the threshold age of the files
      */
@@ -84,15 +87,16 @@ public class AgeFileFilter extends AbstractFileFilter {
      * of a certain cutoff date.
      *
      * @param cutoffDate  the threshold age of the files
-     * @param acceptOlder  if true, older files are accepted, else newer ones
+     * @param acceptOlder  if true, older files (at or before the cutoff)
+     * are accepted, else newer ones (after the cutoff).
      */
     public AgeFileFilter(Date cutoffDate, boolean acceptOlder) {
         this(cutoffDate.getTime(), acceptOlder);
     }
 
     /**
-     * Constructs a new age file filter for files older than a certain
-     * File (whose last modification time will be used as reference).
+     * Constructs a new age file filter for files older than (at or before)
+     * a certain File (whose last modification time will be used as reference).
      *
      * @param cutoffReference  the file whose last modification
      *        time is usesd as the threshold age of the files
@@ -108,7 +112,8 @@ public class AgeFileFilter extends AbstractFileFilter {
      *
      * @param cutoffReference  the file whose last modification
      *        time is usesd as the threshold age of the files
-     * @param acceptOlder  if true, older files are accepted, else newer ones
+     * @param acceptOlder  if true, older files (at or before the cutoff)
+     * are accepted, else newer ones (after the cutoff).
      */
     public AgeFileFilter(File cutoffReference, boolean acceptOlder) {
         this(cutoffReference.lastModified(), acceptOlder);
@@ -118,7 +123,11 @@ public class AgeFileFilter extends AbstractFileFilter {
     /**
      * Checks to see if the last modification of the file matches cutoff
      * favorably.
-     * If last modification time equals cutoff, file is not selected.
+     * <p>
+     * If last modification time equals cutoff and newer files are required,
+     * file <b>IS NOT</b> selected.
+     * If last modification time equals cutoff and older files are required,
+     * file <b>IS</b> selected.
      *
      * @param file  the File to check
      * @return true if the filename matches
