@@ -77,6 +77,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * number of bytes written.
      *
      * @param b  the byte to write
+     * @throws IOException if an I/O error occurs
      * @see java.io.OutputStream#write(int)
      */
     public void write(int b) throws IOException {
