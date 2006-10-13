@@ -146,6 +146,12 @@ Enhancements from 1.2
 - NullWriter
   - New writer that acts as a sink for all data, as per /dev/null
 
+- NullInputStream
+  - New input stream that emulates a stream of a specified size
+
+- NullReader
+  - New reader that emulates a reader of a specified size
+
 
 Feedback
 --------

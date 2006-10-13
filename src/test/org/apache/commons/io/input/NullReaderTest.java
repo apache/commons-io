@@ -18,19 +18,19 @@ package org.apache.commons.io.input;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 import junit.framework.TestCase;
 
 /**
- * JUnit Test Case for {@link MockInputStream}.
+ * JUnit Test Case for {@link NullReader}.
  *
  * @version $Id$
  */
-public class MockInputStreamTestCase extends TestCase {
+public class NullReaderTest extends TestCase {
 
     /** Constructor */
-    public MockInputStreamTestCase(String name) {
+    public NullReaderTest(String name) {
         super(name);
     }
 
@@ -49,73 +49,70 @@ public class MockInputStreamTestCase extends TestCase {
      */
     public void testRead() throws Exception {
         int size = 5;
-        InputStream input = new TestMockInputStream(size);
+        TestNullReader reader = new TestNullReader(size);
         for (int i = 0; i < size; i++) {
-            assertEquals("Check Size [" + i + "]", (size - i), input.available());
-            assertEquals("Check Value [" + i + "]", i, input.read());
+            assertEquals("Check Value [" + i + "]", i, reader.read());
         }
-        assertEquals("Available after contents all read", 0, input.available());
 
-        // Check availbale is zero after End of file
-        assertEquals("End of File", -1, input.read());
-        assertEquals("Available after End of File", 0, input.available());
+        // Check End of File
+        assertEquals("End of File", -1, reader.read());
 
         // Test reading after the end of file
         try {
-            int result = input.read();
-            fail("Should have thrown an IOException, byte=[" + result + "]");
+            int result = reader.read();
+            fail("Should have thrown an IOException, value=[" + result + "]");
         } catch (IOException e) {
             assertEquals("Read after end of file", e.getMessage());
         }
 
         // Close - should reset
-        input.close();
-        assertEquals("Available after close", size, input.available());
+        reader.close();
+        assertEquals("Available after close", 0, reader.getPosition());
     }
 
     /**
-     * Test <code>read(byte[])</code> method.
+     * Test <code>read(char[])</code> method.
      */
-    public void testReadByteArray() throws Exception {
-        byte[] bytes = new byte[10];
-        InputStream input = new TestMockInputStream(15);
+    public void testReadCharArray() throws Exception {
+        char[] chars = new char[10];
+        Reader reader = new TestNullReader(15);
 
         // Read into array
-        int count1 = input.read(bytes);
-        assertEquals("Read 1", bytes.length, count1);
+        int count1 = reader.read(chars);
+        assertEquals("Read 1", chars.length, count1);
         for (int i = 0; i < count1; i++) {
-            assertEquals("Check Bytes 1", i, bytes[i]);
+            assertEquals("Check Chars 1", i, chars[i]);
         }
 
         // Read into array
-        int count2 = input.read(bytes);
+        int count2 = reader.read(chars);
         assertEquals("Read 2", 5, count2);
         for (int i = 0; i < count2; i++) {
-            assertEquals("Check Bytes 2", count1 + i, bytes[i]);
+            assertEquals("Check Chars 2", count1 + i, chars[i]);
         }
 
         // End of File
-        int count3 = input.read(bytes);
+        int count3 = reader.read(chars);
         assertEquals("Read 3 (EOF)", -1, count3);
 
         // Test reading after the end of file
         try {
-            int count4 = input.read(bytes);
-            fail("Should have thrown an IOException, byte=[" + count4 + "]");
+            int count4 = reader.read(chars);
+            fail("Should have thrown an IOException, value=[" + count4 + "]");
         } catch (IOException e) {
             assertEquals("Read after end of file", e.getMessage());
         }
 
         // reset by closing
-        input.close();
+        reader.close();
     
         // Read into array using offset & length
         int offset = 2;
         int lth    = 4;
-        int count5 = input.read(bytes, offset, lth);
+        int count5 = reader.read(chars, offset, lth);
         assertEquals("Read 5", lth, count5);
         for (int i = offset; i < lth; i++) {
-            assertEquals("Check Bytes 2", i, bytes[i]);
+            assertEquals("Check Chars 3", i, chars[i]);
         }
     }
 
@@ -124,12 +121,12 @@ public class MockInputStreamTestCase extends TestCase {
      * (rather than return -1).
      */
     public void testEOFException() throws Exception {
-        InputStream input = new TestMockInputStream(2, false, true);
-        assertEquals("Read 1",  0, input.read());
-        assertEquals("Read 2",  1, input.read());
+        Reader reader = new TestNullReader(2, false, true);
+        assertEquals("Read 1",  0, reader.read());
+        assertEquals("Read 2",  1, reader.read());
         try {
-            int result = input.read();
-            fail("Should have thrown an EOFException, byte=[" + result + "]");
+            int result = reader.read();
+            fail("Should have thrown an EOFException, value=[" + result + "]");
         } catch (EOFException e) {
             // expected
         }
@@ -141,13 +138,13 @@ public class MockInputStreamTestCase extends TestCase {
     public void testMarkAndReset() throws Exception {
         int position = 0;
         int readlimit = 10;
-        InputStream input = new TestMockInputStream(100, true, false);
+        Reader reader = new TestNullReader(100, true, false);
         
-        assertTrue("Mark Should be Supported", input.markSupported());
+        assertTrue("Mark Should be Supported", reader.markSupported());
 
         // No Mark
         try {
-            input.reset();
+            reader.reset();
             fail("Read limit exceeded, expected IOException ");
         } catch (Exception e) {
             assertEquals("No Mark IOException message",
@@ -156,28 +153,28 @@ public class MockInputStreamTestCase extends TestCase {
         }
 
         for (; position < 3; position++) {
-            assertEquals("Read Before Mark [" + position +"]",  position, input.read());
+            assertEquals("Read Before Mark [" + position +"]",  position, reader.read());
         }
 
         // Mark
-        input.mark(readlimit);
+        reader.mark(readlimit);
 
         // Read further
         for (int i = 0; i < 3; i++) {
-            assertEquals("Read After Mark [" + i +"]",  (position + i), input.read());
+            assertEquals("Read After Mark [" + i +"]",  (position + i), reader.read());
         }
 
         // Reset
-        input.reset();
+        reader.reset();
 
         // Read From marked position
         for (int i = 0; i < readlimit + 1; i++) {
-            assertEquals("Read After Reset [" + i +"]",  (position + i), input.read());
+            assertEquals("Read After Reset [" + i +"]",  (position + i), reader.read());
         }
 
         // Reset after read limit passed
         try {
-            input.reset();
+            reader.reset();
             fail("Read limit exceeded, expected IOException ");
         } catch (Exception e) {
             assertEquals("Read limit IOException message",
@@ -192,18 +189,18 @@ public class MockInputStreamTestCase extends TestCase {
      * Test <code>mark()</code> not supported.
      */
     public void testMarkNotSupported() throws Exception {
-        InputStream input = new TestMockInputStream(100, false, true);
-        assertFalse("Mark Should NOT be Supported", input.markSupported());
+        Reader reader = new TestNullReader(100, false, true);
+        assertFalse("Mark Should NOT be Supported", reader.markSupported());
 
         try {
-            input.mark(5);
+            reader.mark(5);
             fail("mark() should throw UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
             assertEquals("mark() error message",  "Mark not supported", e.getMessage());
         }
 
         try {
-            input.reset();
+            reader.reset();
             fail("reset() should throw UnsupportedOperationException");
         } catch (UnsupportedOperationException e) {
             assertEquals("reset() error message",  "Mark not supported", e.getMessage());
@@ -214,15 +211,15 @@ public class MockInputStreamTestCase extends TestCase {
      * Test <code>skip()</code> method.
      */
    public void testSkip() throws Exception {
-        InputStream input = new TestMockInputStream(10, true, false);
-        assertEquals("Read 1", 0, input.read());
-        assertEquals("Read 2", 1, input.read());
-        assertEquals("Skip 1", 5, input.skip(5));
-        assertEquals("Read 3", 7, input.read());
-        assertEquals("Skip 2", 2, input.skip(5)); // only 2 left to skip
-        assertEquals("Skip 3 (EOF)", -1, input.skip(5)); // End of file
+        Reader reader = new TestNullReader(10, true, false);
+        assertEquals("Read 1", 0, reader.read());
+        assertEquals("Read 2", 1, reader.read());
+        assertEquals("Skip 1", 5, reader.skip(5));
+        assertEquals("Read 3", 7, reader.read());
+        assertEquals("Skip 2", 2, reader.skip(5)); // only 2 left to skip
+        assertEquals("Skip 3 (EOF)", -1, reader.skip(5)); // End of file
         try {
-            input.skip(5); //
+            reader.skip(5); //
             fail("Expected IOException for skipping after end of file");
         } catch (Exception e) {
             assertEquals("Skip after EOF IOException message",
@@ -232,22 +229,22 @@ public class MockInputStreamTestCase extends TestCase {
     }
 
 
-    // ------------- Test MockInputStream implementation -------------
+    // ------------- Test NullReader implementation -------------
 
-    private static final class TestMockInputStream extends MockInputStream {
-        public TestMockInputStream(int size) {
+    private static final class TestNullReader extends NullReader {
+        public TestNullReader(int size) {
             super(size);
         }
-        public TestMockInputStream(int size, boolean markSupported, boolean throwEofException) {
+        public TestNullReader(int size, boolean markSupported, boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
-        protected int processByte() {
+        protected int processChar() {
             return ((int)getPosition() - 1);
         }
-        protected void processBytes(byte[] bytes, int offset, int length) {
+        protected void processChars(char[] chars, int offset, int length) {
             int startPos = (int)getPosition() - length;
             for (int i = offset; i < length; i++) {
-                bytes[i] = (byte)(startPos + i);
+                chars[i] = (char)(startPos + i);
             }
         }
         
