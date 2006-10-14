@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -146,6 +147,50 @@ public class DirectoryWalkerTestCase extends TestCase {
     }
 
     /**
+     * Test separate dir and file filters
+     */
+    public void testFilterDirAndFile1() {
+        List results = new TestFileFinder(dirsFilter, iofilesFilter, -1).find(javaDir);
+        assertEquals("[DirAndFile1] Result Size", (1 + dirs.length + ioFiles.length), results.size());
+        assertTrue("[DirAndFile1] Start Dir", results.contains(javaDir));
+        checkContainsFiles("[DirAndFile1] Dir", dirs, results);
+        checkContainsFiles("[DirAndFile1] File", ioFiles, results);
+    }
+
+    /**
+     * Test separate dir and file filters
+     */
+    public void testFilterDirAndFile2() {
+        List results = new TestFileFinder((IOFileFilter) null, (IOFileFilter) null, -1).find(javaDir);
+        assertTrue("[DirAndFile2] Result Size", results.size() > (1 + dirs.length + ioFiles.length));
+        assertTrue("[DirAndFile2] Start Dir", results.contains(javaDir));
+        checkContainsFiles("[DirAndFile2] Dir", dirs, results);
+        checkContainsFiles("[DirAndFile2] File", ioFiles, results);
+    }
+
+    /**
+     * Test separate dir and file filters
+     */
+    public void testFilterDirAndFile3() {
+        List results = new TestFileFinder(dirsFilter, (IOFileFilter) null, -1).find(javaDir);
+        List resultDirs = directoriesOnly(results);
+        assertEquals("[DirAndFile3] Result Size", (1 + dirs.length), resultDirs.size());
+        assertTrue("[DirAndFile3] Start Dir", results.contains(javaDir));
+        checkContainsFiles("[DirAndFile3] Dir", dirs, resultDirs);
+    }
+
+    /**
+     * Test separate dir and file filters
+     */
+    public void testFilterDirAndFile4() {
+        List results = new TestFileFinder((IOFileFilter) null, iofilesFilter, -1).find(javaDir);
+        List resultFiles = filesOnly(results);
+        assertEquals("[DirAndFile4] Result Size", ioFiles.length, resultFiles.size());
+        assertTrue("[DirAndFile4] Start Dir", results.contains(javaDir));
+        checkContainsFiles("[DirAndFile4] File", ioFiles, resultFiles);
+    }
+
+    /**
      * Test Limiting to current directory
      */
     public void testLimitToCurrent() {
@@ -192,6 +237,34 @@ public class DirectoryWalkerTestCase extends TestCase {
         for (int i = 0; i < files.length; i++) {
             assertTrue(prefix + "["+i+"] " + files[i], results.contains(files[i]));
         }
+    }
+
+    /**
+     * Extract the directories.
+     */
+    private List directoriesOnly(Collection results) {
+        List list = new ArrayList(results.size());
+        for (Iterator it = results.iterator(); it.hasNext(); ) {
+            File file = (File) it.next();
+            if (file.isDirectory()) {
+                list.add(file);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Extract the files.
+     */
+    private List filesOnly(Collection results) {
+        List list = new ArrayList(results.size());
+        for (Iterator it = results.iterator(); it.hasNext(); ) {
+            File file = (File) it.next();
+            if (file.isFile()) {
+                list.add(file);
+            }
+        }
+        return list;
     }
 
     /**
@@ -257,6 +330,10 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         protected TestFileFinder(FileFilter filter, int depthLimit) {
             super(filter, depthLimit);
+        }
+
+        protected TestFileFinder(IOFileFilter dirFilter, IOFileFilter fileFilter, int depthLimit) {
+            super(dirFilter, fileFilter, depthLimit);
         }
 
         /** find files. */
