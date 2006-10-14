@@ -141,7 +141,7 @@ import java.util.Collection;
  * scenarios.
  *
  * <a name="external"></a>
- * <h4>3.1 External / Mult-threaded</h4>
+ * <h4>3.1 External / Multi-threaded</h4>
  *
  * This example provides a <code>cancel()</code> method for external processes to
  * indcate that processing must stop. Calling this method sets a
@@ -289,15 +289,16 @@ public abstract class DirectoryWalker {
             handleDirectoryStart(directory, depth, results);
             int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
-                File[] files = (filter == null ? directory.listFiles() : directory.listFiles(filter));
-                if (files == null) {
+                File[] childFiles = (filter == null ? directory.listFiles() : directory.listFiles(filter));
+                if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
                 } else {
-                    for (int i = 0; i < files.length; i++) {
-                        if (files[i].isDirectory()) {
-                            walk(files[i], childDepth, results);
+                    for (int i = 0; i < childFiles.length; i++) {
+                        File childFile = childFiles[i];
+                        if (childFile.isDirectory()) {
+                            walk(childFile, childDepth, results);
                         } else {
-                            handleFile(files[i], childDepth, results);
+                            handleFile(childFile, childDepth, results);
                         }
                     }
                 }
@@ -410,6 +411,8 @@ public abstract class DirectoryWalker {
 
     /**
      * Overridable callback method invoked when the operation is cancelled.
+     * The file being processed when the cancellation occurred can be
+     * obtained from the exception.
      * <p>
      * This implementation just re-throws the {@link CancelException}.
      *
@@ -425,6 +428,7 @@ public abstract class DirectoryWalker {
         throw cancel;
     }
 
+    //-----------------------------------------------------------------------
     /**
      * CancelException is thrown in DirectoryWalker to cancel the current
      * processing.
