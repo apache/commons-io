@@ -415,7 +415,7 @@ public abstract class DirectoryWalker {
      *
      * @param startDirectory  the directory to start from
      * @param results  the collection of result objects, may be updated
-     * @param cancel The exception throw to cancel further processing
+     * @param cancel  the exception throw to cancel further processing
      * containing details at the point of cancellation. 
      * @throws IOException if an I/O Error occurs
      */
@@ -431,15 +431,20 @@ public abstract class DirectoryWalker {
      */
     public static class CancelException extends IOException {
 
+        /** Serialization id. */
+        private static final long serialVersionUID = 1347339620135041008L;
+        
+        /** The file being processed when the exception was thrown. */
         private File file;
+        /** The file depth when the exception was thrown. */
         private int depth = -1;
 
         /**
          * Constructs a <code>CancelException</code> with
          * the file and depth when cancellation occurred.
          *
-         * @param file The file when the operation was cancelled
-         * @param depth The depth when the operation was cancelled
+         * @param file  the file when the operation was cancelled, may be null
+         * @param depth  the depth when the operation was cancelled, may be null
          */
         public CancelException(File file, int depth) {
             this("Operation Cancelled", file, depth);
@@ -450,9 +455,9 @@ public abstract class DirectoryWalker {
          * an appropriate message and the file and depth when
          * cancellation occurred.
          *
-         * @param message The detail message.
-         * @param file The file when the operation was cancelled
-         * @param depth The depth when the operation was cancelled
+         * @param message  the detail message
+         * @param file  the file when the operation was cancelled
+         * @param depth  the depth when the operation was cancelled
          */
         public CancelException(String message, File file, int depth) {
             super(message);
@@ -463,7 +468,7 @@ public abstract class DirectoryWalker {
         /**
          * Return the file when the operation was cancelled.
          *
-         * @return The file when the operation was cancelled
+         * @return the file when the operation was cancelled
          */
         public File getFile() {
             return file;
@@ -472,7 +477,7 @@ public abstract class DirectoryWalker {
         /**
          * Return the depth when the operation was cancelled.
          *
-         * @return The depth when the operation was cancelled
+         * @return the depth when the operation was cancelled
          */
         public int getDepth() {
             return depth;
