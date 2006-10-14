@@ -168,56 +168,6 @@ public class FileFilterUtils {
     }
 
     //-----------------------------------------------------------------------
-
-    /* Constructed on demand and then cached */
-    private static IOFileFilter cvsFilter;
-
-    /* Constructed on demand and then cached */
-    private static IOFileFilter svnFilter;
-
-    /**
-     * Returns an IOFileFilter that ignores CVS directories. You may optionally
-     * pass in an existing IOFileFilter in which case it is extended to exclude
-     * CVS directories.
-     * @param filter IOFileFilter to wrap, null if a new IOFileFilter
-     * should be created
-     * @return the requested (combined) filter
-     * @since 1.1 (method existed but had bug in 1.0)
-     */
-    public static IOFileFilter makeCVSAware(IOFileFilter filter) {
-        if (cvsFilter == null) {
-            cvsFilter = notFileFilter(
-                andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));
-        }
-        if (filter == null) {
-            return cvsFilter;
-        } else {
-            return andFileFilter(filter, cvsFilter);
-        }
-    }
-
-    /**
-     * Returns an IOFileFilter that ignores SVN directories. You may optionally
-     * pass in an existing IOFileFilter in which case it is extended to exclude
-     * SVN directories.
-     * @param filter IOFileFilter to wrap, null if a new IOFileFilter
-     * should be created
-     * @return the requested (combined) filter
-     * @since 1.1
-     */
-    public static IOFileFilter makeSVNAware(IOFileFilter filter) {
-        if (svnFilter == null) {
-            svnFilter = notFileFilter(
-                andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
-        }
-        if (filter == null) {
-            return svnFilter;
-        } else {
-            return andFileFilter(filter, svnFilter);
-        }
-    }
-
-    //-----------------------------------------------------------------------
     /**
      * Returns a filter that returns true if the file was last modified after
      * the specified cutoff time.
@@ -329,6 +279,55 @@ public class FileFilterUtils {
         IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
         IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
+    }
+
+    //-----------------------------------------------------------------------
+    /* Constructed on demand and then cached */
+    private static IOFileFilter cvsFilter;
+
+    /* Constructed on demand and then cached */
+    private static IOFileFilter svnFilter;
+
+    /**
+     * Decorates a filter to make it ignore CVS directories.
+     * Passing in <code>null</code> will return a filter that accepts everything
+     * except CVS directories.
+     * 
+     * @param filter  the filter to decorate, null means an unrestricted filter
+     * @return the decorated filter, never null
+     * @since 1.1 (method existed but had bug in 1.0)
+     */
+    public static IOFileFilter makeCVSAware(IOFileFilter filter) {
+        if (cvsFilter == null) {
+            cvsFilter = notFileFilter(
+                andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));
+        }
+        if (filter == null) {
+            return cvsFilter;
+        } else {
+            return andFileFilter(filter, cvsFilter);
+        }
+    }
+
+    /**
+     * Decorates a filter to make it ignore SVN directories.
+     * Passing in <code>null</code> will return a filter that accepts everything
+     * except SVN directories.
+     * 
+     * @param filter  the filter to decorate, null means an unrestricted filter
+     * @return the decorated filter, never null
+     * @since 1.1
+     */
+    public static IOFileFilter makeSVNAware(IOFileFilter filter) {
+        if (svnFilter == null) {
+            svnFilter = notFileFilter(
+                andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
+        }
+        if (filter == null) {
+            return svnFilter;
+        } else {
+            return andFileFilter(filter, svnFilter);
+        }
     }
 
     //-----------------------------------------------------------------------
