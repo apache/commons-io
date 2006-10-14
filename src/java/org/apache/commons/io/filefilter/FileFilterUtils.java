@@ -218,7 +218,6 @@ public class FileFilterUtils {
     }
 
     //-----------------------------------------------------------------------
-
     /**
      * Returns a filter that returns true if the file was last modified after
      * the specified cutoff time.
@@ -330,6 +329,35 @@ public class FileFilterUtils {
         IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
         IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Decorates a filter so that it only applies to directories and not to files.
+     * 
+     * @param filter  the filter to decorate, null means an unrestricted filter
+     * @return the decorated filter, never null
+     * @since 1.3
+     */
+    public static IOFileFilter makeDirectoryOnly(IOFileFilter filter) {
+        if (filter == null) {
+            return DirectoryFileFilter.DIRECTORY;
+        }
+        return new AndFileFilter(DirectoryFileFilter.DIRECTORY, filter);
+    }
+
+    /**
+     * Decorates a filter so that it only applies to files and not to directories.
+     * 
+     * @param filter  the filter to decorate, null means an unrestricted filter
+     * @return the decorated filter, never null
+     * @since 1.3
+     */
+    public static IOFileFilter makeFileOnly(IOFileFilter filter) {
+        if (filter == null) {
+            return FileFileFilter.FILE;
+        }
+        return new AndFileFilter(FileFileFilter.FILE, filter);
     }
 
 }
