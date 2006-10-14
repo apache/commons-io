@@ -21,6 +21,10 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
 /**
  * Abstract class that walks through a directory hierarchy and provides
  * subclasses with convenient hooks to add specific behaviour.
@@ -80,14 +84,28 @@ import java.util.Collection;
  * <a name="filter"></a>
  * <h3>2. Filter Example</h3>
  *
- * If you wanted all directories which are not hidden
- * and files which end in ".txt" - you could build a composite filter
- * using the filter implementations in the Commons IO
- * <a href="filefilter/package-summary.html">filefilter</a> package
- * in the following way:
- *
+ * Choosing which directories and files to process can be a key aspect
+ * of using this class. This information can be setup in three ways,
+ * via three different constructors.
+ * <p>
+ * The first option is to visit all directories and files.
+ * This is achieved via the no-args constructor.
+ * <p>
+ * The second constructor option is to supply a single {@link FileFilter}
+ * that describes the files and directories to visit. Care must be taken
+ * with this option as the same filter is used for both directories
+ * and files.
+ * <p>
+ * For example, if you wanted all directories which are not hidden
+ * and files which end in ".txt":
  * <pre>
- *
+ *  public class FooDirectoryWalker extends DirectoryWalker {
+ *    public FooDirectoryWalker(FileFilter filter) {
+ *      super(filter, -1);
+ *    }
+ *  }
+ *  
+ *  // Build up the filters and create the walker
  *    // Create a filter for Non-hidden directories
  *    IOFileFilter fooDirFilter = 
  *        FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
@@ -103,9 +121,32 @@ import java.util.Collection;
  *        FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
  *
  *    // Use the filter to construct a DirectoryWalker implementation
- *    FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter, -1);
- *
+ *    FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter);
  * </pre>
+ * <p>
+ * The third constructor option is to specify separate filters, one for
+ * directories and one for files. These are combined internally to form
+ * the correct <code>FileFilter</code>, something which is very easy to
+ * get wrong when attempted manually, particularly when trying to
+ * express constructs like 'any file in directories named docs'.
+ * <p>
+ * For example, if you wanted all directories which are not hidden
+ * and files which end in ".txt":
+ * <pre>
+ *  public class FooDirectoryWalker extends DirectoryWalker {
+ *    public FooDirectoryWalker(IOFileFilter dirFilter, IOFileFilter fileFilter) {
+ *      super(dirFilter, fileFilter, -1);
+ *    }
+ *  }
+ *  
+ *  // Use the filters to construct the walker
+ *  FooDirectoryWalker walker = new FooDirectoryWalker(
+ *    HiddenFileFilter.VISIBLE,
+ *    FileFilterUtils.suffixFileFilter(".txt"),
+ *  );
+ * <pre>
+ * This is much simpler than the previous example, and is why it is the preferred
+ * option for filtering.
  *
  * <a name="cancel"></a>
  * <h3>3. Cancellation</h3>
@@ -145,8 +186,8 @@ import java.util.Collection;
  *
  * This example provides a <code>cancel()</code> method for external processes to
  * indcate that processing must stop. Calling this method sets a
- * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">
- * volatile</a> flag to (hopefully) ensure it will work properly in
+ * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">volatile</a>
+ * flag to (hopefully) ensure it will work properly in
  * a multi-threaded environment. In this implementation the flag is checked in two
  * of the lifecycle methods using a convenience <code>checkIfCancelled()</code> method
  * which throws a {@link CancelException} if cancellation has been requested.
@@ -237,13 +278,45 @@ public abstract class DirectoryWalker {
 
     /**
      * Construct an instance with a filter and limit the <i>depth</i> navigated to.
+     * <p>
+     * The filter controls which files and directories will be navigated to as
+     * part of the walk. The {@link FileFilterUtils} class is useful for combining
+     * various filters together. A <code>null</code> filter means that no
+     * filtering should occur and all files and directories will be visited.
      *
-     * @param filter  the filter to limit the navigation/results, may be null
+     * @param filter  the filter to apply, null means visit all files
      * @param depthLimit  controls how <i>deep</i> the hierarchy is
      *  navigated to (less than 0 means unlimited)
      */
     protected DirectoryWalker(FileFilter filter, int depthLimit) {
         this.filter = filter;
+        this.depthLimit = depthLimit;
+    }
+
+    /**
+     * Construct an instance with a directory and a file filter and an optional
+     * limit on the <i>depth</i> navigated to.
+     * <p>
+     * The filters control which files and directories will be navigated to as part
+     * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly()}
+     * and {@link FileFilterUtils#makeFileOnly()} internally to combine the filters.
+     * A <code>null</code> filter means that no filtering should occur.
+     *
+     * @param directoryFilter  the filter to apply to directories, null means visit all directories
+     * @param fileFilter  the filter to apply to files, null means visit all files
+     * @param depthLimit  controls how <i>deep</i> the hierarchy is
+     *  navigated to (less than 0 means unlimited)
+     */
+    protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, int depthLimit) {
+        if (directoryFilter == null && fileFilter == null) {
+            this.filter = null;
+        } else {
+            directoryFilter = (directoryFilter != null ? directoryFilter : TrueFileFilter.TRUE);
+            fileFilter = (fileFilter != null ? fileFilter : TrueFileFilter.TRUE);
+            directoryFilter = FileFilterUtils.makeDirectoryOnly(directoryFilter);
+            fileFilter = FileFilterUtils.makeFileOnly(fileFilter);
+            this.filter = FileFilterUtils.orFileFilter(directoryFilter, fileFilter);
+        }
         this.depthLimit = depthLimit;
     }
 
