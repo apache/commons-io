@@ -139,9 +139,13 @@ Enhancements from 1.2
     (whereas if everything uses INSTANCE, then they just clash)
   - The old INSTANCE constants are still present and have not been deprecated
 
-- FileFilterUtils
+- FileFilterUtils.sizeRangeFileFilter
   - new sizeRangeFileFilter(long minimumSize, long maximumSize) method which 
     creates a filter that accepts files within the specified size range.
+
+- FileFilterUtils.makeDirectoryOnly/makeFileOnly
+  - two new methods that decorate a file filter to make it apply to
+    directories only or files only
 
 - NullWriter
   - New writer that acts as a sink for all data, as per /dev/null

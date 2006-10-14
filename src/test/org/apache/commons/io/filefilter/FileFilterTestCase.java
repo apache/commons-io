@@ -736,5 +736,62 @@ public class FileFilterTestCase extends FileBasedTestCase {
         FileUtils.forceDelete(emptyDir);
     }
 
+    //-----------------------------------------------------------------------
+    public void testMakeDirectoryOnly() throws Exception {
+        assertSame(DirectoryFileFilter.DIRECTORY, FileFilterUtils.makeDirectoryOnly(null));
+        
+        IOFileFilter filter = FileFilterUtils.makeDirectoryOnly(
+                FileFilterUtils.nameFileFilter("B"));
+        
+        File fileA = new File(getTestDirectory(), "A");
+        File fileB = new File(getTestDirectory(), "B");
+        
+        fileA.mkdirs();
+        fileB.mkdirs();
+        
+        assertFiltering(filter, fileA, false);
+        assertFiltering(filter, fileB, true);
+        
+        FileUtils.deleteDirectory(fileA);
+        FileUtils.deleteDirectory(fileB);
+        
+        createFile(fileA, 32);
+        createFile(fileB, 32);
+        
+        assertFiltering(filter, fileA, false);
+        assertFiltering(filter, fileB, false);
+        
+        fileA.delete();
+        fileB.delete();
+    }
+         
+    //-----------------------------------------------------------------------
+    public void testMakeFileOnly() throws Exception {
+        assertSame(FileFileFilter.FILE, FileFilterUtils.makeFileOnly(null));
+        
+        IOFileFilter filter = FileFilterUtils.makeFileOnly(
+                FileFilterUtils.nameFileFilter("B"));
+        
+        File fileA = new File(getTestDirectory(), "A");
+        File fileB = new File(getTestDirectory(), "B");
+        
+        fileA.mkdirs();
+        fileB.mkdirs();
+        
+        assertFiltering(filter, fileA, false);
+        assertFiltering(filter, fileB, false);
+        
+        FileUtils.deleteDirectory(fileA);
+        FileUtils.deleteDirectory(fileB);
+        
+        createFile(fileA, 32);
+        createFile(fileB, 32);
+        
+        assertFiltering(filter, fileA, false);
+        assertFiltering(filter, fileB, true);
+        
+        fileA.delete();
+        fileB.delete();
+    }
+         
 }
-
