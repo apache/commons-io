@@ -26,7 +26,6 @@ import junit.framework.TestCase;
  * Really not a lot to do here, but checking that no 
  * Exceptions are thrown. 
  *
- * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
 

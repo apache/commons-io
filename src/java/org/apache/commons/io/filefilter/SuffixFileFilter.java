@@ -37,7 +37,6 @@ import java.util.List;
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @author Federico Barbieri
  * @author Serge Knystautas

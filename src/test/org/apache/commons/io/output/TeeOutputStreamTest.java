@@ -24,7 +24,6 @@ import junit.framework.TestCase;
 
 
 /**
- * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
 

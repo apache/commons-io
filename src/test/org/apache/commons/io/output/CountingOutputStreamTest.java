@@ -27,7 +27,6 @@ import org.apache.commons.io.input.NullInputStream;
 
 
 /**
- * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
 

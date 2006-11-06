@@ -28,7 +28,6 @@ import java.io.Writer;
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @version $Id$
  */
