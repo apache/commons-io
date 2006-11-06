@@ -26,7 +26,6 @@ import java.io.FilenameFilter;
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  */
 public class DelegateFileFilter extends AbstractFileFilter {

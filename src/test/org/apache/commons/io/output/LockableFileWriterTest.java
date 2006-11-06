@@ -27,7 +27,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * Tests that files really lock, although no writing is done as 
  * the locking is tested only on construction. 
  *
- * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
 public class LockableFileWriterTest extends FileBasedTestCase {

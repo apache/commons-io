@@ -27,7 +27,6 @@ import junit.framework.TestCase;
  * Test for the SwappedDataInputStream. This also 
  * effectively tests the underlying EndianUtils Stream methods.
  *
- * @author Henri Yandell (bayard at apache dot org)
  * @version $Revision$ $Date$
  */
 

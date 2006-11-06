@@ -27,7 +27,6 @@ import org.apache.commons.io.output.NullOutputStream;
 /**
  * Tests the CountingInputStream.
  *
- * @author Henri Yandell
  * @author Marcelo Liberato
  * @author Stephen Colebourne
  * @version $Id$

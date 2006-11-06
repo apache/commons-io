@@ -26,7 +26,6 @@ import java.io.OutputStream;
  * being called. It is an alternative base class to FilterOutputStream
  * to increase reusability.
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @version $Id$
  */

@@ -29,7 +29,6 @@ import java.io.InputStream;
  * to increase reusability, because FilterInputStream changes the 
  * methods being called, such as read(byte[]) to read(byte[], int, int).
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @version $Id$
  */

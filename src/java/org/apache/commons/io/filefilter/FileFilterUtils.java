@@ -29,7 +29,6 @@ import java.util.Date;
  * @since Commons IO 1.0
  * @version $Id$
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @author Jeremias Maerki
  * @author Masato Tezuka

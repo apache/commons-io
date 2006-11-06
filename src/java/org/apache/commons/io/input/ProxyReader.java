@@ -29,7 +29,6 @@ import java.io.Reader;
  * to increase reusability, because FilterReader changes the 
  * methods being called, such as read(char[]) to read(char[], int, int).
  * 
- * @author Henri Yandell
  * @author Stephen Colebourne
  * @version $Id$
  */
