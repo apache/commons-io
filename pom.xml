@@ -48,21 +48,6 @@
     <url>http://svn.apache.org/viewvc/jakarta/commons/proper/io/trunk</url>
   </scm>
 
-  <mailingLists>
-    <mailingList>
-      <name>Commons Dev List</name>
-      <subscribe>commons-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>commons-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-dev/</archive>
-    </mailingList>
-    <mailingList>
-      <name>Commons User List</name>
-      <subscribe>commons-user-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>commons-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/mod_mbox/jakarta-commons-user/</archive>
-    </mailingList>
-  </mailingLists>
-
   <developers>
     <developer>
       <name>Scott Sanders</name>
