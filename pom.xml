@@ -21,7 +21,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.commons</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>commons-parent</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -36,19 +36,6 @@
   </description>
 
   <url>http://jakarta.apache.org/commons/io/</url>
-
-  <organization>
-    <name>The Apache Software Foundation</name>
-    <url>http://jakarta.apache.org</url>
-  </organization>
-
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>/LICENSE.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
 
   <issueManagement>
     <system>jira</system>
