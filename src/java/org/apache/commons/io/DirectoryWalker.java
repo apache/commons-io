@@ -144,7 +144,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *    HiddenFileFilter.VISIBLE,
  *    FileFilterUtils.suffixFileFilter(".txt"),
  *  );
- * <pre>
+ * </pre>
  * This is much simpler than the previous example, and is why it is the preferred
  * option for filtering.
  *
