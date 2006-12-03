@@ -288,7 +288,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         // Cancel on a file
         try {
             cancelName = "DirectoryWalker.java";
-            List results = new TestCancelWalker(cancelName, false).find(javaDir);
+            new TestCancelWalker(cancelName, false).find(javaDir);
             fail("CancelException not thrown for '" + cancelName + "'");
         } catch (DirectoryWalker.CancelException cancel) {
             assertEquals("File:  " + cancelName,   cancelName, cancel.getFile().getName());
@@ -300,7 +300,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         // Cancel on a directory
         try {
             cancelName = "commons";
-            List results = new TestCancelWalker(cancelName, false).find(javaDir);
+            new TestCancelWalker(cancelName, false).find(javaDir);
             fail("CancelException not thrown for '" + cancelName + "'");
         } catch (DirectoryWalker.CancelException cancel) {
             assertEquals("File:  " + cancelName,   cancelName, cancel.getFile().getName());
@@ -314,6 +314,51 @@ public class DirectoryWalkerTestCase extends TestCase {
             List results = new TestCancelWalker(cancelName, true).find(javaDir);
             File lastFile = (File)results.get(results.size() - 1);
             assertEquals("Suppress:  " + cancelName,   cancelName, lastFile.getName());
+        } catch(IOException ex) {
+            fail("Suppress threw " + ex);
+        }
+
+    }
+
+    /**
+     * Test Cancel
+     */
+    public void testMultiThreadCancel() {
+        String cancelName = null;
+        TestMultiThreadCancelWalker walker = null;
+        // Cancel on a file
+        try {
+            cancelName = "DirectoryWalker.java";
+            walker = new TestMultiThreadCancelWalker(cancelName, false);
+            walker.find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (DirectoryWalker.CancelException cancel) {
+            File last = (File) walker.results.get(walker.results.size() - 1);
+            assertEquals(cancelName, last.getName());
+            assertEquals("Depth: " + cancelName,  5, cancel.getDepth());
+        } catch(IOException ex) {
+            fail("IOException: " + cancelName + " " + ex);
+        }
+        
+        // Cancel on a directory
+        try {
+            cancelName = "commons";
+            walker = new TestMultiThreadCancelWalker(cancelName, false);
+            walker.find(javaDir);
+            fail("CancelException not thrown for '" + cancelName + "'");
+        } catch (DirectoryWalker.CancelException cancel) {
+            assertEquals("File:  " + cancelName,   cancelName, cancel.getFile().getName());
+            assertEquals("Depth: " + cancelName,  3, cancel.getDepth());
+        } catch(IOException ex) {
+            fail("IOException: " + cancelName + " " + ex);
+        }
+        
+        // Suppress CancelException (use same file name as preceeding test)
+        try {
+            walker = new TestMultiThreadCancelWalker(cancelName, true);
+            List results = walker.find(javaDir);
+            File lastFile = (File) results.get(results.size() - 1);
+            assertEquals("Suppress:  " + cancelName, cancelName, lastFile.getName());
         } catch(IOException ex) {
             fail("Suppress threw " + ex);
         }
@@ -413,6 +458,61 @@ public class DirectoryWalkerTestCase extends TestCase {
             if (cancelFileName.equals(file.getName())) {
                 throw new CancelException(file, depth);
             }
+        }
+
+        /** Handles Cancel. */
+        protected void handleCancelled(File startDirectory, Collection results,
+                       CancelException cancel) throws IOException {
+            if (!suppressCancel) {
+                super.handleCancelled(startDirectory, results, cancel);
+            }
+        }
+    }
+
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    static class TestMultiThreadCancelWalker extends DirectoryWalker {
+        private String cancelFileName;
+        private boolean suppressCancel;
+        private boolean cancelled;
+        public List results;
+
+        TestMultiThreadCancelWalker(String cancelFileName, boolean suppressCancel) {
+            super();
+            this.cancelFileName = cancelFileName;
+            this.suppressCancel = suppressCancel;
+        }
+
+        /** find files. */
+        protected List find(File startDirectory) throws IOException {
+           results = new ArrayList();
+           walk(startDirectory, results);
+           return results;
+        }
+
+        /** Handles a directory end by adding the File to the result set. */
+        protected void handleDirectoryEnd(File directory, int depth, Collection results) throws IOException {
+            results.add(directory);
+            assertEquals(false, cancelled);
+            if (cancelFileName.equals(directory.getName())) {
+                cancelled = true;
+            }
+        }
+
+        /** Handles a file by adding the File to the result set. */
+        protected void handleFile(File file, int depth, Collection results) throws IOException {
+            results.add(file);
+            assertEquals(false, cancelled);
+            if (cancelFileName.equals(file.getName())) {
+                cancelled = true;
+            }
+        }
+
+        /** Handles Cancelled. */
+        protected boolean handleIsCancelled(File file, int depth, Collection results) throws IOException {
+            return cancelled;
         }
 
         /** Handles Cancel. */
