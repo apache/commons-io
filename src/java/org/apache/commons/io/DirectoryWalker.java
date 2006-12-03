@@ -184,13 +184,15 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <a name="external"></a>
  * <h4>3.1 External / Multi-threaded</h4>
  *
- * This example provides a <code>cancel()</code> method for external processes to
- * indcate that processing must stop. Calling this method sets a
- * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">volatile</a>
- * flag to (hopefully) ensure it will work properly in
- * a multi-threaded environment. In this implementation the flag is checked in two
- * of the lifecycle methods using a convenience <code>checkIfCancelled()</code> method
- * which throws a {@link CancelException} if cancellation has been requested.
+ * This example provides a public <code>cancel()</code> method that can be
+ * called by another thread to stop the processing. A typical example use-case
+ * would be a cancel button on a GUI. Calling this method sets a
+ * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">
+ * volatile</a> flag to ensure it will work properly in a multi-threaded environment.
+ * The flag is returned by the <code>handleIsCancelled()</code> method, which
+ * will cause the walk to stop immediately. The <code>handleCancelled()</code>
+ * method will be the next, and last, callback method received once cancellation
+ * has occurred.
  *
  * <pre>
  *  public class FooDirectoryWalker extends DirectoryWalker {
@@ -201,24 +203,12 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *        cancelled = true;
  *    }
  *
- *    protected boolean handleDirectory(File directory, int depth, Collection results) throws IOException {
- *        checkIfCancelled(directory, depth); // Cancel Check
- *        return true;
- *    }
- *
- *    protected void handleFile(File file, int depth, Collection results) throws IOException {
- *        checkIfCancelled(file, depth);  // Cancel Check
- *        results.add(file);
- *    }
- *
- *    private void checkIfCancelled(File file, int depth) throws CancelException {
- *        if (cancelled) {
- *            throw new CancelException(file, depth);
- *        }
+ *    private void handleIsCancelled(File file, int depth, Collection results) {
+ *        return cancelled;
  *    }
  *
  *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
- *        // implement cancel processing here
+ *        // implement processing required when a cancellation occurs
  *    }
  *  }
  * </pre>
@@ -250,7 +240,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *    }
  *
  *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
- *        // implement cancel processing here
+ *        // implement processing required when a cancellation occurs
  *    }
  *  }
  * </pre>
@@ -324,7 +314,7 @@ public abstract class DirectoryWalker {
     /**
      * Internal method that walks the directory hierarchy in a depth-first manner.
      * <p>
-     * Most users of this class do not need to call this method. This method will
+     * Users of this class do not need to call this method. This method will
      * be called automatically by another (public) method on the specific subclass.
      * <p>
      * Writers of subclasses should call this method to start the directory walk.
@@ -336,7 +326,7 @@ public abstract class DirectoryWalker {
      * @throws NullPointerException if the start directory is null
      * @throws IOException if an I/O Error occurs
      */
-    protected void walk(File startDirectory, Collection results) throws IOException {
+    protected final void walk(File startDirectory, Collection results) throws IOException {
         if (startDirectory == null) {
             throw new NullPointerException("Start Directory is null");
         }
@@ -358,10 +348,12 @@ public abstract class DirectoryWalker {
      * @throws IOException if an I/O Error occurs
      */
     private void walk(File directory, int depth, Collection results) throws IOException {
+        checkIfCancelled(directory, depth, results);
         if (handleDirectory(directory, depth, results)) {
             handleDirectoryStart(directory, depth, results);
             int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
+                checkIfCancelled(directory, depth, results);
                 File[] childFiles = (filter == null ? directory.listFiles() : directory.listFiles(filter));
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
@@ -371,13 +363,97 @@ public abstract class DirectoryWalker {
                         if (childFile.isDirectory()) {
                             walk(childFile, childDepth, results);
                         } else {
+                            checkIfCancelled(childFile, childDepth, results);
                             handleFile(childFile, childDepth, results);
+                            checkIfCancelled(childFile, childDepth, results);
                         }
                     }
                 }
             }
             handleDirectoryEnd(directory, depth, results);
         }
+        checkIfCancelled(directory, depth, results);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
+     * throwing a <code>CancelException</code> if it has.
+     * <p>
+     * Writers of subclasses should not normally call this method as it is called
+     * automatically by the walk of the tree. However, sometimes a single method,
+     * typically {@link #handleFile}, may take a long time to run. In that case,
+     * you may wish to check for cancellation by calling this method.
+     * 
+     * @param file  the current file being processed
+     * @param depth  the current file level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
+     * @return true to process this directory, false to skip this directory
+     * @throws IOException if an I/O Error occurs
+     */
+    protected final void checkIfCancelled(File file, int depth, Collection results) throws IOException {
+        if (handleIsCancelled(file, depth, results)) {
+            throw new CancelException(file, depth);
+        }
+    }
+
+    /**
+     * Overridable callback method invoked to determine if the entire walk
+     * operation should be immediately cancelled.
+     * <p>
+     * This method should be implemented by those subclasses that want to
+     * provide a public <code>cancel()</code> method available from another
+     * thread. The design pattern for the subclass should be as follows:
+     * <pre>
+     *  public class FooDirectoryWalker extends DirectoryWalker {
+     *    private volatile boolean cancelled = false;
+     *
+     *    public void cancel() {
+     *        cancelled = true;
+     *    }
+     *    private void handleIsCancelled(File file, int depth, Collection results) {
+     *        return cancelled;
+     *    }
+     *    protected void handleCancelled(File startDirectory,
+     *              Collection results, CancelException cancel) {
+     *        // implement processing required when a cancellation occurs
+     *    }
+     *  }
+     * </pre>
+     * <p>
+     * If this method returns true, then the directory walk is immediately
+     * cancelled. The next callback method will be {@link #handleCancelled}.
+     * <p>
+     * This implementation returns false.
+     *
+     * @param file  the file or directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @return true if the walk has been cancelled
+     * @throws IOException if an I/O Error occurs
+     */
+    protected boolean handleIsCancelled(
+            File file, int depth, Collection results) throws IOException {
+        // do nothing - overridable by subclass
+        return false;  // not cancelled
+    }
+
+    /**
+     * Overridable callback method invoked when the operation is cancelled.
+     * The file being processed when the cancellation occurred can be
+     * obtained from the exception.
+     * <p>
+     * This implementation just re-throws the {@link CancelException}.
+     *
+     * @param startDirectory  the directory that the walk started from
+     * @param results  the collection of result objects, may be updated
+     * @param cancel  the exception throw to cancel further processing
+     * containing details at the point of cancellation. 
+     * @throws IOException if an I/O Error occurs
+     */
+    protected void handleCancelled(File startDirectory, Collection results,
+                       CancelException cancel) throws IOException {
+        // re-throw exception - overridable by subclass
+        throw cancel;
     }
 
     //-----------------------------------------------------------------------
@@ -480,25 +556,6 @@ public abstract class DirectoryWalker {
      */
     protected void handleEnd(Collection results) throws IOException {
         // do nothing - overridable by subclass
-    }
-
-    /**
-     * Overridable callback method invoked when the operation is cancelled.
-     * The file being processed when the cancellation occurred can be
-     * obtained from the exception.
-     * <p>
-     * This implementation just re-throws the {@link CancelException}.
-     *
-     * @param startDirectory  the directory to start from
-     * @param results  the collection of result objects, may be updated
-     * @param cancel  the exception throw to cancel further processing
-     * containing details at the point of cancellation. 
-     * @throws IOException if an I/O Error occurs
-     */
-    protected void handleCancelled(File startDirectory, Collection results,
-                       CancelException cancel) throws IOException {
-        // re-throw exception - overridable by subclass
-        throw cancel;
     }
 
     //-----------------------------------------------------------------------
