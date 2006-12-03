@@ -125,12 +125,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         OutputStream out = new NullOutputStream();
 
         // Test copy() method
-        try {
-            IOUtils.copy(in, out);
-            fail("Expected copy() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
-            // expected result
-        }
+        assertEquals(-1, IOUtils.copy(in, out));
 
         // reset the input
         in.close();
@@ -369,12 +364,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         Writer writer = new NullWriter();
 
         // Test copy() method
-        try {
-            IOUtils.copy(reader, writer);
-            fail("Expected copy() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
-            // expected result
-        }
+        assertEquals(-1, IOUtils.copy(reader, writer));
 
         // reset the input
         reader.close();
