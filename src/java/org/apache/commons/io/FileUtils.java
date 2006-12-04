@@ -142,7 +142,10 @@ public class FileUtils {
             OutputStream out = new FileOutputStream(file);
             IOUtils.closeQuietly(out);
         }
-        file.setLastModified(System.currentTimeMillis());
+        boolean success = file.setLastModified(System.currentTimeMillis());
+        if(!success) {
+            throw new IOException("Unable to set the last modification time for " + file);
+        }
     }
 
     //-----------------------------------------------------------------------
