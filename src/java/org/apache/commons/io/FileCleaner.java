@@ -29,6 +29,12 @@ import java.util.Vector;
  * This utility creates a background thread to handle file deletion.
  * Each file to be deleted is registered with a handler object.
  * When the handler object is garbage collected, the file is deleted.
+ * <p>
+ * In an environment with multiple class loaders (a servlet container, for
+ * example), you should consider stopping the background thread if it is no
+ * longer needed. This is done by invoking the method
+ * {@link {@link #exitWhenFinished}, typically in
+ * {@link javax.servlet.ServletContextListener#contextDestroyed} or similar.
  *
  * @author Noel Bergman
  * @author Martin Cooper
@@ -39,47 +45,19 @@ public class FileCleaner {
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    private static ReferenceQueue /* Tracker */ q = new ReferenceQueue();
-
+    static ReferenceQueue /* Tracker */ q = new ReferenceQueue();
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    private static Collection /* Tracker */ trackers = new Vector();
-
+    static Collection /* Tracker */ trackers = new Vector();
+    /**
+     * Whether to terminate the thread when the tracking is complete.
+     */
+    static volatile boolean exitWhenFinished = false;
     /**
      * The thread that will clean up registered files.
      */
-    private static Thread reaper = new Thread("File Reaper") {
-
-        /**
-         * Run the reaper thread that will delete files as their associated
-         * marker objects are reclaimed by the garbage collector.
-         */
-        public void run() {
-            for (;;) {
-                Tracker tracker = null;
-                try {
-                    // Wait for a tracker to remove.
-                    tracker = (Tracker) q.remove();
-                } catch (Exception e) {
-                    continue;
-                }
-
-                tracker.delete();
-                tracker.clear();
-                trackers.remove(tracker);
-            }
-        }
-    };
-
-    /**
-     * The static initializer that starts the reaper thread.
-     */
-    static {
-        reaper.setPriority(Thread.MAX_PRIORITY);
-        reaper.setDaemon(true);
-        reaper.start();
-    }
+    static Thread reaper;
 
     //-----------------------------------------------------------------------
     /**
@@ -109,7 +87,7 @@ public class FileCleaner {
         if (file == null) {
             throw new NullPointerException("The file must not be null");
         }
-        trackers.add(new Tracker(file.getPath(), deleteStrategy, marker, q));
+        addTracker(file.getPath(), marker, deleteStrategy);
     }
 
     /**
@@ -139,9 +117,28 @@ public class FileCleaner {
         if (path == null) {
             throw new NullPointerException("The path must not be null");
         }
+        addTracker(path, marker, deleteStrategy);
+    }
+
+    /**
+     * Adds a tracker to the list of trackers.
+     * 
+     * @param path  the full path to the file to be tracked, not null
+     * @param marker  the marker object used to track the file, not null
+     * @param deleteStrategy  the strategy to delete the file, null means normal
+     */
+    private static synchronized void addTracker(String path, Object marker, FileDeleteStrategy deleteStrategy) {
+        if (exitWhenFinished) {
+            throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
+        }
+        if (reaper == null) {
+            reaper = new Reaper();
+            reaper.start();
+        }
         trackers.add(new Tracker(path, deleteStrategy, marker, q));
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Retrieve the number of files currently being tracked, and therefore
      * awaiting deletion.
@@ -152,11 +149,75 @@ public class FileCleaner {
         return trackers.size();
     }
 
+    /**
+     * Call this method to cause the file cleaner thread to terminate when
+     * there are no more objects being tracked for deletion.
+     * <p>
+     * In a simple environment, you don't need this method as the file cleaner
+     * thread will simply exit when the JVM exits. In a more complex environment,
+     * with multiple class loaders (such as an application server), you should be
+     * aware that the file cleaner thread will continue running even if the class
+     * loader it was started from terminates. This can consitute a memory leak.
+     * <p>
+     * For example, suppose that you have developed a web application, which
+     * contains the commons-io jar file in your WEB-INF/lib directory. In other
+     * words, the FileCleaner class is loaded through the class loader of your
+     * web application. If the web application is terminated, but the servlet
+     * container is still running, then the file cleaner thread will still exist,
+     * posing a memory leak.
+     * <p>
+     * This method allows the thread to be terminated. Simply call this method
+     * in the resource cleanup code, such as {@link javax.servlet.ServletContextListener#contextDestroyed}.
+     * One called, no new objects can be tracked by the file cleaner.
+     */
+    public static synchronized void exitWhenFinished() {
+        exitWhenFinished = true;
+        if (reaper != null) {
+            synchronized (reaper) {
+                reaper.interrupt();
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    /**
+     * The reaper thread.
+     */
+    static final class Reaper extends Thread {
+        Reaper() {
+            super("File Reaper");
+            setPriority(Thread.MAX_PRIORITY);
+            setDaemon(true);
+        }
+
+        /**
+         * Run the reaper thread that will delete files as their associated
+         * marker objects are reclaimed by the garbage collector.
+         */
+        public void run() {
+            // thread exits when exitWhenFinished is true and there are no more tracked objects
+            while (exitWhenFinished == false || trackers.size() > 0) {
+                Tracker tracker = null;
+                try {
+                    // Wait for a tracker to remove.
+                    tracker = (Tracker) q.remove();
+                } catch (Exception e) {
+                    continue;
+                }
+                if (tracker != null) {
+                    tracker.delete();
+                    tracker.clear();
+                    trackers.remove(tracker);
+                }
+            }
+        }
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Inner class which acts as the reference for a file pending deletion.
      */
-    static class Tracker extends PhantomReference {
+    static final class Tracker extends PhantomReference {
 
         /**
          * The full path to the file being tracked.
