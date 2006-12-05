@@ -288,8 +288,8 @@ public abstract class DirectoryWalker {
      * limit on the <i>depth</i> navigated to.
      * <p>
      * The filters control which files and directories will be navigated to as part
-     * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly()}
-     * and {@link FileFilterUtils#makeFileOnly()} internally to combine the filters.
+     * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly(IOFileFilter)}
+     * and {@link FileFilterUtils#makeFileOnly(IOFileFilter)} internally to combine the filters.
      * A <code>null</code> filter means that no filtering should occur.
      *
      * @param directoryFilter  the filter to apply to directories, null means visit all directories
