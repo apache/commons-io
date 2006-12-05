@@ -427,6 +427,7 @@ public abstract class DirectoryWalker {
      *
      * @param file  the file or directory being processed
      * @param depth  the current directory level (starting directory = 0)
+     * @param results  the collection of result objects, may be updated
      * @return true if the walk has been cancelled
      * @throws IOException if an I/O Error occurs
      */
