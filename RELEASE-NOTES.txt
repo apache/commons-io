@@ -22,6 +22,7 @@ Binary compatible - Yes
 Source compatible - Yes
 
 Semantic compatible - Yes
+  Check the bug fixes section for semantic bug fixes
 
 
 Deprecations from 1.2
@@ -55,6 +56,11 @@ Bug fixes from 1.2
   - Fixed resource leak leading to 'Too many open files' error
   - Previously did not destroy Process instances (as JDK Javadoc is so poor)
   - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+
+- FileUtils.touch [IO-100]
+  - The touch method previously gave no indication when the file could not
+    be touched successfully (such as due to access restrictions) - it now
+    throws an IOException if the last modified date cannot be changed
 
 - FileCleaner
   - This now handles the situation where an error occurs when deleting the file
