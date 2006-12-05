@@ -388,7 +388,6 @@ public abstract class DirectoryWalker {
      * @param file  the current file being processed
      * @param depth  the current file level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
-     * @return true to process this directory, false to skip this directory
      * @throws IOException if an I/O Error occurs
      */
     protected final void checkIfCancelled(File file, int depth, Collection results) throws IOException {
