@@ -218,12 +218,12 @@ public class EndianUtils {
             ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 3 ] & 0xff ) << 24 );
+            ( ( (long) ( data[ offset + 3 ] & 0xff ) ) << 24 );
         long high = 
             ( ( data[ offset + 4 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 5 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 6 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 7 ] & 0xff ) << 24 );
+            ( ( (long) ( data[ offset + 7 ] & 0xff ) ) << 24 );
         return low + (high << 32);
     }
 

@@ -242,4 +242,25 @@ public class EndianUtilsTest extends TestCase {
         assertEquals( 0x01, bytes[7] );
     }
 
+    // tests #IO-101
+    public void testSymmetryOfLong() throws IOException {
+
+        double[] tests = new double[] {34.345, -345.5645, 545.12, 10.043, 7.123456789123};
+        for (int i = 0; i< tests.length ;i++) {
+
+            // testing the real problem
+            byte[] buffer = new byte[8];
+            long ln1 = Double.doubleToLongBits( tests[i] );
+            EndianUtils.writeSwappedLong(buffer, 0, ln1);
+            long ln2 = EndianUtils.readSwappedLong(buffer, 0);
+            assertEquals( ln1, ln2 );
+
+            // testing the bug report
+            buffer = new byte[8];
+            EndianUtils.writeSwappedDouble(buffer, 0, tests[i]);
+            double val = EndianUtils.readSwappedDouble(buffer, 0);
+            assertEquals( tests[i], val, 0 );
+        }
+    }
+
 }
