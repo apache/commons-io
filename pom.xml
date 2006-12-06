@@ -198,16 +198,6 @@
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <targetPath>META-INF</targetPath>
-          <includes>
-            <include>NOTICE.txt</include>
-            <include>LICENSE.txt</include>
-          </includes>
-        </resource>
-      </resources>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
