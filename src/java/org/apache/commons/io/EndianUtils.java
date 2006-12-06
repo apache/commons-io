@@ -405,7 +405,9 @@ public class EndianUtils {
         throws IOException
     {
         byte[] bytes = new byte[8];
-        input.read( bytes );
+        for ( int i=0; i<8; i++ ) {
+            bytes[i] = (byte) read( input );
+        }
         return readSwappedLong( bytes, 0 );
     }
 
