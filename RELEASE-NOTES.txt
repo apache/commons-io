@@ -80,6 +80,11 @@ Bug fixes from 1.2
 - FileBasedTestCase
   - Fixed bug in compare content methods identified by GNU classpath
 
+- EndianUtils.writeSwappedLong(byte[], int) [IO-101]
+  - An int overrun in the bit shifting when it should have been a long
+
+- EndianUtils.writeSwappedLong(InputStream) [IO-102]
+  - The return of input.read(byte[]) was not being checked to ensure all 8 bytes were read
 
 Enhancements from 1.2
 ---------------------
