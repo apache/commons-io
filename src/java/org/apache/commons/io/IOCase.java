@@ -146,7 +146,7 @@ public final class IOCase implements Serializable {
     /**
      * Checks if one string starts with another using the case-sensitivity rule.
      * <p>
-     * This method mimics {@link String#startsWith} but takes case-sensitivity
+     * This method mimics {@link String#startsWith(String)} but takes case-sensitivity
      * into account.
      * 
      * @param str  the string to check, not null
@@ -177,8 +177,8 @@ public final class IOCase implements Serializable {
     /**
      * Checks if one string contains another at a specific index using the case-sensitivity rule.
      * <p>
-     * This method mimics parts of {@link String#regionMatches} but takes case-sensitivity
-     * into account.
+     * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)} 
+     * but takes case-sensitivity into account.
      * 
      * @param str  the string to check, not null
      * @param strStartIndex  the index to start at in str
