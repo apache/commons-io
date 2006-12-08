@@ -36,6 +36,11 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class FileFilterTestCase extends FileBasedTestCase {
 
+    /**
+     * The subversion directory name.
+     */
+    static final String SVN_DIR_NAME = ".svn";
+    
     private static final boolean WINDOWS = (File.separatorChar == '\\');
 
     public FileFilterTestCase(String name) {
@@ -558,7 +563,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         IOFileFilter filter2 = FileFilterUtils.makeSVNAware(FileFilterUtils
             .nameFileFilter("test-file1.txt"));
 
-        File file = new File(getTestDirectory(), ".svn");
+        File file = new File(getTestDirectory(), SVN_DIR_NAME);
         file.mkdirs();
         assertFiltering(filter1, file, false);
         assertFiltering(filter2, file, false);
@@ -574,7 +579,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
 
-        file = new File(getTestDirectory(), ".svn");
+        file = new File(getTestDirectory(), SVN_DIR_NAME);
         createFile(file, 0);
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -680,10 +685,10 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     public void testHidden() throws Exception {
-        File hiddenDir = new File(".svn");
+        File hiddenDir = new File(SVN_DIR_NAME);
         if (hiddenDir.exists()) {
-            assertFiltering(HiddenFileFilter.HIDDEN,  hiddenDir, true);
-            assertFiltering(HiddenFileFilter.VISIBLE, hiddenDir, false);
+            assertFiltering(HiddenFileFilter.HIDDEN,  hiddenDir, hiddenDir.isHidden());
+            assertFiltering(HiddenFileFilter.VISIBLE, hiddenDir, !hiddenDir.isHidden());
         }
         assertFiltering(HiddenFileFilter.HIDDEN,  getTestDirectory(), false);
         assertFiltering(HiddenFileFilter.VISIBLE, getTestDirectory(), true);
