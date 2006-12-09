@@ -480,13 +480,35 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean)
      */
     public static void copyFileToDirectory(File srcFile, File destDir) throws IOException {
+        copyFileToDirectory(srcFile, destDir, true);
+    }
+
+    /**
+     * Copies a file to a directory optionally preserving the file date.
+     * <p>
+     * This method copies the contents of the specified source file
+     * to a file of the same name in the specified destination directory.
+     * The destination directory is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     *
+     * @param srcFile  an existing file to copy, must not be null
+     * @param destDir  the directory to place the copy in, must not be null
+     * @param preserveFileDate  true if the file date of the copy
+     *  should be the same as the original
+     *
+     * @throws NullPointerException if source or destination is null
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying
+     * @see #copyFile(File, File, boolean)
+     */
+    public static void copyFileToDirectory(File srcFile, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
         if (destDir.exists() && destDir.isDirectory() == false) {
             throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
         }
-        copyFile(srcFile, new File(destDir, srcFile.getName()), true);
+        copyFile(srcFile, new File(destDir, srcFile.getName()), preserveFileDate);
     }
 
     /**
