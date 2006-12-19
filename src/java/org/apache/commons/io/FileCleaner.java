@@ -184,6 +184,7 @@ public class FileCleaner {
      * The reaper thread.
      */
     static final class Reaper extends Thread {
+        /** Construct a new Reaper */
         Reaper() {
             super("File Reaper");
             setPriority(Thread.MAX_PRIORITY);
