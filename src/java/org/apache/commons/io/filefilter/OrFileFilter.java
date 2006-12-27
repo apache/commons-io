@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class OrFileFilter
         extends AbstractFileFilter
-        implements IOFileFilter, ConditionalFileFilter {
+        implements ConditionalFileFilter {
 
     /** The list of file filters. */
     private List fileFilters;
