@@ -116,6 +116,7 @@ public class FileUtils {
      * The parent directory will be created if it does not exist.
      * The file will be created if it does not exist.
      * An exception is thrown if the file object exists but is a directory.
+     * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
      * 
      * @param file  the file to create, not null
@@ -126,6 +127,9 @@ public class FileUtils {
         if (file.exists()) {
             if (file.isDirectory()) {
                 throw new IOException("File '" + file + "' exists but is a directory");
+            }
+            if (file.canWrite() == false) {
+                throw new IOException("File '" + file + "' cannot be written to");
             }
         } else {
             File parent = file.getParentFile();
@@ -168,14 +172,15 @@ public class FileUtils {
      * closed without modifying it, but updating the file date and time.
      * <p>
      * NOTE: As from v1.3, this method throws an IOException if the last
-     * modified date of the file cannot be set
+     * modified date of the file cannot be set. Also, as from v1.3 this method
+     * creates parent directories if they do not exist.
      *
      * @param file  the File to touch
      * @throws IOException If an I/O problem occurs
      */
     public static void touch(File file) throws IOException {
         if (!file.exists()) {
-            OutputStream out = new FileOutputStream(file);
+            OutputStream out = openOutputStream(file);
             IOUtils.closeQuietly(out);
         }
         boolean success = file.setLastModified(System.currentTimeMillis());
@@ -790,34 +795,19 @@ public class FileUtils {
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
      *
-     * @param source A <code>URL</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to
-     * (possibly overwriting).
-     *
-     * @throws IOException if
-     * <ul>
-     *  <li><code>source</code> URL cannot be opened</li>
-     *  <li><code>destination</code> cannot be written to</li>
-     *  <li>an IO error occurs during copying</li>
-     * </ul>
+     * @param source  the <code>URL</code> to copy bytes from, not null
+     * @param destination  the non-directory <code>File</code> to write bytes to
+     *  (possibly overwriting), not null
+     * @throws IOException if <code>source</code> URL cannot be opened
+     * @throws IOException if <code>destination</code> is a directory
+     * @throws IOException if <code>destination</code> cannot be written
+     * @throws IOException if <code>destination</code> needs creating but can't be
+     * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(URL source, File destination) throws IOException {
-        //does destination directory exist ?
-        if (destination.getParentFile() != null
-            && !destination.getParentFile().exists()) {
-            destination.getParentFile().mkdirs();
-        }
-
-        //make sure we can write to destination
-        if (destination.exists() && !destination.canWrite()) {
-            String message =
-                "Unable to open file " + destination + " for writing.";
-            throw new IOException(message);
-        }
-
         InputStream input = source.openStream();
         try {
-            FileOutputStream output = new FileOutputStream(destination);
+            FileOutputStream output = openOutputStream(destination);
             try {
                 IOUtils.copy(input, output);
             } finally {
@@ -835,8 +825,7 @@ public class FileUtils {
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void deleteDirectory(File directory)
-        throws IOException {
+    public static void deleteDirectory(File directory) throws IOException {
         if (!directory.exists()) {
             return;
         }
@@ -1045,6 +1034,9 @@ public class FileUtils {
      * There is no writeStringToFile method without encoding parameter because
      * the default encoding can differ between platforms and will have
      * inconsistent results.
+     * <p>
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
      *
      * @param file  the file to write
      * @param data  the content to write to the file
@@ -1052,9 +1044,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
-    public static void writeStringToFile(File file,
-            String data, String encoding) throws IOException {
-        OutputStream out = new FileOutputStream(file);
+    public static void writeStringToFile(File file, String data, String encoding) throws IOException {
+        OutputStream out = openOutputStream(file);
         try {
             IOUtils.write(data, out, encoding);
         } finally {
@@ -1064,15 +1055,17 @@ public class FileUtils {
 
     /**
      * Writes a byte array to a file creating the file if it does not exist.
+     * <p>
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
      *
      * @param file  the file to write to
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.1
      */
-    public static void writeByteArrayToFile(
-            File file, byte[] data) throws IOException {
-        OutputStream out = new FileOutputStream(file);
+    public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
+        OutputStream out = openOutputStream(file);
         try {
             out.write(data);
         } finally {
@@ -1088,6 +1081,9 @@ public class FileUtils {
      * There is no writeLines method without encoding parameter because
      * the default encoding can differ between platforms and will have
      * inconsistent results.
+     * <p>
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1108,6 +1104,9 @@ public class FileUtils {
      * There is no writeLines method without encoding parameter because
      * the default encoding can differ between platforms and will have
      * inconsistent results.
+     * <p>
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
      *
      * @param file  the file to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1118,7 +1117,7 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static void writeLines(File file, String encoding, Collection lines, String lineEnding) throws IOException {
-        OutputStream out = new FileOutputStream(file);
+        OutputStream out = openOutputStream(file);
         try {
             IOUtils.writeLines(lines, lineEnding, out, encoding);
         } finally {
