@@ -500,6 +500,7 @@ public class FileUtils {
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
      * @see #copyFile(File, File, boolean)
+     * @since Commons IO 1.3
      */
     public static void copyFileToDirectory(File srcFile, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir == null) {
