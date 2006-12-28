@@ -102,8 +102,55 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
-    // byteCountToDisplaySize
+    //-----------------------------------------------------------------------
+    public void test_openOutputStream_exists() throws Exception {
+        File file = new File(getTestDirectory(), "test.txt");
+        createLineBasedFile(file, new String[] {"Hello"});
+        FileOutputStream out = null;
+        try {
+            out = FileUtils.openOutputStream(file);
+            out.write(0);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+        assertEquals(true, file.exists());
+    }
 
+    public void test_openOutputStream_existsButIsDirectory() throws Exception {
+        File directory = new File(getTestDirectory(), "subdir");
+        directory.mkdirs();
+        try {
+            FileUtils.openOutputStream(directory);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    public void test_openOutputStream_notExists() throws Exception {
+        File file = new File(getTestDirectory(), "a/test.txt");
+        FileOutputStream out = null;
+        try {
+            out = FileUtils.openOutputStream(file);
+            out.write(0);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+        assertEquals(true, file.exists());
+    }
+
+    public void test_openOutputStream_notExistsCannotCreate() throws Exception {
+        File file = new File(getTestDirectory(), "a/:#$!/test.txt");  // empty path segment is bad directory name
+        try {
+            FileUtils.openOutputStream(file);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    // byteCountToDisplaySize
     public void testByteCountToDisplaySize() {
         assertEquals(FileUtils.byteCountToDisplaySize(0), "0 bytes");
         assertEquals(FileUtils.byteCountToDisplaySize(1024), "1 KB");
