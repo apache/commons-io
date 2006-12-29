@@ -103,6 +103,46 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    public void test_openInputStream_exists() throws Exception {
+        File file = new File(getTestDirectory(), "test.txt");
+        createLineBasedFile(file, new String[] {"Hello"});
+        FileInputStream in = null;
+        try {
+            in = FileUtils.openInputStream(file);
+            assertEquals('H', in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    public void test_openInputStream_existsButIsDirectory() throws Exception {
+        File directory = new File(getTestDirectory(), "subdir");
+        directory.mkdirs();
+        FileInputStream in = null;
+        try {
+            in = FileUtils.openInputStream(directory);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    public void test_openInputStream_notExists() throws Exception {
+        File directory = new File(getTestDirectory(), "test.txt");
+        FileInputStream in = null;
+        try {
+            in = FileUtils.openInputStream(directory);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    //-----------------------------------------------------------------------
     public void test_openOutputStream_exists() throws Exception {
         File file = new File(getTestDirectory(), "test.txt");
         createLineBasedFile(file, new String[] {"Hello"});

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -107,6 +108,38 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Opens a {@link FileInputStream} for the specified file, providing better
+     * error messages than simply calling <code>new FileInputStream(file)</code>.
+     * <p>
+     * At the end of the method either the stream will be successfully opened,
+     * or an exception will have been thrown.
+     * <p>
+     * An exception is thrown if the file does not exist.
+     * An exception is thrown if the file object exists but is a directory.
+     * An exception is thrown if the file exists but cannot be read.
+     * 
+     * @param file  the file to open for input, not null
+     * @throws IOException if the file does not exist
+     * @throws IOException if the file object is a directory
+     * @throws IOException if the file cannot be read
+     * @since Commons IO 1.3
+     */
+    public static FileInputStream openInputStream(File file) throws IOException {
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                throw new IOException("File '" + file + "' exists but is a directory");
+            }
+            if (file.canRead() == false) {
+                throw new IOException("File '" + file + "' cannot be read");
+            }
+        } else {
+            throw new IOException("File '" + file + "' does not exist");
+        }
+        return new FileInputStream(file);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
      * Opens a {@link FileOutputStream} for the specified file, checking and
      * creating the parent directory if it does not exist.
      * <p>
@@ -119,8 +152,9 @@ public class FileUtils {
      * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
      * 
-     * @param file  the file to create, not null
+     * @param file  the file to open for output, not null
      * @throws IOException if the file object is a directory
+     * @throws IOException if the file cannot be written to
      * @throws IOException if a parent directory needs creating but that fails
      * @since Commons IO 1.3
      */
@@ -918,17 +952,16 @@ public class FileUtils {
      * the default encoding can differ between platforms and will have
      * inconsistent results.
      *
-     * @param file  the file to read
+     * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
-     * @return the file contents or null if read failed
+     * @return the file contents, never null
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
-    public static String readFileToString(
-            File file, String encoding) throws IOException {
+    public static String readFileToString(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
-            in = new FileInputStream(file);
+            in = openInputStream(file);
             return IOUtils.toString(in, encoding);
         } finally {
             IOUtils.closeQuietly(in);
@@ -939,15 +972,15 @@ public class FileUtils {
      * Reads the contents of a file into a byte array.
      * The file is always closed.
      *
-     * @param file  the file to read
-     * @return the file contents or null if read failed
+     * @param file  the file to read, not null
+     * @return the file contents, never null
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.1
      */
     public static byte[] readFileToByteArray(File file) throws IOException {
         InputStream in = null;
         try {
-            in = new FileInputStream(file);
+            in = openInputStream(file);
             return IOUtils.toByteArray(in);
         } finally {
             IOUtils.closeQuietly(in);
@@ -962,9 +995,9 @@ public class FileUtils {
      * the default encoding can differ between platforms and will have
      * inconsistent results.
      *
-     * @param file  the file to read
+     * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
-     * @return the list of Strings representing each line in the file
+     * @return the list of Strings representing each line in the file, never null
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
@@ -972,7 +1005,7 @@ public class FileUtils {
     public static List readLines(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
-            in = new FileInputStream(file);
+            in = openInputStream(file);
             return IOUtils.readLines(in, encoding);
         } finally {
             IOUtils.closeQuietly(in);
@@ -1008,7 +1041,7 @@ public class FileUtils {
      * the default encoding can differ between platforms and will have
      * inconsistent results.
      *
-     * @param file  the file to read
+     * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
      * @return an Iterator of the lines in the file, never null
      * @throws IOException in case of an I/O error (file closed)
@@ -1017,7 +1050,7 @@ public class FileUtils {
     public static LineIterator lineIterator(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
-            in = new FileInputStream(file);
+            in = openInputStream(file);
             return IOUtils.lineIterator(in, encoding);
         } catch (IOException ex) {
             IOUtils.closeQuietly(in);
@@ -1046,8 +1079,9 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file, String data, String encoding) throws IOException {
-        OutputStream out = openOutputStream(file);
+        OutputStream out = null;
         try {
+            out = openOutputStream(file);
             IOUtils.write(data, out, encoding);
         } finally {
             IOUtils.closeQuietly(out);
@@ -1066,8 +1100,9 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
-        OutputStream out = openOutputStream(file);
+        OutputStream out = null;
         try {
+            out = openOutputStream(file);
             out.write(data);
         } finally {
             IOUtils.closeQuietly(out);
@@ -1118,8 +1153,9 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static void writeLines(File file, String encoding, Collection lines, String lineEnding) throws IOException {
-        OutputStream out = openOutputStream(file);
+        OutputStream out = null;
         try {
+            out = openOutputStream(file);
             IOUtils.writeLines(lines, lineEnding, out, encoding);
         } finally {
             IOUtils.closeQuietly(out);
