@@ -189,6 +189,9 @@ Enhancements from 1.2
 - NullReader
   - New reader that emulates a reader of a specified size
 
+- ByteArrayOutputStream  [IO-97]
+  - Performance enhancements
+
 
 Feedback
 --------

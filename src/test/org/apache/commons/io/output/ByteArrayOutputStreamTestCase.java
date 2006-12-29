@@ -104,10 +104,12 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         
         //First three writes
         written = writeData(baout, ref, new int[] {4, 10, 22});
+        assertEquals(36, written);
         checkStreams(baout, ref);
 
         //Another two writes to see if there are any bad effects after toByteArray()
         written = writeData(baout, ref, new int[] {20, 12});
+        assertEquals(32, written);
         checkStreams(baout, ref);
 
         //Now reset the streams        
@@ -116,6 +118,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         
         //Test again to see if reset() had any bad effects
         written = writeData(baout, ref, new int[] {5, 47, 33, 60, 1, 0, 8});
+        assertEquals(155, written);
         checkStreams(baout, ref);
         
         //Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream 
@@ -130,6 +133,11 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         String baoutString = baout.toString("ASCII");
         String refString = ref.toString("ASCII");
         assertEquals("ASCII decoded String must be equal", refString, baoutString);
+        
+        //Make sure that empty ByteArrayOutputStreams really don't create garbage
+        //on toByteArray()
+        assertSame(new ByteArrayOutputStream().toByteArray(),
+            new ByteArrayOutputStream().toByteArray());
     }
 }
 
