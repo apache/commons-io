@@ -946,10 +946,6 @@ public class FileUtils {
     /**
      * Reads the contents of a file into a String.
      * The file is always closed.
-     * <p>
-     * There is no readFileToString method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
      *
      * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
@@ -965,6 +961,20 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+
+    /**
+     * Reads the contents of a file into a String using the default encoding for the VM. 
+     * The file is always closed.
+     *
+     * @param file  the file to read, not null
+     * @return the file contents, never null
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 1.3
+     */
+    public String readFileToString(File f) throws IOException {
+        return readFileToString(f, null);
     }
 
     /**
@@ -989,10 +999,6 @@ public class FileUtils {
     /**
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
-     * <p>
-     * There is no readLines method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
      *
      * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
@@ -1009,6 +1015,19 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    /**
+     * Reads the contents of a file line by line to a List of Strings using the default encoding for the VM.
+     * The file is always closed.
+     *
+     * @param file  the file to read, not null
+     * @return the list of Strings representing each line in the file, never null
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 1.3
+     */
+    public static List readLines(File file) throws IOException {
+        return readLines(file, null);
     }
 
     /**
@@ -1035,10 +1054,6 @@ public class FileUtils {
      * <p>
      * If an exception occurs during the creation of the iterator, the
      * underlying stream is closed.
-     * <p>
-     * There is no lineIterator method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
      *
      * @param file  the file to read, not null
      * @param encoding  the encoding to use, null means platform default
@@ -1060,14 +1075,20 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Return an Iterator for the lines in a <code>File</code> using the default encoding for the VM.
+     *
+     * @since Commons IO 1.3
+     * @see lineIterator(File, String)
+     */
+    public static LineIterator lineIterator(File file) throws IOException {
+        return lineIterator(file, null);
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Writes a String to a file creating the file if it does not exist.
-     * <p>
-     * There is no writeStringToFile method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
-     * <p>
+     *
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
      *
@@ -1085,6 +1106,17 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    /**
+     * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
+     * 
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @throws IOException in case of an I/O error
+     */
+    public static void writeStringToFile(File file, String data) throws IOException {
+        writeStringToFile(file, data, null);
     }
 
     /**
@@ -1113,10 +1145,6 @@ public class FileUtils {
      * the specified <code>File</code> line by line.
      * The specified character encoding and the default line ending will be used.
      * <p>
-     * There is no writeLines method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
-     * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
      *
@@ -1134,11 +1162,21 @@ public class FileUtils {
     /**
      * Writes the <code>toString()</code> value of each item in a collection to
      * the specified <code>File</code> line by line.
+     * The default VM encoding and the default line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param lines  the lines to write, null entries produce blank lines
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 1.3
+     */
+    public static void writeLines(File file, Collection lines) throws IOException {
+        writeLines(file, null, lines, null);
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
      * The specified character encoding and the line ending will be used.
-     * <p>
-     * There is no writeLines method without encoding parameter because
-     * the default encoding can differ between platforms and will have
-     * inconsistent results.
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
@@ -1159,6 +1197,21 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The default VM encoding and the specified line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param lines  the lines to write, null entries produce blank lines
+     * @param lineEnding  the line separator to use, null is system default
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 1.3
+     */
+    public static void writeLines(File file, Collection lines, String lineEnding) throws IOException {
+        writeLines(file, null, lines, lineEnding);
     }
 
     //-----------------------------------------------------------------------
