@@ -49,7 +49,7 @@ public class FileCleaner {
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    static Collection /* Tracker */ trackers = new Vector();
+    static Collection /* Tracker */ trackers = new Vector();  // synchronized
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
@@ -128,6 +128,7 @@ public class FileCleaner {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
     private static synchronized void addTracker(String path, Object marker, FileDeleteStrategy deleteStrategy) {
+        // synchronized block protects reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
         }
@@ -171,6 +172,7 @@ public class FileCleaner {
      * One called, no new objects can be tracked by the file cleaner.
      */
     public static synchronized void exitWhenFinished() {
+        // synchronized block protects reaper
         exitWhenFinished = true;
         if (reaper != null) {
             synchronized (reaper) {
@@ -179,7 +181,7 @@ public class FileCleaner {
         }
     }
 
-    // -----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     /**
      * The reaper thread.
      */
