@@ -102,6 +102,14 @@ Enhancements from 1.2
   - wildcardMatch - new method that has IOCase as a parameter
   - equals - new method that has IOCase as a parameter
 
+- FileUtils [IO-108] - new default encoding methods for:
+  - readFileToString(File)
+  - readLines(File)
+  - lineIterator(File)
+  - writeStringToFile(File, String)
+  - writeLines(File, Collection)
+  - writeLines(File, Collection, String)
+
 - FileUtils.openOutputStream  [IO-107]
   - new method to open a FileOutputStream, creating parent directories if required
 - FileUtils.touch
