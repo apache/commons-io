@@ -119,11 +119,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void test_openOutputStream_existsButIsDirectory() throws Exception {
         File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
+        FileOutputStream out = null;
         try {
-            FileUtils.openOutputStream(directory);
+            out = FileUtils.openOutputStream(directory);
             fail();
         } catch (IOException ioe) {
             // expected
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 
@@ -140,12 +143,23 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void test_openOutputStream_notExistsCannotCreate() throws Exception {
-        File file = new File(getTestDirectory(), "a/:#$!/test.txt");  // empty path segment is bad directory name
+        // according to Wikipedia, most filing systems have a 256 limit on filename
+        String longStr =
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
+            "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
+        File file = new File(getTestDirectory(), "a/" + longStr + "/test.txt");
+        FileOutputStream out = null;
         try {
-            FileUtils.openOutputStream(file);
+            out = FileUtils.openOutputStream(file);
             fail();
         } catch (IOException ioe) {
             // expected
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 
