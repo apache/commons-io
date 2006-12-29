@@ -44,14 +44,23 @@ import java.util.List;
  * deprecated toString(int) method that has been ignored.
  * 
  * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
+ * @author Holger Hoffstatte
  * @version $Id$
  */
 public class ByteArrayOutputStream extends OutputStream {
 
+    /** A singleton empty byte array. */
+    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
+    /** The list of buffers, which grows and never reduces. */
     private List buffers = new ArrayList();
+    /** The index of the current buffer. */
     private int currentBufferIndex;
+    /** The total count of bytes in all the filled buffers. */
     private int filledBufferSum;
+    /** The current buffer. */
     private byte[] currentBuffer;
+    /** The total count of bytes written. */
     private int count;
 
     /**
@@ -85,7 +94,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @return the buffer
      */
     private byte[] getBuffer(int index) {
-        return (byte[])buffers.get(index);
+        return (byte[]) buffers.get(index);
     }
 
     /**
@@ -123,7 +132,7 @@ public class ByteArrayOutputStream extends OutputStream {
     /**
      * @see java.io.OutputStream#write(byte[], int, int)
      */
-    public synchronized void write(byte[] b, int off, int len) {
+    public void write(byte[] b, int off, int len) {
         if ((off < 0) 
                 || (off > b.length) 
                 || (len < 0) 
@@ -133,34 +142,40 @@ public class ByteArrayOutputStream extends OutputStream {
         } else if (len == 0) {
             return;
         }
-        int newcount = count + len;
-        int remaining = len;
-        int inBufferPos = count - filledBufferSum;
-        while (remaining > 0) {
-            int part = Math.min(remaining, currentBuffer.length - inBufferPos);
-            System.arraycopy(b, off + len - remaining, currentBuffer, inBufferPos, part);
-            remaining -= part;
-            if (remaining > 0) {
-                needNewBuffer(newcount);
-                inBufferPos = 0;
+        synchronized (this) {
+            int newcount = count + len;
+            int remaining = len;
+            int inBufferPos = count - filledBufferSum;
+            while (remaining > 0) {
+                int part = Math.min(remaining, currentBuffer.length - inBufferPos);
+                System.arraycopy(b, off + len - remaining, currentBuffer, inBufferPos, part);
+                remaining -= part;
+                if (remaining > 0) {
+                    needNewBuffer(newcount);
+                    inBufferPos = 0;
+                }
             }
+            count = newcount;
         }
-        count = newcount;
     }
 
     /**
-     * Calls the write(byte[]) method.
-     *
      * @see java.io.OutputStream#write(int)
      */
     public synchronized void write(int b) {
-        write(new byte[] {(byte)b}, 0, 1);
+        int inBufferPos = count - filledBufferSum;
+        if (inBufferPos == currentBuffer.length) {
+            needNewBuffer(count + 1);
+            inBufferPos = 0;
+        }
+        currentBuffer[inBufferPos] = (byte) b;
+        count++;
     }
 
     /**
      * @see java.io.ByteArrayOutputStream#size()
      */
-    public int size() {
+    public synchronized int size() {
         return count;
     }
 
@@ -216,8 +231,11 @@ public class ByteArrayOutputStream extends OutputStream {
      */
     public synchronized byte[] toByteArray() {
         int remaining = count;
+        if (remaining == 0) {
+            return EMPTY_BYTE_ARRAY; 
+        }
+        byte newbuf[] = new byte[remaining];
         int pos = 0;
-        byte newbuf[] = new byte[count];
         for (int i = 0; i < buffers.size(); i++) {
             byte[] buf = getBuffer(i);
             int c = Math.min(buf.length, remaining);
