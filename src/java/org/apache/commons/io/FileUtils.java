@@ -122,6 +122,7 @@ public class FileUtils {
      * @param file  the file to create, not null
      * @throws IOException if the file object is a directory
      * @throws IOException if a parent directory needs creating but that fails
+     * @since Commons IO 1.3
      */
     public static FileOutputStream openOutputStream(File file) throws IOException {
         if (file.exists()) {
