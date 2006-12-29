@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -119,7 +118,7 @@ public class FileUtils {
      * An exception is thrown if the file exists but cannot be read.
      * 
      * @param file  the file to open for input, not null
-     * @throws IOException if the file does not exist
+     * @throws FileNotFoundException if the file does not exist
      * @throws IOException if the file object is a directory
      * @throws IOException if the file cannot be read
      * @since Commons IO 1.3
@@ -133,7 +132,7 @@ public class FileUtils {
                 throw new IOException("File '" + file + "' cannot be read");
             }
         } else {
-            throw new IOException("File '" + file + "' does not exist");
+            throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
     }
