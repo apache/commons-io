@@ -1079,7 +1079,7 @@ public class FileUtils {
      * Return an Iterator for the lines in a <code>File</code> using the default encoding for the VM.
      *
      * @since Commons IO 1.3
-     * @see lineIterator(File, String)
+     * @see #lineIterator(File, String)
      */
     public static LineIterator lineIterator(File file) throws IOException {
         return lineIterator(file, null);
