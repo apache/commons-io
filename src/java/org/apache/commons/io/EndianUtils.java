@@ -224,7 +224,7 @@ public class EndianUtils {
             ( ( data[ offset + 5 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 6 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 7 ] & 0xff ) << 24 );
-        return ((long) high << 32) + (0xffffffffL & low); 
+        return (high << 32) + (0xffffffffL & low); 
     }
 
     /**
