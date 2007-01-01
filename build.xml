@@ -274,6 +274,8 @@
         <path refid="build.classpath">
         </path>
       </classpath>
+      <link href="http://java.sun.com/j2se/1.4/docs/api/" />
+      <link href="http://java.sun.com/webservices/docs/1.5/api/" />        
     </javadoc>
   </target>
   <target name="get-deps" unless="noget">
