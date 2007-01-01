@@ -598,7 +598,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
-     * @see #copyFileToDirectory
+     * @see #copyFileToDirectory(File, File)
      */
     public static void copyFile(File srcFile, File destFile) throws IOException {
         copyFile(srcFile, destFile, true);
@@ -620,7 +620,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
-     * @see #copyFileToDirectory
+     * @see #copyFileToDirectory(File, File, boolean)
      */
     public static void copyFile(File srcFile, File destFile,
             boolean preserveFileDate) throws IOException {
