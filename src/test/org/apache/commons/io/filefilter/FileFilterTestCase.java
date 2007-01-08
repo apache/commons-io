@@ -141,7 +141,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("imaginary"), false);
         assertFiltering(filter, new File("imaginary/"), false);
 
-        assertFiltering(filter, new File("STATUS.html"), false);
+        assertFiltering(filter, new File("LICENSE.txt"), false);
         
         assertSame(DirectoryFileFilter.DIRECTORY, DirectoryFileFilter.INSTANCE);
     }
@@ -158,7 +158,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("imaginary"), false);
         assertFiltering(filter, new File("imaginary/"), false);
         
-        assertFiltering(filter, new File("STATUS.html"), true);
+        assertFiltering(filter, new File("LICENSE.txt"), true);
     }
 
     public void testPrefix() throws Exception {
