@@ -103,7 +103,7 @@
     <copy todir="${srcdir}/META-INF">
       <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
     </copy>
-    <jar jarfile="${defaulttargetdir}/${final.name}-src-ide.zip" basedir="${srcdir}" />
+    <jar jarfile="${defaulttargetdir}/${final.name}-sources.jar" basedir="${srcdir}" manifest="${basedir}/src/conf/MANIFEST.MF"/>
     <antcall target="internal-md5">
       <param name="path" value="${defaulttargetdir}/${final.name}.jar"/>
     </antcall>
@@ -123,6 +123,8 @@
     <!-- but the javadoc is built on JDK1.4 -->
     <mkdir dir="${dist.bin}" />
     <mkdir dir="${dist.zip.dir}" />
+    <!-- Javadoc -->
+    <jar jarfile="${defaulttargetdir}/${final.name}-javadoc.jar" basedir="${javadocdir}" manifest="${basedir}/src/conf/MANIFEST.MF"/>
   	<!-- Binary -->
     <copy todir="${dist.bin}">
       <fileset dir="${defaulttargetdir}" includes="*.jar,*.zip" />
