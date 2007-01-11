@@ -246,6 +246,7 @@
        </comment>
       </properties>
     </dependency>
+    <!--
     <dependency>
       <groupId>maven-plugins</groupId>
       <artifactId>maven-cobertura-plugin</artifactId>
@@ -259,6 +260,7 @@
        </comment>
       </properties>
     </dependency>
+    -->
   </dependencies>
 
   <build>
@@ -300,7 +302,7 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-jxr-plugin</report>
     <report>maven-license-plugin</report>
-    <report>maven-cobertura-plugin</report>
+    <!--report>maven-cobertura-plugin</report-->
     <report>maven-pmd-plugin</report>
     <!-- report>maven-jdiff-plugin</report -->
   </reports>
