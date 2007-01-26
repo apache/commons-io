@@ -124,6 +124,9 @@
     <mkdir dir="${dist.bin}" />
     <mkdir dir="${dist.zip.dir}" />
     <!-- Javadoc -->
+    <copy todir="${javadocdir}/META-INF">
+      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
+    </copy>
     <jar jarfile="${defaulttargetdir}/${final.name}-javadoc.jar" basedir="${javadocdir}" manifest="${basedir}/src/conf/MANIFEST.MF"/>
   	<!-- Binary -->
     <copy todir="${dist.bin}">
