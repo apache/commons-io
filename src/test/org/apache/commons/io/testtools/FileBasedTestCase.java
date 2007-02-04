@@ -93,12 +93,10 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     protected void createLineBasedFile(File file, String[] data) throws IOException {
-        if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file
-                    + " as the parent directory does not exist");
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        PrintWriter output = new PrintWriter(
-            new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+        PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         try {
             for (int i = 0; i < data.length; i++) {
                 output.println(data[i]);

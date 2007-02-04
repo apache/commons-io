@@ -169,7 +169,7 @@ public class FileUtils {
             }
         } else {
             File parent = file.getParentFile();
-            if (parent.exists() == false) {
+            if (parent != null && parent.exists() == false) {
                 if (parent.mkdirs() == false) {
                     throw new IOException("File '" + file + "' could not be created");
                 }

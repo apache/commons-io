@@ -143,6 +143,36 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    void openOutputStream_noParent(boolean createFile) throws Exception {
+        File file = new File("test.txt");
+        assertNull(file.getParentFile());
+        try {
+            if (createFile) {
+            createLineBasedFile(file, new String[]{"Hello"});}
+            FileOutputStream out = null;
+            try {
+                out = FileUtils.openOutputStream(file);
+                out.write(0);
+            } finally {
+                IOUtils.closeQuietly(out);
+            }
+            assertEquals(true, file.exists());
+        } finally {
+            if (file.delete() == false) {
+                file.deleteOnExit();
+            }
+        }
+    }
+
+    public void test_openOutputStream_noParentCreateFile() throws Exception {
+        openOutputStream_noParent(true);
+    }
+
+    public void test_openOutputStream_noParentNoFile() throws Exception {
+        openOutputStream_noParent(false);
+    }
+
+
     public void test_openOutputStream_exists() throws Exception {
         File file = new File(getTestDirectory(), "test.txt");
         createLineBasedFile(file, new String[] {"Hello"});
