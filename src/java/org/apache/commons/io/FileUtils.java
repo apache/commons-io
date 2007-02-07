@@ -975,7 +975,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3
      */
-    public String readFileToString(File file) throws IOException {
+    public static String readFileToString(File file) throws IOException {
         return readFileToString(file, null);
     }
 
