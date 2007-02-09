@@ -30,6 +30,11 @@
         <created>2006-03-19</created>
         <version>1.2</version>
       </revision>
+      <revision>
+        <name>commons-io</name>
+        <created>2007-01-30</created>
+        <version>1.3</version>
+      </revision>
     </release>
     <mailing-list rdf:resource="http://jakarta.apache.org/site/mail2.html#Commons"/>
   </Project>
