@@ -18,10 +18,10 @@ and endian transformation classes.
 Compatibility with 1.3
 ----------------------
 Binary compatible - No
-  See [IO-112]
+  See [IO-113]
 
 Source compatible - No
-  See [IO-112]
+  See [IO-113]
 
 Semantic compatible - Yes
 
