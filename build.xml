@@ -26,7 +26,7 @@
   </property>
   <property name="testreportdir" value="${basedir}/build/test-reports">
   </property>
-  <property name="final.name" value="commons-io-1.3.1" />
+  <property name="final.name" value="commons-io-1.4-SNAPSHOT" />
   <property name="dist.build.dir" value="${basedir}/build/dist-build" />
   <property name="dist.bin" value="${dist.build.dir}/${final.name}" />
   <property name="dist.src" value="${dist.build.dir}/${final.name}-src" />
@@ -272,7 +272,7 @@
     </tstamp>
     <property name="copyright" value="Copyright &amp;copy;  The Apache Software Foundation. All Rights Reserved.">
     </property>
-    <property name="title" value="IO 1.3.1">
+    <property name="title" value="IO 1.4-SNAPSHOT">
     </property>
     <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="${basedir}/src/java" packagenames="org.apache.commons.io.*" overview="src/java/org/apache/commons/io/overview.html">
       <classpath>
