@@ -973,7 +973,7 @@ public class FileUtils {
      * @param file  the file to read, must not be <code>null</code>
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
-     * @since Commons IO 1.3
+     * @since Commons IO 1.3.1
      */
     public static String readFileToString(File file) throws IOException {
         return readFileToString(file, null);
