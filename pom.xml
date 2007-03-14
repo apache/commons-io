@@ -131,7 +131,11 @@
         <role>Java Developer</role>
       </roles>
     </developer>
-
+    <developer>
+      <name>Jochen Wiedmann</name>
+      <id>jochen</id>
+      <email>jochen.wiedmann@gmail.com</email>
+    </developer>
   </developers>
 
   <contributors>
@@ -220,4 +224,23 @@
       </plugins>
     </build>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <configuration>
+          <issueLinkTemplate>%URL%/../%ISSUE%</issueLinkTemplate>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+              <report>jira-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
