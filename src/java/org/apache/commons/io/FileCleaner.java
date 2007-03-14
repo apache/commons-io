@@ -17,10 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.lang.ref.PhantomReference;
-import java.lang.ref.ReferenceQueue;
-import java.util.Collection;
-import java.util.Vector;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -39,25 +35,13 @@ import java.util.Vector;
  * @author Noel Bergman
  * @author Martin Cooper
  * @version $Id$
+ * @deprecated Use {@link FileCleaningTracker}
  */
 public class FileCleaner {
-
     /**
-     * Queue of <code>Tracker</code> instances being watched.
+     * The instance to use for the deprecated, static methods.
      */
-    static ReferenceQueue /* Tracker */ q = new ReferenceQueue();
-    /**
-     * Collection of <code>Tracker</code> instances in existence.
-     */
-    static Collection /* Tracker */ trackers = new Vector();  // synchronized
-    /**
-     * Whether to terminate the thread when the tracking is complete.
-     */
-    static volatile boolean exitWhenFinished = false;
-    /**
-     * The thread that will clean up registered files.
-     */
-    static Thread reaper;
+    static final FileCleaningTracker theInstance = new FileCleaningTracker();
 
     //-----------------------------------------------------------------------
     /**
@@ -68,9 +52,10 @@ public class FileCleaner {
      * @param file  the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the file is null
+     * @deprecated Use {@link FileCleaningTracker#track(File, Object)}.
      */
     public static void track(File file, Object marker) {
-        track(file, marker, (FileDeleteStrategy) null);
+        theInstance.track(file, marker);
     }
 
     /**
@@ -82,12 +67,10 @@ public class FileCleaner {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the file is null
+     * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
     public static void track(File file, Object marker, FileDeleteStrategy deleteStrategy) {
-        if (file == null) {
-            throw new NullPointerException("The file must not be null");
-        }
-        addTracker(file.getPath(), marker, deleteStrategy);
+        theInstance.track(file, marker, deleteStrategy);
     }
 
     /**
@@ -98,9 +81,10 @@ public class FileCleaner {
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the path is null
+     * @deprecated Use {@link FileCleaningTracker#track(String, Object)}.
      */
     public static void track(String path, Object marker) {
-        track(path, marker, (FileDeleteStrategy) null);
+        theInstance.track(path, marker);
     }
 
     /**
@@ -112,31 +96,10 @@ public class FileCleaner {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the path is null
+     * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
     public static void track(String path, Object marker, FileDeleteStrategy deleteStrategy) {
-        if (path == null) {
-            throw new NullPointerException("The path must not be null");
-        }
-        addTracker(path, marker, deleteStrategy);
-    }
-
-    /**
-     * Adds a tracker to the list of trackers.
-     * 
-     * @param path  the full path to the file to be tracked, not null
-     * @param marker  the marker object used to track the file, not null
-     * @param deleteStrategy  the strategy to delete the file, null means normal
-     */
-    private static synchronized void addTracker(String path, Object marker, FileDeleteStrategy deleteStrategy) {
-        // synchronized block protects reaper
-        if (exitWhenFinished) {
-            throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
-        }
-        if (reaper == null) {
-            reaper = new Reaper();
-            reaper.start();
-        }
-        trackers.add(new Tracker(path, deleteStrategy, marker, q));
+        theInstance.track(path, marker, deleteStrategy);
     }
 
     //-----------------------------------------------------------------------
@@ -145,9 +108,10 @@ public class FileCleaner {
      * awaiting deletion.
      *
      * @return the number of files being tracked
+     * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
      */
     public static int getTrackCount() {
-        return trackers.size();
+        return theInstance.getTrackCount();
     }
 
     /**
@@ -170,90 +134,19 @@ public class FileCleaner {
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as {@link javax.servlet.ServletContextListener#contextDestroyed}.
      * One called, no new objects can be tracked by the file cleaner.
+     * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
      */
     public static synchronized void exitWhenFinished() {
-        // synchronized block protects reaper
-        exitWhenFinished = true;
-        if (reaper != null) {
-            synchronized (reaper) {
-                reaper.interrupt();
-            }
-        }
+        theInstance.exitWhenFinished();
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * The reaper thread.
+     * Returns the singleton instance, which is used by the deprecated, static methods.
+     * This is mainly useful for code, which wants to support the new
+     * {@link FileCleaningTracker} class while maintain compatibility with the
+     * deprecated {@link FileCleaner}.
      */
-    static final class Reaper extends Thread {
-        /** Construct a new Reaper */
-        Reaper() {
-            super("File Reaper");
-            setPriority(Thread.MAX_PRIORITY);
-            setDaemon(true);
-        }
-
-        /**
-         * Run the reaper thread that will delete files as their associated
-         * marker objects are reclaimed by the garbage collector.
-         */
-        public void run() {
-            // thread exits when exitWhenFinished is true and there are no more tracked objects
-            while (exitWhenFinished == false || trackers.size() > 0) {
-                Tracker tracker = null;
-                try {
-                    // Wait for a tracker to remove.
-                    tracker = (Tracker) q.remove();
-                } catch (Exception e) {
-                    continue;
-                }
-                if (tracker != null) {
-                    tracker.delete();
-                    tracker.clear();
-                    trackers.remove(tracker);
-                }
-            }
-        }
+    public static FileCleaningTracker getInstance() {
+        return theInstance;
     }
-
-    //-----------------------------------------------------------------------
-    /**
-     * Inner class which acts as the reference for a file pending deletion.
-     */
-    static final class Tracker extends PhantomReference {
-
-        /**
-         * The full path to the file being tracked.
-         */
-        private final String path;
-        /**
-         * The strategy for deleting files.
-         */
-        private final FileDeleteStrategy deleteStrategy;
-
-        /**
-         * Constructs an instance of this class from the supplied parameters.
-         *
-         * @param path  the full path to the file to be tracked, not null
-         * @param deleteStrategy  the strategy to delete the file, null means normal
-         * @param marker  the marker object used to track the file, not null
-         * @param queue  the queue on to which the tracker will be pushed, not null
-         */
-        Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker, ReferenceQueue queue) {
-            super(marker, queue);
-            this.path = path;
-            this.deleteStrategy = (deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy);
-        }
-
-        /**
-         * Deletes the file associated with this tracker instance.
-         *
-         * @return <code>true</code> if the file was deleted successfully;
-         *         <code>false</code> otherwise.
-         */
-        public boolean delete() {
-            return deleteStrategy.deleteQuietly(new File(path));
-        }
-    }
-
 }
