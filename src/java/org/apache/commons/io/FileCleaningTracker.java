@@ -17,6 +17,8 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collection;
@@ -40,23 +42,28 @@ import java.util.Vector;
  * @author Martin Cooper
  * @version $Id: FileCleaner.java 490987 2006-12-29 12:11:48Z scolebourne $
  */
-public class FileCleaningTracker {
+public class FileCleaningTracker implements Serializable {
+    /**
+     * UID for serializing instances of this class.
+     */
+    private static final long serialVersionUID = -8153509976492548871L;
+
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    ReferenceQueue /* Tracker */ q = new ReferenceQueue();
+    transient ReferenceQueue /* Tracker */ q = new ReferenceQueue();
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    final Collection /* Tracker */ trackers = new Vector();  // synchronized
+    final transient Collection /* Tracker */ trackers = new Vector();  // synchronized
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
-    volatile boolean exitWhenFinished = false;
+    transient volatile boolean exitWhenFinished = false;
     /**
      * The thread that will clean up registered files.
      */
-    Thread reaper;
+    transient Thread reaper;
 
     //-----------------------------------------------------------------------
     /**
@@ -255,4 +262,14 @@ public class FileCleaningTracker {
         }
     }
 
+    /**
+     * This method is called when an instance is deserialized.
+     * It replaces the deserialized instance with a new, fresh
+     * instance.
+     * @return A new instance, which hasn't been in use so far.
+     * @throws ObjectStreamException Not actually thrown.
+     */
+    private Object readResolve() throws ObjectStreamException {
+        return new FileCleaningTracker();
+    }
 }
