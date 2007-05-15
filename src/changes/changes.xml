@@ -40,6 +40,10 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="1.4" date="Not yet released">
+      <action dev="jochen" type="fix" issue="IO-115">
+        Some tests, which are implicitly assuming a Unix-like file
+        system, are now skipped on Windows.
+      </action>
       <action dev="jochen" type="fix" issue="IO-116">
         Created the FileCleaningTracker, basically a non-static
         version of the FileCleaner, which can be controlled by
