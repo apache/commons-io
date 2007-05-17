@@ -37,8 +37,8 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>target/site/apidocs</directory>
-            <outputDirectory>apidocs</outputDirectory>
+            <directory>target/site</directory>
+            <outputDirectory>docs</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
