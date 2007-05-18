@@ -137,4 +137,13 @@ public class AgeFileFilter extends AbstractFileFilter {
         return acceptOlder ? !newer : newer;
     }
 
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        String condition = acceptOlder ? "<=" : ">";
+        return super.toString() + "(" + condition + cutoff + ")";
+    }
 }

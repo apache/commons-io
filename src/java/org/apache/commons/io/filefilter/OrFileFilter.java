@@ -135,4 +135,26 @@ public class OrFileFilter
         return false;
     }
 
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(super.toString());
+        buffer.append("(");
+        if (fileFilters != null) {
+            for (int i = 0; i < fileFilters.size(); i++) {
+                if (i > 0) {
+                    buffer.append(",");
+                }
+                Object filter = fileFilters.get(i);
+                buffer.append(filter == null ? "null" : filter.toString());
+            }
+        }
+        buffer.append(")");
+        return buffer.toString();
+    }
+
 }

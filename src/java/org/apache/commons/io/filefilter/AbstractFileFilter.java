@@ -53,4 +53,15 @@ public abstract class AbstractFileFilter implements IOFileFilter {
         return accept(new File(dir, name));
     }
 
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        String name = getClass().getName();
+        int period = name.lastIndexOf('.');
+        return (period > 0 ? name.substring(period + 1) : name);
+    }
+
 }

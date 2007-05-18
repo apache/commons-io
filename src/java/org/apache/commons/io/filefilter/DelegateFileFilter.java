@@ -87,5 +87,15 @@ public class DelegateFileFilter extends AbstractFileFilter {
             return super.accept(dir, name);
         }
     }
+
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        String delegate = (fileFilter != null ? fileFilter.toString() : filenameFilter.toString()); 
+        return super.toString() + "(" + delegate.toString() + ")";
+    }
     
 }
