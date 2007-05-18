@@ -182,10 +182,13 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedUnsignedInteger(byte[] data, int offset) {
-        return ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
-            ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 3 ] & 0xff ) << 24 ) );
+        long low = ( ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
+                     ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
+                     ( ( data[ offset + 2 ] & 0xff ) << 16 ) );
+
+        long high = data[ offset + 3 ] & 0xff;
+
+        return (high << 24) + (0xffffffffL & low); 
     }
 
     /**
@@ -368,10 +371,13 @@ public class EndianUtils {
         int value3 = read( input );
         int value4 = read( input );
 
-        return ( ( value1 & 0xff ) << 0 ) +
-            ( ( value2 & 0xff ) << 8 ) +
-            ( ( value3 & 0xff ) << 16 ) +
-            ( ( value4 & 0xff ) << 24 );
+        long low = ( ( ( value1 & 0xff ) << 0 ) +
+                     ( ( value2 & 0xff ) << 8 ) +
+                     ( ( value3 & 0xff ) << 16 ) );
+
+        long high = value4 & 0xff;
+
+        return (high << 24) + (0xffffffffL & low); 
     }
 
     /**

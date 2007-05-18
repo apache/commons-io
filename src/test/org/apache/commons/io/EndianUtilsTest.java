@@ -263,4 +263,17 @@ public class EndianUtilsTest extends TestCase {
         }
     }
 
+    // tests #IO-117
+    public void testUnsignedOverrun() throws Exception {
+        byte[] target = new byte[] { 0, 0, 0, (byte)0x80 };
+        long expected = 0x80000000L;
+    
+        long actual = EndianUtils.readSwappedUnsignedInteger(target, 0);
+        assertEquals("readSwappedUnsignedInteger(byte[], int) was incorrect", expected, actual);
+
+        ByteArrayInputStream in = new ByteArrayInputStream(target);
+        actual = EndianUtils.readSwappedUnsignedInteger(in);
+        assertEquals("readSwappedUnsignedInteger(InputStream) was incorrect", expected, actual);
+    }
+
 }
