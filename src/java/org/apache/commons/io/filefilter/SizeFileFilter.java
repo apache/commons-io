@@ -89,4 +89,14 @@ public class SizeFileFilter extends AbstractFileFilter {
         return acceptLarger ? !smaller : smaller;
     }
 
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        String condition = acceptLarger ? ">=" : "<";
+        return super.toString() + "(" + condition + size + ")";
+    }
+
 }

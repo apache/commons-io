@@ -45,7 +45,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * @author Jason Anderson
- * @version $Revision: 155419 $ $Date: 2006-06-26 00:19:58 +0100 (Mon, 26 Jun 2006) $
+ * @version $Revision: 155419 $ $Date$
  * @since Commons IO 1.3
  */
 public class WildcardFileFilter extends AbstractFileFilter {
@@ -169,6 +169,27 @@ public class WildcardFileFilter extends AbstractFileFilter {
             }
         }
         return false;
+    }
+
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(super.toString());
+        buffer.append("(");
+        if (wildcards != null) {
+            for (int i = 0; i < wildcards.length; i++) {
+                if (i > 0) {
+                    buffer.append(",");
+                }
+                buffer.append(wildcards[i]);
+            }
+        }
+        buffer.append(")");
+        return buffer.toString();
     }
 
 }

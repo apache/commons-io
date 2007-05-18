@@ -64,5 +64,14 @@ public class NotFileFilter extends AbstractFileFilter {
     public boolean accept(File file, String name) {
         return ! filter.accept(file, name);
     }
+
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        return super.toString() + "(" + filter.toString()  + ")";
+    }
     
 }

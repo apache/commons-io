@@ -120,5 +120,26 @@ public class PrefixFileFilter extends AbstractFileFilter {
         }
         return false;
     }
+
+    /**
+     * Provide a String representaion of this file filter.
+     *
+     * @return a String representaion
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(super.toString());
+        buffer.append("(");
+        if (prefixes != null) {
+            for (int i = 0; i < prefixes.length; i++) {
+                if (i > 0) {
+                    buffer.append(",");
+                }
+                buffer.append(prefixes[i]);
+            }
+        }
+        buffer.append(")");
+        return buffer.toString();
+    }
     
 }
