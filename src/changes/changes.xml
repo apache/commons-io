@@ -49,6 +49,10 @@ The <action> type attribute can be add,update,fix,remove.
         version of the FileCleaner, which can be controlled by
         the user.
       </action>
+      <action dev="bayard" type="fix" issue="IO-117" due-to="Hiroshi Ikeda">
+        EndianUtils - both readSwappedUnsignedInteger(...) methods could
+        return negative numbers due to int/long casting.
+      </action>
     </release>
   </body>
 </document>
