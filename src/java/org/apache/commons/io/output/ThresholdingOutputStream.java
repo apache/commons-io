@@ -217,11 +217,20 @@ public abstract class ThresholdingOutputStream
     {
         if (!thresholdExceeded && (written + count > threshold))
         {
-            thresholdReached();
             thresholdExceeded = true;
+            thresholdReached();
         }
     }
 
+    /**
+     * Resets the byteCount to zero.  You can call this from 
+     * {@link #thresholdReached()} if you want the event to be triggered again. 
+     */
+    protected void reset() 
+    {
+        this.thresholdExceeded = false;
+        this.written = 0;
+    }
 
     // ------------------------------------------------------- Abstract methods
 

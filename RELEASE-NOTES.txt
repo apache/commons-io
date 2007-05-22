@@ -27,6 +27,12 @@ Semantic compatible - ?
 Bug fixes from 1.3.2
 --------------------
 
+Enhancements from 1.3.2
+-----------------------
+- ThesholdingOuputStream [IO-121]
+  - Add a reset() method which sets the count of the bytes written back to zero.
+
+
 Feedback
 --------
 Open source works best when you give feedback:
