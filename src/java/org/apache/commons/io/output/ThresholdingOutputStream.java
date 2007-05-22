@@ -226,7 +226,7 @@ public abstract class ThresholdingOutputStream
      * Resets the byteCount to zero.  You can call this from 
      * {@link #thresholdReached()} if you want the event to be triggered again. 
      */
-    protected void reset() 
+    protected void resetByteCount() 
     {
         this.thresholdExceeded = false;
         this.written = 0;
