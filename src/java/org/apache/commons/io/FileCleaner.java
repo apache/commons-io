@@ -35,7 +35,6 @@ import java.io.File;
  * @author Noel Bergman
  * @author Martin Cooper
  * @version $Id$
- * @deprecated Use {@link FileCleaningTracker}
  */
 public class FileCleaner {
     /**
@@ -52,7 +51,6 @@ public class FileCleaner {
      * @param file  the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the file is null
-     * @deprecated Use {@link FileCleaningTracker#track(File, Object)}.
      */
     public static void track(File file, Object marker) {
         theInstance.track(file, marker);
@@ -67,7 +65,6 @@ public class FileCleaner {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the file is null
-     * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
     public static void track(File file, Object marker, FileDeleteStrategy deleteStrategy) {
         theInstance.track(file, marker, deleteStrategy);
@@ -81,7 +78,6 @@ public class FileCleaner {
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the path is null
-     * @deprecated Use {@link FileCleaningTracker#track(String, Object)}.
      */
     public static void track(String path, Object marker) {
         theInstance.track(path, marker);
@@ -96,7 +92,6 @@ public class FileCleaner {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the path is null
-     * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
     public static void track(String path, Object marker, FileDeleteStrategy deleteStrategy) {
         theInstance.track(path, marker, deleteStrategy);
@@ -108,7 +103,6 @@ public class FileCleaner {
      * awaiting deletion.
      *
      * @return the number of files being tracked
-     * @deprecated Use {@link FileCleaningTracker#getTrackCount()}.
      */
     public static int getTrackCount() {
         return theInstance.getTrackCount();
@@ -134,7 +128,6 @@ public class FileCleaner {
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as {@link javax.servlet.ServletContextListener#contextDestroyed}.
      * One called, no new objects can be tracked by the file cleaner.
-     * @deprecated Use {@link FileCleaningTracker#exitWhenFinished()}.
      */
     public static synchronized void exitWhenFinished() {
         theInstance.exitWhenFinished();
