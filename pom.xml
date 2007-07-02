@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>2</version>
+    <version>3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -253,4 +253,101 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <tasks>
+                    <copy todir="${project.build.directory}/site/api-release">
+                      <fileset dir="${project.build.directory}/site/apidocs"/>
+                    </copy>
+                    <zip destfile="${project.build.directory}/${artifactId}-${version}-javadoc.jar.new">
+                      <zipfileset src="${project.build.directory}/${artifactId}-${version}-javadoc.jar"/>
+                      <zipfileset dir="." prefix="META-INF">
+                        <include name="LICENSE.txt"/>
+                        <include name="NOTICE.txt"/>
+                      </zipfileset>
+                    </zip>
+                    <move file="${project.build.directory}/${artifactId}-${version}-javadoc.jar.new"
+                          tofile="${project.build.directory}/${artifactId}-${version}-javadoc.jar"/>
+                    <zip destfile="${project.build.directory}/${artifactId}-${version}-sources.jar.new">
+                      <zipfileset src="${project.build.directory}/${artifactId}-${version}-sources.jar"/>
+                      <zipfileset dir="." prefix="META-INF">
+                        <include name="LICENSE.txt"/>
+                        <include name="NOTICE.txt"/>
+                      </zipfileset>
+                    </zip>
+                    <move file="${project.build.directory}/${artifactId}-${version}-sources.jar.new"
+                          tofile="${project.build.directory}/${artifactId}-${version}-sources.jar"/>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>attached</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>rc</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-site-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>attached</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="1.4" date="Not yet released">
+    </release>
+
+    <release version="1.3.2" date="2007-Jul-02">
       <action dev="jochen" type="fix" issue="IO-115">
         Some tests, which are implicitly assuming a Unix-like file
         system, are now skipped on Windows.
