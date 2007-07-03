@@ -145,6 +145,8 @@ public class FileCleaner {
      * This is mainly useful for code, which wants to support the new
      * {@link FileCleaningTracker} class while maintain compatibility with the
      * deprecated {@link FileCleaner}.
+     * 
+     * @return the singleton instance
      */
     public static FileCleaningTracker getInstance() {
         return theInstance;
