@@ -35,7 +35,7 @@
         Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
   </description>
 
-  <url>http://jakarta.apache.org/commons/io/</url>
+  <url>http://commons.apache.org/io/</url>
 
   <issueManagement>
     <system>jira</system>
@@ -43,9 +43,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/io/trunk</connection>
-    <developerConnection>scm:svn:scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/proper/io/trunk</developerConnection>
-    <url>http://svn.apache.org/viewvc/jakarta/commons/proper/io/trunk</url>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/trunk</developerConnection>
+    <url>http://svn.apache.org/viewvc/commons/proper/io/trunk</url>
   </scm>
 
   <developers>
