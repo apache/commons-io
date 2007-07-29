@@ -27,7 +27,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * Test for FileDeleteStrategy.
  *
- * @version $Id: DirectoryWalkerTestCase.java 438218 2006-08-29 21:15:11 +0000 (Tue, 29 Aug 2006) scolebourne $
+ * @version $Id$
  * @see FileDeleteStrategy
  */
 public class FileDeleteStrategyTestCase extends FileBasedTestCase {
