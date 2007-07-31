@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE org.apache.commons.menus SYSTEM 'http://jakarta.apache.org/commons/build/maven-build.dtd'>
+<!DOCTYPE org.apache.commons.menus SYSTEM 'http://commons.apache.org/build/maven-build.dtd'>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one or more
 contributor license agreements.  See the NOTICE file distributed with
@@ -22,7 +22,7 @@ limitations under the License.
 
   <body>
     <links>
-      <item name="Jakarta Commons" href="http://jakarta.apache.org/commons/"/>
+      <item name="Apache Commons" href="http://commons.apache.org/"/>
     </links>
 
     <menu name="Commons IO">
@@ -40,7 +40,7 @@ limitations under the License.
       <item name="Team" href="/team-list.html"/>
       <item name="Tasks" href="/tasks.html"/>
       <item name="Proposal" href="/proposal.html"/>
-      <item name="SVN repository" href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/io/trunk/"/>
+      <item name="SVN repository" href="http://svn.apache.org/viewvc/commons/proper/io/trunk/"/>
       <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
     </menu>
     
