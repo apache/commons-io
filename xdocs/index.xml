@@ -55,14 +55,14 @@ The JavaDoc API documents are available online:
 </ul>
 <p>
 The <a href="cvs-usage.html">subversion repository</a> can be
-<a href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/io/trunk/">browsed</a>.
+<a href="http://svn.apache.org/viewvc/commons/proper/io/trunk/">browsed</a>.
 </p>
 </section>
 <!-- ================================================== -->
 <section name="Releases">
 <p>
 The latest version is v1.3.2. - 
-<a href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi">Download now!</a><br />
+<a href="http://commons.apache.org/downloads/download_io.cgi">Download now!</a><br />
 The <a href="upgradeto1_3_2.html">upgrade notes</a> are also available.
 
 </p>

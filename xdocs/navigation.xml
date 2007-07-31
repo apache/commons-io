@@ -22,12 +22,12 @@ limitations under the License.
 
   <body>
     <links>
-      <item name="Apache Commons" href="http://commons.apache.org/"/>
+      <item name="Commons" href="http://commons.apache.org/"/>
     </links>
 
     <menu name="Commons IO">
       <item name="Overview" href="/index.html"/>
-      <item name="Download" href="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi"/>
+      <item name="Download" href="http://commons.apache.org/downloads/download_io.cgi"/>
       <item name="User guide" href="/description.html"/>
       <item name="Best practices" href="/bestpractices.html"/>
       <!--item name="History" href="/history.html"/-->
