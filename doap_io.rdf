@@ -31,8 +31,8 @@
   </description>
     <repository>
       <SVNRepository>
-        <browse rdf:resource="http://svn.apache.org/repos/asf/jakarta/commons/proper/io/trunk"/>
-        <location rdf:resource="http://svn.apache.org/repos/asf/jakarta/commons/proper/io"/>
+        <browse rdf:resource="http://svn.apache.org/repos/asf/commons/proper/io/trunk"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/commons/proper/io"/>
       </SVNRepository>
     </repository>
     <release>
