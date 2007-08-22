@@ -43,7 +43,7 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/trunk</connection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/io/trunk</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/trunk</developerConnection>
     <url>http://svn.apache.org/viewvc/commons/proper/io/trunk</url>
   </scm>
