@@ -129,6 +129,46 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
 }
 
+    public void testSuffixCaseInsensitive() throws Exception {
+
+        IOFileFilter filter = new SuffixFileFilter(new String[] { "tes", "est" }, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo.tes"), true);
+        assertFiltering(filter, new File("foo.est"), true);
+        assertFiltering(filter, new File("foo.EST"), true); //case-sensitive
+        assertFiltering(filter, new File("foo.TES"), true); //case-sensitive
+        assertFiltering(filter, new File("foo.exe"), false);
+
+        filter = new SuffixFileFilter("est", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("test"), true);
+        assertFiltering(filter, new File("TEST"), true);
+
+        List suffixes = Arrays.asList( new String[] { "tes", "est" } );
+        filter = new SuffixFileFilter(suffixes, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("bar.tes"), true);
+        assertFiltering(filter, new File("bar.est"), true);
+        assertFiltering(filter, new File("bar.EST"), true); //case-sensitive
+        assertFiltering(filter, new File("bar.TES"), true); //case-sensitive
+        assertFiltering(filter, new File("bar.exe"), false);
+
+        try {
+            new SuffixFileFilter((String) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+
+        try {
+            new SuffixFileFilter((String[]) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+
+        try {
+            new SuffixFileFilter((List) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
     public void testDirectory() throws Exception {
         // XXX: This test presumes the current working dir is the base dir of the source checkout.
         IOFileFilter filter = new DirectoryFileFilter();
@@ -206,6 +246,46 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         try {
             new PrefixFileFilter((List) null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
+    public void testPrefixCaseInsensitive() throws Exception {
+
+        IOFileFilter filter = new PrefixFileFilter(new String[] { "foo", "bar" }, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo.test1"), true);
+        assertFiltering(filter, new File("bar.test1"), true);
+        assertFiltering(filter, new File("FOO.test1"), true);  //case-sensitive
+        assertFiltering(filter, new File("BAR.test1"), true);  //case-sensitive
+
+        filter = new PrefixFileFilter("bar", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo.test2"), false);
+        assertFiltering(filter, new File("bar.test2"), true);
+        assertFiltering(filter, new File("FOO.test2"), false); //case-sensitive
+        assertFiltering(filter, new File("BAR.test2"), true);  //case-sensitive
+
+        List prefixes = Arrays.asList( new String[] { "foo", "bar" } );
+        filter = new PrefixFileFilter(prefixes, IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo.test3"), true);
+        assertFiltering(filter, new File("bar.test3"), true);
+        assertFiltering(filter, new File("FOO.test3"), true);  //case-sensitive
+        assertFiltering(filter, new File("BAR.test3"), true);  //case-sensitive
+
+        try {
+            new PrefixFileFilter((String) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+
+        try {
+            new PrefixFileFilter((String[]) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+
+        try {
+            new PrefixFileFilter((List) null, IOCase.INSENSITIVE);
             fail();
         } catch (IllegalArgumentException ex) {
         }

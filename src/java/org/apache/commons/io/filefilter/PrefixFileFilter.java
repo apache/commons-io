@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import org.apache.commons.io.IOCase;
 
 /**
  * Filters filenames for a certain prefix.
@@ -46,6 +47,9 @@ public class PrefixFileFilter extends AbstractFileFilter {
     /** The filename prefixes to search for */
     private String[] prefixes;
 
+    /** Whether the comparison is case sensitive. */
+    private IOCase caseSensitivity = IOCase.SENSITIVE;
+
     /**
      * Constructs a new Prefix file filter for a single prefix.
      * 
@@ -57,6 +61,20 @@ public class PrefixFileFilter extends AbstractFileFilter {
             throw new IllegalArgumentException("The prefix must not be null");
         }
         this.prefixes = new String[] {prefix};
+    }
+
+    /**
+     * Constructs a new Prefix file filter for a single prefix 
+     * specifying case-sensitivity.
+     * 
+     * @param prefix  the prefix to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the prefix is null
+     * @since Commons IO 1.4
+     */
+    public PrefixFileFilter(String prefix, IOCase caseSensitivity) {
+        this(prefix);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 
     /**
@@ -76,6 +94,23 @@ public class PrefixFileFilter extends AbstractFileFilter {
     }
 
     /**
+     * Constructs a new Prefix file filter for any of an array of prefixes
+     * specifying case-sensitivity.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
+     * 
+     * @param prefixes  the prefixes to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the prefix is null
+     * @since Commons IO 1.4
+     */
+    public PrefixFileFilter(String[] prefixes, IOCase caseSensitivity) {
+        this(prefixes);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+    }
+
+    /**
      * Constructs a new Prefix file filter for a list of prefixes.
      * 
      * @param prefixes  the prefixes to allow, must not be null
@@ -90,6 +125,21 @@ public class PrefixFileFilter extends AbstractFileFilter {
     }
 
     /**
+     * Constructs a new Prefix file filter for a list of prefixes
+     * specifying case-sensitivity.
+     * 
+     * @param prefixes  the prefixes to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the prefix list is null
+     * @throws ClassCastException if the list does not contain Strings
+     * @since Commons IO 1.4
+     */
+    public PrefixFileFilter(List prefixes, IOCase caseSensitivity) {
+        this(prefixes);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+    }
+
+    /**
      * Checks to see if the filename starts with the prefix.
      * 
      * @param file  the File to check
@@ -98,7 +148,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
     public boolean accept(File file) {
         String name = file.getName();
         for (int i = 0; i < this.prefixes.length; i++) {
-            if (name.startsWith(this.prefixes[i])) {
+            if (caseSensitivity.checkStartsWith(name, prefixes[i])) {
                 return true;
             }
         }
@@ -114,7 +164,7 @@ public class PrefixFileFilter extends AbstractFileFilter {
      */
     public boolean accept(File file, String name) {
         for (int i = 0; i < prefixes.length; i++) {
-            if (name.startsWith(prefixes[i])) {
+            if (caseSensitivity.checkStartsWith(name, prefixes[i])) {
                 return true;
             }
         }

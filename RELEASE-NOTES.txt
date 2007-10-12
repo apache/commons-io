@@ -32,6 +32,12 @@ Enhancements from 1.3.2
 - ThesholdingOuputStream [IO-121]
   - Add a reset() method which sets the count of the bytes written back to zero.
 
+- PrefixFileFilter [IO-126]
+  - Add faciltiy to specify case sensitivty on prefix matching
+
+- SuffixFileFilter [IO-126]
+  - Add faciltiy to specify case sensitivty on suffix matching
+
 
 Feedback
 --------
