@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Date;
+import org.apache.commons.io.IOCase;
 
 /**
  * Useful utilities for working with file filters. It provides access to all
@@ -278,6 +279,43 @@ public class FileFilterUtils {
         IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
         IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
+    }
+
+    /**
+     * Returns a filter that uses a regular expression to filter file names.
+     *
+     * @param pattern the regular expression pattern
+     * @return an appropriately configured IOFileFilter
+     * @since Commons IO 1.4
+     */
+    public static IOFileFilter regex(String pattern) {
+        return new RegexFilter(pattern);
+    }
+
+    /**
+     * Returns a filter that uses a regular expression to filter file names with
+     * the specified case sensitivity.
+     *
+     * @param pattern the regular expression pattern
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @return an appropriately configured IOFileFilter
+     * @since Commons IO 1.4
+     */
+    public static IOFileFilter regex(String pattern, IOCase caseSensitivity) {
+        return new RegexFilter(pattern, caseSensitivity);
+    }
+
+    /**
+     * Returns a filter that uses a regular expression to filter file names with
+     * the specified flags.
+     *
+     * @param pattern the regular expression pattern
+     * @param flags pattern flags (e.g. {@link java.util.regex.Pattern#CASE_INSENSITIVE})
+     * @return an appropriately configured IOFileFilter
+     * @since Commons IO 1.4
+     */
+    public static IOFileFilter regex(String pattern, int flags) {
+        return new RegexFilter(pattern, flags);
     }
 
     //-----------------------------------------------------------------------

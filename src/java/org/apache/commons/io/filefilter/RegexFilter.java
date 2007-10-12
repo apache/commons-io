@@ -17,9 +17,8 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.commons.io.IOCase;
 
 /**
  * Filters files using supplied regular expression(s).
@@ -44,11 +43,11 @@ import java.util.regex.Pattern;
  */
 public class RegexFilter extends AbstractFileFilter {
 
-    /** The regular expression patterns that will be used to match filenames */
-    private Pattern[] patterns = null;
+    /** The regular expression pattern that will be used to match filenames */
+    private Pattern pattern;
 
     /**
-     * Construct a new regular expression filter for a single regular expression
+     * Construct a new regular expression filter.
      *
      * @param pattern regular string expression to match
      * @throws IllegalArgumentException if the pattern is null
@@ -58,11 +57,43 @@ public class RegexFilter extends AbstractFileFilter {
             throw new java.lang.IllegalArgumentException();
         }
 
-        patterns = new Pattern[] { Pattern.compile(pattern) };
+        this.pattern = Pattern.compile(pattern);
     }
 
     /**
-     * Construct a new regular expression filter for a single regular expression
+     * Construct a new regular expression filter with the specified flags case sensitivity.
+     *
+     * @param pattern regular string expression to match
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the pattern is null
+     */
+    public RegexFilter(String pattern, IOCase caseSensitivity) {
+        if (pattern == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
+        int flags = 0;
+        if (caseSensitivity != null && !caseSensitivity.isCaseSensitive()) {
+            flags = Pattern.CASE_INSENSITIVE;
+        }
+        this.pattern = Pattern.compile(pattern, flags);
+    }
+
+    /**
+     * Construct a new regular expression filter with the specified flags.
+     *
+     * @param pattern regular string expression to match
+     * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
+     * @throws IllegalArgumentException if the pattern is null
+     */
+    public RegexFilter(String pattern, int flags) {
+        if (pattern == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
+        this.pattern = Pattern.compile(pattern, flags);
+    }
+
+    /**
+     * Construct a new regular expression filter for a compiled regular expression
      *
      * @param pattern regular expression to match
      * @throws IllegalArgumentException if the pattern is null
@@ -72,66 +103,7 @@ public class RegexFilter extends AbstractFileFilter {
             throw new java.lang.IllegalArgumentException();
         }
 
-        patterns = new Pattern[] { pattern };
-    }
-
-    /**
-     * Construct a new regular expression filter for an array of regular expressions
-     *
-     * @param patterns regular expression strings to match
-     * @throws IllegalArgumentException if the pattern array is null
-     */
-    public RegexFilter(String[] patterns) {
-        if (patterns == null) {
-            throw new java.lang.IllegalArgumentException();
-        }
-
-        this.patterns = new Pattern[patterns.length];
-        for (int i = 0; i < patterns.length; i++) {
-            this.patterns[i] = Pattern.compile(patterns[i]);
-        }
-    }
-
-    /**
-     * Construct a new regular expression filter for an array of regular expressions
-     *
-     * @param patterns regular expression to match
-     * @throws IllegalArgumentException if the pattern array is null
-     */
-    public RegexFilter(Pattern[] patterns) {
-        if (patterns == null) {
-            throw new java.lang.IllegalArgumentException();
-        }
-
-        this.patterns = patterns;
-    }
-
-    /**
-     * Construct a new regular expression filter for a list of regular expressions
-     *
-     * @param patterns list of regular expressions (either list of type
-     *                 <code>java.lang.String</code> or of type
-     *                 <code>java.util.regex.Pattern</code>) to match
-     * @throws IllegalArgumentException if the pattern list is null
-     * @throws ClassCastException if the list does not contain Strings
-     */
-    public RegexFilter(List patterns) {
-        if (patterns == null) {
-            throw new java.lang.IllegalArgumentException();
-        }
-
-        if (patterns.size() == 0)
-            return;
-
-        this.patterns = new Pattern[patterns.size()];
-
-        int i = 0;
-        for (Iterator it = patterns.iterator(); it.hasNext(); i++) {
-            Object pattern = it.next();
-            this.patterns[i] = (pattern instanceof Pattern)
-                ? (Pattern)pattern
-                : Pattern.compile(pattern.toString());
-        }
+        this.pattern = pattern;
     }
 
     /**
@@ -142,37 +114,7 @@ public class RegexFilter extends AbstractFileFilter {
      * @return true if the filename matches one of the regular expressions
      */
     public boolean accept(File dir, String name) {
-        if (dir != null && new File(dir, name).isDirectory()) {
-            return false;
-        }
-
-        for (int i = 0; i < patterns.length; i++) {
-            if (patterns[i].matcher(name).matches()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks to see if the filename matches one of the regular expressions.
-     *
-     * @param file the file to check
-     * @return true if the filename matches one of the regular expressions
-     */
-    public boolean accept(File file) {
-        if (file.isDirectory()) {
-            return false;
-        }
-
-        for (int i = 0; i < patterns.length; i++) {
-            if (patterns[i].matcher(file.getName()).matches()) {
-                return true;
-            }
-        }
-
-        return false;
+        return (pattern.matcher(name).matches());
     }
 
 }
