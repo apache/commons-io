@@ -847,6 +847,34 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
+
+        try {
+            FileFilterUtils.regex((String)null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+
+        try {
+            FileFilterUtils.regex((String)null, Pattern.CASE_INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+
+        try {
+            FileFilterUtils.regex((String)null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+
+        try {
+            new RegexFilter((java.util.regex.Pattern)null);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
     }
 
     //-----------------------------------------------------------------------

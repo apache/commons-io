@@ -54,7 +54,7 @@ public class RegexFilter extends AbstractFileFilter {
      */
     public RegexFilter(String pattern) {
         if (pattern == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException("Pattern is missing");
         }
 
         this.pattern = Pattern.compile(pattern);
@@ -69,7 +69,7 @@ public class RegexFilter extends AbstractFileFilter {
      */
     public RegexFilter(String pattern, IOCase caseSensitivity) {
         if (pattern == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException("Pattern is missing");
         }
         int flags = 0;
         if (caseSensitivity != null && !caseSensitivity.isCaseSensitive()) {
@@ -87,7 +87,7 @@ public class RegexFilter extends AbstractFileFilter {
      */
     public RegexFilter(String pattern, int flags) {
         if (pattern == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException("Pattern is missing");
         }
         this.pattern = Pattern.compile(pattern, flags);
     }
@@ -100,7 +100,7 @@ public class RegexFilter extends AbstractFileFilter {
      */
     public RegexFilter(Pattern pattern) {
         if (pattern == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException("Pattern is missing");
         }
 
         this.pattern = pattern;
