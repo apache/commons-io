@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import org.apache.commons.io.IOCase;
 
 /**
  * Filters files based on the suffix (what the filename ends with).
@@ -47,6 +48,9 @@ public class SuffixFileFilter extends AbstractFileFilter {
     /** The filename suffixes to search for */
     private String[] suffixes;
 
+    /** Whether the comparison is case sensitive. */
+    private IOCase caseSensitivity = IOCase.SENSITIVE;
+
     /**
      * Constructs a new Suffix file filter for a single extension.
      * 
@@ -58,6 +62,20 @@ public class SuffixFileFilter extends AbstractFileFilter {
             throw new IllegalArgumentException("The suffix must not be null");
         }
         this.suffixes = new String[] {suffix};
+    }
+
+    /**
+     * Constructs a new Suffix file filter for a single extension
+     * specifying case-sensitivity.
+     *
+     * @param suffix  the suffix to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the suffix is null
+     * @since Commons IO 1.4
+     */
+    public SuffixFileFilter(String suffix, IOCase caseSensitivity) {
+        this(suffix);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 
     /**
@@ -77,6 +95,23 @@ public class SuffixFileFilter extends AbstractFileFilter {
     }
 
     /**
+     * Constructs a new Suffix file filter for an array of suffixs
+     * specifying case-sensitivity.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
+     * 
+     * @param suffixes  the suffixes to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the suffix array is null
+     * @since Commons IO 1.4
+     */
+    public SuffixFileFilter(String[] suffixes, IOCase caseSensitivity) {
+        this(suffixes);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+    }
+
+    /**
      * Constructs a new Suffix file filter for a list of suffixes.
      * 
      * @param suffixes  the suffixes to allow, must not be null
@@ -91,6 +126,21 @@ public class SuffixFileFilter extends AbstractFileFilter {
     }
 
     /**
+     * Constructs a new Suffix file filter for a list of suffixes
+     * specifying case-sensitivity.
+     * 
+     * @param suffixes  the suffixes to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the suffix list is null
+     * @throws ClassCastException if the list does not contain Strings
+     * @since Commons IO 1.4
+     */
+    public SuffixFileFilter(List suffixes, IOCase caseSensitivity) {
+        this(suffixes);
+        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+    }
+
+    /**
      * Checks to see if the filename ends with the suffix.
      * 
      * @param file  the File to check
@@ -99,7 +149,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
     public boolean accept(File file) {
         String name = file.getName();
         for (int i = 0; i < this.suffixes.length; i++) {
-            if (name.endsWith(this.suffixes[i])) {
+            if (caseSensitivity.checkEndsWith(name, suffixes[i])) {
                 return true;
             }
         }
@@ -115,7 +165,7 @@ public class SuffixFileFilter extends AbstractFileFilter {
      */
     public boolean accept(File file, String name) {
         for (int i = 0; i < this.suffixes.length; i++) {
-            if (name.endsWith(this.suffixes[i])) {
+            if (caseSensitivity.checkEndsWith(name, suffixes[i])) {
                 return true;
             }
         }
