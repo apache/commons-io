@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -819,6 +820,75 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(EmptyFileFilter.EMPTY, notEmptyFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, notEmptyFile, true);
         FileUtils.forceDelete(emptyDir);
+    }
+
+    public void testRegex() throws Exception {
+        IOFileFilter filter = new RegexFilter("^.*[tT]est(-\\d+)?\\.java$");
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test-10.java"), true);
+        assertFiltering(filter, new File("test-.java"), false);
+
+        filter = new RegexFilter("^[Tt]est.java$");
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), false);
+
+        filter = new RegexFilter(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), true);
+
+        filter = new RegexFilter(new String[] { "^Test.java$", "^test.java$" });
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), false);
+
+        filter = new RegexFilter(new Pattern[] {
+            Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE), Pattern.compile("^test2.java$") }
+        );
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), true);
+        assertFiltering(filter, new File("test2.java"), true);
+        assertFiltering(filter, new File("Test2.java"), false);
+
+        List filterList = Arrays.asList(new String[] { "^Test.java$", "^test.java$" });
+        filter = new RegexFilter(filterList);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), false);
+
+        filterList = Arrays.asList(new Pattern[] {
+            Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE), Pattern.compile("^test2.java$") }
+        );
+        filter = new RegexFilter(filterList);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), true);
+        assertFiltering(filter, new File("test2.java"), true);
+        assertFiltering(filter, new File("Test2.java"), false);
+
+        filterList = new ArrayList();
+        filterList.add(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
+        filterList.add("^test2.java$");
+        filter = new RegexFilter(filterList);
+        assertFiltering(filter, new File("Test.java"), true);
+        assertFiltering(filter, new File("test.java"), true);
+        assertFiltering(filter, new File("tEST.java"), true);
+        assertFiltering(filter, new File("test2.java"), true);
+        assertFiltering(filter, new File("Test2.java"), false);
+
+        assertTrue(filter.accept(new File("Test.java")));
+        assertTrue(filter.accept(new File("test.java")));
+        assertTrue(filter.accept(new File("tEST.java")));
+        assertTrue(filter.accept(new File("test2.java")));
+        assertFalse(filter.accept(new File("Test2.java")));
+
+        assertTrue(filter.accept(new File("Test.java").getParentFile(), new File("Test.java").getName()));
+        assertTrue(filter.accept(new File("test.java").getParentFile(), new File("test.java").getName()));
+        assertTrue(filter.accept(new File("tEST.java").getParentFile(), new File("tEST.java").getName()));
+        assertTrue(filter.accept(new File("test2.java").getParentFile(), new File("test2.java").getName()));
+        assertFalse(filter.accept(new File("Test2.java").getParentFile(), new File("Test2.java").getName()));
     }
 
     //-----------------------------------------------------------------------
