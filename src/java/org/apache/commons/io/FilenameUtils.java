@@ -977,6 +977,10 @@ public class FilenameUtils {
         if (normalized) {
             filename1 = normalize(filename1);
             filename2 = normalize(filename2);
+            if (filename1 == null || filename2 == null) {
+                throw new IllegalArgumentException(
+                    "Error normalizing one or both of the file names");
+            }
         }
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;

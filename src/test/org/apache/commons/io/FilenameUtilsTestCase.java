@@ -784,6 +784,30 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(false, FilenameUtils.equalsNormalizedOnSystem("a/b/", "a/b"));
     }
 
+    /**
+     * Test for https://issues.apache.org/jira/browse/IO-128
+     */
+    public void testEqualsNormalizedError_IO_128() {
+        try {
+            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
+            fail("Invalid normalized first file");
+        } catch(IllegalArgumentException e) {
+            // expected result
+        }
+        try {
+            FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
+            fail("Invalid normalized second file");
+        } catch(IllegalArgumentException e) {
+            // expected result
+        }
+        try {
+            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
+            fail("Invalid normalized both filse");
+        } catch(IllegalArgumentException e) {
+            // expected result
+        }
+    }
+
     public void testEquals_fullControl() {
         assertEquals(false, FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.SENSITIVE));
         assertEquals(true, FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.INSENSITIVE));
