@@ -48,6 +48,9 @@ Enhancements from 1.3.2
   - CloseShieldInputStream - prevents the underlying input stream from being closed.
   - CloseShieldOutputStream - prevents the underlying output stream from being closed.
 
+- TeeInputStream [IO-129]
+  - Add new Tee input stream implementation
+
 
 Feedback
 --------
