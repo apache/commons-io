@@ -289,7 +289,7 @@ public class FileFilterUtils {
      * @since Commons IO 1.4
      */
     public static IOFileFilter regex(String pattern) {
-        return new RegexFilter(pattern);
+        return new RegexFileFilter(pattern);
     }
 
     /**
@@ -302,7 +302,7 @@ public class FileFilterUtils {
      * @since Commons IO 1.4
      */
     public static IOFileFilter regex(String pattern, IOCase caseSensitivity) {
-        return new RegexFilter(pattern, caseSensitivity);
+        return new RegexFileFilter(pattern, caseSensitivity);
     }
 
     /**
@@ -315,7 +315,7 @@ public class FileFilterUtils {
      * @since Commons IO 1.4
      */
     public static IOFileFilter regex(String pattern, int flags) {
-        return new RegexFilter(pattern, flags);
+        return new RegexFileFilter(pattern, flags);
     }
 
     //-----------------------------------------------------------------------

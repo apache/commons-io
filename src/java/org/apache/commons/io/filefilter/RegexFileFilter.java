@@ -30,7 +30,7 @@ import org.apache.commons.io.IOCase;
  * e.g.
  * <pre>
  * File dir = new File(".");
- * FileFilter fileFilter = new RegexFilter("^.*[tT]est(-\\d+)?\\.java$");
+ * FileFilter fileFilter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
  * File[] files = dir.listFiles(fileFilter);
  * for (int i = 0; i < files.length; i++) {
  *   System.out.println(files[i]);
@@ -41,7 +41,7 @@ import org.apache.commons.io.IOCase;
  * @version $Revision$
  * @since Commons IO 1.4
  */
-public class RegexFilter extends AbstractFileFilter {
+public class RegexFileFilter extends AbstractFileFilter {
 
     /** The regular expression pattern that will be used to match filenames */
     private Pattern pattern;
@@ -52,7 +52,7 @@ public class RegexFilter extends AbstractFileFilter {
      * @param pattern regular string expression to match
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFilter(String pattern) {
+    public RegexFileFilter(String pattern) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -67,7 +67,7 @@ public class RegexFilter extends AbstractFileFilter {
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFilter(String pattern, IOCase caseSensitivity) {
+    public RegexFileFilter(String pattern, IOCase caseSensitivity) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -85,7 +85,7 @@ public class RegexFilter extends AbstractFileFilter {
      * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFilter(String pattern, int flags) {
+    public RegexFileFilter(String pattern, int flags) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -98,7 +98,7 @@ public class RegexFilter extends AbstractFileFilter {
      * @param pattern regular expression to match
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFilter(Pattern pattern) {
+    public RegexFileFilter(Pattern pattern) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
