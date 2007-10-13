@@ -41,6 +41,14 @@ Enhancements from 1.3.2
 - RegexFilter [IO-74]
   - Add new regular expression file filter implementation
 
+- New Closed Input/Output stream implementations [IO-122]
+  - AutoCloseInputStream - automatically closes and discards the underlying input stream
+  - ClosedInputStream - returns -1 for any read attempts
+  - ClosedOutputStream - throws an IOException for any write attempts
+  - CloseShieldInputStream - prevents the underlying input stream from being closed.
+  - CloseShieldOutputStream - prevents the underlying output stream from being closed.
+
+
 Feedback
 --------
 Open source works best when you give feedback:
