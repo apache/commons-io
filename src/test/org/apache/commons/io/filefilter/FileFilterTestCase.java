@@ -833,7 +833,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), false);
 
-        filter = new RegexFilter(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
+        filter = new RegexFileFilter(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
@@ -870,7 +870,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
 
         try {
-            new RegexFilter((java.util.regex.Pattern)null);
+            new RegexFileFilter((java.util.regex.Pattern)null);
             fail();
         } catch (IllegalArgumentException ex) {
             // expected
