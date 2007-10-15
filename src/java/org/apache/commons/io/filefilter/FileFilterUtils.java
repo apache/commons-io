@@ -281,43 +281,6 @@ public class FileFilterUtils {
         return new AndFileFilter(minimumFilter, maximumFilter);
     }
 
-    /**
-     * Returns a filter that uses a regular expression to filter file names.
-     *
-     * @param pattern the regular expression pattern
-     * @return an appropriately configured IOFileFilter
-     * @since Commons IO 1.4
-     */
-    public static IOFileFilter regex(String pattern) {
-        return new RegexFileFilter(pattern);
-    }
-
-    /**
-     * Returns a filter that uses a regular expression to filter file names with
-     * the specified case sensitivity.
-     *
-     * @param pattern the regular expression pattern
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
-     * @return an appropriately configured IOFileFilter
-     * @since Commons IO 1.4
-     */
-    public static IOFileFilter regex(String pattern, IOCase caseSensitivity) {
-        return new RegexFileFilter(pattern, caseSensitivity);
-    }
-
-    /**
-     * Returns a filter that uses a regular expression to filter file names with
-     * the specified flags.
-     *
-     * @param pattern the regular expression pattern
-     * @param flags pattern flags (e.g. {@link java.util.regex.Pattern#CASE_INSENSITIVE})
-     * @return an appropriately configured IOFileFilter
-     * @since Commons IO 1.4
-     */
-    public static IOFileFilter regex(String pattern, int flags) {
-        return new RegexFileFilter(pattern, flags);
-    }
-
     //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
     private static IOFileFilter cvsFilter;
