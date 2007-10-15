@@ -823,12 +823,12 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     public void testRegex() throws Exception {
-        IOFileFilter filter = FileFilterUtils.regex("^.*[tT]est(-\\d+)?\\.java$");
+        IOFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test-10.java"), true);
         assertFiltering(filter, new File("test-.java"), false);
 
-        filter = FileFilterUtils.regex("^[Tt]est.java$");
+        filter = new RegexFileFilter("^[Tt]est.java$");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), false);
@@ -838,32 +838,32 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
 
-        filter = FileFilterUtils.regex("^test.java$", Pattern.CASE_INSENSITIVE);
+        filter = new RegexFileFilter("^test.java$", Pattern.CASE_INSENSITIVE);
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
 
-        filter = FileFilterUtils.regex("^test.java$", IOCase.INSENSITIVE);
+        filter = new RegexFileFilter("^test.java$", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
 
         try {
-            FileFilterUtils.regex((String)null);
+            new RegexFileFilter((String)null);
             fail();
         } catch (IllegalArgumentException ex) {
             // expected
         }
 
         try {
-            FileFilterUtils.regex((String)null, Pattern.CASE_INSENSITIVE);
+            new RegexFileFilter((String)null, Pattern.CASE_INSENSITIVE);
             fail();
         } catch (IllegalArgumentException ex) {
             // expected
         }
 
         try {
-            FileFilterUtils.regex((String)null, IOCase.INSENSITIVE);
+            new RegexFileFilter((String)null, IOCase.INSENSITIVE);
             fail();
         } catch (IllegalArgumentException ex) {
             // expected
