@@ -27,8 +27,9 @@ import java.io.OutputStream;
  * bytes from the input stream being skipped or duplicated in the output
  * stream.
  * <p>
- * Unlike the proxied input stream (that gets closed when {@link #close()}
- * is called), the associated output stream is never closed by this class. 
+ * The proxied input stream is closed when the {@link #close()} method is
+ * called on this proxy. It is configurable whether the associated output
+ * stream will also closed.
  *
  * @since Commons IO 1.4
  */
@@ -41,15 +42,56 @@ public class TeeInputStream extends ProxyInputStream {
     private final OutputStream branch;
 
     /**
+     * Flag for closing also the associated output stream when this
+     * stream is closed.
+     */
+    private final boolean closeBranch;
+
+    /**
      * Creates a TeeInputStream that proxies the given {@link InputStream}
-     * and copies all read bytes to the given {@link OutputStream}.
+     * and copies all read bytes to the given {@link OutputStream}. The given
+     * output stream will not be closed when this stream gets closed.
      *
      * @param input input stream to be proxied
      * @param branch output stream that will receive a copy of all bytes read
      */
     public TeeInputStream(InputStream input, OutputStream branch) {
+        this(input, branch, false);
+    }
+
+    /**
+     * Creates a TeeInputStream that proxies the given {@link InputStream}
+     * and copies all read bytes to the given {@link OutputStream}. The given
+     * output stream will be closed when this stream gets closed if the
+     * closeBranch parameter is <code>true</code>.
+     *
+     * @param input input stream to be proxied
+     * @param branch output stream that will receive a copy of all bytes read
+     * @param closeBranch flag for closing also the output stream when this
+     *                    stream is closed
+     */
+    public TeeInputStream(
+            InputStream input, OutputStream branch, boolean closeBranch) {
         super(input);
         this.branch = branch;
+        this.closeBranch = closeBranch;
+    }
+
+    /**
+     * Closes the proxied input stream and, if so configured, the associated
+     * output stream. An exception thrown from one stream will not prevent
+     * closing of the other stream.
+     *
+     * @throws IOException if either of the streams could not be closed
+     */
+    public void close() throws IOException {
+        try {
+            super.close();
+        } finally {
+            if (closeBranch) {
+                branch.close();
+            }
+        }
     }
 
     /**
