@@ -238,6 +238,113 @@ public class DeferredFileOutputStreamTest extends TestCase
     }
 
     /**
+     * Test specifying a temporary file and the threshold not reached.
+     */
+    public void testTempFileBelowThreshold() {
+
+        String prefix = "commons-io-test";
+        String suffix = ".out";
+        File tempDir  = new File(".");
+        DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length + 42, prefix, suffix, tempDir);
+        assertNull("Check file is null-A", dfos.getFile());
+        try
+        {
+            dfos.write(testBytes, 0, testBytes.length);
+            dfos.close();
+        }
+        catch (IOException e) {
+            fail("Unexpected IOException");
+        }
+        assertTrue(dfos.isInMemory());
+        assertNull("Check file is null-B", dfos.getFile());
+    }
+
+    /**
+     * Test specifying a temporary file and the threshold is reached.
+     */
+    public void testTempFileAboveThreshold() {
+
+        String prefix = "commons-io-test";
+        String suffix = ".out";
+        File tempDir  = new File(".");
+        DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+        assertNull("Check file is null-A", dfos.getFile());
+        try
+        {
+            dfos.write(testBytes, 0, testBytes.length);
+            dfos.close();
+        }
+        catch (IOException e) {
+            fail("Unexpected IOException");
+        }
+        assertFalse(dfos.isInMemory());
+        assertNull(dfos.getData());
+        assertNotNull("Check file not null", dfos.getFile());
+        assertTrue("Check file exists", dfos.getFile().exists());
+        assertTrue("Check prefix", dfos.getFile().getName().startsWith(prefix));
+        assertTrue("Check suffix", dfos.getFile().getName().endsWith(suffix));
+        assertEquals("Check dir", tempDir.getPath(), dfos.getFile().getParent());
+
+        verifyResultFile(dfos.getFile());
+
+        // Delete the temporary file.
+        dfos.getFile().delete();
+    }
+
+    /**
+     * Test specifying a temporary file and the threshold is reached.
+     */
+    public void testTempFileAboveThresholdPrefixOnly() {
+
+        String prefix = "commons-io-test";
+        String suffix = null;
+        File tempDir  = null;
+        DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+        assertNull("Check file is null-A", dfos.getFile());
+        try
+        {
+            dfos.write(testBytes, 0, testBytes.length);
+            dfos.close();
+        }
+        catch (IOException e) {
+            fail("Unexpected IOException");
+        }
+        assertFalse(dfos.isInMemory());
+        assertNull(dfos.getData());
+        assertNotNull("Check file not null", dfos.getFile());
+        assertTrue("Check file exists", dfos.getFile().exists());
+        assertTrue("Check prefix", dfos.getFile().getName().startsWith(prefix));
+        assertTrue("Check suffix", dfos.getFile().getName().endsWith(".tmp")); // ".tmp" is default
+
+        verifyResultFile(dfos.getFile());
+
+        // Delete the temporary file.
+        dfos.getFile().delete();
+    }
+
+    /**
+     * Test specifying a temporary file and the threshold is reached.
+     */
+    public void testTempFileError() {
+
+        String prefix = null;
+        String suffix = ".out";
+        File tempDir  = new File(".");
+        try
+        {
+            DeferredFileOutputStream dfos =
+                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+            fail("Expected IllegalArgumentException ");
+        }
+        catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    /**
      * Verifies that the specified file contains the same data as the original
      * test data.
      *

@@ -67,6 +67,21 @@ public class DeferredFileOutputStream
      */
     private File outputFile;
 
+    /**
+     * The temporary file prefix.
+     */
+    private String prefix;
+
+    /**
+     * The temporary file suffix.
+     */
+    private String suffix;
+
+    /**
+     * The directory to use for temporary files.
+     */
+    private File directory;
+
     
     /**
      * True when close() has been called successfully.
@@ -90,6 +105,29 @@ public class DeferredFileOutputStream
 
         memoryOutputStream = new ByteArrayOutputStream();
         currentOutputStream = memoryOutputStream;
+    }
+
+
+    /**
+     * Constructs an instance of this class which will trigger an event at the
+     * specified threshold, and save data to a temporary file beyond that point.
+     *
+     * @param threshold  The number of bytes at which to trigger an event.
+     * @param prefix Prefix to use for the temporary file.
+     * @param suffix Suffix to use for the temporary file.
+     * @param directory Temporary file directory.
+     *
+     * @since Commons IO 1.4
+     */
+    public DeferredFileOutputStream(int threshold, String prefix, String suffix, File directory)
+    {
+        this(threshold, (File)null);
+        if (prefix == null) {
+            throw new IllegalArgumentException("Temporary file prefix is missing");
+        }
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.directory = directory;
     }
 
 
@@ -120,6 +158,9 @@ public class DeferredFileOutputStream
      */
     protected void thresholdReached() throws IOException
     {
+        if (prefix != null) {
+            outputFile = File.createTempFile(prefix, suffix, directory);
+        }
         FileOutputStream fos = new FileOutputStream(outputFile);
         memoryOutputStream.writeTo(fos);
         currentOutputStream = fos;
@@ -162,8 +203,15 @@ public class DeferredFileOutputStream
 
 
     /**
-     * Returns the same output file specified in the constructor, even when
-     * threashold has not been reached.
+     * Returns either the output file specified in the constructor or
+     * the temporary file created or null.
+     * <p>
+     * If the constructor specifying the file is used then it returns that
+     * same output file, even when threashold has not been reached.
+     * <p>
+     * If constructor specifying a temporary file prefix/suffix is used
+     * then the temporary file created once the threashold is reached is returned
+     * If the threshold was not reached then <code>null</code> is returned.
      *
      * @return The file for this output stream, or <code>null</code> if no such
      *         file exists.
