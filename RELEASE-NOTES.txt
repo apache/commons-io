@@ -51,6 +51,8 @@ Enhancements from 1.3.2
 - TeeInputStream [IO-129]
   - Add new Tee input stream implementation
 
+- DeferredFileOutputStream [IO-130]
+  - Add support for temporary files
 
 Feedback
 --------
