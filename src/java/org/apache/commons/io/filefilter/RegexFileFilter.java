@@ -19,6 +19,7 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.util.regex.Pattern;
 import org.apache.commons.io.IOCase;
+import java.io.Serializable;
 
 /**
  * Filters files using supplied regular expression(s).
@@ -41,7 +42,7 @@ import org.apache.commons.io.IOCase;
  * @version $Revision$
  * @since Commons IO 1.4
  */
-public class RegexFileFilter extends AbstractFileFilter {
+public class RegexFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The regular expression pattern that will be used to match filenames */
     private Pattern pattern;

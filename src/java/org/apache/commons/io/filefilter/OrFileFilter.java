@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  * A {@link java.io.FileFilter} providing conditional OR logic across a list of
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class OrFileFilter
         extends AbstractFileFilter
-        implements ConditionalFileFilter {
+        implements ConditionalFileFilter, Serializable {
 
     /** The list of file filters. */
     private List fileFilters;

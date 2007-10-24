@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import java.io.Serializable;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -48,7 +49,7 @@ import org.apache.commons.io.IOCase;
  * @version $Revision: 155419 $ $Date$
  * @since Commons IO 1.3
  */
-public class WildcardFileFilter extends AbstractFileFilter {
+public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The wildcards that will be used to match filenames. */
     private String[] wildcards;

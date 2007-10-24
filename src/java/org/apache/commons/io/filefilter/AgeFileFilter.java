@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.Date;
+import java.io.Serializable;
 
 import org.apache.commons.io.FileUtils;
 
@@ -42,7 +43,7 @@ import org.apache.commons.io.FileUtils;
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class AgeFileFilter extends AbstractFileFilter {
+public class AgeFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The cutoff time threshold. */
     private long cutoff;

@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts <code>File</code>s that can be read.
@@ -59,7 +60,7 @@ import java.io.File;
  * @since Commons IO 1.3
  * @version $Revision$
  */
-public class CanReadFileFilter extends AbstractFileFilter {
+public class CanReadFileFilter extends AbstractFileFilter implements Serializable {
     
     /** Singleton instance of <i>readable</i> filter */
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();

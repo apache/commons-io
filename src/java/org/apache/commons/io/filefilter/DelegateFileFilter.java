@@ -19,6 +19,7 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.Serializable;
 
 /**
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
@@ -28,7 +29,7 @@ import java.io.FilenameFilter;
  * 
  * @author Stephen Colebourne
  */
-public class DelegateFileFilter extends AbstractFileFilter {
+public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The Filename filter */
     private FilenameFilter filenameFilter;

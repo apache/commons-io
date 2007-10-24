@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts <code>File</code>s that are hidden.
@@ -47,7 +48,7 @@ import java.io.File;
  * @since Commons IO 1.3
  * @version $Revision$
  */
-public class HiddenFileFilter extends AbstractFileFilter {
+public class HiddenFileFilter extends AbstractFileFilter implements Serializable {
     
     /** Singleton instance of <i>hidden</i> filter */
     public static final IOFileFilter HIDDEN  = new HiddenFileFilter();

@@ -54,6 +54,9 @@ Enhancements from 1.3.2
 - DeferredFileOutputStream [IO-130]
   - Add support for temporary files
 
+- Make IOFileFilter implementations Serializable [IO-131]
+
+
 Feedback
 --------
 Open source works best when you give feedback:
