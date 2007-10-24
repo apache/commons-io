@@ -31,6 +31,7 @@ import java.io.OutputStream;
  * called on this proxy. It is configurable whether the associated output
  * stream will also closed.
  *
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class TeeInputStream extends ProxyInputStream {

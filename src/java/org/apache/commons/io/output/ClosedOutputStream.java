@@ -27,6 +27,7 @@ import java.io.OutputStream;
  * that accept an output stream and acting as a sentinel value instead of
  * a <code>null</code> output stream.
  *
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class ClosedOutputStream extends OutputStream {

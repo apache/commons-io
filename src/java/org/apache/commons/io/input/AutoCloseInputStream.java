@@ -31,6 +31,7 @@ import java.io.InputStream;
  * closing the stream when no longer needed) or the underlying stream (by not
  * releasing resources once the last byte has been read) do not do that.
  *
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class AutoCloseInputStream extends ProxyInputStream {

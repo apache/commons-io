@@ -26,6 +26,7 @@ import java.io.InputStream;
  * that accept input streams and acting as a sentinel value instead of a
  * <code>null</code> input stream.
  *
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class ClosedInputStream extends InputStream {
