@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts files or directories that are empty.
@@ -50,7 +51,7 @@ import java.io.File;
  * @since Commons IO 1.3
  * @version $Revision$
  */
-public class EmptyFileFilter extends AbstractFileFilter {
+public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
     
     /** Singleton instance of <i>empty</i> filter */
     public static final IOFileFilter EMPTY = new EmptyFileFilter();

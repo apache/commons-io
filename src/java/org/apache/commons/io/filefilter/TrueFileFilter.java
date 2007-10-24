@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * A file filter that always returns true.
@@ -26,7 +27,7 @@ import java.io.File;
  *
  * @author Stephen Colebourne
  */
-public class TrueFileFilter implements IOFileFilter {
+public class TrueFileFilter implements IOFileFilter implements Serializable {
 
     /**
      * Singleton instance of true filter.

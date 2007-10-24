@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts <code>File</code>s that are directories.
@@ -38,7 +39,7 @@ import java.io.File;
  * @author Stephen Colebourne
  * @author Peter Donald
  */
-public class DirectoryFileFilter extends AbstractFileFilter {
+public class DirectoryFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Singleton instance of directory filter.

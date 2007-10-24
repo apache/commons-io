@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Filters files based on size, can filter either smaller files or
@@ -37,7 +38,7 @@ import java.io.File;
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class SizeFileFilter extends AbstractFileFilter {
+public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The size threshold. */
     private long size;

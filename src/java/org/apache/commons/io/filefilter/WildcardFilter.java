@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import java.io.Serializable;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -49,7 +50,7 @@ import org.apache.commons.io.FilenameUtils;
  * @deprecated Use WilcardFileFilter. Deprecated as this class performs directory
  * filtering which it shouldn't do, but that can't be removed due to compatability.
  */
-public class WildcardFilter extends AbstractFileFilter {
+public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /** The wildcards that will be used to match filenames. */
     private String[] wildcards;

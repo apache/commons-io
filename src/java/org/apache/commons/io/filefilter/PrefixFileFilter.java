@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import java.io.Serializable;
 import org.apache.commons.io.IOCase;
 
 /**
@@ -42,7 +43,7 @@ import org.apache.commons.io.IOCase;
  * @author Serge Knystautas
  * @author Peter Donald
  */
-public class PrefixFileFilter extends AbstractFileFilter {
+public class PrefixFileFilter extends AbstractFileFilter implements Serializable {
     
     /** The filename prefixes to search for */
     private String[] prefixes;

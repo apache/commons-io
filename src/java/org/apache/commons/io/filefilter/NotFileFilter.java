@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter produces a logical NOT of the filters specified.
@@ -26,7 +27,7 @@ import java.io.File;
  * 
  * @author Stephen Colebourne
  */
-public class NotFileFilter extends AbstractFileFilter {
+public class NotFileFilter extends AbstractFileFilter implements Serializable {
     
     /** The filter */
     private IOFileFilter filter;

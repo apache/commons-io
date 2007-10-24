@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts <code>File</code>s that are files (not directories).
@@ -35,7 +36,7 @@ import java.io.File;
  * @since Commons IO 1.3
  * @version $Revision: 155419 $ $Date$
  */
-public class FileFileFilter extends AbstractFileFilter {
+public class FileFileFilter extends AbstractFileFilter implements Serializable {
 
     /** Singleton instance of file filter */
     public static final IOFileFilter FILE = new FileFileFilter();

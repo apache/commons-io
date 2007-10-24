@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.List;
+import java.io.Serializable;
 import org.apache.commons.io.IOCase;
 
 /**
@@ -43,7 +44,7 @@ import org.apache.commons.io.IOCase;
  * @author Serge Knystautas
  * @author Peter Donald
  */
-public class SuffixFileFilter extends AbstractFileFilter {
+public class SuffixFileFilter extends AbstractFileFilter implements Serializable {
     
     /** The filename suffixes to search for */
     private String[] suffixes;

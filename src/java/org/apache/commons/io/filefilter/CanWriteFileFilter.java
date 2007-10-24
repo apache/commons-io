@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This filter accepts <code>File</code>s that can be written to.
@@ -51,7 +52,7 @@ import java.io.File;
  * @since Commons IO 1.3
  * @version $Revision$
  */
-public class CanWriteFileFilter extends AbstractFileFilter {
+public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {
     
     /** Singleton instance of <i>writable</i> filter */
     public static final IOFileFilter CAN_WRITE = new CanWriteFileFilter();
