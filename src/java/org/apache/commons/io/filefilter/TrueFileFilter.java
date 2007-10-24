@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @author Stephen Colebourne
  */
-public class TrueFileFilter implements IOFileFilter implements Serializable {
+public class TrueFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Singleton instance of true filter.
