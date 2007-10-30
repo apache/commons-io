@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Date;
-import org.apache.commons.io.IOCase;
 
 /**
  * Useful utilities for working with file filters. It provides access to all
