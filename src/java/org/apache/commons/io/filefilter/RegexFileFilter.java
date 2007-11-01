@@ -45,7 +45,7 @@ import java.io.Serializable;
 public class RegexFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The regular expression pattern that will be used to match filenames */
-    private Pattern pattern;
+    private final Pattern pattern;
 
     /**
      * Construct a new regular expression filter.

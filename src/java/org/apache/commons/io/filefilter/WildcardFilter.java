@@ -53,7 +53,7 @@ import org.apache.commons.io.FilenameUtils;
 public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /** The wildcards that will be used to match filenames. */
-    private String[] wildcards;
+    private final String[] wildcards;
 
     /**
      * Construct a new case-sensitive wildcard filter for a single wildcard.

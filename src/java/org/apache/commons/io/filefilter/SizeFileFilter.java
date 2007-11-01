@@ -41,9 +41,9 @@ import java.io.Serializable;
 public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The size threshold. */
-    private long size;
+    private final long size;
     /** Whether the files accepted will be larger or smaller. */
-    private boolean acceptLarger;
+    private final boolean acceptLarger;
 
     /**
      * Constructs a new size file filter for files equal to or 
