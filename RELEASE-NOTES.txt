@@ -56,6 +56,9 @@ Enhancements from 1.3.2
 
 - Make IOFileFilter implementations Serializable [IO-131]
 
+- Make fields final so classes are immutable/threadsafe [IO-133]
+  - changes to Age, Delegate, Name, Not, Prefix, Regex, Size, Suffix and Wildcard IOFileFilter
+    implementations.
 
 Feedback
 --------

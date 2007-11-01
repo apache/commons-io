@@ -30,7 +30,7 @@ import java.io.Serializable;
 public class NotFileFilter extends AbstractFileFilter implements Serializable {
     
     /** The filter */
-    private IOFileFilter filter;
+    private final IOFileFilter filter;
 
     /**
      * Constructs a new file filter that NOTs the result of another filters.

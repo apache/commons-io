@@ -46,9 +46,9 @@ import org.apache.commons.io.FileUtils;
 public class AgeFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The cutoff time threshold. */
-    private long cutoff;
+    private final long cutoff;
     /** Whether the files accepted will be older or newer. */
-    private boolean acceptOlder;
+    private final boolean acceptOlder;
 
     /**
      * Constructs a new age file filter for files equal to or older than

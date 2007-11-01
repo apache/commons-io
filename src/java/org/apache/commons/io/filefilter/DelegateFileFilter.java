@@ -32,9 +32,9 @@ import java.io.Serializable;
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The Filename filter */
-    private FilenameFilter filenameFilter;
+    private final FilenameFilter filenameFilter;
     /** The File filter */
-    private FileFilter fileFilter;
+    private final FileFilter fileFilter;
 
     /**
      * Constructs a delegate file filter around an existing FilenameFilter.
@@ -46,6 +46,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
             throw new IllegalArgumentException("The FilenameFilter must not be null");
         }
         this.filenameFilter = filter;
+        this.fileFilter = null;
     }
 
     /**
@@ -58,6 +59,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
             throw new IllegalArgumentException("The FileFilter must not be null");
         }
         this.fileFilter = filter;
+        this.filenameFilter = null;
     }
 
     /**
@@ -96,7 +98,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     public String toString() {
         String delegate = (fileFilter != null ? fileFilter.toString() : filenameFilter.toString()); 
-        return super.toString() + "(" + delegate.toString() + ")";
+        return super.toString() + "(" + delegate + ")";
     }
     
 }

@@ -47,9 +47,9 @@ import org.apache.commons.io.IOCase;
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
     
     /** The filenames to search for */
-    private String[] names;
+    private final String[] names;
     /** Whether the comparison is case sensitive. */
-    private IOCase caseSensitivity;
+    private final IOCase caseSensitivity;
 
     /**
      * Constructs a new case-sensitive name file filter for a single name.

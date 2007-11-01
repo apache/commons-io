@@ -52,9 +52,9 @@ import org.apache.commons.io.IOCase;
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The wildcards that will be used to match filenames. */
-    private String[] wildcards;
+    private final String[] wildcards;
     /** Whether the comparison is case sensitive. */
-    private IOCase caseSensitivity;
+    private final IOCase caseSensitivity;
 
     /**
      * Construct a new case-sensitive wildcard filter for a single wildcard.
