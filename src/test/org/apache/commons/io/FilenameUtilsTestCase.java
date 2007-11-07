@@ -791,19 +791,19 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
             fail("Invalid normalized first file");
-        } catch(IllegalArgumentException e) {
+        } catch(NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
             fail("Invalid normalized second file");
-        } catch(IllegalArgumentException e) {
+        } catch(NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
             fail("Invalid normalized both filse");
-        } catch(IllegalArgumentException e) {
+        } catch(NullPointerException e) {
             // expected result
         }
     }

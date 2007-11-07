@@ -978,7 +978,7 @@ public class FilenameUtils {
             filename1 = normalize(filename1);
             filename2 = normalize(filename2);
             if (filename1 == null || filename2 == null) {
-                throw new IllegalArgumentException(
+                throw new NullPointerException(
                     "Error normalizing one or both of the file names");
             }
         }
