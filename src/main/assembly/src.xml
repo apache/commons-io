@@ -20,9 +20,7 @@
         <format>tar.gz</format>
         <format>zip</format>
     </formats>
-<!--
-    <baseDirectory>${project.build.finalName}-src</baseDirectory>
- -->
+    <baseDirectory>${artifactId}-${version}-src</baseDirectory>
     <fileSets>
         <fileSet>
             <includes>
