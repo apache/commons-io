@@ -120,6 +120,7 @@ public class HexDump {
     /**
      * Dump a long value into a StringBuffer.
      *
+     * @param _lbuffer the StringBuffer to dump the value in
      * @param value  the long value to be dumped
      * @return StringBuffer containing the dumped value.
      */
@@ -134,6 +135,7 @@ public class HexDump {
     /**
      * Dump a byte value into a StringBuffer.
      *
+     * @param _cbuffer the StringBuffer to dump the value in
      * @param value  the byte value to be dumped
      * @return StringBuffer containing the dumped value.
      */
