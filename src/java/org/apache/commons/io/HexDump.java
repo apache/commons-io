@@ -78,10 +78,10 @@ public class HexDump {
             if (chars_read > 16) {
                 chars_read = 16;
             }
-            buffer.append(dump(display_offset)).append(' ');
+            dump(buffer, display_offset).append(' ');
             for (int k = 0; k < 16; k++) {
                 if (k < chars_read) {
-                    buffer.append(dump(data[k + j]));
+                    dump(buffer, data[k + j]);
                 } else {
                     buffer.append("  ");
                 }
@@ -107,8 +107,6 @@ public class HexDump {
      */
     public static final String EOL =
             System.getProperty("line.separator");
-    private static final StringBuffer _lbuffer = new StringBuffer(8);
-    private static final StringBuffer _cbuffer = new StringBuffer(2);
     private static final char[] _hexcodes =
             {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -125,8 +123,7 @@ public class HexDump {
      * @param value  the long value to be dumped
      * @return StringBuffer containing the dumped value.
      */
-    private static StringBuffer dump(long value) {
-        _lbuffer.setLength(0);
+    private static StringBuffer dump(StringBuffer _lbuffer, long value) {
         for (int j = 0; j < 8; j++) {
             _lbuffer
                     .append(_hexcodes[((int) (value >> _shifts[j])) & 15]);
@@ -140,8 +137,7 @@ public class HexDump {
      * @param value  the byte value to be dumped
      * @return StringBuffer containing the dumped value.
      */
-    private static StringBuffer dump(byte value) {
-        _cbuffer.setLength(0);
+    private static StringBuffer dump(StringBuffer _cbuffer, byte value) {
         for (int j = 0; j < 2; j++) {
             _cbuffer.append(_hexcodes[(value >> _shifts[j + 6]) & 15]);
         }
