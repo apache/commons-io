@@ -37,7 +37,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.commons.io.filefilter.WildcardFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -908,8 +908,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         Collection files = FileUtils.listFiles(subDir,
-                                               new WildcardFilter("*.*"),
-                                               new WildcardFilter("*"));
+                                               new WildcardFileFilter("*.*"),
+                                               new WildcardFileFilter("*"));
 
         int count = files.size();
         Object[] fileObjs = files.toArray();
@@ -947,8 +947,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         Iterator files = FileUtils.iterateFiles(subDir,
-                                                new WildcardFilter("*.*"),
-                                                new WildcardFilter("*"));
+                                                new WildcardFileFilter("*.*"),
+                                                new WildcardFileFilter("*"));
 
         Map foundFileNames = new HashMap();
 
