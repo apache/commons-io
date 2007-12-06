@@ -27,6 +27,11 @@ import java.io.Writer;
  * @version $Id$
  */
 public class NullWriter extends Writer {
+    
+    /**
+     * A singleton.
+     */
+    public static final NullWriter NULL_WRITER = new NullWriter();
 
     /**
      * Constructs a new NullWriter.
