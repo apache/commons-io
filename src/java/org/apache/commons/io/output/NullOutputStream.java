@@ -29,6 +29,11 @@ import java.io.OutputStream;
  * @version $Id$
  */
 public class NullOutputStream extends OutputStream {
+    
+    /**
+     * A singleton.
+     */
+    public static final NullOutputStream NULL_OUTPUT_STREAM = new NullOutputStream();
 
     /**
      * @see java.io.OutputStream#write(byte[], int, int)

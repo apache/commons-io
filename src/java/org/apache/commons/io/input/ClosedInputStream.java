@@ -30,6 +30,11 @@ import java.io.InputStream;
  * @since Commons IO 1.4
  */
 public class ClosedInputStream extends InputStream {
+    
+    /**
+     * A singleton.
+     */
+    public static final ClosedInputStream CLOSED_INPUT_STREAM = new ClosedInputStream();
 
     /**
      * Returns -1 to indicate that the stream is closed.

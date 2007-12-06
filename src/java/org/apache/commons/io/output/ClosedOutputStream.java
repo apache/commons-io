@@ -31,6 +31,11 @@ import java.io.OutputStream;
  * @since Commons IO 1.4
  */
 public class ClosedOutputStream extends OutputStream {
+    
+    /**
+     * A singleton.
+     */
+    public static final ClosedOutputStream CLOSED_OUTPUT_STREAM = new ClosedOutputStream();
 
     /**
      * Throws an {@link IOException} to indicate that the stream is closed.
