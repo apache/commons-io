@@ -96,6 +96,43 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertEquals(false, IOCase.INSENSITIVE.isCaseSensitive());
         assertEquals(!WINDOWS, IOCase.SYSTEM.isCaseSensitive());
     }
+    //-----------------------------------------------------------------------
+    public void test_checkCompare_functionality() throws Exception {
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "") > 0);
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("", "ABC") < 0);
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "DEF") < 0);
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("DEF", "ABC") > 0);
+        assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
+        assertEquals(0, IOCase.SENSITIVE.checkCompareTo("", ""));
+        
+        try {
+            IOCase.SENSITIVE.checkCompareTo("ABC", null);
+            fail();
+        } catch (NullPointerException ex) {}
+        try {
+            IOCase.SENSITIVE.checkCompareTo(null, "ABC");
+            fail();
+        } catch (NullPointerException ex) {}
+        try {
+            IOCase.SENSITIVE.checkCompareTo(null, null);
+            fail();
+        } catch (NullPointerException ex) {}
+    }
+
+    public void test_checkCompare_case() throws Exception {
+        assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "abc") < 0);
+        assertTrue(IOCase.SENSITIVE.checkCompareTo("abc", "ABC") > 0);
+        
+        assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("ABC", "ABC"));
+        assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("ABC", "abc"));
+        assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("abc", "ABC"));
+
+        assertEquals(0, IOCase.SYSTEM.checkCompareTo("ABC", "ABC"));
+        assertEquals(WINDOWS, IOCase.SYSTEM.checkCompareTo("ABC", "abc") == 0);
+        assertEquals(WINDOWS, IOCase.SYSTEM.checkCompareTo("abc", "ABC") == 0);
+    }
+
 
     //-----------------------------------------------------------------------
     public void test_checkEquals_functionality() throws Exception {
