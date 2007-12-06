@@ -128,6 +128,24 @@ public final class IOCase implements Serializable {
     /**
      * Compares two strings using the case-sensitivity rule.
      * <p>
+     * This method mimics {@link String#compareTo} but takes case-sensitivity
+     * into account.
+     * 
+     * @param str1  the first string to compare, not null
+     * @param str2  the second string to compare, not null
+     * @return true if equal using the case rules
+     * @throws NullPointerException if either string is null
+     */
+    public int checkCompareTo(String str1, String str2) {
+        if (str1 == null || str2 == null) {
+            throw new NullPointerException("The strings must not be null");
+        }
+        return sensitive ? str1.compareTo(str2) : str1.compareToIgnoreCase(str2);
+    }
+
+    /**
+     * Compares two strings using the case-sensitivity rule.
+     * <p>
      * This method mimics {@link String#equals} but takes case-sensitivity
      * into account.
      * 
