@@ -35,6 +35,7 @@ public class PackageTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("IO Utilities");
+        suite.addTest(new TestSuite(CausedIOExceptionTestCase.class));
         suite.addTest(new TestSuite(CopyUtilsTest.class));
         suite.addTest(new TestSuite(DemuxTestCase.class));
         suite.addTest(new TestSuite(DirectoryWalkerTestCase.class));
