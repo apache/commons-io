@@ -41,10 +41,12 @@ public final class IOCase implements Serializable {
      * The constant for case sensitive regardless of operating system.
      */
     public static final IOCase SENSITIVE = new IOCase("Sensitive", true);
+    
     /**
      * The constant for case insensitive regardless of operating system.
      */
     public static final IOCase INSENSITIVE = new IOCase("Insensitive", false);
+    
     /**
      * The constant for case sensitivity determined by the current operating system.
      * Windows is case-insensitive when comparing filenames, Unix is case-sensitive.
@@ -59,6 +61,7 @@ public final class IOCase implements Serializable {
 
     /** The enumeration name. */
     private final String name;
+    
     /** The sensitivity flag. */
     private final transient boolean sensitive;
 
