@@ -90,14 +90,14 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             long free = FileSystemUtils.freeSpace("/");
             long kb = FileSystemUtils.freeSpaceKb("/");
             if (kilobyteBlock) {
-                assertEquals((double) free, (double) kb, 256d);
+                assertEquals(free, kb, 256d);
             } else {
-                assertEquals((double) free / 2d, (double) kb, 256d);
+                assertEquals(free / 2d, kb, 256d);
             }
         } else {
             long bytes = FileSystemUtils.freeSpace("");
             long kb = FileSystemUtils.freeSpaceKb("");
-            assertEquals((double) bytes / 1024, (double) kb, 256d);
+            assertEquals((double) bytes / 1024, kb, 256d);
         }
     }
 

@@ -87,7 +87,7 @@ public class SwappedDataInputStreamTest extends TestCase {
     }
 
     public void testReadInt() throws IOException {
-        assertEquals( (int) 0x04030201, this.sdis.readInt() );
+        assertEquals( 0x04030201, this.sdis.readInt() );
     }
 
     public void testReadLine() throws IOException {
@@ -124,7 +124,7 @@ public class SwappedDataInputStreamTest extends TestCase {
 
     public void testSkipBytes() throws IOException {
         this.sdis.skipBytes(4);
-        assertEquals( (int)0x08070605, this.sdis.readInt() );
+        assertEquals( 0x08070605, this.sdis.readInt() );
     }
 
 }
