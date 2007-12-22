@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io;
 
-import junit.framework.TestCase;
-
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import junit.framework.TestCase;
 
 /**
  * @version $Revision$ $Date$

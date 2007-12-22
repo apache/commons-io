@@ -17,8 +17,8 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.util.Date;
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 

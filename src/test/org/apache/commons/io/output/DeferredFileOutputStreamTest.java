@@ -16,14 +16,13 @@
  */
 package org.apache.commons.io.output;
 
-import junit.framework.TestCase;
-//import org.apache.commons.fileupload.DeferredFileOutputStream;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
+
+import junit.framework.TestCase;
 
 /**
  * Unit tests for the <code>DeferredFileOutputStream</code> class.

@@ -18,9 +18,9 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
 import junit.framework.TestCase;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 
 /**

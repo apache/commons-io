@@ -17,11 +17,11 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.io.Serializable;
 
 /**
  * A {@link java.io.FileFilter} providing conditional AND logic across a list of

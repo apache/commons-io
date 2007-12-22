@@ -19,7 +19,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.util.Date;
 
-import org.apache.commons.io.testtools.*;
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * This is used to test FileUtils for correctness.

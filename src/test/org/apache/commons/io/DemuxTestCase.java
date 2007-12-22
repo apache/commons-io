@@ -23,11 +23,12 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
+
 import junit.framework.TestCase;
 
+import org.apache.commons.io.input.DemuxInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
-import org.apache.commons.io.input.DemuxInputStream;
 
 /**
  * Basic unit tests for the multiplexing streams.
