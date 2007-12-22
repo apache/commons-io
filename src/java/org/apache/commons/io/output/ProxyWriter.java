@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.output;
 
-import java.io.IOException;
 import java.io.FilterWriter;
+import java.io.IOException;
 import java.io.Writer;
 
 /**

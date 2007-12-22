@@ -23,14 +23,14 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.YellOnCloseInputStream;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.apache.commons.io.testtools.FileBasedTestCase;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.YellOnCloseInputStream;
+import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * JUnit tests for CopyUtils.

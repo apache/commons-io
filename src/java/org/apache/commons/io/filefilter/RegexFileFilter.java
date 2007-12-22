@@ -17,9 +17,10 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.util.regex.Pattern;
-import org.apache.commons.io.IOCase;
 import java.io.Serializable;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOCase;
 
 /**
  * Filters files using supplied regular expression(s).

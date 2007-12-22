@@ -17,11 +17,12 @@
 package org.apache.commons.io.output;
 
 
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import junit.framework.TestCase;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 

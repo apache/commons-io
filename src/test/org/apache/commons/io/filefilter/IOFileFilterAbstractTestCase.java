@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+
 import junit.framework.TestCase;
 
 public abstract class IOFileFilterAbstractTestCase extends TestCase {

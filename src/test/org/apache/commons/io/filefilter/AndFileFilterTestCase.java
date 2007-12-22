@@ -18,6 +18,7 @@ package org.apache.commons.io.filefilter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 

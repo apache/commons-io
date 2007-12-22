@@ -17,8 +17,8 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
