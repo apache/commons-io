@@ -31,22 +31,21 @@ import java.io.IOException;
 public class CausedIOException extends IOException {
 
     /**
-     * Default serial version UID.
+     * Defines the serial version UID.
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs a new instance with the specified detail message and cause.
+     * Constructs a new instance with the given message and cause.
      * <p>
-     * Note that the detail message associated with <code>cause</code> is <i>not</i> automatically incorporated in
-     * this throwable's detail message.
+     * As specified in {@link Throwable}, the message in the given <code>cause</code> is not used in this instance's
+     * message.
      * </p>
      * 
      * @param message
-     *            the detail message (which is saved for later retrieval by the {@link #getMessage()} method).
+     *            the message (see {@link #getMessage()})
      * @param cause
-     *            the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <code>null</code>
-     *            value is permitted, and indicates that the cause is nonexistent or unknown.)
+     *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
      */
     public CausedIOException(String message, Throwable cause) {
         super(message);
@@ -54,16 +53,14 @@ public class CausedIOException extends IOException {
     }
 
     /**
-     * Constructs a new exception with the specified cause and a detail message.
+     * Constructs a new instance with the given cause.
      * <p>
-     * The message is <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
-     * detail message of <code>cause</code>). This constructor is useful for exceptions that are little more than
-     * wrappers for other throwables (for example, {@link java.security.PrivilegedActionException}).
+     * The message is set to <code>cause==null ? null : cause.toString()</code>, which by default contains the class
+     * and message of <code>cause</code>. This constructor is useful for call sites that just wrap another throwable.
      * </p>
      * 
      * @param cause
-     *            the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <code>null</code>
-     *            value is permitted, and indicates that the cause is nonexistent or unknown.)
+     *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
      */
     public CausedIOException(Throwable cause) {
         super(cause == null ? null : cause.toString());
