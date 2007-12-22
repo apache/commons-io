@@ -20,11 +20,13 @@ package org.apache.commons.io;
 import java.io.IOException;
 
 /**
- * Subclasses IOException with the {@link Throwable} constructor was missing before Java 6.
+ * Subclasses IOException with the {@link Throwable} constructors missing before Java 6. If you are using Java 6,
+ * consider this class deprecated and use {@link IOException}.
  * 
  * @see <a href="mailto:commons-user@jakarta.apache.org">Apache Commons Users List</a>
  * @author <a href="http://commons.apache.org/io/">Apache Commons IO</a>
  * @version $Id: $
+ * @since 1.4
  */
 public class CausedIOException extends IOException {
 
@@ -34,18 +36,37 @@ public class CausedIOException extends IOException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Creates an instance with the given message and cause.
+     * Constructs a new instance with the specified detail message and cause.
      * <p>
-     * This constructor was not added in the underlying {@link IOException} class until Java 6. This is a convenience
-     * method which uses the {@link #initCause(Throwable)} method to set the root cause.
+     * Note that the detail message associated with <code>cause</code> is <i>not</i> automatically incorporated in
+     * this throwable's detail message.
+     * </p>
      * 
      * @param message
-     *            exception message
+     *            the detail message (which is saved for later retrieval by the {@link #getMessage()} method).
      * @param cause
-     *            root cause
+     *            the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <code>null</code>
+     *            value is permitted, and indicates that the cause is nonexistent or unknown.)
      */
     public CausedIOException(String message, Throwable cause) {
         super(message);
+        this.initCause(cause);
+    }
+
+    /**
+     * Constructs a new exception with the specified cause and a detail message.
+     * <p>
+     * The message is <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+     * detail message of <code>cause</code>). This constructor is useful for exceptions that are little more than
+     * wrappers for other throwables (for example, {@link java.security.PrivilegedActionException}).
+     * </p>
+     * 
+     * @param cause
+     *            the cause (which is saved for later retrieval by the {@link #getCause()} method). (A <code>null</code>
+     *            value is permitted, and indicates that the cause is nonexistent or unknown.)
+     */
+    public CausedIOException(Throwable cause) {
+        super(cause == null ? null : cause.toString());
         this.initCause(cause);
     }
 
