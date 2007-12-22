@@ -33,8 +33,21 @@ public class CausedIOExceptionTestCase extends TestCase {
     public void testIOExceptionStringThrowable() {
         Throwable cause = new IllegalArgumentException("cause");
         CausedIOException exception = new CausedIOException("message", cause);
-        assertEquals("message", exception.getMessage());
-        assertEquals(cause, exception.getCause());
-        assertSame(cause, exception.getCause());
+        this.validate(exception, cause, "message");
+    }
+
+    /**
+     * Tests the {@link CausedIOException#CausedIOException(Throwable)} constructor.
+     */
+    public void testIOExceptionThrowable() {
+        Throwable cause = new IllegalArgumentException("cause");
+        CausedIOException exception = new CausedIOException(cause);
+        this.validate(exception, cause, "java.lang.IllegalArgumentException: cause");
+    }
+
+    void validate(Throwable throwable, Throwable expectedCause, String expectedMessage) {
+        assertEquals(expectedMessage, throwable.getMessage());
+        assertEquals(expectedCause, throwable.getCause());
+        assertSame(expectedCause, throwable.getCause());
     }
 }
