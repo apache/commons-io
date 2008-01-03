@@ -26,6 +26,8 @@ Semantic compatible - ?
 
 Bug fixes from 1.3.2
 --------------------
+- FileUtils
+  - forceDelete of orphaned Softlinks does not work [IO-147]
 
 Enhancements from 1.3.2
 -----------------------
