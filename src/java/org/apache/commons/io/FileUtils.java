@@ -1232,16 +1232,18 @@ public class FileUtils {
      *
      * @param file  file or directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
+     * @throws FileNotFoundException if the file was not found
      * @throws IOException in case deletion is unsuccessful
      */
     public static void forceDelete(File file) throws IOException {
         if (file.isDirectory()) {
             deleteDirectory(file);
         } else {
-            if (!file.exists()) {
-                throw new FileNotFoundException("File does not exist: " + file);
-            }
+            boolean filePresent = file.exists();
             if (!file.delete()) {
+                if (!filePresent){
+                    throw new FileNotFoundException("File does not exist: " + file);
+                }
                 String message =
                     "Unable to delete file: " + file;
                 throw new IOException(message);
