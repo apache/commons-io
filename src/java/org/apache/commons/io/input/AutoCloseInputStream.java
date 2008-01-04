@@ -115,4 +115,14 @@ public class AutoCloseInputStream extends ProxyInputStream {
         return n;
     }
 
+    /**
+     * Ensures that the stream is closed before it gets garbage-collected.
+     * As mentioned in {@link #close()}, this is a no-op if the stream has
+     * already been closed.
+     */
+    protected void finalize() throws Throwable {
+        close();
+        super.finalize();
+    }
+
 }
