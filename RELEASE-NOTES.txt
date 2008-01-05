@@ -33,6 +33,10 @@ Bug fixes from 1.3.2
 
 Enhancements from 1.3.2
 -----------------------
+- CharSequenceReader [IO-138]
+  - Add new Reader implementation that handles any CharSequence (String,
+    StringBuffer, StringBuilder or CharBuffer) 
+
 - ThesholdingOuputStream [IO-121]
   - Add a reset() method which sets the count of the bytes written back to zero.
 
