@@ -30,7 +30,6 @@ import java.io.Serializable;
  */
 public class CharSequenceReader extends Reader implements Serializable {
 
-    private static final StringBuilder EMPTY_BUILDER = new StringBuilder(0);
     private final CharSequence charSequence;
     private int idx;
     private int mark;
@@ -41,7 +40,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param charSequence The character sequence, may be <code>null</code>
      */
     public CharSequenceReader(CharSequence charSequence) {
-        this.charSequence = (charSequence != null ? charSequence : EMPTY_BUILDER);
+        this.charSequence = (charSequence != null ? charSequence : "");
     }
 
     /**
