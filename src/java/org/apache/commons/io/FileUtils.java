@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -781,7 +782,20 @@ public class FileUtils {
         if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
             throw new IOException("Source '" + srcDir + "' and destination '" + destDir + "' are the same");
         }
-        doCopyDirectory(srcDir, destDir, preserveFileDate);
+
+        // Cater for destination being directory within the source directory (see IO-141)
+        List exclusionList = null;
+        if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
+            File[] srcFiles = srcDir.listFiles();
+            if (srcFiles != null && srcFiles.length > 0) {
+                exclusionList = new ArrayList(srcFiles.length);
+                for (int i = 0; i < srcFiles.length; i++) {
+                    File copiedFile = new File(destDir, srcFiles[i].getName());
+                    exclusionList.add(copiedFile.getCanonicalPath());
+                }
+            }
+        }
+        doCopyDirectory(srcDir, destDir, preserveFileDate, exclusionList);
     }
 
     /**
@@ -790,10 +804,12 @@ public class FileUtils {
      * @param srcDir  the validated source directory, must not be <code>null</code>
      * @param destDir  the validated destination directory, must not be <code>null</code>
      * @param preserveFileDate  whether to preserve the file date
+     * @param exclusionList  List of files and directories to exclude from the copy, may be null
      * @throws IOException if an error occurs
      * @since Commons IO 1.1
      */
-    private static void doCopyDirectory(File srcDir, File destDir, boolean preserveFileDate) throws IOException {
+    private static void doCopyDirectory(File srcDir, File destDir, boolean preserveFileDate,
+           List exclusionList) throws IOException {
         if (destDir.exists()) {
             if (destDir.isDirectory() == false) {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
@@ -816,10 +832,12 @@ public class FileUtils {
         }
         for (int i = 0; i < files.length; i++) {
             File copiedFile = new File(destDir, files[i].getName());
-            if (files[i].isDirectory()) {
-                doCopyDirectory(files[i], copiedFile, preserveFileDate);
-            } else {
-                doCopyFile(files[i], copiedFile, preserveFileDate);
+            if (exclusionList == null || !exclusionList.contains(files[i].getCanonicalPath())) {
+                if (files[i].isDirectory()) {
+                    doCopyDirectory(files[i], copiedFile, preserveFileDate, exclusionList);
+                } else {
+                    doCopyFile(files[i], copiedFile, preserveFileDate);
+                }
             }
         }
     }

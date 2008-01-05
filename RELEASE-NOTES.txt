@@ -28,6 +28,8 @@ Bug fixes from 1.3.2
 --------------------
 - FileUtils
   - forceDelete of orphaned Softlinks does not work [IO-147]
+  - Infinite loop on FileUtils.copyDirectory when the destination directory is within
+    the source directory [IO-141]
 
 Enhancements from 1.3.2
 -----------------------
