@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -60,6 +61,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      */
     private static final int TEST_DIRECTORY_SIZE = 0;
     
+    /**
+     * List files recursively
+     */
+    private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
+
     /** Delay in milliseconds to make sure test for "last modified date" are accurate */
     //private static final int LAST_MODIFIED_DELAY = 600;
 
@@ -732,6 +738,57 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(true, new File(destDir, "sub/A.txt").exists());
     }
 
+    /** Test for IO-141 */
+    public void testCopyDirectoryToChild() throws Exception {
+        File grandParentDir = new File(getTestDirectory(), "grandparent");
+        File parentDir      = new File(grandParentDir, "parent");
+        File childDir       = new File(parentDir, "child");
+        createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
+
+        long expectedCount = LIST_WALKER.list(grandParentDir).size() +
+                             LIST_WALKER.list(parentDir).size();
+        long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) +
+                             FileUtils.sizeOfDirectory(parentDir);
+        FileUtils.copyDirectory(parentDir, childDir);
+        assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
+        assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+    }
+
+    /** Test for IO-141 */
+    public void testCopyDirectoryToGrandChild() throws Exception {
+        File grandParentDir = new File(getTestDirectory(), "grandparent");
+        File parentDir      = new File(grandParentDir, "parent");
+        File childDir       = new File(parentDir, "child");
+        createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
+
+        long expectedCount = (LIST_WALKER.list(grandParentDir).size() * 2);
+        long expectedSize =  (FileUtils.sizeOfDirectory(grandParentDir) * 2);
+        FileUtils.copyDirectory(grandParentDir, childDir);
+        assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
+        assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+    }
+
+    private void createFilesForTestCopyDirectory(File grandParentDir, File parentDir, File childDir) throws Exception {
+        File childDir2 = new File(parentDir, "child2");
+        File grandChildDir = new File(childDir, "grandChild");
+        File grandChild2Dir = new File(childDir2, "grandChild2");
+        File file1 = new File(grandParentDir, "file1.txt");
+        File file2 = new File(parentDir, "file2.txt");
+        File file3 = new File(childDir, "file3.txt");
+        File file4 = new File(childDir2, "file4.txt");
+        File file5 = new File(grandChildDir, "file5.txt");
+        File file6 = new File(grandChild2Dir, "file6.txt");
+        FileUtils.deleteDirectory(grandParentDir);
+        grandChildDir.mkdirs();
+        grandChild2Dir.mkdirs();
+        FileUtils.writeStringToFile(file1, "File 1 in grandparent", "UTF8");
+        FileUtils.writeStringToFile(file2, "File 2 in parent", "UTF8");
+        FileUtils.writeStringToFile(file3, "File 3 in child", "UTF8");
+        FileUtils.writeStringToFile(file4, "File 4 in child2", "UTF8");
+        FileUtils.writeStringToFile(file5, "File 5 in grandChild", "UTF8");
+        FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
+    }
+
     public void testCopyDirectoryErrors() throws Exception {
         try {
             FileUtils.copyDirectory(null, null);
@@ -1183,6 +1240,31 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         long resultValue = testChecksum.getValue();
         
         assertEquals(expectedValue, resultValue);
+    }
+
+    /**
+     * DirectoryWalker implementation that recursively lists all files and directories.
+     */
+    static class ListDirectoryWalker extends DirectoryWalker {
+        ListDirectoryWalker() {
+            super();
+        }
+        List list(File startDirectory) throws IOException {
+            ArrayList files = new ArrayList();
+            walk(startDirectory, files);
+            return files;
+        }
+
+        protected void handleDirectoryStart(File directory, int depth, Collection results) throws IOException {
+            // Add all directories except the starting directory
+            if (depth > 0) {
+                results.add(directory);
+            }
+        }
+
+        protected void handleFile(File file, int depth, Collection results) throws IOException {
+            results.add(file);
+        }
     }
 
 }
