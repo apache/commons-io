@@ -20,28 +20,28 @@ package org.apache.commons.io;
 import junit.framework.TestCase;
 
 /**
- * Tests CausedIOException
+ * Tests IOExceptionWithCause
  * 
  * @author <a href="mailto:ggregory@seagullsw.com">Gary Gregory</a>
  * @version $Id: $
  */
-public class CausedIOExceptionTestCase extends TestCase {
+public class IOExceptionWithCauseTestCase extends TestCase {
 
     /**
-     * Tests the {@link CausedIOException#CausedIOException(String,Throwable)} constructor.
+     * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(String,Throwable)} constructor.
      */
     public void testIOExceptionStringThrowable() {
         Throwable cause = new IllegalArgumentException("cause");
-        CausedIOException exception = new CausedIOException("message", cause);
+        IOExceptionWithCause exception = new IOExceptionWithCause("message", cause);
         this.validate(exception, cause, "message");
     }
 
     /**
-     * Tests the {@link CausedIOException#CausedIOException(Throwable)} constructor.
+     * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(Throwable)} constructor.
      */
     public void testIOExceptionThrowable() {
         Throwable cause = new IllegalArgumentException("cause");
-        CausedIOException exception = new CausedIOException(cause);
+        IOExceptionWithCause exception = new IOExceptionWithCause(cause);
         this.validate(exception, cause, "java.lang.IllegalArgumentException: cause");
     }
 

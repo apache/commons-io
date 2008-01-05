@@ -62,6 +62,7 @@
 
             <include name="**/*.java"/>
             <exclude name="**/CharSequenceReader.java"/>
+            <exclude name="**/IOExceptionWithCause.java"/>
             <exclude name="**/RegexFileFilter.java"/>
 
         </javac>
