@@ -34,6 +34,7 @@ public class PackageTestSuite {
     public static Test suite() {
         TestSuite suite = new TestSuite("IO Utilities - input");
         suite.addTest(new TestSuite(AutoCloseInputStreamTest.class));
+        suite.addTest(new TestSuite(CharSequenceReaderTest.class));
         suite.addTest(new TestSuite(ClassLoaderObjectInputStreamTest.class));
         suite.addTest(new TestSuite(ClosedInputStreamTest.class));
         suite.addTest(new TestSuite(CloseShieldInputStreamTest.class));
@@ -41,6 +42,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(NullInputStreamTest.class));
         suite.addTest(new TestSuite(NullReaderTest.class));
         suite.addTest(new TestSuite(SwappedDataInputStreamTest.class));
+        suite.addTest(new TestSuite(TeeInputStreamTest.class));
         return suite;
     }
 }
