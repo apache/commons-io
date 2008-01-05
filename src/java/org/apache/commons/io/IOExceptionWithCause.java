@@ -23,12 +23,11 @@ import java.io.IOException;
  * Subclasses IOException with the {@link Throwable} constructors missing before Java 6. If you are using Java 6,
  * consider this class deprecated and use {@link IOException}.
  * 
- * @see <a href="mailto:commons-user@jakarta.apache.org">Apache Commons Users List</a>
  * @author <a href="http://commons.apache.org/io/">Apache Commons IO</a>
- * @version $Id: $
+ * @version $Id$
  * @since 1.4
  */
-public class CausedIOException extends IOException {
+public class IOExceptionWithCause extends IOException {
 
     /**
      * Defines the serial version UID.
@@ -47,7 +46,7 @@ public class CausedIOException extends IOException {
      * @param cause
      *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
      */
-    public CausedIOException(String message, Throwable cause) {
+    public IOExceptionWithCause(String message, Throwable cause) {
         super(message);
         this.initCause(cause);
     }
@@ -62,7 +61,7 @@ public class CausedIOException extends IOException {
      * @param cause
      *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
      */
-    public CausedIOException(Throwable cause) {
+    public IOExceptionWithCause(Throwable cause) {
         super(cause == null ? null : cause.toString());
         this.initCause(cause);
     }
