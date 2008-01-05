@@ -89,6 +89,6 @@ Please direct all bug reports to JIRA
 http://issues.apache.org/jira/browse/IO
 
 Or subscribe to the commons-user mailing list (prefix emails by [io])
-http://jakarta.apache.org/site/mail.html
+http://commons.apache.org/mail-lists.html
 
 The Commons-IO Team
