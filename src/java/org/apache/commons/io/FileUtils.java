@@ -893,6 +893,39 @@ public class FileUtils {
     }
 
     /**
+     * Delete a file. If file is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * <ul>
+     * <li>A directory to be deleted does not have to be empty.</li>
+     * <li>No exceptions are thrown when a file or directory cannot be deleted.
+     * </ul>
+     *
+     * @param file  file or directory to delete, can be <code>null</code>
+     * @return <code>true</code> if the file or directory was deleted, otherwise
+     * <code>false</code>
+     *
+     * @since Commons IO 1.4
+     */
+    public static boolean deleteQuietly(File file) {
+        if (file == null) {
+            return false;
+        }
+        try {
+            if (file.isDirectory()) {
+                cleanDirectory(file);
+            }
+        } catch (Throwable t) {
+        }
+
+        try {
+            return file.delete();
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /**
      * Clean a directory without deleting it.
      *
      * @param directory directory to clean
