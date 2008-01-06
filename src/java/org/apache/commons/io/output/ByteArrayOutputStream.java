@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
  
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -170,6 +171,34 @@ public class ByteArrayOutputStream extends OutputStream {
         }
         currentBuffer[inBufferPos] = (byte) b;
         count++;
+    }
+
+    /**
+     * Writes the entire contents of the specified input stream to this
+     * byte stream. Bytes from the input stream are read directly into the
+     * internal buffers of this streams.
+     *
+     * @param in the input stream to read from
+     * @return total number of bytes read from the input stream
+     *         (and written to this stream)
+     * @throws IOException if an I/O error occurs while reading the input stream
+     * @since Commons IO 1.4
+     */
+    public synchronized int write(InputStream in) throws IOException {
+        int readCount = 0;
+        int inBufferPos = count - filledBufferSum;
+        int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+        while (n != -1) {
+            readCount += n;
+            inBufferPos += n;
+            count += n;
+            if (inBufferPos == currentBuffer.length) {
+                needNewBuffer(currentBuffer.length);
+                inBufferPos = 0;
+            }
+            n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
+        }
+        return readCount;
     }
 
     /**

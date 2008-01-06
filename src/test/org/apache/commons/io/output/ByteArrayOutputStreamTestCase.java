@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.output;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import junit.framework.TestCase;
@@ -120,7 +121,13 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         written = writeData(baout, ref, new int[] {5, 47, 33, 60, 1, 0, 8});
         assertEquals(155, written);
         checkStreams(baout, ref);
-        
+
+        //Test the readFrom(InputStream) method
+        baout.reset();
+        written = baout.write(new ByteArrayInputStream(ref.toByteArray()));
+        assertEquals(155, written);
+        checkStreams(baout, ref);
+
         //Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream 
         //and vice-versa to test the writeTo() method.
         ByteArrayOutputStream baout1 = new ByteArrayOutputStream(32);
