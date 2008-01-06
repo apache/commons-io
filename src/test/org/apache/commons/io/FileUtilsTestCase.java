@@ -39,6 +39,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
@@ -737,6 +738,23 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
         assertEquals(true, new File(destDir, "sub/A.txt").exists());
     }
+
+    public void testCopyDirectoryFiltered() throws Exception {
+        File grandParentDir = new File(getTestDirectory(), "grandparent");
+        File parentDir      = new File(grandParentDir, "parent");
+        File childDir       = new File(parentDir, "child");
+        createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
+
+        NameFileFilter filter = new NameFileFilter(new String[] {"parent", "child", "file3.txt"});
+        File destDir       = new File(getTestDirectory(), "copydest");
+
+        FileUtils.copyDirectory(grandParentDir, destDir, filter);
+        List files  = LIST_WALKER.list(destDir);
+        assertEquals(3, files.size());
+        assertEquals("parent", ((File)files.get(0)).getName());
+        assertEquals("child", ((File)files.get(1)).getName());
+        assertEquals("file3.txt", ((File)files.get(2)).getName());
+   }
 
     /** Test for IO-141 */
     public void testCopyDirectoryToChild() throws Exception {
