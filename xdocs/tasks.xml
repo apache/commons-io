@@ -34,7 +34,6 @@ limitations under the License.
         <li>JoinReader/ConcatReader. One in GenJava, one submitted to Bayard</li>
         <li>FormattedWriter, when it writes out values it uses Format objects to output them. </li>
         <li>FixedWidthReader. Reads in files with a known width, ie) mainframe like. </li>
-        <li>FileUtils could use a copyDirectory() method (possibly making use of IOFileFilters)</li>
       </ul>
     </section>
   </body>
