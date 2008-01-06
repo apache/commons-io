@@ -25,7 +25,7 @@ import java.io.IOException;
  * 
  * @author <a href="http://commons.apache.org/io/">Apache Commons IO</a>
  * @version $Id$
- * @since 1.4
+ * @since Commons IO 1.4
  */
 public class IOExceptionWithCause extends IOException {
 
