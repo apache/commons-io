@@ -36,6 +36,7 @@ Bug fixes from 1.3.2
   - forceDelete of orphaned Softlinks does not work [IO-147]
   - Infinite loop on FileUtils.copyDirectory when the destination directory is within
     the source directory [IO-141]
+  - Add a copyDirectory() method that makes use of FileFilter [IO-105]
 
 - HexDump
   - HexDump's use of static StringBuffers isn't thread-safe [IO-136]
