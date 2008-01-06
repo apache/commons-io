@@ -79,6 +79,14 @@ Enhancements from 1.3.2
 - IOCase
   - Add a compare method to IOCase [IO-144]
 
+- Add a package of java.util.Comparator implementations for files [IO-145]
+  - DefaultFileComparator - compare files using the default File.compareTo(File) method.
+  - ExtensionFileComparator - compares files using file name extensions.
+  - LastModifiedFileComparator - compares files using the last modified date/time.
+  - NameFileComparator - compares files using file names.
+  - PathFileComparator - compares files using file paths.
+  - SizeFileComparator - compares files using file sizes.
+
 
 Feedback
 --------
