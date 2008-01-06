@@ -1242,6 +1242,47 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(expectedValue, resultValue);
     }
 
+    public void testDeleteQuietlyForNull() {
+        try {
+            FileUtils.deleteQuietly(null);
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+    }
+
+    public void testDeleteQuietlyDir() throws IOException {
+        File testDirectory = new File(getTestDirectory(), "testDeleteQuietlyDir");
+        File testFile= new File(testDirectory, "testDeleteQuietlyFile");
+        testDirectory.mkdirs();
+        createFile(testFile, 0);
+
+        assertTrue(testDirectory.exists());
+        assertTrue(testFile.exists());
+        FileUtils.deleteQuietly(testDirectory);
+        assertFalse("Check No Exist", testDirectory.exists());
+        assertFalse("Check No Exist", testFile.exists());
+    }
+
+    public void testDeleteQuietlyFile() throws IOException {
+        File testFile= new File(getTestDirectory(), "testDeleteQuietlyFile");
+        createFile(testFile, 0);
+
+        assertTrue(testFile.exists());
+        FileUtils.deleteQuietly(testFile);
+        assertFalse("Check No Exist", testFile.exists());
+    }
+
+    public void testDeleteQuietlyNonExistent() {
+        File testFile = new File("testDeleteQuietlyNonExistent");
+        assertFalse(testFile.exists());
+        
+        try {
+            FileUtils.deleteQuietly(testFile);
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+    }
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
