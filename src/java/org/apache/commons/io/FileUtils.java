@@ -915,12 +915,12 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cleanDirectory(file);
             }
-        } catch (Throwable t) {
+        } catch (Exception e) {
         }
 
         try {
             return file.delete();
-        } catch (Throwable t) {
+        } catch (Exception e) {
             return false;
         }
     }
