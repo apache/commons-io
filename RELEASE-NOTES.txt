@@ -17,11 +17,17 @@ and endian transformation classes.
 
 Compatibility with 1.3.2
 ------------------------
-Binary compatible - ?
+Binary compatible - Yes
 
-Source compatible - ?
+Source compatible - Yes
 
-Semantic compatible - ?
+Semantic compatible - Yes
+  Check the bug fixes section for semantic bug fixes
+
+Commons IO 1.4 introduces some new implementations which depend on JDK 1.4
+features (CharSequenceReader, IOExceptionWithCause and RegexFileFilter). It has
+been built with the JDK source and target options set to JDK 1.3 and, except for
+those implementations, can be used with JDK 1.3 (see IO IO-127).
 
 
 Bug fixes from 1.3.2
