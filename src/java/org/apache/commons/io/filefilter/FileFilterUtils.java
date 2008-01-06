@@ -294,7 +294,7 @@ public class FileFilterUtils {
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @since 1.1 (method existed but had bug in 1.0)
+     * @since Commons IO 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(IOFileFilter filter) {
         if (cvsFilter == null) {
@@ -315,7 +315,7 @@ public class FileFilterUtils {
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @since 1.1
+     * @since Commons IO 1.1
      */
     public static IOFileFilter makeSVNAware(IOFileFilter filter) {
         if (svnFilter == null) {
@@ -335,7 +335,7 @@ public class FileFilterUtils {
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @since 1.3
+     * @since Commons IO 1.3
      */
     public static IOFileFilter makeDirectoryOnly(IOFileFilter filter) {
         if (filter == null) {
@@ -349,7 +349,7 @@ public class FileFilterUtils {
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @since 1.3
+     * @since Commons IO 1.3
      */
     public static IOFileFilter makeFileOnly(IOFileFilter filter) {
         if (filter == null) {
