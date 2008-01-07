@@ -136,6 +136,20 @@
       <id>jochen</id>
       <email>jochen.wiedmann@gmail.com</email>
     </developer>
+    <developer>
+      <name>Niall Pemberton</name>
+      <id>niallp</id>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jukka Zitting</name>
+      <id>jukka</id>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <contributors>
@@ -172,9 +186,6 @@
     <contributor>
       <name>Alban Peignier</name>
       <email>alban.peignier at free.fr</email>
-    </contributor>
-    <contributor>
-      <name>Niall Pemberton</name>
     </contributor>
     <contributor>
       <name>Ian Springer</name>
