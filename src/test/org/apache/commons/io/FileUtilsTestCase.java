@@ -1351,14 +1351,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveFile_Errors() throws Exception {
         try {
             FileUtils.moveFile(null, new File("foo"));
-            fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when source is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
             FileUtils.moveFile(new File("foo"), null);
-            fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when destination is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
@@ -1400,14 +1400,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveFileToDirectory_Errors() throws Exception {
         try {
             FileUtils.moveFileToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when source is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
             FileUtils.moveFileToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when destination is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
@@ -1485,14 +1485,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveDirectory_Errors() throws Exception {
         try {
             FileUtils.moveDirectory(null, new File("foo"));
-            fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when source is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
             FileUtils.moveDirectory(new File("foo"), null);
-            fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when destination is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
@@ -1549,14 +1549,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveDirectoryToDirectory_Errors() throws Exception {
         try {
             FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when source is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
             FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when destination is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
@@ -1604,14 +1604,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveToDirectory_Errors() throws Exception {
         try {
             FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when source is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         try {
             FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+            fail("Expected IllegalArgumentException when destination is null");
+        } catch (IllegalArgumentException e) {
             // expected
         }
         File nonexistant    = new File(getTestDirectory(), "nonexistant");
