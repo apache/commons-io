@@ -242,6 +242,40 @@
             <tarLongFileMode>gnu</tarLongFileMode>
           </configuration>
         </plugin>
+
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+            <archive>
+              <!-- 
+                   Configure OSGi bundle information
+                   (remvoe when maven bundle plugin is added to commons-parent pom)
+               -->
+              <manifestEntries>
+                <Bundle-SymbolicName>org.apache.commons.io</Bundle-SymbolicName>
+                <Bundle-License>http://www.apache.org/licenses/LICENSE-2.0.txt</Bundle-License>
+                <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                <Bundle-Name>Apache Commons IO Bundle</Bundle-Name>
+                <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+                <Bundle-Version>${project.version}</Bundle-Version>
+                <Export-Package>
+org.apache.commons.io;version=${project.version},
+org.apache.commons.io.comparator;version=${project.version},
+org.apache.commons.io.filefilter;version=${project.version},
+org.apache.commons.io.input;version=${project.version},
+org.apache.commons.io.output;version=${project.version}
+                </Export-Package>
+                <Import-Package>
+org.apache.commons.io;version=${project.version},
+org.apache.commons.io.comparator;version=${project.version},
+org.apache.commons.io.filefilter;version=${project.version},
+org.apache.commons.io.input;version=${project.version},
+org.apache.commons.io.output;version=${project.version}
+                </Import-Package>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
       </plugins>
     </build>
 
