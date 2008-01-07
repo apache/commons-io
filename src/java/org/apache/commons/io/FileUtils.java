@@ -1772,7 +1772,8 @@ public class FileUtils {
             destDir.mkdirs();
         }
         if (!destDir.exists()) {
-            throw new IOException("Destination directory does not exist");
+            throw new FileNotFoundException("Destination directory '" + destDir +
+                    "' does not exist [createDestDir=" + createDestDir +"]");
         }
         if (!destDir.isDirectory()) {
             throw new IOException("Destination '" + destDir + "' is not a directory");
@@ -1846,7 +1847,8 @@ public class FileUtils {
             destDir.mkdirs();
         }
         if (!destDir.exists()) {
-            throw new IOException("Destination directory does not exist");
+            throw new FileNotFoundException("Destination directory '" + destDir +
+                    "' does not exist [createDestDir=" + createDestDir +"]");
         }
         if (!destDir.isDirectory()) {
             throw new IOException("Destination '" + destDir + "' is not a directory");
