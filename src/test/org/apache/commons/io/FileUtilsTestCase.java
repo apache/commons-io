@@ -1301,6 +1301,329 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testMoveFile_Rename() throws Exception {
+        File destination = new File( getTestDirectory(), "move1.txt" );
+
+        FileUtils.moveFile( testFile1, destination );
+        assertTrue( "Check Exist", destination.exists() );
+        assertTrue( "Original deleted", ! testFile1.exists() );
+    }
+
+    public void testMoveFile_CopyDelete() throws Exception {
+        File destination = new File( getTestDirectory(), "move2.txt" );
+        File src = new File( testFile1.getAbsolutePath() ) {
+            // Force renameTo to fail, as if destination is on another
+            // filesystem
+            public boolean renameTo( File f ) {
+                return false;
+            }
+        };
+        FileUtils.moveFile( src, destination );
+        assertTrue( "Check Exist", destination.exists() );
+        assertTrue( "Original deleted", ! src.exists() );
+    }
+
+
+    public void testMoveFile_CopyDelete_Failed() throws Exception {
+        File destination = new File( getTestDirectory(), "move3.txt" );
+        File src = new File( testFile1.getAbsolutePath() ) {
+            // Force renameTo to fail, as if destination is on another
+            // filesystem
+            public boolean renameTo( File f ) {
+                return false;
+            }
+
+            // Force delete failure
+            public boolean delete() {
+                return false;
+            }
+
+        };
+        try {
+            FileUtils.moveFile( src, destination );
+            fail( "move should have failed as src has not been deleted" );
+        } catch (IOException e) {
+           // exepected
+            assertTrue( "Check Rollback", !destination.exists() );
+            assertTrue( "Original exists", src.exists() );
+        }
+    }
+    public void testMoveFile_Errors() throws Exception {
+        try {
+            FileUtils.moveFile(null, new File("foo"));
+            fail("Expected NullPointerException when source is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveFile(new File("foo"), null);
+            fail("Expected NullPointerException when destination is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveFile(new File("nonexistant"), new File("foo"));
+            fail("Expected FileNotFoundException for source");
+        } catch (FileNotFoundException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveFile(getTestDirectory(), new File("foo"));
+            fail("Expected IOException when source is a directory");
+        } catch (IOException e) {
+            // expected
+        }
+        File testSourceFile = new File(getTestDirectory(), "testMoveFileSource");
+        File testDestFile = new File(getTestDirectory(), "testMoveFileSource");
+        createFile(testSourceFile, 0);
+        createFile(testDestFile, 0);
+        try {
+            FileUtils.moveFile(testSourceFile, testDestFile);
+            fail("Expected IOException when dest already exists");
+        } catch (IOException e) {
+            // expected
+        }
+
+    }
+
+    public void testMoveFileToDirectory() throws Exception {
+        File destDir = new File( getTestDirectory(), "moveFileDestDir");
+        File movedFile = new File(destDir, testFile1.getName());
+        assertFalse("Check Exist before", destDir.exists());
+        assertFalse("Check Exist before", movedFile.exists());
+
+        FileUtils.moveFileToDirectory(testFile1, destDir, true);
+        assertTrue( "Check Exist after", movedFile.exists() );
+        assertTrue( "Original deleted", ! testFile1.exists() );
+    }
+
+    public void testMoveFileToDirectory_Errors() throws Exception {
+        try {
+            FileUtils.moveFileToDirectory(null, new File("foo"), true);
+            fail("Expected NullPointerException when source is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveFileToDirectory(new File("foo"), null, true);
+            fail("Expected NullPointerException when destination is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
+        File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
+        createFile(testFile1, 0);
+        createFile(testFile2, 0);
+        try {
+            FileUtils.moveFileToDirectory(testFile1, testFile2, true);
+            fail("Expected IOException when dest not a directory");
+        } catch (IOException e) {
+            // expected
+        }
+
+        File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
+        try {
+            FileUtils.moveFileToDirectory(testFile1, nonexistant, false);
+            fail("Expected IOException when dest does not exist and create=false");
+        } catch (IOException e) {
+            // expected
+        }
+    }
+
+
+    public void testMoveDirectory_Rename() throws Exception {
+        File dir = getTestDirectory();
+        File src = new File(dir, "testMoveDirectory1Source");
+        File testDir = new File(src, "foo");
+        File testFile = new File(testDir, "bar");
+        testDir.mkdirs();
+        createFile(testFile, 0);
+        File destination = new File(dir, "testMoveDirectory1Dest");
+        FileUtils.deleteDirectory( destination );
+
+        // Move the directory
+        FileUtils.moveDirectory( src, destination );
+
+        // Check results
+        assertTrue( "Check Exist", destination.exists() );
+        assertTrue( "Original deleted", ! src.exists() );
+        File movedDir = new File(destination, testDir.getName());
+        File movedFile = new File(movedDir, testFile.getName());
+        assertTrue( "Check dir moved", movedDir.exists());
+        assertTrue( "Check file moved", movedFile.exists());
+    }
+
+    public void testMoveDirectory_CopyDelete() throws Exception {
+
+        File dir = getTestDirectory();
+        File src = new File(dir, "testMoveDirectory2Source") {
+
+            // Force renameTo to fail
+            public boolean renameTo( File dest ) {
+                return false;
+            }
+        };
+        File testDir = new File(src, "foo");
+        File testFile = new File(testDir, "bar");
+        testDir.mkdirs();
+        createFile(testFile, 0);
+        File destination = new File(dir, "testMoveDirectory1Dest");
+        FileUtils.deleteDirectory( destination );
+
+        // Move the directory
+        FileUtils.moveDirectory( src, destination );
+
+        // Check results
+        assertTrue( "Check Exist", destination.exists() );
+        assertTrue( "Original deleted", ! src.exists() );
+        File movedDir = new File(destination, testDir.getName());
+        File movedFile = new File(movedDir, testFile.getName());
+        assertTrue( "Check dir moved", movedDir.exists());
+        assertTrue( "Check file moved", movedFile.exists());
+    }
+
+    public void testMoveDirectory_Errors() throws Exception {
+        try {
+            FileUtils.moveDirectory(null, new File("foo"));
+            fail("Expected NullPointerException when source is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveDirectory(new File("foo"), null);
+            fail("Expected NullPointerException when destination is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveDirectory(new File("nonexistant"), new File("foo"));
+            fail("Expected FileNotFoundException for source");
+        } catch (FileNotFoundException e) {
+            // expected
+        }
+        File testFile = new File(getTestDirectory(), "testMoveDirectoryFile");
+        createFile(testFile, 0);
+        try {
+            FileUtils.moveDirectory(testFile, new File("foo"));
+            fail("Expected IOException when source is not a directory");
+        } catch (IOException e) {
+            // expected
+        }
+        File testSrcFile = new File(getTestDirectory(), "testMoveDirectorySource");
+        File testDestFile = new File(getTestDirectory(), "testMoveDirectoryDest");
+        testDestFile.mkdir();
+        try {
+            FileUtils.moveDirectory(testSrcFile, testDestFile);
+            fail("Expected IOException when dest already exists");
+        } catch (IOException e) {
+            // expected
+        }
+
+    }
+
+    public void testMoveDirectoryToDirectory() throws Exception {
+        File dir = getTestDirectory();
+        File src = new File(dir, "testMoveDirectory1Source");
+        File testChildDir = new File(src, "foo");
+        File testFile = new File(testChildDir, "bar");
+        testChildDir.mkdirs();
+        createFile(testFile, 0);
+        File destDir = new File(dir, "testMoveDirectory1Dest");
+        FileUtils.deleteDirectory( destDir );
+        assertFalse( "Check Exist before", destDir.exists() );
+
+        // Move the directory
+        FileUtils.moveDirectoryToDirectory(src, destDir, true);
+
+        // Check results
+        assertTrue( "Check Exist after", destDir.exists() );
+        assertTrue( "Original deleted", ! src.exists() );
+        File movedDir = new File(destDir, src.getName());
+        File movedChildDir = new File(movedDir, testChildDir.getName());
+        File movedFile = new File(movedChildDir, testFile.getName());
+        assertTrue( "Check dir moved", movedDir.exists());
+        assertTrue( "Check child dir moved", movedChildDir.exists());
+        assertTrue( "Check file moved", movedFile.exists());
+    }
+
+    public void testMoveDirectoryToDirectory_Errors() throws Exception {
+        try {
+            FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
+            fail("Expected NullPointerException when source is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
+            fail("Expected NullPointerException when destination is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
+        File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
+        createFile(testFile1, 0);
+        createFile(testFile2, 0);
+        try {
+            FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true);
+            fail("Expected IOException when dest not a directory");
+        } catch (IOException e) {
+            // expected
+        }
+
+        File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
+        try {
+            FileUtils.moveDirectoryToDirectory(testFile1, nonexistant, false);
+            fail("Expected IOException when dest does not exist and create=false");
+        } catch (IOException e) {
+            // expected
+        }
+    }
+    public void testMoveToDirectory() throws Exception {
+        File destDir     = new File(getTestDirectory(), "testMoveToDirectoryDestDir");
+        File testDir     = new File(getTestDirectory(), "testMoveToDirectoryTestDir");
+        File testFile    = new File(getTestDirectory(), "testMoveToDirectoryTestFile");
+        testDir.mkdirs();
+        createFile(testFile, 0);
+        File movedFile = new File(destDir, testFile.getName());
+        File movedDir = new File(destDir, testFile.getName());
+        
+        assertFalse( "Check File Doesnt exist", movedFile.exists() );
+        assertFalse( "Check Dir Doesnt exist", movedDir.exists() );
+        
+        // Test moving a file
+        FileUtils.moveToDirectory(testFile, destDir, true);
+        assertTrue( "Check File exists", movedFile.exists() );
+        assertFalse( "Check Original File doesn't exist", testFile.exists() );
+        
+        // Test moving a directory
+        FileUtils.moveToDirectory(testDir, destDir, true);
+        assertTrue( "Check Dir exists", movedDir.exists() );
+        assertFalse( "Check Original Dir doesn't exist", testDir.exists());
+    }
+
+    public void testMoveToDirectory_Errors() throws Exception {
+        try {
+            FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
+            fail("Expected NullPointerException when source is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
+            fail("Expected NullPointerException when destination is null");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        File nonexistant    = new File(getTestDirectory(), "nonexistant");
+        File destDir    = new File(getTestDirectory(), "MoveToDirectoryDestDir");
+        try {
+            FileUtils.moveToDirectory(nonexistant, destDir, true);
+            fail("Expected IOException when source does not exist");
+        } catch (IOException e) {
+            // expected
+        }
+    }
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */

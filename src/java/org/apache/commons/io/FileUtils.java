@@ -1710,4 +1710,179 @@ public class FileUtils {
         return checksum;
     }
 
+    /**
+     * Move a directory.
+     * <p>
+     * When the destination directory is on another file system, do a "copy and delete".
+     *
+     * @param srcDir the directory to be moved
+     * @param destDir the destination directory
+     * @throws NullPointerException if source or destination is <code>null</code>
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs moving the file
+     * @since Commons IO 1.4
+     */
+    public static void moveDirectory(File srcDir, File destDir) throws IOException {
+        if (srcDir == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (!srcDir.exists()) {
+            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
+        }
+        if (!srcDir.isDirectory()) {
+            throw new IOException("Source '" + srcDir + "' is not a directory");
+        }
+        if (destDir.exists()) {
+            throw new IOException("Destination '" + destDir + "' allready exists");
+        }
+        boolean rename = srcDir.renameTo(destDir);
+        if (!rename) {
+            copyDirectory( srcDir, destDir );
+            deleteDirectory( srcDir );
+            if (srcDir.exists()) {
+                throw new IOException("Failed to delete original directory '" + srcDir +
+                        "' after copy to '" + destDir + "'");
+            }
+        }
+    }
+
+    /**
+     * Move a directory to a directory.
+     *
+     * @param src the file to be moved
+     * @param destDir the destination file
+     * @param createDestDir If <code>true</code> create the destination directory,
+     * otherwise if <code>false</code> throw an IOException
+     * @throws NullPointerException if source or destination is <code>null</code>
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs moving the file
+     * @since Commons IO 1.4
+     */
+    public static void moveDirectoryToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
+        if (src == null) {
+            throw new NullPointerException( "Source must not be null" );
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination directory must not be null");
+        }
+        if (!destDir.exists() && createDestDir) {
+            destDir.mkdirs();
+        }
+        if (!destDir.exists()) {
+            throw new IOException("Destination directory does not exist");
+        }
+        if (!destDir.isDirectory()) {
+            throw new IOException("Destination '" + destDir + "' is not a directory");
+        }
+        moveDirectory(src, new File(destDir, src.getName()));
+    
+    }
+
+    /**
+     * Move a file.
+     * <p>
+     * When the destination file is on another file system, do a "copy and delete".
+     *
+     * @param srcFile the file to be moved
+     * @param destFile the destination file
+     * @throws NullPointerException if source or destination is <code>null</code>
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs moving the file
+     * @since Commons IO 1.4
+     */
+    public static void moveFile(File srcFile, File destFile) throws IOException {
+        if (srcFile == null) {
+            throw new NullPointerException( "Source must not be null" );
+        }
+        if (destFile == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (!srcFile.exists()) {
+            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
+        }
+        if (srcFile.isDirectory()) {
+            throw new IOException("Source '" + srcFile + "' is a directory");
+        }
+        if (destFile.exists()) {
+            throw new IOException("Destination '" + destFile + "' allready exists");
+        }
+        if (destFile.isDirectory()) {
+            throw new IOException("Destination '" + destFile + "' is a directory");
+        }
+        boolean rename = srcFile.renameTo(destFile);
+        if (!rename) {
+            copyFile( srcFile, destFile );
+            if (!srcFile.delete()) {
+                FileUtils.deleteQuietly(destFile);
+                throw new IOException("Failed to delete original file '" + srcFile +
+                        "' after copy to '" + destFile + "'");
+            }
+        }
+    }
+
+    /**
+     * Move a file to a directory.
+     *
+     * @param srcFile the file to be moved
+     * @param destDir the destination file
+     * @param createDestDir If <code>true</code> create the destination directory,
+     * otherwise if <code>false</code> throw an IOException
+     * @throws NullPointerException if source or destination is <code>null</code>
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs moving the file
+     * @since Commons IO 1.4
+     */
+    public static void moveFileToDirectory(File srcFile, File destDir, boolean createDestDir) throws IOException {
+        if (srcFile == null) {
+            throw new NullPointerException( "Source must not be null" );
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination directory must not be null");
+        }
+        if (!destDir.exists() && createDestDir) {
+            destDir.mkdirs();
+        }
+        if (!destDir.exists()) {
+            throw new IOException("Destination directory does not exist");
+        }
+        if (!destDir.isDirectory()) {
+            throw new IOException("Destination '" + destDir + "' is not a directory");
+        }
+        moveFile(srcFile, new File(destDir, srcFile.getName()));
+    }
+
+    /**
+     * Move a file or directory to the destination directory.
+     * <p>
+     * When the destination is on another file system, do a "copy and delete".
+     *
+     * @param src the file or directory to be moved
+     * @param destDir the destination directory 
+     * @param createDestDir If <code>true</code> create the destination directory,
+     * otherwise if <code>false</code> throw an IOException
+     * @throws NullPointerException if source or destination is <code>null</code>
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs moving the file
+     * @since Commons IO 1.4
+     */
+    public static void moveToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
+        if (src == null) {
+            throw new NullPointerException( "Source must not be null" );
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (!src.exists()) {
+            throw new FileNotFoundException("Source '" + src + "' does not exist");
+        }
+        if (src.isDirectory()) {
+            moveDirectoryToDirectory(src, destDir, createDestDir);
+        } else {
+            moveFileToDirectory(src, destDir, createDestDir);
+        }
+    }
+
 }
