@@ -25,7 +25,7 @@
   <inceptionYear>2002</inceptionYear>
   <shortDescription>Commons IO</shortDescription>
   <description>
-        Commons-IO contains utility classes, stream implementations, file filters, and endian classes.
+        Commons-IO contains utility classes, stream implementations, file filters, file comparators and endian classes.
   </description>
   <logo>/images/io-logo-white.png</logo>
 
