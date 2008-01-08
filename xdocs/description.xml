@@ -28,7 +28,8 @@ limitations under the License.
             <a href="#Utility classes">utility classes</a>,
             <a href="#Endian classes">endian classes</a>,
             <a href="#Line iterator">line iterator</a>,
-            <a href="#File filters">file filters</a> and
+            <a href="#File filters">file filters</a>,
+            <a href="#File comparators">file comparators</a> and
             <a href="#Streams">stream implementations</a>.
         </p>
 
@@ -211,6 +212,21 @@ limitations under the License.
         <p>
             See the
             <a href="api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+            package javadoc for more details.
+        </p>
+    </section>
+
+    <section name="File comparators">
+        <p>
+            The <code>org.apache.commons.io.comparator</code>
+            package provides a number of <code>java.util.Comparator</code>
+            implementations for <code>java.io.File</code>.
+
+            These comparators can be used to sort lists and arrays of files, for example.
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
             package javadoc for more details.
         </p>
     </section>
