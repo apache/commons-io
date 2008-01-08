@@ -47,6 +47,9 @@ Enhancements from 1.3.2
 - FileUtils
   - Add a deleteQuietly method [IO-135]
 
+- FilenameUtils
+  - Add file name extension separator constants[IO-149]
+
 - IOExceptionWithCause [IO-148]
   - Add a new IOException implementation with constructors which take a cause
 
