@@ -39,27 +39,46 @@ public class NullWriter extends Writer {
     public NullWriter() {
     }
 
-    /** @see java.io.Writer#write(int) */
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param idx The character to write
+     */
     public void write(int idx) {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#write(char[]) */
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param chr The characters to write
+     */
     public void write(char[] chr) {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#write(char[], int, int) */
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param chr The characters to write
+     * @param st The start offset
+     * @param end The number of characters to write
+     */
     public void write(char[] chr, int st, int end) {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#write(String) */
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param str The string to write
+     */
     public void write(String str) {
         //to /dev/null
     }
 
-    /** @see java.io.Writer#write(String, int, int) */
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param str The string to write
+     * @param st The start offset
+     * @param end The number of characters to write
+     */
     public void write(String str, int st, int end) {
         //to /dev/null
     }

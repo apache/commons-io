@@ -36,21 +36,27 @@ public class NullOutputStream extends OutputStream {
     public static final NullOutputStream NULL_OUTPUT_STREAM = new NullOutputStream();
 
     /**
-     * @see java.io.OutputStream#write(byte[], int, int)
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param b The bytes to write
+     * @param off The start offset
+     * @param len The number of bytes to write
      */
     public void write(byte[] b, int off, int len) {
         //to /dev/null
     }
 
     /**
-     * @see java.io.OutputStream#write(int)
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param b The byte to write
      */
     public void write(int b) {
         //to /dev/null
     }
 
     /**
-     * @see java.io.OutputStream#write(byte[])
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param b The bytes to write
+     * @throws IOException never
      */
     public void write(byte[] b) throws IOException {
         //to /dev/null

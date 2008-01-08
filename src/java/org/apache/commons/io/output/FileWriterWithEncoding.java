@@ -251,37 +251,67 @@ public class FileWriterWithEncoding extends Writer {
     }
 
     //-----------------------------------------------------------------------
-    /** @see java.io.Writer#write(int) */
+    /**
+     * Write a character.
+     * @param idx the character to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(int idx) throws IOException {
         out.write(idx);
     }
 
-    /** @see java.io.Writer#write(char[]) */
+    /**
+     * Write the characters from an array.
+     * @param chr the characters to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(char[] chr) throws IOException {
         out.write(chr);
     }
 
-    /** @see java.io.Writer#write(char[], int, int) */
+    /**
+     * Write the specified characters from an array.
+     * @param chr the characters to write
+     * @param st The start offset
+     * @param end The number of characters to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(char[] chr, int st, int end) throws IOException {
         out.write(chr, st, end);
     }
 
-    /** @see java.io.Writer#write(String) */
+    /**
+     * Write the characters from a string.
+     * @param str the string to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(String str) throws IOException {
         out.write(str);
     }
 
-    /** @see java.io.Writer#write(String, int, int) */
+    /**
+     * Write the specified characters from a string.
+     * @param str the string to write
+     * @param st The start offset
+     * @param end The number of characters to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(String str, int st, int end) throws IOException {
         out.write(str, st, end);
     }
 
-    /** @see java.io.Writer#flush() */
+    /**
+     * Flush the stream.
+     * @throws IOException if an I/O error occurs
+     */
     public void flush() throws IOException {
         out.flush();
     }
 
-    /** @see java.io.Writer#close() */
+    /**
+     * Close the stream.
+     * @throws IOException if an I/O error occurs
+     */
     public void close() throws IOException {
         out.close();
     }

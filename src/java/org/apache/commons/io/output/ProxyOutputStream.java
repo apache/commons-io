@@ -41,27 +41,47 @@ public class ProxyOutputStream extends FilterOutputStream {
         // the proxy is stored in a protected superclass variable named 'out'
     }
 
-    /** @see java.io.OutputStream#write(int) */
+    /**
+     * Invokes the delegate's <code>write(int)</code> method.
+     * @param idx the byte to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(int idx) throws IOException {
         out.write(idx);
     }
 
-    /** @see java.io.OutputStream#write(byte[]) */
+    /**
+     * Invokes the delegate's <code>write(byte[])</code> method.
+     * @param bts the bytes to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(byte[] bts) throws IOException {
         out.write(bts);
     }
 
-    /** @see java.io.OutputStream#write(byte[], int, int) */
+    /**
+     * Invokes the delegate's <code>write(byte[])</code> method.
+     * @param bts the bytes to write
+     * @param st The start offset
+     * @param end The number of bytes to write
+     * @throws IOException if an I/O error occurs
+     */
     public void write(byte[] bts, int st, int end) throws IOException {
         out.write(bts, st, end);
     }
 
-    /** @see java.io.OutputStream#flush() */
+    /**
+     * Invokes the delegate's <code>flush()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public void flush() throws IOException {
         out.flush();
     }
 
-    /** @see java.io.OutputStream#close() */
+    /**
+     * Invokes the delegate's <code>close()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public void close() throws IOException {
         out.close();
     }

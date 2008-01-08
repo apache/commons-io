@@ -41,19 +41,33 @@ public class TeeOutputStream extends ProxyOutputStream {
         this.branch = branch;
     }
 
-    /** @see java.io.OutputStream#write(byte[]) */
+    /**
+     * Write the bytes to both streams.
+     * @param b the bytes to write
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void write(byte[] b) throws IOException {
         super.write(b);
         this.branch.write(b);
     }
 
-    /** @see java.io.OutputStream#write(byte[], int, int) */
+    /**
+     * Write the specified bytes to both streams.
+     * @param b the bytes to write
+     * @param off The start offset
+     * @param len The number of bytes to write
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void write(byte[] b, int off, int len) throws IOException {
         super.write(b, off, len);
         this.branch.write(b, off, len);
     }
 
-    /** @see java.io.OutputStream#write(int) */
+    /**
+     * Write a byte to both streams.
+     * @param b the byte to write
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void write(int b) throws IOException {
         super.write(b);
         this.branch.write(b);
@@ -61,8 +75,7 @@ public class TeeOutputStream extends ProxyOutputStream {
 
     /**
      * Flushes both streams.
-     *
-     * @see java.io.OutputStream#flush()
+     * @throws IOException if an I/O error occurs
      */
     public void flush() throws IOException {
         super.flush();
@@ -71,8 +84,7 @@ public class TeeOutputStream extends ProxyOutputStream {
 
     /**
      * Closes both streams. 
-     *
-     * @see java.io.OutputStream#close() 
+     * @throws IOException if an I/O error occurs
      */
     public void close() throws IOException {
         super.close();

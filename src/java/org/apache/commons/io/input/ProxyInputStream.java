@@ -44,47 +44,84 @@ public abstract class ProxyInputStream extends FilterInputStream {
         // the proxy is stored in a protected superclass variable named 'in'
     }
 
-    /** @see java.io.InputStream#read() */
+    /**
+     * Invokes the delegate's <code>read()</code> method.
+     * @return the byte read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read() throws IOException {
         return in.read();
     }
 
-    /** @see java.io.InputStream#read(byte[]) */
+    /**
+     * Invokes the delegate's <code>read(byte[])</code> method.
+     * @param bts the buffer to read the bytes into
+     * @return the number of bytes read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read(byte[] bts) throws IOException {
         return in.read(bts);
     }
 
-    /** @see java.io.InputStream#read(byte[], int, int) */
+    /**
+     * Invokes the delegate's <code>read(byte[], int, int)</code> method.
+     * @param bts the buffer to read the bytes into
+     * @param st The start offset
+     * @param end The number of bytes to read
+     * @return the number of bytes read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read(byte[] bts, int st, int end) throws IOException {
         return in.read(bts, st, end);
     }
 
-    /** @see java.io.InputStream#skip(long) */
+    /**
+     * Invokes the delegate's <code>skip(long)</code> method.
+     * @param ln the number of bytes to skip
+     * @return the number of bytes to skipped or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public long skip(long ln) throws IOException {
         return in.skip(ln);
     }
 
-    /** @see java.io.InputStream#available() */
+    /**
+     * Invokes the delegate's <code>available()</code> method.
+     * @return the number of available bytes
+     * @throws IOException if an I/O error occurs
+     */
     public int available() throws IOException {
         return in.available();
     }
 
-    /** @see java.io.InputStream#close() */
+    /**
+     * Invokes the delegate's <code>close()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public void close() throws IOException {
         in.close();
     }
 
-    /** @see java.io.InputStream#mark(int) */
+    /**
+     * Invokes the delegate's <code>mark(int)</code> method.
+     * @param idx read ahead limit
+     */
     public synchronized void mark(int idx) {
         in.mark(idx);
     }
 
-    /** @see java.io.InputStream#reset() */
+    /**
+     * Invokes the delegate's <code>reset()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void reset() throws IOException {
         in.reset();
     }
 
-    /** @see java.io.InputStream#markSupported() */
+    /**
+     * Invokes the delegate's <code>markSupported()</code> method.
+     * @return true if mark is supported, otherwise false
+     */
     public boolean markSupported() {
         return in.markSupported();
     }

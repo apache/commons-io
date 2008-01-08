@@ -44,47 +44,85 @@ public abstract class ProxyReader extends FilterReader {
         // the proxy is stored in a protected superclass variable named 'in'
     }
 
-    /** @see java.io.Reader#read() */
+    /**
+     * Invokes the delegate's <code>read()</code> method.
+     * @return the character read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read() throws IOException {
         return in.read();
     }
 
-    /** @see java.io.Reader#read(char[]) */
+    /**
+     * Invokes the delegate's <code>read(char[])</code> method.
+     * @param chr the buffer to read the characters into
+     * @return the number of characters read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read(char[] chr) throws IOException {
         return in.read(chr);
     }
 
-    /** @see java.io.Reader#read(char[], int, int) */
+    /**
+     * Invokes the delegate's <code>read(char[], int, int)</code> method.
+     * @param chr the buffer to read the characters into
+     * @param st The start offset
+     * @param end The number of bytes to read
+     * @return the number of characters read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public int read(char[] chr, int st, int end) throws IOException {
         return in.read(chr, st, end);
     }
 
-    /** @see java.io.Reader#skip(long) */
+    /**
+     * Invokes the delegate's <code>skip(long)</code> method.
+     * @param ln the number of bytes to skip
+     * @return the number of bytes to skipped or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
     public long skip(long ln) throws IOException {
         return in.skip(ln);
     }
 
-    /** @see java.io.Reader#ready() */
+    /**
+     * Invokes the delegate's <code>ready()</code> method.
+     * @return true if the stream is ready to be read
+     * @throws IOException if an I/O error occurs
+     */
     public boolean ready() throws IOException {
         return in.ready();
     }
 
-    /** @see java.io.Reader#close() */
+    /**
+     * Invokes the delegate's <code>close()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public void close() throws IOException {
         in.close();
     }
 
-    /** @see java.io.Reader#mark(int) */
+    /**
+     * Invokes the delegate's <code>mark(int)</code> method.
+     * @param idx read ahead limit
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void mark(int idx) throws IOException {
         in.mark(idx);
     }
 
-    /** @see java.io.Reader#reset() */
+    /**
+     * Invokes the delegate's <code>reset()</code> method.
+     * @throws IOException if an I/O error occurs
+     */
     public synchronized void reset() throws IOException {
         in.reset();
     }
 
-    /** @see java.io.Reader#markSupported() */
+    /**
+     * Invokes the delegate's <code>markSupported()</code> method.
+     * @return true if mark is supported, otherwise false
+     */
     public boolean markSupported() {
         return in.markSupported();
     }
