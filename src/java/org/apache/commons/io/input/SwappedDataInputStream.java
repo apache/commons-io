@@ -47,49 +47,89 @@ public class SwappedDataInputStream extends ProxyInputStream
         super( input );
     }
 
-    /** @see java.io.DataInput#readBoolean() */
+    /**
+     * Return <code>{@link #readByte()} == 0</code>
+     * @return the true if the byte read is zero, otherwise false
+     * @throws IOException if an I/O error occurs
+     * @throws EOFException if an end of file is reached unexpectedly
+     */
     public boolean readBoolean()
         throws IOException, EOFException
     {
         return ( 0 == readByte() );
     }
 
-    /** @see java.io.DataInput#readByte() */
+    /**
+     * Invokes the delegate's <code>read()</code> method.
+     * @return the byte read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     * @throws EOFException if an end of file is reached unexpectedly
+     */
     public byte readByte()
         throws IOException, EOFException
     {
         return (byte)in.read();
     }
 
-    /** @see java.io.DataInput#readChar() */
+    /**
+     * Reads a character delegating to {@link #readShort()}.
+     * @return the byte read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     * @throws EOFException if an end of file is reached unexpectedly
+     */
     public char readChar()
         throws IOException, EOFException
     {
         return (char)readShort();
     }
 
-    /** @see java.io.DataInput#readDouble() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedDouble(InputStream)}. 
+     * @return the read long
+     * @throws IOException if an I/O error occurs
+     * @throws EOFException if an end of file is reached unexpectedly
+     */
     public double readDouble()
         throws IOException, EOFException
     {
         return EndianUtils.readSwappedDouble( in );
     }
 
-    /** @see java.io.DataInput#readFloat() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedFloat(InputStream)}. 
+     * @return the read long
+     * @throws IOException if an I/O error occurs
+     * @throws EOFException if an end of file is reached unexpectedly
+     */
     public float readFloat()
         throws IOException, EOFException
     {
         return EndianUtils.readSwappedFloat( in );
     }
 
-    /** @see java.io.DataInput#readFully(byte[]) */
+    /**
+     * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
+     * 
+     * @param data the buffer to read the bytes into
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public void readFully( byte[] data )
         throws IOException, EOFException
     {
         readFully( data, 0, data.length );
     }
 
-    /** @see java.io.DataInput#readFully(byte[], int, int) */
+
+    /**
+     * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
+     * 
+     * @param data the buffer to read the bytes into
+     * @param offset The start offset
+     * @param length The number of bytes to read
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public void readFully( byte[] data, int offset, int length )
         throws IOException, EOFException
     {
@@ -109,7 +149,12 @@ public class SwappedDataInputStream extends ProxyInputStream
         }
     }
 
-    /** @see java.io.DataInput#readInt() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedInteger(InputStream)}. 
+     * @return the read long
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public int readInt()
         throws IOException, EOFException
     {
@@ -117,9 +162,10 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Not currently supported.
-     *
-     * @see java.io.DataInput#readLine()
+     * Not currently supported - throws {@link UnsupportedOperationException}.
+     * @return the line read
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
      */
     public String readLine()
         throws IOException, EOFException
@@ -128,28 +174,48 @@ public class SwappedDataInputStream extends ProxyInputStream
                 "Operation not supported: readLine()" );
     }
 
-    /** @see java.io.DataInput#readLong() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedLong(InputStream)}. 
+     * @return the read long
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public long readLong()
         throws IOException, EOFException
     {
         return EndianUtils.readSwappedLong( in );
     }
 
-    /** @see java.io.DataInput#readShort() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedShort(InputStream)}. 
+     * @return the read long
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public short readShort()
         throws IOException, EOFException
     {
         return EndianUtils.readSwappedShort( in );
     }
 
-    /** @see java.io.DataInput#readUnsignedByte() */
+    /**
+     * Invokes the delegate's <code>read()</code> method.
+     * @return the byte read or -1 if the end of stream
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public int readUnsignedByte()
         throws IOException, EOFException
     {
         return in.read();
     }
 
-    /** @see java.io.DataInput#readUnsignedShort() */
+    /**
+     * Delegates to {@link EndianUtils#readSwappedUnsignedShort(InputStream)}. 
+     * @return the read long
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public int readUnsignedShort()
         throws IOException, EOFException
     {
@@ -157,9 +223,10 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Not currently supported. 
-     *
-     * @see java.io.DataInput#readUTF() 
+     * Not currently supported - throws {@link UnsupportedOperationException}.
+     * @return UTF String read
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
      */
     public String readUTF()
         throws IOException, EOFException
@@ -168,7 +235,13 @@ public class SwappedDataInputStream extends ProxyInputStream
                 "Operation not supported: readUTF()" );
     }
 
-    /** @see java.io.DataInput#skipBytes(int) */
+    /**
+     * Invokes the delegate's <code>skip(int)</code> method.
+     * @param count the number of bytes to skip
+     * @return the number of bytes to skipped or -1 if the end of stream
+     * @throws EOFException if an end of file is reached unexpectedly
+     * @throws IOException if an I/O error occurs
+     */
     public int skipBytes( int count )
         throws IOException, EOFException
     {

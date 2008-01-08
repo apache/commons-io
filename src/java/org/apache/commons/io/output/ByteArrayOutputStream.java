@@ -131,7 +131,10 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @see java.io.OutputStream#write(byte[], int, int)
+     * Write the bytes to byte array.
+     * @param b the bytes to write
+     * @param off The start offset
+     * @param len The number of bytes to write
      */
     public void write(byte[] b, int off, int len) {
         if ((off < 0) 
@@ -161,7 +164,8 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @see java.io.OutputStream#write(int)
+     * Write a byte to byte array.
+     * @param b the byte to write
      */
     public synchronized void write(int b) {
         int inBufferPos = count - filledBufferSum;
@@ -202,7 +206,8 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * @see java.io.ByteArrayOutputStream#size()
+     * Return the current size of the byte array.
+     * @return the current size of the byte array
      */
     public synchronized int size() {
         return count;
@@ -280,7 +285,7 @@ public class ByteArrayOutputStream extends OutputStream {
 
     /**
      * Gets the curent contents of this byte stream as a string.
-     *
+     * @return the contents of the byte array as a String
      * @see java.io.ByteArrayOutputStream#toString()
      */
     public String toString() {

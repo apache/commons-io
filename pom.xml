@@ -308,6 +308,23 @@ org.apache.commons.io.output;version=${project.version}
           </reportSet>
         </reportSets>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>checkstyle.xml</configLocation>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <links>http://java.sun.com/j2se/1.4.2/docs/api,</links>
+        </configuration>
+      </plugin>
+
     </plugins>
   </reporting>
 
