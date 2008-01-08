@@ -286,11 +286,19 @@ org.apache.commons.io.output;version=${project.version}
         <artifactId>maven-changes-plugin</artifactId>
         <configuration>
           <issueLinkTemplate>%URL%/../%ISSUE%</issueLinkTemplate>
+          <!--
+             JIRA Search parameters:
+                 - resolution=1 specifies "Fixed"
+                 - fixfor=12312101 specifies "Commons IO version 1.4"
+
+             If/when http://jira.codehaus.org/browse/MCHANGES-92
+             is fixed this will be easier/less messy
+           -->
+          <filter>&amp;&amp;resolution=1&amp;fixfor=12312101</filter>
         </configuration>
         <reportSets>
           <reportSet>
             <reports>
-              <report>changes-report</report>
               <report>jira-report</report>
             </reports>
           </reportSet>
