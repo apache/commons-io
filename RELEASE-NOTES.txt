@@ -24,9 +24,9 @@ Source compatible - Yes
 Semantic compatible - Yes
   Check the bug fixes section for semantic bug fixes
 
-Commons IO 1.4 introduces some new implementations which depend on JDK 1.4
-features (CharSequenceReader, IOExceptionWithCause and RegexFileFilter). It has
-been built with the JDK source and target options set to JDK 1.3 and, except for
+Commons IO 1.4 introduces four new implementations which depend on JDK 1.4 features
+(CharSequenceReader, FileWriterWithEncoding, IOExceptionWithCause and RegexFileFilter).
+It has been built with the JDK source and target options set to JDK 1.3 and, except for
 those implementations, can be used with JDK 1.3 (see IO IO-127).
 
 
@@ -52,6 +52,9 @@ Enhancements from 1.3.2
 
 - TeeInputStream [IO-129]
   - Add new Tee input stream implementation
+
+- FileWriterWithEncoding [IO-153]
+  - Add new File Writer implementation that accepts an encoding
 
 - CharSequenceReader [IO-138]
   - Add new Reader implementation that handles any CharSequence (String,
