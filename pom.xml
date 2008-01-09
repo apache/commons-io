@@ -215,6 +215,36 @@
     <testSourceDirectory>src/test</testSourceDirectory>
       <plugins>
         <plugin>
+          <!--
+            - Copy LICENSE.txt and NOTICE.txt so that they are included in file
+            - commons-io-X.Y-javadoc.jar.
+            - If/when commons-io starts to use maven-remote-reources-plugin this
+            - antrun should be removed.
+            -->
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.1</version>
+          <executions>
+            <execution>
+              <id>javadoc.resources</id>
+              <phase>generate-sources</phase>
+              <configuration>
+                <tasks>
+                  <copy todir="${project.build.directory}/apidocs">
+                    <fileset dir="${basedir}">
+                      <include name="LICENSE.txt" />
+                      <include name="NOTICE.txt" />
+                    </fileset>
+                  </copy>
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
