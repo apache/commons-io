@@ -230,7 +230,7 @@
               <phase>generate-sources</phase>
               <configuration>
                 <tasks>
-                  <copy todir="${project.build.directory}/apidocs">
+                  <copy todir="${project.build.directory}/apidocs/META-INF">
                     <fileset dir="${basedir}">
                       <include name="LICENSE.txt" />
                       <include name="NOTICE.txt" />
