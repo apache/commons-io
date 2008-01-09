@@ -398,7 +398,7 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Compare the contents of two files to determine if they are equal or not.
+     * Compares the contents of two files to determine if they are equal or not.
      * <p>
      * This method checks to see if the two files are different lengths
      * or if they point to the same file, before resorting to byte-by-byte
@@ -771,7 +771,7 @@ public class FileUtils {
     }
 
     /**
-     * Filtered Copy of a directory to a new location preserving the file dates.
+     * Copies a filtered directory to a new location preserving the file dates.
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
@@ -815,7 +815,7 @@ public class FileUtils {
     }
 
     /**
-     * Filtered Copy of a directory to a new location.
+     * Copies a filtered directory to a new location.
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
@@ -964,7 +964,7 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Recursively delete a directory.
+     * Deletes a directory recursively. 
      *
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
@@ -983,12 +983,12 @@ public class FileUtils {
     }
 
     /**
-     * Delete a file. If file is a directory, delete it and all sub-directories.
+     * Deletes a file, never throwing an exception. If file is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
-     * <li>No exceptions are thrown when a file or directory cannot be deleted.
+     * <li>No exceptions are thrown when a file or directory cannot be deleted.</li>
      * </ul>
      *
      * @param file  file or directory to delete, can be <code>null</code>
@@ -1016,7 +1016,7 @@ public class FileUtils {
     }
 
     /**
-     * Clean a directory without deleting it.
+     * Cleans a directory without deleting it.
      *
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
@@ -1174,7 +1174,7 @@ public class FileUtils {
     }
 
     /**
-     * Return an Iterator for the lines in a <code>File</code>.
+     * Returns an Iterator for the lines in a <code>File</code>.
      * <p>
      * This method opens an <code>InputStream</code> for the file.
      * When you have finished with the iterator you should close the stream
@@ -1219,7 +1219,7 @@ public class FileUtils {
     }
 
     /**
-     * Return an Iterator for the lines in a <code>File</code> using the default encoding for the VM.
+     * Returns an Iterator for the lines in a <code>File</code> using the default encoding for the VM.
      *
      * @param file  the file to open for input, must not be <code>null</code>
      * @return an Iterator of the lines in the file, never <code>null</code>
@@ -1362,7 +1362,7 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Delete a file. If file is a directory, delete it and all sub-directories.
+     * Deletes a file. If file is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
      * <ul>
@@ -1393,7 +1393,7 @@ public class FileUtils {
     }
 
     /**
-     * Schedule a file to be deleted when JVM exits.
+     * Schedules a file to be deleted when JVM exits.
      * If file is directory delete it and all sub-directories.
      *
      * @param file  file or directory to delete, must not be <code>null</code>
@@ -1409,7 +1409,7 @@ public class FileUtils {
     }
 
     /**
-     * Recursively schedule directory for deletion on JVM exit.
+     * Schedules a directory recursively for deletion on JVM exit.
      *
      * @param directory  directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
@@ -1425,7 +1425,7 @@ public class FileUtils {
     }
 
     /**
-     * Clean a directory without deleting it.
+     * Cleans a directory without deleting it.
      *
      * @param directory  directory to clean, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
@@ -1463,7 +1463,7 @@ public class FileUtils {
     }
 
     /**
-     * Make a directory, including any necessary but nonexistent parent
+     * Makes a directory, including any necessary but nonexistent parent
      * directories. If there already exists a file with specified name or
      * the directory cannot be created then an exception is thrown.
      *
@@ -1492,7 +1492,7 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Recursively count size of a directory (sum of the length of all files).
+     * Counts the size of a directory recursively (sum of the length of all files).
      *
      * @param directory  directory to inspect, must not be <code>null</code>
      * @return size of directory in bytes, 0 if directory is security restricted
@@ -1711,7 +1711,7 @@ public class FileUtils {
     }
 
     /**
-     * Move a directory.
+     * Moves a directory.
      * <p>
      * When the destination directory is on another file system, do a "copy and delete".
      *
@@ -1750,7 +1750,7 @@ public class FileUtils {
     }
 
     /**
-     * Move a directory to a directory.
+     * Moves a directory to another directory.
      *
      * @param src the file to be moved
      * @param destDir the destination file
@@ -1783,7 +1783,7 @@ public class FileUtils {
     }
 
     /**
-     * Move a file.
+     * Moves a file.
      * <p>
      * When the destination file is on another file system, do a "copy and delete".
      *
@@ -1825,7 +1825,7 @@ public class FileUtils {
     }
 
     /**
-     * Move a file to a directory.
+     * Moves a file to a directory.
      *
      * @param srcFile the file to be moved
      * @param destDir the destination file
@@ -1857,7 +1857,7 @@ public class FileUtils {
     }
 
     /**
-     * Move a file or directory to the destination directory.
+     * Moves a file or directory to the destination directory.
      * <p>
      * When the destination is on another file system, do a "copy and delete".
      *
