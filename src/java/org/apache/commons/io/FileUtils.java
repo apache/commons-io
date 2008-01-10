@@ -1717,17 +1717,17 @@ public class FileUtils {
      *
      * @param srcDir the directory to be moved
      * @param destDir the destination directory
-     * @throws IllegalArgumentException if source or destination is <code>null</code>
+     * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs moving the file
      * @since Commons IO 1.4
      */
     public static void moveDirectory(File srcDir, File destDir) throws IOException {
         if (srcDir == null) {
-            throw new IllegalArgumentException("Source must not be null");
+            throw new NullPointerException("Source must not be null");
         }
         if (destDir == null) {
-            throw new IllegalArgumentException("Destination must not be null");
+            throw new NullPointerException("Destination must not be null");
         }
         if (!srcDir.exists()) {
             throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
@@ -1756,17 +1756,17 @@ public class FileUtils {
      * @param destDir the destination file
      * @param createDestDir If <code>true</code> create the destination directory,
      * otherwise if <code>false</code> throw an IOException
-     * @throws IllegalArgumentException if source or destination is <code>null</code>
+     * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs moving the file
      * @since Commons IO 1.4
      */
     public static void moveDirectoryToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
         if (src == null) {
-            throw new IllegalArgumentException( "Source must not be null" );
+            throw new NullPointerException("Source must not be null");
         }
         if (destDir == null) {
-            throw new IllegalArgumentException("Destination directory must not be null");
+            throw new NullPointerException("Destination directory must not be null");
         }
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
@@ -1789,17 +1789,17 @@ public class FileUtils {
      *
      * @param srcFile the file to be moved
      * @param destFile the destination file
-     * @throws IllegalArgumentException if source or destination is <code>null</code>
+     * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs moving the file
      * @since Commons IO 1.4
      */
     public static void moveFile(File srcFile, File destFile) throws IOException {
         if (srcFile == null) {
-            throw new IllegalArgumentException( "Source must not be null" );
+            throw new NullPointerException("Source must not be null");
         }
         if (destFile == null) {
-            throw new IllegalArgumentException("Destination must not be null");
+            throw new NullPointerException("Destination must not be null");
         }
         if (!srcFile.exists()) {
             throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
@@ -1831,17 +1831,17 @@ public class FileUtils {
      * @param destDir the destination file
      * @param createDestDir If <code>true</code> create the destination directory,
      * otherwise if <code>false</code> throw an IOException
-     * @throws IllegalArgumentException if source or destination is <code>null</code>
+     * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs moving the file
      * @since Commons IO 1.4
      */
     public static void moveFileToDirectory(File srcFile, File destDir, boolean createDestDir) throws IOException {
         if (srcFile == null) {
-            throw new IllegalArgumentException( "Source must not be null" );
+            throw new NullPointerException("Source must not be null");
         }
         if (destDir == null) {
-            throw new IllegalArgumentException("Destination directory must not be null");
+            throw new NullPointerException("Destination directory must not be null");
         }
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
@@ -1865,17 +1865,17 @@ public class FileUtils {
      * @param destDir the destination directory 
      * @param createDestDir If <code>true</code> create the destination directory,
      * otherwise if <code>false</code> throw an IOException
-     * @throws IllegalArgumentException if source or destination is <code>null</code>
+     * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs moving the file
      * @since Commons IO 1.4
      */
     public static void moveToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
         if (src == null) {
-            throw new IllegalArgumentException( "Source must not be null" );
+            throw new NullPointerException("Source must not be null");
         }
         if (destDir == null) {
-            throw new IllegalArgumentException("Destination must not be null");
+            throw new NullPointerException("Destination must not be null");
         }
         if (!src.exists()) {
             throw new FileNotFoundException("Source '" + src + "' does not exist");
