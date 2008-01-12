@@ -15,10 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
@@ -213,71 +210,71 @@
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <includes>
-                <include>**/*Test*</include>
-              </includes>
-              <excludes>
-                <exclude>**/*AbstractTestCase*</exclude>
-                <exclude>**/AllIOTestSuite*</exclude>
-                <exclude>**/PackageTestSuite*</exclude>
-                <exclude>**/testtools/**</exclude>
-
-                <!-- http://jira.codehaus.org/browse/SUREFIRE-44 -->
-                <exclude>**/*$*</exclude>
-              </excludes>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-assembly-plugin</artifactId>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <descriptors>
-              <descriptor>src/main/assembly/bin.xml</descriptor>
-              <descriptor>src/main/assembly/src.xml</descriptor>
-            </descriptors>
-            <tarLongFileMode>gnu</tarLongFileMode>
-          </configuration>
-        </plugin>
+            <includes>
+              <include>**/*Test*</include>
+            </includes>
+            <excludes>
+              <exclude>**/*AbstractTestCase*</exclude>
+              <exclude>**/AllIOTestSuite*</exclude>
+              <exclude>**/PackageTestSuite*</exclude>
+              <exclude>**/testtools/**</exclude>
 
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <!--
-                   Configure OSGi bundle information
-                   (remvoe when maven bundle plugin is added to commons-parent pom)
-               -->
-              <manifestEntries>
-                <Bundle-SymbolicName>org.apache.commons.io</Bundle-SymbolicName>
-                <Bundle-License>http://www.apache.org/licenses/LICENSE-2.0.txt</Bundle-License>
-                <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-                <Bundle-Name>Apache Commons IO Bundle</Bundle-Name>
-                <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-                <Bundle-Version>${project.version}</Bundle-Version>
-                <Export-Package>
+              <!-- http://jira.codehaus.org/browse/SUREFIRE-44 -->
+              <exclude>**/*$*</exclude>
+            </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/bin.xml</descriptor>
+            <descriptor>src/main/assembly/src.xml</descriptor>
+          </descriptors>
+          <tarLongFileMode>gnu</tarLongFileMode>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <!--
+                 Configure OSGi bundle information
+                 (remove when maven bundle plugin is added to commons-parent pom)
+             -->
+            <manifestEntries>
+              <Bundle-SymbolicName>org.apache.commons.io</Bundle-SymbolicName>
+              <Bundle-License>http://www.apache.org/licenses/LICENSE-2.0.txt</Bundle-License>
+              <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+              <Bundle-Name>Apache Commons IO Bundle</Bundle-Name>
+              <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+              <Bundle-Version>${project.version}</Bundle-Version>
+              <Export-Package>
 org.apache.commons.io;version=${project.version},
 org.apache.commons.io.comparator;version=${project.version},
 org.apache.commons.io.filefilter;version=${project.version},
 org.apache.commons.io.input;version=${project.version},
 org.apache.commons.io.output;version=${project.version}
-                </Export-Package>
-                <Import-Package>
+              </Export-Package>
+              <Import-Package>
 org.apache.commons.io;version=${project.version},
 org.apache.commons.io.comparator;version=${project.version},
 org.apache.commons.io.filefilter;version=${project.version},
 org.apache.commons.io.input;version=${project.version},
 org.apache.commons.io.output;version=${project.version}
-                </Import-Package>
-              </manifestEntries>
-            </archive>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
+              </Import-Package>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <reporting>
     <plugins>
