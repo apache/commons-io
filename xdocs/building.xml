@@ -29,6 +29,13 @@ limitations under the License.
   <a href="http://ant.apache.org">Ant</a> as a build system.
 </p>
 <p>
+  IO 1.4 requires a minimum of JDK 1.4 to build. However all but four
+  new implementations are JDK 1.3 compatible (by the <code>source</code> and
+  <code>target</code> compiler options being set to <code>1.3</code>) and
+  the <i>ant</i> build excludes those new JDK 1.4 implementations, if the
+  JDK is version 1.3.
+</p>
+<p>
   You may also be interested in the upgrade notes:<br />
   Upgrade <a href="upgradeto1_4.html">from 1.3.2 to 1.4</a><br />
   Upgrade <a href="upgradeto1_3_2.html">from 1.3, or 1.3.1 to 1.3.2</a><br />
@@ -67,7 +74,7 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Ant Goals">
   <p>
-    The following <strong><i>Maven 1</i></strong> commands can be used to build io:
+    The following <strong><i>Ant</i></strong> commands can be used to build io:
   </p>
   <ul>
     <li><code>ant clean</code> - clean up</li>
