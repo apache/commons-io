@@ -1,337 +1,406 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+   
+         http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project name="Commons IO" default="jar" basedir=".">
+
 
 <!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+        "IO" component of the Apache Commons Subproject
+        $Id$
+        $Revision$ $Date$
 -->
 
-<!--
- Based on maven generated file on date October 1 2005
- Added overview to javadoc
- Include license in jar
- Changed dist target and structure
- -->
 
-<project default="jar" name="commons-io" basedir=".">
-  <!--Load local and user build preferences-->
+<!-- ========== Initialize Properties ===================================== -->
 
-  <property file="build.properties">
-  </property>
-  <property file="${user.home}/build.properties">
-  </property>
-  <!--Build properties-->
 
-  <property name="defaulttargetdir" value="${basedir}/build">
-  </property>
-  <property name="libdir" value="${user.home}/.maven/repository">
-  </property>
-  <property name="classesdir" value="${basedir}/build/classes" />
-  <property name="srcdir" value="${basedir}/build/src" />
-  <property name="testclassesdir" value="${basedir}/build/test-classes">
-  </property>
-  <property name="testreportdir" value="${basedir}/build/test-reports">
-  </property>
-  <property name="final.name" value="commons-io-1.4-SNAPSHOT" />
-  <property name="dist.build.dir" value="${basedir}/build/dist-build" />
-  <property name="dist.bin" value="${dist.build.dir}/${final.name}" />
-  <property name="dist.src" value="${dist.build.dir}/${final.name}-src" />
-  <property name="javadocdir" value="${dist.bin}/docs" />
-  <property name="dist.zip.dir" value="${basedir}/build/dist" />
-  <property name="dist.bin.tar.name" value="${basedir}/build/dist/${final.name}.tar" />
-  <property name="dist.bin.gz.name" value="${basedir}/build/dist/${final.name}.tar.gz" />
-  <property name="dist.bin.zip.name" value="${basedir}/build/dist/${final.name}.zip" />
-  <property name="dist.src.tar.name" value="${basedir}/build/dist/${final.name}-src.tar" />
-  <property name="dist.src.gz.name" value="${basedir}/build/dist/${final.name}-src.tar.gz" />
-  <property name="dist.src.zip.name" value="${basedir}/build/dist/${final.name}-src.zip" />
-  <property name="proxy.host" value="">
-  </property>
-  <property name="proxy.port" value="">
-  </property>
-  <property name="proxy.username" value="">
-  </property>
-  <property name="proxy.password" value="">
-  </property>
-  <path id="build.classpath">
+  <property file="project.properties"/>              <!-- Project local   -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+
+
+<!-- ========== External Dependencies ===================================== -->
+
+
+  <!-- The directories corresponding to your necessary dependencies -->
+  <property name="junit.home"              value="/usr/local/junit3.8.1"/>
+  <property name="junit.jar"               value="${junit.home}/junit.jar"/>
+
+
+<!-- ========== Component Declarations ==================================== -->
+
+
+  <!-- The name of this component -->
+  <property name="component.name"          value="commons-io"/>
+
+  <!-- The primary package name of this component -->
+  <property name="component.package"       value="org.apache.commons.io"/>
+
+  <!-- The title of this component -->
+  <property name="component.title"         value="Commons IO"/>
+
+  <!-- The current version number of this component -->
+  <property name="component.version"       value="1.4-SNAPSHOT"/>
+
+  <!-- The base directory for component sources -->
+  <property name="source.home"             value="src/java"/>
+
+  <!-- The base directory for unit test sources -->
+  <property name="test.home"               value="src/test"/>
+
+  <!-- Download lib dir -->
+  <property name="download.lib.dir"        value="lib"/>
+
+  <!-- The base directory for compilation targets -->
+  <property name="build.home"              value="target"/>
+
+  <!-- The base directory for distribution targets -->
+  <property name="dist.home"               value="${build.home}/dist"/>
+
+  <!-- Base file name for dist files -->
+  <property name="dist.file.base"        value="${component.name}-${component.version}"/>
+
+  <!-- Directory where binary release files are staged -->
+  <property name="stage.bin.dir"           value="${dist.home}/stage-bin"/>
+
+  <!-- Directory where source release files are staged -->
+  <property name="stage.src.dir"           value="${dist.home}/stage-src"/>
+
+<!-- ========== Compiler Defaults ========================================= -->
+
+  <!-- Should Java compilations set the 'debug' compiler option? -->
+  <property name="compile.debug"           value="true"/>
+
+  <!-- Should Java compilations set the 'deprecation' compiler option? -->
+  <property name="compile.deprecation"     value="false"/>
+
+  <!-- Should Java compilations set the 'optimize' compiler option? -->
+  <property name="compile.optimize"        value="true"/>
+
+  <!-- Construct compile classpath -->
+  <path id="compile.classpath">
+    <pathelement location="${build.home}/classes"/>
   </path>
-  <target name="init" description="o Initializes some properties">
-    <mkdir dir="${libdir}">
-    </mkdir>
-    <condition property="noget">
-      <equals arg2="only" arg1="${build.sysclasspath}">
-      </equals>
-    </condition>
-    <!--Test if JUNIT is present in ANT classpath-->
 
-    <available property="Junit.present" classname="junit.framework.Test">
-    </available>
-    <!--Test if user defined a proxy-->
+  <!-- Construct compile classpath -->
+  <path id="downloaded.lib.classpath">
+    <pathelement location="${download.lib.dir}/junit.jar"/>
+  </path>
 
-    <condition property="useProxy">
-      <and>
-        <isset property="proxy.host">
-        </isset>
-        <not>
-          <equals trim="true" arg2="" arg1="${proxy.host}">
-          </equals>
-        </not>
-      </and>
-    </condition>
+<!-- ========== Test Execution Defaults =================================== -->
+
+
+  <!-- Construct unit test classpath -->
+  <path id="test.classpath">
+    <pathelement location="${build.home}/classes"/>
+    <pathelement location="${build.home}/tests"/>
+    <pathelement location="${junit.jar}"/>
+    <path refid="downloaded.lib.classpath"/>
+  </path>
+
+  <!-- Should all tests fail if one does? -->
+  <property name="test.failonerror"        value="true"/>
+
+  <!-- The test runner to execute -->
+  <property name="test.runner"             value="junit.textui.TestRunner"/>
+
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="clean" description="Clean build and distribution directories">
+    <delete    dir="${build.home}"/>
+    <delete    dir="test"/>
   </target>
-  <target name="compile" description="o Compile the code" depends="get-deps">
-    <mkdir dir="${classesdir}">
-    </mkdir>
-    <javac destdir="${classesdir}" deprecation="true" debug="true" optimize="false" excludes="**/package.html">
-      <src>
-        <pathelement location="${basedir}/src/java">
-        </pathelement>
-      </src>
-      <classpath refid="build.classpath">
-      </classpath>
+
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- ${component.title} ${component.version} --------"/>
+    <filter  token="name"                  value="${component.name}"/>
+    <filter  token="package"               value="${component.package}"/>
+    <filter  token="version"               value="${component.version}"/>
+    <filter  token="compilesource"         value="${compile.source}"/>
+    <filter  token="compiletarget"         value="${compile.target}"/>
+    <tstamp/>
+    <mkdir dir="${build.home}"/>
+    <mkdir dir="${build.home}/classes"/>
+    <mkdir dir="${build.home}/tests"/>
+  </target>
+
+<!-- ========== Compile Targets =========================================== -->
+
+  <target name="compile" depends="init" description="Compile dependant on JDK version">
+    <condition property="is.jdk13">
+      <equals arg1="${ant.java.version}" arg2="1.3" />
+    </condition>
+    <condition property="not.jdk13">
+      <not><equals arg1="${ant.java.version}" arg2="1.3" /></not>
+    </condition>
+    <antcall target="compile.jdk13" />
+    <antcall target="compile.all" />
+  </target>
+
+  <!-- Compile all classes -->
+  <target name="compile.all" unless="is.jdk13"
+          description="Compile ALL classes">
+    <echo message="*** Compiling all classes ***" />
+
+    <!-- check JDK 1.3 -->
+    <fail message="switch to JDK 1.4+">
+      <condition>
+        <equals arg1="${ant.java.version}" arg2="1.3" />
+      </condition>
+    </fail>
+
+    <javac  srcdir="${source.home}"
+           destdir="${build.home}/classes"
+             source="${maven.compile.source}"
+             target="${maven.compile.target}"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
     </javac>
-    <mkdir dir="${classesdir}/META-INF" />
-    <copy todir="${classesdir}/META-INF">
-      <fileset dir="${basedir}/.">
-        <include name="LICENSE.txt" />
-        <include name="NOTICE.txt" />
+  </target>
+
+  <!-- Compile excluding JDK 1.4 classes -->
+  <target name="compile.jdk13" unless="not.jdk13"
+          description="Compile ONLY JDK 1.3 compatible classes ">
+    <echo message="*** Compiling ONLY JDK 1.3 compatible classes ***" />
+
+    <fail message="switch to JDK 1.3">
+      <condition>
+        <not><equals arg1="${ant.java.version}" arg2="1.3" /></not>
+      </condition>
+    </fail>
+    <javac  srcdir="${source.home}"
+           destdir="${build.home}/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+      <include name="**/*.java"/>
+      <exclude name="**/CharSequenceReader.java"/>
+      <exclude name="**/IOExceptionWithCause.java"/>
+      <exclude name="**/RegexFileFilter.java"/>
+      <exclude name="**/FileWriterWithEncoding.java"/>
+    </javac>
+  </target>
+
+
+<!-- ========== Unit Test Targets ========================================= -->
+
+
+  <target name="compile.tests" depends="compile,download-dependencies"
+   description="Compile unit test cases">
+    <javac  srcdir="${test.home}"
+           destdir="${build.home}/tests"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="test.classpath"/>
+    </javac>
+  </target>
+
+
+  <target name="test"  depends="compile.tests,test.main,test.comparator,test.filefilter,test.input,test.output"
+                       description="Run all unit test cases">
+  </target>
+
+  <target name="test.main"  depends="compile.tests" description="Run main unit test cases">
+    <echo message="Running main tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.io.PackageTestSuite"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.comparator"  depends="compile.tests" description="Run comparator unit test cases">
+    <echo message="Running comparator tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.io.comparator.PackageTestSuite"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.filefilter"  depends="compile.tests" description="Run filefilter unit test cases">
+    <echo message="Running filefilter tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.io.filefilter.PackageTestSuite"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.input"  depends="compile.tests" description="Run input unit test cases">
+    <echo message="Running input tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.io.input.PackageTestSuite"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.output"  depends="compile.tests" description="Run output unit test cases">
+    <echo message="Running output tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="org.apache.commons.io.output.PackageTestSuite"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+
+<!-- ========== Produce JavaDocs ========================================== -->
+
+  <target name="javadoc" depends="compile" description="Create component Javadoc documentation">
+    <tstamp>
+        <format property="current.year" pattern="yyyy"/>
+    </tstamp>
+    <javadoc sourcepath="${source.home}"
+                destdir="${build.home}/apidocs"
+           packagenames="org.apache.commons.*"
+                 author="true"
+                private="true"
+                version="true"
+               doctitle="&lt;h1&gt;${component.title} ${component.version}&lt;/h1&gt;"
+            windowtitle="${component.title} ${component.version}"
+                 bottom="Copyright (c) 2002-${current.year}  Apache Software Foundation"
+           classpathref="compile.classpath" />
+  </target>
+
+
+<!-- ========== Create Jar ================================================ -->
+
+  <target name="jar" depends="compile" description="Create jar file">
+
+    <mkdir dir="${build.home}/classes/META-INF"/>
+    <copy file="LICENSE.txt" tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <copy file="NOTICE.txt"  tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
+
+    <manifest file="${build.home}/MANIFEST.MF">
+        <attribute name="Specification-Title"      value="${component.title}"/>
+        <attribute name="Specification-Version"    value="${component.version}"/>
+        <attribute name="Specification-Vendor"     value="Apache Software Foundation"/>
+        <attribute name="Implementation-Title"     value="${component.title}"/>
+        <attribute name="Implementation-Version"   value="${component.version}"/> 
+        <attribute name="Implementation-Vendor"    value="Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+        <attribute name="X-Compile-Source-JDK"     value="${maven.compile.source}"/>
+        <attribute name="X-Compile-Target-JDK"     value="${maven.compile.target}"/>
+    </manifest>
+
+    <jar jarfile="${build.home}/${dist.file.base}.jar"
+         basedir="${build.home}/classes"
+        manifest="${build.home}/MANIFEST.MF"/>
+  </target>
+
+
+<!-- ========== Distribution Target =========================================== -->
+
+  <target name="dist" depends="clean,jar,javadoc" description="Create distribution artifacts">
+
+    <mkdir dir="${dist.home}"/>
+
+    <!-- jar(s) -->
+    <copy todir="${dist.home}">
+      <fileset dir=".">
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+      <fileset dir="${build.home}">
+        <include name="*.jar"/>
       </fileset>
     </copy>
-  </target>
 
-  <target name="jar" description="o Create the jar" depends="compile,test">
-    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/*.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF" />
-  </target>
-  <target name="dist-jar" depends="compile">
-    <jar jarfile="${defaulttargetdir}/${final.name}.jar" excludes="**/*.html" basedir="${classesdir}" manifest="${basedir}/src/conf/MANIFEST.MF" />
-    <copy todir="${srcdir}">
-      <fileset dir="${basedir}/src/java" includes="**/*.java" />
+    <!-- Binary Distro -->
+    <mkdir dir="${stage.bin.dir}/${dist.file.base}"/>
+    <copy todir="${stage.bin.dir}/${dist.file.base}">
+      <fileset dir=".">
+        <include name="LICENSE.txt"/>
+        <include name="NOTICE.txt"/>
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+      <fileset dir="${build.home}">
+        <include name="*.jar"/>
+      </fileset>
     </copy>
-    <copy todir="${srcdir}/META-INF">
-      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
+    <copy todir="${stage.bin.dir}/${dist.file.base}/apidocs">
+      <fileset dir="${build.home}/apidocs" />
     </copy>
-    <jar jarfile="${defaulttargetdir}/${final.name}-sources.jar" basedir="${srcdir}" manifest="${basedir}/src/conf/MANIFEST.MF"/>
-    <antcall target="internal-md5">
-      <param name="path" value="${defaulttargetdir}/${final.name}.jar"/>
-    </antcall>
-  </target>
 
-  <target name="clean" description="o Clean up the generated directories">
-    <delete dir="${defaulttargetdir}">
-    </delete>
-    <delete dir="${dist.bin}">
-    </delete>
-  </target>
-
-  <target name="dist" description="o Create a distribution" depends="dist-jar, dist-existing-jar">
-  </target>
-  <target name="dist-existing-jar" depends="javadoc">
-    <!-- this is used in a release where the jar is built on JDK1.3 -->
-    <!-- but the javadoc is built on JDK1.4 -->
-    <mkdir dir="${dist.bin}" />
-    <mkdir dir="${dist.zip.dir}" />
-    <!-- Javadoc -->
-    <copy todir="${javadocdir}/META-INF">
-      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*" />
+    <!-- Source Distro -->
+    <mkdir dir="${stage.src.dir}/${dist.file.base}-src"/>
+    <copy todir="${stage.src.dir}/${dist.file.base}-src">
+      <fileset dir=".">
+        <include name="build.xml"/>
+        <include name="build-check-jdk13.xml"/>
+        <include name="checkstyle.xml"/>
+        <include name="LICENSE.txt"/>
+        <include name="maven.xml"/>
+        <include name="NOTICE.txt"/>
+        <include name="pom.xml"/>
+        <include name="project.properties"/>
+        <include name="project.xml"/>
+        <include name="PROPOSAL.html"/>
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
     </copy>
-    <jar jarfile="${defaulttargetdir}/${final.name}-javadoc.jar" basedir="${javadocdir}" manifest="${basedir}/src/conf/MANIFEST.MF"/>
-  	<!-- Binary -->
-    <copy todir="${dist.bin}">
-      <fileset dir="${defaulttargetdir}" includes="*.jar,*.zip" />
-      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*, README*, RELEASE-NOTES*" />
+    <copy todir="${stage.src.dir}/${dist.file.base}-src/src">
+      <fileset dir="src" />
     </copy>
-    <!-- Unix tar gz binary -->
-  	<fixcrlf srcdir="${dist.bin}" eol="lf" includes="*.txt" />
-    <tar longfile="gnu" tarfile="${dist.bin.tar.name}">
-      <tarfileset dir="${dist.build.dir}"/>
-    </tar>
-    <gzip zipfile="${dist.bin.gz.name}" src="${dist.bin.tar.name}"/>
-    <antcall target="internal-md5">
-      <param name="path" value="${dist.bin.gz.name}"/>
-    </antcall>
-    <delete file="${dist.bin.tar.name}" />
-    <!-- Windows zip binary -->
-  	<fixcrlf srcdir="${dist.bin}" eol="crlf" includes="*.txt" />
-    <zip zipfile="${dist.bin.zip.name}" >
-      <zipfileset dir="${dist.build.dir}"/>
-    </zip>
-    <antcall target="internal-md5">
-      <param name="path" value="${dist.bin.zip.name}"/>
-    </antcall>
-  	<!-- Source -->
-    <delete dir="${dist.bin}" />
-    <copy todir="${dist.src}">
-      <fileset dir="${defaulttargetdir}" includes="*.jar" />
-      <fileset dir="${basedir}" includes="LICENSE*, NOTICE*, README*, RELEASE-NOTES*, build.xml, checkstyle.xml, maven.xml, project.properties, project.xml" />
-      <fileset dir="${basedir}" includes="xdocs/**, src/**" />
+    <copy todir="${stage.src.dir}/${dist.file.base}-src/xdocs">
+      <fileset dir="xdocs" />
     </copy>
-    <!-- Unix tar gz source -->
-  	<fixcrlf srcdir="${dist.src}" eol="lf"  includes="*.txt,*.xml,*.css,*.properties" />
-    <tar longfile="gnu" tarfile="${dist.src.tar.name}">
-      <tarfileset dir="${dist.build.dir}"/>
-    </tar>
-    <gzip zipfile="${dist.src.gz.name}" src="${dist.src.tar.name}"/>
-    <antcall target="internal-md5">
-      <param name="path" value="${dist.src.gz.name}"/>
-    </antcall>
-    <delete file="${dist.src.tar.name}" />
-    <!-- Windows zip source -->
-  	<fixcrlf srcdir="${dist.src}" eol="crlf" includes="*.txt,*.xml,*.css,*.properties" />
-    <zip zipfile="${dist.src.zip.name}" >
-      <zipfileset dir="${dist.build.dir}"/>
-    </zip>
-    <antcall target="internal-md5">
-      <param name="path" value="${dist.src.zip.name}"/>
-    </antcall>
-  	<!-- POM -->
-  	<copy file="project.xml" tofile="${defaulttargetdir}/${final.name}.pom" />
-    <antcall target="internal-md5">
-      <param name="path" value="${defaulttargetdir}/${final.name}.pom"/>
-    </antcall>
-  	<!-- Tidy -->
-    <delete dir="${dist.build.dir}" />
-  </target>
-  <target name="internal-md5">
-    <basename property="_base" file="${path}"/>
-    <checksum file="${path}" property="md5"/>
-   	<echo message="${md5} *${_base}" file="${path}.md5"/>
+
+    <zip  zipfile="${dist.home}/${dist.file.base}.zip"     basedir="${stage.bin.dir}"/>
+    <zip  zipfile="${dist.home}/${dist.file.base}-src.zip" basedir="${stage.src.dir}"/>
+    <tar  tarfile="${dist.home}/${dist.file.base}.tar"     basedir="${stage.bin.dir}" longfile="gnu"/>
+    <tar  tarfile="${dist.home}/${dist.file.base}-src.tar" basedir="${stage.src.dir}" longfile="gnu"/>
+    <gzip     src="${dist.home}/${dist.file.base}.tar"     zipfile="${dist.home}/${dist.file.base}.tar.gz"/>
+    <gzip     src="${dist.home}/${dist.file.base}-src.tar" zipfile="${dist.home}/${dist.file.base}-src.tar.gz"/>
+
+    <!-- clean up staging directories -->
+    <delete    dir="${stage.bin.dir}"/>
+    <delete    dir="${stage.src.dir}"/>
+
   </target>
 
-  <target name="test" description="o Run the test cases" if="test.failure" depends="internal-test">
-    <fail message="There were test failures." />
-  </target>
-  <target name="internal-test" if="Junit.present" depends="junit-present,compile-tests">
-    <mkdir dir="${testreportdir}">
-    </mkdir>
-    <junit dir="${basedir}" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
-      <sysproperty key="basedir" value="." />
-      <formatter type="plain" />
-      <formatter usefile="false" type="plain" />
-      <classpath>
-        <path refid="build.classpath" />
-        <pathelement path="${testclassesdir}" />
-        <pathelement path="${classesdir}" />
-      </classpath>
-      <batchtest todir="${testreportdir}">
-        <fileset dir="${basedir}/src/test">
-          <include name="**/*Test*" />
-          <exclude name="**/*AbstractTestCase*" />
-          <exclude name="**/AllIOTestSuite*" />
-          <exclude name="**/PackageTestSuite*" />
-          <exclude name="**/testtools/**" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-  <target name="testjar" description="o Run the test cases against the jar" if="test.failure" depends="internal-testjar">
-    <fail message="There were test failures." />
-  </target>
-  <target name="internal-testjar" if="Junit.present" depends="junit-present,compile-tests">
-    <mkdir dir="${testreportdir}">
-    </mkdir>
-    <junit dir="${basedir}" failureproperty="test.failure" printSummary="yes" fork="true" haltonerror="true">
-      <sysproperty key="basedir" value="." />
-      <formatter type="plain" />
-      <formatter usefile="false" type="plain" />
-      <classpath>
-        <path refid="build.classpath" />
-        <pathelement path="${testclassesdir}" />
-        <pathelement location="${defaulttargetdir}/${final.name}.jar"/>
-      </classpath>
-      <batchtest todir="${testreportdir}">
-        <fileset dir="${basedir}/src/test">
-          <include name="**/*Test*" />
-          <exclude name="**/*AbstractTestCase*" />
-          <exclude name="**/AllIOTestSuite*" />
-          <exclude name="**/PackageTestSuite*" />
-          <exclude name="**/testtools/**" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-  <target name="junit-present" unless="Junit.present" depends="init">
-    <echo>================================= WARNING ================================</echo>
-    <echo>Junit isn't present in your ${ANT_HOME}/lib directory. Tests not executed.</echo>
-    <echo>==========================================================================</echo>
-  </target>
-  <target name="compile-tests" if="Junit.present" depends="junit-present,compile">
-    <mkdir dir="${testclassesdir}">
-    </mkdir>
-    <javac destdir="${testclassesdir}" deprecation="true" debug="true" optimize="false" excludes="**/package.html">
-      <src>
-        <pathelement location="${basedir}/src/test">
-        </pathelement>
-      </src>
-      <classpath>
-        <path refid="build.classpath">
-        </path>
-        <pathelement path="${classesdir}">
-        </pathelement>
-      </classpath>
-    </javac>
-  </target>
-  <target name="javadoc" description="o Generate javadoc" depends="get-deps">
-    <mkdir dir="${javadocdir}">
-    </mkdir>
-    <tstamp>
-      <format pattern="2002-yyyy" property="year">
-      </format>
-    </tstamp>
-    <property name="copyright" value="Copyright &amp;copy;  The Apache Software Foundation. All Rights Reserved.">
-    </property>
-    <property name="title" value="IO 1.4-SNAPSHOT">
-    </property>
-    <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="${basedir}/src/java" packagenames="org.apache.commons.io.*" overview="src/java/org/apache/commons/io/overview.html">
-      <classpath>
-        <path refid="build.classpath">
-        </path>
-      </classpath>
-      <link href="http://java.sun.com/j2se/1.4/docs/api/" />
-      <link href="http://java.sun.com/webservices/docs/1.5/api/" />        
-    </javadoc>
-  </target>
-  <target name="get-deps" unless="noget">
-  </target>
-  <target name="setProxy" if="useProxy" depends="init">
-    <!--Proxy settings works only with a JDK 1.2 and higher.-->
 
-    <echo>Proxy used :</echo>
-    <echo>Proxy host [${proxy.host}]</echo>
-    <echo>Proxy port [${proxy.port}]</echo>
-    <echo>Proxy user [${proxy.username}]</echo>
-    <setproxy proxyuser="${proxy.username}" proxyport="${proxy.port}" proxypassword="${proxy.password}" proxyhost="${proxy.host}">
-    </setproxy>
-  </target>
-  <target name="noProxy" unless="useProxy" depends="init">
-    <echo>Proxy not used.</echo>
-  </target>
-  <target name="install-maven">
-    <get dest="${user.home}/maven-install-latest.jar" usetimestamp="true" src="${repo}/maven/maven-install-latest.jar">
-    </get>
-    <unjar dest="${maven.home}" src="${user.home}/maven-install-latest.jar">
-    </unjar>
-  </target>
+<!-- ========== Download Dependencies =========================================== -->
 
-<!-- ====================================================================== -->
-  <target name="clirr">
-    <taskdef resource="clirrtask.properties">
-      <classpath path="../clirr/clirr-core-0.6-uber.jar;" />
-    </taskdef>
-    <clirr>
-      <origfiles dir="${libdir}/commons-io/jars" includes="commons-io-1.1.jar"/>
-      <newfiles dir="${defaulttargetdir}" includes="${final.name}.jar" />
-      <formatter type="plain" outfile="${defaulttargetdir}/clirr.txt" />
-    </clirr>
-  </target>
+    <target name="download-dependencies" 
+           depends="check-availability" unless="skip.download">
+        <echo message="doing download-dependencies..." />
+        <antcall target="download-junit" />
+    </target>
 
+    <target name="check-availability">
+        <echo message="doing check-availability..." />
+        <available file="${junit.jar}" property="junit.found"/>
+    </target>
+
+    <target name="download-junit" unless="junit.found">
+        <echo message="Downloading junit..."/>
+        <mkdir dir="${download.lib.dir}" />
+        <get dest="${download.lib.dir}/junit.jar"
+            usetimestamp="true" ignoreerrors="true"
+            src="http://www.ibiblio.org/maven/junit/jars/junit-3.8.1.jar"/>
+    </target>
+      
 </project>
+

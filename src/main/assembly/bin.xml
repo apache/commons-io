@@ -37,7 +37,7 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>target/site</directory>
+            <directory>target/site/apidocs</directory>
             <outputDirectory>docs</outputDirectory>
             <excludes>
                 <exclude>**/customsorttypes.js</exclude>

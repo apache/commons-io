@@ -285,6 +285,7 @@ org.apache.commons.io.output;version=${project.version}
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
+        <version>2.0-beta-3</version>
         <configuration>
           <issueLinkTemplate>%URL%/../%ISSUE%</issueLinkTemplate>
           <!--
@@ -308,6 +309,7 @@ org.apache.commons.io.output;version=${project.version}
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.1</version>
         <configuration>
           <configLocation>checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
@@ -327,6 +329,7 @@ org.apache.commons.io.output;version=${project.version}
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
+        <version>2.1</version>
         <configuration>
           <comparisonVersion>1.3.2</comparisonVersion>
           <minSeverity>info</minSeverity>
