@@ -26,7 +26,7 @@
     <!-- Copy Files -->
     <ant:copy todir="${maven.dist.bin.assembly.dir}">
       <ant:fileset dir=".">
-        <ant:include name="RELEASE-NOTES.html"/>
+        <ant:include name="RELEASE-NOTES.txt"/>
         <ant:include name="NOTICE.txt"/>
       </ant:fileset>
     </ant:copy>
@@ -46,17 +46,11 @@
     <!-- Copy Files -->
     <ant:copy todir="${maven.dist.src.assembly.dir}">
       <ant:fileset dir=".">
-        <ant:include name="RELEASE-NOTES.html"/>
+        <ant:include name="checkstyle.xml"/>
+        <ant:include name="RELEASE-NOTES.txt"/>
         <ant:include name="NOTICE.txt"/>
         <ant:include name="PROPOSAL.html"/>
-        <ant:include name="STATUS.html"/>
-      </ant:fileset>
-    </ant:copy>
-
-    <!-- Copy Jars -->
-    <ant:copy todir="${maven.dist.src.assembly.dir}">
-      <ant:fileset dir="${maven.build.dir}">
-        <ant:include name="*.jar"/>
+        <ant:include name="pom.xml"/>
       </ant:fileset>
     </ant:copy>
     
