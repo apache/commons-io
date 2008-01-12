@@ -54,7 +54,7 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Maven 1 Goals">
   <p>
-    The following <strong><i>Maven 1</i></strong> commands can be used to build validator:
+    The following <strong><i>Maven 1</i></strong> commands can be used to build io:
   </p>
   <ul>
     <li><code>maven clean</code> - clean up</li>
@@ -67,7 +67,7 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Ant Goals">
   <p>
-    The following <strong><i>Maven 1</i></strong> commands can be used to build validator:
+    The following <strong><i>Maven 1</i></strong> commands can be used to build io:
   </p>
   <ul>
     <li><code>ant clean</code> - clean up</li>
