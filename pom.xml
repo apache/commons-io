@@ -355,6 +355,24 @@ org.apache.commons.io.output;version=${project.version}
             </executions>
           </plugin>
           <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <tasks>
+                    <copy todir="${project.build.directory}/site/api-release">
+                      <fileset dir="${project.build.directory}/site/apidocs"/>
+                    </copy>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
