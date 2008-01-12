@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>7-SNAPSHOT</version>
+    <version>6</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -210,6 +210,16 @@
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>NOTICE.txt</include>
+          <include>LICENSE.txt</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -272,6 +282,33 @@ org.apache.commons.io.output;version=${project.version}
             </manifestEntries>
           </archive>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.1</version>
+        <!--
+          - Copy LICENSE.txt and NOTICE.txt so that they are included in the javadoc.jar
+          -->
+        <executions>
+          <execution>
+            <id>javadoc.resources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.directory}/apidocs/META-INF">
+                  <fileset dir="${basedir}">
+                    <include name="LICENSE.txt" />
+                    <include name="NOTICE.txt" />
+                  </fileset>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
