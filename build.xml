@@ -269,6 +269,7 @@
 <!-- ========== Produce JavaDocs ========================================== -->
 
   <target name="javadoc" depends="compile" description="Create component Javadoc documentation">
+    <mkdir dir="${build.home}/apidocs"/>
     <tstamp>
         <format property="current.year" pattern="yyyy"/>
     </tstamp>
