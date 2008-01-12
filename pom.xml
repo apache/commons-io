@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>6</version>
+    <version>7-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -277,7 +277,7 @@
           <artifactId>maven-jar-plugin</artifactId>
           <configuration>
             <archive>
-              <!-- 
+              <!--
                    Configure OSGi bundle information
                    (remvoe when maven bundle plugin is added to commons-parent pom)
                -->
