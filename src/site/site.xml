@@ -38,7 +38,7 @@
             <item name="Team"                 href="/team-list.html"/>
             <item name="Tasks"                href="/tasks.html"/>
             <item name="Proposal"             href="/proposal.html"/>
-            <item name="SVN repository"       href="http://svn.apache.org/viewvc/commons/proper/io/trunk/"/>
+            <item name="SVN repository"       href="/source-repository.html"/>
             <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
         </menu>
 
