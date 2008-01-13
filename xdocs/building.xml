@@ -74,6 +74,15 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Ant Goals">
   <p>
+    <strong>Note:</strong>
+    <ul>
+        <li>The ant build is JDK dependant. Building with JDK 1.3 excludes
+            JDK 1.4 dependant classes.</li>
+        <li>Dependencies are automatically downloaded if not specified explicitly in
+            a <code>build.properties</code> file.</li>
+    </ul>
+  </p>
+  <p>
     The following <strong><i>Ant</i></strong> commands can be used to build io:
   </p>
   <ul>
@@ -83,10 +92,6 @@ limitations under the License.
     <li><code>ant jar</code> - build the jar</li>
     <li><code>ant dist</code> - Create the source and binary distributions</li>
   </ul>
-  <p>
-    <strong>N.B.</strong>The ant build is JDK dependant. Building with JDK 1.3 excludes
-    JDK 1.4 dependant classes.
-  </p>
 </section>
 <!-- ================================================== -->
 </body>
