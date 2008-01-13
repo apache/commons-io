@@ -71,7 +71,7 @@
   <property name="dist.home"               value="${build.home}/dist"/>
 
   <!-- Base file name for dist files -->
-  <property name="dist.file.base"        value="${component.name}-${component.version}"/>
+  <property name="final.name"        value="${component.name}-${component.version}"/>
 
   <!-- Directory where binary release files are staged -->
   <property name="stage.bin.dir"           value="${dist.home}/stage-bin"/>
@@ -106,7 +106,7 @@
   <!-- Construct unit test classpath -->
   <path id="test.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${build.home}/tests"/>
+    <pathelement location="${build.home}/test-classes"/>
     <pathelement location="${junit.jar}"/>
     <path refid="downloaded.lib.classpath"/>
   </path>
@@ -137,7 +137,7 @@
     <tstamp/>
     <mkdir dir="${build.home}"/>
     <mkdir dir="${build.home}/classes"/>
-    <mkdir dir="${build.home}/tests"/>
+    <mkdir dir="${build.home}/test-classes"/>
   </target>
 
 <!-- ========== Compile Targets =========================================== -->
@@ -207,7 +207,7 @@
   <target name="compile.tests" depends="compile,download-dependencies"
    description="Compile unit test cases">
     <javac  srcdir="${test.home}"
-           destdir="${build.home}/tests"
+           destdir="${build.home}/test-classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
@@ -306,7 +306,7 @@
         <attribute name="X-Compile-Target-JDK"     value="${maven.compile.target}"/>
     </manifest>
 
-    <jar jarfile="${build.home}/${dist.file.base}.jar"
+    <jar jarfile="${build.home}/${final.name}.jar"
          basedir="${build.home}/classes"
         manifest="${build.home}/MANIFEST.MF"/>
   </target>
@@ -329,8 +329,8 @@
     </copy>
 
     <!-- Binary Distro -->
-    <mkdir dir="${stage.bin.dir}/${dist.file.base}"/>
-    <copy todir="${stage.bin.dir}/${dist.file.base}">
+    <mkdir dir="${stage.bin.dir}/${final.name}"/>
+    <copy todir="${stage.bin.dir}/${final.name}">
       <fileset dir=".">
         <include name="LICENSE.txt"/>
         <include name="NOTICE.txt"/>
@@ -340,13 +340,13 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
-    <copy todir="${stage.bin.dir}/${dist.file.base}/apidocs">
+    <copy todir="${stage.bin.dir}/${final.name}/apidocs">
       <fileset dir="${build.home}/apidocs" />
     </copy>
 
     <!-- Source Distro -->
-    <mkdir dir="${stage.src.dir}/${dist.file.base}-src"/>
-    <copy todir="${stage.src.dir}/${dist.file.base}-src">
+    <mkdir dir="${stage.src.dir}/${final.name}-src"/>
+    <copy todir="${stage.src.dir}/${final.name}-src">
       <fileset dir=".">
         <include name="build.xml"/>
         <include name="build-check-jdk13.xml"/>
@@ -361,25 +361,30 @@
         <include name="RELEASE-NOTES.txt"/>
       </fileset>
     </copy>
-    <copy todir="${stage.src.dir}/${dist.file.base}-src/src">
+    <copy todir="${stage.src.dir}/${final.name}-src/src">
       <fileset dir="src" />
     </copy>
-    <copy todir="${stage.src.dir}/${dist.file.base}-src/xdocs">
+    <copy todir="${stage.src.dir}/${final.name}-src/xdocs">
       <fileset dir="xdocs" />
     </copy>
 
-    <zip  zipfile="${dist.home}/${dist.file.base}.zip"     basedir="${stage.bin.dir}"/>
-    <zip  zipfile="${dist.home}/${dist.file.base}-src.zip" basedir="${stage.src.dir}"/>
-    <tar  tarfile="${dist.home}/${dist.file.base}.tar"     basedir="${stage.bin.dir}" longfile="gnu"/>
-    <tar  tarfile="${dist.home}/${dist.file.base}-src.tar" basedir="${stage.src.dir}" longfile="gnu"/>
-    <gzip     src="${dist.home}/${dist.file.base}.tar"     zipfile="${dist.home}/${dist.file.base}.tar.gz"/>
-    <gzip     src="${dist.home}/${dist.file.base}-src.tar" zipfile="${dist.home}/${dist.file.base}-src.tar.gz"/>
+    <zip  zipfile="${dist.home}/${final.name}.zip"     basedir="${stage.bin.dir}"/>
+    <zip  zipfile="${dist.home}/${final.name}-src.zip" basedir="${stage.src.dir}"/>
+    <tar  tarfile="${dist.home}/${final.name}.tar"     basedir="${stage.bin.dir}" longfile="gnu"/>
+    <tar  tarfile="${dist.home}/${final.name}-src.tar" basedir="${stage.src.dir}" longfile="gnu"/>
+    <gzip     src="${dist.home}/${final.name}.tar"     zipfile="${dist.home}/${final.name}.tar.gz"/>
+    <gzip     src="${dist.home}/${final.name}-src.tar" zipfile="${dist.home}/${final.name}-src.tar.gz"/>
 
     <!-- clean up staging directories -->
     <delete    dir="${stage.bin.dir}"/>
     <delete    dir="${stage.src.dir}"/>
 
   </target>
+
+
+<!-- ========== Gump Target ===================================================== -->
+
+  <target name="gump" depends="clean,test,javadoc,jar" description="Gump Target - clean,test,javadoc,jar"/>
 
 
 <!-- ========== Download Dependencies =========================================== -->
