@@ -36,7 +36,13 @@ import org.apache.commons.io.IOUtils;
  * <code>FileWriter</code>.
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
- * The encoding may also be specified, and defaults to the platform default.
+ * <p>
+ * The encoding must be specified using either the name of the {@link Charset},
+ * the {@link Charset}, or a {@link CharsetEncoder}. If the default encoding
+ * is required then use the {@link java.io.FileWriter} directly, rather than
+ * this implementation.
+ * <p>
+ * 
  *
  * @since Commons IO 1.4
  * @version $Id$
