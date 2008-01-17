@@ -318,7 +318,10 @@
                doctitle="&lt;h1&gt;${component.title} ${component.version}&lt;/h1&gt;"
             windowtitle="${component.title} ${component.version}"
                  bottom="Copyright (c) 2002-${current.year}  Apache Software Foundation"
-           classpathref="compile.classpath" />
+           classpathref="compile.classpath">
+        <link href="http://java.sun.com/javaee/5/docs/api/"/>
+        <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>        
+    </javadoc>
   </target>
 
 
