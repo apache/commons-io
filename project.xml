@@ -21,7 +21,7 @@
   <name>IO</name>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <currentVersion>1.4-SNAPSHOT</currentVersion>
+  <currentVersion>1.4</currentVersion>
   <inceptionYear>2002</inceptionYear>
   <shortDescription>Commons IO</shortDescription>
   <description>
