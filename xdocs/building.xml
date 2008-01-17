@@ -87,7 +87,7 @@ limitations under the License.
   </p>
   <ul>
     <li><code>ant clean</code> - clean up</li>
-    <li><code>ant test</code> - compile and run the unit tests (requires JDK 1.4+)</li>
+    <li><code>ant test</code> - compile and run the unit tests</li>
     <li><code>ant javadoc</code> - create javadocs</li>
     <li><code>ant jar</code> - build the jar</li>
     <li><code>ant dist</code> - Create the source and binary distributions</li>

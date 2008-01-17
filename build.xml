@@ -158,7 +158,7 @@
           description="Compile ALL classes">
     <echo message="*** Compiling all classes ***" />
 
-    <!-- check JDK 1.3 -->
+    <!-- check JDK 1.4 -->
     <fail message="switch to JDK 1.4+">
       <condition>
         <equals arg1="${ant.java.version}" arg2="1.3" />
@@ -181,6 +181,7 @@
           description="Compile ONLY JDK 1.3 compatible classes ">
     <echo message="*** Compiling ONLY JDK 1.3 compatible classes ***" />
 
+    <!-- check JDK 1.3 -->
     <fail message="switch to JDK 1.3">
       <condition>
         <not><equals arg1="${ant.java.version}" arg2="1.3" /></not>
@@ -203,64 +204,99 @@
 
 <!-- ========== Unit Test Targets ========================================= -->
 
+    <target name="compile.tests" depends="compile, download-dependencies" description="Compile unit test cases dependant on JDK version">
+      <antcall target="compile.tests.jdk13" />
+      <antcall target="compile.tests.all" />
+    </target>
+    
+    <!-- Compile all classes -->
+    <target name="compile.tests.all" unless="is.jdk13"
+            description="Compile ALL test classes">
+      <echo message="*** Compiling all test classes ***" />
 
-  <target name="compile.tests" depends="compile,download-dependencies"
-   description="Compile unit test cases">
-    <javac  srcdir="${test.home}"
-           destdir="${build.home}/test-classes"
+      <!-- check JDK 1.4 -->
+      <fail message="switch to JDK 1.4+">
+        <condition>
+          <equals arg1="${ant.java.version}" arg2="1.3" />
+        </condition>
+      </fail>
+
+      <javac srcdir="${test.home}"
+             destdir="${build.home}/test-classes"
              debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="test.classpath"/>
-    </javac>
-  </target>
+             deprecation="${compile.deprecation}"
+             optimize="${compile.optimize}">
+          <classpath refid="test.classpath"/>
+      </javac>
+    </target>
 
+    <!-- Compile excluding JDK 1.4 classes -->
+    <target name="compile.tests.jdk13" unless="not.jdk13"
+            description="Compile ONLY JDK 1.3 compatible test classes ">
+      <echo message="*** Compiling ONLY JDK 1.3 compatible test classes ***" />
 
-  <target name="test"  depends="compile.tests,test.main,test.comparator,test.filefilter,test.input,test.output"
+      <fail message="switch to JDK 1.3">
+        <condition>
+          <not><equals arg1="${ant.java.version}" arg2="1.3" /></not>
+        </condition>
+      </fail>
+      <javac srcdir="${test.home}"
+               destdir="${build.home}/test-classes"
+               debug="${compile.debug}"
+               deprecation="${compile.deprecation}"
+               optimize="${compile.optimize}">             
+          <classpath refid="test.classpath"/>
+          <include name="**/*.java"/>            
+          <exclude name="**/RegexFileFilterTestCase.java"/>
+          <exclude name="**/FileWriterWithEncodingTest.java"/>
+          <exclude name="**/IOExceptionWithCauseTestCase.java"/>
+          <exclude name="**/CharSequenceReaderTest.java"/>
+      </javac>
+    </target>
+
+  <target name="test"  depends="compile.tests"
                        description="Run all unit test cases">
+      <antcall target="run.tests.jdk13" />
+      <antcall target="run.tests.jdk14" />
   </target>
 
-  <target name="test.main"  depends="compile.tests" description="Run main unit test cases">
-    <echo message="Running main tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.PackageTestSuite"/>
-      <classpath refid="test.classpath"/>
-    </java>
+  <target name="run.tests.jdk13"
+          description="Run ONLY JDK 1.3 compatible test classes ">
+
+    <echo message="**** Running JDK 1.3 compatible test classes ****"/>
+
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.PackageTestSuite"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.comparator.PackageTestSuite"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.filefilter.PackageTestSuite"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.input.PackageTestSuite"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.output.PackageTestSuite"/></antcall>
+
   </target>
 
-  <target name="test.comparator"  depends="compile.tests" description="Run comparator unit test cases">
-    <echo message="Running comparator tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.comparator.PackageTestSuite"/>
-      <classpath refid="test.classpath"/>
-    </java>
+  <target name="run.tests.jdk14"  unless="is.jdk13"
+          description="Run ONLY tests requiring JDK 1.4">
+
+    <echo message="**** Running tests requiring JDK 1.4 ****"/>
+
+    <!-- check JDK 1.4 -->
+    <fail message="switch to JDK 1.4+">
+      <condition>
+        <equals arg1="${ant.java.version}" arg2="1.3" />
+      </condition>
+    </fail>
+
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.IOExceptionWithCauseTestCase"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.filefilter.RegexFileFilterTestCase"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.input.CharSequenceReaderTest"/></antcall>
+    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.output.FileWriterWithEncodingTest"/></antcall>
+
   </target>
 
-  <target name="test.filefilter"  depends="compile.tests" description="Run filefilter unit test cases">
-    <echo message="Running filefilter tests ..."/>
+  <target name="exec.test" description="Run a unit test case">
+    <echo message="Running Test ${testclass} ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.filefilter.PackageTestSuite"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.input"  depends="compile.tests" description="Run input unit test cases">
-    <echo message="Running input tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.input.PackageTestSuite"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.output"  depends="compile.tests" description="Run output unit test cases">
-    <echo message="Running output tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <arg value="org.apache.commons.io.output.PackageTestSuite"/>
+      <arg value="${testclass}"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
