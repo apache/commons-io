@@ -38,7 +38,6 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(CloseShieldOutputStreamTest.class));
         suite.addTest(new TestSuite(CountingOutputStreamTest.class));
         suite.addTest(new TestSuite(DeferredFileOutputStreamTest.class));
-        suite.addTest(new TestSuite(FileWriterWithEncodingTest.class));
         suite.addTest(new TestSuite(LockableFileWriterTest.class));
         suite.addTest(new TestSuite(NullOutputStreamTest.class));
         suite.addTest(new TestSuite(NullWriterTest.class));

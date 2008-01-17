@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -820,61 +819,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(EmptyFileFilter.EMPTY, notEmptyFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, notEmptyFile, true);
         FileUtils.forceDelete(emptyDir);
-    }
-
-    public void testRegex() throws Exception {
-        IOFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
-        assertFiltering(filter, new File("Test.java"), true);
-        assertFiltering(filter, new File("test-10.java"), true);
-        assertFiltering(filter, new File("test-.java"), false);
-
-        filter = new RegexFileFilter("^[Tt]est.java$");
-        assertFiltering(filter, new File("Test.java"), true);
-        assertFiltering(filter, new File("test.java"), true);
-        assertFiltering(filter, new File("tEST.java"), false);
-
-        filter = new RegexFileFilter(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
-        assertFiltering(filter, new File("Test.java"), true);
-        assertFiltering(filter, new File("test.java"), true);
-        assertFiltering(filter, new File("tEST.java"), true);
-
-        filter = new RegexFileFilter("^test.java$", Pattern.CASE_INSENSITIVE);
-        assertFiltering(filter, new File("Test.java"), true);
-        assertFiltering(filter, new File("test.java"), true);
-        assertFiltering(filter, new File("tEST.java"), true);
-
-        filter = new RegexFileFilter("^test.java$", IOCase.INSENSITIVE);
-        assertFiltering(filter, new File("Test.java"), true);
-        assertFiltering(filter, new File("test.java"), true);
-        assertFiltering(filter, new File("tEST.java"), true);
-
-        try {
-            new RegexFileFilter((String)null);
-            fail();
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter((String)null, Pattern.CASE_INSENSITIVE);
-            fail();
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter((String)null, IOCase.INSENSITIVE);
-            fail();
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
-
-        try {
-            new RegexFileFilter((java.util.regex.Pattern)null);
-            fail();
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
     }
 
     //-----------------------------------------------------------------------
