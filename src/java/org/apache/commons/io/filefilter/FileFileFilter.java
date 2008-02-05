@@ -34,7 +34,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision: 155419 $ $Date$
+ * @version $Revision:587916 $ $Date$
  */
 public class FileFileFilter extends AbstractFileFilter implements Serializable {
 
