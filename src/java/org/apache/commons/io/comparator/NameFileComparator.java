@@ -49,25 +49,25 @@ import org.apache.commons.io.IOCase;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class NameFileComparator implements Comparator, Serializable {
+public class NameFileComparator implements Comparator<File>, Serializable {
 
     /** Case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator NAME_COMPARATOR = new NameFileComparator();
+    public static final Comparator<File> NAME_COMPARATOR = new NameFileComparator();
 
     /** Reverse case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator NAME_REVERSE = new ReverseComparator(NAME_COMPARATOR);
+    public static final Comparator<File> NAME_REVERSE = new ReverseComparator(NAME_COMPARATOR);
 
     /** Case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator NAME_INSENSITIVE_COMPARATOR = new NameFileComparator(IOCase.INSENSITIVE);
+    public static final Comparator<File> NAME_INSENSITIVE_COMPARATOR = new NameFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator NAME_INSENSITIVE_REVERSE = new ReverseComparator(NAME_INSENSITIVE_COMPARATOR);
+    public static final Comparator<File> NAME_INSENSITIVE_REVERSE = new ReverseComparator(NAME_INSENSITIVE_COMPARATOR);
 
     /** System sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator NAME_SYSTEM_COMPARATOR = new NameFileComparator(IOCase.SYSTEM);
+    public static final Comparator<File> NAME_SYSTEM_COMPARATOR = new NameFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator NAME_SYSTEM_REVERSE = new ReverseComparator(NAME_SYSTEM_COMPARATOR);
+    public static final Comparator<File> NAME_SYSTEM_REVERSE = new ReverseComparator(NAME_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -91,16 +91,14 @@ public class NameFileComparator implements Comparator, Serializable {
     /**
      * Compare the names of two files with the specified case sensitivity.
      * 
-     * @param obj1 The first file to compare
-     * @param obj2 The second file to compare
+     * @param file1 The first file to compare
+     * @param file2 The second file to compare
      * @return a negative value if the first file's name
      * is less than the second, zero if the names are the
      * same and a positive value if the first files name
      * is greater than the second file.
      */
-    public int compare(Object obj1, Object obj2) {
-        File file1 = (File)obj1;
-        File file2 = (File)obj2;
+    public int compare(File file1, File file2) {
         return caseSensitivity.checkCompareTo(file1.getName(), file2.getName());
     }
 }

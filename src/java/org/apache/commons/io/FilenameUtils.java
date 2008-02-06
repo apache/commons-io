@@ -1152,12 +1152,12 @@ public class FilenameUtils {
         boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        Stack backtrack = new Stack();
+        Stack<int[]> backtrack = new Stack<int[]>();
         
         // loop around a backtrack stack, to handle complex * matching
         do {
             if (backtrack.size() > 0) {
-                int[] array = (int[]) backtrack.pop();
+                int[] array = backtrack.pop();
                 wcsIdx = array[0];
                 textIdx = array[1];
                 anyChars = true;
@@ -1232,7 +1232,7 @@ public class FilenameUtils {
         }
 
         char[] array = text.toCharArray();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < array.length; i++) {
             if (array[i] == '?' || array[i] == '*') {
@@ -1254,7 +1254,7 @@ public class FilenameUtils {
             list.add(buffer.toString());
         }
 
-        return (String[]) list.toArray( new String[ list.size() ] );
+        return list.toArray( new String[ list.size() ] );
     }
 
 }

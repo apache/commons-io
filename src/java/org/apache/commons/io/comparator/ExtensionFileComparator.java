@@ -51,26 +51,26 @@ import org.apache.commons.io.IOCase;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class ExtensionFileComparator implements Comparator, Serializable {
+public class ExtensionFileComparator implements Comparator<File>, Serializable {
 
     /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator EXTENSION_COMPARATOR = new ExtensionFileComparator();
+    public static final Comparator<File> EXTENSION_COMPARATOR = new ExtensionFileComparator();
 
     /** Reverse case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
+    public static final Comparator<File> EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
 
     /** Case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator EXTENSION_INSENSITIVE_COMPARATOR = new ExtensionFileComparator(IOCase.INSENSITIVE);
+    public static final Comparator<File> EXTENSION_INSENSITIVE_COMPARATOR = new ExtensionFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator EXTENSION_INSENSITIVE_REVERSE
+    public static final Comparator<File> EXTENSION_INSENSITIVE_REVERSE
                                                 = new ReverseComparator(EXTENSION_INSENSITIVE_COMPARATOR);
 
     /** System sensitive extension comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator EXTENSION_SYSTEM_COMPARATOR = new ExtensionFileComparator(IOCase.SYSTEM);
+    public static final Comparator<File> EXTENSION_SYSTEM_COMPARATOR = new ExtensionFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator EXTENSION_SYSTEM_REVERSE = new ReverseComparator(EXTENSION_SYSTEM_COMPARATOR);
+    public static final Comparator<File> EXTENSION_SYSTEM_REVERSE = new ReverseComparator(EXTENSION_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -94,17 +94,15 @@ public class ExtensionFileComparator implements Comparator, Serializable {
     /**
      * Compare the extensions of two files the specified case sensitivity.
      * 
-     * @param obj1 The first file to compare
-     * @param obj2 The second file to compare
+     * @param file1 The first file to compare
+     * @param file2 The second file to compare
      * @return a negative value if the first file's extension
      * is less than the second, zero if the extensions are the
      * same and a positive value if the first files extension
      * is greater than the second file.
      * 
      */
-    public int compare(Object obj1, Object obj2) {
-        File file1 = (File)obj1;
-        File file2 = (File)obj2;
+    public int compare(File file1, File file2) {
         String suffix1 = FilenameUtils.getExtension(file1.getName());
         String suffix2 = FilenameUtils.getExtension(file2.getName());
         return caseSensitivity.checkCompareTo(suffix1, suffix2);

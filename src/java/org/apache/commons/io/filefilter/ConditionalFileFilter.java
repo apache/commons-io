@@ -43,7 +43,7 @@ public interface ConditionalFileFilter {
      * @return the file filter list
      * @since Commons IO 1.1
      */
-    public List getFileFilters();
+    public List<IOFileFilter> getFileFilters();
 
     /**
      * Removes the specified file filter.
@@ -62,6 +62,6 @@ public interface ConditionalFileFilter {
      * @param fileFilters the list of filters
      * @since Commons IO 1.1
      */
-    public void setFileFilters(List fileFilters);
+    public void setFileFilters(List<IOFileFilter> fileFilters);
 
 }

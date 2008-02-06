@@ -32,7 +32,7 @@ import org.apache.commons.io.FilenameUtils;
  * single or multiple wildcard characters.
  * This is the same as often found on Dos/Unix command lines.
  * The extension check is case-sensitive.
- * See {@link FilenameUtils#wildcardMatch} for more information.
+ * See {@link FilenameUtils#wildcardMatch(String, String)} for more information.
  * <p>
  * For example:
  * <pre>
@@ -88,11 +88,11 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public WildcardFilter(List wildcards) {
+    public WildcardFilter(List<String> wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = (String[]) wildcards.toArray(new String[wildcards.size()]);
+        this.wildcards = wildcards.toArray(new String[wildcards.size()]);
     }
 
     //-----------------------------------------------------------------------

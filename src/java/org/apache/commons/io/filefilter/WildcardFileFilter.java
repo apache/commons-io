@@ -119,7 +119,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public WildcardFileFilter(List wildcards) {
+    public WildcardFileFilter(List<String> wildcards) {
         this(wildcards, null);
     }
 
@@ -131,11 +131,11 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public WildcardFileFilter(List wildcards, IOCase caseSensitivity) {
+    public WildcardFileFilter(List<String> wildcards, IOCase caseSensitivity) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = (String[]) wildcards.toArray(new String[wildcards.size()]);
+        this.wildcards = wildcards.toArray(new String[wildcards.size()]);
         this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 

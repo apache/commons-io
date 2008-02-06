@@ -496,9 +496,9 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(Reader input) throws IOException {
+    public static List<String> readLines(Reader input) throws IOException {
         BufferedReader reader = new BufferedReader(input);
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         String line = reader.readLine();
         while (line != null) {
             list.add(line);

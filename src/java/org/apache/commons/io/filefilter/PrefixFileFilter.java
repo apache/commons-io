@@ -119,7 +119,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public PrefixFileFilter(List prefixes) {
+    public PrefixFileFilter(List<String> prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 
@@ -133,11 +133,11 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws ClassCastException if the list does not contain Strings
      * @since Commons IO 1.4
      */
-    public PrefixFileFilter(List prefixes, IOCase caseSensitivity) {
+    public PrefixFileFilter(List<String> prefixes, IOCase caseSensitivity) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
-        this.prefixes = (String[]) prefixes.toArray(new String[prefixes.size()]);
+        this.prefixes = prefixes.toArray(new String[prefixes.size()]);
         this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 

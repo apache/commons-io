@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,7 +39,7 @@ public class OrFileFilter
         implements ConditionalFileFilter, Serializable {
 
     /** The list of file filters. */
-    private List fileFilters;
+    private List<IOFileFilter> fileFilters;
 
     /**
      * Constructs a new instance of <code>OrFileFilter</code>.
@@ -48,7 +47,7 @@ public class OrFileFilter
      * @since Commons IO 1.1
      */
     public OrFileFilter() {
-        this.fileFilters = new ArrayList();
+        this.fileFilters = new ArrayList<IOFileFilter>();
     }
 
     /**
@@ -58,11 +57,11 @@ public class OrFileFilter
      * @param fileFilters  the file filters for this filter, copied, null ignored
      * @since Commons IO 1.1
      */
-    public OrFileFilter(final List fileFilters) {
+    public OrFileFilter(final List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
-            this.fileFilters = new ArrayList();
+            this.fileFilters = new ArrayList<IOFileFilter>();
         } else {
-            this.fileFilters = new ArrayList(fileFilters);
+            this.fileFilters = new ArrayList<IOFileFilter>(fileFilters);
         }
     }
 
@@ -77,7 +76,7 @@ public class OrFileFilter
         if (filter1 == null || filter2 == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        this.fileFilters = new ArrayList();
+        this.fileFilters = new ArrayList<IOFileFilter>();
         addFileFilter(filter1);
         addFileFilter(filter2);
     }
@@ -92,7 +91,7 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
-    public List getFileFilters() {
+    public List<IOFileFilter> getFileFilters() {
         return Collections.unmodifiableList(this.fileFilters);
     }
 
@@ -106,7 +105,7 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
-    public void setFileFilters(final List fileFilters) {
+    public void setFileFilters(final List<IOFileFilter> fileFilters) {
         this.fileFilters = fileFilters;
     }
 
@@ -114,8 +113,7 @@ public class OrFileFilter
      * {@inheritDoc}
      */
     public boolean accept(final File file) {
-        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+        for (IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file)) {
                 return true;
             }
@@ -127,8 +125,7 @@ public class OrFileFilter
      * {@inheritDoc}
      */
     public boolean accept(final File file, final String name) {
-        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+        for (IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file, name)) {
                 return true;
             }
