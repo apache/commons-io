@@ -183,7 +183,124 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
+    //-----------------------------------------------------------------------
+    public void testWrite_charSequenceToOutputStream() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+        
+        IOUtils.write(csq, out);
+        out.off();
+        out.flush();
+        
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
 
+    public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+        
+        IOUtils.write((CharSequence) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals("Sizes differ", 0, baout.size());
+    }
+
+    public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        try {
+            IOUtils.write(csq, (OutputStream) null);
+            fail();
+        } catch (NullPointerException ex) {}
+    }
+
+    //-----------------------------------------------------------------------
+    public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write(csq, out, "UTF16");
+        out.off();
+        out.flush();
+        
+        byte[] bytes = baout.toByteArray();
+        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        assertTrue("Content differs", Arrays.equals(inData, bytes));
+    }
+
+    public void testWrite_charSequenceToOutputStream_Encoding_nullData() throws Exception {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+        
+        IOUtils.write((CharSequence) null, out);
+        out.off();
+        out.flush();
+
+        assertEquals("Sizes differ", 0, baout.size());
+    }
+
+    public void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        try {
+            IOUtils.write(csq, (OutputStream) null);
+            fail();
+        } catch (NullPointerException ex) {}
+    }
+
+    public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+
+        IOUtils.write(csq, out, null);
+        out.off();
+        out.flush();
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    //-----------------------------------------------------------------------
+    public void testWrite_charSequenceToWriter() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+        Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+
+        IOUtils.write(csq, writer);
+        out.off();
+        writer.flush();
+
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testWrite_charSequenceToWriter_Encoding_nullData() throws Exception {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
+        Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        
+        IOUtils.write((CharSequence) null, writer);
+        out.off();
+        writer.flush();
+
+        assertEquals("Sizes differ", 0, baout.size());
+    }
+
+    public void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
+        CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        try {
+            IOUtils.write(csq, (Writer) null);
+            fail();
+        } catch (NullPointerException ex) {}
+    }
     //-----------------------------------------------------------------------
     public void testWrite_stringToOutputStream() throws Exception {
         String str = new String(inData, "US-ASCII");

@@ -277,6 +277,26 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     /**
+     * Test for {@link IOUtils#toInputStream(CharSequence)} and {@link IOUtils#toInputStream(CharSequence, String)}.
+     * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
+     * {@link #testInputStreamToByteArray()} to ensure this method functions correctly.
+     *
+     * @throws Exception on error
+     */
+    public void testCharSequenceToInputStream() throws Exception {
+        CharSequence csq = new StringBuilder("Abc123Xyz!");
+        InputStream inStream = IOUtils.toInputStream(csq);
+        byte[] bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(csq.toString().getBytes(), bytes);
+        inStream = IOUtils.toInputStream(csq, null);
+        bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(csq.toString().getBytes(), bytes);
+        inStream = IOUtils.toInputStream(csq, "UTF-8");
+        bytes = IOUtils.toByteArray(inStream);
+        assertEqualContent(csq.toString().getBytes("UTF-8"), bytes);
+    }
+
+    /**
      * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}.
      * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
      * {@link #testInputStreamToByteArray()} to ensure this method functions correctly.

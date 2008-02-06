@@ -1108,6 +1108,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEqualContent(text, file);
     }
 
+    public void testWriteCharSequence1() throws Exception {
+        File file = new File(getTestDirectory(), "write.txt");
+        FileUtils.write(file, "Hello /u1234", "UTF8");
+        byte[] text = "Hello /u1234".getBytes("UTF8");
+        assertEqualContent(text, file);
+    }
+
+    public void testWriteCharSequence2() throws Exception {
+        File file = new File(getTestDirectory(), "write.txt");
+        FileUtils.write(file, "Hello /u1234", null);
+        byte[] text = "Hello /u1234".getBytes();
+        assertEqualContent(text, file);
+    }
+
     public void testWriteByteArrayToFile() throws Exception {
         File file = new File(getTestDirectory(), "write.obj");
         byte[] data = new byte[] {11, 21, 31};
