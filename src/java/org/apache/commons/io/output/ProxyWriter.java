@@ -44,6 +44,38 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
+     * Invokes the delegate's <code>append(char)</code> method.
+     * @param c The character to write
+     * @sinc IO 2.0
+     */
+    public Writer append(char c) throws IOException {
+        out.append(c);
+        return this;
+    }
+
+    /**
+     * Invokes the delegate's <code>append(CharSequence, int, int)</code> method.
+     * @param csq The character sequence to write
+     * @param start The index of the first character to write
+     * @param end  The index of the first character to write (exclusive)
+     * @sinc IO 2.0
+     */
+    public Writer append(CharSequence csq, int start, int end) throws IOException {
+        out.append(csq, start, end);
+        return this;
+    }
+
+    /**
+     * Invokes the delegate's <code>append(CharSequence)</code> method.
+     * @param csq The character sequence to write
+     * @sinc IO 2.0
+     */
+    public Writer append(CharSequence csq) throws IOException {
+        out.append(csq);
+        return this;
+    }
+
+    /**
      * Invokes the delegate's <code>write(int)</code> method.
      * @param idx the character to write
      * @throws IOException if an I/O error occurs
