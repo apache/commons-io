@@ -51,6 +51,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(FileUtilsTestCase.class));
         suite.addTest(new TestSuite(HexDumpTest.class));
         suite.addTest(new TestSuite(IOCaseTestCase.class));
+        suite.addTest(new TestSuite(IOExceptionWithCauseTestCase.class));
         suite.addTest(new TestSuite(IOUtilsCopyTestCase.class));
         suite.addTest(new TestSuite(IOUtilsTestCase.class));
         suite.addTest(new TestSuite(IOUtilsWriteTestCase.class));

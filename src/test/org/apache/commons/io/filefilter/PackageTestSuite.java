@@ -36,6 +36,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(AndFileFilterTestCase.class));
         suite.addTest(new TestSuite(FileFilterTestCase.class));
         suite.addTest(new TestSuite(OrFileFilterTestCase.class));
+        suite.addTest(new TestSuite(RegexFileFilterTestCase.class));
         return suite;
     }
 }
