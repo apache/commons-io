@@ -283,7 +283,7 @@ public class FileSystemUtils {
         }
         
         // remove commas and dots in the bytes count
-        StringBuffer buf = new StringBuffer(line.substring(bytesStart, bytesEnd));
+        StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));
         for (int k = 0; k < buf.length(); k++) {
             if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
                 buf.deleteCharAt(k--);

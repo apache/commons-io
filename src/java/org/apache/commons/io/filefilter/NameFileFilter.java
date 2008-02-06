@@ -173,7 +173,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @return a String representaion
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
         if (names != null) {

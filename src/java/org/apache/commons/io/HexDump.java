@@ -70,7 +70,7 @@ public class HexDump {
             throw new IllegalArgumentException("cannot write to nullstream");
         }
         long display_offset = offset + index;
-        StringBuffer buffer = new StringBuffer(74);
+        StringBuilder buffer = new StringBuilder(74);
 
         for (int j = index; j < data.length; j += 16) {
             int chars_read = data.length - j;
@@ -118,13 +118,13 @@ public class HexDump {
             };
 
     /**
-     * Dump a long value into a StringBuffer.
+     * Dump a long value into a StringBuilder.
      *
-     * @param _lbuffer the StringBuffer to dump the value in
+     * @param _lbuffer the StringBuilder to dump the value in
      * @param value  the long value to be dumped
-     * @return StringBuffer containing the dumped value.
+     * @return StringBuilder containing the dumped value.
      */
-    private static StringBuffer dump(StringBuffer _lbuffer, long value) {
+    private static StringBuilder dump(StringBuilder _lbuffer, long value) {
         for (int j = 0; j < 8; j++) {
             _lbuffer
                     .append(_hexcodes[((int) (value >> _shifts[j])) & 15]);
@@ -133,13 +133,13 @@ public class HexDump {
     }
 
     /**
-     * Dump a byte value into a StringBuffer.
+     * Dump a byte value into a StringBuilder.
      *
-     * @param _cbuffer the StringBuffer to dump the value in
+     * @param _cbuffer the StringBuilder to dump the value in
      * @param value  the byte value to be dumped
-     * @return StringBuffer containing the dumped value.
+     * @return StringBuilder containing the dumped value.
      */
-    private static StringBuffer dump(StringBuffer _cbuffer, byte value) {
+    private static StringBuilder dump(StringBuilder _cbuffer, byte value) {
         for (int j = 0; j < 2; j++) {
             _cbuffer.append(_hexcodes[(value >> _shifts[j + 6]) & 15]);
         }
