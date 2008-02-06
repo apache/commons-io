@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -666,11 +667,11 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        FileInputStream input = new FileInputStream(srcFile);
+        FileChannel input = new FileInputStream(srcFile).getChannel();
         try {
-            FileOutputStream output = new FileOutputStream(destFile);
+            FileChannel output = new FileOutputStream(destFile).getChannel();
             try {
-                IOUtils.copy(input, output);
+                output.transferFrom(input, 0, input.size());
             } finally {
                 IOUtils.closeQuietly(output);
             }
