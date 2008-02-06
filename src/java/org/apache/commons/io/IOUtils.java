@@ -28,7 +28,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.StringBuilderWriter;;
 
 /**
  * General IO stream manipulation utilities.
@@ -110,7 +110,7 @@ public class IOUtils {
     public static final String LINE_SEPARATOR;
     static {
         // avoid security issues
-        StringWriter buf = new StringWriter(4);
+        StringBuilderWriter buf = new StringBuilderWriter(4);
         PrintWriter out = new PrintWriter(buf);
         out.println();
         LINE_SEPARATOR = buf.toString();
@@ -374,7 +374,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      */
     public static String toString(InputStream input) throws IOException {
-        StringWriter sw = new StringWriter();
+        StringBuilderWriter sw = new StringBuilderWriter();
         copy(input, sw);
         return sw.toString();
     }
@@ -397,7 +397,7 @@ public class IOUtils {
      */
     public static String toString(InputStream input, String encoding)
             throws IOException {
-        StringWriter sw = new StringWriter();
+        StringBuilderWriter sw = new StringBuilderWriter();
         copy(input, sw, encoding);
         return sw.toString();
     }
@@ -414,7 +414,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      */
     public static String toString(Reader input) throws IOException {
-        StringWriter sw = new StringWriter();
+        StringBuilderWriter sw = new StringBuilderWriter();
         copy(input, sw);
         return sw.toString();
     }
