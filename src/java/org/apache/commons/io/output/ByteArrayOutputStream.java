@@ -54,7 +54,7 @@ public class ByteArrayOutputStream extends OutputStream {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /** The list of buffers, which grows and never reduces. */
-    private List buffers = new ArrayList();
+    private List<byte[]> buffers = new ArrayList<byte[]>();
     /** The index of the current buffer. */
     private int currentBufferIndex;
     /** The total count of bytes in all the filled buffers. */
@@ -88,17 +88,6 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Return the appropriate <code>byte[]</code> buffer 
-     * specified by index.
-     *
-     * @param index  the index of the buffer required
-     * @return the buffer
-     */
-    private byte[] getBuffer(int index) {
-        return (byte[]) buffers.get(index);
-    }
-
-    /**
      * Makes a new buffer available either by allocating
      * a new one or re-cycling an existing one.
      *
@@ -110,7 +99,7 @@ public class ByteArrayOutputStream extends OutputStream {
             filledBufferSum += currentBuffer.length;
             
             currentBufferIndex++;
-            currentBuffer = getBuffer(currentBufferIndex);
+            currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Creating new buffer
             int newBufferSize;
@@ -232,7 +221,7 @@ public class ByteArrayOutputStream extends OutputStream {
         count = 0;
         filledBufferSum = 0;
         currentBufferIndex = 0;
-        currentBuffer = getBuffer(currentBufferIndex);
+        currentBuffer = buffers.get(currentBufferIndex);
     }
 
     /**
@@ -246,7 +235,7 @@ public class ByteArrayOutputStream extends OutputStream {
     public synchronized void writeTo(OutputStream out) throws IOException {
         int remaining = count;
         for (int i = 0; i < buffers.size(); i++) {
-            byte[] buf = getBuffer(i);
+            byte[] buf = buffers.get(i);
             int c = Math.min(buf.length, remaining);
             out.write(buf, 0, c);
             remaining -= c;
@@ -271,7 +260,7 @@ public class ByteArrayOutputStream extends OutputStream {
         byte newbuf[] = new byte[remaining];
         int pos = 0;
         for (int i = 0; i < buffers.size(); i++) {
-            byte[] buf = getBuffer(i);
+            byte[] buf = buffers.get(i);
             int c = Math.min(buf.length, remaining);
             System.arraycopy(buf, 0, newbuf, pos, c);
             pos += c;

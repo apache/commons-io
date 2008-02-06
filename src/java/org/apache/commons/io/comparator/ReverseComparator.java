@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.io.File;
 
 /**
  * Reverses the result of comparing two objects using
@@ -26,16 +27,16 @@ import java.util.Comparator;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-class ReverseComparator implements Comparator, Serializable {
+class ReverseComparator implements Comparator<File>, Serializable {
 
-    private final Comparator delegate;
+    private final Comparator<File> delegate;
 
     /**
      * Construct an instance with the sepecified delegate {@link Comparator}.
      *
      * @param delegate The comparator to delegate to
      */
-    public ReverseComparator(Comparator delegate) {
+    public ReverseComparator(Comparator<File> delegate) {
         if (delegate == null) {
             throw new IllegalArgumentException("Delegate comparator is missing");
         }
@@ -45,13 +46,13 @@ class ReverseComparator implements Comparator, Serializable {
     /**
      * Compare using the delegate Comparator, but reversing the result.
      * 
-     * @param obj1 The first object to compare
-     * @param obj2 The second object to compare
+     * @param file1 The first file to compare
+     * @param file2 The second file to compare
      * @return the result from the delegate {@link Comparator#compare(Object, Object)}
      * reversing the value (i.e. positive becomes negative and vice versa)
      */
-    public int compare(Object obj1, Object obj2) {
-        return delegate.compare(obj2, obj1); // parameters switched round
+    public int compare(File file1, File file2) {
+        return delegate.compare(file2, file1); // parameters switched round
     }
 
 }

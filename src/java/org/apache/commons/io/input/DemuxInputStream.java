@@ -29,7 +29,7 @@ import java.io.InputStream;
 public class DemuxInputStream
     extends InputStream
 {
-    private InheritableThreadLocal m_streams = new InheritableThreadLocal();
+    private InheritableThreadLocal<InputStream> m_streams = new InheritableThreadLocal<InputStream>();
 
     /**
      * Bind the specified stream to the current thread.
@@ -39,7 +39,7 @@ public class DemuxInputStream
      */
     public InputStream bindStream( InputStream input )
     {
-        InputStream oldValue = getStream();
+        InputStream oldValue = m_streams.get();
         m_streams.set( input );
         return oldValue;
     }
@@ -52,7 +52,7 @@ public class DemuxInputStream
     public void close()
         throws IOException
     {
-        InputStream input = getStream();
+        InputStream input = m_streams.get();
         if( null != input )
         {
             input.close();
@@ -68,7 +68,7 @@ public class DemuxInputStream
     public int read()
         throws IOException
     {
-        InputStream input = getStream();
+        InputStream input = m_streams.get();
         if( null != input )
         {
             return input.read();
@@ -77,15 +77,5 @@ public class DemuxInputStream
         {
             return -1;
         }
-    }
-
-    /**
-     * Utility method to retrieve stream bound to current thread (if any).
-     *
-     * @return the input stream
-     */
-    private InputStream getStream()
-    {
-        return (InputStream)m_streams.get();
     }
 }

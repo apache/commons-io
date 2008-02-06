@@ -320,14 +320,14 @@ public class FileSystemUtils {
             (flags.length() > 1 ? new String[] {"df", flags, path} : new String[] {"df", path});
         
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
-        List lines = performCommand(cmdAttribs, 3);
+        List<String> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
                     "Command line 'df' did not return info as expected " +
                     "for path '" + path + "'- response was " + lines);
         }
-        String line2 = (String) lines.get(1); // the line we're interested in
+        String line2 = lines.get(1); // the line we're interested in
         
         // Now, we tokenize the string. The fourth element is what we want.
         StringTokenizer tok = new StringTokenizer(line2, " ");
@@ -385,7 +385,7 @@ public class FileSystemUtils {
      * @return the parsed data
      * @throws IOException if an error occurs
      */
-    List performCommand(String[] cmdAttribs, int max) throws IOException {
+    List<String> performCommand(String[] cmdAttribs, int max) throws IOException {
         // this method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
@@ -394,7 +394,7 @@ public class FileSystemUtils {
         // however, its still not perfect as the JDK support is so poor
         // (see commond-exec or ant for a better multi-threaded multi-os solution)
         
-        List lines = new ArrayList(20);
+        List<String> lines = new ArrayList<String>(20);
         Process proc = null;
         InputStream in = null;
         OutputStream out = null;

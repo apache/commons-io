@@ -44,25 +44,23 @@ import java.util.Comparator;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class DefaultFileComparator implements Comparator, Serializable {
+public class DefaultFileComparator implements Comparator<File>, Serializable {
 
     /** Singleton default comparator instance */
-    public static final Comparator DEFAULT_COMPARATOR = new DefaultFileComparator();
+    public static final Comparator<File> DEFAULT_COMPARATOR = new DefaultFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final Comparator DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
+    public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#compareTo(File)} method.
      * 
-     * @param obj1 The first file to compare
-     * @param obj2 The second file to compare
+     * @param file1 The first file to compare
+     * @param file2 The second file to compare
      * @return the result of calling file1's
      * {@link File#compareTo(File)} with file2 as the parameter.
      */
-    public int compare(Object obj1, Object obj2) {
-        File file1 = (File)obj1;
-        File file2 = (File)obj2;
+    public int compare(File file1, File file2) {
         return file1.compareTo(file2);
     }
 }

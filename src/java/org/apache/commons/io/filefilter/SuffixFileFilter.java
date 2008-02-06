@@ -120,7 +120,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the suffix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public SuffixFileFilter(List suffixes) {
+    public SuffixFileFilter(List<String> suffixes) {
         this(suffixes, IOCase.SENSITIVE);
     }
 
@@ -134,11 +134,11 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @throws ClassCastException if the list does not contain Strings
      * @since Commons IO 1.4
      */
-    public SuffixFileFilter(List suffixes, IOCase caseSensitivity) {
+    public SuffixFileFilter(List<String> suffixes, IOCase caseSensitivity) {
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
-        this.suffixes = (String[]) suffixes.toArray(new String[suffixes.size()]);
+        this.suffixes = suffixes.toArray(new String[suffixes.size()]);
         this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 

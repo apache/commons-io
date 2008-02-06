@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,7 +39,7 @@ public class AndFileFilter
         implements ConditionalFileFilter, Serializable {
 
     /** The list of file filters. */
-    private List fileFilters;
+    private List<IOFileFilter> fileFilters;
 
     /**
      * Constructs a new instance of <code>AndFileFilter</code>.
@@ -48,7 +47,7 @@ public class AndFileFilter
      * @since Commons IO 1.1
      */
     public AndFileFilter() {
-        this.fileFilters = new ArrayList();
+        this.fileFilters = new ArrayList<IOFileFilter>();
     }
 
     /**
@@ -58,11 +57,11 @@ public class AndFileFilter
      * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
      * @since Commons IO 1.1
      */
-    public AndFileFilter(final List fileFilters) {
+    public AndFileFilter(final List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
-            this.fileFilters = new ArrayList();
+            this.fileFilters = new ArrayList<IOFileFilter>();
         } else {
-            this.fileFilters = new ArrayList(fileFilters);
+            this.fileFilters = new ArrayList<IOFileFilter>(fileFilters);
         }
     }
 
@@ -77,7 +76,7 @@ public class AndFileFilter
         if (filter1 == null || filter2 == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        this.fileFilters = new ArrayList();
+        this.fileFilters = new ArrayList<IOFileFilter>();
         addFileFilter(filter1);
         addFileFilter(filter2);
     }
@@ -92,7 +91,7 @@ public class AndFileFilter
     /**
      * {@inheritDoc}
      */
-    public List getFileFilters() {
+    public List<IOFileFilter> getFileFilters() {
         return Collections.unmodifiableList(this.fileFilters);
     }
 
@@ -106,8 +105,8 @@ public class AndFileFilter
     /**
      * {@inheritDoc}
      */
-    public void setFileFilters(final List fileFilters) {
-        this.fileFilters = new ArrayList(fileFilters);
+    public void setFileFilters(final List<IOFileFilter> fileFilters) {
+        this.fileFilters = new ArrayList<IOFileFilter>(fileFilters);
     }
 
     /**
@@ -117,8 +116,7 @@ public class AndFileFilter
         if (this.fileFilters.size() == 0) {
             return false;
         }
-        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+        for (IOFileFilter fileFilter : fileFilters) {
             if (!fileFilter.accept(file)) {
                 return false;
             }
@@ -133,8 +131,7 @@ public class AndFileFilter
         if (this.fileFilters.size() == 0) {
             return false;
         }
-        for (Iterator iter = this.fileFilters.iterator(); iter.hasNext();) {
-            IOFileFilter fileFilter = (IOFileFilter) iter.next();
+        for (IOFileFilter fileFilter : fileFilters) {
             if (!fileFilter.accept(file, name)) {
                 return false;
             }

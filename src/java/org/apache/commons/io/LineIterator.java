@@ -50,7 +50,7 @@ import java.util.NoSuchElementException;
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class LineIterator implements Iterator {
+public class LineIterator implements Iterator<String> {
 
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
@@ -125,7 +125,7 @@ public class LineIterator implements Iterator {
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
-    public Object next() {
+    public String next() {
         return nextLine();
     }
 

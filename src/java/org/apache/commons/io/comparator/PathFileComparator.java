@@ -49,25 +49,25 @@ import org.apache.commons.io.IOCase;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class PathFileComparator implements Comparator, Serializable {
+public class PathFileComparator implements Comparator<File>, Serializable {
 
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator PATH_COMPARATOR = new PathFileComparator();
+    public static final Comparator<File> PATH_COMPARATOR = new PathFileComparator();
 
     /** Reverse case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);
+    public static final Comparator<File> PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);
 
     /** Case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);
+    public static final Comparator<File> PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);
+    public static final Comparator<File> PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);
 
     /** System sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);
+    public static final Comparator<File> PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);
+    public static final Comparator<File> PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -91,17 +91,15 @@ public class PathFileComparator implements Comparator, Serializable {
     /**
      * Compare the paths of two files the specified case sensitivity.
      * 
-     * @param obj1 The first file to compare
-     * @param obj2 The second file to compare
+     * @param file1 The first file to compare
+     * @param file2 The second file to compare
      * @return a negative value if the first file's path
      * is less than the second, zero if the paths are the
      * same and a positive value if the first files path
      * is greater than the second file.
      * 
      */
-    public int compare(Object obj1, Object obj2) {
-        File file1 = (File)obj1;
-        File file2 = (File)obj2;
+    public int compare(File file1, File file2) {
         return caseSensitivity.checkCompareTo(file1.getPath(), file2.getPath());
     }
 }

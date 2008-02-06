@@ -235,8 +235,8 @@ public class FileUtils {
      * @param files  a Collection containing java.io.File instances
      * @return an array of java.io.File
      */
-    public static File[] convertFileCollectionToFileArray(Collection files) {
-         return (File[]) files.toArray(new File[files.size()]);
+    public static File[] convertFileCollectionToFileArray(Collection<File> files) {
+         return files.toArray(new File[files.size()]);
     }
 
     //-----------------------------------------------------------------------
@@ -248,7 +248,7 @@ public class FileUtils {
      * @param directory the directory to search in.
      * @param filter the filter to apply to files and directories.
      */
-    private static void innerListFiles(Collection files, File directory,
+    private static void innerListFiles(Collection<File> files, File directory,
             IOFileFilter filter) {
         File[] found = directory.listFiles((FileFilter) filter);
         if (found != null) {
@@ -287,7 +287,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
-    public static Collection listFiles(
+    public static Collection<File> listFiles(
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(
@@ -311,7 +311,7 @@ public class FileUtils {
         }
 
         //Find files
-        Collection files = new java.util.LinkedList();
+        Collection<File> files = new java.util.LinkedList<File>();
         innerListFiles(files, directory,
             FileFilterUtils.orFileFilter(effFileFilter, effDirFilter));
         return files;
@@ -873,11 +873,11 @@ public class FileUtils {
         }
 
         // Cater for destination being directory within the source directory (see IO-141)
-        List exclusionList = null;
+        List<String> exclusionList = null;
         if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
             File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
             if (srcFiles != null && srcFiles.length > 0) {
-                exclusionList = new ArrayList(srcFiles.length);
+                exclusionList = new ArrayList<String>(srcFiles.length);
                 for (int i = 0; i < srcFiles.length; i++) {
                     File copiedFile = new File(destDir, srcFiles[i].getName());
                     exclusionList.add(copiedFile.getCanonicalPath());
@@ -899,7 +899,7 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     private static void doCopyDirectory(File srcDir, File destDir, FileFilter filter,
-            boolean preserveFileDate, List exclusionList) throws IOException {
+            boolean preserveFileDate, List<String> exclusionList) throws IOException {
         if (destDir.exists()) {
             if (destDir.isDirectory() == false) {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
