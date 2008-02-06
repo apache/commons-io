@@ -41,6 +41,38 @@ public class NullWriter extends Writer {
 
     /**
      * Does nothing - output to <code>/dev/null</code>.
+     * @param c The character to write
+     * @sinc IO 2.0
+     */
+    public Writer append(char c) {
+        //to /dev/null
+        return this;
+    }
+
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param csq The character sequence to write
+     * @param start The index of the first character to write
+     * @param end  The index of the first character to write (exclusive)
+     * @sinc IO 2.0
+     */
+    public Writer append(CharSequence csq, int start, int end) {
+        //to /dev/null
+        return this;
+    }
+
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
+     * @param csq The character sequence to write
+     * @sinc IO 2.0
+     */
+    public Writer append(CharSequence csq) {
+        //to /dev/null
+        return this;
+    }
+
+    /**
+     * Does nothing - output to <code>/dev/null</code>.
      * @param idx The character to write
      */
     public void write(int idx) {

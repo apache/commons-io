@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
 
 /**
  * A Proxy stream which acts as expected, that is it passes the method 
@@ -73,6 +74,17 @@ public abstract class ProxyReader extends FilterReader {
      */
     public int read(char[] chr, int st, int end) throws IOException {
         return in.read(chr, st, end);
+    }
+
+    /**
+     * Invokes the delegate's <code>read(CharBuffer)</code> method.
+     * @param target the char buffer to read the characters into
+     * @return the number of characters read or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     * @since IO 2.0
+     */
+    public int read(CharBuffer target) throws IOException {
+        return in.read(target);
     }
 
     /**
