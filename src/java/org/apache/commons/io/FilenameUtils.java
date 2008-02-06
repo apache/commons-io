@@ -1233,7 +1233,7 @@ public class FilenameUtils {
 
         char[] array = text.toCharArray();
         ArrayList<String> list = new ArrayList<String>();
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             if (array[i] == '?' || array[i] == '*') {
                 if (buffer.length() != 0) {
