@@ -207,6 +207,11 @@
     </dependency>
   </dependencies>
 
+  <properties>
+    <maven.compile.source>1.5</maven.compile.source>
+    <maven.compile.target>1.5</maven.compile.target>
+  </properties> 
+
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
@@ -313,17 +318,6 @@ org.apache.commons.io.output;version=${project.version}
         <configuration>
           <configLocation>checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.3</version>
-        <configuration>
-          <source>1.4</source>
-          <links>
-            <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
-          </links>
         </configuration>
       </plugin>
       <plugin>
