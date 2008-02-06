@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -140,6 +141,24 @@ public class IOUtils {
         try {
             if (input != null) {
                 input.close();
+            }
+        } catch (IOException ioe) {
+            // ignore
+        }
+    }
+
+    /**
+     * Unconditionally close a <code>Channel</code>.
+     * <p>
+     * Equivalent to {@link Channel#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
+     *
+     * @param channel the Channel to close, may be null or already closed
+     */
+    public static void closeQuietly(Channel channel) {
+        try {
+            if (channel != null) {
+                channel.close();
             }
         } catch (IOException ioe) {
             // ignore
