@@ -1267,6 +1267,34 @@ public class FileUtils {
     }
 
     /**
+     * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
+     * 
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @throws IOException in case of an I/O error
+     * @since IO 2.0
+     */
+    public static void write(File file, CharSequence data) throws IOException {
+        String str = data == null ? null : data.toString();
+        writeStringToFile(file, str);
+    }
+
+    /**
+     * Writes a CharSequence to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since IO 2.0
+     */
+    public static void write(File file, CharSequence data, String encoding) throws IOException {
+        String str = data == null ? null : data.toString();
+        writeStringToFile(file, str, encoding);
+    }
+
+    /**
      * Writes a byte array to a file creating the file if it does not exist.
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created

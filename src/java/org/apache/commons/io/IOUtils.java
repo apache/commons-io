@@ -602,6 +602,36 @@ public class IOUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Convert the specified CharSequence to an input stream, encoded as bytes
+     * using the default character encoding of the platform.
+     *
+     * @param input the CharSequence to convert
+     * @return an input stream
+     * @since IO 2.0
+     */
+    public static InputStream toInputStream(CharSequence input) {
+        return toInputStream(input.toString());
+    }
+
+    /**
+     * Convert the specified CharSequence to an input stream, encoded as bytes
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     *
+     * @param input the CharSequence to convert
+     * @param encoding the encoding to use, null means platform default
+     * @throws IOException if the encoding is invalid
+     * @return an input stream
+     * @since IO 2.0
+     */
+    public static InputStream toInputStream(CharSequence input, String encoding) throws IOException {
+        return toInputStream(input.toString(), encoding);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
      * Convert the specified string to an input stream, encoded as bytes
      * using the default character encoding of the platform.
      *
@@ -767,6 +797,66 @@ public class IOUtils {
         }
     }
 
+    // write CharSequence
+    //-----------------------------------------------------------------------
+    /**
+     * Writes chars from a <code>CharSequence</code> to a <code>Writer</code>.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    public static void write(CharSequence data, Writer output) throws IOException {
+        if (data != null) {
+            write(data.toString(), output);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>CharSequence</code> to bytes on an
+     * <code>OutputStream</code> using the default character encoding of the
+     * platform.
+     * <p>
+     * This method uses {@link String#getBytes()}.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    public static void write(CharSequence data, OutputStream output)
+            throws IOException {
+        if (data != null) {
+            write(data.toString(), output);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>CharSequence</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    public static void write(CharSequence data, OutputStream output, String encoding)
+            throws IOException {
+        if (data != null) {
+            write(data.toString(), output, encoding);
+        }
+    }
+
     // write String
     //-----------------------------------------------------------------------
     /**
@@ -841,6 +931,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since Commons IO 1.1
+     * @deprecated replaced by write(CharSequence, Writer)
      */
     public static void write(StringBuffer data, Writer output)
             throws IOException {
@@ -861,6 +952,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since Commons IO 1.1
+     * @deprecated replaced by write(CharSequence, OutputStream)
      */
     public static void write(StringBuffer data, OutputStream output)
             throws IOException {
@@ -884,6 +976,7 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since Commons IO 1.1
+     * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
     public static void write(StringBuffer data, OutputStream output,
             String encoding) throws IOException {
