@@ -124,7 +124,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         
         //First, find non-recursively
         fileFilter = FileFilterUtils.trueFileFilter();
-        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, null);
+        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, (IOFileFilter)null);
         filenames = filesToFilenames(files);
         assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
         assertFalse("'dummy-index.html' shouldn't be found", filenames.contains("dummy-index.html"));
@@ -159,7 +159,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
 
         try {
-            FileUtils.listFiles(getLocalTestDirectory(), null, null);
+            FileUtils.listFiles(getLocalTestDirectory(), (IOFileFilter)null, (IOFileFilter)null);
             fail("Expected error about null parameter");
         } catch (Exception e) {
             //fine
