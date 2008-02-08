@@ -334,7 +334,7 @@ public class FileSystemUtils {
         if (tok.countTokens() < 4) {
             // could be long Filesystem, thus data on third line
             if (tok.countTokens() == 1 && lines.size() >= 3) {
-                String line3 = (String) lines.get(2); // the line may be interested in
+                String line3 = lines.get(2); // the line may be interested in
                 tok = new StringTokenizer(line3, " ");
             } else {
                 throw new IOException(
