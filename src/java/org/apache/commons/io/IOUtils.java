@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
@@ -30,6 +31,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.channels.Channel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,25 +52,21 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * <li>contentEquals - these methods compare the content of two streams
  * </ul>
  * <p>
- * The byte-to-char methods and char-to-byte methods involve a conversion step.
- * Two methods are provided in each case, one that uses the platform default
- * encoding and the other which allows you to specify an encoding. You are
- * encouraged to always specify an encoding because relying on the platform
- * default can lead to unexpected results, for example when moving from
- * development to production.
+ * The byte-to-char methods and char-to-byte methods involve a conversion step. Two methods are provided in each case,
+ * one that uses the platform default encoding and the other which allows you to specify an encoding. You are encouraged
+ * to always specify an encoding because relying on the platform default can lead to unexpected results, for example
+ * when moving from development to production.
  * <p>
- * All the methods in this class that read a stream are buffered internally.
- * This means that there is no cause to use a <code>BufferedInputStream</code>
- * or <code>BufferedReader</code>. The default buffer size of 4K has been shown
- * to be efficient in tests.
+ * All the methods in this class that read a stream are buffered internally. This means that there is no cause to use a
+ * <code>BufferedInputStream</code> or <code>BufferedReader</code>. The default buffer size of 4K has been shown to
+ * be efficient in tests.
  * <p>
- * Wherever possible, the methods in this class do <em>not</em> flush or close
- * the stream. This is to avoid making non-portable assumptions about the
- * streams' origin and further use. Thus the caller is still responsible for
- * closing streams after use.
+ * Wherever possible, the methods in this class do <em>not</em> flush or close the stream. This is to avoid making
+ * non-portable assumptions about the streams' origin and further use. Thus the caller is still responsible for closing
+ * streams after use.
  * <p>
  * Origin of code: Excalibur.
- *
+ * 
  * @author Peter Donald
  * @author Jeff Turner
  * @author Matthew Hawthorne
@@ -80,7 +78,7 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * @version $Id$
  */
 public class IOUtils {
-    // NOTE: This class is focussed on InputStream, OutputStream, Reader and
+    // NOTE: This class is focused on InputStream, OutputStream, Reader and
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
@@ -88,22 +86,27 @@ public class IOUtils {
      * The Unix directory separator character.
      */
     public static final char DIR_SEPARATOR_UNIX = '/';
+
     /**
      * The Windows directory separator character.
      */
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
+
     /**
      * The system directory separator character.
      */
     public static final char DIR_SEPARATOR = File.separatorChar;
+
     /**
      * The Unix line separator string.
      */
     public static final String LINE_SEPARATOR_UNIX = "\n";
+
     /**
      * The Windows line separator string.
      */
     public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+
     /**
      * The system line separator string.
      */
@@ -128,14 +131,15 @@ public class IOUtils {
         super();
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Unconditionally close an <code>Reader</code>.
      * <p>
-     * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     *
-     * @param input  the Reader to close, may be null or already closed
+     * Equivalent to {@link Reader#close()}, except any exceptions will be ignored. This is typically used in finally
+     * blocks.
+     * 
+     * @param input
+     *            the Reader to close, may be null or already closed
      */
     public static void closeQuietly(Reader input) {
         try {
@@ -150,10 +154,11 @@ public class IOUtils {
     /**
      * Unconditionally close a <code>Channel</code>.
      * <p>
-     * Equivalent to {@link Channel#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     *
-     * @param channel the Channel to close, may be null or already closed
+     * Equivalent to {@link Channel#close()}, except any exceptions will be ignored. This is typically used in finally
+     * blocks.
+     * 
+     * @param channel
+     *            the Channel to close, may be null or already closed
      */
     public static void closeQuietly(Channel channel) {
         try {
@@ -168,10 +173,11 @@ public class IOUtils {
     /**
      * Unconditionally close a <code>Writer</code>.
      * <p>
-     * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     *
-     * @param output  the Writer to close, may be null or already closed
+     * Equivalent to {@link Writer#close()}, except any exceptions will be ignored. This is typically used in finally
+     * blocks.
+     * 
+     * @param output
+     *            the Writer to close, may be null or already closed
      */
     public static void closeQuietly(Writer output) {
         try {
@@ -186,10 +192,11 @@ public class IOUtils {
     /**
      * Unconditionally close an <code>InputStream</code>.
      * <p>
-     * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     *
-     * @param input  the InputStream to close, may be null or already closed
+     * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored. This is typically used in
+     * finally blocks.
+     * 
+     * @param input
+     *            the InputStream to close, may be null or already closed
      */
     public static void closeQuietly(InputStream input) {
         try {
@@ -204,10 +211,11 @@ public class IOUtils {
     /**
      * Unconditionally close an <code>OutputStream</code>.
      * <p>
-     * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     *
-     * @param output  the OutputStream to close, may be null or already closed
+     * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored. This is typically used in
+     * finally blocks.
+     * 
+     * @param output
+     *            the OutputStream to close, may be null or already closed
      */
     public static void closeQuietly(OutputStream output) {
         try {
@@ -220,17 +228,19 @@ public class IOUtils {
     }
 
     // read toByteArray
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
+     * @param input
+     *            the <code>InputStream</code> to read from
      * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
     public static byte[] toByteArray(InputStream input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -239,16 +249,18 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
-     * using the default character encoding of the platform.
+     * Get the contents of a <code>Reader</code> as a <code>byte[]</code> using the default character encoding of
+     * the platform.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * 
-     * @param input  the <code>Reader</code> to read from
+     * @param input
+     *            the <code>Reader</code> to read from
      * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
     public static byte[] toByteArray(Reader input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -257,39 +269,42 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
-     * using the specified character encoding.
+     * Get the contents of a <code>Reader</code> as a <code>byte[]</code> using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * 
-     * @param input  the <code>Reader</code> to read from
-     * @param encoding  the encoding to use, null means platform default
+     * @param input
+     *            the <code>Reader</code> to read from
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static byte[] toByteArray(Reader input, String encoding)
-            throws IOException {
+    public static byte[] toByteArray(Reader input, String encoding) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         copy(input, output, encoding);
         return output.toByteArray();
     }
 
     /**
-     * Get the contents of a <code>String</code> as a <code>byte[]</code>
-     * using the default character encoding of the platform.
+     * Get the contents of a <code>String</code> as a <code>byte[]</code> using the default character encoding of
+     * the platform.
      * <p>
      * This is the same as {@link String#getBytes()}.
      * 
-     * @param input  the <code>String</code> to convert
+     * @param input
+     *            the <code>String</code> to convert
      * @return the requested byte array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs (never occurs)
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#getBytes()}
      */
     public static byte[] toByteArray(String input) throws IOException {
@@ -297,18 +312,20 @@ public class IOUtils {
     }
 
     // read char[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a character array
-     * using the default character encoding of the platform.
+     * Get the contents of an <code>InputStream</code> as a character array using the default character encoding of
+     * the platform.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param is  the <code>InputStream</code> to read from
+     * @param is
+     *            the <code>InputStream</code> to read from
      * @return the requested character array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static char[] toCharArray(InputStream is) throws IOException {
@@ -318,24 +335,24 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a character array
-     * using the specified character encoding.
+     * Get the contents of an <code>InputStream</code> as a character array using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param is  the <code>InputStream</code> to read from
-     * @param encoding  the encoding to use, null means platform default
+     * @param is
+     *            the <code>InputStream</code> to read from
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return the requested character array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static char[] toCharArray(InputStream is, String encoding)
-            throws IOException {
+    public static char[] toCharArray(InputStream is, String encoding) throws IOException {
         CharArrayWriter output = new CharArrayWriter();
         copy(is, output, encoding);
         return output.toCharArray();
@@ -344,13 +361,15 @@ public class IOUtils {
     /**
      * Get the contents of a <code>Reader</code> as a character array.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * 
-     * @param input  the <code>Reader</code> to read from
+     * @param input
+     *            the <code>Reader</code> to read from
      * @return the requested character array
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static char[] toCharArray(Reader input) throws IOException {
@@ -360,18 +379,20 @@ public class IOUtils {
     }
 
     // read toString
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a String
-     * using the default character encoding of the platform.
+     * Get the contents of an <code>InputStream</code> as a String using the default character encoding of the
+     * platform.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
+     * @param input
+     *            the <code>InputStream</code> to read from
      * @return the requested String
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
     public static String toString(InputStream input) throws IOException {
         StringBuilderWriter sw = new StringBuilderWriter();
@@ -380,23 +401,23 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a String
-     * using the specified character encoding.
+     * Get the contents of an <code>InputStream</code> as a String using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
-     * @param encoding  the encoding to use, null means platform default
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return the requested String
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
-    public static String toString(InputStream input, String encoding)
-            throws IOException {
+    public static String toString(InputStream input, String encoding) throws IOException {
         StringBuilderWriter sw = new StringBuilderWriter();
         copy(input, sw, encoding);
         return sw.toString();
@@ -405,13 +426,15 @@ public class IOUtils {
     /**
      * Get the contents of a <code>Reader</code> as a String.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * 
-     * @param input  the <code>Reader</code> to read from
+     * @param input
+     *            the <code>Reader</code> to read from
      * @return the requested String
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
     public static String toString(Reader input) throws IOException {
         StringBuilderWriter sw = new StringBuilderWriter();
@@ -420,13 +443,15 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>byte[]</code> as a String
-     * using the default character encoding of the platform.
+     * Get the contents of a <code>byte[]</code> as a String using the default character encoding of the platform.
      * 
-     * @param input the byte array to read from
+     * @param input
+     *            the byte array to read from
      * @return the requested String
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs (never occurs)
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[])}
      */
     public static String toString(byte[] input) throws IOException {
@@ -434,85 +459,87 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>byte[]</code> as a String
-     * using the specified character encoding.
+     * Get the contents of a <code>byte[]</code> as a String using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * 
-     * @param input the byte array to read from
-     * @param encoding  the encoding to use, null means platform default
+     * @param input
+     *            the byte array to read from
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return the requested String
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs (never occurs)
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[],String)}
      */
-    public static String toString(byte[] input, String encoding)
-            throws IOException {
+    public static String toString(byte[] input, String encoding) throws IOException {
         if (encoding == null) {
             return new String(input);
-        } else {
-            return new String(input, encoding);
         }
+        return new String(input, encoding);
     }
 
     // readLines
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a list of Strings,
-     * one entry per line, using the default character encoding of the platform.
+     * Get the contents of an <code>InputStream</code> as a list of Strings, one entry per line, using the default
+     * character encoding of the platform.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
-     *
-     * @param input  the <code>InputStream</code> to read from, not null
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from, not null
      * @return the list of Strings, never null
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(InputStream input) throws IOException {
-        InputStreamReader reader = new InputStreamReader(input);
-        return readLines(reader);
+    public static List<String> readLines(InputStream input) throws IOException {
+        return readLines(new InputStreamReader(input));
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a list of Strings,
-     * one entry per line, using the specified character encoding.
+     * Get the contents of an <code>InputStream</code> as a list of Strings, one entry per line, using the specified
+     * character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
-     *
-     * @param input  the <code>InputStream</code> to read from, not null
-     * @param encoding  the encoding to use, null means platform default
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from, not null
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return the list of Strings, never null
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static List readLines(InputStream input, String encoding) throws IOException {
+    public static List<String> readLines(InputStream input, String encoding) throws IOException {
         if (encoding == null) {
             return readLines(input);
-        } else {
-            InputStreamReader reader = new InputStreamReader(input, encoding);
-            return readLines(reader);
         }
+        return readLines(new InputStreamReader(input, encoding));
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a list of Strings,
-     * one entry per line.
+     * Get the contents of a <code>Reader</code> as a list of Strings, one entry per line.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
-     *
-     * @param input  the <code>Reader</code> to read from, not null
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
+     * 
+     * @param input
+     *            the <code>Reader</code> to read from, not null
      * @return the list of Strings, never null
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static List<String> readLines(Reader input) throws IOException {
@@ -527,17 +554,17 @@ public class IOUtils {
     }
 
     // lineIterator
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Return an Iterator for the lines in a <code>Reader</code>.
      * <p>
-     * <code>LineIterator</code> holds a reference to the open
-     * <code>Reader</code> specified here. When you have finished with the
-     * iterator you should close the reader to free internal resources.
-     * This can be done by closing the reader directly, or by calling
-     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+     * <code>LineIterator</code> holds a reference to the open <code>Reader</code> specified here. When you have
+     * finished with the iterator you should close the reader to free internal resources. This can be done by closing
+     * the reader directly, or by calling {@link LineIterator#close()} or
+     * {@link LineIterator#closeQuietly(LineIterator)}.
      * <p>
      * The recommended usage pattern is:
+     * 
      * <pre>
      * try {
      *   LineIterator it = IOUtils.lineIterator(reader);
@@ -549,10 +576,12 @@ public class IOUtils {
      *   IOUtils.closeQuietly(reader);
      * }
      * </pre>
-     *
-     * @param reader  the <code>Reader</code> to read from, not null
+     * 
+     * @param reader
+     *            the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException if the reader is null
+     * @throws IllegalArgumentException
+     *             if the reader is null
      * @since Commons IO 1.2
      */
     public static LineIterator lineIterator(Reader reader) {
@@ -560,16 +589,16 @@ public class IOUtils {
     }
 
     /**
-     * Return an Iterator for the lines in an <code>InputStream</code>, using
-     * the character encoding specified (or default encoding if null).
+     * Return an Iterator for the lines in an <code>InputStream</code>, using the character encoding specified (or
+     * default encoding if null).
      * <p>
-     * <code>LineIterator</code> holds a reference to the open
-     * <code>InputStream</code> specified here. When you have finished with
-     * the iterator you should close the stream to free internal resources.
-     * This can be done by closing the stream directly, or by calling
-     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+     * <code>LineIterator</code> holds a reference to the open <code>InputStream</code> specified here. When you
+     * have finished with the iterator you should close the stream to free internal resources. This can be done by
+     * closing the stream directly, or by calling {@link LineIterator#close()} or
+     * {@link LineIterator#closeQuietly(LineIterator)}.
      * <p>
      * The recommended usage pattern is:
+     * 
      * <pre>
      * try {
      *   LineIterator it = IOUtils.lineIterator(stream, "UTF-8");
@@ -581,16 +610,19 @@ public class IOUtils {
      *   IOUtils.closeQuietly(stream);
      * }
      * </pre>
-     *
-     * @param input  the <code>InputStream</code> to read from, not null
-     * @param encoding  the encoding to use, null means platform default
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from, not null
+     * @param encoding
+     *            the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException if the input is null
-     * @throws IOException if an I/O error occurs, such as if the encoding is invalid
+     * @throws IllegalArgumentException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs, such as if the encoding is invalid
      * @since Commons IO 1.2
      */
-    public static LineIterator lineIterator(InputStream input, String encoding) 
-                     throws IOException {
+    public static LineIterator lineIterator(InputStream input, String encoding) throws IOException {
         Reader reader = null;
         if (encoding == null) {
             reader = new InputStreamReader(input);
@@ -600,12 +632,13 @@ public class IOUtils {
         return new LineIterator(reader);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Convert the specified CharSequence to an input stream, encoded as bytes
-     * using the default character encoding of the platform.
-     *
-     * @param input the CharSequence to convert
+     * Convert the specified CharSequence to an input stream, encoded as bytes using the default character encoding of
+     * the platform.
+     * 
+     * @param input
+     *            the CharSequence to convert
      * @return an input stream
      * @since IO 2.0
      */
@@ -614,15 +647,16 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified CharSequence to an input stream, encoded as bytes
-     * using the specified character encoding.
+     * Convert the specified CharSequence to an input stream, encoded as bytes using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
-     *
-     * @param input the CharSequence to convert
-     * @param encoding the encoding to use, null means platform default
-     * @throws IOException if the encoding is invalid
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * 
+     * @param input
+     *            the CharSequence to convert
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws IOException
+     *             if the encoding is invalid
      * @return an input stream
      * @since IO 2.0
      */
@@ -630,12 +664,13 @@ public class IOUtils {
         return toInputStream(input.toString(), encoding);
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Convert the specified string to an input stream, encoded as bytes
-     * using the default character encoding of the platform.
-     *
-     * @param input the string to convert
+     * Convert the specified string to an input stream, encoded as bytes using the default character encoding of the
+     * platform.
+     * 
+     * @param input
+     *            the string to convert
      * @return an input stream
      * @since Commons IO 1.1
      */
@@ -645,15 +680,16 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified string to an input stream, encoded as bytes
-     * using the specified character encoding.
+     * Convert the specified string to an input stream, encoded as bytes using the specified character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
-     *
-     * @param input the string to convert
-     * @param encoding the encoding to use, null means platform default
-     * @throws IOException if the encoding is invalid
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * 
+     * @param input
+     *            the string to convert
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws IOException
+     *             if the encoding is invalid
      * @return an input stream
      * @since Commons IO 1.1
      */
@@ -663,35 +699,40 @@ public class IOUtils {
     }
 
     // write byte[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Writes bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      * 
-     * @param data  the byte array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the byte array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(byte[] data, OutputStream output)
-            throws IOException {
+    public static void write(byte[] data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data);
         }
     }
 
     /**
-     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
-     * using the default character encoding of the platform.
+     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code> using the default character
+     * encoding of the platform.
      * <p>
      * This method uses {@link String#String(byte[])}.
      * 
-     * @param data  the byte array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the byte array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(byte[] data, Writer output) throws IOException {
@@ -701,24 +742,26 @@ public class IOUtils {
     }
 
     /**
-     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
-     * using the specified character encoding.
+     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code> using the specified character
+     * encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#String(byte[], String)}.
      * 
-     * @param data  the byte array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the byte array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(byte[] data, Writer output, String encoding)
-            throws IOException {
+    public static void write(byte[] data, Writer output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -729,16 +772,19 @@ public class IOUtils {
     }
 
     // write char[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Writes chars from a <code>char[]</code> to a <code>Writer</code>
-     * using the default character encoding of the platform.
+     * Writes chars from a <code>char[]</code> to a <code>Writer</code> using the default character encoding of the
+     * platform.
      * 
-     * @param data  the char array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the char array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(char[] data, Writer output) throws IOException {
@@ -748,46 +794,47 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a <code>char[]</code> to bytes on an
-     * <code>OutputStream</code>.
+     * Writes chars from a <code>char[]</code> to bytes on an <code>OutputStream</code>.
      * <p>
-     * This method uses {@link String#String(char[])} and
-     * {@link String#getBytes()}.
+     * This method uses {@link String#String(char[])} and {@link String#getBytes()}.
      * 
-     * @param data  the char array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the char array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(char[] data, OutputStream output)
-            throws IOException {
+    public static void write(char[] data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(new String(data).getBytes());
         }
     }
 
     /**
-     * Writes chars from a <code>char[]</code> to bytes on an
-     * <code>OutputStream</code> using the specified character encoding.
+     * Writes chars from a <code>char[]</code> to bytes on an <code>OutputStream</code> using the specified
+     * character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * This method uses {@link String#String(char[])} and
-     * {@link String#getBytes(String)}.
+     * This method uses {@link String#String(char[])} and {@link String#getBytes(String)}.
      * 
-     * @param data  the char array to write, do not modify during output,
-     * null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the char array to write, do not modify during output, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(char[] data, OutputStream output, String encoding)
-            throws IOException {
+    public static void write(char[] data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -798,14 +845,18 @@ public class IOUtils {
     }
 
     // write CharSequence
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Writes chars from a <code>CharSequence</code> to a <code>Writer</code>.
      * 
-     * @param data  the <code>CharSequence</code> to write, null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>CharSequence</code> to write, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 2.0
      */
     public static void write(CharSequence data, Writer output) throws IOException {
@@ -815,57 +866,66 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a <code>CharSequence</code> to bytes on an
-     * <code>OutputStream</code> using the default character encoding of the
-     * platform.
+     * Writes chars from a <code>CharSequence</code> to bytes on an <code>OutputStream</code> using the default
+     * character encoding of the platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * 
-     * @param data  the <code>CharSequence</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>CharSequence</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 2.0
      */
-    public static void write(CharSequence data, OutputStream output)
-            throws IOException {
+    public static void write(CharSequence data, OutputStream output) throws IOException {
         if (data != null) {
             write(data.toString(), output);
         }
     }
 
     /**
-     * Writes chars from a <code>CharSequence</code> to bytes on an
-     * <code>OutputStream</code> using the specified character encoding.
+     * Writes chars from a <code>CharSequence</code> to bytes on an <code>OutputStream</code> using the specified
+     * character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
      * 
-     * @param data  the <code>CharSequence</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>CharSequence</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 2.0
      */
-    public static void write(CharSequence data, OutputStream output, String encoding)
-            throws IOException {
+    public static void write(CharSequence data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             write(data.toString(), output, encoding);
         }
     }
 
     // write String
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Writes chars from a <code>String</code> to a <code>Writer</code>.
      * 
-     * @param data  the <code>String</code> to write, null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>String</code> to write, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(String data, Writer output) throws IOException {
@@ -875,43 +935,48 @@ public class IOUtils {
     }
 
     /**
-     * Writes chars from a <code>String</code> to bytes on an
-     * <code>OutputStream</code> using the default character encoding of the
-     * platform.
+     * Writes chars from a <code>String</code> to bytes on an <code>OutputStream</code> using the default character
+     * encoding of the platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * 
-     * @param data  the <code>String</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>String</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(String data, OutputStream output)
-            throws IOException {
+    public static void write(String data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data.getBytes());
         }
     }
 
     /**
-     * Writes chars from a <code>String</code> to bytes on an
-     * <code>OutputStream</code> using the specified character encoding.
+     * Writes chars from a <code>String</code> to bytes on an <code>OutputStream</code> using the specified
+     * character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
      * 
-     * @param data  the <code>String</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>String</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(String data, OutputStream output, String encoding)
-            throws IOException {
+    public static void write(String data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -922,64 +987,72 @@ public class IOUtils {
     }
 
     // write StringBuffer
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Writes chars from a <code>StringBuffer</code> to a <code>Writer</code>.
      * 
-     * @param data  the <code>StringBuffer</code> to write, null ignored
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>StringBuffer</code> to write, null ignored
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, Writer)
      */
-    public static void write(StringBuffer data, Writer output)
-            throws IOException {
+    public static void write(StringBuffer data, Writer output) throws IOException {
         if (data != null) {
             output.write(data.toString());
         }
     }
 
     /**
-     * Writes chars from a <code>StringBuffer</code> to bytes on an
-     * <code>OutputStream</code> using the default character encoding of the
-     * platform.
+     * Writes chars from a <code>StringBuffer</code> to bytes on an <code>OutputStream</code> using the default
+     * character encoding of the platform.
      * <p>
      * This method uses {@link String#getBytes()}.
      * 
-     * @param data  the <code>StringBuffer</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>StringBuffer</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, OutputStream)
      */
-    public static void write(StringBuffer data, OutputStream output)
-            throws IOException {
+    public static void write(StringBuffer data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes());
         }
     }
 
     /**
-     * Writes chars from a <code>StringBuffer</code> to bytes on an
-     * <code>OutputStream</code> using the specified character encoding.
+     * Writes chars from a <code>StringBuffer</code> to bytes on an <code>OutputStream</code> using the specified
+     * character encoding.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
      * 
-     * @param data  the <code>StringBuffer</code> to write, null ignored
-     * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if output is null
-     * @throws IOException if an I/O error occurs
+     * @param data
+     *            the <code>StringBuffer</code> to write, null ignored
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
-    public static void write(StringBuffer data, OutputStream output,
-            String encoding) throws IOException {
+    public static void write(StringBuffer data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -990,93 +1063,91 @@ public class IOUtils {
     }
 
     // writeLines
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Writes the <code>toString()</code> value of each item in a collection to
-     * an <code>OutputStream</code> line by line, using the default character
-     * encoding of the platform and the specified line ending.
-     *
-     * @param lines  the lines to write, null entries produce blank lines
-     * @param lineEnding  the line separator to use, null is system default
-     * @param output  the <code>OutputStream</code> to write to, not null, not closed
-     * @throws NullPointerException if the output is null
-     * @throws IOException if an I/O error occurs
+     * Writes the <code>toString()</code> value of each item in a collection to an <code>OutputStream</code> line by
+     * line, using the default character encoding of the platform and the specified line ending.
+     * 
+     * @param values
+     *            the lines to write, null entries produce blank lines
+     * @param lineEnding
+     *            the line separator to use, null is system default
+     * @param output
+     *            the <code>OutputStream</code> to write to, not null, not closed
+     * @throws NullPointerException
+     *             if the output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void writeLines(Collection lines, String lineEnding,
-            OutputStream output) throws IOException {
-        if (lines == null) {
+    public static void writeLines(Collection<?> values, String lineEnding, OutputStream output) throws IOException {
+       writeLines(values, lineEnding, output, defaultCharsetName());
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to an <code>OutputStream</code> line by
+     * line, using the specified character encoding and the specified line ending.
+     * <p>
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * 
+     * @param values
+     *            the lines to write, null entries produce blank lines
+     * @param lineEnding
+     *            the line separator to use, null is system default
+     * @param output
+     *            the <code>OutputStream</code> to write to, not null, not closed
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if the output is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @since Commons IO 1.1
+     */
+    public static void writeLines(Collection<?> values, String lineEnding, OutputStream output, String encoding)
+            throws IOException {
+        if (encoding == null) {
+            encoding = defaultCharsetName();
+        }
+        if (values == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator it = lines.iterator(); it.hasNext(); ) {
+        for (Iterator<?> it = values.iterator(); it.hasNext();) {
             Object line = it.next();
             if (line != null) {
-                output.write(line.toString().getBytes());
+                output.write(line.toString().getBytes(encoding));
             }
-            output.write(lineEnding.getBytes());
+            output.write(lineEnding.getBytes(encoding));
         }
     }
 
     /**
-     * Writes the <code>toString()</code> value of each item in a collection to
-     * an <code>OutputStream</code> line by line, using the specified character
-     * encoding and the specified line ending.
-     * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
-     *
-     * @param lines  the lines to write, null entries produce blank lines
-     * @param lineEnding  the line separator to use, null is system default
-     * @param output  the <code>OutputStream</code> to write to, not null, not closed
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if the output is null
-     * @throws IOException if an I/O error occurs
+     * Writes the <code>toString()</code> value of each item in a collection to a <code>Writer</code> line by line,
+     * using the specified line ending.
+     * 
+     * @param values
+     *            the lines to write, null entries produce blank lines
+     * @param lineEnding
+     *            the line separator to use, null is system default
+     * @param writer
+     *            the <code>Writer</code> to write to, not null, not closed
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void writeLines(Collection lines, String lineEnding,
-            OutputStream output, String encoding) throws IOException {
-        if (encoding == null) {
-            writeLines(lines, lineEnding, output);
-        } else {
-            if (lines == null) {
-                return;
-            }
-            if (lineEnding == null) {
-                lineEnding = LINE_SEPARATOR;
-            }
-            for (Iterator it = lines.iterator(); it.hasNext(); ) {
-                Object line = it.next();
-                if (line != null) {
-                    output.write(line.toString().getBytes(encoding));
-                }
-                output.write(lineEnding.getBytes(encoding));
-            }
-        }
-    }
-
-    /**
-     * Writes the <code>toString()</code> value of each item in a collection to
-     * a <code>Writer</code> line by line, using the specified line ending.
-     *
-     * @param lines  the lines to write, null entries produce blank lines
-     * @param lineEnding  the line separator to use, null is system default
-     * @param writer  the <code>Writer</code> to write to, not null, not closed
-     * @throws NullPointerException if the input is null
-     * @throws IOException if an I/O error occurs
-     * @since Commons IO 1.1
-     */
-    public static void writeLines(Collection lines, String lineEnding,
-            Writer writer) throws IOException {
-        if (lines == null) {
+    public static void writeLines(Collection<?> values, String lineEnding, Writer writer) throws IOException {
+        if (values == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator it = lines.iterator(); it.hasNext(); ) {
+        for (Iterator<?> it = values.iterator(); it.hasNext();) {
             Object line = it.next();
             if (line != null) {
                 writer.write(line.toString());
@@ -1086,25 +1157,27 @@ public class IOUtils {
     }
 
     // copy from InputStream
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Copy bytes from an <code>InputStream</code> to an
-     * <code>OutputStream</code>.
+     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * <p>
-     * Large streams (over 2GB) will return a bytes copied value of
-     * <code>-1</code> after the copy has completed since the correct
-     * number of bytes cannot be returned as an int. For large streams
-     * use the <code>copyLarge(InputStream, OutputStream)</code> method.
+     * Large streams (over 2GB) will return a bytes copied value of <code>-1</code> after the copy has completed since
+     * the correct number of bytes cannot be returned as an int. For large streams use the
+     * <code>copyLarge(InputStream, OutputStream)</code> method.
      * 
-     * @param input  the <code>InputStream</code> to read from
-     * @param output  the <code>OutputStream</code> to write to
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
      * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
-     * @throws ArithmeticException if the byte count is too large
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @throws ArithmeticException
+     *             if the byte count is too large
      * @since Commons IO 1.1
      */
     public static int copy(InputStream input, OutputStream output) throws IOException {
@@ -1116,21 +1189,22 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
-     * <code>OutputStream</code>.
+     * Copy bytes from a large (over 2GB) <code>InputStream</code> to an <code>OutputStream</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * 
-     * @param input  the <code>InputStream</code> to read from
-     * @param output  the <code>OutputStream</code> to write to
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
      * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.3
      */
-    public static long copyLarge(InputStream input, OutputStream output)
-            throws IOException {
+    public static long copyLarge(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         long count = 0;
         int n = 0;
@@ -1142,47 +1216,51 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code> using the default character encoding of the platform.
+     * Copy bytes from an <code>InputStream</code> to chars on a <code>Writer</code> using the default character
+     * encoding of the platform.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * <p>
      * This method uses {@link InputStreamReader}.
-     *
-     * @param input  the <code>InputStream</code> to read from
-     * @param output  the <code>Writer</code> to write to
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(InputStream input, Writer output)
-            throws IOException {
+    public static void copy(InputStream input, Writer output) throws IOException {
         InputStreamReader in = new InputStreamReader(input);
         copy(in, output);
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to chars on a
-     * <code>Writer</code> using the specified character encoding.
+     * Copy bytes from an <code>InputStream</code> to chars on a <code>Writer</code> using the specified character
+     * encoding.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link InputStreamReader}.
-     *
-     * @param input  the <code>InputStream</code> to read from
-     * @param output  the <code>Writer</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param output
+     *            the <code>Writer</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(InputStream input, Writer output, String encoding)
-            throws IOException {
+    public static void copy(InputStream input, Writer output, String encoding) throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1192,24 +1270,27 @@ public class IOUtils {
     }
 
     // copy from Reader
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * <p>
-     * Large streams (over 2GB) will return a chars copied value of
-     * <code>-1</code> after the copy has completed since the correct
-     * number of chars cannot be returned as an int. For large streams
-     * use the <code>copyLarge(Reader, Writer)</code> method.
-     *
-     * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>Writer</code> to write to
+     * Large streams (over 2GB) will return a chars copied value of <code>-1</code> after the copy has completed since
+     * the correct number of chars cannot be returned as an int. For large streams use the
+     * <code>copyLarge(Reader, Writer)</code> method.
+     * 
+     * @param input
+     *            the <code>Reader</code> to read from
+     * @param output
+     *            the <code>Writer</code> to write to
      * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
-     * @throws ArithmeticException if the character count is too large
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @throws ArithmeticException
+     *             if the character count is too large
      * @since Commons IO 1.1
      */
     public static int copy(Reader input, Writer output) throws IOException {
@@ -1223,14 +1304,17 @@ public class IOUtils {
     /**
      * Copy chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
-     *
-     * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>Writer</code> to write to
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
+     * 
+     * @param input
+     *            the <code>Reader</code> to read from
+     * @param output
+     *            the <code>Writer</code> to write to
      * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.3
      */
     public static long copyLarge(Reader input, Writer output) throws IOException {
@@ -1245,26 +1329,26 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a <code>Reader</code> to bytes on an
-     * <code>OutputStream</code> using the default character encoding of the
-     * platform, and calling flush.
+     * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code> using the default character
+     * encoding of the platform, and calling flush.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * <p>
-     * Due to the implementation of OutputStreamWriter, this method performs a
-     * flush.
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
      * <p>
      * This method uses {@link OutputStreamWriter}.
-     *
-     * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>OutputStream</code> to write to
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * 
+     * @param input
+     *            the <code>Reader</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(Reader input, OutputStream output)
-            throws IOException {
+    public static void copy(Reader input, OutputStream output) throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
@@ -1273,30 +1357,30 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a <code>Reader</code> to bytes on an
-     * <code>OutputStream</code> using the specified character encoding, and
-     * calling flush.
+     * Copy chars from a <code>Reader</code> to bytes on an <code>OutputStream</code> using the specified character
+     * encoding, and calling flush.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedReader</code>.
      * <p>
-     * Character encoding names can be found at
-     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * Character encoding names can be found at <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
-     * Due to the implementation of OutputStreamWriter, this method performs a
-     * flush.
+     * Due to the implementation of OutputStreamWriter, this method performs a flush.
      * <p>
      * This method uses {@link OutputStreamWriter}.
-     *
-     * @param input  the <code>Reader</code> to read from
-     * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException if an I/O error occurs
+     * 
+     * @param input
+     *            the <code>Reader</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param encoding
+     *            the encoding to use, null means platform default
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(Reader input, OutputStream output, String encoding)
-            throws IOException {
+    public static void copy(Reader input, OutputStream output, String encoding) throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1309,23 +1393,24 @@ public class IOUtils {
     }
 
     // content equals
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
-     * Compare the contents of two Streams to determine if they are equal or
-     * not.
+     * Compare the contents of two Streams to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using
-     * <code>BufferedInputStream</code> if they are not already buffered.
-     *
-     * @param input1  the first stream
-     * @param input2  the second stream
-     * @return true if the content of the streams are equal or they both don't
-     * exist, false otherwise
-     * @throws NullPointerException if either input is null
-     * @throws IOException if an I/O error occurs
+     * This method buffers the input internally using <code>BufferedInputStream</code> if they are not already
+     * buffered.
+     * 
+     * @param input1
+     *            the first stream
+     * @param input2
+     *            the second stream
+     * @return true if the content of the streams are equal or they both don't exist, false otherwise
+     * @throws NullPointerException
+     *             if either input is null
+     * @throws IOException
+     *             if an I/O error occurs
      */
-    public static boolean contentEquals(InputStream input1, InputStream input2)
-            throws IOException {
+    public static boolean contentEquals(InputStream input1, InputStream input2) throws IOException {
         if (!(input1 instanceof BufferedInputStream)) {
             input1 = new BufferedInputStream(input1);
         }
@@ -1347,22 +1432,22 @@ public class IOUtils {
     }
 
     /**
-     * Compare the contents of two Readers to determine if they are equal or
-     * not.
+     * Compare the contents of two Readers to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using
-     * <code>BufferedReader</code> if they are not already buffered.
-     *
-     * @param input1  the first reader
-     * @param input2  the second reader
-     * @return true if the content of the readers are equal or they both don't
-     * exist, false otherwise
-     * @throws NullPointerException if either input is null
-     * @throws IOException if an I/O error occurs
+     * This method buffers the input internally using <code>BufferedReader</code> if they are not already buffered.
+     * 
+     * @param input1
+     *            the first reader
+     * @param input2
+     *            the second reader
+     * @return true if the content of the readers are equal or they both don't exist, false otherwise
+     * @throws NullPointerException
+     *             if either input is null
+     * @throws IOException
+     *             if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static boolean contentEquals(Reader input1, Reader input2)
-            throws IOException {
+    public static boolean contentEquals(Reader input1, Reader input2) throws IOException {
         if (!(input1 instanceof BufferedReader)) {
             input1 = new BufferedReader(input1);
         }
@@ -1381,6 +1466,10 @@ public class IOUtils {
 
         int ch2 = input2.read();
         return (ch2 == -1);
+    }
+
+    private static String defaultCharsetName() {
+        return Charset.defaultCharset().name();
     }
 
 }
