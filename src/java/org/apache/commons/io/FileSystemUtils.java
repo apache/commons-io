@@ -222,14 +222,14 @@ public class FileSystemUtils {
         String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
         
         // read in the output of the command to an ArrayList
-        List lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
+        List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
         
         // now iterate over the lines we just read and find the LAST
         // non-empty line (the free space bytes should be in the last element
         // of the ArrayList anyway, but this will ensure it works even if it's
         // not, still assuming it is on the last non-blank line)
         for (int i = lines.size() - 1; i >= 0; i--) {
-            String line = (String) lines.get(i);
+            String line = lines.get(i);
             if (line.length() > 0) {
                 return parseDir(line, path);
             }
