@@ -335,7 +335,7 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since Commons IO 1.2
      */
-    public static Iterator iterateFiles(
+    public static Iterator<File> iterateFiles(
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
@@ -367,7 +367,7 @@ public class FileUtils {
      * @param recursive  if true all subdirectories are searched as well
      * @return an collection of java.io.File with the matching files
      */
-    public static Collection listFiles(
+    public static Collection<File> listFiles(
             File directory, String[] extensions, boolean recursive) {
         IOFileFilter filter;
         if (extensions == null) {
@@ -392,7 +392,7 @@ public class FileUtils {
      * @return an iterator of java.io.File with the matching files
      * @since Commons IO 1.2
      */
-    public static Iterator iterateFiles(
+    public static Iterator<File> iterateFiles(
             File directory, String[] extensions, boolean recursive) {
         return listFiles(directory, extensions, recursive).iterator();
     }
@@ -1151,7 +1151,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
-    public static List readLines(File file, String encoding) throws IOException {
+    public static List<String> readLines(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
@@ -1170,7 +1170,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3
      */
-    public static List readLines(File file) throws IOException {
+    public static List<String> readLines(File file) throws IOException {
         return readLines(file, null);
     }
 
@@ -1330,7 +1330,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
-    public static void writeLines(File file, String encoding, Collection lines) throws IOException {
+    public static void writeLines(File file, String encoding, Collection<?> lines) throws IOException {
         writeLines(file, encoding, lines, null);
     }
 
@@ -1344,7 +1344,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3
      */
-    public static void writeLines(File file, Collection lines) throws IOException {
+    public static void writeLines(File file, Collection<?> lines) throws IOException {
         writeLines(file, null, lines, null);
     }
 
@@ -1364,7 +1364,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since Commons IO 1.1
      */
-    public static void writeLines(File file, String encoding, Collection lines, String lineEnding) throws IOException {
+    public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding)
+        throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file);
@@ -1385,7 +1386,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3
      */
-    public static void writeLines(File file, Collection lines, String lineEnding) throws IOException {
+    public static void writeLines(File file, Collection<?> lines, String lineEnding) throws IOException {
         writeLines(file, null, lines, lineEnding);
     }
 
