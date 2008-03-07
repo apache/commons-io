@@ -1056,7 +1056,7 @@ public class FilenameUtils {
      * @param extensions  the extensions to check for, null checks for no extension
      * @return true if the filename is one of the extensions
      */
-    public static boolean isExtension(String filename, Collection extensions) {
+    public static boolean isExtension(String filename, Collection<String> extensions) {
         if (filename == null) {
             return false;
         }
@@ -1064,7 +1064,7 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        for (Iterator it = extensions.iterator(); it.hasNext();) {
+        for (Iterator<String> it = extensions.iterator(); it.hasNext();) {
             if (fileExt.equals(it.next())) {
                 return true;
             }
