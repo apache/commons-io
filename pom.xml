@@ -19,10 +19,9 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>8</version>
+    <version>9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <packaging>bundle</packaging>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
   <version>1.5-SNAPSHOT</version>
@@ -213,7 +212,6 @@
     <maven.compile.target>1.5</maven.compile.target>
     <commons.componentid>io</commons.componentid>
     <commons.release.version>1.4</commons.release.version>
-    <commons.binary.suffix>-bin</commons.binary.suffix>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
   </properties> 
