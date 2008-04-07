@@ -36,7 +36,7 @@ import java.io.Serializable;
  * {@link #newChildInstance(File)} to return a new instance of the appropriate type.
  * You may also want to override the {@link #refresh()} and/or {@link #hasChanged()}
  * methods.
- * 
+ * @see FilesystemObserver
  */
 public class FilesystemEntry implements Serializable {
 
