@@ -64,6 +64,10 @@ public class FileSystemUtils {
 
     /** The operating system flag. */
     private static final int OS;
+
+    /** The path to df */
+    private static String dfPath = "df";
+
     static {
         int os = OTHER;
         try {
@@ -76,9 +80,6 @@ public class FileSystemUtils {
             if (osName.indexOf("windows") != -1) {
                 os = WINDOWS;
             } else if (osName.indexOf("linux") != -1 ||
-                osName.indexOf("sun os") != -1 ||
-                osName.indexOf("sunos") != -1 ||
-                osName.indexOf("solaris") != -1 ||
                 osName.indexOf("mpe/ix") != -1 ||
                 osName.indexOf("freebsd") != -1 ||
                 osName.indexOf("irix") != -1 ||
@@ -86,6 +87,11 @@ public class FileSystemUtils {
                 osName.indexOf("unix") != -1 ||
                 osName.indexOf("mac os x") != -1) {
                 os = UNIX;
+            } else if (osName.indexOf("sun os") != -1 ||
+                osName.indexOf("sunos") != -1 ||
+                osName.indexOf("solaris") != -1) {
+                os = POSIX_UNIX;
+                dfPath = "/usr/xpg4/bin/df";
             } else if (osName.indexOf("hp-ux") != -1 ||
                 osName.indexOf("aix") != -1) {
                 os = POSIX_UNIX;
@@ -116,7 +122,7 @@ public class FileSystemUtils {
      * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
      * Note that some OS's are NOT currently supported, including OS/390,
-     * OpenVMS and and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
+     * OpenVMS. 
      * <pre>
      * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -317,14 +323,14 @@ public class FileSystemUtils {
             flags += "P";
         }
         String[] cmdAttribs = 
-            (flags.length() > 1 ? new String[] {"df", flags, path} : new String[] {"df", path});
+            (flags.length() > 1 ? new String[] {dfPath, flags, path} : new String[] {dfPath, path});
         
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         List<String> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
-                    "Command line 'df' did not return info as expected " +
+                    "Command line '" + dfPath + "' did not return info as expected " +
                     "for path '" + path + "'- response was " + lines);
         }
         String line2 = lines.get(1); // the line we're interested in
@@ -338,7 +344,7 @@ public class FileSystemUtils {
                 tok = new StringTokenizer(line3, " ");
             } else {
                 throw new IOException(
-                        "Command line 'df' did not return data as expected " +
+                        "Command line '" + dfPath + "' did not return data as expected " +
                         "for path '" + path + "'- check path is valid");
             }
         } else {
@@ -364,14 +370,14 @@ public class FileSystemUtils {
             long bytes = Long.parseLong(freeSpace);
             if (bytes < 0) {
                 throw new IOException(
-                        "Command line 'df' did not find free space in response " +
+                        "Command line '" + dfPath + "' did not find free space in response " +
                         "for path '" + path + "'- check path is valid");
             }
             return bytes;
             
         } catch (NumberFormatException ex) {
             throw new IOException(
-                    "Command line 'df' did not return numeric data as expected " +
+                    "Command line '" + dfPath + "' did not return numeric data as expected " +
                     "for path '" + path + "'- check path is valid");
         }
     }
