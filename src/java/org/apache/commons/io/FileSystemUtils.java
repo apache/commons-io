@@ -66,10 +66,11 @@ public class FileSystemUtils {
     private static final int OS;
 
     /** The path to df */
-    private static String dfPath = "df";
+    private static final String DF;
 
     static {
         int os = OTHER;
+        String dfPath = "df";
         try {
             String osName = System.getProperty("os.name");
             if (osName == null) {
@@ -103,6 +104,7 @@ public class FileSystemUtils {
             os = INIT_PROBLEM;
         }
         OS = os;
+        DF = dfPath;
     }
 
     /**
@@ -323,14 +325,14 @@ public class FileSystemUtils {
             flags += "P";
         }
         String[] cmdAttribs = 
-            (flags.length() > 1 ? new String[] {dfPath, flags, path} : new String[] {dfPath, path});
+            (flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path});
         
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         List<String> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
-                    "Command line '" + dfPath + "' did not return info as expected " +
+                    "Command line '" + DF + "' did not return info as expected " +
                     "for path '" + path + "'- response was " + lines);
         }
         String line2 = lines.get(1); // the line we're interested in
@@ -344,7 +346,7 @@ public class FileSystemUtils {
                 tok = new StringTokenizer(line3, " ");
             } else {
                 throw new IOException(
-                        "Command line '" + dfPath + "' did not return data as expected " +
+                        "Command line '" + DF + "' did not return data as expected " +
                         "for path '" + path + "'- check path is valid");
             }
         } else {
@@ -370,14 +372,14 @@ public class FileSystemUtils {
             long bytes = Long.parseLong(freeSpace);
             if (bytes < 0) {
                 throw new IOException(
-                        "Command line '" + dfPath + "' did not find free space in response " +
+                        "Command line '" + DF + "' did not find free space in response " +
                         "for path '" + path + "'- check path is valid");
             }
             return bytes;
             
         } catch (NumberFormatException ex) {
             throw new IOException(
-                    "Command line '" + dfPath + "' did not return numeric data as expected " +
+                    "Command line '" + DF + "' did not return numeric data as expected " +
                     "for path '" + path + "'- check path is valid");
         }
     }
