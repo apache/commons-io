@@ -68,8 +68,13 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             // have to figure out unix block size
             String[] cmd = null;
             String osName = System.getProperty("os.name");
+            osName = osName.toLowerCase();
+
             if (osName.indexOf("hp-ux") >= 0 || osName.indexOf("aix") >= 0) {
                 cmd = new String[] {"df", "-P", "/"};
+            } else if (osName.indexOf("sunos") >= 0 || osName.indexOf("sun os") >= 0
+                       || osName.indexOf("solaris") >= 0) {
+                cmd = new String[] {"/usr/xpg4/bin/df", "-P", "/"};
             } else {
                 cmd = new String[] {"df", "/"};
             }
