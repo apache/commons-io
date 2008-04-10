@@ -328,6 +328,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File[] files = new File[] {
             new File(getTestDirectory(), "file1.txt"),
             new File(getTestDirectory(), "file2.txt"),
+            new File(getTestDirectory(), "test file.txt"),
         };
         URL[] urls = FileUtils.toURLs(files);
         
@@ -336,6 +337,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") >= 0);
         assertEquals(true, urls[1].toExternalForm().startsWith("file:"));
         assertEquals(true, urls[1].toExternalForm().indexOf("file2.txt") >= 0);
+
+        // Test escaped char
+        assertEquals(true, urls[2].toExternalForm().startsWith("file:"));
+        assertEquals(true, urls[2].toExternalForm().indexOf("test%20file.txt") >= 0);
     }
 
 //    public void testToURLs2() throws Exception {
