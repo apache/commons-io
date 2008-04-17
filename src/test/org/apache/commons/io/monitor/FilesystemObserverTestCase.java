@@ -441,7 +441,7 @@ public class FilesystemObserverTestCase extends TestCase {
             FileUtils.touch(file);
             while (lastModified == file.lastModified()) {
                 try {
-                    Thread.sleep(5);
+                    Thread.sleep(50);
                 } catch(InterruptedException ie) {
                     // ignore
                 }
