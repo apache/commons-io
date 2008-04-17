@@ -414,6 +414,12 @@ public class FilesystemObserverTestCase extends TestCase {
      * Check all the Collections have the expected sizes.
      */
     private void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
+        label = label + "[" + listener.getCreatedDirectories().size() +
+                        " " + listener.getChangedDirectories().size() +
+                        " " + listener.getDeletedDirectories().size() +
+                        " " + listener.getCreatedFiles().size() +
+                        " " + listener.getChangedFiles().size() +
+                        " " + listener.getDeletedFiles().size() + "]";
         assertEquals(label + ": No. of directories created",  dirCreate,  listener.getCreatedDirectories().size());
         assertEquals(label + ": No. of directories changed",  dirChange,  listener.getChangedDirectories().size());
         assertEquals(label + ": No. of directories deleted",  dirDelete,  listener.getDeletedDirectories().size());
