@@ -63,13 +63,14 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         createFile(olderFile, 0);
 
         File newerFile = new File(dir, "newer.txt");
+        createFile(newerFile, 0);
         do {
             try { 
                 Thread.sleep(300);
             } catch(InterruptedException ie) {
                 // ignore
             }
-            createFile(newerFile, 0);
+            newerFile.setLastModified(System.currentTimeMillis());
         } while( olderFile.lastModified() == newerFile.lastModified() );
         equalFile1 = olderFile;
         equalFile2 = olderFile;
