@@ -26,7 +26,7 @@ import junit.framework.TestCase;
 /**
  * Tests the CountingInputStream.
  *
- * @version $Id: CountingInputStreamTest.java 160202 2005-04-05 17:22:21Z roxspring $
+ * @version $Id$
  */
 public class ClassLoaderObjectInputStreamTest extends TestCase {
 
