@@ -23,7 +23,7 @@ import junit.framework.TestCase;
  * Tests IOExceptionWithCause
  * 
  * @author <a href="mailto:ggregory@seagullsw.com">Gary Gregory</a>
- * @version $Id: $
+ * @version $Id$
  */
 public class IOExceptionWithCauseTestCase extends TestCase {
 
