@@ -34,25 +34,25 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         super(name);
     }
 
-	/* Note: This test case tests the simplest functionality of
-	 * ObjectInputStream.  IF we really wanted to test ClassLoaderObjectInputStream
-	 * we would probably need to create a transient Class Loader. -TO
-	 */
+    /* Note: This test case tests the simplest functionality of
+     * ObjectInputStream.  IF we really wanted to test ClassLoaderObjectInputStream
+     * we would probably need to create a transient Class Loader. -TO
+     */
 
     
     public void testExpected() throws Exception {
 
-    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-    	
-    	oos.writeObject( Boolean.FALSE );
-    	
-    	InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-    	ClassLoaderObjectInputStream clois = 
-    		new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-    	Boolean result = (Boolean) clois.readObject();
-    	
-    	assertTrue( !result.booleanValue() );
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject( Boolean.FALSE );
+
+        InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        Boolean result = (Boolean) clois.readObject();
+
+        assertTrue( !result.booleanValue() );
     }
     
 }

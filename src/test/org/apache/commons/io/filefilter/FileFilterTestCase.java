@@ -91,8 +91,8 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("fred.exe"), false);
 
         filter = FileFilterUtils.orFileFilter( 
-        			FileFilterUtils.suffixFileFilter( "tes" ),
-        			FileFilterUtils.suffixFileFilter( "est" ) );
+                    FileFilterUtils.suffixFileFilter( "tes" ),
+                    FileFilterUtils.suffixFileFilter( "est" ) );
         assertFiltering(filter, new File("fred"), false);
         assertFiltering(filter, new File(".tes"), true);
         assertFiltering(filter, new File("fred.test"), true);
@@ -339,30 +339,30 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     public void testNameFilterNullArgument() throws Exception {
-    	String test = null;
-    	try {
-    		new NameFileFilter(test);
-    		fail( "constructing a NameFileFilter with a null String argument should fail.");
-    	} catch( IllegalArgumentException iae ) {
-    	}
+        String test = null;
+        try {
+            new NameFileFilter(test);
+            fail( "constructing a NameFileFilter with a null String argument should fail.");
+        } catch( IllegalArgumentException iae ) {
+        }
     }
 
     public void testNameFilterNullArrayArgument() throws Exception {
-    	String[] test = null;
-    	try {
-    		new NameFileFilter(test);
-    		fail( "constructing a NameFileFilter with a null String[] argument should fail.");
-    	} catch( IllegalArgumentException iae ) {
-    	}
+        String[] test = null;
+        try {
+            new NameFileFilter(test);
+            fail( "constructing a NameFileFilter with a null String[] argument should fail.");
+        } catch( IllegalArgumentException iae ) {
+        }
     }
 
     public void testNameFilterNullListArgument() throws Exception {
-    	List test = null;
-    	try {
-    		new NameFileFilter(test);
-    		fail( "constructing a NameFileFilter with a null List argument should fail.");
-    	} catch( IllegalArgumentException iae ) {
-    	}
+        List test = null;
+        try {
+            new NameFileFilter(test);
+            fail( "constructing a NameFileFilter with a null List argument should fail.");
+        } catch( IllegalArgumentException iae ) {
+        }
     }
 
     public void testTrue() throws Exception {
@@ -588,26 +588,26 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     public void testDelegateFileFilter() throws Exception {
-    	OrFileFilter orFilter = new OrFileFilter();
-    	File testFile = new File( "test.txt" );
+        OrFileFilter orFilter = new OrFileFilter();
+        File testFile = new File( "test.txt" );
 
-    	IOFileFilter filter = new DelegateFileFilter((FileFilter) orFilter);
-    	assertFiltering( filter, testFile, false );
+        IOFileFilter filter = new DelegateFileFilter((FileFilter) orFilter);
+        assertFiltering( filter, testFile, false );
 
-    	filter = new DelegateFileFilter((FilenameFilter) orFilter);
-    	assertFiltering( filter, testFile, false );
+        filter = new DelegateFileFilter((FilenameFilter) orFilter);
+        assertFiltering( filter, testFile, false );
 
-    	try {
-    		new DelegateFileFilter((FileFilter) null);
-    		fail();
-    	} catch( IllegalArgumentException iae ) {
-    	}
+        try {
+            new DelegateFileFilter((FileFilter) null);
+            fail();
+        } catch( IllegalArgumentException iae ) {
+        }
 
-    	try {
-    		new DelegateFileFilter((FilenameFilter) null);
-    		fail();
-    	} catch( IllegalArgumentException iae ) {
-    	}
+        try {
+            new DelegateFileFilter((FilenameFilter) null);
+            fail();
+        } catch( IllegalArgumentException iae ) {
+        }
 
     }
 
