@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @author Noel Bergman
  * @author Martin Cooper
  *
- * @version $Id: FileCleanerTestCase.java 482437 2006-12-05 01:13:05Z scolebourne $
+ * @version $Id$
 
  * @see FileCleaner
  */
