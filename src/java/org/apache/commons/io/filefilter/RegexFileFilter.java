@@ -115,6 +115,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param name  the filename
      * @return true if the filename matches one of the regular expressions
      */
+    @Override
     public boolean accept(File dir, String name) {
         return (pattern.matcher(name).matches());
     }

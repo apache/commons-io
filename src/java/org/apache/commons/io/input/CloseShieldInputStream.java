@@ -45,6 +45,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      * sentinel. The original input stream will remain open, but this proxy
      * will appear closed.
      */
+    @Override
     public void close() {
         in = new ClosedInputStream();
     }

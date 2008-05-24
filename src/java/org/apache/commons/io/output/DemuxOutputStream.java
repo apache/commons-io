@@ -49,6 +49,7 @@ public class DemuxOutputStream
      *
      * @throws IOException if an error occurs
      */
+    @Override
     public void close()
         throws IOException
     {
@@ -64,6 +65,7 @@ public class DemuxOutputStream
      *
      * @throws IOException if an error occurs
      */
+    @Override
     public void flush()
         throws IOException
     {
@@ -80,6 +82,7 @@ public class DemuxOutputStream
      * @param ch the byte to write to stream
      * @throws IOException if an error occurs
      */
+    @Override
     public void write( int ch )
         throws IOException
     {

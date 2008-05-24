@@ -143,6 +143,7 @@ public class DeferredFileOutputStream
      *
      * @exception IOException if an error occurs.
      */
+    @Override
     protected OutputStream getStream() throws IOException
     {
         return currentOutputStream;
@@ -157,6 +158,7 @@ public class DeferredFileOutputStream
      *
      * @exception IOException if an error occurs.
      */
+    @Override
     protected void thresholdReached() throws IOException
     {
         if (prefix != null) {
@@ -228,6 +230,7 @@ public class DeferredFileOutputStream
      *
      * @exception IOException if an error occurs.
      */
+    @Override
     public void close() throws IOException
     {
         super.close();

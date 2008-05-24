@@ -292,6 +292,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#getBytes()}
      */
+    @Deprecated
     public static byte[] toByteArray(String input) throws IOException {
         return input.getBytes();
     }
@@ -429,6 +430,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[])}
      */
+    @Deprecated
     public static String toString(byte[] input) throws IOException {
         return new String(input);
     }
@@ -447,6 +449,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[],String)}
      */
+    @Deprecated
     public static String toString(byte[] input, String encoding)
             throws IOException {
         if (encoding == null) {
@@ -933,6 +936,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, Writer)
      */
+    @Deprecated
     public static void write(StringBuffer data, Writer output)
             throws IOException {
         if (data != null) {
@@ -954,6 +958,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, OutputStream)
      */
+    @Deprecated
     public static void write(StringBuffer data, OutputStream output)
             throws IOException {
         if (data != null) {
@@ -978,6 +983,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
+    @Deprecated
     public static void write(StringBuffer data, OutputStream output,
             String encoding) throws IOException {
         if (data != null) {

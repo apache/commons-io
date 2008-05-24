@@ -264,6 +264,7 @@ public class LockableFileWriter extends Writer {
      *
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void close() throws IOException {
         try {
             out.close();
@@ -278,6 +279,7 @@ public class LockableFileWriter extends Writer {
      * @param idx the character to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(int idx) throws IOException {
         out.write(idx);
     }
@@ -287,6 +289,7 @@ public class LockableFileWriter extends Writer {
      * @param chr the characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(char[] chr) throws IOException {
         out.write(chr);
     }
@@ -298,6 +301,7 @@ public class LockableFileWriter extends Writer {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(char[] chr, int st, int end) throws IOException {
         out.write(chr, st, end);
     }
@@ -307,6 +311,7 @@ public class LockableFileWriter extends Writer {
      * @param str the string to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(String str) throws IOException {
         out.write(str);
     }
@@ -318,6 +323,7 @@ public class LockableFileWriter extends Writer {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(String str, int st, int end) throws IOException {
         out.write(str, st, end);
     }
@@ -326,6 +332,7 @@ public class LockableFileWriter extends Writer {
      * Flush the stream.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }

@@ -66,6 +66,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param value The character to append
      * @return This writer instance
      */
+    @Override
     public Writer append(char value) {
         builder.append(value);
         return this;
@@ -77,6 +78,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param value The character to append
      * @return This writer instance
      */
+    @Override
     public Writer append(CharSequence value) {
         builder.append(value);
         return this;
@@ -90,6 +92,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param end The index of the last character + 1
      * @return This writer instance
      */
+    @Override
     public Writer append(CharSequence value, int start, int end) {
         builder.append(value, start, end);
         return this;
@@ -98,12 +101,14 @@ public class StringBuilderWriter extends Writer implements Serializable {
     /**
      * Closing this writer has no effect. 
      */
+    @Override
     public void close() {
     }
 
     /**
      * Flushing this writer has no effect. 
      */
+    @Override
     public void flush() {
     }
 
@@ -113,6 +118,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * 
      * @param value The value to write
      */
+    @Override
     public void write(String value) {
         if (value != null) {
             builder.append(value);
@@ -126,6 +132,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param offset The index of the first character
      * @param length The number of characters to write
      */
+    @Override
     public void write(char[] value, int offset, int length) {
         if (value != null) {
             builder.append(value, offset, length);
@@ -146,6 +153,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      *
      * @return The contents of the String builder.
      */
+    @Override
     public String toString() {
         return builder.toString();
     }

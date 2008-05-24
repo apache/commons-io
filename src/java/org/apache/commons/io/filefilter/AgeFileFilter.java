@@ -133,6 +133,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * @param file  the File to check
      * @return true if the filename matches
      */
+    @Override
     public boolean accept(File file) {
         boolean newer = FileUtils.isFileNewer(file, cutoff);
         return acceptOlder ? !newer : newer;
@@ -143,6 +144,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         String condition = acceptOlder ? "<=" : ">";
         return super.toString() + "(" + condition + cutoff + ")";

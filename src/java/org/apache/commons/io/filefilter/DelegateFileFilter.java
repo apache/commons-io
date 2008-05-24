@@ -68,6 +68,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @param file  the file to check
      * @return true if the filter matches
      */
+    @Override
     public boolean accept(File file) {
         if (fileFilter != null) {
             return fileFilter.accept(file);
@@ -83,6 +84,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @param name  the filename in the directory
      * @return true if the filter matches
      */
+    @Override
     public boolean accept(File dir, String name) {
         if (filenameFilter != null) {
             return filenameFilter.accept(dir, name);
@@ -96,6 +98,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         String delegate = (fileFilter != null ? fileFilter.toString() : filenameFilter.toString()); 
         return super.toString() + "(" + delegate + ")";

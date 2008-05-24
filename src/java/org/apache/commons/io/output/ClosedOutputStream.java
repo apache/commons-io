@@ -43,6 +43,7 @@ public class ClosedOutputStream extends OutputStream {
      * @param b ignored
      * @throws IOException always thrown
      */
+    @Override
     public void write(int b) throws IOException {
         throw new IOException("write(" + b + ") failed: stream is closed");
     }

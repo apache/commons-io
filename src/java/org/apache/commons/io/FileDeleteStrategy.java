@@ -122,6 +122,7 @@ public class FileDeleteStrategy {
      *
      * @return a string describing the delete strategy
      */
+    @Override
     public String toString() {
         return "FileDeleteStrategy[" + name + "]";
     }

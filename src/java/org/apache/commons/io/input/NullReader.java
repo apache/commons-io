@@ -121,6 +121,7 @@ public class NullReader extends Reader {
      *
      * @throws IOException If an error occurs.
      */
+    @Override
     public void close() throws IOException {
         eof = false;
         position = 0;
@@ -134,6 +135,7 @@ public class NullReader extends Reader {
      * is invalid.
      * @throws UnsupportedOperationException if mark is not supported.
      */
+    @Override
     public synchronized void mark(int readlimit) {
         if (!markSupported) {
             throw new UnsupportedOperationException("Mark not supported");
@@ -147,6 +149,7 @@ public class NullReader extends Reader {
      *
      * @return Whether <i>mark</i> is supported or not.
      */
+    @Override
     public boolean markSupported() {
         return markSupported;
     }
@@ -161,6 +164,7 @@ public class NullReader extends Reader {
      * <code>throwEofException</code> is set to <code>true</code>.
      * @throws IOException if trying to read past the end of file.
      */
+    @Override
     public int read() throws IOException {
         if (eof) {
             throw new IOException("Read after end of file");
@@ -183,6 +187,7 @@ public class NullReader extends Reader {
      * <code>throwEofException</code> is set to <code>true</code>.
      * @throws IOException if trying to read past the end of file.
      */
+    @Override
     public int read(char[] chars) throws IOException {
         return read(chars, 0, chars.length);
     }
@@ -200,6 +205,7 @@ public class NullReader extends Reader {
      * <code>throwEofException</code> is set to <code>true</code>.
      * @throws IOException if trying to read past the end of file.
      */
+    @Override
     public int read(char[] chars, int offset, int length) throws IOException {
         if (eof) {
             throw new IOException("Read after end of file");
@@ -225,6 +231,7 @@ public class NullReader extends Reader {
      * or the read limit has been exceed since the last position was
      * marked.
      */
+    @Override
     public synchronized void reset() throws IOException {
         if (!markSupported) {
             throw new UnsupportedOperationException("Mark not supported");
@@ -252,6 +259,7 @@ public class NullReader extends Reader {
      * <code>throwEofException</code> is set to <code>true</code>.
      * @throws IOException if trying to read past the end of file.
      */
+    @Override
     public long skip(long numberOfChars) throws IOException {
         if (eof) {
             throw new IOException("Skip after end of file");

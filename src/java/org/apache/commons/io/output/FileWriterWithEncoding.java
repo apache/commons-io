@@ -262,6 +262,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param idx the character to write
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void write(int idx) throws IOException {
         out.write(idx);
     }
@@ -271,6 +272,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param chr the characters to write
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void write(char[] chr) throws IOException {
         out.write(chr);
     }
@@ -282,6 +284,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void write(char[] chr, int st, int end) throws IOException {
         out.write(chr, st, end);
     }
@@ -291,6 +294,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param str the string to write
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void write(String str) throws IOException {
         out.write(str);
     }
@@ -302,6 +306,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void write(String str, int st, int end) throws IOException {
         out.write(str, st, end);
     }
@@ -310,6 +315,7 @@ public class FileWriterWithEncoding extends Writer {
      * Flush the stream.
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void flush() throws IOException {
         out.flush();
     }
@@ -318,6 +324,7 @@ public class FileWriterWithEncoding extends Writer {
      * Close the stream.
      * @throws IOException if an I/O error occurs
      */
+     @Override
     public void close() throws IOException {
         out.close();
     }

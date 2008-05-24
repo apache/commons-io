@@ -50,6 +50,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      * @since IO 2.0
      */
+    @Override
     public Writer append(char c) throws IOException {
         out.append(c);
         return this;
@@ -64,6 +65,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      * @since IO 2.0
      */
+    @Override
     public Writer append(CharSequence csq, int start, int end) throws IOException {
         out.append(csq, start, end);
         return this;
@@ -76,6 +78,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      * @since IO 2.0
      */
+    @Override
     public Writer append(CharSequence csq) throws IOException {
         out.append(csq);
         return this;
@@ -86,6 +89,7 @@ public class ProxyWriter extends FilterWriter {
      * @param idx the character to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(int idx) throws IOException {
         out.write(idx);
     }
@@ -95,6 +99,7 @@ public class ProxyWriter extends FilterWriter {
      * @param chr the characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(char[] chr) throws IOException {
         out.write(chr);
     }
@@ -106,6 +111,7 @@ public class ProxyWriter extends FilterWriter {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(char[] chr, int st, int end) throws IOException {
         out.write(chr, st, end);
     }
@@ -115,6 +121,7 @@ public class ProxyWriter extends FilterWriter {
      * @param str the string to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(String str) throws IOException {
         out.write(str);
     }
@@ -126,6 +133,7 @@ public class ProxyWriter extends FilterWriter {
      * @param end The number of characters to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(String str, int st, int end) throws IOException {
         out.write(str, st, end);
     }
@@ -134,6 +142,7 @@ public class ProxyWriter extends FilterWriter {
      * Invokes the delegate's <code>flush()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }
@@ -142,6 +151,7 @@ public class ProxyWriter extends FilterWriter {
      * Invokes the delegate's <code>close()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void close() throws IOException {
         out.close();
     }

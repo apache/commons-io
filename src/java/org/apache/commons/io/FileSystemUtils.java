@@ -141,6 +141,7 @@ public class FileSystemUtils {
      * @deprecated Use freeSpaceKb(String)
      *  Deprecated from 1.3, may be removed in 2.0
      */
+    @Deprecated
     public static long freeSpace(String path) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, false);
     }
