@@ -51,6 +51,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @param file  the File to check
      * @return true if the filter returns false
      */
+    @Override
     public boolean accept(File file) {
         return ! filter.accept(file);
     }
@@ -62,6 +63,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @param name  the filename
      * @return true if the filter returns false
      */
+    @Override
     public boolean accept(File file, String name) {
         return ! filter.accept(file, name);
     }
@@ -71,6 +73,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         return super.toString() + "(" + filter.toString()  + ")";
     }

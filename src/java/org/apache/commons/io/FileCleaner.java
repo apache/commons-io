@@ -37,6 +37,7 @@ import java.io.File;
  * @version $Id$
  * @deprecated Use {@link FileCleaningTracker}
  */
+@Deprecated
 public class FileCleaner {
     /**
      * The instance to use for the deprecated, static methods.

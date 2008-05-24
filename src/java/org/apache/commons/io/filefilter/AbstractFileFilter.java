@@ -58,6 +58,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         String name = getClass().getName();
         int period = name.lastIndexOf('.');

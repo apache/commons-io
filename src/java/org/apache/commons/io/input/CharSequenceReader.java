@@ -46,6 +46,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Close resets the file back to the start and removes any marked position.
      */
+    @Override
     public void close() {
         idx = 0;
         mark = 0;
@@ -56,6 +57,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      *
      * @param readAheadLimit ignored
      */
+    @Override
     public void mark(int readAheadLimit) {
         mark = idx;
     }
@@ -65,6 +67,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      *
      * @return <code>true</code>
      */
+    @Override
     public boolean markSupported() {
         return true;
     }
@@ -75,6 +78,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @return the next character from the character sequence
      * or -1 if the end has been reached.
      */
+    @Override
     public int read() {
         if (idx >= charSequence.length()) {
             return -1;
@@ -92,6 +96,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @return The number of characters read or -1 if there are
      * no more
      */
+    @Override
     public int read(char[] array, int offset, int length) {
         if (idx >= charSequence.length()) {
             return -1;
@@ -119,6 +124,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * Reset the reader to the last marked position (or the beginning if
      * mark has not been called).
      */
+    @Override
     public void reset() {
         idx = mark;
     }
@@ -129,6 +135,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param n The number of characters to skip
      * @return The actual number of characters skipped
      */
+    @Override
     public long skip(long n) {
         if (n < 0) {
             throw new IllegalArgumentException(
@@ -149,6 +156,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      *
      * @return The contents of the character sequence
      */
+    @Override
     public String toString() {
         return charSequence.toString();
     }

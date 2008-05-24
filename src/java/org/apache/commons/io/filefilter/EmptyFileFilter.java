@@ -72,6 +72,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
      * @return <code>true</code> if the file or directory
      *  is <i>empty</i>, otherwise <code>false</code>.
      */
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory()) {
             File[] files = file.listFiles();

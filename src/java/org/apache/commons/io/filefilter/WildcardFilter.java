@@ -50,6 +50,7 @@ import org.apache.commons.io.FilenameUtils;
  * @deprecated Use WilcardFileFilter. Deprecated as this class performs directory
  * filtering which it shouldn't do, but that can't be removed due to compatability.
  */
+@Deprecated
 public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /** The wildcards that will be used to match filenames. */

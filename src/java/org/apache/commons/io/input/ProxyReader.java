@@ -50,6 +50,7 @@ public abstract class ProxyReader extends FilterReader {
      * @return the character read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int read() throws IOException {
         return in.read();
     }
@@ -60,6 +61,7 @@ public abstract class ProxyReader extends FilterReader {
      * @return the number of characters read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int read(char[] chr) throws IOException {
         return in.read(chr);
     }
@@ -72,6 +74,7 @@ public abstract class ProxyReader extends FilterReader {
      * @return the number of characters read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int read(char[] chr, int st, int end) throws IOException {
         return in.read(chr, st, end);
     }
@@ -83,6 +86,7 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      * @since IO 2.0
      */
+    @Override
     public int read(CharBuffer target) throws IOException {
         return in.read(target);
     }
@@ -93,6 +97,7 @@ public abstract class ProxyReader extends FilterReader {
      * @return the number of bytes to skipped or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public long skip(long ln) throws IOException {
         return in.skip(ln);
     }
@@ -102,6 +107,7 @@ public abstract class ProxyReader extends FilterReader {
      * @return true if the stream is ready to be read
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public boolean ready() throws IOException {
         return in.ready();
     }
@@ -110,6 +116,7 @@ public abstract class ProxyReader extends FilterReader {
      * Invokes the delegate's <code>close()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void close() throws IOException {
         in.close();
     }
@@ -119,6 +126,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param idx read ahead limit
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public synchronized void mark(int idx) throws IOException {
         in.mark(idx);
     }
@@ -127,6 +135,7 @@ public abstract class ProxyReader extends FilterReader {
      * Invokes the delegate's <code>reset()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public synchronized void reset() throws IOException {
         in.reset();
     }
@@ -135,6 +144,7 @@ public abstract class ProxyReader extends FilterReader {
      * Invokes the delegate's <code>markSupported()</code> method.
      * @return true if mark is supported, otherwise false
      */
+    @Override
     public boolean markSupported() {
         return in.markSupported();
     }

@@ -58,6 +58,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      *
      * @throws IOException if the underlying input stream can not be closed
      */
+    @Override
     public void close() throws IOException {
         in.close();
         in = new ClosedInputStream();
@@ -71,6 +72,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @return next byte in the stream, or -1 if no more bytes are available
      * @throws IOException if the stream could not be read or closed
      */
+    @Override
     public int read() throws IOException {
         int n = in.read();
         if (n == -1) {
@@ -88,6 +90,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @return number of bytes read, or -1 if no more bytes are available
      * @throws IOException if the stream could not be read or closed
      */
+    @Override
     public int read(byte[] b) throws IOException {
         int n = in.read(b);
         if (n == -1) {
@@ -107,6 +110,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @return number of bytes read, or -1 if no more bytes are available
      * @throws IOException if the stream could not be read or closed
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int n = in.read(b, off, len);
         if (n == -1) {
@@ -121,6 +125,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * already been closed.
      * @throws Throwable if an error occurs
      */
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();

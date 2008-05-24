@@ -474,6 +474,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @return a String representation of this observer
      */
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(getClass().getSimpleName());

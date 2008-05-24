@@ -41,6 +41,7 @@ public class ClosedInputStream extends InputStream {
      *
      * @return always -1
      */
+    @Override
     public int read() {
         return -1;
     }

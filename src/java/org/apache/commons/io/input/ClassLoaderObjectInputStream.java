@@ -61,6 +61,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @throws IOException in case of an I/O error
      * @throws ClassNotFoundException if the Class cannot be found
      */
+    @Override
     protected Class<?> resolveClass(ObjectStreamClass objectStreamClass)
             throws IOException, ClassNotFoundException {
         

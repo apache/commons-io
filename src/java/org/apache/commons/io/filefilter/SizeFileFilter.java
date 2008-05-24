@@ -85,6 +85,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * @param file  the File to check
      * @return true if the filename matches
      */
+    @Override
     public boolean accept(File file) {
         boolean smaller = file.length() < size;
         return acceptLarger ? !smaller : smaller;
@@ -95,6 +96,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         String condition = acceptLarger ? ">=" : "<";
         return super.toString() + "(" + condition + size + ")";

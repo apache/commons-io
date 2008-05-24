@@ -46,6 +46,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param idx the byte to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(int idx) throws IOException {
         out.write(idx);
     }
@@ -55,6 +56,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param bts the bytes to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(byte[] bts) throws IOException {
         out.write(bts);
     }
@@ -66,6 +68,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param end The number of bytes to write
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void write(byte[] bts, int st, int end) throws IOException {
         out.write(bts, st, end);
     }
@@ -74,6 +77,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Invokes the delegate's <code>flush()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }
@@ -82,6 +86,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * Invokes the delegate's <code>close()</code> method.
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void close() throws IOException {
         out.close();
     }

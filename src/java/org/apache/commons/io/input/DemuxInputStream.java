@@ -49,6 +49,7 @@ public class DemuxInputStream
      *
      * @throws IOException if an error occurs
      */
+    @Override
     public void close()
         throws IOException
     {
@@ -65,6 +66,7 @@ public class DemuxInputStream
      * @return the byte read from stream
      * @throws IOException if an error occurs
      */
+    @Override
     public int read()
         throws IOException
     {

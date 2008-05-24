@@ -112,6 +112,7 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean accept(final File file) {
         for (IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file)) {
@@ -124,6 +125,7 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean accept(final File file, final String name) {
         for (IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file, name)) {
@@ -138,6 +140,7 @@ public class OrFileFilter
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());

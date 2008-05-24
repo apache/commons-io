@@ -45,6 +45,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      * sentinel. The original output stream will remain open, but this proxy
      * will appear closed.
      */
+    @Override
     public void close() {
         out = new ClosedOutputStream();
     }

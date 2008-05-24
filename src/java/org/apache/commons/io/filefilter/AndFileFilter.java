@@ -127,6 +127,7 @@ public class AndFileFilter
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean accept(final File file, final String name) {
         if (this.fileFilters.size() == 0) {
             return false;
@@ -144,6 +145,7 @@ public class AndFileFilter
      *
      * @return a String representaion
      */
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());

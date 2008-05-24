@@ -51,6 +51,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @throws IOException if an I/O error occurs
      * @see java.io.OutputStream#write(byte[])
      */
+    @Override
     public void write(byte[] b) throws IOException {
         count += b.length;
         super.write(b);
@@ -66,6 +67,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @throws IOException if an I/O error occurs
      * @see java.io.OutputStream#write(byte[], int, int)
      */
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
         count += len;
         super.write(b, off, len);
@@ -79,6 +81,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @throws IOException if an I/O error occurs
      * @see java.io.OutputStream#write(int)
      */
+    @Override
     public void write(int b) throws IOException {
         count++;
         super.write(b);

@@ -111,6 +111,7 @@ import java.io.Writer;
  *  Null handling behaviour changed in IOUtils (null data does not
  *  throw NullPointerException).
  */
+@Deprecated
 public class CopyUtils {
 
     /**
