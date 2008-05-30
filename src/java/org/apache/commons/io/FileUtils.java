@@ -549,14 +549,15 @@ public class FileUtils {
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
+     * @return the new file
      *
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
      * @see #copyFile(File, File, boolean)
      */
-    public static void copyFileToDirectory(File srcFile, File destDir) throws IOException {
-        copyFileToDirectory(srcFile, destDir, true);
+    public static File copyFileToDirectory(File srcFile, File destDir) throws IOException {
+        return copyFileToDirectory(srcFile, destDir, true);
     }
 
     /**
@@ -571,6 +572,7 @@ public class FileUtils {
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
      * @param preserveFileDate  true if the file date of the copy
      *  should be the same as the original
+     * @return the new file
      *
      * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
@@ -578,14 +580,16 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean)
      * @since Commons IO 1.3
      */
-    public static void copyFileToDirectory(File srcFile, File destDir, boolean preserveFileDate) throws IOException {
+    public static File copyFileToDirectory(File srcFile, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
         if (destDir.exists() && destDir.isDirectory() == false) {
             throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
         }
-        copyFile(srcFile, new File(destDir, srcFile.getName()), preserveFileDate);
+        File destFile = new File(destDir, srcFile.getName());
+        copyFile(srcFile, destFile, preserveFileDate);
+        return destFile;
     }
 
     /**
