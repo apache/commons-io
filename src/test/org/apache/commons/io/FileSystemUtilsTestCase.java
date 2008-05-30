@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Locale;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -68,7 +69,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             // have to figure out unix block size
             String[] cmd = null;
             String osName = System.getProperty("os.name");
-            osName = osName.toLowerCase();
+            osName = osName.toLowerCase(Locale.ENGLISH);
 
             if (osName.indexOf("hp-ux") >= 0 || osName.indexOf("aix") >= 0) {
                 cmd = new String[] {"df", "-P", "/"};
@@ -84,7 +85,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             try {
                 r = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 String line = r.readLine();
-                if (line.toLowerCase().indexOf("512") >= 0) {
+                if (line.indexOf("512") >= 0) {
                     kilobyteBlock = false;
                 }
             } finally {

@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -76,7 +77,7 @@ public class FileSystemUtils {
             if (osName == null) {
                 throw new IOException("os.name not found");
             }
-            osName = osName.toLowerCase();
+            osName = osName.toLowerCase(Locale.ENGLISH);
             // match
             if (osName.indexOf("windows") != -1) {
                 os = WINDOWS;
@@ -417,7 +418,7 @@ public class FileSystemUtils {
             inr = new BufferedReader(new InputStreamReader(in));
             String line = inr.readLine();
             while (line != null && lines.size() < max) {
-                line = line.toLowerCase().trim();
+                line = line.toLowerCase(Locale.ENGLISH).trim();
                 lines.add(line);
                 line = inr.readLine();
             }
