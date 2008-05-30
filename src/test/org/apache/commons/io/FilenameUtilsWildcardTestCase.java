@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.util.Locale;
 
 import junit.framework.TestCase;
 
@@ -179,6 +180,35 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertMatch("log.log.abc", "*log?abc", true);
         assertMatch("log.log.abc.log.abc", "*log?abc", true);
         assertMatch("log.log.abc.log.abc.d", "*log?abc?d", true);
+    }
+
+    public void testLocaleIndependence() {
+        Locale orig = Locale.getDefault();
+
+        Locale[] locales = Locale.getAvailableLocales();
+
+        String[][] data = {
+            { "I", "i"},
+            { "i", "I"},
+            { "i", "\u0130"},
+            { "i", "\u0131"},
+            { "\u03A3", "\u03C2"},
+            { "\u03A3", "\u03C3"},
+            { "\u03C2", "\u03C3"},
+        };
+
+        try {
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < locales.length; j++) {
+                    Locale.setDefault(locales[j]);
+                    assertTrue("Test data corrupt: " + i, data[i][0].equalsIgnoreCase(data[i][1]));
+                    boolean match = FilenameUtils.wildcardMatch(data[i][0], data[i][1], IOCase.INSENSITIVE);
+                    assertTrue(Locale.getDefault().toString() + ": " + i, match);
+                }
+            }
+        } finally {
+            Locale.setDefault(orig);
+        }
     }
 
 }

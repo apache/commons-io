@@ -196,6 +196,33 @@ public final class IOCase implements Serializable {
     }
 
     /**
+     * Checks if one string contains another starting at a specific index using the
+     * case-sensitivity rule.
+     * <p>
+     * This method mimics parts of {@link String#indexOf(String, int)} 
+     * but takes case-sensitivity into account.
+     * 
+     * @param str  the string to check, not null
+     * @param strStartIndex  the index to start at in str
+     * @param search  the start to search for, not null
+     * @return the first index of the search String,
+     *  -1 if no match or <code>null</code> string input
+     * @throws NullPointerException if either string is null
+     * @since 2.0
+     */
+    public int checkIndexOf(String str, int strStartIndex, String search) {
+        int endIndex = str.length() - search.length();
+        if (endIndex >= strStartIndex) {
+            for (int i = strStartIndex; i <= endIndex; i++) {
+                if (checkRegionMatches(str, i, search)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Checks if one string contains another at a specific index using the case-sensitivity rule.
      * <p>
      * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)} 
@@ -209,20 +236,6 @@ public final class IOCase implements Serializable {
      */
     public boolean checkRegionMatches(String str, int strStartIndex, String search) {
         return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
-    }
-
-    /**
-     * Converts the case of the input String to a standard format.
-     * Subsequent operations can then use standard String methods.
-     * 
-     * @param str  the string to convert, null returns null
-     * @return the lower-case version if case-insensitive
-     */
-    String convertCase(String str) {
-        if (str == null) {
-            return null;
-        }
-        return sensitive ? str : str.toLowerCase();
     }
 
     //-----------------------------------------------------------------------
