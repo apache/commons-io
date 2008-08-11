@@ -1457,7 +1457,9 @@ public class FileUtils {
             return;
         }
 
-        cleanDirectoryOnExit(directory);
+        if (!isSymlink(directory)) {
+            cleanDirectoryOnExit(directory);
+        }
         directory.deleteOnExit();
     }
 
