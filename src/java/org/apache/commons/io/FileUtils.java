@@ -1927,13 +1927,15 @@ public class FileUtils {
     }
 
     /**
-     * Determines whether the specified file is a link rather than an actual file.
-     * Will not return true if there is a symlink anywhere in the path, only if the specific file is.
+     * Determines whether the specified file is a Symbolic Link rather than an actual file.
+     * <p>
+     * Will not return true if there is a Symbolic Link anywhere in the path,
+     * only if the specific file is.
      *
      * @param file the file to check
-     * @return true iff the file is a symlink
+     * @return true if the file is a Symbolic Link
      * @throws IOException if an IO error occurs while checking the file
-     * @since 2.0
+     * @since IO 2.0
      */
     public static boolean isSymlink(File file) throws IOException {
         if (file == null) {
