@@ -979,7 +979,10 @@ public class FileUtils {
             return;
         }
 
-        cleanDirectory(directory);
+        if (!isSymlink(directory)) {
+            cleanDirectory(directory);
+        }
+
         if (!directory.delete()) {
             String message =
                 "Unable to delete directory " + directory + ".";
@@ -1921,4 +1924,31 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Determines whether the specified file is a link rather than an actual file.
+     * Will not return true if there is a symlink anywhere in the path, only if the specific file is.
+     *
+     * @param file the file to check
+     * @return true iff the file is a symlink
+     * @throws IOException if an IO error occurs while checking the file
+     * @since 2.0
+     */
+    public static boolean isSymlink(File file) throws IOException {
+        if (file == null) {
+            throw new NullPointerException("File must not be null");
+        }
+        File fileInCanonicalDir = null;
+        if (file.getParent() == null) {
+            fileInCanonicalDir = file;
+        } else {
+            File canonicalDir = file.getParentFile().getCanonicalFile();
+            fileInCanonicalDir = new File(canonicalDir, file.getName());
+        }
+        
+        if (fileInCanonicalDir.getCanonicalFile().equals(fileInCanonicalDir.getAbsoluteFile())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
