@@ -40,7 +40,7 @@ import java.util.NoSuchElementException;
  *     /// do something with line
  *   }
  * } finally {
- *   LineIterator.closeQuietly(iterator);
+ *   LineIterator.closeQuietly(it);
  * }
  * </pre>
  *
