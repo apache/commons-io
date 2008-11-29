@@ -556,6 +556,8 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     public void testGetPath() {
         assertEquals(null, FilenameUtils.getPath(null));
         assertEquals("", FilenameUtils.getPath("noseperator.inthispath"));
+        assertEquals("", FilenameUtils.getPath("/noseperator.inthispath"));
+        assertEquals("", FilenameUtils.getPath("\\noseperator.inthispath"));
         assertEquals("a/b/", FilenameUtils.getPath("a/b/c.txt"));
         assertEquals("a/b/", FilenameUtils.getPath("a/b/c"));
         assertEquals("a/b/c/", FilenameUtils.getPath("a/b/c/"));
@@ -590,6 +592,8 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     public void testGetPathNoEndSeparator() {
         assertEquals(null, FilenameUtils.getPath(null));
         assertEquals("", FilenameUtils.getPath("noseperator.inthispath"));
+        assertEquals("", FilenameUtils.getPathNoEndSeparator("/noseperator.inthispath"));
+        assertEquals("", FilenameUtils.getPathNoEndSeparator("\\noseperator.inthispath"));
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("a/b/c.txt"));
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("a/b/c"));
         assertEquals("a/b/c", FilenameUtils.getPathNoEndSeparator("a/b/c/"));

@@ -699,10 +699,11 @@ public class FilenameUtils {
             return null;
         }
         int index = indexOfLastSeparator(filename);
-        if (prefix >= filename.length() || index < 0) {
+        int endIndex = index+separatorAdd;
+        if (prefix >= filename.length() || index < 0 || prefix >= endIndex) {
             return "";
         }
-        return filename.substring(prefix, index + separatorAdd);
+        return filename.substring(prefix, endIndex);
     }
 
     /**
