@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -68,6 +69,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
         equalFile2 = null;
         lessFile = null;
         moreFile = null;
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     /**
@@ -89,14 +91,21 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     }
 
     /**
+     * Test comparator array sort is null safe.
+     */
+    public void testSortArrayNull() {
+        assertNull(comparator.sort((File[])null));
+    }
+
+    /**
      * Test the comparator array sort.
      */
     public void testSortArray() {
-    	File[] files = new File[3];
-    	files[0] = equalFile1;
-    	files[1] = moreFile;
-    	files[2] = lessFile;
-    	comparator.sort(files);
+        File[] files = new File[3];
+        files[0] = equalFile1;
+        files[1] = moreFile;
+        files[2] = lessFile;
+        comparator.sort(files);
         assertTrue("equal", files[0] == lessFile);
         assertTrue("less",  files[1] == equalFile1);
         assertTrue("more",  files[2] == moreFile);
@@ -106,13 +115,28 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test the comparator array sort.
      */
     public void testSortList() {
-    	List<File> files = new ArrayList<File>();
-    	files.add(equalFile1);
-    	files.add(moreFile);
-    	files.add(lessFile);
-    	comparator.sort(files);
+        List<File> files = new ArrayList<File>();
+        files.add(equalFile1);
+        files.add(moreFile);
+        files.add(lessFile);
+        comparator.sort(files);
         assertTrue("equal", files.get(0) == lessFile);
         assertTrue("less",  files.get(1) == equalFile1);
         assertTrue("more",  files.get(2) == moreFile);
+    }
+
+    /**
+     * Test comparator list sort is null safe.
+     */
+    public void testSortListNull() {
+        assertNull(comparator.sort((List)null));
+    }
+
+    /**
+     * Test comparator toString.
+     */
+    public void testToString() {
+        assertNotNull("comparator", comparator.toString());
+        assertTrue("reverse", reverse.toString().startsWith("ReverseComparator["));
     }
 }
