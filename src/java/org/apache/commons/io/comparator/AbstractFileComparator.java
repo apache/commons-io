@@ -61,4 +61,14 @@ abstract class AbstractFileComparator implements Comparator<File> {
         }
         return files;
     }
+
+    /**
+     * String representation of this file comparator.
+     *
+     * @return String representation of this file comparator
+     */
+    public String toString() {
+        String className = getClass().getName();
+        return className.substring(className.lastIndexOf('.') + 1);
+    }
 }

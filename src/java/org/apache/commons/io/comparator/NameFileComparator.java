@@ -101,4 +101,13 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
     public int compare(File file1, File file2) {
         return caseSensitivity.checkCompareTo(file1.getName(), file2.getName());
     }
+
+    /**
+     * String representation of this file comparator.
+     *
+     * @return String representation of this file comparator
+     */
+    public String toString() {
+        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+    }
 }
