@@ -513,6 +513,7 @@ public abstract class DirectoryWalker {
      * @param directory  the current directory being processed
      * @param depth  the current directory level (starting directory = 0)
      * @param files the files (possibly filtered) in the directory
+     * @return the filtered list of files
      * @throws IOException if an I/O Error occurs
      */
     protected File[] filterDirectoryContents(File directory, int depth, File[] files) throws IOException {
