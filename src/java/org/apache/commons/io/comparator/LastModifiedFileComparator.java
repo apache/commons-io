@@ -31,21 +31,21 @@ import java.util.Comparator;
  * {@link #LASTMODIFIED_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       Collections.sort(list, LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+ *       LastModifiedFileComparator.LASTMODIFIED_COMPARATOR.sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #LASTMODIFIED_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       Arrays.sort(array, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+ *       LastModifiedFileComparator.LASTMODIFIED_REVERSE.sort(array);
  * </pre>
  * <p>
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class LastModifiedFileComparator implements Comparator<File>, Serializable {
+public class LastModifiedFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Last modified comparator instance */
     public static final Comparator<File> LASTMODIFIED_COMPARATOR = new LastModifiedFileComparator();

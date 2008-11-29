@@ -56,11 +56,11 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = ExtensionFileComparator.EXTENSION_COMPARATOR;
+        comparator = (AbstractFileComparator)ExtensionFileComparator.EXTENSION_COMPARATOR;
         reverse = ExtensionFileComparator.EXTENSION_REVERSE;
-        equalFile1 = new File("foo.txt");
-        equalFile2 = new File("bar.txt");
-        lessFile   = new File("DEF.doc");
-        moreFile   = new File("ABC.txt");
+        equalFile1 = new File("file.foo");
+        equalFile2 = new File("file.foo");
+        lessFile   = new File("file.abc");
+        moreFile   = new File("file.xyz");
     }
 }

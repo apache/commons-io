@@ -37,21 +37,21 @@ import org.apache.commons.io.IOCase;
  * {@link #EXTENSION_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       Collections.sort(list, ExtensionFileComparator.EXTENSION_COMPARATOR);
+ *       ExtensionFileComparator.EXTENSION_COMPARATOR.sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file extension sort using the
  * {@link #EXTENSION_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       Arrays.sort(array, ExtensionFileComparator.EXTENSION_INSENSITIVE_REVERSE);
+ *       ExtensionFileComparator.EXTENSION_INSENSITIVE_REVERSE.sort(array);
  * </pre>
  * <p>
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class ExtensionFileComparator implements Comparator<File>, Serializable {
+public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> EXTENSION_COMPARATOR = new ExtensionFileComparator();

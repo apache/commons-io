@@ -17,7 +17,10 @@
 package org.apache.commons.io.comparator;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -26,7 +29,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
 
     /** comparator instance */
-    protected Comparator comparator;
+    protected AbstractFileComparator comparator;
 
     /** reverse comparator instance */
     protected Comparator reverse;
@@ -53,7 +56,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
 
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
-        comparator = DefaultFileComparator.DEFAULT_COMPARATOR;
+        comparator = (AbstractFileComparator)DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
     }
 
@@ -83,5 +86,33 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
         assertTrue("equal", reverse.compare(equalFile1, equalFile2) == 0);
         assertTrue("less",  reverse.compare(moreFile, lessFile) < 0);
         assertTrue("more",  reverse.compare(lessFile, moreFile) > 0);
+    }
+
+    /**
+     * Test the comparator array sort.
+     */
+    public void testSortArray() {
+    	File[] files = new File[3];
+    	files[0] = equalFile1;
+    	files[1] = moreFile;
+    	files[2] = lessFile;
+    	comparator.sort(files);
+        assertTrue("equal", files[0] == lessFile);
+        assertTrue("less",  files[1] == equalFile1);
+        assertTrue("more",  files[2] == moreFile);
+    }
+
+    /**
+     * Test the comparator array sort.
+     */
+    public void testSortList() {
+    	List<File> files = new ArrayList<File>();
+    	files.add(equalFile1);
+    	files.add(moreFile);
+    	files.add(lessFile);
+    	comparator.sort(files);
+        assertTrue("equal", files.get(0) == lessFile);
+        assertTrue("less",  files.get(1) == equalFile1);
+        assertTrue("more",  files.get(2) == moreFile);
     }
 }

@@ -61,19 +61,21 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = SizeFileComparator.SIZE_COMPARATOR;
+        comparator = (AbstractFileComparator)SizeFileComparator.SIZE_COMPARATOR;
         reverse = SizeFileComparator.SIZE_REVERSE;
         File dir = getTestDirectory();
         smallerDir = new File(dir, "smallerdir");
         largerDir = new File(dir, "largerdir");
         smallerFile = new File(smallerDir, "smaller.txt");
+        File equalFile = new File(dir, "equal.txt");
         largerFile = new File(largerDir, "larger.txt");
         smallerDir.mkdir();
         largerDir.mkdir();
         createFile(smallerFile, 32);
+        createFile(equalFile, 48);
         createFile(largerFile, 64);
-        equalFile1 = smallerFile;
-        equalFile2 = smallerFile;
+        equalFile1 = equalFile;
+        equalFile2 = equalFile;
         lessFile   = smallerFile;
         moreFile   = largerFile;
     }

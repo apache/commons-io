@@ -56,11 +56,22 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
+        comparator = (AbstractFileComparator)LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
         File dir = getTestDirectory();
         File olderFile = new File(dir, "older.txt");
         createFile(olderFile, 0);
+
+        File equalFile = new File(dir, "equal.txt");
+        createFile(equalFile, 0);
+        do {
+            try { 
+                Thread.sleep(300);
+            } catch(InterruptedException ie) {
+                // ignore
+            }
+            equalFile.setLastModified(System.currentTimeMillis());
+        } while( olderFile.lastModified() == equalFile.lastModified() );
 
         File newerFile = new File(dir, "newer.txt");
         createFile(newerFile, 0);
@@ -71,9 +82,9 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
                 // ignore
             }
             newerFile.setLastModified(System.currentTimeMillis());
-        } while( olderFile.lastModified() == newerFile.lastModified() );
-        equalFile1 = olderFile;
-        equalFile2 = olderFile;
+        } while( equalFile.lastModified() == newerFile.lastModified() );
+        equalFile1 = equalFile;
+        equalFile2 = equalFile;
         lessFile   = olderFile;
         moreFile   = newerFile;
     }

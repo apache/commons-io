@@ -56,11 +56,11 @@ public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = DefaultFileComparator.DEFAULT_COMPARATOR;
+        comparator = (AbstractFileComparator)DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
-        equalFile1 = new File("same");
-        equalFile2 = new File("same");
+        equalFile1 = new File("foo");
+        equalFile2 = new File("foo");
         lessFile   = new File("ABC");
-        moreFile   = new File("DEF");
+        moreFile   = new File("XYZ");
     }
 }
