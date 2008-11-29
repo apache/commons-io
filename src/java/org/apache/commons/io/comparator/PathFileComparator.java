@@ -102,4 +102,13 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
     public int compare(File file1, File file2) {
         return caseSensitivity.checkCompareTo(file1.getPath(), file2.getPath());
     }
+
+    /**
+     * String representation of this file comparator.
+     *
+     * @return String representation of this file comparator
+     */
+    public String toString() {
+        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+    }
 }

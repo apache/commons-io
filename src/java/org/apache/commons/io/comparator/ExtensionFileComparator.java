@@ -107,4 +107,13 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
         String suffix2 = FilenameUtils.getExtension(file2.getName());
         return caseSensitivity.checkCompareTo(suffix1, suffix2);
     }
+
+    /**
+     * String representation of this file comparator.
+     *
+     * @return String representation of this file comparator
+     */
+    public String toString() {
+        return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
+    }
 }

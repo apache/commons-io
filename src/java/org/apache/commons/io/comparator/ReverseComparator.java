@@ -55,4 +55,13 @@ class ReverseComparator extends AbstractFileComparator implements Serializable {
         return delegate.compare(file2, file1); // parameters switched round
     }
 
+    /**
+     * String representation of this file comparator.
+     *
+     * @return String representation of this file comparator
+     */
+    public String toString() {
+        return super.toString() + "[" + delegate.toString() + "]";
+    }
+
 }
