@@ -355,6 +355,7 @@ public abstract class DirectoryWalker {
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
                 File[] childFiles = (filter == null ? directory.listFiles() : directory.listFiles(filter));
+                childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
                 } else {
@@ -502,6 +503,20 @@ public abstract class DirectoryWalker {
      */
     protected void handleDirectoryStart(File directory, int depth, Collection<?> results) throws IOException {
         // do nothing - overridable by subclass
+    }
+
+    /**
+     * Overridable callback method invoked with the contents of each directory.
+     * <p>
+     * This implementation returns the files unchanged
+     *
+     * @param directory  the current directory being processed
+     * @param depth  the current directory level (starting directory = 0)
+     * @param files the files (possibly filtered) in the directory
+     * @throws IOException if an I/O Error occurs
+     */
+    protected File[] filterDirectoryContents(File directory, int depth, File[] files) throws IOException {
+        return files;
     }
 
     /**
