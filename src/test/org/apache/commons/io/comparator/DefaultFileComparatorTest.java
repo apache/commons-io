@@ -60,7 +60,7 @@ public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
         equalFile1 = new File("foo");
         equalFile2 = new File("foo");
-        lessFile   = new File("ABC");
-        moreFile   = new File("XYZ");
+        lessFile   = new File("abc");
+        moreFile   = new File("xyz");
     }
 }
