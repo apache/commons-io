@@ -30,21 +30,21 @@ import java.util.Comparator;
  * {@link #DEFAULT_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       Collections.sort(list, DefaultFileComparator.DEFAULT_COMPARATOR);
+ *       DefaultFileComparator.DEFAULT_COMPARATOR.sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #DEFAULT_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       Arrays.sort(array, DefaultFileComparator.DEFAULT_REVERSE);
+ *       DefaultFileComparator.DEFAULT_REVERSE.sort(array);
  * </pre>
  * <p>
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class DefaultFileComparator implements Comparator<File>, Serializable {
+public class DefaultFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Singleton default comparator instance */
     public static final Comparator<File> DEFAULT_COMPARATOR = new DefaultFileComparator();

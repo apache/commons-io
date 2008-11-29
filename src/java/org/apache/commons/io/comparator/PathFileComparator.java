@@ -35,21 +35,21 @@ import org.apache.commons.io.IOCase;
  * {@link #PATH_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       Collections.sort(list, PathFileComparator.PATH_COMPARATOR);
+ *       PathFileComparator.PATH_COMPARATOR.sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file path sort using the
  * {@link #PATH_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       Arrays.sort(array, PathFileComparator.PATH_INSENSITIVE_REVERSE);
+ *       PathFileComparator.PATH_INSENSITIVE_REVERSE.sort(array);
  * </pre>
  * <p>
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class PathFileComparator implements Comparator<File>, Serializable {
+public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> PATH_COMPARATOR = new PathFileComparator();

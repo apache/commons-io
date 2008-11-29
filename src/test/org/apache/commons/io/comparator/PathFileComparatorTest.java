@@ -56,11 +56,11 @@ public class PathFileComparatorTest extends ComparatorAbstractTestCase {
     /** @see junit.framework.TestCase#setUp() */
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = PathFileComparator.PATH_COMPARATOR;
+        comparator = (AbstractFileComparator)PathFileComparator.PATH_COMPARATOR;
         reverse = PathFileComparator.PATH_REVERSE;
         equalFile1 = new File("foo/file.txt");
         equalFile2 = new File("foo/file.txt");
         lessFile   = new File("abc/file.txt");
-        moreFile   = new File("def/file.txt");
+        moreFile   = new File("xyz/file.txt");
     }
 }

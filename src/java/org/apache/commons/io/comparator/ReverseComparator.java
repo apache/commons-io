@@ -27,7 +27,7 @@ import java.io.File;
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-class ReverseComparator implements Comparator<File>, Serializable {
+class ReverseComparator extends AbstractFileComparator implements Serializable {
 
     private final Comparator<File> delegate;
 

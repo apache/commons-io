@@ -35,21 +35,21 @@ import org.apache.commons.io.IOCase;
  * {@link #NAME_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       Collections.sort(list, NameFileComparator.NAME_COMPARATOR);
+ *       NameFileComparator.NAME_COMPARATOR.sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file name sort using the
  * {@link #NAME_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       Arrays.sort(array, NameFileComparator.NAME_INSENSITIVE_REVERSE);
+ *       NameFileComparator.NAME_INSENSITIVE_REVERSE.sort(array);
  * </pre>
  * <p>
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class NameFileComparator implements Comparator<File>, Serializable {
+public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> NAME_COMPARATOR = new NameFileComparator();
