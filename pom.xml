@@ -224,6 +224,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
+              <forkMode>pertest</forkMode>
+              <!-- limit memory size see IO-161 -->
+              <argLine>-Xmx25M</argLine>
             <includes>
               <include>**/*Test*</include>
             </includes>
