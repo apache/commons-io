@@ -232,6 +232,17 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
     }
 
+    public void testNormalizeUnixWin() throws Exception {
+
+        // Normalize (Unix Separator)
+        assertEquals("/a/c/",    FilenameUtils.normalize("/a/b/../c/", true));
+        assertEquals("/a/c/",    FilenameUtils.normalize("\\a\\b\\..\\c\\", true));
+
+        // Normalize (Windows Separator)
+        assertEquals("\\a\\c\\", FilenameUtils.normalize("/a/b/../c/", false));
+        assertEquals("\\a\\c\\", FilenameUtils.normalize("\\a\\b\\..\\c\\", false));
+    }
+
     //-----------------------------------------------------------------------
     public void testNormalizeNoEndSeparator() throws Exception {
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator(null));
@@ -380,6 +391,17 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator("//server/../a"));
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalizeNoEndSeparator("//server/"));
+    }
+
+    public void testNormalizeNoEndSeparatorUnixWin() throws Exception {
+
+        // Normalize (Unix Separator)
+        assertEquals("/a/c",   FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", true));
+        assertEquals("/a/c",   FilenameUtils.normalizeNoEndSeparator("\\a\\b\\..\\c\\", true));
+
+        // Normalize (Windows Separator)
+        assertEquals("\\a\\c", FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", false));
+        assertEquals("\\a\\c", FilenameUtils.normalizeNoEndSeparator("\\a\\b\\..\\c\\", false));
     }
 
     //-----------------------------------------------------------------------
