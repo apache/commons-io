@@ -952,7 +952,8 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename the filename to retrieve the extension of.
-     * @return the extension of the file or an empty string if none exists.
+     * @return the extension of the file or an empty string if none exists or <code>null</code>
+     * if the filename is <code>null</code>.
      */
     public static String getExtension(String filename) {
         if (filename == null) {
