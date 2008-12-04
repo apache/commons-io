@@ -201,7 +201,54 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid
      */
     public static String normalize(String filename) {
-        return doNormalize(filename, true);
+        return doNormalize(filename, SYSTEM_SEPARATOR, true);
+    }
+    /**
+     * Normalizes a path, removing double and single dot path steps.
+     * <p>
+     * This method normalizes a path to a standard format.
+     * The input may contain separators in either Unix or Windows format.
+     * The output will contain separators in the format specified.
+     * <p>
+     * A trailing slash will be retained.
+     * A double slash will be merged to a single slash (but UNC names are handled).
+     * A single dot path segment will be removed.
+     * A double dot will cause that path segment and the one before to be removed.
+     * If the double dot has no parent path segment to work with, <code>null</code>
+     * is returned.
+     * <p>
+     * The output will be the same on both Unix and Windows except
+     * for the separator character.
+     * <pre>
+     * /foo//               -->   /foo/
+     * /foo/./              -->   /foo/
+     * /foo/../bar          -->   /bar
+     * /foo/../bar/         -->   /bar/
+     * /foo/../bar/../baz   -->   /baz
+     * //foo//./bar         -->   /foo/bar
+     * /../                 -->   null
+     * ../foo               -->   null
+     * foo/bar/..           -->   foo/
+     * foo/../../bar        -->   null
+     * foo/../bar           -->   bar
+     * //server/foo/../bar  -->   //server/bar
+     * //server/../bar      -->   null
+     * C:\foo\..\bar        -->   C:\bar
+     * C:\..\bar            -->   null
+     * ~/foo/../bar/        -->   ~/bar/
+     * ~/../bar             -->   null
+     * </pre>
+     * The output will be the same on both Unix and Windows including
+     * the separator character.
+     *
+     * @param filename  the filename to normalize, null returns null
+     * @param unixSeparator <code>true</code> if a unix separator should
+     * be used or <code>false</code> if a windows separtor should be used.
+     * @return the normalized filename, or null if invalid
+     */
+    public static String normalize(String filename, boolean unixSeparator) {
+        char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+        return doNormalize(filename, separator, true);
     }
 
     //-----------------------------------------------------------------------
@@ -247,17 +294,65 @@ public class FilenameUtils {
      * @return the normalized filename, or null if invalid
      */
     public static String normalizeNoEndSeparator(String filename) {
-        return doNormalize(filename, false);
+        return doNormalize(filename, SYSTEM_SEPARATOR, false);
+    }
+
+    /**
+     * Normalizes a path, removing double and single dot path steps,
+     * and removing any final directory separator.
+     * <p>
+     * This method normalizes a path to a standard format.
+     * The input may contain separators in either Unix or Windows format.
+     * The output will contain separators in the format specified.
+     * <p>
+     * A trailing slash will be removed.
+     * A double slash will be merged to a single slash (but UNC names are handled).
+     * A single dot path segment will be removed.
+     * A double dot will cause that path segment and the one before to be removed.
+     * If the double dot has no parent path segment to work with, <code>null</code>
+     * is returned.
+     * <p>
+     * The output will be the same on both Unix and Windows including
+     * the separator character.
+     * <pre>
+     * /foo//               -->   /foo
+     * /foo/./              -->   /foo
+     * /foo/../bar          -->   /bar
+     * /foo/../bar/         -->   /bar
+     * /foo/../bar/../baz   -->   /baz
+     * //foo//./bar         -->   /foo/bar
+     * /../                 -->   null
+     * ../foo               -->   null
+     * foo/bar/..           -->   foo
+     * foo/../../bar        -->   null
+     * foo/../bar           -->   bar
+     * //server/foo/../bar  -->   //server/bar
+     * //server/../bar      -->   null
+     * C:\foo\..\bar        -->   C:\bar
+     * C:\..\bar            -->   null
+     * ~/foo/../bar/        -->   ~/bar
+     * ~/../bar             -->   null
+     * </pre>
+     *
+     * @param filename  the filename to normalize, null returns null
+     * @param unixSeparator <code>true</code> if a unix separator should
+     * be used or <code>false</code> if a windows separtor should be used.
+     * @return the normalized filename, or null if invalid
+     */
+    public static String normalizeNoEndSeparator(String filename, boolean unixSeparator) {
+         char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+        return doNormalize(filename, separator, false);
     }
 
     /**
      * Internal method to perform the normalization.
      *
      * @param filename  the filename
+     * @param separator The separator character to use
      * @param keepSeparator  true to keep the final separator
      * @return the normalized filename
      */
-    private static String doNormalize(String filename, boolean keepSeparator) {
+    private static String doNormalize(String filename, char separator, boolean keepSeparator) {
         if (filename == null) {
             return null;
         }
@@ -274,22 +369,23 @@ public class FilenameUtils {
         filename.getChars(0, filename.length(), array, 0);
         
         // fix separators throughout
+        char otherSeparator = (separator == SYSTEM_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_SEPARATOR);
         for (int i = 0; i < array.length; i++) {
-            if (array[i] == OTHER_SEPARATOR) {
-                array[i] = SYSTEM_SEPARATOR;
+            if (array[i] == otherSeparator) {
+                array[i] = separator;
             }
         }
         
         // add extra separator on the end to simplify code below
         boolean lastIsDirectory = true;
-        if (array[size - 1] != SYSTEM_SEPARATOR) {
-            array[size++] = SYSTEM_SEPARATOR;
+        if (array[size - 1] != separator) {
+            array[size++] = separator;
             lastIsDirectory = false;
         }
         
         // adjoining slashes
         for (int i = prefix + 1; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == SYSTEM_SEPARATOR) {
+            if (array[i] == separator && array[i - 1] == separator) {
                 System.arraycopy(array, i, array, i - 1, size - i);
                 size--;
                 i--;
@@ -298,8 +394,8 @@ public class FilenameUtils {
         
         // dot slash
         for (int i = prefix + 1; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' &&
-                    (i == prefix + 1 || array[i - 2] == SYSTEM_SEPARATOR)) {
+            if (array[i] == separator && array[i - 1] == '.' &&
+                    (i == prefix + 1 || array[i - 2] == separator)) {
                 if (i == size - 1) {
                     lastIsDirectory = true;
                 }
@@ -312,8 +408,8 @@ public class FilenameUtils {
         // double dot slash
         outer:
         for (int i = prefix + 2; i < size; i++) {
-            if (array[i] == SYSTEM_SEPARATOR && array[i - 1] == '.' && array[i - 2] == '.' &&
-                    (i == prefix + 2 || array[i - 3] == SYSTEM_SEPARATOR)) {
+            if (array[i] == separator && array[i - 1] == '.' && array[i - 2] == '.' &&
+                    (i == prefix + 2 || array[i - 3] == separator)) {
                 if (i == prefix + 2) {
                     return null;
                 }
@@ -322,7 +418,7 @@ public class FilenameUtils {
                 }
                 int j;
                 for (j = i - 4 ; j >= prefix; j--) {
-                    if (array[j] == SYSTEM_SEPARATOR) {
+                    if (array[j] == separator) {
                         // remove b/../ from a/b/../c
                         System.arraycopy(array, i + 1, array, j + 1, size - i);
                         size -= (i - j);
