@@ -643,6 +643,21 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             testFile1.lastModified() == destination.lastModified());*/  
     }
 
+    public void IGNOREtestCopyFileLarge() throws Exception {
+
+        File largeFile = new File(getTestDirectory(), "large.txt");
+        File destination = new File(getTestDirectory(), "copylarge.txt");
+
+        System.out.println("START:   " + new java.util.Date());
+        createFile(largeFile, FileUtils.ONE_GB);
+        System.out.println("CREATED: " + new java.util.Date());
+        FileUtils.copyFile(largeFile, destination);
+        System.out.println("COPIED:  " + new java.util.Date());
+
+        assertTrue("Check Exist", destination.exists());
+        assertTrue("Check Full copy", destination.length() == largeFile.length());
+    }
+
     public void testCopyFile2() throws Exception {
         File destination = new File(getTestDirectory(), "copy2.txt");
         

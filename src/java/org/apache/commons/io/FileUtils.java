@@ -98,6 +98,11 @@ public class FileUtils {
     public static final long ONE_MB = ONE_KB * ONE_KB;
 
     /**
+     * The number of bytes in a 50 MB.
+     */
+    private static final long FIFTY_MB = ONE_MB * 50;
+
+    /**
      * The number of bytes in a gigabyte.
      */
     public static final long ONE_GB = ONE_KB * ONE_MB;
@@ -671,16 +676,27 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        FileChannel input = new FileInputStream(srcFile).getChannel();
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        FileChannel input = null;
+        FileChannel output = null;
         try {
-            FileChannel output = new FileOutputStream(destFile).getChannel();
-            try {
-                output.transferFrom(input, 0, input.size());
-            } finally {
-                IOUtils.closeQuietly(output);
+            fis = new FileInputStream(srcFile);
+            fos = new FileOutputStream(destFile);
+            input  = fis.getChannel();
+            output = fos.getChannel();
+            long size = input.size();
+            long pos = 0;
+            long count = 0;
+            while (pos < size) {
+                count = (size - pos) > FIFTY_MB ? FIFTY_MB : (size - pos);
+                pos += output.transferFrom(input, pos, count);
             }
         } finally {
+            IOUtils.closeQuietly(output);
+            IOUtils.closeQuietly(fos);
             IOUtils.closeQuietly(input);
+            IOUtils.closeQuietly(fis);
         }
 
         if (srcFile.length() != destFile.length()) {
