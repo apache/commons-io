@@ -222,6 +222,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testInputStreamToBufferedInputStream() throws Exception {
+        FileInputStream fin = new FileInputStream(m_testFile);
+        try {
+            InputStream in = IOUtils.toBufferedInputStream(fin);
+            byte[] out = IOUtils.toByteArray(in);
+            assertNotNull(out);
+            assertTrue("Not all bytes were read", fin.available() == 0);
+            assertTrue("Wrong output size: out.length=" + out.length + "!="
+                    + FILE_SIZE, out.length == FILE_SIZE);
+            assertEqualContent(out, m_testFile);
+        } finally {
+            fin.close();
+        }
+    }
+
     public void testStringToByteArray()
         throws Exception
     {
@@ -443,5 +458,4 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             deleteFile(file);
         }
     }
-
 }
