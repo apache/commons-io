@@ -16,12 +16,16 @@
  */
 package org.apache.commons.io.output;
  
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.SequenceInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import org.apache.commons.io.input.ClosedInputStream;
 
 /**
  * This class implements an output stream in which the data is 
@@ -246,6 +250,61 @@ public class ByteArrayOutputStream extends OutputStream {
                 break;
             }
         }
+    }
+
+    /**
+     * Fetches entire contents of an <code>InputStream</code> and represent
+     * same data as result InputStream.
+     * <p>
+     * This method is useful where,
+     * <ul>
+     * <li>Source InputStream is slow.</li>
+     * <li>It has network resources associated, so we cannot keep it open for
+     * long time.</li>
+     * <li>It has network timeout associated.</li>
+     * </ul>
+     * It can be used in favor of {@link #toByteArray()}, since it
+     * avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * 
+     * @param input Stream to be fully buffered.
+     * @return A fully buffered stream.
+     * @throws IOException if an I/O error occurs
+     */
+    public static InputStream toBufferedInputStream(InputStream input)
+            throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        output.write(input);
+        return output.toBufferedInputStream();
+    }
+
+    /**
+     * Gets the current contents of this byte stream as a Input Stream. The
+     * returned stream is backed by buffers of <code>this</code> stream,
+     * avoiding memory allocation and copy, thus saving space and time.<br>
+     * 
+     * @return the current contents of this output stream.
+     * @see java.io.ByteArrayOutputStream#toByteArray()
+     * @see #reset()
+     * @since Commons IO 2.0
+     */
+    private InputStream toBufferedInputStream() {
+        int remaining = count;
+        if (remaining == 0) {
+            return new ClosedInputStream();
+        }
+        List<ByteArrayInputStream> list = new ArrayList<ByteArrayInputStream>(buffers.size());
+        for (int i = 0; i < buffers.size(); i++) {
+            byte[] buf = buffers.get(i);
+            int c = Math.min(buf.length, remaining);
+            list.add(new ByteArrayInputStream(buf, 0, c));
+            remaining -= c;
+            if (remaining == 0) {
+                break;
+            }
+        }
+        return new SequenceInputStream(Collections.enumeration(list));
     }
 
     /**
