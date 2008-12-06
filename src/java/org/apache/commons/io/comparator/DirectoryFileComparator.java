@@ -33,7 +33,7 @@ import java.util.Comparator;
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files/directories using the
- * {@link #DEFAULT_REVERSE} singleton instance:
+ * {@link #DIRECTORY_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
  *       DirectoryFileComparator.DIRECTORY_REVERSE.sort(array);
