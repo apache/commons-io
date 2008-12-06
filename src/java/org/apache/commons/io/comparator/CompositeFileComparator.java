@@ -98,6 +98,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @return String representation of this file comparator
      */
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(super.toString());

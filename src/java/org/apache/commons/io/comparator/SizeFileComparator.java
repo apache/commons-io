@@ -133,6 +133,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      *
      * @return String representation of this file comparator
      */
+    @Override
     public String toString() {
         return super.toString() + "[sumDirectoryContents=" + sumDirectoryContents + "]";
     }
