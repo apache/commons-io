@@ -104,6 +104,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param name  the filename
      * @return true if the filename matches one of the wildcards
      */
+    @Override
     public boolean accept(File dir, String name) {
         if (dir != null && new File(dir, name).isDirectory()) {
             return false;
@@ -124,6 +125,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param file the file to check
      * @return true if the filename matches one of the wildcards
      */
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory()) {
             return false;

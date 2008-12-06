@@ -112,6 +112,7 @@ public class AndFileFilter
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean accept(final File file) {
         if (this.fileFilters.size() == 0) {
             return false;

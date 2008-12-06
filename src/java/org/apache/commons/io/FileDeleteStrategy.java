@@ -148,6 +148,7 @@ public class FileDeleteStrategy {
          * @throws NullPointerException if the file is null
          * @throws IOException if an error occurs during file deletion
          */
+        @Override
         protected boolean doDelete(File fileToDelete) throws IOException {
             FileUtils.forceDelete(fileToDelete);
             return true;

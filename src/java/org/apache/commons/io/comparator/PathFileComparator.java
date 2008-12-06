@@ -108,6 +108,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      *
      * @return String representation of this file comparator
      */
+    @Override
     public String toString() {
         return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
     }

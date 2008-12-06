@@ -113,6 +113,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @return String representation of this file comparator
      */
+    @Override
     public String toString() {
         return super.toString() + "[caseSensitivity=" + caseSensitivity + "]";
     }

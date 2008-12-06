@@ -60,6 +60,7 @@ class ReverseComparator extends AbstractFileComparator implements Serializable {
      *
      * @return String representation of this file comparator
      */
+    @Override
     public String toString() {
         return super.toString() + "[" + delegate.toString() + "]";
     }
