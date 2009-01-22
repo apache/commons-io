@@ -41,10 +41,24 @@ public class HexDump {
     }
 
     /**
-     * Dump an array of bytes to an OutputStream.
+     * Dump an array of bytes to an OutputStream. The output is formatted
+     * for human inspection, with a hexadecimal offset followed by the
+     * hexadecimal values of the next 16 bytes of data and the printable ASCII
+     * characters (if any) that those bytes represent printed per each line
+     * of output.
+     * <p>
+     * The offset argument specifies the start offset of the data array
+     * within a larger entity like a file or an incoming stream. For example,
+     * if the data array contains the third kibibyte of a file, then the
+     * offset argument should be set to 2048. The offset value printed
+     * at the beginning of each line indicates where in that larger entity
+     * the first byte on that line is located.
+     * <p>
+     * All bytes between the given index (inclusive) and the end of the
+     * data array are dumped. 
      *
      * @param data  the byte array to be dumped
-     * @param offset  its offset, whatever that might mean
+     * @param offset  offset of the byte array within a larger entity
      * @param stream  the OutputStream to which the data is to be
      *               written
      * @param index initial index into the byte array
