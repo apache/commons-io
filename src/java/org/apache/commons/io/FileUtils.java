@@ -258,11 +258,11 @@ public class FileUtils {
             IOFileFilter filter) {
         File[] found = directory.listFiles((FileFilter) filter);
         if (found != null) {
-            for (int i = 0; i < found.length; i++) {
-                if (found[i].isDirectory()) {
-                    innerListFiles(files, found[i], filter);
+            for (File file : found) {
+                if (file.isDirectory()) {
+                    innerListFiles(files, file, filter);
                 } else {
-                    files.add(found[i]);
+                    files.add(file);
                 }
             }
         }
@@ -899,8 +899,8 @@ public class FileUtils {
             File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
             if (srcFiles != null && srcFiles.length > 0) {
                 exclusionList = new ArrayList<String>(srcFiles.length);
-                for (int i = 0; i < srcFiles.length; i++) {
-                    File copiedFile = new File(destDir, srcFiles[i].getName());
+                for (File srcFile : srcFiles) {
+                    File copiedFile = new File(destDir, srcFile.getName());
                     exclusionList.add(copiedFile.getCanonicalPath());
                 }
             }
@@ -941,13 +941,13 @@ public class FileUtils {
         if (files == null) {  // null if security restricted
             throw new IOException("Failed to list contents of " + srcDir);
         }
-        for (int i = 0; i < files.length; i++) {
-            File copiedFile = new File(destDir, files[i].getName());
-            if (exclusionList == null || !exclusionList.contains(files[i].getCanonicalPath())) {
-                if (files[i].isDirectory()) {
-                    doCopyDirectory(files[i], copiedFile, filter, preserveFileDate, exclusionList);
+        for (File file : files) {
+            File copiedFile = new File(destDir, file.getName());
+            if (exclusionList == null || !exclusionList.contains(file.getCanonicalPath())) {
+                if (file.isDirectory()) {
+                    doCopyDirectory(file, copiedFile, filter, preserveFileDate, exclusionList);
                 } else {
-                    doCopyFile(files[i], copiedFile, preserveFileDate);
+                    doCopyFile(file, copiedFile, preserveFileDate);
                 }
             }
         }
@@ -1029,12 +1029,12 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cleanDirectory(file);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             return file.delete();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false;
         }
     }
@@ -1062,8 +1062,7 @@ public class FileUtils {
         }
 
         IOException exception = null;
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
+        for (File file : files) {
             try {
                 forceDelete(file);
             } catch (IOException ioe) {
@@ -1503,8 +1502,7 @@ public class FileUtils {
         }
 
         IOException exception = null;
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
+        for (File file : files) {
             try {
                 forceDeleteOnExit(file);
             } catch (IOException ioe) {
@@ -1570,9 +1568,7 @@ public class FileUtils {
         if (files == null) {  // null if security restricted
             return 0L;
         }
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-
+        for (File file : files) {
             if (file.isDirectory()) {
                 size += sizeOfDirectory(file);
             } else {

@@ -24,7 +24,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * registered {@link FilesystemObserver} at a specified interval.
  * 
  * @see FilesystemObserver
- * @see FilesystemTimerTask
  * @version $Id$
  * @since Commons IO 2.0
  */
@@ -62,8 +61,8 @@ public final class FilesystemMonitor implements Runnable {
     public FilesystemMonitor(long interval, FilesystemObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (int i = 0; i < observers.length; i++) {
-                addObserver(observers[i]);
+            for (FilesystemObserver observer : observers) {
+                addObserver(observer);
             }
         }
     }
@@ -125,6 +124,7 @@ public final class FilesystemMonitor implements Runnable {
         try {
             thread.join(interval);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         for (FilesystemObserver observer : observers) {
             observer.destroy();
@@ -135,10 +135,7 @@ public final class FilesystemMonitor implements Runnable {
      * Run.
      */
     public void run() {
-        while (true) {
-            if (!running) {
-                break;
-            }
+        while (running) {
             for (FilesystemObserver observer : observers) {
                 observer.checkAndNotify();
             }
@@ -147,7 +144,7 @@ public final class FilesystemMonitor implements Runnable {
             }
             try {
                 Thread.sleep(interval);
-            } catch (final InterruptedException e) {
+            } catch (final InterruptedException ignored) {
             }
         }
     }

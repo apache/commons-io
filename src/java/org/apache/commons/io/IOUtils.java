@@ -32,7 +32,6 @@ import java.io.Writer;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -1042,8 +1041,7 @@ public class IOUtils {
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator<?> it = lines.iterator(); it.hasNext(); ) {
-            Object line = it.next();
+        for (Object line : lines) {
             if (line != null) {
                 output.write(line.toString().getBytes());
             }
@@ -1078,8 +1076,7 @@ public class IOUtils {
             if (lineEnding == null) {
                 lineEnding = LINE_SEPARATOR;
             }
-            for (Iterator<?> it = lines.iterator(); it.hasNext(); ) {
-                Object line = it.next();
+            for (Object line : lines) {
                 if (line != null) {
                     output.write(line.toString().getBytes(encoding));
                 }
@@ -1107,8 +1104,7 @@ public class IOUtils {
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator<?> it = lines.iterator(); it.hasNext(); ) {
-            Object line = it.next();
+        for (Object line : lines) {
             if (line != null) {
                 writer.write(line.toString());
             }

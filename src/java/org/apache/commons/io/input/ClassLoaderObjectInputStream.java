@@ -35,7 +35,7 @@ import java.io.StreamCorruptedException;
 public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
     /** The class loader to use. */
-    private ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     /**
      * Constructs a new ClassLoaderObjectInputStream.

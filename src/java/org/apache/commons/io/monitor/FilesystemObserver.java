@@ -352,20 +352,20 @@ public class FilesystemObserver implements Serializable {
     private void checkAndNotify(FilesystemEntry parent, FilesystemEntry[] previous, File[] files) {
         int c = 0;
         FilesystemEntry[] current = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
-        for (int p = 0; p < previous.length; p++) {
-            while (c < files.length &&  comparator.compare(previous[p].getFile(), files[c]) > 0) {
+        for (FilesystemEntry entry : previous) {
+            while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
                 current[c] = createFileEntry(parent, files[c]);
                 doCreate(current[c]);
                 c++;
             }
-            if (c < files.length && comparator.compare(previous[p].getFile(), files[c]) == 0) {
-                doMatch(previous[p], files[c]);
-                checkAndNotify(previous[p], previous[p].getChildren(), listFiles(files[c]));
-                current[c] = previous[p];
+            if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
+                doMatch(entry, files[c]);
+                checkAndNotify(entry, entry.getChildren(), listFiles(files[c]));
+                current[c] = entry;
                 c++;
             } else {
-                checkAndNotify(previous[p], previous[p].getChildren(), EMPTY_FILES);
-                doDelete(previous[p]);
+                checkAndNotify(entry, entry.getChildren(), EMPTY_FILES);
+                doDelete(entry);
             }
         }
         for (; c < files.length; c++) {
@@ -408,8 +408,8 @@ public class FilesystemObserver implements Serializable {
             }
         }
         FilesystemEntry[] children = entry.getChildren();
-        for (int i = 0; i < children.length; i++) {
-            doCreate(children[i]);
+        for (FilesystemEntry aChildren : children) {
+            doCreate(aChildren);
         }
     }
 

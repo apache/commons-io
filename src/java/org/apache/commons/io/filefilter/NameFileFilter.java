@@ -144,8 +144,8 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public boolean accept(File file) {
         String name = file.getName();
-        for (int i = 0; i < this.names.length; i++) {
-            if (caseSensitivity.checkEquals(name, names[i])) {
+        for (String name2 : this.names) {
+            if (caseSensitivity.checkEquals(name, name2)) {
                 return true;
             }
         }
@@ -161,8 +161,8 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(File file, String name) {
-        for (int i = 0; i < names.length; i++) {
-            if (caseSensitivity.checkEquals(name, names[i])) {
+        for (String name2 : names) {
+            if (caseSensitivity.checkEquals(name, name2)) {
                 return true;
             }
         }

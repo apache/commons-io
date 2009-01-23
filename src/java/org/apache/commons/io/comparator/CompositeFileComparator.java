@@ -44,6 +44,7 @@ import java.util.List;
  */
 public class CompositeFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final Comparator[] NO_COMPARATORS = {};
     private final Comparator<File>[] delegates;
 
     /**
@@ -52,10 +53,11 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      * @param delegates The delegate file comparators
      */
     public CompositeFileComparator(Comparator<File>... delegates) {
-        int size = (delegates == null ? 0 : delegates.length);
-        this.delegates = new Comparator[size];
-        for (int i = 0; i < size; i++) {
-            this.delegates[i] = delegates[i];
+        if (delegates == null) {
+            this.delegates = NO_COMPARATORS;
+        } else {
+            this.delegates = new Comparator[delegates.length];
+            System.arraycopy(delegates, 0, this.delegates, 0, delegates.length);
         }
     }
 
@@ -65,13 +67,15 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      * @param delegates The delegate file comparators
      */
     public CompositeFileComparator(Iterable<Comparator<File>> delegates) {
-        List<Comparator<File>> list = new ArrayList<Comparator<File>>();
-        if (delegates != null) {
+        if (delegates == null) {
+            this.delegates = NO_COMPARATORS;
+        } else {
+            List<Comparator<File>> list = new ArrayList<Comparator<File>>();
             for (Comparator<File> comparator : delegates) {
                 list.add(comparator);
             }
+            this.delegates = list.toArray(new Comparator[list.size()]);
         }
-        this.delegates = list.toArray(new Comparator[list.size()]);
     }
 
     /**
@@ -84,8 +88,8 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      */
     public int compare(File file1, File file2) {
         int result = 0;
-        for (int i = 0; i < delegates.length; i++) {
-            result = delegates[i].compare(file1, file2);
+        for (Comparator<File> delegate : delegates) {
+            result = delegate.compare(file1, file2);
             if (result != 0) {
                 break;
             }

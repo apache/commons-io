@@ -71,17 +71,17 @@ public class DeferredFileOutputStream
     /**
      * The temporary file prefix.
      */
-    private String prefix;
+    private final String prefix;
 
     /**
      * The temporary file suffix.
      */
-    private String suffix;
+    private final String suffix;
 
     /**
      * The directory to use for temporary files.
      */
-    private File directory;
+    private final File directory;
 
     
     /**
@@ -101,11 +101,7 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(int threshold, File outputFile)
     {
-        super(threshold);
-        this.outputFile = outputFile;
-
-        memoryOutputStream = new ByteArrayOutputStream();
-        currentOutputStream = memoryOutputStream;
+        this(threshold,  outputFile, null, null, null);
     }
 
 
@@ -122,10 +118,28 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(int threshold, String prefix, String suffix, File directory)
     {
-        this(threshold, (File)null);
+        this(threshold,   null, prefix, suffix, directory);
         if (prefix == null) {
             throw new IllegalArgumentException("Temporary file prefix is missing");
         }
+    }
+
+    /**
+     * Constructs an instance of this class which will trigger an event at the
+     * specified threshold, and save data either to a file beyond that point.
+     * 
+     * @param threshold  The number of bytes at which to trigger an event.
+     * @param outputFile The file to which data is saved beyond the threshold.
+     * @param prefix Prefix to use for the temporary file.
+     * @param suffix Suffix to use for the temporary file.
+     * @param directory Temporary file directory.
+     */
+    private DeferredFileOutputStream(int threshold, File outputFile, String prefix, String suffix, File directory) {
+        super(threshold);
+        this.outputFile = outputFile;
+
+        memoryOutputStream = new ByteArrayOutputStream();
+        currentOutputStream = memoryOutputStream;
         this.prefix = prefix;
         this.suffix = suffix;
         this.directory = directory;

@@ -58,7 +58,7 @@ public class ByteArrayOutputStream extends OutputStream {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /** The list of buffers, which grows and never reduces. */
-    private List<byte[]> buffers = new ArrayList<byte[]>();
+    private final List<byte[]> buffers = new ArrayList<byte[]>();
     /** The index of the current buffer. */
     private int currentBufferIndex;
     /** The total count of bytes in all the filled buffers. */
@@ -241,8 +241,7 @@ public class ByteArrayOutputStream extends OutputStream {
      */
     public synchronized void writeTo(OutputStream out) throws IOException {
         int remaining = count;
-        for (int i = 0; i < buffers.size(); i++) {
-            byte[] buf = buffers.get(i);
+        for (byte[] buf : buffers) {
             int c = Math.min(buf.length, remaining);
             out.write(buf, 0, c);
             remaining -= c;
@@ -295,8 +294,7 @@ public class ByteArrayOutputStream extends OutputStream {
             return new ClosedInputStream();
         }
         List<ByteArrayInputStream> list = new ArrayList<ByteArrayInputStream>(buffers.size());
-        for (int i = 0; i < buffers.size(); i++) {
-            byte[] buf = buffers.get(i);
+        for (byte[] buf : buffers) {
             int c = Math.min(buf.length, remaining);
             list.add(new ByteArrayInputStream(buf, 0, c));
             remaining -= c;
@@ -321,8 +319,7 @@ public class ByteArrayOutputStream extends OutputStream {
         }
         byte newbuf[] = new byte[remaining];
         int pos = 0;
-        for (int i = 0; i < buffers.size(); i++) {
-            byte[] buf = buffers.get(i);
+        for (byte[] buf : buffers) {
             int c = Math.min(buf.length, remaining);
             System.arraycopy(buf, 0, newbuf, pos, c);
             pos += c;

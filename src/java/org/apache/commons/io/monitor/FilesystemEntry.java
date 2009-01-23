@@ -40,7 +40,7 @@ import java.io.Serializable;
  */
 public class FilesystemEntry implements Serializable {
 
-    private FilesystemEntry parent;
+    private final FilesystemEntry parent;
     private FilesystemEntry[] children;
     private File file;
     private String name;
