@@ -69,7 +69,6 @@ abstract class AbstractFileComparator implements Comparator<File> {
      */
     @Override
     public String toString() {
-        String className = getClass().getName();
-        return className.substring(className.lastIndexOf('.') + 1);
+        return getClass().getSimpleName();
     }
 }
