@@ -29,7 +29,7 @@ import java.io.OutputStream;
 public class DemuxOutputStream
     extends OutputStream
 {
-    private InheritableThreadLocal<OutputStream> m_streams = new InheritableThreadLocal<OutputStream>();
+    private final InheritableThreadLocal<OutputStream> m_streams = new InheritableThreadLocal<OutputStream>();
 
     /**
      * Bind the specified stream to the current thread.

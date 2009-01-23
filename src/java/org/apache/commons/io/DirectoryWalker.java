@@ -359,8 +359,7 @@ public abstract class DirectoryWalker {
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);
                 } else {
-                    for (int i = 0; i < childFiles.length; i++) {
-                        File childFile = childFiles[i];
+                    for (File childFile : childFiles) {
                         if (childFile.isDirectory()) {
                             walk(childFile, childDepth, results);
                         } else {
@@ -585,9 +584,9 @@ public abstract class DirectoryWalker {
         private static final long serialVersionUID = 1347339620135041008L;
         
         /** The file being processed when the exception was thrown. */
-        private File file;
+        private final File file;
         /** The file depth when the exception was thrown. */
-        private int depth = -1;
+        private final int depth;
 
         /**
          * Constructs a <code>CancelException</code> with

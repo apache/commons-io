@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -102,7 +101,7 @@ public class FilenameUtils {
      * The extension separator String.
      * @since Commons IO 1.4
      */
-    public static final String EXTENSION_SEPARATOR_STR = (new Character(EXTENSION_SEPARATOR)).toString();
+    public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
 
     /**
      * The Unix separator character.
@@ -1135,8 +1134,8 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        for (int i = 0; i < extensions.length; i++) {
-            if (fileExt.equals(extensions[i])) {
+        for (String extension : extensions) {
+            if (fileExt.equals(extension)) {
                 return true;
             }
         }
@@ -1162,8 +1161,8 @@ public class FilenameUtils {
             return (indexOfExtension(filename) == -1);
         }
         String fileExt = getExtension(filename);
-        for (Iterator<String> it = extensions.iterator(); it.hasNext();) {
-            if (fileExt.equals(it.next())) {
+        for (String extension : extensions) {
+            if (fileExt.equals(extension)) {
                 return true;
             }
         }
@@ -1323,7 +1322,7 @@ public class FilenameUtils {
         // used by wildcardMatch
         // package level so a unit test may run on this
         
-        if (text.indexOf("?") == -1 && text.indexOf("*") == -1) {
+        if (text.indexOf('?') == -1 && text.indexOf('*') == -1) {
             return new String[] { text };
         }
 

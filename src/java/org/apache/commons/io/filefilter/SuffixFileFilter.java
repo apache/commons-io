@@ -151,8 +151,8 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     @Override
     public boolean accept(File file) {
         String name = file.getName();
-        for (int i = 0; i < this.suffixes.length; i++) {
-            if (caseSensitivity.checkEndsWith(name, suffixes[i])) {
+        for (String suffix : this.suffixes) {
+            if (caseSensitivity.checkEndsWith(name, suffix)) {
                 return true;
             }
         }
@@ -168,8 +168,8 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(File file, String name) {
-        for (int i = 0; i < this.suffixes.length; i++) {
-            if (caseSensitivity.checkEndsWith(name, suffixes[i])) {
+        for (String suffix : this.suffixes) {
+            if (caseSensitivity.checkEndsWith(name, suffix)) {
                 return true;
             }
         }

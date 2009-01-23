@@ -62,13 +62,13 @@ import java.io.InputStream;
  */
 public class NullInputStream extends InputStream {
 
-    private long size;
+    private final long size;
     private long position;
     private long mark = -1;
     private long readlimit;
     private boolean eof;
-    private boolean throwEofException;
-    private boolean markSupported;
+    private final boolean throwEofException;
+    private final boolean markSupported;
 
     /**
      * Create an {@link InputStream} that emulates a specified size

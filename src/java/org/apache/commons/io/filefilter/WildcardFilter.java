@@ -109,9 +109,9 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (dir != null && new File(dir, name).isDirectory()) {
             return false;
         }
-        
-        for (int i = 0; i < wildcards.length; i++) {
-            if (FilenameUtils.wildcardMatch(name, wildcards[i])) {
+
+        for (String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(name, wildcard)) {
                 return true;
             }
         }
@@ -130,9 +130,9 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (file.isDirectory()) {
             return false;
         }
-        
-        for (int i = 0; i < wildcards.length; i++) {
-            if (FilenameUtils.wildcardMatch(file.getName(), wildcards[i])) {
+
+        for (String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
                 return true;
             }
         }

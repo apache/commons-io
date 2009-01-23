@@ -39,7 +39,7 @@ public class AndFileFilter
         implements ConditionalFileFilter, Serializable {
 
     /** The list of file filters. */
-    private List<IOFileFilter> fileFilters;
+    private final List<IOFileFilter> fileFilters;
 
     /**
      * Constructs a new instance of <code>AndFileFilter</code>.
@@ -76,7 +76,7 @@ public class AndFileFilter
         if (filter1 == null || filter2 == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        this.fileFilters = new ArrayList<IOFileFilter>();
+        this.fileFilters = new ArrayList<IOFileFilter>(2);
         addFileFilter(filter1);
         addFileFilter(filter2);
     }
@@ -106,7 +106,8 @@ public class AndFileFilter
      * {@inheritDoc}
      */
     public void setFileFilters(final List<IOFileFilter> fileFilters) {
-        this.fileFilters = new ArrayList<IOFileFilter>(fileFilters);
+        this.fileFilters.clear();
+        this.fileFilters.addAll(fileFilters);
     }
 
     /**

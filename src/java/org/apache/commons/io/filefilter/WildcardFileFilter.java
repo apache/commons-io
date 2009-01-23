@@ -149,8 +149,8 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public boolean accept(File dir, String name) {
-        for (int i = 0; i < wildcards.length; i++) {
-            if (FilenameUtils.wildcardMatch(name, wildcards[i], caseSensitivity)) {
+        for (String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {
                 return true;
             }
         }
@@ -166,8 +166,8 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     @Override
     public boolean accept(File file) {
         String name = file.getName();
-        for (int i = 0; i < wildcards.length; i++) {
-            if (FilenameUtils.wildcardMatch(name, wildcards[i], caseSensitivity)) {
+        for (String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {
                 return true;
             }
         }

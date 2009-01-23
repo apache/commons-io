@@ -62,13 +62,13 @@ import java.io.Reader;
  */
 public class NullReader extends Reader {
 
-    private long size;
+    private final long size;
     private long position;
     private long mark = -1;
     private long readlimit;
     private boolean eof;
-    private boolean throwEofException;
-    private boolean markSupported;
+    private final boolean throwEofException;
+    private final boolean markSupported;
 
     /**
      * Create a {@link Reader} that emulates a specified size
