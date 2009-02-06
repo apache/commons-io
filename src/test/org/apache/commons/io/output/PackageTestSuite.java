@@ -33,6 +33,7 @@ public class PackageTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("IO Utilities - output");
+        suite.addTest(new TestSuite(BrokenOutputStreamTest.class));
         suite.addTest(new TestSuite(ByteArrayOutputStreamTestCase.class));
         suite.addTest(new TestSuite(ClosedOutputStreamTest.class));
         suite.addTest(new TestSuite(CloseShieldOutputStreamTest.class));
