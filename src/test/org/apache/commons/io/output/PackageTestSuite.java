@@ -44,6 +44,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(NullOutputStreamTest.class));
         suite.addTest(new TestSuite(NullWriterTest.class));
         suite.addTest(new TestSuite(StringBuilderWriterTest.class));
+        suite.addTest(new TestSuite(TaggedOutputStreamTest.class));
         suite.addTest(new TestSuite(TeeOutputStreamTest.class));
         return suite;
     }

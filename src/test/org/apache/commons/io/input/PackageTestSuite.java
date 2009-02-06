@@ -43,6 +43,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(NullInputStreamTest.class));
         suite.addTest(new TestSuite(NullReaderTest.class));
         suite.addTest(new TestSuite(SwappedDataInputStreamTest.class));
+        suite.addTest(new TestSuite(TaggedInputStreamTest.class));
         suite.addTest(new TestSuite(TeeInputStreamTest.class));
         return suite;
     }
