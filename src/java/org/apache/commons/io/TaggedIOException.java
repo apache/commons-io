@@ -58,6 +58,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      *
      * @return wrapped exception
      */
+    @Override
     public IOException getCause() {
         return (IOException) super.getCause();
     }
