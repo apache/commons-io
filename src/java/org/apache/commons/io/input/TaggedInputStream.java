@@ -105,67 +105,15 @@ public class TaggedInputStream extends ProxyInputStream {
         }
     }
 
+    /**
+     * Tags any IOExceptions thrown, wrapping and re-throwing.
+     * 
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    public int available() throws IOException {
-        try {
-            return super.available();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public int read() throws IOException {
-        try {
-            return super.read();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public int read(byte[] bts, int st, int end) throws IOException {
-        try {
-            return super.read(bts, st, end);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public int read(byte[] bts) throws IOException {
-        try {
-            return super.read(bts);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public long skip(long ln) throws IOException {
-        try {
-            return super.skip(ln);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void reset() throws IOException {
-        try {
-            super.reset();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void close() throws IOException {
-        try {
-            super.close();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
+    protected void handleIOException(IOException e) throws IOException {
+        throw new TaggedIOException(e, this);
     }
 
 }

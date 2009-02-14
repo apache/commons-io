@@ -105,49 +105,15 @@ public class TaggedOutputStream extends ProxyOutputStream {
         }
     }
 
+    /**
+     * Tags any IOExceptions thrown, wrapping and re-throwing.
+     *
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    public void write(byte[] bts, int st, int end) throws IOException {
-        try {
-            super.write(bts, st, end);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void write(byte[] bts) throws IOException {
-        try {
-            super.write(bts);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void write(int idx) throws IOException {
-        try {
-            super.write(idx);
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void flush() throws IOException {
-        try {
-            super.flush();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
-    }
-
-    @Override
-    public void close() throws IOException {
-        try {
-            super.close();
-        } catch (IOException e) {
-            throw new TaggedIOException(e, this);
-        }
+    protected void handleIOException(IOException e) throws IOException {
+        throw new TaggedIOException(e, this);
     }
 
 }
