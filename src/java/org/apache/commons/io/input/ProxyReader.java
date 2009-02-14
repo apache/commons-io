@@ -52,7 +52,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public int read() throws IOException {
-        return in.read();
+        try {
+            return in.read();
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -63,7 +68,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public int read(char[] chr) throws IOException {
-        return in.read(chr);
+        try {
+            return in.read(chr);
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -76,7 +86,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public int read(char[] chr, int st, int end) throws IOException {
-        return in.read(chr, st, end);
+        try {
+            return in.read(chr, st, end);
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -88,7 +103,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public int read(CharBuffer target) throws IOException {
-        return in.read(target);
+        try {
+            return in.read(target);
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -99,7 +119,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public long skip(long ln) throws IOException {
-        return in.skip(ln);
+        try {
+            return in.skip(ln);
+        } catch (IOException e) {
+            handleIOException(e);
+            return 0;
+        }
     }
 
     /**
@@ -109,7 +134,12 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public boolean ready() throws IOException {
-        return in.ready();
+        try {
+            return in.ready();
+        } catch (IOException e) {
+            handleIOException(e);
+            return false;
+        }
     }
 
     /**
@@ -118,7 +148,11 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public void close() throws IOException {
-        in.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -128,7 +162,11 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public synchronized void mark(int idx) throws IOException {
-        in.mark(idx);
+        try {
+            in.mark(idx);
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -137,7 +175,11 @@ public abstract class ProxyReader extends FilterReader {
      */
     @Override
     public synchronized void reset() throws IOException {
-        in.reset();
+        try {
+            in.reset();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -147,6 +189,19 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public boolean markSupported() {
         return in.markSupported();
+    }
+
+    /**
+     * Handle any IOExceptions thrown.
+     * <p>
+     * This method provides a point to implement custom exception
+     * handling. The default behaviour is to re-throw the exception.
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    protected void handleIOException(IOException e) throws IOException {
+        throw e;
     }
 
 }

@@ -51,7 +51,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int read() throws IOException {
-        return in.read();
+        try {
+            return in.read();
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -62,7 +67,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int read(byte[] bts) throws IOException {
-        return in.read(bts);
+        try {
+            return in.read(bts);
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -75,7 +85,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int read(byte[] bts, int st, int end) throws IOException {
-        return in.read(bts, st, end);
+        try {
+            return in.read(bts, st, end);
+        } catch (IOException e) {
+            handleIOException(e);
+            return -1;
+        }
     }
 
     /**
@@ -86,7 +101,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public long skip(long ln) throws IOException {
-        return in.skip(ln);
+        try {
+            return in.skip(ln);
+        } catch (IOException e) {
+            handleIOException(e);
+            return 0;
+        }
     }
 
     /**
@@ -96,7 +116,12 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public int available() throws IOException {
-        return in.available();
+        try {
+            return super.available();
+        } catch (IOException e) {
+            handleIOException(e);
+            return 0;
+        }
     }
 
     /**
@@ -105,7 +130,11 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public void close() throws IOException {
-        in.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -123,7 +152,11 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public synchronized void reset() throws IOException {
-        in.reset();
+        try {
+            in.reset();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -135,4 +168,18 @@ public abstract class ProxyInputStream extends FilterInputStream {
         return in.markSupported();
     }
 
+
+    /**
+     * Handle any IOExceptions thrown.
+     * <p>
+     * This method provides a point to implement custom exception
+     * handling. The default behaviour is to re-throw the exception.
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    protected void handleIOException(IOException e) throws IOException {
+        throw e;
+    }
+ 
 }
