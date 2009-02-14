@@ -48,7 +48,11 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(int idx) throws IOException {
-        out.write(idx);
+        try {
+            out.write(idx);
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -58,7 +62,11 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(byte[] bts) throws IOException {
-        out.write(bts);
+        try {
+            out.write(bts);
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -70,7 +78,11 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void write(byte[] bts, int st, int end) throws IOException {
-        out.write(bts, st, end);
+        try {
+            out.write(bts, st, end);
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -79,7 +91,11 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void flush() throws IOException {
-        out.flush();
+        try {
+            out.flush();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
     }
 
     /**
@@ -88,7 +104,24 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void close() throws IOException {
-        out.close();
+        try {
+            out.close();
+        } catch (IOException e) {
+            handleIOException(e);
+        }
+    }
+
+    /**
+     * Handle any IOExceptions thrown.
+     * <p>
+     * This method provides a point to implement custom exception
+     * handling. The default behaviour is to re-throw the exception.
+     * @param e The IOException thrown
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
+     */
+    protected void handleIOException(IOException e) throws IOException {
+        throw e;
     }
 
 }
