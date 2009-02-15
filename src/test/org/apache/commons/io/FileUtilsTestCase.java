@@ -898,8 +898,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         //This is to slow things down so we can catch if 
         //the lastModified date is not ok
         
-        File result = FileUtils.copyFileToDirectory(testFile1, directory);
-        assertEquals("Check File", destination, result);
+        FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
         assertTrue("Check Full copy", destination.length() == testFile1Size);
         /* disabled: Thread.sleep doesn't work reliantly for this case
