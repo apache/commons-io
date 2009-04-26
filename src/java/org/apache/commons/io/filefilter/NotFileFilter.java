@@ -33,7 +33,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     private final IOFileFilter filter;
 
     /**
-     * Constructs a new file filter that NOTs the result of another filters.
+     * Constructs a new file filter that NOTs the result of another filter.
      * 
      * @param filter  the filter, must not be null
      * @throws IllegalArgumentException if the filter is null
@@ -46,7 +46,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if both filters are true.
+     * Returns the logical NOT of the underlying filter's return value for the same File.
      * 
      * @param file  the File to check
      * @return true if the filter returns false
@@ -57,7 +57,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     }
     
     /**
-     * Checks to see if both filters are true.
+     * Returns the logical NOT of the underlying filter's return value for the same arguments.
      * 
      * @param file  the File directory
      * @param name  the filename
