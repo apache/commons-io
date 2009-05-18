@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,14 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method 
- * calls on to the proxied stream and doesn't change which methods are 
- * being called. 
+ * A Proxy stream which acts as expected, that is it passes the method
+ * calls on to the proxied stream and doesn't change which methods are
+ * being called.
  * <p>
  * It is an alternative base class to FilterInputStream
- * to increase reusability, because FilterInputStream changes the 
+ * to increase reusability, because FilterInputStream changes the
  * methods being called, such as read(byte[]) to read(byte[], int, int).
- * 
+ *
  * @author Stephen Colebourne
  * @version $Id$
  */
@@ -36,7 +36,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Constructs a new ProxyInputStream.
-     * 
+     *
      * @param proxy  the InputStream to delegate to
      */
     public ProxyInputStream(InputStream proxy) {
@@ -78,15 +78,15 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's <code>read(byte[], int, int)</code> method.
      * @param bts the buffer to read the bytes into
-     * @param st The start offset
-     * @param end The number of bytes to read
+     * @param off The start offset
+     * @param len The number of bytes to read
      * @return the number of bytes read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(byte[] bts, int st, int end) throws IOException {
+    public int read(byte[] bts, int off, int len) throws IOException {
         try {
-            return in.read(bts, st, end);
+            return in.read(bts, off, len);
         } catch (IOException e) {
             handleIOException(e);
             return -1;
@@ -139,11 +139,11 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Invokes the delegate's <code>mark(int)</code> method.
-     * @param idx read ahead limit
+     * @param readlimit read ahead limit
      */
     @Override
-    public synchronized void mark(int idx) {
-        in.mark(idx);
+    public synchronized void mark(int readlimit) {
+        in.mark(readlimit);
     }
 
     /**
@@ -181,5 +181,5 @@ public abstract class ProxyInputStream extends FilterInputStream {
     protected void handleIOException(IOException e) throws IOException {
         throw e;
     }
- 
+
 }
