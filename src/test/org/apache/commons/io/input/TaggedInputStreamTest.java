@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.apache.commons.io.TaggedIOException;
 
@@ -114,7 +115,8 @@ public class TaggedInputStreamTest extends TestCase {
         TaggedInputStream stream = new TaggedInputStream(closed);
 
         assertFalse(stream.isCauseOf(exception));
-        assertFalse(stream.isCauseOf(new TaggedIOException(exception, closed)));
+        assertFalse(stream.isCauseOf(
+                new TaggedIOException(exception, UUID.randomUUID())));
 
         try {
             stream.throwIfCauseOf(exception);
@@ -123,7 +125,8 @@ public class TaggedInputStreamTest extends TestCase {
         }
 
         try {
-            stream.throwIfCauseOf(new TaggedIOException(exception, closed));
+            stream.throwIfCauseOf(
+                    new TaggedIOException(exception, UUID.randomUUID()));
         } catch (IOException e) {
             fail("Unexpected exception thrown");
         }

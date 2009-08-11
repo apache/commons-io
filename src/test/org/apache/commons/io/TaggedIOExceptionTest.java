@@ -17,6 +17,8 @@
 package org.apache.commons.io;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.UUID;
 
 import junit.framework.TestCase;
 
@@ -26,10 +28,11 @@ import junit.framework.TestCase;
 public class TaggedIOExceptionTest extends TestCase {
 
     public void testTaggedIOException() {
-        Object tag = new Object();
+        Serializable tag = UUID.randomUUID();
         IOException exception = new IOException("Test exception");
         TaggedIOException tagged = new TaggedIOException(exception, tag);
-        assertEquals(tag, tagged.getTag());
+        assertTrue(TaggedIOException.isTaggedWith(tagged, tag));
+        assertFalse(TaggedIOException.isTaggedWith(tagged, UUID.randomUUID()));
         assertEquals(exception, tagged.getCause());
         assertEquals(exception.getMessage(), tagged.getMessage());
     }

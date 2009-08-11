@@ -18,6 +18,8 @@ package org.apache.commons.io.input;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.util.UUID;
 
 import org.apache.commons.io.TaggedIOException;
 
@@ -57,9 +59,14 @@ import org.apache.commons.io.TaggedIOException;
  * </pre>
  *
  * @see TaggedIOException
- * @since Commons IO 1.5
+ * @since Commons IO 2.0
  */
 public class TaggedInputStream extends ProxyInputStream {
+
+    /**
+     * The unique tag associated with exceptions from stream.
+     */
+    private final Serializable tag = UUID.randomUUID();
 
     /**
      * Creates a tagging decorator for the given input stream.
@@ -73,17 +80,12 @@ public class TaggedInputStream extends ProxyInputStream {
     /**
      * Tests if the given exception was caused by this stream.
      *
-     * @param exception an exception
+     * @param throwable an exception
      * @return <code>true</code> if the exception was thrown by this stream,
      *         <code>false</code> otherwise
      */
-    public boolean isCauseOf(IOException exception) {
-        if (exception instanceof TaggedIOException) {
-            TaggedIOException tagged = (TaggedIOException) exception;
-            return this == tagged.getTag();
-        } else {
-            return false;
-        }
+    public boolean isCauseOf(Throwable exception) {
+        return TaggedIOException.isTaggedWith(exception, tag);
     }
 
     /**
@@ -93,16 +95,11 @@ public class TaggedInputStream extends ProxyInputStream {
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this stream.
      *
-     * @param exception an exception
+     * @param throwable an exception
      * @throws IOException original exception, if any, thrown by this stream
      */
-    public void throwIfCauseOf(Exception exception) throws IOException {
-        if (exception instanceof TaggedIOException) {
-            TaggedIOException tagged = (TaggedIOException) exception;
-            if (this == tagged.getTag()) {
-                throw tagged.getCause();
-            }
-        }
+    public void throwIfCauseOf(Throwable throwable) throws IOException {
+        TaggedIOException.throwCauseIfTaggedWith(throwable, tag);
     }
 
     /**
@@ -113,7 +110,7 @@ public class TaggedInputStream extends ProxyInputStream {
      */
     @Override
     protected void handleIOException(IOException e) throws IOException {
-        throw new TaggedIOException(e, this);
+        throw new TaggedIOException(e, tag);
     }
 
 }

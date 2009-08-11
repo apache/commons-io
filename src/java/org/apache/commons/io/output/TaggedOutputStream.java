@@ -18,6 +18,8 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.UUID;
 
 import org.apache.commons.io.TaggedIOException;
 
@@ -57,9 +59,14 @@ import org.apache.commons.io.TaggedIOException;
  * </pre>
  *
  * @see TaggedIOException
- * @since Commons IO 1.5
+ * @since Commons IO 2.0
  */
 public class TaggedOutputStream extends ProxyOutputStream {
+
+    /**
+     * The unique tag associated with exceptions from stream.
+     */
+    private final Serializable tag = UUID.randomUUID();
 
     /**
      * Creates a tagging decorator for the given output stream.
@@ -77,13 +84,8 @@ public class TaggedOutputStream extends ProxyOutputStream {
      * @return <code>true</code> if the exception was thrown by this stream,
      *         <code>false</code> otherwise
      */
-    public boolean isCauseOf(IOException exception) {
-        if (exception instanceof TaggedIOException) {
-            TaggedIOException tagged = (TaggedIOException) exception;
-            return this == tagged.getTag();
-        } else {
-            return false;
-        }
+    public boolean isCauseOf(Exception exception) {
+        return TaggedIOException.isTaggedWith(exception, tag);
     }
 
     /**
@@ -97,12 +99,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
      * @throws IOException original exception, if any, thrown by this stream
      */
     public void throwIfCauseOf(Exception exception) throws IOException {
-        if (exception instanceof TaggedIOException) {
-            TaggedIOException tagged = (TaggedIOException) exception;
-            if (this == tagged.getTag()) {
-                throw tagged.getCause();
-            }
-        }
+        TaggedIOException.throwCauseIfTaggedWith(exception, tag);
     }
 
     /**
@@ -113,7 +110,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
      */
     @Override
     protected void handleIOException(IOException e) throws IOException {
-        throw new TaggedIOException(e, this);
+        throw new TaggedIOException(e, tag);
     }
 
 }
