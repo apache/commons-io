@@ -44,54 +44,6 @@ public class CountingInputStream extends ProxyInputStream {
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Reads a number of bytes into the byte array, keeping count of the
-     * number read.
-     *
-     * @param b  the buffer into which the data is read, not null
-     * @return the total number of bytes read into the buffer, -1 if end of stream
-     * @throws IOException if an I/O error occurs
-     * @see java.io.InputStream#read(byte[]) 
-     */
-    @Override
-    public int read(byte[] b) throws IOException {
-        int found = super.read(b);
-        this.count += (found >= 0) ? found : 0;
-        return found;
-    }
-
-    /**
-     * Reads a number of bytes into the byte array at a specific offset,
-     * keeping count of the number read.
-     *
-     * @param b  the buffer into which the data is read, not null
-     * @param off  the start offset in the buffer
-     * @param len  the maximum number of bytes to read
-     * @return the total number of bytes read into the buffer, -1 if end of stream
-     * @throws IOException if an I/O error occurs
-     * @see java.io.InputStream#read(byte[], int, int)
-     */
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        int found = super.read(b, off, len);
-        this.count += (found >= 0) ? found : 0;
-        return found;
-    }
-
-    /**
-     * Reads the next byte of data adding to the count of bytes received
-     * if a byte is successfully read. 
-     *
-     * @return the byte read, -1 if end of stream
-     * @throws IOException if an I/O error occurs
-     * @see java.io.InputStream#read()
-     */
-    @Override
-    public int read() throws IOException {
-        int found = super.read();
-        this.count += (found >= 0) ? 1 : 0;
-        return found;
-    }
 
     /**
      * Skips the stream over the specified number of bytes, adding the skipped
@@ -107,6 +59,18 @@ public class CountingInputStream extends ProxyInputStream {
         final long skip = super.skip(length);
         this.count += skip;
         return skip;
+    }
+
+    /**
+     * Adds the number of read bytes to the count.
+     *
+     * @param n number of bytes read, or -1 if no more bytes are available
+     */
+    @Override
+    protected void afterRead(int n) {
+        if (n != -1) {
+            this.count += n;
+        }
     }
 
     //-----------------------------------------------------------------------

@@ -43,48 +43,15 @@ public class CountingOutputStream extends ProxyOutputStream {
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Writes the contents of the specified byte array to this output stream
-     * keeping count of the number of bytes written.
-     *
-     * @param b  the bytes to write, not null
-     * @throws IOException if an I/O error occurs
-     * @see java.io.OutputStream#write(byte[])
-     */
-    @Override
-    public void write(byte[] b) throws IOException {
-        count += b.length;
-        super.write(b);
-    }
 
     /**
-     * Writes a portion of the specified byte array to this output stream
-     * keeping count of the number of bytes written.
+     * Updates the count with the number of bytes that are being written.
      *
-     * @param b  the bytes to write, not null
-     * @param off  the start offset in the buffer
-     * @param len  the maximum number of bytes to write
-     * @throws IOException if an I/O error occurs
-     * @see java.io.OutputStream#write(byte[], int, int)
+     * @param n number of bytes to be written to the stream
      */
     @Override
-    public void write(byte[] b, int off, int len) throws IOException {
-        count += len;
-        super.write(b, off, len);
-    }
-
-    /**
-     * Writes a single byte to the output stream adding to the count of the
-     * number of bytes written.
-     *
-     * @param b  the byte to write
-     * @throws IOException if an I/O error occurs
-     * @see java.io.OutputStream#write(int)
-     */
-    @Override
-    public void write(int b) throws IOException {
-        count++;
-        super.write(b);
+    protected void beforeWrite(int n) {
+        count += n;
     }
 
     //-----------------------------------------------------------------------

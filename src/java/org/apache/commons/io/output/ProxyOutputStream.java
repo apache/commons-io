@@ -25,6 +25,9 @@ import java.io.OutputStream;
  * calls on to the proxied stream and doesn't change which methods are 
  * being called. It is an alternative base class to FilterOutputStream
  * to increase reusability.
+ * <p>
+ * See the protected methods for ways in which a subclass can easily decorate
+ * a stream with custom pre-, post- or error processing functionality.
  * 
  * @author Stephen Colebourne
  * @version $Id$
@@ -49,7 +52,9 @@ public class ProxyOutputStream extends FilterOutputStream {
     @Override
     public void write(int idx) throws IOException {
         try {
+            beforeWrite(1);
             out.write(idx);
+            afterWrite(1);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -63,7 +68,9 @@ public class ProxyOutputStream extends FilterOutputStream {
     @Override
     public void write(byte[] bts) throws IOException {
         try {
+            beforeWrite(bts.length);
             out.write(bts);
+            afterWrite(bts.length);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -79,7 +86,9 @@ public class ProxyOutputStream extends FilterOutputStream {
     @Override
     public void write(byte[] bts, int st, int end) throws IOException {
         try {
+            beforeWrite(end);
             out.write(bts, st, end);
+            afterWrite(end);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -109,6 +118,39 @@ public class ProxyOutputStream extends FilterOutputStream {
         } catch (IOException e) {
             handleIOException(e);
         }
+    }
+
+    /**
+     * Invoked by the write methods before the call is proxied. The number
+     * of bytes to be written (1 for the {@link #write(int)} method, buffer
+     * length for {@link #write(byte[])}, etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common pre-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since Commons IO 2.0
+     * @param n number of bytes to be written
+     * @throws IOException if the pre-processing fails
+     */
+    protected void beforeWrite(int n) throws IOException {
+    }
+
+    /**
+     * Invoked by the write methods after the proxied call has returned
+     * successfully. The number of bytes written (1 for the
+     * {@link #write(int)} method, buffer length for {@link #write(byte[])},
+     * etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common post-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since Commons IO 2.0
+     * @param n number of bytes written
+     * @throws IOException if the post-processing fails
+     */
+    protected void afterWrite(int n) throws IOException {
     }
 
     /**
