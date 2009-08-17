@@ -65,58 +65,16 @@ public class AutoCloseInputStream extends ProxyInputStream {
     }
 
     /**
-     * Reads and returns a single byte from the underlying input stream.
-     * If the underlying stream returns -1, the {@link #close()} method is
-     * called to automatically close and discard the stream.
+     * Automatically closes the stream if the end of stream was reached.
      *
-     * @return next byte in the stream, or -1 if no more bytes are available
-     * @throws IOException if the stream could not be read or closed
+     * @param n number of bytes read, or -1 if no more bytes are available
+     * @throws IOException if the stream could not be closed
      */
     @Override
-    public int read() throws IOException {
-        int n = in.read();
+    protected void afterRead(int n) throws IOException {
         if (n == -1) {
             close();
         }
-        return n;
-    }
-
-    /**
-     * Reads and returns bytes from the underlying input stream to the given
-     * buffer. If the underlying stream returns -1, the {@link #close()} method
-     * i called to automatically close and discard the stream.
-     *
-     * @param b buffer to which bytes from the stream are written
-     * @return number of bytes read, or -1 if no more bytes are available
-     * @throws IOException if the stream could not be read or closed
-     */
-    @Override
-    public int read(byte[] b) throws IOException {
-        int n = in.read(b);
-        if (n == -1) {
-            close();
-        }
-        return n;
-    }
-
-    /**
-     * Reads and returns bytes from the underlying input stream to the given
-     * buffer. If the underlying stream returns -1, the {@link #close()} method
-     * i called to automatically close and discard the stream.
-     *
-     * @param b buffer to which bytes from the stream are written
-     * @param off start offset within the buffer
-     * @param len maximum number of bytes to read
-     * @return number of bytes read, or -1 if no more bytes are available
-     * @throws IOException if the stream could not be read or closed
-     */
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        int n = in.read(b, off, len);
-        if (n == -1) {
-            close();
-        }
-        return n;
     }
 
     /**
