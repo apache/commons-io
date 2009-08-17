@@ -108,7 +108,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's <code>skip(long)</code> method.
      * @param ln the number of bytes to skip
-     * @return the number of bytes to skipped or -1 if the end of stream
+     * @return the actual number of bytes skipped
      * @throws IOException if an I/O error occurs
      */
     @Override
