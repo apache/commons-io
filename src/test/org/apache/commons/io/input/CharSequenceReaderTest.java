@@ -46,7 +46,7 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#markSupported()}. */
-    public void testMarkSupported() throws IOException {
+    public void testMarkSupported() {
         Reader reader = new CharSequenceReader("FooBar");
         assertTrue(reader.markSupported());
     }
@@ -65,7 +65,7 @@ public class CharSequenceReaderTest extends TestCase {
         checkRead(reader, "Foo");
     }
 
-    /** Test {@link Reader#skip(int)}. */
+    /** Test {@link Reader#skip(long)}. */
     public void testSkip() throws IOException {
         Reader reader = new CharSequenceReader("FooBar");
         assertEquals(3, reader.skip(3));
@@ -119,10 +119,10 @@ public class CharSequenceReaderTest extends TestCase {
     private void checkRead(Reader reader, String expected) throws IOException {
         for (int i = 0; i < expected.length(); i++) {
             assertEquals("Read[" + i + "] of '" + expected + "'", 
-                    (char)expected.charAt(i), (char)reader.read());
+                    expected.charAt(i), (char)reader.read());
         }
     }
-    private void checkArray(char[] expected, char[] actual) throws IOException {
+    private void checkArray(char[] expected, char[] actual) {
         for (int i = 0; i < expected.length; i++) {
             assertEquals("Compare[" +i + "]", expected[i], actual[i]);
         }
