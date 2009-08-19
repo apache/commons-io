@@ -159,7 +159,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_encoding_badEncoding() throws IOException {
+    public void testConstructor_File_encoding_badEncoding() {
         Writer writer = null;
         try {
             writer = new LockableFileWriter(file, "BAD-ENCODE");
@@ -176,7 +176,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_directory() throws IOException {
+    public void testConstructor_File_directory() {
         Writer writer = null;
         try {
             writer = new LockableFileWriter(getTestDirectory());

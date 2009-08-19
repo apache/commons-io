@@ -44,7 +44,7 @@ public class StringBuilderWriterTest extends TestCase {
     }
 
     /** Test {@link StringBuilderWriter} constructor. */
-    public void testAppendConstructStringBuilder() throws IOException {
+    public void testAppendConstructStringBuilder() {
         StringBuilder builder = new StringBuilder("Foo");
         StringBuilderWriter writer = new StringBuilderWriter(builder);
         writer.append("Bar");

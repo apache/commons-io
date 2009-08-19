@@ -101,7 +101,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     }
 
     public void testDifferentEncoding() throws Exception {
-        Map map = Charset.availableCharsets();
+        Map<String, Charset> map = Charset.availableCharsets();
         if (map.containsKey("UTF-16BE")) {
             FileWriter fw1 = null;
             FileWriterWithEncoding fw2 = null;
@@ -161,7 +161,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_encoding_badEncoding() throws IOException {
+    public void testConstructor_File_encoding_badEncoding() {
         Writer writer = null;
         try {
             writer = new FileWriterWithEncoding(file1, "BAD-ENCODE");
@@ -176,7 +176,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_directory() throws IOException {
+    public void testConstructor_File_directory() {
         Writer writer = null;
         try {
             writer = new FileWriterWithEncoding(getTestDirectory(), defaultEncoding);
