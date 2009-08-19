@@ -45,6 +45,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     }
 
     /** @see java.io.OutputStream#flush() */
+    @Override
     public void flush() throws IOException {
         if (yellForFlush) {
             throw new AssertionFailedError("flush() was called on OutputStream");
@@ -53,6 +54,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     }
 
     /** @see java.io.OutputStream#close() */
+    @Override
     public void close() throws IOException {
         if (yellForClose) {
             throw new AssertionFailedError("close() was called on OutputStream");

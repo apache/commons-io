@@ -43,6 +43,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         getTestDirectory().mkdirs();
         createFile(m_testFile1, FILE1_SIZE);
@@ -50,6 +51,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#tearDown() */
+    @Override
     protected void tearDown() throws Exception {
         m_testFile1.delete();
         m_testFile2.delete();

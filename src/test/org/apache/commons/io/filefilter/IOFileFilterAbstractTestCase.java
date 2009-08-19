@@ -105,11 +105,13 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
 
     private boolean invoked;
     
+    @Override
     public boolean accept(File file) {
       setInvoked(true);
       return super.accept(file);
     }
     
+    @Override
     public boolean accept(File file, String str) {
       setInvoked(true);
       return super.accept(file, str);
@@ -132,11 +134,13 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
     
     private boolean invoked;
     
+    @Override
     public boolean accept(File file) {
       setInvoked(true);
       return super.accept(file);
     }
     
+    @Override
     public boolean accept(File file, String str) {
       setInvoked(true);
       return super.accept(file, str);

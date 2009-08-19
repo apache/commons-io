@@ -58,6 +58,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         comparator = new CompositeFileComparator(SizeFileComparator.SIZE_COMPARATOR,

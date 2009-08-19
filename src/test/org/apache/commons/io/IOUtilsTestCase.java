@@ -63,6 +63,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     private File m_testFile;
 
+    @Override
     public void setUp()
     {
         try
@@ -79,6 +80,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Override
     public void tearDown()
     {
         try

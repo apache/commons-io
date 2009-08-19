@@ -179,6 +179,7 @@ public class DemuxTestCase
             return m_buffer.toString();
         }
 
+        @Override
         public void run()
         {
             m_demux.bindStream( m_input );
@@ -221,6 +222,7 @@ public class DemuxTestCase
             m_data = data.getBytes();
         }
 
+        @Override
         public void run()
         {
             m_demux.bindStream( m_output );

@@ -56,9 +56,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
     }
 
+    @Override
     protected void tearDown() throws Exception {
     }
 
@@ -146,6 +148,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
 
     public void testGetFreeSpaceOS_String_Windows() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils() {
+            @Override
             protected long freeSpaceWindows(String path) throws IOException {
                 return 12345L;
             }
@@ -156,6 +159,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
 
     public void testGetFreeSpaceOS_String_Unix() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils() {
+            @Override
             protected long freeSpaceUnix(String path, boolean kb, boolean posix) throws IOException {
                 return (kb ? 12345L : 54321);
             }
@@ -495,26 +499,33 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             this.bytes = lines.getBytes();
             this.cmd = cmd;
         }
+        @Override
         Process openProcess(String[] params) {
             if (cmd != null) {
                 assertEquals(cmd, params[params.length - 1]);
             }
             return new Process() {
+                @Override
                 public InputStream getErrorStream() {
                     return null;
                 }
+                @Override
                 public InputStream getInputStream() {
                     return new ByteArrayInputStream(bytes);
                 }
+                @Override
                 public OutputStream getOutputStream() {
                     return null;
                 }
+                @Override
                 public int waitFor() throws InterruptedException {
                     return exitCode;
                 }
+                @Override
                 public int exitValue() {
                     return exitCode;
                 }
+                @Override
                 public void destroy() {
                 }
             };

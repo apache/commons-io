@@ -35,9 +35,11 @@ public class CloseShieldInputStreamTest extends TestCase {
 
     private boolean closed;
 
+    @Override
     protected void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
         original = new ByteArrayInputStream(data) {
+            @Override
             public void close() {
                 closed = true;
             }

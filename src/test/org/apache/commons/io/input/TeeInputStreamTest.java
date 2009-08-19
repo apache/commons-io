@@ -33,6 +33,7 @@ public class TeeInputStreamTest extends TestCase {
 
     private ByteArrayOutputStream output;
 
+    @Override
     protected void setUp() throws Exception {
         InputStream input = new ByteArrayInputStream("abc".getBytes(ASCII));
         output = new ByteArrayOutputStream();

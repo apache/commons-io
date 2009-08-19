@@ -54,6 +54,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         File dir = getTestDirectory();
         if (dir.exists()) {
@@ -64,6 +65,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#tearDown() */
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
@@ -331,6 +333,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         
         Reader reader = new FileReader(testFile);
         LineIterator iterator = new LineIterator(reader) {
+            @Override
             protected boolean isValidLine(String line) {
                 char c = line.charAt(line.length() - 1);
                 return ((c - 48) % 3 != 1);

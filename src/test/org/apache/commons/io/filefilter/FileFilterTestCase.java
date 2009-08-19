@@ -55,10 +55,12 @@ public class FileFilterTestCase extends FileBasedTestCase {
         return new TestSuite(FileFilterTestCase.class);
     }
 
+    @Override
     public void setUp() {
         getTestDirectory().mkdirs();
     }
 
+    @Override
     public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }

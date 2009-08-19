@@ -38,6 +38,7 @@ public class YellOnCloseInputStream extends ProxyInputStream {
     }
 
     /** @see java.io.InputStream#close() */
+    @Override
     public void close() throws IOException {
         throw new AssertionFailedError("close() was called on OutputStream");
     }

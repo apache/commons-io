@@ -33,9 +33,11 @@ public class AutoCloseInputStreamTest extends TestCase {
 
     private boolean closed;
 
+    @Override
     protected void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
         stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
+            @Override
             public void close() {
                 closed = true;
             }

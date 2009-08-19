@@ -43,10 +43,12 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         return new TestSuite(RegexFileFilterTestCase.class);
     }
 
+    @Override
     public void setUp() {
         getTestDirectory().mkdirs();
     }
 
+    @Override
     public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }

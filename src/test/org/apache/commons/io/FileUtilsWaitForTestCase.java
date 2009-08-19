@@ -48,11 +48,13 @@ public class FileUtilsWaitForTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         getTestDirectory().mkdirs();
     }
 
     /** @see junit.framework.TestCase#tearDown() */
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }

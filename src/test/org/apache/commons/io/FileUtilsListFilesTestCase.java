@@ -40,6 +40,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         File dir = getLocalTestDirectory();
         if (dir.exists()) {
@@ -77,6 +78,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#tearDown()
      */
+    @Override
     protected void tearDown() throws Exception {
         File dir = getLocalTestDirectory();
         FileUtils.deleteDirectory(dir);

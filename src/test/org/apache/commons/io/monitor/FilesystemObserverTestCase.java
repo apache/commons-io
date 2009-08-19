@@ -49,6 +49,7 @@ public class FilesystemObserverTestCase extends TestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         testDir = new File(new File("."), "test-monitor");
         if (testDir.exists()) {
@@ -88,6 +89,7 @@ public class FilesystemObserverTestCase extends TestCase {
         }
     }
 
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(testDir);
     }

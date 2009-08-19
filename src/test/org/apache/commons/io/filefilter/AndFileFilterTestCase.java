@@ -45,11 +45,13 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     super(name);
   }
   
+  @Override
   public void setUp() throws Exception {
     super.setUp();
     this.setUpTestFilters();
   }
   
+  @Override
   protected IOFileFilter buildFilterUsingAdd(final List filters) {
     AndFileFilter filter = new AndFileFilter();
     for(int i = 0; i < filters.size(); i++) {
@@ -58,38 +60,47 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     return filter;
   }
   
+  @Override
   protected IOFileFilter buildFilterUsingConstructor(final List filters) {
     return new AndFileFilter(filters);
   }
   
+  @Override
   protected ConditionalFileFilter getConditionalFileFilter() {
     return new AndFileFilter();
   }
   
+  @Override
   protected String getDefaultWorkingPath() {
     return DEFAULT_WORKING_PATH;
   }
   
+  @Override
   protected List getFalseResults() {
     return this.testFalseResults;
   }
   
+  @Override
   protected List getFileResults() {
     return this.testFileResults;
   }
   
+  @Override
   protected List getFilenameResults() {
     return this.testFilenameResults;
   }
   
+  @Override
   protected List getTestFilters() {
     return this.testFilters;
   }
   
+  @Override
   protected List getTrueResults() {
     return this.testTrueResults;
   }
   
+  @Override
   protected String getWorkingPathNamePropertyKey() {
     return WORKING_PATH_NAME_PROPERTY_KEY;
   }

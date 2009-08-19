@@ -95,6 +95,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         getTestDirectory().mkdirs();
         createFile(testFile1, testFile1Size);
@@ -106,6 +107,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     /** @see junit.framework.TestCase#tearDown() */
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
@@ -1348,6 +1350,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File src = new File( testFile1.getAbsolutePath() ) {
             // Force renameTo to fail, as if destination is on another
             // filesystem
+            @Override
             public boolean renameTo( File f ) {
                 return false;
             }
@@ -1363,11 +1366,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File src = new File( testFile1.getAbsolutePath() ) {
             // Force renameTo to fail, as if destination is on another
             // filesystem
+            @Override
             public boolean renameTo( File f ) {
                 return false;
             }
 
             // Force delete failure
+            @Override
             public boolean delete() {
                 return false;
             }
@@ -1493,6 +1498,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File src = new File(dir, "testMoveDirectory2Source") {
 
             // Force renameTo to fail
+            @Override
             public boolean renameTo( File dest ) {
                 return false;
             }
@@ -1671,6 +1677,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             return files;
         }
 
+        @Override
         protected void handleDirectoryStart(File directory, int depth, Collection results) throws IOException {
             // Add all directories except the starting directory
             if (depth > 0) {
@@ -1678,6 +1685,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             }
         }
 
+        @Override
         protected void handleFile(File file, int depth, Collection results) throws IOException {
             results.add(file);
         }
