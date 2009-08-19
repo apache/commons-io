@@ -44,7 +44,7 @@ import org.apache.commons.io.TaggedIOException;
  * }
  * </pre>
  * <p>
- * Alternatively, the {@link #throwIfCauseOf(Exception)} method can be
+ * Alternatively, the {@link #throwIfCauseOf(Throwable)} method can be
  * used to let higher levels of code handle the exception caused by this
  * stream while other processing errors are being taken care of at this
  * lower level.
@@ -80,7 +80,7 @@ public class TaggedInputStream extends ProxyInputStream {
     /**
      * Tests if the given exception was caused by this stream.
      *
-     * @param throwable an exception
+     * @param exception an exception
      * @return <code>true</code> if the exception was thrown by this stream,
      *         <code>false</code> otherwise
      */
