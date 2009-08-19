@@ -53,7 +53,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Directories which have changed
      */
-    public Collection getChangedDirectories() {
+    public Collection<File> getChangedDirectories() {
         return changedDirectories;
     }
 
@@ -62,7 +62,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Files which have changed
      */
-    public Collection getChangedFiles() {
+    public Collection<File> getChangedFiles() {
         return changedFiles;
     }
 
@@ -71,7 +71,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Directories which have been created
      */
-    public Collection getCreatedDirectories() {
+    public Collection<File> getCreatedDirectories() {
         return createdDirectories;
     }
 
@@ -80,7 +80,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Files which have been created
      */
-    public Collection getCreatedFiles() {
+    public Collection<File> getCreatedFiles() {
         return createdFiles;
     }
 
@@ -89,7 +89,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Directories which been deleted
      */
-    public Collection getDeletedDirectories() {
+    public Collection<File> getDeletedDirectories() {
         return deletedDirectories;
     }
 
@@ -98,7 +98,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @return Files which been deleted
      */
-    public Collection getDeletedFiles() {
+    public Collection<File> getDeletedFiles() {
         return deletedFiles;
     }
 

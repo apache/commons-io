@@ -17,8 +17,6 @@
 package org.apache.commons.io.output;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import junit.framework.TestCase;
 
 /**
@@ -43,7 +41,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
 
     private int writeData(ByteArrayOutputStream baout, 
                 java.io.ByteArrayOutputStream ref,
-                int count) throws IOException {
+                int count) {
         if (count > DATA.length) {
             throw new IllegalArgumentException("Requesting too many bytes");
         }
@@ -60,7 +58,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
     
     private int writeData(ByteArrayOutputStream baout, 
                 java.io.ByteArrayOutputStream ref, 
-                int[] instructions) throws IOException {
+                int[] instructions) {
         int written = 0;
         for (int i = 0; i < instructions.length; i++) {
             written += writeData(baout, ref, instructions[i]);

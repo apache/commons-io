@@ -239,7 +239,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
     private void setupSymlink(File res, File link) throws Exception {
         // create symlink
-        List args = new ArrayList();
+        List<String> args = new ArrayList<String>();
         args.add("ln");
         args.add("-s");
 
@@ -248,7 +248,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
         Process proc;
 
-        proc = Runtime.getRuntime().exec((String[]) args.toArray(new String[args.size()]));
+        proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
         proc.waitFor();
     }
 

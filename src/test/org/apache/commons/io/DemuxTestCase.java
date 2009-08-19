@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -49,8 +48,8 @@ public class DemuxTestCase
     private static final String DATA4 = "Data for thread4";
 
     private static Random c_random = new Random();
-    private HashMap m_outputMap = new HashMap();
-    private HashMap m_threadMap = new HashMap();
+    private HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<String, ByteArrayOutputStream>();
+    private HashMap<String, Thread> m_threadMap = new HashMap<String, Thread>();
 
     public DemuxTestCase( String name )
     {
@@ -58,17 +57,15 @@ public class DemuxTestCase
     }
 
     private String getOutput( String threadName )
-        throws IOException
     {
         ByteArrayOutputStream output =
-            (ByteArrayOutputStream)m_outputMap.get( threadName );
+            m_outputMap.get( threadName );
         assertNotNull( "getOutput()", output );
 
         return output.toString();
     }
 
     private String getInput( String threadName )
-        throws IOException
     {
         ReaderThread thread = (ReaderThread)m_threadMap.get( threadName );
         assertNotNull( "getInput()", thread );
@@ -79,11 +76,11 @@ public class DemuxTestCase
     private void doStart()
         throws Exception
     {
-        Iterator iterator = m_threadMap.keySet().iterator();
+        Iterator<String> iterator = m_threadMap.keySet().iterator();
         while( iterator.hasNext() )
         {
-            String name = (String)iterator.next();
-            Thread thread = (Thread)m_threadMap.get( name );
+            String name = iterator.next();
+            Thread thread = m_threadMap.get( name );
             thread.start();
         }
     }
@@ -91,11 +88,11 @@ public class DemuxTestCase
     private void doJoin()
         throws Exception
     {
-        Iterator iterator = m_threadMap.keySet().iterator();
+        Iterator<String> iterator = m_threadMap.keySet().iterator();
         while( iterator.hasNext() )
         {
-            String name = (String)iterator.next();
-            Thread thread = (Thread)m_threadMap.get( name );
+            String name = iterator.next();
+            Thread thread = m_threadMap.get( name );
             thread.join();
         }
     }
