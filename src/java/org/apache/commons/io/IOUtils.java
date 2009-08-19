@@ -113,6 +113,7 @@ public class IOUtils {
         PrintWriter out = new PrintWriter(buf);
         out.println();
         LINE_SEPARATOR = buf.toString();
+        out.close();
     }
 
     /**
