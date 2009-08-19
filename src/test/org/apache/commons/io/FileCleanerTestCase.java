@@ -33,6 +33,7 @@ import junit.textui.TestRunner;
  * @see FileCleaner
  */
 public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
+    @Override
     protected FileCleaningTracker newInstance() {
         return FileCleaner.getInstance();
     }

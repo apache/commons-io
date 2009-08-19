@@ -41,6 +41,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
         super(name);
     }
 
+    @Override
     public void setUp() {
         file = new File(getTestDirectory(), "testlockfile");
         lockDir = new File(System.getProperty("java.io.tmpdir"));
@@ -49,6 +50,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
         altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
+    @Override
     public void tearDown() {
         file.delete();
         lockFile.delete();

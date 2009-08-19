@@ -78,9 +78,11 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     // Setup
     // ----------------------------------------------------------------
 
+    @Override
     public void setUp() throws Exception {
     }
 
+    @Override
     public void tearDown() throws Exception {
     }
 

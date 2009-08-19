@@ -46,6 +46,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         super(name);
     }
 
+    @Override
     public void setUp() {
         File encodingFinder = new File(getTestDirectory(), "finder.txt");
         OutputStreamWriter out = null;
@@ -66,6 +67,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         textContent = new String(arr);
     }
 
+    @Override
     public void tearDown() {
         defaultEncoding = null;
         file1.delete();

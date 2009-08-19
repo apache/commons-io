@@ -35,11 +35,13 @@ public class NullInputStreamTest extends TestCase {
     }
 
     /** Set up */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
 
     /** Tear Down */
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }
@@ -241,9 +243,11 @@ public class NullInputStreamTest extends TestCase {
         public TestNullInputStream(int size, boolean markSupported, boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
+        @Override
         protected int processByte() {
             return ((int)getPosition() - 1);
         }
+        @Override
         protected void processBytes(byte[] bytes, int offset, int length) {
             int startPos = (int)getPosition() - length;
             for (int i = offset; i < length; i++) {

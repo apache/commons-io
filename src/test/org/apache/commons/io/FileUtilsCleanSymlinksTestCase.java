@@ -46,10 +46,12 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         top.mkdirs();
     }
 
+    @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(top);
     }

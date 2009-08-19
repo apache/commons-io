@@ -30,6 +30,7 @@ public class BrokenOutputStreamTest extends TestCase {
 
     private OutputStream stream;
 
+    @Override
     protected void setUp() {
         exception = new IOException("test exception");
         stream = new BrokenOutputStream(exception);

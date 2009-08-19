@@ -37,6 +37,7 @@ public abstract class ConditionalFileFilterAbstractTestCase
     super(name);
   }
   
+  @Override
   public void setUp() throws Exception {
     this.workingPath = this.determineWorkingDirectoryPath(this.getWorkingPathNamePropertyKey(), this.getDefaultWorkingPath());
     this.file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);

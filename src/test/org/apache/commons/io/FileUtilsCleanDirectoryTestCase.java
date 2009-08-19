@@ -55,6 +55,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
+    @Override
     protected void setUp() throws Exception {
         top.mkdirs();
     }
@@ -62,6 +63,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#tearDown()
      */
+    @Override
     protected void tearDown() throws Exception {
         chmod(top, 775, true);
         FileUtils.deleteDirectory(top);

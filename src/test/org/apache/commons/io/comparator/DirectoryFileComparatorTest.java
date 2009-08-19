@@ -55,6 +55,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         comparator = (AbstractFileComparator)DirectoryFileComparator.DIRECTORY_COMPARATOR;

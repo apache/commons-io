@@ -32,8 +32,10 @@ public class CloseShieldOutputStreamTest extends TestCase {
 
     private boolean closed;
 
+    @Override
     protected void setUp() {
         original = new ByteArrayOutputStream() {
+            @Override
             public void close() {
                 closed = true;
             }

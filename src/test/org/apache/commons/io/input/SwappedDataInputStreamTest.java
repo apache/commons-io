@@ -39,6 +39,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         super(name);
     }
 
+    @Override
     public void setUp() {
         bytes = new byte[] {
             0x01,
@@ -54,6 +55,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         this.sdis = new SwappedDataInputStream( bais );
     }
 
+    @Override
     public void tearDown() {
         this.sdis = null;
     }

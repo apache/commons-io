@@ -54,6 +54,7 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         comparator = (AbstractFileComparator)NameFileComparator.NAME_INSENSITIVE_COMPARATOR;

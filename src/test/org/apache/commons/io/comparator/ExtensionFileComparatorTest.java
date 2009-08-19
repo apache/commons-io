@@ -54,6 +54,7 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** @see junit.framework.TestCase#setUp() */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         comparator = (AbstractFileComparator)ExtensionFileComparator.EXTENSION_COMPARATOR;
