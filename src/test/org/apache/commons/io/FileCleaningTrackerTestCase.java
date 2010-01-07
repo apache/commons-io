@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
@@ -55,9 +54,8 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         return new TestSuite(FileCleaningTrackerTestCase.class);
     }
 
-    public FileCleaningTrackerTestCase(String name) throws IOException {
+    public FileCleaningTrackerTestCase(String name) {
         super(name);
-
         testFile = new File(getTestDirectory(), "file-test.txt");
     }
 

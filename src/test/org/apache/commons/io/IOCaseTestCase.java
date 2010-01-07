@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -47,7 +46,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         return new TestSuite(IOCaseTestCase.class);
     }
 
-    public IOCaseTestCase(String name) throws IOException {
+    public IOCaseTestCase(String name) {
         super(name);
     }
 

@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io;
 
-import java.io.IOException;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -46,7 +44,7 @@ public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
         return new TestSuite(FileCleanerTestCase.class);
     }
 
-    public FileCleanerTestCase(String name) throws IOException {
+    public FileCleanerTestCase(String name) {
         super(name);
     }
 }
