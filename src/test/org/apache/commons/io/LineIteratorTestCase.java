@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         return new TestSuite(LineIteratorTestCase.class);
     }
 
-    public LineIteratorTestCase(String name) throws IOException {
+    public LineIteratorTestCase(String name) {
         super(name);
     }
 
@@ -177,12 +176,12 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         String encoding = null;
         
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
-        List lines = createFile(testFile, encoding, 3);
+        List<String> lines = createFile(testFile, encoding, 3);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             for (int i = 0; i < lines.size(); i++) {
-                String line = (String)iterator.next();
+                String line = iterator.next();
                 assertEquals("next() line " + i, lines.get(i), line);
             }
             assertEquals("No more expected", false, iterator.hasNext());
@@ -198,7 +197,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         String encoding = null;
         
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
-        List lines = createFile(testFile, encoding, 3);
+        List<String> lines = createFile(testFile, encoding, 3);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
@@ -272,7 +271,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         
         String fileName = "LineIterator-" + lineCount + "-test.txt";
         File testFile = new File(getTestDirectory(), fileName);
-        List lines = createFile(testFile, encoding, lineCount);
+        List<String> lines = createFile(testFile, encoding, lineCount);
         
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
@@ -285,7 +284,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     
             int idx = 0;
             while (iterator.hasNext()) {
-                String line = (String)iterator.next();
+                String line = iterator.next();
                 assertEquals("Comparing line " + idx, lines.get(idx), line);
                 assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());
                 idx++;
@@ -314,8 +313,8 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      * Utility method to create a test file with a specified
      * number of lines.
      */
-    private List createFile(File file, String encoding, int lineCount) throws Exception {
-        List lines = new ArrayList();
+    private List<String> createFile(File file, String encoding, int lineCount) throws Exception {
+        List<String> lines = new ArrayList<String>();
         for (int i = 0; i < lineCount; i++) {
             lines.add("LINE " + i);
         }
@@ -329,7 +328,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         
         String fileName = "LineIterator-Filter-test.txt";
         File testFile = new File(getTestDirectory(), fileName);
-        List lines = createFile(testFile, encoding, 9);
+        List<String> lines = createFile(testFile, encoding, 9);
         
         Reader reader = new FileReader(testFile);
         LineIterator iterator = new LineIterator(reader) {
@@ -350,7 +349,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             int idx = 0;
             int actualLines = 0;
             while (iterator.hasNext()) {
-                String line = (String) iterator.next();
+                String line = iterator.next();
                 actualLines++;
                 assertEquals("Comparing line " + idx, lines.get(idx), line);
                 assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());

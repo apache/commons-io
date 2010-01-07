@@ -545,7 +545,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_OutputStream() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -564,7 +564,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
-        IOUtils.writeLines((List) null, "*", out);
+        IOUtils.writeLines((List<?>) null, "*", out);
         out.off();
         out.flush();
         
@@ -573,7 +573,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_OutputStream_nullSeparator() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
             
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -589,7 +589,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_OutputStream_nullStream() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (OutputStream) null);
             fail();
@@ -600,7 +600,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_OutputStream_Encoding() throws Exception {
         Object[] data = new Object[] {
             "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -619,7 +619,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
-        IOUtils.writeLines((List) null, "*", out, "US-ASCII");
+        IOUtils.writeLines((List<?>) null, "*", out, "US-ASCII");
         out.off();
         out.flush();
         
@@ -628,7 +628,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
             
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -644,7 +644,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (OutputStream) null, "US-ASCII");
             fail();
@@ -654,7 +654,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -673,7 +673,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_Writer() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -694,7 +694,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         Writer writer = new OutputStreamWriter(baout, "US-ASCII");
         
-        IOUtils.writeLines((List) null, "*", writer);
+        IOUtils.writeLines((List<?>) null, "*", writer);
         out.off();
         writer.flush();
         
@@ -703,7 +703,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_Writer_nullSeparator() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
             
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -720,7 +720,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWriteLines_Writer_nullStream() throws Exception {
         Object[] data = new Object[] {"hello", "world"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (Writer) null);
             fail();

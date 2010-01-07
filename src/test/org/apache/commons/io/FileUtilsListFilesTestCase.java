@@ -84,11 +84,11 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(dir);
     }
     
-    private Collection filesToFilenames(Collection files) {
-        Collection filenames = new java.util.ArrayList(files.size());
-        Iterator i = files.iterator();
+    private Collection<String> filesToFilenames(Collection<File> files) {
+        Collection<String> filenames = new java.util.ArrayList<String>(files.size());
+        Iterator<File> i = files.iterator();
         while (i.hasNext()) {
-            filenames.add(((File)i.next()).getName());
+            filenames.add(i.next().getName());
         }
         return filenames;
     }
@@ -96,9 +96,9 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     public void testListFilesByExtension() throws Exception {
         String[] extensions = {"xml", "txt"};
         
-        Collection files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
+        Collection<File> files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
         assertEquals(1, files.size());
-        Collection filenames = filesToFilenames(files);
+        Collection<String> filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
         assertFalse(filenames.contains("README"));
         assertFalse(filenames.contains("dummy-file.txt"));
@@ -119,8 +119,8 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
 
     public void testListFiles() throws Exception {
-        Collection files;
-        Collection filenames;
+        Collection<File> files;
+        Collection<String> filenames;
         IOFileFilter fileFilter;
         IOFileFilter dirFilter;
         

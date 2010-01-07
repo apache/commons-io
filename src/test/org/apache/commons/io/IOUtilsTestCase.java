@@ -116,7 +116,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent( byte[] b0, byte[] b1 )
-        throws IOException
     {
         assertTrue( "Content not equal according to java.util.Arrays#equals()", Arrays.equals( b0, b1 ) );
     }
@@ -416,7 +415,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             createLineBasedFile(file, data);
             
             in = new FileInputStream(file);
-            List lines = IOUtils.readLines(in);
+            List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -434,7 +433,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             createLineBasedFile(file, data);
             
             in = new FileInputStream(file);
-            List lines = IOUtils.readLines(in, "UTF-8");
+            List<String> lines = IOUtils.readLines(in, "UTF-8");
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -452,7 +451,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             createLineBasedFile(file, data);
             
             in = new InputStreamReader(new FileInputStream(file));
-            List lines = IOUtils.readLines(in);
+            List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
