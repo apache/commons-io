@@ -178,7 +178,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("src/"), true);
         assertFiltering(filter, new File("src/java/"), true);
 
-        assertFiltering(filter, new File("project.xml"), false);
+        assertFiltering(filter, new File("pom.xml"), false);
 
         assertFiltering(filter, new File("imaginary"), false);
         assertFiltering(filter, new File("imaginary/"), false);
@@ -195,7 +195,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("src/"), false);
         assertFiltering(filter, new File("src/java/"), false);
         
-        assertFiltering(filter, new File("project.xml"), true);
+        assertFiltering(filter, new File("pom.xml"), true);
         
         assertFiltering(filter, new File("imaginary"), false);
         assertFiltering(filter, new File("imaginary/"), false);
