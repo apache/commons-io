@@ -84,7 +84,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         return new TestSuite(FileUtilsTestCase.class);
     }
 
-    public FileUtilsTestCase(String name) throws IOException {
+    public FileUtilsTestCase(String name) {
         super(name);
 
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -771,11 +771,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File destDir       = new File(getTestDirectory(), "copydest");
 
         FileUtils.copyDirectory(grandParentDir, destDir, filter);
-        List files  = LIST_WALKER.list(destDir);
+        List<File> files  = LIST_WALKER.list(destDir);
         assertEquals(3, files.size());
-        assertEquals("parent", ((File)files.get(0)).getName());
-        assertEquals("child", ((File)files.get(1)).getName());
-        assertEquals("file3.txt", ((File)files.get(2)).getName());
+        assertEquals("parent", files.get(0).getName());
+        assertEquals("child", files.get(1).getName());
+        assertEquals("file3.txt", files.get(2).getName());
    }
 
     /** Test for IO-141 */
@@ -1015,7 +1015,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             createFile(theFile, fileSizes[i]);
         }
 
-        Collection files = FileUtils.listFiles(subDir,
+        Collection<File> files = FileUtils.listFiles(subDir,
                                                new WildcardFileFilter("*.*"),
                                                new WildcardFileFilter("*"));
 
@@ -1024,7 +1024,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         assertEquals(files.size(), fileNames.length);
 
-        Map foundFileNames = new HashMap();
+        Map<String, String> foundFileNames = new HashMap<String, String>();
 
         for (int i = 0; i < count; ++i) {
             boolean found = false;
@@ -1054,15 +1054,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             createFile(theFile, fileSizes[i]);
         }
 
-        Iterator files = FileUtils.iterateFiles(subDir,
+        Iterator<File> files = FileUtils.iterateFiles(subDir,
                                                 new WildcardFileFilter("*.*"),
                                                 new WildcardFileFilter("*"));
 
-        Map foundFileNames = new HashMap();
+        Map<String, String> foundFileNames = new HashMap<String, String>();
 
         while (files.hasNext()) {
             boolean found = false;
-            String fileName = ((File) files.next()).getName();
+            String fileName = files.next().getName();
 
             for (int j = 0; (( !found ) && (j < fileNames.length)); ++j) {
                 if ( fileNames[j].equals(fileName)) {
@@ -1109,7 +1109,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
             createLineBasedFile(file, data);
             
-            List lines = FileUtils.readLines(file, "UTF-8");
+            List<String> lines = FileUtils.readLines(file, "UTF-8");
             assertEquals(Arrays.asList(data), lines);
         } finally {
             deleteFile(file);
@@ -1154,7 +1154,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testWriteLines_4arg() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, "*");
@@ -1166,7 +1166,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testWriteLines_4arg_Writer_nullData() throws Exception {
         File file = newFile("lines.txt");
-        FileUtils.writeLines(file, "US-ASCII", (List) null, "*");
+        FileUtils.writeLines(file, "US-ASCII", (List<?>) null, "*");
         
         assertEquals("Sizes differ", 0, file.length());
     }
@@ -1174,7 +1174,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testWriteLines_4arg_nullSeparator() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, null);
@@ -1189,7 +1189,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testWriteLines_3arg_nullSeparator() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List list = Arrays.asList(data);
+        List<Object> list = Arrays.asList(data);
         
         File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list);
@@ -1671,8 +1671,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         ListDirectoryWalker() {
             super();
         }
-        List list(File startDirectory) throws IOException {
-            ArrayList files = new ArrayList();
+        List<File> list(File startDirectory) throws IOException {
+            ArrayList<File> files = new ArrayList<File>();
             walk(startDirectory, files);
             return files;
         }

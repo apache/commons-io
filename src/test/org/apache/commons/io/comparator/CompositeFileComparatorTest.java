@@ -93,7 +93,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
      * Test Constructor with null Iterable
      */
     public void testConstructorIterableNull() {
-        Comparator<File> c = new CompositeFileComparator((Iterable)null);
+        Comparator<File> c = new CompositeFileComparator((Iterable<Comparator<File>>)null);
         assertEquals("less,more", 0, c.compare(lessFile, moreFile));
         assertEquals("more,less", 0, c.compare(moreFile, lessFile));
         assertEquals("toString", "CompositeFileComparator{}", c.toString());
@@ -103,7 +103,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
      * Test Constructor with null array
      */
     public void testConstructorArrayNull() {
-        Comparator<File> c = new CompositeFileComparator((Comparator[])null);
+        Comparator<File> c = new CompositeFileComparator((Comparator<File>[])null);
         assertEquals("less,more", 0, c.compare(lessFile, moreFile));
         assertEquals("more,less", 0, c.compare(moreFile, lessFile));
         assertEquals("toString", "CompositeFileComparator{}", c.toString());

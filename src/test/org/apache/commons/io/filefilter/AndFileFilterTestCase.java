@@ -35,11 +35,11 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     return new TestSuite(AndFileFilterTestCase.class);
   }
   
-  private List testFilters;
-  private List testTrueResults;
-  private List testFalseResults;
-  private List testFileResults;
-  private List testFilenameResults;
+  private List<List<IOFileFilter>> testFilters;
+  private List<boolean[]> testTrueResults;
+  private List<boolean[]> testFalseResults;
+  private List<Boolean> testFileResults;
+  private List<Boolean> testFilenameResults;
   
   public AndFileFilterTestCase(final String name) {
     super(name);
@@ -52,16 +52,16 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
   }
   
   @Override
-  protected IOFileFilter buildFilterUsingAdd(final List filters) {
+  protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     AndFileFilter filter = new AndFileFilter();
     for(int i = 0; i < filters.size(); i++) {
-      filter.addFileFilter((IOFileFilter) filters.get(i));
+      filter.addFileFilter(filters.get(i));
     }
     return filter;
   }
   
   @Override
-  protected IOFileFilter buildFilterUsingConstructor(final List filters) {
+  protected IOFileFilter buildFilterUsingConstructor(final List<IOFileFilter> filters) {
     return new AndFileFilter(filters);
   }
   
@@ -76,27 +76,27 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
   }
   
   @Override
-  protected List getFalseResults() {
+  protected List<boolean[]> getFalseResults() {
     return this.testFalseResults;
   }
   
   @Override
-  protected List getFileResults() {
+  protected List<Boolean> getFileResults() {
     return this.testFileResults;
   }
   
   @Override
-  protected List getFilenameResults() {
+  protected List<Boolean> getFilenameResults() {
     return this.testFilenameResults;
   }
   
   @Override
-  protected List getTestFilters() {
+  protected List<List<IOFileFilter>> getTestFilters() {
     return this.testFilters;
   }
   
   @Override
-  protected List getTrueResults() {
+  protected List<boolean[]> getTrueResults() {
     return this.testTrueResults;
   }
   
@@ -108,11 +108,11 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
   private void setUpTestFilters() {
     // filters
     //tests
-    this.testFilters = new ArrayList();
-    this.testTrueResults = new ArrayList();
-    this.testFalseResults = new ArrayList();
-    this.testFileResults = new ArrayList();
-    this.testFilenameResults = new ArrayList();
+    this.testFilters = new ArrayList<List<IOFileFilter>>();
+    this.testTrueResults = new ArrayList<boolean[]>();
+    this.testFalseResults = new ArrayList<boolean[]>();
+    this.testFileResults = new ArrayList<Boolean>();
+    this.testFilenameResults = new ArrayList<Boolean>();
 
     // test 0 - add empty elements
     {
@@ -126,7 +126,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     // test 1 - Test conditional and with all filters returning true
     {
       // test 1 filters
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
@@ -145,7 +145,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     // test 2 - Test conditional and with first filter returning false
     {
       // test 2 filters
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
@@ -167,7 +167,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     // test 3 - Test conditional and with second filter returning false
     {
       // test 3 filters
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(falseFilters[1]);
       filters.add(trueFilters[2]);
@@ -189,7 +189,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     // test 4 - Test conditional and with third filter returning false
     {
       // test 4 filters
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(falseFilters[1]);
@@ -211,7 +211,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     // test 5 - Test conditional and with first and third filters returning false
     {
       // test 5 filters
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(trueFilters[1]);
       filters.add(falseFilters[2]);
@@ -232,7 +232,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     
     // test 6 - Test conditional and with second and third filters returning false
     {
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
@@ -253,7 +253,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     
     // test 7 - Test conditional and with first and second filters returning false
     {
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
       filters.add(trueFilters[3]);
@@ -274,7 +274,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     
     // test 8 - Test conditional and with fourth filters returning false
     {
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
@@ -293,7 +293,7 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
 
     // test 9 - Test conditional and with all filters returning false
     {
-      List filters = new ArrayList();
+      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);

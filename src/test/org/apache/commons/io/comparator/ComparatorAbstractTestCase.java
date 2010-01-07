@@ -33,7 +33,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     protected AbstractFileComparator comparator;
 
     /** reverse comparator instance */
-    protected Comparator reverse;
+    protected Comparator<File> reverse;
 
     /** File which compares equal to  "equalFile2" */
     protected File equalFile1;
@@ -131,7 +131,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test comparator list sort is null safe.
      */
     public void testSortListNull() {
-        assertNull(comparator.sort((List)null));
+        assertNull(comparator.sort((List<File>)null));
     }
 
     /**
