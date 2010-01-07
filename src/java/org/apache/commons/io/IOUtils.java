@@ -1129,10 +1129,9 @@ public class IOUtils {
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
-     * @return the number of bytes copied
+     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @throws ArithmeticException if the byte count is too large
      * @since Commons IO 1.1
      */
     public static int copy(InputStream input, OutputStream output) throws IOException {
@@ -1234,10 +1233,9 @@ public class IOUtils {
      *
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>Writer</code> to write to
-     * @return the number of characters copied
+     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @throws ArithmeticException if the character count is too large
      * @since Commons IO 1.1
      */
     public static int copy(Reader input, Writer output) throws IOException {
