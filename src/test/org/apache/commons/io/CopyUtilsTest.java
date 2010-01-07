@@ -117,6 +117,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Not all bytes were read", in.available() == 0);
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, count);
     }
 
     public void testCopy_inputStreamToWriter() throws Exception {

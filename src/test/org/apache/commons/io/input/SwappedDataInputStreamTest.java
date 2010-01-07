@@ -94,7 +94,7 @@ public class SwappedDataInputStreamTest extends TestCase {
 
     public void testReadLine() throws IOException {
         try {
-            String unexpected = this.sdis.readLine();
+            this.sdis.readLine();
             fail("readLine should be unsupported. ");
         } catch(UnsupportedOperationException uoe) {
         }
@@ -118,7 +118,7 @@ public class SwappedDataInputStreamTest extends TestCase {
 
     public void testReadUTF() throws IOException {
         try {
-            String unexpected = this.sdis.readUTF();
+            this.sdis.readUTF();
             fail("readUTF should be unsupported. ");
         } catch(UnsupportedOperationException uoe) {
         }
