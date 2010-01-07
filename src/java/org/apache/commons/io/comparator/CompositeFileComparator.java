@@ -44,7 +44,7 @@ import java.util.List;
  */
 public class CompositeFileComparator extends AbstractFileComparator implements Serializable {
 
-    private static final Comparator[] NO_COMPARATORS = {};
+    private static final Comparator<?>[] NO_COMPARATORS = {};
     private final Comparator<File>[] delegates;
 
     /**
@@ -52,11 +52,12 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @param delegates The delegate file comparators
      */
+    @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(Comparator<File>... delegates) {
         if (delegates == null) {
-            this.delegates = NO_COMPARATORS;
+            this.delegates = (Comparator<File>[]) NO_COMPARATORS;//1
         } else {
-            this.delegates = new Comparator[delegates.length];
+            this.delegates = (Comparator<File>[]) new Comparator<?>[delegates.length];//2
             System.arraycopy(delegates, 0, this.delegates, 0, delegates.length);
         }
     }
@@ -66,15 +67,16 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      *
      * @param delegates The delegate file comparators
      */
+    @SuppressWarnings("unchecked") // casts 1 & 2 must be OK because types are already correct
     public CompositeFileComparator(Iterable<Comparator<File>> delegates) {
         if (delegates == null) {
-            this.delegates = NO_COMPARATORS;
+            this.delegates = (Comparator<File>[]) NO_COMPARATORS; //1
         } else {
             List<Comparator<File>> list = new ArrayList<Comparator<File>>();
             for (Comparator<File> comparator : delegates) {
                 list.add(comparator);
             }
-            this.delegates = list.toArray(new Comparator[list.size()]);
+            this.delegates = (Comparator<File>[]) list.toArray(new Comparator<?>[list.size()]); //2
         }
     }
 
