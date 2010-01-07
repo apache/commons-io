@@ -334,8 +334,7 @@ public class DeferredFileOutputStreamTest extends TestCase
         File tempDir  = new File(".");
         try
         {
-            DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+            new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
             fail("Expected IllegalArgumentException ");
         }
         catch (IllegalArgumentException e) {
