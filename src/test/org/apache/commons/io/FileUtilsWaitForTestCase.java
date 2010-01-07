@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -43,7 +42,7 @@ public class FileUtilsWaitForTestCase extends FileBasedTestCase {
         return new TestSuite(FileUtilsWaitForTestCase.class);
     }
 
-    public FileUtilsWaitForTestCase(String name) throws IOException {
+    public FileUtilsWaitForTestCase(String name) {
         super(name);
     }
 

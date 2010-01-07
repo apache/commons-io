@@ -52,7 +52,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         return new TestSuite(FileSystemUtilsTestCase.class);
     }
 
-    public FileSystemUtilsTestCase(String name) throws IOException {
+    public FileSystemUtilsTestCase(String name) {
         super(name);
     }
 

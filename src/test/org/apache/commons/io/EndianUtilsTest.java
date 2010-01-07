@@ -243,7 +243,7 @@ public class EndianUtilsTest extends TestCase {
     }
 
     // tests #IO-101
-    public void testSymmetryOfLong() throws IOException {
+    public void testSymmetryOfLong() {
 
         double[] tests = new double[] {34.345, -345.5645, 545.12, 10.043, 7.123456789123};
         for (int i = 0; i< tests.length ;i++) {
