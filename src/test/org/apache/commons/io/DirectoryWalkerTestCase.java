@@ -326,12 +326,10 @@ public class DirectoryWalkerTestCase extends TestCase {
      * Test Cancel
      */
     public void testMultiThreadCancel() {
-        String cancelName = null;
-        TestMultiThreadCancelWalker walker = null;
+        String cancelName = "DirectoryWalker.java";
+        TestMultiThreadCancelWalker walker = new TestMultiThreadCancelWalker(cancelName, false);
         // Cancel on a file
         try {
-            cancelName = "DirectoryWalker.java";
-            walker = new TestMultiThreadCancelWalker(cancelName, false);
             walker.find(javaDir);
             fail("CancelException not thrown for '" + cancelName + "'");
         } catch (DirectoryWalker.CancelException cancel) {
@@ -421,7 +419,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Always returns false. */
         @Override
-        protected boolean handleDirectory(File directory, int depth, Collection results) {
+        protected boolean handleDirectory(File directory, int depth, Collection<?> results) {
             return false;
         }
     }
@@ -469,7 +467,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(File startDirectory, Collection results,
+        protected void handleCancelled(File startDirectory, Collection<?> results,
                        CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
@@ -522,13 +520,13 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles Cancelled. */
         @Override
-        protected boolean handleIsCancelled(File file, int depth, Collection results) throws IOException {
+        protected boolean handleIsCancelled(File file, int depth, Collection<?> results) throws IOException {
             return cancelled;
         }
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(File startDirectory, Collection results,
+        protected void handleCancelled(File startDirectory, Collection<?> results,
                        CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
