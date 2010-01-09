@@ -1667,7 +1667,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
-    static class ListDirectoryWalker extends DirectoryWalker {
+    static class ListDirectoryWalker extends DirectoryWalker<File> {
         ListDirectoryWalker() {
             super();
         }
@@ -1678,7 +1678,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         @Override
-        protected void handleDirectoryStart(File directory, int depth, Collection results) throws IOException {
+        protected void handleDirectoryStart(File directory, int depth, Collection<File> results) throws IOException {
             // Add all directories except the starting directory
             if (depth > 0) {
                 results.add(directory);
@@ -1686,7 +1686,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         @Override
-        protected void handleFile(File file, int depth, Collection results) throws IOException {
+        protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
             results.add(file);
         }
     }
