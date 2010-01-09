@@ -80,7 +80,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
          * which we should, IMO, not.
          */
         {
-            theInstance.q = new ReferenceQueue();
+            theInstance.q = new ReferenceQueue<Object>();
             theInstance.trackers.clear();
             theInstance.exitWhenFinished = false;
             theInstance.reaper = null;
