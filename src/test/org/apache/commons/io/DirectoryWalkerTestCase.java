@@ -371,7 +371,7 @@ public class DirectoryWalkerTestCase extends TestCase {
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
      */
-    private static class TestFileFinder extends DirectoryWalker {
+    private static class TestFileFinder extends DirectoryWalker<File> {
 
         protected TestFileFinder(FileFilter filter, int depthLimit) {
             super(filter, depthLimit);
@@ -394,13 +394,13 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles a directory end by adding the File to the result set. */
         @Override
-        protected void handleDirectoryEnd(File directory, int depth, Collection results) {
+        protected void handleDirectoryEnd(File directory, int depth, Collection<File> results) {
             results.add(directory);
         }
 
         /** Handles a file by adding the File to the result set. */
         @Override
-        protected void handleFile(File file, int depth, Collection results) {
+        protected void handleFile(File file, int depth, Collection<File> results) {
             results.add(file);
         }
     }
@@ -419,7 +419,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Always returns false. */
         @Override
-        protected boolean handleDirectory(File directory, int depth, Collection<?> results) {
+        protected boolean handleDirectory(File directory, int depth, Collection<File> results) {
             return false;
         }
     }
@@ -430,7 +430,7 @@ public class DirectoryWalkerTestCase extends TestCase {
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
      */
-    static class TestCancelWalker extends DirectoryWalker {
+    static class TestCancelWalker extends DirectoryWalker<File> {
         private String cancelFileName;
         private boolean suppressCancel;
 
@@ -449,7 +449,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles a directory end by adding the File to the result set. */
         @Override
-        protected void handleDirectoryEnd(File directory, int depth, Collection results) throws IOException {
+        protected void handleDirectoryEnd(File directory, int depth, Collection<File> results) throws IOException {
             results.add(directory);
             if (cancelFileName.equals(directory.getName())) {
                 throw new CancelException(directory, depth);
@@ -458,7 +458,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles a file by adding the File to the result set. */
         @Override
-        protected void handleFile(File file, int depth, Collection results) throws IOException {
+        protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
             results.add(file);
             if (cancelFileName.equals(file.getName())) {
                 throw new CancelException(file, depth);
@@ -467,7 +467,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(File startDirectory, Collection<?> results,
+        protected void handleCancelled(File startDirectory, Collection<File> results,
                        CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
@@ -479,7 +479,7 @@ public class DirectoryWalkerTestCase extends TestCase {
      * Test DirectoryWalker implementation that finds files in a directory hierarchy
      * applying a file filter.
      */
-    static class TestMultiThreadCancelWalker extends DirectoryWalker {
+    static class TestMultiThreadCancelWalker extends DirectoryWalker<File> {
         private String cancelFileName;
         private boolean suppressCancel;
         private boolean cancelled;
@@ -500,7 +500,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles a directory end by adding the File to the result set. */
         @Override
-        protected void handleDirectoryEnd(File directory, int depth, Collection results) throws IOException {
+        protected void handleDirectoryEnd(File directory, int depth, Collection<File> results) throws IOException {
             results.add(directory);
             assertEquals(false, cancelled);
             if (cancelFileName.equals(directory.getName())) {
@@ -510,7 +510,7 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles a file by adding the File to the result set. */
         @Override
-        protected void handleFile(File file, int depth, Collection results) throws IOException {
+        protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
             results.add(file);
             assertEquals(false, cancelled);
             if (cancelFileName.equals(file.getName())) {
@@ -520,13 +520,13 @@ public class DirectoryWalkerTestCase extends TestCase {
 
         /** Handles Cancelled. */
         @Override
-        protected boolean handleIsCancelled(File file, int depth, Collection<?> results) throws IOException {
+        protected boolean handleIsCancelled(File file, int depth, Collection<File> results) throws IOException {
             return cancelled;
         }
 
         /** Handles Cancel. */
         @Override
-        protected void handleCancelled(File startDirectory, Collection<?> results,
+        protected void handleCancelled(File startDirectory, Collection<File> results,
                        CancelException cancel) throws IOException {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
