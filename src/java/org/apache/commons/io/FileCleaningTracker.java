@@ -44,7 +44,7 @@ public class FileCleaningTracker {
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    ReferenceQueue /* Tracker */ q = new ReferenceQueue();
+    ReferenceQueue<Object> q = new ReferenceQueue<Object>();
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
@@ -220,7 +220,7 @@ public class FileCleaningTracker {
     /**
      * Inner class which acts as the reference for a file pending deletion.
      */
-    private static final class Tracker extends PhantomReference {
+    private static final class Tracker extends PhantomReference<Object> {
 
         /**
          * The full path to the file being tracked.
@@ -239,7 +239,7 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker, ReferenceQueue queue) {
+        Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker, ReferenceQueue<? super Object> queue) {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = (deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy);
