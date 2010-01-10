@@ -73,8 +73,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     private File testFile1;
     private File testFile2;
 
-    private static int testFile1Size;
-    private static int testFile2Size;
+    private int testFile1Size;
+    private int testFile2Size;
 
     public static void main(String[] args) {
         TestRunner.run(suite());
