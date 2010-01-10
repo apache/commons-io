@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,13 +139,7 @@ public class IOUtils {
      * @param input  the Reader to close, may be null or already closed
      */
     public static void closeQuietly(Reader input) {
-        try {
-            if (input != null) {
-                input.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
+        closeQuietly((Closeable)input);
     }
 
     /**
@@ -156,13 +151,7 @@ public class IOUtils {
      * @param channel the Channel to close, may be null or already closed
      */
     public static void closeQuietly(Channel channel) {
-        try {
-            if (channel != null) {
-                channel.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
+        closeQuietly((Closeable)channel);
     }
 
     /**
@@ -174,13 +163,7 @@ public class IOUtils {
      * @param output  the Writer to close, may be null or already closed
      */
     public static void closeQuietly(Writer output) {
-        try {
-            if (output != null) {
-                output.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
+        closeQuietly((Closeable)output);
     }
 
     /**
@@ -192,13 +175,7 @@ public class IOUtils {
      * @param input  the InputStream to close, may be null or already closed
      */
     public static void closeQuietly(InputStream input) {
-        try {
-            if (input != null) {
-                input.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
+        closeQuietly((Closeable)input);
     }
 
     /**
@@ -210,9 +187,21 @@ public class IOUtils {
      * @param output  the OutputStream to close, may be null or already closed
      */
     public static void closeQuietly(OutputStream output) {
+        closeQuietly((Closeable)output);
+    }
+    
+    /**
+     * Unconditionally close a <code>Closeable</code>.
+     * <p>
+     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
+     *
+     * @param closeable the object to close, may be null or already closed
+     */
+    public static void closeQuietly(Closeable closeable) {
         try {
-            if (output != null) {
-                output.close();
+            if (closeable != null) {
+                closeable.close();
             }
         } catch (IOException ioe) {
             // ignore
