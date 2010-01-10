@@ -241,6 +241,12 @@ public class DirectoryWalkerTestCase extends TestCase {
         }
     }
 
+    private void checkContainsString(String prefix, File[] files, Collection<String> results) {
+        for (int i = 0; i < files.length; i++) {
+            assertTrue(prefix + "["+i+"] " + files[i], results.contains(files[i].toString()));
+        }
+    }
+
     /**
      * Extract the directories.
      */
@@ -363,6 +369,16 @@ public class DirectoryWalkerTestCase extends TestCase {
             fail("Suppress threw " + ex);
         }
 
+    }
+
+    /**
+     * Test Filtering
+     */
+    public void testFilterString() {
+        List<String> results = new TestFileFinderString(dirsAndFilesFilter, -1).find(javaDir);
+        assertEquals("Result Size", (outputFiles.length + ioFiles.length), results.size());
+        checkContainsString("IO File", ioFiles, results);
+        checkContainsString("Output File", outputFiles, results);
     }
 
     // ------------ Test DirectoryWalker implementation --------------------------
@@ -531,6 +547,34 @@ public class DirectoryWalkerTestCase extends TestCase {
             if (!suppressCancel) {
                 super.handleCancelled(startDirectory, results, cancel);
             }
+        }
+    }
+
+    /**
+     * Test DirectoryWalker implementation that finds files in a directory hierarchy
+     * applying a file filter.
+     */
+    private static class TestFileFinderString extends DirectoryWalker<String> {
+
+        protected TestFileFinderString(FileFilter filter, int depthLimit) {
+            super(filter, depthLimit);
+        }
+
+        /** find files. */
+        protected List<String> find(File startDirectory) {
+           List<String> results = new ArrayList<String>();
+           try {
+               walk(startDirectory, results);
+           } catch(IOException ex) {
+               Assert.fail(ex.toString());
+           }
+           return results;
+        }
+
+        /** Handles a file by adding the File to the result set. */
+        @Override
+        protected void handleFile(File file, int depth, Collection<String> results) {
+            results.add(file.toString());
         }
     }
 
