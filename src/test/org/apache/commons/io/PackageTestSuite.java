@@ -38,6 +38,7 @@ public class PackageTestSuite {
         suite.addTest(new TestSuite(CopyUtilsTest.class));
         suite.addTest(new TestSuite(DemuxTestCase.class));
         suite.addTest(new TestSuite(DirectoryWalkerTestCase.class));
+        suite.addTest(new TestSuite(DirectoryWalkerTestCaseJava4.class));
         suite.addTest(new TestSuite(EndianUtilsTest.class));
         suite.addTest(new TestSuite(FileCleanerTestCase.class));
         suite.addTest(new TestSuite(FileCleaningTrackerTestCase.class));
