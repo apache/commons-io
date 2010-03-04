@@ -27,11 +27,8 @@
                 <include>build.xml</include>
                 <include>checkstyle.xml</include>
                 <include>LICENSE.txt</include>
-                <include>maven.xml</include>
                 <include>NOTICE.txt</include>
                 <include>pom.xml</include>
-                <include>project.properties</include>
-                <include>project.xml</include>
                 <include>PROPOSAL.html</include>
                 <include>RELEASE-NOTES.txt</include>
             </includes>
