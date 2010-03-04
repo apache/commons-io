@@ -1596,7 +1596,7 @@ public class FileUtils {
         }
         if (!reference.exists()) {
             throw new IllegalArgumentException("The reference file '"
-                    + file + "' doesn't exist");
+                    + reference + "' doesn't exist");
         }
         return isFileNewer(file, reference.lastModified());
     }
@@ -1663,7 +1663,7 @@ public class FileUtils {
         }
         if (!reference.exists()) {
             throw new IllegalArgumentException("The reference file '"
-                    + file + "' doesn't exist");
+                    + reference + "' doesn't exist");
         }
         return isFileOlder(file, reference.lastModified());
     }

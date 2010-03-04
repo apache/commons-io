@@ -542,6 +542,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("New File - Newer - Date", FileUtils.isFileNewer(newFile, date));
         assertTrue("New File - Newer - Mili", FileUtils.isFileNewer(newFile, now));
         assertFalse("Invalid - Newer - File", FileUtils.isFileNewer(invalidFile, reference));
+        final String invalidFileName = invalidFile.getName();
+        try {
+            FileUtils.isFileNewer(newFile, invalidFile);
+            fail("Should have cause IllegalArgumentException");
+        } catch (IllegalArgumentException iae){
+            final String message = iae.getMessage();
+            assertTrue("Message should contain: "+invalidFileName+ " but was: "+message,message.contains(invalidFileName));
+        }
         
         // Test isFileOlder()
         assertTrue("Old File - Older - File", FileUtils.isFileOlder(oldFile, reference));
@@ -551,6 +559,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertFalse("New File - Older - Date", FileUtils.isFileOlder(newFile, date));
         assertFalse("New File - Older - Mili", FileUtils.isFileOlder(newFile, now));
         assertFalse("Invalid - Older - File", FileUtils.isFileOlder(invalidFile, reference));
+        try {
+            FileUtils.isFileOlder(newFile, invalidFile);
+            fail("Should have cause IllegalArgumentException");
+        } catch (IllegalArgumentException iae){
+            final String message = iae.getMessage();
+            assertTrue("Message should contain: "+invalidFileName+ " but was: "+message,message.contains(invalidFileName));
+        }
         
         
         // ----- Test isFileNewer() exceptions -----
