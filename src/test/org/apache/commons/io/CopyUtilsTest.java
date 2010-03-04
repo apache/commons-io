@@ -32,6 +32,8 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
+@SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
+
 /**
  * JUnit tests for CopyUtils.
  * 
