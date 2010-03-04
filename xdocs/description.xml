@@ -177,11 +177,11 @@ limitations under the License.
 
     <section name="Line iterator">
         <p>
-			The <code>org.apache.commons.io.LineIterator</code> class
-			provides a flexible way for working with a line-based file.
-			An instance can be created directly, or via factory methods on
-			<code>FileUtils</code> or <code>IOUtils</code>.
-			The recommended usage pattern is:
+            The <code>org.apache.commons.io.LineIterator</code> class
+            provides a flexible way for working with a line-based file.
+            An instance can be created directly, or via factory methods on
+            <code>FileUtils</code> or <code>IOUtils</code>.
+            The recommended usage pattern is:
         </p>
         <source>
  LineIterator it = FileUtils.lineIterator(file, "UTF-8");
