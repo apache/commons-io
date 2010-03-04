@@ -34,10 +34,13 @@
 
 <!-- ========== External Dependencies ===================================== -->
 
+  <!-- Repository base path -->
+  <property name="repository"              value="${user.home}/.m2/repository"/>
 
   <!-- The directories corresponding to your necessary dependencies -->
-  <property name="junit.home"              value="/usr/local/junit3.8.1"/>
-  <property name="junit.jar"               value="${junit.home}/junit.jar"/>
+  <property name="junit.version"           value="4.8.1"/>
+  <property name="junit.home"              value="${repository}/junit/junit/${junit.version}"/>
+  <property name="junit.jar"               value="${junit.home}/junit-${junit.version}.jar"/>
 
 
 <!-- ========== Component Declarations ==================================== -->
@@ -80,6 +83,12 @@
   <property name="stage.src.dir"           value="${dist.home}/stage-src"/>
 
 <!-- ========== Compiler Defaults ========================================= -->
+
+  <!-- compiler source JDK version -->
+  <property name="compile.source"          value="1.5"/>
+
+  <!-- compiler target JDK version -->
+  <property name="compile.target"          value="1.5"/>
 
   <!-- Should Java compilations set the 'debug' compiler option? -->
   <property name="compile.debug"           value="true"/>
@@ -146,8 +155,8 @@
 
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
-             source="${maven.compile.source}"
-             target="${maven.compile.target}"
+             source="${compile.source}"
+             target="${compile.target}"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
@@ -228,8 +237,8 @@
         <attribute name="Implementation-Version"   value="${component.version}"/> 
         <attribute name="Implementation-Vendor"    value="Apache Software Foundation"/>
         <attribute name="Implementation-Vendor-Id" value="org.apache"/>
-        <attribute name="X-Compile-Source-JDK"     value="${maven.compile.source}"/>
-        <attribute name="X-Compile-Target-JDK"     value="${maven.compile.target}"/>
+        <attribute name="X-Compile-Source-JDK"     value="${compile.source}"/>
+        <attribute name="X-Compile-Target-JDK"     value="${compile.target}"/>
     </manifest>
 
     <jar jarfile="${build.home}/${final.name}.jar"
@@ -278,11 +287,8 @@
         <include name="build-check-jdk13.xml"/>
         <include name="checkstyle.xml"/>
         <include name="LICENSE.txt"/>
-        <include name="maven.xml"/>
         <include name="NOTICE.txt"/>
         <include name="pom.xml"/>
-        <include name="project.properties"/>
-        <include name="project.xml"/>
         <include name="PROPOSAL.html"/>
         <include name="RELEASE-NOTES.txt"/>
       </fileset>
