@@ -25,10 +25,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -37,20 +33,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @version $Id$
  */
 public class FileSystemUtilsTestCase extends FileBasedTestCase {
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-        
-//        try {
-//            System.out.println(FileSystemUtils.freeSpace("C:\\"));
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileSystemUtilsTestCase.class);
-    }
 
     public FileSystemUtilsTestCase(String name) {
         super(name);

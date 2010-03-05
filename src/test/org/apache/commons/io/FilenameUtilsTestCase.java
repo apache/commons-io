@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -46,14 +42,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
 
     private int testFile1Size;
     private int testFile2Size;
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FilenameUtilsTestCase.class);
-    }
 
     public FilenameUtilsTestCase(String name) {
         super(name);

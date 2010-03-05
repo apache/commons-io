@@ -180,21 +180,22 @@
 
   <target name="test"  depends="compile.tests"
                        description="Run all unit test cases">
-    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.PackageTestSuite"/></antcall>
-    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.comparator.PackageTestSuite"/></antcall>
-    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.filefilter.PackageTestSuite"/></antcall>
-    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.input.PackageTestSuite"/></antcall>
-    <antcall target="exec.test"><param name="testclass" value="org.apache.commons.io.output.PackageTestSuite"/></antcall>
-
-  </target>
-
-  <target name="exec.test" description="Run a unit test case">
-    <echo message="Running Test ${testclass} ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <arg value="${testclass}"/>
+    <mkdir dir="${build.home}/ant-reports"/>
+    <junit printsummary="true" showoutput="true" fork="yes" haltonfailure="${test.failonerror}">
       <classpath refid="test.classpath"/>
-    </java>
+      <formatter type="plain" usefile="true" />
+      <!-- If test.entry is defined, run a single test, otherwise run all valid tests -->
+      <test name="${test.entry}" if="test.entry"/>
+      <batchtest todir="${build.home}/ant-reports" unless="test.entry">
+        <fileset dir="${test.home}">
+          <include name="**/*Test*.java"/>
+          <!-- Test support files -->
+          <exclude name="**/testtools/**"/>
+          <!-- Ant JUnit does not handle abstract classes -->
+          <exclude name="**/*AbstractTestCase*"/>
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
 
 

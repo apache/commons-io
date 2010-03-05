@@ -19,9 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -31,10 +28,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @see FileDeleteStrategy
  */
 public class FileDeleteStrategyTestCase extends FileBasedTestCase {
-
-    public static Test suite() {
-        return new TestSuite(FileDeleteStrategyTestCase.class);
-    }
 
     public FileDeleteStrategyTestCase(String name) {
         super(name);

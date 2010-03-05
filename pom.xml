@@ -232,8 +232,6 @@
             </includes>
             <excludes>
               <exclude>**/*AbstractTestCase*</exclude>
-              <exclude>**/AllIOTestSuite*</exclude>
-              <exclude>**/PackageTestSuite*</exclude>
               <exclude>**/testtools/**</exclude>
 
               <!-- http://jira.codehaus.org/browse/SUREFIRE-44 -->
