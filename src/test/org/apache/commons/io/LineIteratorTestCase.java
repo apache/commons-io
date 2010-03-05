@@ -25,10 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -39,14 +35,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @version $Id$
  */
 public class LineIteratorTestCase extends FileBasedTestCase {
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(LineIteratorTestCase.class);
-    }
 
     public LineIteratorTestCase(String name) {
         super(name);

@@ -255,15 +255,4 @@ public class HexDumpTest extends TestCase {
         }
         return rval;
     }
-
-    /**
-     * main method to run the unit tests
-     *
-     * @param ignored_args
-     */
-
-    public static void main(String[] ignored_args) {
-        System.out.println("Testing io.HexDump functionality");
-        junit.textui.TestRunner.run(HexDumpTest.class);
-    }
 }

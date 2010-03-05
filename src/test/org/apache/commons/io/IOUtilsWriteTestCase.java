@@ -22,10 +22,6 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
@@ -46,14 +42,6 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
 
     private byte[] inData = generateTestData(FILE_SIZE);
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(IOUtilsWriteTestCase.class);
-    }
 
     public IOUtilsWriteTestCase(String testName) {
         super(testName);

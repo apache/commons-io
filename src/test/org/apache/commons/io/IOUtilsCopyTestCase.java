@@ -25,10 +25,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -61,14 +57,6 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
 
 
     private byte[] inData = generateTestData(FILE_SIZE);
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(IOUtilsCopyTestCase.class);
-    }
 
     public IOUtilsCopyTestCase(String testName) {
         super(testName);

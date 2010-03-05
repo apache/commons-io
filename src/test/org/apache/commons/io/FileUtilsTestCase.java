@@ -35,10 +35,6 @@ import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -75,14 +71,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     private int testFile1Size;
     private int testFile2Size;
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileUtilsTestCase.class);
-    }
 
     public FileUtilsTestCase(String name) {
         super(name);

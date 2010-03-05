@@ -19,21 +19,10 @@ package org.apache.commons.io.filefilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
   
   private static final String DEFAULT_WORKING_PATH = "./AndFileFilterTestCase/";
   private static final String WORKING_PATH_NAME_PROPERTY_KEY = AndFileFilterTestCase.class.getName() + ".workingDirectory";
-  
-  public static void main(final String[] args) {
-    TestRunner.run(suite());
-  }
-  
-  public static TestSuite suite() {
-    return new TestSuite(AndFileFilterTestCase.class);
-  }
   
   private List<List<IOFileFilter>> testFilters;
   private List<boolean[]> testTrueResults;

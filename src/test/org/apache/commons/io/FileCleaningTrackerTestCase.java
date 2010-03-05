@@ -22,10 +22,6 @@ import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -45,14 +41,6 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     private File testFile;
     private FileCleaningTracker theInstance;
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileCleaningTrackerTestCase.class);
-    }
 
     public FileCleaningTrackerTestCase(String name) {
         super(name);

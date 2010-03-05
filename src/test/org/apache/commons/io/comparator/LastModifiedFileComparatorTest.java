@@ -17,32 +17,11 @@
 package org.apache.commons.io.comparator;
 
 import java.io.File;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 /**
  * Test case for {@link LastModifiedFileComparator}.
  */
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
-
-    /**
-     * Run the test.
-     *
-     * @param args arguments
-     */
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    /**
-     * Create a test suite.
-     *
-     * @return The test suite
-     */
-    public static Test suite() {
-        return new TestSuite(LastModifiedFileComparatorTest.class);
-    }
 
     /**
      * Construct a new test case with the specified name.

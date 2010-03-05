@@ -16,10 +16,6 @@
  */
 package org.apache.commons.io;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 /**
  * This is used to test FileCleaner for correctness.
  *
@@ -34,14 +30,6 @@ public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
     @Override
     protected FileCleaningTracker newInstance() {
         return FileCleaner.getInstance();
-    }
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileCleanerTestCase.class);
     }
 
     public FileCleanerTestCase(String name) {

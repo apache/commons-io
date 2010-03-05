@@ -21,10 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -35,14 +31,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     final File top = getLocalTestDirectory();
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileUtilsCleanDirectoryTestCase.class);
-    }
 
     public FileUtilsCleanDirectoryTestCase(String name) {
         super(name);

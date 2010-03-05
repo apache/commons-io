@@ -19,9 +19,6 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -33,14 +30,6 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
 
     public RegexFileFilterTestCase(String name) {
         super(name);
-    }
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static TestSuite suite() {
-        return new TestSuite(RegexFileFilterTestCase.class);
     }
 
     @Override

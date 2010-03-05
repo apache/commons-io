@@ -18,10 +18,6 @@ package org.apache.commons.io;
 
 import java.io.File;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -33,14 +29,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class FileUtilsWaitForTestCase extends FileBasedTestCase {
     // This class has been broken out from FileUtilsTestCase
     // to solve issues as per BZ 38927
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileUtilsWaitForTestCase.class);
-    }
 
     public FileUtilsWaitForTestCase(String name) {
         super(name);

@@ -16,15 +16,11 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
-
 import java.io.File;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import junit.textui.TestRunner;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
@@ -33,14 +29,6 @@ import junit.framework.TestSuite;
 public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
     final File top = getTestDirectory();
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        return new TestSuite(FileUtilsCleanSymlinksTestCase.class);
-    }
 
     public FileUtilsCleanSymlinksTestCase(String name) {
         super(name);

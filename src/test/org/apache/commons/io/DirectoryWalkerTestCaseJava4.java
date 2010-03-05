@@ -25,9 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -71,10 +69,6 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
 
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
-
-    public static Test suite() {
-        return new TestSuite(DirectoryWalkerTestCaseJava4.class);
-    }
 
     /** Construct the TestCase using the name */
     public DirectoryWalkerTestCaseJava4(String name) {

@@ -24,9 +24,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -45,14 +42,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     public FileFilterTestCase(String name) {
         super(name);
-    }
-
-    public static void main(String[] args) {
-        TestRunner.run(suite());
-    }
-
-    public static TestSuite suite() {
-        return new TestSuite(FileFilterTestCase.class);
     }
 
     @Override
