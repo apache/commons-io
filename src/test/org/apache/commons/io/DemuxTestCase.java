@@ -47,7 +47,7 @@ public class DemuxTestCase
     private static final String DATA3 = "Data for thread3";
     private static final String DATA4 = "Data for thread4";
 
-    private static Random c_random = new Random();
+    private static final Random c_random = new Random();
     private HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<String, ByteArrayOutputStream>();
     private HashMap<String, Thread> m_threadMap = new HashMap<String, Thread>();
 
