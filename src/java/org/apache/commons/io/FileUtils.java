@@ -1520,16 +1520,18 @@ public class FileUtils {
 
     /**
      * Makes a directory, including any necessary but nonexistent parent
-     * directories. If there already exists a file with specified name or
-     * the directory cannot be created then an exception is thrown.
+     * directories. If a file already exists with specified name but it is
+     * not a directory then an IOException is thrown.
+     * If the directory cannot be created (or does not already exist)
+     * then an IOException is thrown.
      *
      * @param directory  directory to create, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
-     * @throws IOException if the directory cannot be created
+     * @throws IOException if the directory cannot be created or the file already exists but is not a directory
      */
     public static void forceMkdir(File directory) throws IOException {
         if (directory.exists()) {
-            if (directory.isFile()) {
+            if (!directory.isDirectory()) {
                 String message =
                     "File "
                         + directory
