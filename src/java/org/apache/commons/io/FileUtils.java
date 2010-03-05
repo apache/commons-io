@@ -189,10 +189,16 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input
      * represents a specific number of bytes.
+     * 
+     * If the size is over 1GB, the size is returned as the number of whole GB,
+     * i.e. the size is rounded down to the nearest GB boundary.
+     * 
+     * Similarly for the 1MB and 1KB boundaries.
      *
      * @param size  the number of bytes
-     * @return a human-readable display value (includes units)
+     * @return a human-readable display value (includes units - GB, MB, KB or bytes)
      */
+    // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
     public static String byteCountToDisplaySize(long size) {
         String displaySize;
 
