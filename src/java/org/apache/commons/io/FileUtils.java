@@ -1539,9 +1539,14 @@ public class FileUtils {
             }
         } else {
             if (!directory.mkdirs()) {
-                String message =
-                    "Unable to create directory " + directory;
-                throw new IOException(message);
+                // Double-check that some other thread or process hasn't made
+                // the directory in the background
+                if (!directory.isDirectory())
+                {
+                    String message =
+                        "Unable to create directory " + directory;
+                    throw new IOException(message);
+                }
             }
         }
     }
