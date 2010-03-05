@@ -43,7 +43,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  */
 public abstract class FileBasedTestCase extends TestCase {
 
-    private static File testDir;
+    private static volatile File testDir;
 
     public FileBasedTestCase(String name) {
         super(name);
