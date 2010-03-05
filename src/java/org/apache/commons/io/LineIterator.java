@@ -37,20 +37,19 @@ import java.util.NoSuchElementException;
  * try {
  *   while (it.hasNext()) {
  *     String line = it.nextLine();
- *     /// do something with line
+ *     // do something with line
  *   }
  * } finally {
- *   LineIterator.closeQuietly(it);
+ *   it.close();
  * }
  * </pre>
- *
  * @author Niall Pemberton
  * @author Stephen Colebourne
  * @author Sandy McArthur
  * @version $Id$
  * @since Commons IO 1.2
  */
-public class LineIterator implements Iterator<String> {
+public class LineIterator implements Iterator<String>, Iterable<String> {
 
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
@@ -176,6 +175,28 @@ public class LineIterator implements Iterator<String> {
         if (iterator != null) {
             iterator.close();
         }
+    }
+
+    /**
+     * Returns the current instance.
+     * Shares the Reader with the other methods.
+     * <p> 
+     * Sample usage:
+     * </p>
+     * <pre>
+     * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+     * try {
+     *     for (String line : it) {
+     *         // do something with line
+     *     }
+     * } finally {
+     *     it.close();
+     * }
+     * </pre>
+     * 
+     */
+    public Iterator<String> iterator() {
+        return this;
     }
 
 }
