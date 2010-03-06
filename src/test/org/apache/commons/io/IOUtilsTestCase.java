@@ -89,7 +89,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
         catch( IOException ioe )
         {
-            // Ignore, because by this time, it is too late.
+            throw new RuntimeException("Could not clear up "+getTestDirectory());
         }
     }
 
