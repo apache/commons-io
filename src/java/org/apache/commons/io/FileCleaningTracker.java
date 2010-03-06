@@ -168,7 +168,7 @@ public class FileCleaningTracker {
      * <p>
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as {@link javax.servlet.ServletContextListener#contextDestroyed}.
-     * One called, no new objects can be tracked by the file cleaner.
+     * Once called, no new objects can be tracked by the file cleaner.
      */
     public synchronized void exitWhenFinished() {
         // synchronized block protects reaper
@@ -200,17 +200,14 @@ public class FileCleaningTracker {
         public void run() {
             // thread exits when exitWhenFinished is true and there are no more tracked objects
             while (exitWhenFinished == false || trackers.size() > 0) {
-                Tracker tracker = null;
                 try {
                     // Wait for a tracker to remove.
-                    tracker = (Tracker) q.remove();
-                } catch (Exception e) {
-                    continue;
-                }
-                if (tracker != null) {
+                    Tracker tracker = (Tracker) q.remove(); // cannot return null
                     tracker.delete();
                     tracker.clear();
                     trackers.remove(tracker);
+                } catch (InterruptedException e) {
+                    continue;
                 }
             }
         }
