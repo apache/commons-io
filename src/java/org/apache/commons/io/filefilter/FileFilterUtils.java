@@ -279,6 +279,78 @@ public class FileFilterUtils {
         IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
     }
+    
+    /**
+     * Returns a filter that accepts files that begin with the provided magic
+     * number.
+     * 
+     * @param magicNumber the magic number (byte sequence) to match at the 
+     *        beginning of each file.
+     * 
+     * @return an IOFileFilter that accepts files beginning with the provided
+     *         magic number.
+     *         
+     * @throws IllegalArgumentException if <code>magicNumber</code> is 
+     *         <code>null</code> or the empty String.
+     */
+    public static IOFileFilter magicNumberFileFilter(String magicNumber) {
+        return new MagicNumberFileFilter(magicNumber);
+    }
+    
+    /**
+     * Returns a filter that accepts files that contains the provided magic
+     * number at a specified offset within the file.
+     * 
+     * @param magicNumber the magic number (byte sequence) to match at the 
+     *        provided offset in each file.
+     * @param offset the offset within the files to look for the magic number.
+     * 
+     * @return an IOFileFilter that accepts files containing the magic number
+     *         at the specified offset.
+     *         
+     * @throws IllegalArgumentException if <code>magicNumber</code> is 
+     *         <code>null</code> or the empty String, or if offset is a 
+     *         negative number.
+     */
+    public static IOFileFilter magicNumberFileFilter(String magicNumber, long offset) {
+        return new MagicNumberFileFilter(magicNumber, offset);
+    }
+    
+    /**
+     * Returns a filter that accepts files that begin with the provided magic
+     * number.
+     * 
+     * @param magicNumber the magic number (byte sequence) to match at the 
+     *        beginning of each file.
+     * 
+     * @return an IOFileFilter that accepts files beginning with the provided
+     *         magic number.
+     *         
+     * @throws IllegalArgumentException if <code>magicNumber</code> is 
+     *         <code>null</code> or is of length zero.
+     */
+    public static IOFileFilter magicNumberFileFilter(byte[] magicNumber) {
+        return new MagicNumberFileFilter(magicNumber);
+    }
+    
+    /**
+     * Returns a filter that accepts files that contains the provided magic
+     * number at a specified offset within the file.
+     * 
+     * @param magicNumber the magic number (byte sequence) to match at the 
+     *        provided offset in each file.
+     * @param offset the offset within the files to look for the magic number.
+     * 
+     * @return an IOFileFilter that accepts files containing the magic number
+     *         at the specified offset.
+     *         
+     * @throws IllegalArgumentException if <code>magicNumber</code> is 
+     *         <code>null</code>, or contains no bytes, or <code>offset</code> 
+     *         is a negative number.
+     */
+    public static IOFileFilter magicNumberFileFilter(byte[] magicNumber, long offset) {
+        return new MagicNumberFileFilter(magicNumber, offset);
+    }
 
     //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
