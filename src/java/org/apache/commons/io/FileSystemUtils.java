@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -176,6 +177,21 @@ public class FileSystemUtils {
         return INSTANCE.freeSpaceOS(path, OS, true);
     }
 
+    /**
+     * Returns the disk size of the volume which holds the working directory.
+     * <p>
+     * Identical to:
+     * <pre>
+     * freeSpaceKb(new File(".").getAbsolutePath())
+     * </pre>
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     */
+    public static long freeSpaceKb() throws IOException {
+        return freeSpaceKb(new File(".").getAbsolutePath()); 
+    }
+    
     //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
