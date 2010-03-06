@@ -19,6 +19,7 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -443,6 +445,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(true, f.getFileFilters().isEmpty());
     }
 
+    @SuppressWarnings("deprecation")
     public void testDeprecatedWildcard() throws Exception {
         IOFileFilter filter = new WildcardFilter("*.txt");
         List<String> patternList = Arrays.asList( new String[] { "*.txt", "*.xml", "*.gif" } );
@@ -869,5 +872,131 @@ public class FileFilterTestCase extends FileBasedTestCase {
         fileA.delete();
         fileB.delete();
     }
-         
+    
+    //-----------------------------------------------------------------------
+    
+    public void testMagicNumberFileFilterBytes() throws Exception {
+        byte[] classFileMagicNumber = 
+            new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+        String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" +
+            "<element>text</element>";
+        
+        File classFileA = new File(getTestDirectory(), "A.class");
+        File xmlFileB = new File(getTestDirectory(), "B.xml");
+        File dir = new File(getTestDirectory(), "D");
+        dir.mkdirs();
+        
+        OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
+        IOUtils.write(classFileMagicNumber, classFileAStream);
+        generateTestData(classFileAStream, 32);
+        classFileAStream.close();
+        
+        FileUtils.write(xmlFileB, xmlFileContent);
+        
+        IOFileFilter filter = new MagicNumberFileFilter(classFileMagicNumber);
+        
+        assertFiltering(filter, classFileA, true);
+        assertFiltering(filter, xmlFileB, false);
+        assertFiltering(filter, dir, false);
+        
+        filter = FileFilterUtils.magicNumberFileFilter(classFileMagicNumber);
+        
+        assertFiltering(filter, classFileA, true);
+        assertFiltering(filter, xmlFileB, false);
+        assertFiltering(filter, dir, false);
+    }
+    
+    public void testMagicNumberFileFilterBytesOffset() throws Exception {
+        byte[] tarMagicNumber = new byte[] {0x75, 0x73, 0x74, 0x61, 0x72};
+        long tarMagicNumberOffset = 257;
+        
+        File tarFileA = new File(getTestDirectory(), "A.tar");
+        File randomFileB = new File(getTestDirectory(), "B.txt");
+        File dir = new File(getTestDirectory(), "D");
+        dir.mkdirs();
+        
+        OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
+        generateTestData(tarFileAStream, tarMagicNumberOffset);
+        IOUtils.write(tarMagicNumber, tarFileAStream);
+        tarFileAStream.close();
+        
+        createFile(randomFileB, 2 * tarMagicNumberOffset);
+        
+        IOFileFilter filter = 
+            new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
+        
+        assertFiltering(filter, tarFileA, true);
+        assertFiltering(filter, randomFileB, false);
+        assertFiltering(filter, dir, false);
+        
+        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber, 
+                tarMagicNumberOffset);
+        
+        assertFiltering(filter, tarFileA, true);
+        assertFiltering(filter, randomFileB, false);
+        assertFiltering(filter, dir, false);
+    }
+    
+    public void testMagicNumberFileFilterString() throws Exception {
+        byte[] classFileMagicNumber = 
+            new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+        String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" +
+            "<element>text</element>";
+        String xmlMagicNumber = "<?xml version=\"1.0\"";
+        
+        File classFileA = new File(getTestDirectory(), "A.class");
+        File xmlFileB = new File(getTestDirectory(), "B.xml");
+        File dir = new File(getTestDirectory(), "D");
+        dir.mkdirs();
+        
+        OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
+        IOUtils.write(classFileMagicNumber, classFileAStream);
+        generateTestData(classFileAStream, 32);
+        classFileAStream.close();
+        
+        FileUtils.write(xmlFileB, xmlFileContent);
+        
+        IOFileFilter filter = new MagicNumberFileFilter(xmlMagicNumber);
+        
+        assertFiltering(filter, classFileA, false);
+        assertFiltering(filter, xmlFileB, true);
+        assertFiltering(filter, dir, false);
+        
+        filter = FileFilterUtils.magicNumberFileFilter(xmlMagicNumber);
+        
+        assertFiltering(filter, classFileA, false);
+        assertFiltering(filter, xmlFileB, true);
+        assertFiltering(filter, dir, false);
+    }
+    
+    public void testMagicNumberFileFilterStringOffset() throws Exception {
+        String tarMagicNumber = "ustar";
+        long tarMagicNumberOffset = 257;
+        
+        File tarFileA = new File(getTestDirectory(), "A.tar");
+        File randomFileB = new File(getTestDirectory(), "B.txt");
+        File dir = new File(getTestDirectory(), "D");
+        dir.mkdirs();
+        
+        OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
+        generateTestData(tarFileAStream, tarMagicNumberOffset);
+        IOUtils.write(tarMagicNumber, tarFileAStream);
+        tarFileAStream.close();
+
+        createFile(randomFileB, 2 * tarMagicNumberOffset);
+        
+        IOFileFilter filter = 
+            new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
+        
+        assertFiltering(filter, tarFileA, true);
+        assertFiltering(filter, randomFileB, false);
+        assertFiltering(filter, dir, false);
+        
+        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber, 
+                tarMagicNumberOffset);
+        
+        assertFiltering(filter, tarFileA, true);
+        assertFiltering(filter, randomFileB, false);
+        assertFiltering(filter, dir, false);
+    }
 }
