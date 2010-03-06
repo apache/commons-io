@@ -316,7 +316,6 @@ public class FileSystemUtils {
         if (path.length() == 0) {
             throw new IllegalArgumentException("Path must not be empty");
         }
-        path = FilenameUtils.normalize(path);
 
         // build and run the 'dir' command
         String flags = "-";
