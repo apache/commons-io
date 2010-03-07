@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
 import java.io.Closeable;
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1398,4 +1399,51 @@ public class IOUtils {
         return (ch2 == -1);
     }
 
+    /**
+     * Skip the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link InputStream#skip(long)} may
+     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * 
+     * @param input stream to skip
+     * @param toSkip the number of bytes to skip
+     * @see InputStream#skip(long)
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     * @throws EOFException if the number of bytes skipped was incorrect 
+     */
+    public static void skipFully(InputStream input, long toSkip) throws IOException {
+        if (toSkip < 0){
+            throw new IllegalArgumentException("Bytes to skip must not be negative: "+toSkip);
+        }
+        long skipped = input.skip(toSkip);
+        if (skipped != toSkip) {
+            throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
+        }
+    }
+
+    /**
+     * Skip the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link Reader#skip(long)} may
+     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * 
+     * @param input stream to skip
+     * @param toSkip the number of bytes to skip
+     * @see Reader#skip(long)
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     * @throws EOFException if the number of bytes skipped was incorrect
+     */
+    public static void skipFully(Reader input, long toSkip) throws IOException {
+        if (toSkip < 0){
+            throw new IllegalArgumentException("Bytes to skip must not be negative: "+toSkip);
+        }
+        long skipped = input.skip(toSkip);
+        if (skipped != toSkip) {
+            throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
+        }
+    }
 }

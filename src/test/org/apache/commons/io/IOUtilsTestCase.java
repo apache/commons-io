@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io;
 
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -458,5 +460,48 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             IOUtils.closeQuietly(in);
             deleteFile(file);
         }
+    }
+
+    public void testSkipStream() throws Exception{
+        final int size = 1027;
+
+        InputStream input = new ByteArrayInputStream(new byte [size]);
+        try {
+            IOUtils.skipFully(input, -1);
+            fail("Should have failed with IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // expected
+        }
+        IOUtils.skipFully(input, 0);
+        IOUtils.skipFully(input, size-1);
+        try {
+            IOUtils.skipFully(input, 2);
+            fail("Should have failed with IOException");
+        } catch (IOException expected) {
+            // expected
+        }
+        IOUtils.closeQuietly(input);
+
+    }
+
+    public void testSkipReader() throws Exception{
+        final int size = 1027;
+
+        Reader input = new CharArrayReader(new char[size]);
+        IOUtils.skipFully(input, 0);
+        IOUtils.skipFully(input, size-3);
+        try {
+            IOUtils.skipFully(input, -1);
+            fail("Should have failed with IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // expected
+        }
+        try {
+            IOUtils.skipFully(input, 5);
+            fail("Should have failed with IOException");
+        } catch (IOException expected) {
+            // expected
+        }
+        IOUtils.closeQuietly(input);
     }
 }
