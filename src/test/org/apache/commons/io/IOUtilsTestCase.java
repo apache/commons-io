@@ -152,6 +152,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testStringToOutputStream()
         throws Exception
     {
@@ -183,6 +184,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         deleteFile( destination );
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testStringToWriter()
         throws Exception
     {
@@ -240,6 +242,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testStringToByteArray()
         throws Exception
     {
@@ -255,6 +258,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testByteArrayToWriter()
         throws Exception
     {
@@ -280,6 +284,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         deleteFile( destination );
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testByteArrayToString()
         throws Exception
     {
@@ -334,6 +339,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertEqualContent(str.getBytes("UTF-8"), bytes);
     }
 
+    @SuppressWarnings("deprecation") // testing deprecated method
     public void testByteArrayToOutputStream()
         throws Exception
     {
