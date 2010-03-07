@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+@SuppressWarnings("deprecation") // testing deprecated class
 /**
  * This is used to test FileCleaner for correctness.
  *

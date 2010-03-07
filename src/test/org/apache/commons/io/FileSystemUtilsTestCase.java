@@ -77,6 +77,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
             
             // now perform the test
+            @SuppressWarnings("deprecation")
             long free = FileSystemUtils.freeSpace("/");
             long kb = FileSystemUtils.freeSpaceKb("/");
             if (kilobyteBlock) {
@@ -85,6 +86,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 assertEquals(free / 2d, kb, 256d);
             }
         } else {
+            @SuppressWarnings("deprecation")
             long bytes = FileSystemUtils.freeSpace("");
             long kb = FileSystemUtils.freeSpaceKb("");
             assertEquals((double) bytes / 1024, kb, 256d);
