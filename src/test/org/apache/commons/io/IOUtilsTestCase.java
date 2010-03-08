@@ -510,4 +510,26 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
         IOUtils.closeQuietly(input);
     }
+    
+    public void testSkipFileReader() throws Exception{
+        FileReader in = new FileReader(m_testFile);
+        try {
+            assertEquals(FILE_SIZE-10, IOUtils.skip(in, FILE_SIZE-10));
+            assertEquals(10, IOUtils.skip(in, 20));
+            assertEquals(0, IOUtils.skip(in, 10));
+        } finally {
+            in.close();
+        }
+    }
+
+    public void testSkipFileInput() throws Exception{
+        InputStream in = new FileInputStream(m_testFile);
+        try {
+            assertEquals(FILE_SIZE-10, IOUtils.skip(in, FILE_SIZE-10));
+            assertEquals(10, IOUtils.skip(in, 20));
+            assertEquals(0, IOUtils.skip(in, 10));
+        } finally {
+            in.close();
+        }
+    }
 }
