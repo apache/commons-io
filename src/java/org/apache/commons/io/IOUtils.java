@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.Socket;
 import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -218,6 +219,24 @@ public class IOUtils {
             }
         } catch (IOException ioe) {
             // ignore
+        }
+    }
+
+    /**
+     * Unconditionally close a <code>Socket</code>.
+     * <p>
+     * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
+     *
+     * @param sock the Socket to close, may be null or already closed
+     */
+    public static void closeQuietly(Socket sock){
+        if (sock != null){
+            try {
+                sock.close();
+            } catch (IOException ioe) {
+                // ignored
+            }
         }
     }
 
