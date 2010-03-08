@@ -119,10 +119,22 @@ public class IOUtils {
     }
 
     /**
-     * The default buffer size to use.
+     * The default buffer size to use for 
+     * {@link #copyLarge(InputStream, OutputStream)}
+     * and
+     * {@link #copyLarge(Reader, Writer)}
      */
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
+    /**
+     * The default buffer size to use for the skip() methods.
+     */
+    private static final int SKIP_BUFFER_SIZE = 2048;
+    
+    // Allocated in the skip method if necessary.
+    private static char[] SKIP_CHAR_BUFFER;
+    private static byte[] SKIP_BYTE_BUFFER;
+    
     /**
      * Instances should NOT be constructed in standard programming.
      */
@@ -1400,6 +1412,86 @@ public class IOUtils {
     }
 
     /**
+     * Skip bytes from an input byte stream.
+     * This implementation guarantees that it will read as many bytes
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link Reader}.
+     *   
+     * @param input byte stream to skip
+     * @param toSkip number of bytes to skip.
+     * @return number of bytes actually skipped.
+     * 
+     * @see InputStream#skip(long)
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     */
+    public static long skip(InputStream input, long toSkip) throws IOException {
+        if (toSkip < 0) {
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: "+toSkip);
+        }
+        /*
+         * N.B. no need to synchronize this because:
+         * - we don't care if the buffer is created multiple times (the data is ignored)
+         * - we always use the same size buffer, so if it it is recreated it will still be OK
+         * (if the buffer size were variable, we would need to synch. to ensure some other thread
+         * did not create a smaller one)
+         */
+        if (SKIP_BYTE_BUFFER == null){
+            SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
+        }
+        long remain=toSkip;
+        while(remain > 0) {
+            long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            if (n < 0) { // EOF
+                break;
+            }
+            remain -= n;
+        }
+        return toSkip - remain;   
+    }
+
+    /**
+     * Skip characters from an input character stream.
+     * This implementation guarantees that it will read as many characters
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link Reader}.
+     *   
+     * @param input character stream to skip
+     * @param toSkip number of characters to skip.
+     * @return number of characters actually skipped.
+     * 
+     * @see Reader#skip(long)
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if toSkip is negative
+     */
+    public static long skip(Reader input, long toSkip) throws IOException {
+        if (toSkip < 0) {
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: "+toSkip);
+        }
+        /*
+         * N.B. no need to synchronize this because:
+         * - we don't care if the buffer is created multiple times (the data is ignored)
+         * - we always use the same size buffer, so if it it is recreated it will still be OK
+         * (if the buffer size were variable, we would need to synch. to ensure some other thread
+         * did not create a smaller one)
+         */
+        if (SKIP_CHAR_BUFFER == null){
+            SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];
+        }
+        long remain=toSkip;
+        while(remain > 0) {
+            long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            if (n < 0) { // EOF
+                break;
+            }
+            remain -= n;
+        }
+        return toSkip - remain;   
+    }
+
+    /**
      * Skip the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#skip(long)} may
@@ -1417,31 +1509,28 @@ public class IOUtils {
         if (toSkip < 0){
             throw new IllegalArgumentException("Bytes to skip must not be negative: "+toSkip);
         }
-        long skipped = input.skip(toSkip);
+        long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
         }
     }
 
     /**
-     * Skip the requested number of bytes or fail if there are not enough left.
+     * Skip the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#skip(long)} may
-     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * not skip as many characters as requested (most likely because of reaching EOF).
      * 
      * @param input stream to skip
-     * @param toSkip the number of bytes to skip
+     * @param toSkip the number of characters to skip
      * @see Reader#skip(long)
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
-     * @throws EOFException if the number of bytes skipped was incorrect
+     * @throws EOFException if the number of characters skipped was incorrect
      */
     public static void skipFully(Reader input, long toSkip) throws IOException {
-        if (toSkip < 0){
-            throw new IllegalArgumentException("Bytes to skip must not be negative: "+toSkip);
-        }
-        long skipped = input.skip(toSkip);
+        long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
         }
