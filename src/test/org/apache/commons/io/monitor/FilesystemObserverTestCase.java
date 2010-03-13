@@ -127,7 +127,7 @@ public class FilesystemObserverTestCase extends TestCase {
             checkAndNotify();
             checkCollectionsEmpty("C");
 
-            touch(testDirAFile4);
+            testDirAFile4 = touch(testDirAFile4);
             FileUtils.deleteDirectory(testDirB);
             checkAndNotify();
             checkCollectionSizes("D", 0, 0, 1, 0, 1, 1);
@@ -165,8 +165,8 @@ public class FilesystemObserverTestCase extends TestCase {
             checkCollectionsEmpty("A");
             File testDirA = new File(testDir, "test-dir-A");
             testDirA.mkdir();
-            touch(testDir);
-            touch(testDirA);
+            testDir  = touch(testDir);
+            testDirA = touch(testDirA);
             File testDirAFile1 =       new File(testDirA, "A-file1.java");
             File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
             File testDirAFile3 =       new File(testDirA, "A-file3.java");
@@ -191,24 +191,24 @@ public class FilesystemObserverTestCase extends TestCase {
             checkCollectionsEmpty("C");
 
             // Create file with name < first entry
-            touch(testDirAFile1);
-            touch(testDirA);
+            testDirAFile1 = touch(testDirAFile1);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("D", 0, 1, 0, 1, 0, 0);
             assertTrue("D testDirAFile1 exists", testDirAFile1.exists());
             assertTrue("D testDirAFile1",  listener.getCreatedFiles().contains(testDirAFile1));
 
             // Create file with name between 2 entries
-            touch(testDirAFile3);
-            touch(testDirA);
+            testDirAFile3 = touch(testDirAFile3);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("E", 0, 1, 0, 1, 0, 0);
             assertTrue("E testDirAFile3 exists", testDirAFile3.exists());
             assertTrue("E testDirAFile3",  listener.getCreatedFiles().contains(testDirAFile3));
 
             // Create file with name > last entry
-            touch(testDirAFile5);
-            touch(testDirA);
+            testDirAFile5 = touch(testDirAFile5);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("F", 0, 1, 0, 1, 0, 0);
             assertTrue("F testDirAFile5 exists", testDirAFile5.exists());
@@ -227,8 +227,8 @@ public class FilesystemObserverTestCase extends TestCase {
             checkCollectionsEmpty("A");
             File testDirA = new File(testDir, "test-dir-A");
             testDirA.mkdir();
-            touch(testDir);
-            touch(testDirA);
+            testDir  = touch(testDir);
+            testDirA = touch(testDirA);
             File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
             File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
             File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
@@ -253,22 +253,22 @@ public class FilesystemObserverTestCase extends TestCase {
             checkCollectionsEmpty("C");
 
             // Update first entry
-            touch(testDirAFile1);
-            touch(testDirA);
+            testDirAFile1 = touch(testDirAFile1);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("D", 0, 1, 0, 0, 1, 0);
             assertTrue("D testDirAFile1",  listener.getChangedFiles().contains(testDirAFile1));
 
             // Update file with name between 2 entries
-            touch(testDirAFile3);
-            touch(testDirA);
+            testDirAFile3 = touch(testDirAFile3);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("E", 0, 1, 0, 0, 1, 0);
             assertTrue("E testDirAFile3",  listener.getChangedFiles().contains(testDirAFile3));
 
             // Update last entry
-            touch(testDirAFile5);
-            touch(testDirA);
+            testDirAFile5 = touch(testDirAFile5);
+            testDirA      = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
             assertTrue("F testDirAFile5",  listener.getChangedFiles().contains(testDirAFile5));
@@ -286,8 +286,8 @@ public class FilesystemObserverTestCase extends TestCase {
             checkCollectionsEmpty("A");
             File testDirA = new File(testDir, "test-dir-A");
             testDirA.mkdir();
-            touch(testDir);
-            touch(testDirA);
+            testDir  = touch(testDir);
+            testDirA = touch(testDirA);
             File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
             File testDirAFile2 = touch(new File(testDirA, "A-file2.java"));
             File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
@@ -313,7 +313,7 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Delete first entry
             FileUtils.deleteQuietly(testDirAFile1);
-            touch(testDirA);
+            testDirA = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("D", 0, 1, 0, 0, 0, 1);
             assertFalse("D testDirAFile1 exists", testDirAFile1.exists());
@@ -321,7 +321,7 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Delete file with name between 2 entries
             FileUtils.deleteQuietly(testDirAFile3);
-            touch(testDirA);
+            testDirA = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("E", 0, 1, 0, 0, 0, 1);
             assertFalse("E testDirAFile3 exists", testDirAFile3.exists());
@@ -329,7 +329,7 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Delete last entry
             FileUtils.deleteQuietly(testDirAFile5);
-            touch(testDirA);
+            testDirA = touch(testDirA);
             checkAndNotify();
             checkCollectionSizes("F", 0, 1, 0, 0, 0, 1);
             assertFalse("F testDirAFile5 exists", testDirAFile5.exists());
@@ -356,7 +356,7 @@ public class FilesystemObserverTestCase extends TestCase {
             assertFalse("A testDirAFile1 exists", testDirAFile1.exists());
 
             // Create
-            touch(testDirAFile1);
+            testDirAFile1 = touch(testDirAFile1);
             File testDirAFile2 = touch(new File(testDirA, "A-file2.txt"));  /* filter should ignore */
             File testDirAFile3 = touch(new File(testDirA, "A-file3.java")); /* filter should ignore */
             assertTrue("B testDirAFile1 exists", testDirAFile1.exists());
@@ -369,9 +369,9 @@ public class FilesystemObserverTestCase extends TestCase {
             assertFalse("C created", listener.getCreatedFiles().contains(testDirAFile3));
 
             // Modify
-            touch(testDirAFile1);
-            touch(testDirAFile2);
-            touch(testDirAFile3);
+            testDirAFile1 = touch(testDirAFile1);
+            testDirAFile2 = touch(testDirAFile2);
+            testDirAFile3 = touch(testDirAFile3);
             checkAndNotify();
             checkCollectionSizes("D", 0, 0, 0, 0, 1, 0);
             assertTrue("D changed", listener.getChangedFiles().contains(testDirAFile1));
@@ -441,6 +441,7 @@ public class FilesystemObserverTestCase extends TestCase {
         long lastModified = file.exists() ? file.lastModified() : 0;
         try {
             FileUtils.touch(file);
+            file = new File(file.getParent(), file.getName());
             while (lastModified == file.lastModified()) {
                 try {
                     Thread.sleep(50);
@@ -448,6 +449,7 @@ public class FilesystemObserverTestCase extends TestCase {
                     // ignore
                 }
                 FileUtils.touch(file);
+                file = new File(file.getParent(), file.getName());
             }
         } catch (Exception e) {
             fail("Touching " + file +": " + e);
