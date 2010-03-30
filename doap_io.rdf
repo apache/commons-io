@@ -23,7 +23,7 @@
     <category rdf:resource="http://projects.apache.org/category/library"/>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20"/>
     <bug-database rdf:resource="http://issues.apache.org/jira/browse/IO"/>
-    <download-page rdf:resource="http://jakarta.apache.org/site/downloads/downloads_commons-io.cgi"/>
+    <download-page rdf:resource="http://commons.apache.org/io/download_io.cgi"/>
     <asfext:pmc rdf:resource="http://commons.apache.org/"/>
     <shortdesc xml:lang="en">Commons IO</shortdesc>
     <description xml:lang="en">
