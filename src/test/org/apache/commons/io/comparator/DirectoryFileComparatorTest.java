@@ -40,7 +40,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
         reverse = DirectoryFileComparator.DIRECTORY_REVERSE;
         File currentDir = new File(".");
         equalFile1 = new File(currentDir, "src");
-        equalFile2 = new File(currentDir, "xdocs");
+        equalFile2 = new File(currentDir, "src/site/xdoc");
         lessFile   = new File(currentDir, "src");
         moreFile   = new File(currentDir, "pom.xml");
     }
