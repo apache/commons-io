@@ -53,7 +53,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(char c) throws IOException {
         try {
+            beforeWrite(1);
             out.append(c);
+            afterWrite(1);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -72,7 +74,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(CharSequence csq, int start, int end) throws IOException {
         try {
+            beforeWrite(end - start);
             out.append(csq, start, end);
+            afterWrite(end - start);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -89,7 +93,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(CharSequence csq) throws IOException {
         try {
+            beforeWrite(csq.length());
             out.append(csq);
+            afterWrite(csq.length());
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -104,7 +110,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(int idx) throws IOException {
         try {
+            beforeWrite(1);
             out.write(idx);
+            afterWrite(1);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -118,7 +126,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(char[] chr) throws IOException {
         try {
+            beforeWrite(chr.length);
             out.write(chr);
+            afterWrite(chr.length);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -128,13 +138,15 @@ public class ProxyWriter extends FilterWriter {
      * Invokes the delegate's <code>write(char[], int, int)</code> method.
      * @param chr the characters to write
      * @param st The start offset
-     * @param end The number of characters to write
+     * @param len The number of characters to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(char[] chr, int st, int end) throws IOException {
+    public void write(char[] chr, int st, int len) throws IOException {
         try {
-            out.write(chr, st, end);
+            beforeWrite(len);
+            out.write(chr, st, len);
+            afterWrite(len);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -148,7 +160,9 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(String str) throws IOException {
         try {
+            beforeWrite(str.length());
             out.write(str);
+            afterWrite(str.length());
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -158,13 +172,15 @@ public class ProxyWriter extends FilterWriter {
      * Invokes the delegate's <code>write(String)</code> method.
      * @param str the string to write
      * @param st The start offset
-     * @param end The number of characters to write
+     * @param len The number of characters to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(String str, int st, int end) throws IOException {
+    public void write(String str, int st, int len) throws IOException {
         try {
-            out.write(str, st, end);
+            beforeWrite(len);
+            out.write(str, st, len);
+            afterWrite(len);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -194,6 +210,39 @@ public class ProxyWriter extends FilterWriter {
         } catch (IOException e) {
             handleIOException(e);
         }
+    }
+
+    /**
+     * Invoked by the write methods before the call is proxied. The number
+     * of chars to be written (1 for the {@link #write(int)} method, buffer
+     * length for {@link #write(char[])}, etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common pre-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since Commons IO 2.0
+     * @param n number of chars to be written
+     * @throws IOException if the pre-processing fails
+     */
+    protected void beforeWrite(int n) throws IOException {
+    }
+
+    /**
+     * Invoked by the write methods after the proxied call has returned
+     * successfully. The number of chars written (1 for the
+     * {@link #write(int)} method, buffer length for {@link #write(char[])},
+     * etc.) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common post-processing
+     * functionality without having to override all the write methods.
+     * The default implementation does nothing.
+     *
+     * @since Commons IO 2.0
+     * @param n number of chars written
+     * @throws IOException if the post-processing fails
+     */
+    protected void afterWrite(int n) throws IOException {
     }
 
     /**
