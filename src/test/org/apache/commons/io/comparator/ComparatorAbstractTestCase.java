@@ -78,7 +78,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test the comparator.
      */
     public void testComparator() {
-        assertTrue("equal", comparator.compare(equalFile1, equalFile2) == 0);
+        assertEquals("equal", 0, comparator.compare(equalFile1, equalFile2));
         assertTrue("less",  comparator.compare(lessFile, moreFile) < 0);
         assertTrue("more",  comparator.compare(moreFile, lessFile) > 0);
     }
@@ -87,7 +87,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test the comparator reversed.
      */
     public void testReverseComparator() {
-        assertTrue("equal", reverse.compare(equalFile1, equalFile2) == 0);
+        assertEquals("equal", 0, reverse.compare(equalFile1, equalFile2));
         assertTrue("less",  reverse.compare(moreFile, lessFile) < 0);
         assertTrue("more",  reverse.compare(lessFile, moreFile) > 0);
     }
