@@ -29,6 +29,71 @@ public class ProxyWriterTest extends TestCase {
         super(name);
     }
 
+    /** Test Appending a CharSequence */
+    public void testAppendCharSequence() {
+        StringBuilderWriter writer = new StringBuilderWriter();
+        ProxyWriter proxy = new ProxyWriter(writer);
+        try {
+            proxy.append("ABC");
+        } catch(Exception e) {
+            fail("Appending CharSequence threw " + e);
+        }
+        assertEquals("ABC", writer.toString());
+        
+    }
+
+    /** Test Writing a String */
+    public void testWriteString() {
+        StringBuilderWriter writer = new StringBuilderWriter();
+        ProxyWriter proxy = new ProxyWriter(writer);
+        try {
+            proxy.write("ABC");
+        } catch(Exception e) {
+            fail("Writing String threw " + e);
+        }
+        assertEquals("ABC", writer.toString());
+        
+    }
+
+    /** Test Writing a Partial String */
+    public void testWriteStringPartial() {
+        StringBuilderWriter writer = new StringBuilderWriter();
+        ProxyWriter proxy = new ProxyWriter(writer);
+        try {
+            proxy.write("ABC", 1, 2);
+        } catch(Exception e) {
+            fail("Writing String threw " + e);
+        }
+        assertEquals("BC", writer.toString());
+        
+    }
+
+    /** Test Writing a Char array */
+    public void testWriteCharArray() {
+        StringBuilderWriter writer = new StringBuilderWriter();
+        ProxyWriter proxy = new ProxyWriter(writer);
+        try {
+            proxy.write(new char[] {'A', 'B', 'C'});
+        } catch(Exception e) {
+            fail("Writing char[] threw " + e);
+        }
+        assertEquals("ABC", writer.toString());
+        
+    }
+
+    /** Test Writing a Partial Char array */
+    public void testWriteCharArrayPartial() {
+        StringBuilderWriter writer = new StringBuilderWriter();
+        ProxyWriter proxy = new ProxyWriter(writer);
+        try {
+            proxy.write(new char[] {'A', 'B', 'C'}, 1, 2);
+        } catch(Exception e) {
+            fail("Writing char[] threw " + e);
+        }
+        assertEquals("BC", writer.toString());
+        
+    }
+    
     /** Test writing Null String */
     public void testNullString() {
 
@@ -62,6 +127,18 @@ public class ProxyWriterTest extends TestCase {
             proxy.write((char[])null, 0, 0);
         } catch(Exception e) {
             fail("Writing null char[] threw " + e);
+        }
+    }
+
+    /** Test appending Null CharSequence */
+    public void testNullCharSequencec() {
+
+        ProxyWriter proxy = new ProxyWriter(new NullWriter());
+
+        try {
+            proxy.append((String)null);
+        } catch(Exception e) {
+            fail("Appending null CharSequence threw " + e);
         }
     }
 
