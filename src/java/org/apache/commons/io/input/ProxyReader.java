@@ -53,7 +53,10 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read() throws IOException {
         try {
-            return in.read();
+            beforeRead(1);
+            int c = in.read();
+            afterRead(c != -1 ? 1 : -1);
+            return c;
         } catch (IOException e) {
             handleIOException(e);
             return -1;
@@ -69,7 +72,10 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(char[] chr) throws IOException {
         try {
-            return in.read(chr);
+            beforeRead(chr.length);
+            int n = in.read(chr);
+            afterRead(n);
+            return n;
         } catch (IOException e) {
             handleIOException(e);
             return -1;
@@ -80,14 +86,17 @@ public abstract class ProxyReader extends FilterReader {
      * Invokes the delegate's <code>read(char[], int, int)</code> method.
      * @param chr the buffer to read the characters into
      * @param st The start offset
-     * @param end The number of bytes to read
+     * @param len The number of bytes to read
      * @return the number of characters read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(char[] chr, int st, int end) throws IOException {
+    public int read(char[] chr, int st, int len) throws IOException {
         try {
-            return in.read(chr, st, end);
+            beforeRead(len);
+            int n = in.read(chr, st, len);
+            afterRead(n);
+            return n;
         } catch (IOException e) {
             handleIOException(e);
             return -1;
@@ -104,7 +113,10 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(CharBuffer target) throws IOException {
         try {
-            return in.read(target);
+            beforeRead(target.length());
+            int n = in.read(target);
+            afterRead(n);
+            return n;
         } catch (IOException e) {
             handleIOException(e);
             return -1;
@@ -189,6 +201,47 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public boolean markSupported() {
         return in.markSupported();
+    }
+
+    /**
+     * Invoked by the read methods before the call is proxied. The number
+     * of chars that the caller wanted to read (1 for the {@link #read()}
+     * method, buffer length for {@link #read(char[])}, etc.) is given as
+     * an argument.
+     * <p>
+     * Subclasses can override this method to add common pre-processing
+     * functionality without having to override all the read methods.
+     * The default implementation does nothing.
+     * <p>
+     * Note this method is <em>not</em> called from {@link #skip(long)} or
+     * {@link #reset()}. You need to explicitly override those methods if
+     * you want to add pre-processing steps also to them.
+     *
+     * @since Commons IO 2.0
+     * @param n number of chars that the caller asked to be read
+     * @throws IOException if the pre-processing fails
+     */
+    protected void beforeRead(int n) throws IOException {
+    }
+
+    /**
+     * Invoked by the read methods after the proxied call has returned
+     * successfully. The number of chars returned to the caller (or -1 if
+     * the end of stream was reached) is given as an argument.
+     * <p>
+     * Subclasses can override this method to add common post-processing
+     * functionality without having to override all the read methods.
+     * The default implementation does nothing.
+     * <p>
+     * Note this method is <em>not</em> called from {@link #skip(long)} or
+     * {@link #reset()}. You need to explicitly override those methods if
+     * you want to add post-processing steps also to them.
+     *
+     * @since Commons IO 2.0
+     * @param n number of chars read, or -1 if the end of stream was reached
+     * @throws IOException if the post-processing fails
+     */
+    protected void afterRead(int n) throws IOException {
     }
 
     /**
