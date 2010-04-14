@@ -72,7 +72,7 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(char[] chr) throws IOException {
         try {
-            beforeRead(chr.length);
+            beforeRead(chr != null ? chr.length : 0);
             int n = in.read(chr);
             afterRead(n);
             return n;
@@ -113,7 +113,7 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(CharBuffer target) throws IOException {
         try {
-            beforeRead(target.length());
+            beforeRead(target != null ? target.length() : 0);
             int n = in.read(target);
             afterRead(n);
             return n;

@@ -36,16 +36,12 @@ public class ProxyWriterTest extends TestCase {
 
         try {
             proxy.write((String)null);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null String threw " + e);
         }
 
         try {
             proxy.write((String)null, 0, 0);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null String threw " + e);
         }
@@ -58,16 +54,12 @@ public class ProxyWriterTest extends TestCase {
 
         try {
             proxy.write((char[])null);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null char[] threw " + e);
         }
 
         try {
             proxy.write((char[])null, 0, 0);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null char[] threw " + e);
         }
