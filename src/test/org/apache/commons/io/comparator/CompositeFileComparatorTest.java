@@ -62,7 +62,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         list.add(ExtensionFileComparator.EXTENSION_COMPARATOR);
         Comparator<File> c = new CompositeFileComparator(list);
 
-        assertTrue("equal", c.compare(equalFile1, equalFile2) == 0);
+        assertEquals("equal", 0, c.compare(equalFile1, equalFile2));
         assertTrue("less",  c.compare(lessFile, moreFile) < 0);
         assertTrue("more",  c.compare(moreFile, lessFile) > 0);
     }

@@ -84,7 +84,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
 
         int count = IOUtils.copy(in, out);
         
-        assertTrue("Not all bytes were read", in.available() == 0);
+        assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
         assertEquals(inData.length,count);
@@ -137,7 +137,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         out.off();
         writer.flush();
 
-        assertTrue("Not all bytes were read", in.available() == 0);
+        assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
@@ -173,7 +173,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         out.off();
         writer.flush();
 
-        assertTrue("Not all bytes were read", in.available() == 0);
+        assertEquals("Not all bytes were read", 0, in.available());
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF8").getBytes("US-ASCII");
         assertTrue("Content differs", Arrays.equals(inData, bytes));
@@ -209,7 +209,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         out.off();
         writer.flush();
 
-        assertTrue("Not all bytes were read", in.available() == 0);
+        assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }

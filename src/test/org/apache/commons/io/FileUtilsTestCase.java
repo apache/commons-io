@@ -642,7 +642,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == testFile1Size);
+        assertEquals("Check Full copy", testFile1Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());*/  
@@ -660,7 +660,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         System.out.println("COPIED:  " + new java.util.Date());
 
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == largeFile.length());
+        assertEquals("Check Full copy", largeFile.length(), destination.length());
     }
 
     public void testCopyFile2() throws Exception {
@@ -672,7 +672,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyFile(testFile1, destination);
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertEquals("Check Full copy", testFile2Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliably for this case
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());*/
@@ -700,7 +700,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyFile(testFile1, destination, false);
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertEquals("Check Full copy", testFile2Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date modified", 
             testFile1.lastModified() != destination.lastModified());*/    
@@ -905,7 +905,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == testFile1Size);
+        assertEquals("Check Full copy", testFile1Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());*/
@@ -930,7 +930,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
-        assertTrue("Check Full copy", destination.length() == testFile2Size);
+        assertEquals("Check Full copy", testFile2Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());*/    

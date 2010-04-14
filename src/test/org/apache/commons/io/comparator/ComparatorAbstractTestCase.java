@@ -108,9 +108,9 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
         files[1] = moreFile;
         files[2] = lessFile;
         comparator.sort(files);
-        assertTrue("equal", files[0] == lessFile);
-        assertTrue("less",  files[1] == equalFile1);
-        assertTrue("more",  files[2] == moreFile);
+        assertEquals("equal", lessFile, files[0]);
+        assertEquals("less",  equalFile1, files[1]);
+        assertEquals("more",  moreFile, files[2]);
     }
 
     /**
@@ -122,9 +122,9 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
         files.add(moreFile);
         files.add(lessFile);
         comparator.sort(files);
-        assertTrue("equal", files.get(0) == lessFile);
-        assertTrue("less",  files.get(1) == equalFile1);
-        assertTrue("more",  files.get(2) == moreFile);
+        assertEquals("equal", lessFile, files.get(0));
+        assertEquals("less",  equalFile1, files.get(1));
+        assertEquals("more",  moreFile, files.get(2));
     }
 
     /**

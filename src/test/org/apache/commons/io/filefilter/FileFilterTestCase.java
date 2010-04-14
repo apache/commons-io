@@ -59,18 +59,18 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void assertFiltering(IOFileFilter filter, File file, boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
-        assertTrue(
+        assertEquals(
             "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
-            (filter.accept(file) == expected));
+            expected, filter.accept(file));
 
         if (file != null && file.getParentFile() != null) {
-            assertTrue(
+            assertEquals(
                 "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                (filter.accept(file.getParentFile(), file.getName()) == expected));
+                expected, filter.accept(file.getParentFile(), file.getName()));
         } else if (file == null) {
-            assertTrue(
+            assertEquals(
                 "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
-                filter.accept(file) == expected);
+                expected, filter.accept(file));
         }
     }
 
