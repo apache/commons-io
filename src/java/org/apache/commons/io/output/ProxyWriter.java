@@ -93,9 +93,14 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(CharSequence csq) throws IOException {
         try {
-            beforeWrite(csq.length());
+            int len = 0;
+            if (csq != null) {
+                len = csq.length();
+            }
+
+            beforeWrite(len);
             out.append(csq);
-            afterWrite(csq.length());
+            afterWrite(len);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -126,9 +131,14 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(char[] chr) throws IOException {
         try {
-            beforeWrite(chr.length);
+            int len = 0;
+            if (chr != null) {
+                len = chr.length;
+            }
+
+            beforeWrite(len);
             out.write(chr);
-            afterWrite(chr.length);
+            afterWrite(len);
         } catch (IOException e) {
             handleIOException(e);
         }
@@ -160,9 +170,14 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(String str) throws IOException {
         try {
-            beforeWrite(str.length());
+            int len = 0;
+            if (str != null) {
+                len = str.length();
+            }
+
+            beforeWrite(len);
             out.write(str);
-            afterWrite(str.length());
+            afterWrite(len);
         } catch (IOException e) {
             handleIOException(e);
         }

@@ -40,8 +40,6 @@ public class ProxyReaderTest extends TestCase {
 
         try {
             proxy.read((char[])null);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null String threw " + e);
         }
@@ -60,8 +58,6 @@ public class ProxyReaderTest extends TestCase {
 
         try {
             proxy.read((CharBuffer)null);
-        } catch(NullPointerException e) {
-            // Should it being throwing NPE? See IO-242
         } catch(Exception e) {
             fail("Writing null String threw " + e);
         }
