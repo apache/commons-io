@@ -73,7 +73,7 @@ public class DeferredFileOutputStreamTest extends TestCase
         assertTrue(dfos.isInMemory());
 
         byte[] resultBytes = dfos.getData();
-        assertTrue(resultBytes.length == testBytes.length);
+        assertEquals(testBytes.length, resultBytes.length);
         assertTrue(Arrays.equals(resultBytes, testBytes));
     }
 
@@ -96,7 +96,7 @@ public class DeferredFileOutputStreamTest extends TestCase
         assertTrue(dfos.isInMemory());
 
         byte[] resultBytes = dfos.getData();
-        assertTrue(resultBytes.length == testBytes.length);
+        assertEquals(testBytes.length, resultBytes.length);
         assertTrue(Arrays.equals(resultBytes, testBytes));
     }
 
@@ -352,13 +352,13 @@ public class DeferredFileOutputStreamTest extends TestCase
         try
         {
             FileInputStream fis = new FileInputStream(testFile);
-            assertTrue(fis.available() == testBytes.length);
+            assertEquals(testBytes.length, fis.available());
 
             byte[] resultBytes = new byte[testBytes.length];
-            assertTrue(fis.read(resultBytes) == testBytes.length);
+            assertEquals(testBytes.length, fis.read(resultBytes));
 
             assertTrue(Arrays.equals(resultBytes, testBytes));
-            assertTrue(fis.read(resultBytes) == -1);
+            assertEquals(-1, fis.read(resultBytes));
 
             try
             {

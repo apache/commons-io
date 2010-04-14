@@ -129,9 +129,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             String out = IOUtils.toString( fin );
             assertNotNull( out );
-            assertTrue( "Not all bytes were read", fin.available() == 0 );
-            assertTrue( "Wrong output size: out.length()=" + out.length() +
-                        "!=" + FILE_SIZE, out.length() == FILE_SIZE );
+            assertEquals( "Not all bytes were read", 0, fin.available() );
+            assertEquals( "Wrong output size", FILE_SIZE, out.length() );
         } finally {
             fin.close();
         }
@@ -144,9 +143,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             String out = IOUtils.toString( fin );
             assertNotNull( out );
-            assertTrue( "Wrong output size: out.length()=" +
-                        out.length() + "!=" + FILE_SIZE,
-                        out.length() == FILE_SIZE );
+            assertEquals( "Wrong output size", FILE_SIZE, out.length());
         } finally {
             fin.close();
         }
@@ -218,9 +215,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             byte[] out = IOUtils.toByteArray( fin );
             assertNotNull( out );
-            assertTrue( "Not all bytes were read", fin.available() == 0 );
-            assertTrue( "Wrong output size: out.length=" + out.length +
-                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEquals( "Not all bytes were read", 0, fin.available());
+            assertEquals( "Wrong output size", FILE_SIZE, out.length );
             assertEqualContent( out, m_testFile );
         } finally {
             fin.close();
@@ -233,9 +229,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             InputStream in = IOUtils.toBufferedInputStream(fin);
             byte[] out = IOUtils.toByteArray(in);
             assertNotNull(out);
-            assertTrue("Not all bytes were read", fin.available() == 0);
-            assertTrue("Wrong output size: out.length=" + out.length + "!="
-                    + FILE_SIZE, out.length == FILE_SIZE);
+            assertEquals("Not all bytes were read", 0, fin.available());
+            assertEquals("Wrong output size", FILE_SIZE, out.length );
             assertEqualContent(out, m_testFile);
         } finally {
             fin.close();
@@ -374,9 +369,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             char[] out = IOUtils.toCharArray( fin );
             assertNotNull( out );
-            assertTrue( "Not all chars were read", fin.available() == 0 );
-            assertTrue( "Wrong output size: out.length=" + out.length +
-                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEquals( "Not all chars were read", 0, fin.available());
+            assertEquals( "Wrong output size", FILE_SIZE, out.length );
             assertEqualContent( out, m_testFile );
         } finally {
             fin.close();
@@ -390,9 +384,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             char[] out = IOUtils.toCharArray( fin , "UTF-8" );
             assertNotNull( out );
-            assertTrue( "Not all chars were read", fin.available() == 0 );
-            assertTrue( "Wrong output size: out.length=" + out.length +
-                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEquals( "Not all chars were read", 0, fin.available());
+            assertEquals( "Wrong output size", FILE_SIZE, out.length);
             assertEqualContent( out, m_testFile );
         } finally {
             fin.close();
@@ -406,8 +399,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             char[] out = IOUtils.toCharArray( fr );
             assertNotNull( out );
-            assertTrue( "Wrong output size: out.length=" + out.length +
-                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEquals( "Wrong output size", FILE_SIZE, out.length);
             assertEqualContent( out, m_testFile );
         } finally {
             fr.close();
