@@ -74,7 +74,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     @Override
     public int read(byte[] bts) throws IOException {
         try {
-            beforeRead(bts.length);
+            beforeRead(bts != null ? bts.length : 0);
             int n = in.read(bts);
             afterRead(n);
             return n;
