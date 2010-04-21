@@ -49,7 +49,7 @@ public class StringBuilderWriterTest extends TestCase {
         StringBuilderWriter writer = new StringBuilderWriter(builder);
         writer.append("Bar");
         assertEquals("FooBar", writer.toString());
-        assertEquals(builder, writer.getBuilder());
+        assertSame(builder, writer.getBuilder());
     }
 
     /** Test {@link StringBuilderWriter} constructor. */
