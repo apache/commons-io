@@ -1797,7 +1797,7 @@ public class FileUtils {
             throw new IOException("Source '" + srcDir + "' is not a directory");
         }
         if (destDir.exists()) {
-            throw new IOException("Destination '" + destDir + "' already exists");
+            throw new FileExistsException("Destination '" + destDir + "' already exists");
         }
         boolean rename = srcDir.renameTo(destDir);
         if (!rename) {
@@ -1869,7 +1869,7 @@ public class FileUtils {
             throw new IOException("Source '" + srcFile + "' is a directory");
         }
         if (destFile.exists()) {
-            throw new IOException("Destination '" + destFile + "' already exists");
+            throw new FileExistsException("Destination '" + destFile + "' already exists");
         }
         if (destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' is a directory");

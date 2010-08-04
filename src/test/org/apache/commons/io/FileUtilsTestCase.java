@@ -1421,8 +1421,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         createFile(testDestFile, 0);
         try {
             FileUtils.moveFile(testSourceFile, testDestFile);
-            fail("Expected IOException when dest already exists");
-        } catch (IOException e) {
+            fail("Expected FileExistsException when dest already exists");
+        } catch (FileExistsException e) {
             // expected
         }
 
@@ -1554,11 +1554,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
         File testSrcFile = new File(getTestDirectory(), "testMoveDirectorySource");
         File testDestFile = new File(getTestDirectory(), "testMoveDirectoryDest");
+        testSrcFile.mkdir();
         testDestFile.mkdir();
         try {
             FileUtils.moveDirectory(testSrcFile, testDestFile);
-            fail("Expected IOException when dest already exists");
-        } catch (IOException e) {
+            fail("Expected FileExistsException when dest already exists");
+        } catch (FileExistsException e) {
             // expected
         }
 
