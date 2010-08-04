@@ -20,7 +20,8 @@ import java.io.File;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Collection;
-import java.util.Vector;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -48,7 +49,7 @@ public class FileCleaningTracker {
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    final Collection<Tracker> trackers = new Vector<Tracker>();  // synchronized
+    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
