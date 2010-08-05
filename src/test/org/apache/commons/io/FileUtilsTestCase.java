@@ -101,6 +101,39 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    /**
+     * Tests the {@link FileUtils#getTempDirectoryPath()} method.
+     */
+    public void testGetTempDirectoryPath() {
+        assertEquals(System.getProperty("java.io.tmpdir"), 
+            FileUtils.getTempDirectoryPath());
+    }
+    
+    /**
+     * Tests the {@link FileUtils#getTempDirectory()} method.
+     */
+    public void testGetTempDirectory() {
+        File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
+        assertEquals(tempDirectory, FileUtils.getTempDirectory());
+    }
+    
+    /**
+     * Tests the {@link FileUtils#getUserDirectoryPath()} method.
+     */
+    public void testGetUserDirectoryPath() {
+        assertEquals(System.getProperty("user.home"), 
+            FileUtils.getUserDirectoryPath());
+    }
+    
+    /**
+     * Tests the {@link FileUtils#getUserDirectory()} method.
+     */
+    public void testGetUserDirectory() {
+        File userDirectory = new File(System.getProperty("user.home"));
+        assertEquals(userDirectory, FileUtils.getUserDirectory());
+    }
+    
+    //-----------------------------------------------------------------------
     public void test_openInputStream_exists() throws Exception {
         File file = new File(getTestDirectory(), "test.txt");
         createLineBasedFile(file, new String[] {"Hello"});

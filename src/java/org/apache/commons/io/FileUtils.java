@@ -114,6 +114,51 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Returns the path to the system temporary directory.
+     * 
+     * @return the path to the system temporary directory.
+     * 
+     * @since Commons IO 2.0
+     */
+    public static String getTempDirectoryPath() {
+        return System.getProperty("java.io.tmpdir");
+    }
+    
+    /**
+     * Returns a {@link File} representing the system temporary directory.
+     * 
+     * @return the system temporary directory. 
+     * 
+     * @since Commons IO 2.0
+     */
+    public static File getTempDirectory() {
+        return new File(getTempDirectoryPath());
+    }
+    
+    /**
+     * Returns the path to the user's home directory.
+     * 
+     * @return the path to the user's home directory.
+     * 
+     * @since Commons IO 2.0
+     */
+    public static String getUserDirectoryPath() {
+        return System.getProperty("user.home");
+    }
+    
+    /**
+     * Returns a {@link File} representing the user's home directory.
+     * 
+     * @return the user's home directory.
+     * 
+     * @since Commons IO 2.0
+     */
+    public static File getUserDirectory() {
+        return new File(getUserDirectoryPath());
+    }
+    
+    //-----------------------------------------------------------------------
+    /**
      * Opens a {@link FileInputStream} for the specified file, providing better
      * error messages than simply calling <code>new FileInputStream(file)</code>.
      * <p>
