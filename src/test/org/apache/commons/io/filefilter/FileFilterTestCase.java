@@ -160,6 +160,17 @@ public class FileFilterTestCase extends FileBasedTestCase {
             fail();
         } catch (IllegalArgumentException ex) {
         }
+        
+        // FileFilterUtils.suffixFileFilter(String, IOCase) tests
+        filter = FileFilterUtils.suffixFileFilter("est", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("test"), true);
+        assertFiltering(filter, new File("TEST"), true);
+        
+        try {
+            FileFilterUtils.suffixFileFilter((String) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
     public void testDirectory() throws Exception {
@@ -282,6 +293,19 @@ public class FileFilterTestCase extends FileBasedTestCase {
             fail();
         } catch (IllegalArgumentException ex) {
         }
+        
+        // FileFilterUtils.prefixFileFilter(String, IOCase) tests
+        filter = FileFilterUtils.prefixFileFilter("bar", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo.test2"), false);
+        assertFiltering(filter, new File("bar.test2"), true);
+        assertFiltering(filter, new File("FOO.test2"), false); //case-sensitive
+        assertFiltering(filter, new File("BAR.test2"), true);  //case-sensitive
+        
+        try {
+            FileFilterUtils.prefixFileFilter((String) null, IOCase.INSENSITIVE);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
     public void testNameFilter() throws Exception {
@@ -329,12 +353,26 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("barfoo"), false);
         assertFiltering(filter, new File("foobar"), false);
         assertFiltering(filter, new File("fred"), false);
+        
+        // FileFilterUtils.nameFileFilter(String, IOCase) tests
+        filter = FileFilterUtils.nameFileFilter("foo", IOCase.INSENSITIVE);
+        assertFiltering(filter, new File("foo"), true);
+        assertFiltering(filter, new File("FOO"), true); //case-insensitive
+        assertFiltering(filter, new File("barfoo"), false);
+        assertFiltering(filter, new File("foobar"), false);
+        assertFiltering(filter, new File("fred"), false);
     }
 
     public void testNameFilterNullArgument() throws Exception {
         String test = null;
         try {
             new NameFileFilter(test);
+            fail( "constructing a NameFileFilter with a null String argument should fail.");
+        } catch( IllegalArgumentException iae ) {
+        }
+        
+        try {
+            FileFilterUtils.nameFileFilter(test, IOCase.INSENSITIVE);
             fail( "constructing a NameFileFilter with a null String argument should fail.");
         } catch( IllegalArgumentException iae ) {
         }
