@@ -100,6 +100,18 @@ public class FileFilterUtils {
     }
 
     /**
+     * Returns a filter that returns true if the filename matches the specified text.
+     * 
+     * @param name  the filename
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @return a name checking filter
+     * @since Commons IO 2.0
+     */
+    public static IOFileFilter nameFileFilter(String name, IOCase caseSensitivity) {
+        return new NameFileFilter(name, caseSensitivity);
+    }
+
+    /**
      * Returns a filter that checks if the file is a directory.
      * 
      * @return file filter that accepts only directories and not files
@@ -384,7 +396,7 @@ public class FileFilterUtils {
             andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));;
 
     /* Constructed on demand and then cached */
-    private static final IOFileFilter svnFilter = svnFilter = notFileFilter(
+    private static final IOFileFilter svnFilter = notFileFilter(
             andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
 
     /**
