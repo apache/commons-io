@@ -380,10 +380,12 @@ public class FileFilterUtils {
 
     //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
-    private static IOFileFilter cvsFilter;
+    private static final IOFileFilter cvsFilter = notFileFilter(
+            andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));;
 
     /* Constructed on demand and then cached */
-    private static IOFileFilter svnFilter;
+    private static final IOFileFilter svnFilter = svnFilter = notFileFilter(
+            andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
 
     /**
      * Decorates a filter to make it ignore CVS directories.
@@ -395,10 +397,6 @@ public class FileFilterUtils {
      * @since Commons IO 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(IOFileFilter filter) {
-        if (cvsFilter == null) {
-            cvsFilter = notFileFilter(
-                andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));
-        }
         if (filter == null) {
             return cvsFilter;
         } else {
@@ -416,10 +414,6 @@ public class FileFilterUtils {
      * @since Commons IO 1.1
      */
     public static IOFileFilter makeSVNAware(IOFileFilter filter) {
-        if (svnFilter == null) {
-            svnFilter = notFileFilter(
-                andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
-        }
         if (filter == null) {
             return svnFilter;
         } else {
