@@ -21,6 +21,8 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Date;
 
+import org.apache.commons.io.IOCase;
+
 /**
  * Useful utilities for working with file filters. It provides access to all
  * file filter implementations in this package so you don't have to import
@@ -54,6 +56,18 @@ public class FileFilterUtils {
     }
 
     /**
+     * Returns a filter that returns true if the filename starts with the specified text.
+     * 
+     * @param prefix  the filename prefix
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @return a prefix checking filter
+     * @since Commons IO 2.0
+     */
+    public static IOFileFilter prefixFileFilter(String prefix, IOCase caseSensitivity) {
+        return new PrefixFileFilter(prefix, caseSensitivity);
+    }
+
+    /**
      * Returns a filter that returns true if the filename ends with the specified text.
      * 
      * @param suffix  the filename suffix
@@ -61,6 +75,18 @@ public class FileFilterUtils {
      */
     public static IOFileFilter suffixFileFilter(String suffix) {
         return new SuffixFileFilter(suffix);
+    }
+
+    /**
+     * Returns a filter that returns true if the filename ends with the specified text.
+     * 
+     * @param suffix  the filename suffix
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @return a suffix checking filter
+     * @since Commons IO 2.0
+     */
+    public static IOFileFilter suffixFileFilter(String suffix, IOCase caseSensitivity) {
+        return new SuffixFileFilter(suffix, caseSensitivity);
     }
 
     /**
