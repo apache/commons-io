@@ -149,7 +149,22 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
-     *
+     * <p>
+     * Example code:
+     * <pre>
+     *   char[] data = new char[1024];
+     *   Reader in = null;
+     *   try {
+     *       in = new FileReader("foo.txt");
+     *       in.read(data);
+     *       in.close(); //close errors are handled
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(in);
+     *   }
+     * </pre>
+     * 
      * @param input  the Reader to close, may be null or already closed
      */
     public static void closeQuietly(Reader input) {
@@ -161,6 +176,22 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Channel#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   ByteBuffer buffer = ByteBuffer.allocate(1024);
+     *   FileChannel channel = null;
+     *   try {
+     *       FileInputStream in = new FileInputStream("foo.txt");
+     *       channel = in.getChannel();
+     *       channel.read(buffer);
+     *       channel.close(); //close errors are handled
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(channel);
+     *   }
+     * </pre>
      *
      * @param channel the Channel to close, may be null or already closed
      */
@@ -173,6 +204,20 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   Writer out = null;
+     *   try {
+     *       out = new StringWriter();
+     *       out.write("Hello World");
+     *       out.close(); //close errors are handled
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(out);
+     *   }
+     * </pre>
      *
      * @param output  the Writer to close, may be null or already closed
      */
@@ -185,6 +230,21 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   byte[] data = new byte[1024];
+     *   InputStream in = null;
+     *   try {
+     *       in = new FileInputStream("foo.txt");
+     *       in.read(data);
+     *       in.close(); //close errors are handled
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(in);
+     *   }
+     * </pre>
      *
      * @param input  the InputStream to close, may be null or already closed
      */
@@ -197,6 +257,22 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     * byte[] data = "Hello, World".getBytes();
+     *
+     * OutputStream out = null;
+     * try {
+     *     out = new FileOutputStream("foo.txt");
+     *     out.write(data);
+     *     out.close(); //close errors are handled
+     * } catch (IOException e) {
+     *     // error handling
+     * } finally {
+     *     IOUtils.closeQuietly(out);
+     * }
+     * </pre>
      *
      * @param output  the OutputStream to close, may be null or already closed
      */
@@ -209,6 +285,20 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   Closeable closeable = null;
+     *   try {
+     *       closeable = new FileReader("foo.txt");
+     *       // process closeable
+     *       closeable.close();
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(closeable);
+     *   }
+     * </pre>
      *
      * @param closeable the object to close, may be null or already closed
      */
@@ -227,6 +317,20 @@ public class IOUtils {
      * <p>
      * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   Socket socket = null;
+     *   try {
+     *       socket = new Socket("http://www.foo.com/", 80);
+     *       // process socket
+     *       socket.close();
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(socket);
+     *   }
+     * </pre>
      *
      * @param sock the Socket to close, may be null or already closed
      */
