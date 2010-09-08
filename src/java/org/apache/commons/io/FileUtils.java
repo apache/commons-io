@@ -1065,7 +1065,6 @@ public class FileUtils {
      * @param source  the <code>InputStream</code> to copy bytes from, must not be <code>null</code>
      * @param destination  the non-directory <code>File</code> to write bytes to
      *  (possibly overwriting), must not be <code>null</code>
-     * @throws IOException if <code>source</code> URL cannot be opened
      * @throws IOException if <code>destination</code> is a directory
      * @throws IOException if <code>destination</code> cannot be written
      * @throws IOException if <code>destination</code> needs creating but can't be
