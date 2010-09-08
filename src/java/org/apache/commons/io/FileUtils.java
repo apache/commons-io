@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1007,6 +1008,10 @@ public class FileUtils {
      * <code>destination</code>. The directories up to <code>destination</code>
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
+     * <p>
+     * Warning: this method does not set a connection or read timeout and thus
+     * might block forever. Use {@link #copyURLToFile(URL, File, int, int)}
+     * with reasonable timeouts to prevent this.
      *
      * @param source  the <code>URL</code> to copy bytes from, must not be <code>null</code>
      * @param destination  the non-directory <code>File</code> to write bytes to
@@ -1019,15 +1024,64 @@ public class FileUtils {
      */
     public static void copyURLToFile(URL source, File destination) throws IOException {
         InputStream input = source.openStream();
+        copyInputStreamToFile(input, destination);
+    }
+
+    /**
+     * Copies bytes from the URL <code>source</code> to a file
+     * <code>destination</code>. The directories up to <code>destination</code>
+     * will be created if they don't already exist. <code>destination</code>
+     * will be overwritten if it already exists.
+     *
+     * @param source  the <code>URL</code> to copy bytes from, must not be <code>null</code>
+     * @param destination  the non-directory <code>File</code> to write bytes to
+     *  (possibly overwriting), must not be <code>null</code>
+     * @param connectionTimeout the number of milliseconds until this method
+     *  will timeout if no connection could be established to the <code>source</code>
+     * @param readTimeout the number of milliseconds until this method will
+     *  timeout if no data could be read from the <code>source</code> 
+     * @throws IOException if <code>source</code> URL cannot be opened
+     * @throws IOException if <code>destination</code> is a directory
+     * @throws IOException if <code>destination</code> cannot be written
+     * @throws IOException if <code>destination</code> needs creating but can't be
+     * @throws IOException if an IO error occurs during copying
+     * @since Commons IO 2.0
+     */
+    public static void copyURLToFile(URL source, File destination,
+            int connectionTimeout, int readTimeout) throws IOException {
+        URLConnection connection = source.openConnection();
+        connection.setConnectTimeout(connectionTimeout);
+        connection.setReadTimeout(readTimeout);
+        InputStream input = connection.getInputStream();
+        copyInputStreamToFile(input, destination);
+    }
+
+    /**
+     * Copies bytes from an {@link InputStream} <code>source</code> to a file
+     * <code>destination</code>. The directories up to <code>destination</code>
+     * will be created if they don't already exist. <code>destination</code>
+     * will be overwritten if it already exists.
+     *
+     * @param source  the <code>InputStream</code> to copy bytes from, must not be <code>null</code>
+     * @param destination  the non-directory <code>File</code> to write bytes to
+     *  (possibly overwriting), must not be <code>null</code>
+     * @throws IOException if <code>source</code> URL cannot be opened
+     * @throws IOException if <code>destination</code> is a directory
+     * @throws IOException if <code>destination</code> cannot be written
+     * @throws IOException if <code>destination</code> needs creating but can't be
+     * @throws IOException if an IO error occurs during copying
+     * @since Commons IO 2.0
+     */
+    public static void copyInputStreamToFile(InputStream source, File destination) throws IOException {
         try {
             FileOutputStream output = openOutputStream(destination);
             try {
-                IOUtils.copy(input, output);
+                IOUtils.copy(source, output);
             } finally {
                 IOUtils.closeQuietly(output);
             }
         } finally {
-            IOUtils.closeQuietly(input);
+            IOUtils.closeQuietly(source);
         }
     }
 
