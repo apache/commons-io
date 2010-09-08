@@ -48,15 +48,15 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Return <code>{@link #readByte()} == 0</code>
-     * @return the true if the byte read is zero, otherwise false
+     * Return <code>{@link #readByte()} != 0</code>
+     * @return false if the byte read is zero, otherwise true
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
     public boolean readBoolean()
         throws IOException, EOFException
     {
-        return ( 0 == readByte() );
+        return ( 0 != readByte() );
     }
 
     /**
