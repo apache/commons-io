@@ -468,6 +468,29 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         //TODO Maybe test copy to itself like for copyFile()
     }
 
+    public void testCopyURLToFileWithTimeout() throws Exception {
+        // Creates file
+        File file = new File(getTestDirectory(), "testCopyURLToFileWithTimeout");
+        file.deleteOnExit();
+
+        // Loads resource
+        String resourceName = "/java/lang/Object.class";
+        FileUtils.copyURLToFile(getClass().getResource(resourceName), file, 500, 500);
+
+        // Tests that resuorce was copied correctly
+        FileInputStream fis = new FileInputStream(file);
+        try {
+            assertTrue(
+                "Content is not equal.",
+                IOUtils.contentEquals(
+                    getClass().getResourceAsStream(resourceName),
+                    fis));
+        } finally {
+            fis.close();
+        }
+        //TODO Maybe test copy to itself like for copyFile()
+    }
+
     // forceMkdir
 
     public void testForceMkdir() throws Exception {
