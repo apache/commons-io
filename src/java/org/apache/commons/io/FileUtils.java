@@ -607,6 +607,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -632,6 +633,7 @@ public class FileUtils {
      * <code>true</code> tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -666,6 +668,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
      * 
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile  the new file, must not be <code>null</code>
@@ -691,6 +694,7 @@ public class FileUtils {
      * <code>true</code> tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile  the new file, must not be <code>null</code>
@@ -789,6 +793,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -828,6 +833,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the new directory, must not be <code>null</code>
@@ -855,6 +861,7 @@ public class FileUtils {
      * <code>true</code> tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the new directory, must not be <code>null</code>
@@ -884,6 +891,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * <h4>Example: Copy directories only</h4> 
      *  <pre>
@@ -933,6 +941,7 @@ public class FileUtils {
      * <code>true</code> tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
      *
      * <h4>Example: Copy directories only</h4> 
      *  <pre>
