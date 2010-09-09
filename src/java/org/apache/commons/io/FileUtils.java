@@ -603,6 +603,10 @@ public class FileUtils {
      * to a file of the same name in the specified destination directory.
      * The destination directory is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that the operation will succeed.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -623,6 +627,11 @@ public class FileUtils {
      * to a file of the same name in the specified destination directory.
      * The destination directory is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * <code>true</code> tries to preserve the file's last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that the operation will succeed.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -653,6 +662,10 @@ public class FileUtils {
      * specified destination file. The directory holding the destination file is
      * created if it does not exist. If the destination file exists, then this
      * method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that the operation will succeed.
      * 
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile  the new file, must not be <code>null</code>
@@ -673,6 +686,11 @@ public class FileUtils {
      * to the specified destination file.
      * The directory holding the destination file is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * <code>true</code> tries to preserve the file's last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that the operation will succeed.
      *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile  the new file, must not be <code>null</code>
@@ -767,6 +785,10 @@ public class FileUtils {
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the files' last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that those operations will succeed.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the directory to place the copy in, must not be <code>null</code>
@@ -802,6 +824,10 @@ public class FileUtils {
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the files' last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that those operations will succeed.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the new directory, must not be <code>null</code>
@@ -824,6 +850,11 @@ public class FileUtils {
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * <code>true</code> tries to preserve the files' last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that those operations will succeed.
      *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the new directory, must not be <code>null</code>
@@ -849,6 +880,10 @@ public class FileUtils {
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the files' last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that those operations will succeed.
      *
      * <h4>Example: Copy directories only</h4> 
      *  <pre>
@@ -893,6 +928,11 @@ public class FileUtils {
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * <code>true</code> tries to preserve the files' last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that those operations will succeed.
      *
      * <h4>Example: Copy directories only</h4> 
      *  <pre>
