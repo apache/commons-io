@@ -482,6 +482,24 @@ public class FileFilterTestCase extends FileBasedTestCase {
         OrFileFilter f = new OrFileFilter((List<IOFileFilter>) null);
         assertEquals(true, f.getFileFilters().isEmpty());
     }
+    public void testFileFilterUtils_and() throws Exception {
+        IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
+        IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
+        assertFiltering(FileFilterUtils.and(trueFilter, trueFilter, trueFilter), new File("foo.test"), true);
+        assertFiltering(FileFilterUtils.and(trueFilter, falseFilter, trueFilter), new File("foo.test"), false);
+        assertFiltering(FileFilterUtils.and(falseFilter, trueFilter), new File("foo.test"), false);
+        assertFiltering(FileFilterUtils.and(falseFilter, falseFilter), new File("foo.test"), false);
+    }
+
+    public void testFileFilterUtils_or() throws Exception {
+        IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
+        IOFileFilter falseFilter = FalseFileFilter.INSTANCE;
+        File testFile = new File( "foo.test" );
+        assertFiltering(FileFilterUtils.or(trueFilter, trueFilter), testFile, true);
+        assertFiltering(FileFilterUtils.or(trueFilter, trueFilter, falseFilter), testFile, true);
+        assertFiltering(FileFilterUtils.or(falseFilter, trueFilter), testFile, true);
+        assertFiltering(FileFilterUtils.or(falseFilter, falseFilter, falseFilter), testFile, false);
+    }
 
     @SuppressWarnings("deprecation")
     public void testDeprecatedWildcard() throws Exception {

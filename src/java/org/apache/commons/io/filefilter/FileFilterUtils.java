@@ -19,7 +19,9 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.IOCase;
 
@@ -136,6 +138,7 @@ public class FileFilterUtils {
      * @param filter1  the first filter
      * @param filter2  the second filter
      * @return a filter that ANDs the two specified filters
+     * @deprecated use {@link #and(IOFileFilter...)}
      */
     public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
         return new AndFileFilter(filter1, filter2);
@@ -147,9 +150,61 @@ public class FileFilterUtils {
      * @param filter1  the first filter
      * @param filter2  the second filter
      * @return a filter that ORs the two specified filters
+     * @deprecated use {@link #or(IOFileFilter...)}
      */
     public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
         return new OrFileFilter(filter1, filter2);
+    }
+
+    /**
+     * Returns a filter that ANDs the specified filters.
+     * 
+     * @param filters the IOFileFilters that will be ANDed together.
+     * @return a filter that ANDs the specified filters
+     * 
+     * @throws IllegalArgumentException if the filters are null or contain a 
+     *         null value.
+     * @since Commons IO 2.0
+     */
+    public static IOFileFilter and(IOFileFilter... filters) {
+        return new AndFileFilter(toList(filters));
+    }
+
+    /**
+     * Returns a filter that ORs the specified filters.
+     * 
+     * @param filters the IOFileFilters that will be ORed together.
+     * @return a filter that ORs the specified filters
+     * 
+     * @throws IllegalArgumentException if the filters are null or contain a 
+     *         null value.
+     * @since Commons IO 2.0
+     */
+    public static IOFileFilter or(IOFileFilter... filters) {
+        return new OrFileFilter(toList(filters));
+    }
+
+    /**
+     * Create a List of file filters.
+     *
+     * @param filters The file filters
+     * @return The list of file filters
+     * @throws IllegalArgumentException if the filters are null or contain a 
+     *         null value.
+     * @since Commons IO 2.0
+     */
+    public static List<IOFileFilter> toList(IOFileFilter... filters) {
+        if (filters == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        List<IOFileFilter> list = new ArrayList<IOFileFilter>(filters.length);
+        for (int i = 0; i < filters.length; i++) {
+            if (filters[i] == null) {
+                throw new IllegalArgumentException("The filter[" + i + "] is null");
+            }
+            list.add(filters[i]);
+        }
+        return list;
     }
 
     /**
