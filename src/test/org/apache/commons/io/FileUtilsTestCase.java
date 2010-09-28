@@ -547,6 +547,44 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             FileUtils.sizeOfDirectory(file));
     }
 
+    /**
+     * Tests the {@link FileUtils#sizeOf(File)} method.
+     * @throws Exception
+     */
+    public void testSizeOf() throws Exception {
+        File file = new File(getTestDirectory(), getName());
+
+        // Null argument
+        try {
+            FileUtils.sizeOf(null);
+            fail("Exception expected.");
+        } catch (NullPointerException ex) {}
+        
+        // Non-existent file
+        try {
+            FileUtils.sizeOf(file);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {}
+
+        // Creates file
+        file.createNewFile();
+        file.deleteOnExit();
+
+        // New file
+        assertEquals(0, FileUtils.sizeOf(file));
+        file.delete();
+
+        // Existing file
+        assertEquals("Unexpected files size",
+            testFile1Size, 
+            FileUtils.sizeOf(testFile1));
+        
+        // Existing directory
+        assertEquals("Unexpected directory size",
+            TEST_DIRECTORY_SIZE,
+            FileUtils.sizeOf(getTestDirectory()));
+    }
+    
     // isFileNewer / isFileOlder
     public void testIsFileNewerOlder() throws Exception {
         File reference   = new File(getTestDirectory(), "FileUtils-reference.txt");

@@ -1702,6 +1702,39 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Returns the size of the specified file or directory. If the provided 
+     * {@link File} is a regular file, then the file's length is returned.
+     * If the argument is a directory, then the size of the directory is
+     * calculated recursively. If a directory or subdirectory is security 
+     * restricted, its size will not be included.
+     * 
+     * @param file the regular file or directory to return the size 
+     *        of (must not be <code>null</code>).
+     * 
+     * @return the length of the file, or recursive size of the directory, 
+     *         provided (in bytes).
+     * 
+     * @throws NullPointerException if the file is <code>null</code>
+     * @throws IllegalArgumentException if the file does not exist.
+     *         
+     * @since Commons IO 2.0
+     */
+    public static long sizeOf(File file) {
+
+        if (!file.exists()) {
+            String message = file + " does not exist";
+            throw new IllegalArgumentException(message);
+        }
+
+        if (file.isDirectory()) {
+            return sizeOfDirectory(file);
+        } else {
+            return file.length();
+        }
+
+    }
+
+    /**
      * Counts the size of a directory recursively (sum of the length of all files).
      *
      * @param directory  directory to inspect, must not be <code>null</code>
@@ -1726,11 +1759,7 @@ public class FileUtils {
             return 0L;
         }
         for (File file : files) {
-            if (file.isDirectory()) {
-                size += sizeOfDirectory(file);
-            } else {
-                size += file.length();
-            }
+            size += sizeOf(file);
         }
 
         return size;
