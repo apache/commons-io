@@ -2139,6 +2139,9 @@ public class FileUtils {
         if (file == null) {
             throw new NullPointerException("File must not be null");
         }
+        if (FilenameUtils.isSystemWindows()) {
+            return false;
+        }
         File fileInCanonicalDir = null;
         if (file.getParent() == null) {
             fileInCanonicalDir = file;
