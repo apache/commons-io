@@ -1019,6 +1019,11 @@ public class FileUtils {
      */
     private static void doCopyDirectory(File srcDir, File destDir, FileFilter filter,
             boolean preserveFileDate, List<String> exclusionList) throws IOException {
+        // recurse
+        File[] files = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
+        if (files == null) {  // null if security restricted
+            throw new IOException("Failed to list contents of " + srcDir);
+        }
         if (destDir.exists()) {
             if (destDir.isDirectory() == false) {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
@@ -1033,11 +1038,6 @@ public class FileUtils {
         }
         if (destDir.canWrite() == false) {
             throw new IOException("Destination '" + destDir + "' cannot be written to");
-        }
-        // recurse
-        File[] files = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
-        if (files == null) {  // null if security restricted
-            throw new IOException("Failed to list contents of " + srcDir);
         }
         for (File file : files) {
             File copiedFile = new File(destDir, file.getName());

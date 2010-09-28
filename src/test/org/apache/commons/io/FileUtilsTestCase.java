@@ -905,6 +905,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
     }
 
+    /** Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
+    public void testCopyDirectoryToItself() throws Exception {
+        File dir = new File(getTestDirectory(), "itself");
+        dir.mkdirs();
+        FileUtils.copyDirectoryToDirectory(dir, dir);
+        assertEquals(1, LIST_WALKER.list(dir).size());
+    }
+
     private void createFilesForTestCopyDirectory(File grandParentDir, File parentDir, File childDir) throws Exception {
         File childDir2 = new File(parentDir, "child2");
         File grandChildDir = new File(childDir, "grandChild");
