@@ -241,17 +241,17 @@ public class LockableFileWriter extends Writer {
         } catch (IOException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
-            lockFile.delete();
+            FileUtils.deleteQuietly(lockFile);
             if (fileExistedAlready == false) {
-                file.delete();
+                FileUtils.deleteQuietly(file);
             }
             throw ex;
         } catch (RuntimeException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
-            lockFile.delete();
+            FileUtils.deleteQuietly(lockFile);
             if (fileExistedAlready == false) {
-                file.delete();
+                FileUtils.deleteQuietly(file);
             }
             throw ex;
         }
