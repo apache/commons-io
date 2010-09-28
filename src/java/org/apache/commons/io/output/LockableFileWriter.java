@@ -34,6 +34,12 @@ import org.apache.commons.io.IOUtils;
  * This class provides a simple alternative to <code>FileWriter</code>
  * that will use a lock file to prevent duplicate writes.
  * <p>
+ * <b>N.B.</b> the lock file is deleted when {@link #close()} is called
+ * - or if the main file cannot be opened initially.
+ * In the (unlikely) event that the lockfile cannot be deleted, 
+ * this is not reported, and subsequent requests using
+ * the same lockfile will fail.
+ * <p>
  * By default, the file will be overwritten, but this may be changed to append.
  * The lock directory may be specified, but defaults to the system property
  * <code>java.io.tmpdir</code>.
@@ -260,7 +266,7 @@ public class LockableFileWriter extends Writer {
 
     //-----------------------------------------------------------------------
     /**
-     * Closes the file writer.
+     * Closes the file writer and deletes the lockfile (if possible).
      *
      * @throws IOException if an I/O error occurs
      */
