@@ -1185,6 +1185,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --> true
      * wildcardMatch("c.txt", "*.????")     --> false
      * </pre>
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1210,6 +1211,7 @@ public class FilenameUtils {
      * wildcardMatch("c.txt", "*.???")      --> true
      * wildcardMatch("c.txt", "*.????")     --> false
      * </pre>
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1226,6 +1228,7 @@ public class FilenameUtils {
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
      * single or multiple (zero or more) wildcard characters.
+     * N.B. the sequence "*?" does not work properly at present in match strings.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
