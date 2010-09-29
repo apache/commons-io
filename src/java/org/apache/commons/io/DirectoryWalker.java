@@ -305,7 +305,7 @@ public abstract class DirectoryWalker<T> {
             fileFilter = (fileFilter != null ? fileFilter : TrueFileFilter.TRUE);
             directoryFilter = FileFilterUtils.makeDirectoryOnly(directoryFilter);
             fileFilter = FileFilterUtils.makeFileOnly(fileFilter);
-            this.filter = FileFilterUtils.orFileFilter(directoryFilter, fileFilter);
+            this.filter = FileFilterUtils.or(directoryFilter, fileFilter);
         }
         this.depthLimit = depthLimit;
     }
