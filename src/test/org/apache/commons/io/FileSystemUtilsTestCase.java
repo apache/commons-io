@@ -97,11 +97,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_NullPath() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS(null, 1, false);
+            fsu.freeSpaceOS(null, 1, false, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
         try {
-            fsu.freeSpaceOS(null, 1, true);
+            fsu.freeSpaceOS(null, 1, true, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
     }
@@ -109,11 +109,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_InitError() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS("", -1, false);
+            fsu.freeSpaceOS("", -1, false, -1);
             fail();
         } catch (IllegalStateException ex) {}
         try {
-            fsu.freeSpaceOS("", -1, true);
+            fsu.freeSpaceOS("", -1, true, -1);
             fail();
         } catch (IllegalStateException ex) {}
     }
@@ -121,11 +121,11 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_Other() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils();
         try {
-            fsu.freeSpaceOS("", 0, false);
+            fsu.freeSpaceOS("", 0, false, -1);
             fail();
         } catch (IllegalStateException ex) {}
         try {
-            fsu.freeSpaceOS("", 0, true);
+            fsu.freeSpaceOS("", 0, true, -1);
             fail();
         } catch (IllegalStateException ex) {}
     }
@@ -133,23 +133,23 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
     public void testGetFreeSpaceOS_String_Windows() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils() {
             @Override
-            protected long freeSpaceWindows(String path) throws IOException {
+            protected long freeSpaceWindows(String path, long timeout) throws IOException {
                 return 12345L;
             }
         };
-        assertEquals(12345L, fsu.freeSpaceOS("", 1, false));
-        assertEquals(12345L / 1024, fsu.freeSpaceOS("", 1, true));
+        assertEquals(12345L, fsu.freeSpaceOS("", 1, false, -1));
+        assertEquals(12345L / 1024, fsu.freeSpaceOS("", 1, true, -1));
     }
 
     public void testGetFreeSpaceOS_String_Unix() throws Exception {
         FileSystemUtils fsu = new FileSystemUtils() {
             @Override
-            protected long freeSpaceUnix(String path, boolean kb, boolean posix) throws IOException {
+            protected long freeSpaceUnix(String path, boolean kb, boolean posix, long timeout) throws IOException {
                 return (kb ? 12345L : 54321);
             }
         };
-        assertEquals(54321L, fsu.freeSpaceOS("", 2, false));
-        assertEquals(12345L, fsu.freeSpaceOS("", 2, true));
+        assertEquals(54321L, fsu.freeSpaceOS("", 2, false, -1));
+        assertEquals(12345L, fsu.freeSpaceOS("", 2, true, -1));
     }
 
     //-----------------------------------------------------------------------
@@ -169,7 +169,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "               7 File(s)        180,260 bytes\n" +
             "              10 Dir(s)  41,411,551,232 bytes free";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(41411551232L, fsu.freeSpaceWindows(""));
+        assertEquals(41411551232L, fsu.freeSpaceWindows("", -1));
     }
 
     //-----------------------------------------------------------------------
@@ -187,7 +187,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c ");
-        assertEquals(41411551232L, fsu.freeSpaceWindows(""));
+        assertEquals(41411551232L, fsu.freeSpaceWindows("", -1));
     }
 
     public void testGetFreeSpaceWindows_String_NormalResponse() throws Exception {
@@ -204,7 +204,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c C:");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("C:"));
+        assertEquals(41411551232L, fsu.freeSpaceWindows("C:", -1));
     }
 
     public void testGetFreeSpaceWindows_String_StripDrive() throws Exception {
@@ -221,14 +221,14 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c C:");
-        assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir"));
+        assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir", -1));
     }
 
     public void testGetFreeSpaceWindows_String_EmptyResponse() throws Exception {
         String lines = "";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceWindows("C:");
+            fsu.freeSpaceWindows("C:", -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -237,7 +237,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines = "\n\n";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceWindows("C:");
+            fsu.freeSpaceWindows("C:", -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -246,7 +246,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         String lines = "BlueScreenOfDeath";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceWindows("C:");
+            fsu.freeSpaceWindows("C:", -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -260,7 +260,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "\n";
         FileSystemUtils fsu = new MockFileSystemUtils(1, lines);
         try {
-            fsu.freeSpaceWindows("C:");
+            fsu.freeSpaceWindows("C:", -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -272,19 +272,19 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx:/home/users/s     14428928  12956424   1472504  90% /home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("", false, false);
+            fsu.freeSpaceUnix("", false, false, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
         try {
-            fsu.freeSpaceUnix("", true, false);
+            fsu.freeSpaceUnix("", true, false, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
         try {
-            fsu.freeSpaceUnix("", true, true);
+            fsu.freeSpaceUnix("", true, true, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
         try {
-            fsu.freeSpaceUnix("", false, true);
+            fsu.freeSpaceUnix("", false, true, -1);
             fail();
         } catch (IllegalArgumentException ex) {}
         
@@ -296,7 +296,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "/dev/xxx                497944    308528    189416  62% /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(189416L, fsu.freeSpaceUnix("/", false, false));
+        assertEquals(189416L, fsu.freeSpaceUnix("/", false, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_NormalResponseFreeBSD() throws Exception {
@@ -305,7 +305,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
             "/dev/xxxxxx    128990    102902    15770    87%    /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(15770L, fsu.freeSpaceUnix("/", false, false));
+        assertEquals(15770L, fsu.freeSpaceUnix("/", false, false, -1));
     }
 
     //-----------------------------------------------------------------------
@@ -316,7 +316,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
             "/dev/xxx                497944    308528    189416  62% /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(189416L, fsu.freeSpaceUnix("/", true, false));
+        assertEquals(189416L, fsu.freeSpaceUnix("/", true, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_NormalResponseKbFreeBSD() throws Exception {
@@ -326,7 +326,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem  1K-blocks      Used    Avail Capacity  Mounted on\n" +
             "/dev/xxxxxx    128990    102902    15770    87%    /";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(15770L, fsu.freeSpaceUnix("/", true, false));
+        assertEquals(15770L, fsu.freeSpaceUnix("/", true, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_NormalResponseKbSolaris() throws Exception {
@@ -336,7 +336,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "Filesystem            kbytes    used   avail capacity  Mounted on\n" +
             "/dev/dsk/x0x0x0x0    1350955  815754  481163    63%";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(481163L, fsu.freeSpaceUnix("/dev/dsk/x0x0x0x0", true, false));
+        assertEquals(481163L, fsu.freeSpaceUnix("/dev/dsk/x0x0x0x0", true, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_LongResponse() throws Exception {
@@ -345,7 +345,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx-yyyyyyy-zzz:/home/users/s\n" +
             "                      14428928  12956424   1472504  90% /home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false));
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", false, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_LongResponseKb() throws Exception {
@@ -354,26 +354,26 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx-yyyyyyy-zzz:/home/users/s\n" +
             "                      14428928  12956424   1472504  90% /home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
-        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false));
+        assertEquals(1472504L, fsu.freeSpaceUnix("/home/users/s", true, false, -1));
     }
 
     public void testGetFreeSpaceUnix_String_EmptyResponse() throws Exception {
         String lines = "";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, false);
+            fsu.freeSpaceUnix("/home/users/s", false, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, false);
+            fsu.freeSpaceUnix("/home/users/s", true, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, true);
+            fsu.freeSpaceUnix("/home/users/s", false, true, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, true);
+            fsu.freeSpaceUnix("/home/users/s", true, true, -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -384,19 +384,19 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "                      14428928  12956424       100";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, false);
+            fsu.freeSpaceUnix("/home/users/s", false, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, false);
+            fsu.freeSpaceUnix("/home/users/s", true, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, true);
+            fsu.freeSpaceUnix("/home/users/s", false, true, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, true);
+            fsu.freeSpaceUnix("/home/users/s", true, true, -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -407,19 +407,19 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx:/home/users/s     14428928  12956424   nnnnnnn  90% /home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, false);
+            fsu.freeSpaceUnix("/home/users/s", false, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, false);
+            fsu.freeSpaceUnix("/home/users/s", true, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, true);
+            fsu.freeSpaceUnix("/home/users/s", false, true, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, true);
+            fsu.freeSpaceUnix("/home/users/s", true, true, -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -430,19 +430,19 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx:/home/users/s     14428928  12956424        -1  90% /home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, false);
+            fsu.freeSpaceUnix("/home/users/s", false, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, false);
+            fsu.freeSpaceUnix("/home/users/s", true, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, true);
+            fsu.freeSpaceUnix("/home/users/s", false, true, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, true);
+            fsu.freeSpaceUnix("/home/users/s", true, true, -1);
             fail();
         } catch (IOException ex) {}
     }
@@ -453,19 +453,19 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "xxx-yyyyyyy-zzz:/home/users/s";
         FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, false);
+            fsu.freeSpaceUnix("/home/users/s", false, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, false);
+            fsu.freeSpaceUnix("/home/users/s", true, false, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", false, true);
+            fsu.freeSpaceUnix("/home/users/s", false, true, -1);
             fail();
         } catch (IOException ex) {}
         try {
-            fsu.freeSpaceUnix("/home/users/s", true, true);
+            fsu.freeSpaceUnix("/home/users/s", true, true, -1);
             fail();
         } catch (IOException ex) {}
     }
