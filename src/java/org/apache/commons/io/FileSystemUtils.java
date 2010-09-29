@@ -448,9 +448,9 @@ public class FileSystemUtils {
             return bytes;
             
         } catch (NumberFormatException ex) {
-            throw new IOException(
+            throw new IOExceptionWithCause(
                     "Command line '" + DF + "' did not return numeric data as expected " +
-                    "for path '" + path + "'- check path is valid");
+                    "for path '" + path + "'- check path is valid", ex);
         }
     }
 
@@ -515,9 +515,9 @@ public class FileSystemUtils {
             return lines;
             
         } catch (InterruptedException ex) {
-            throw new IOException(
-                    "Command line threw an InterruptedException '" + ex.getMessage() +
-                    "' for command " + Arrays.asList(cmdAttribs));
+            throw new IOExceptionWithCause(
+                    "Command line threw an InterruptedException " +
+                    "for command " + Arrays.asList(cmdAttribs) + " timeout=" + timeout, ex);
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
