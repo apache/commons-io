@@ -30,7 +30,8 @@ import java.io.InputStream;
  * ServletInputStream's header, will stop it blocking, providing it's been sent
  * with a correct content length.
  *
- * @author InigoSurguy
+ * @version $Id$
+ * @since Commons IO 2.0
  */
 public class BoundedInputStream extends InputStream {
 
@@ -68,7 +69,6 @@ public class BoundedInputStream extends InputStream {
      * stream and is unlimited.
      *
      * @param in The wrapped input stream
-     * @param size The maximum number of bytes to return
      */
     public BoundedInputStream(InputStream in) {
         this(in, -1);
@@ -93,7 +93,7 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Invokes the delegate's <code>read(byte[])</code> method.
-     * @param bts the buffer to read the bytes into
+     * @param b the buffer to read the bytes into
      * @return the number of bytes read or -1 if the end of stream or
      * the limit has been reached.
      * @throws IOException if an I/O error occurs
@@ -105,7 +105,7 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Invokes the delegate's <code>read(byte[], int, int)</code> method.
-     * @param bts the buffer to read the bytes into
+     * @param b the buffer to read the bytes into
      * @param off The start offset
      * @param len The number of bytes to read
      * @return the number of bytes read or -1 if the end of stream or
@@ -130,7 +130,7 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Invokes the delegate's <code>skip(long)</code> method.
-     * @param ln the number of bytes to skip
+     * @param n the number of bytes to skip
      * @return the actual number of bytes skipped
      * @throws IOException if an I/O error occurs
      */
