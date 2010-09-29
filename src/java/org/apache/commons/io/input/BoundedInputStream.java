@@ -38,13 +38,13 @@ public class BoundedInputStream extends InputStream {
     private final InputStream in;
 
     /** the max length to provide */
-    private final int max;
+    private final long max;
 
     /** the number of bytes already returned */
-    private int pos = 0;
+    private long pos = 0;
 
     /** the marked position */
-    private int mark = -1;
+    private long mark = -1;
 
     /** flag if close shoud be propagated */
     private boolean propagateClose = true;
@@ -59,7 +59,7 @@ public class BoundedInputStream extends InputStream {
     public BoundedInputStream(InputStream in, long size) {
         // Some badly designed methods - eg the servlet API - overload length
         // such that "-1" means stream finished
-        this.max = (int) size;
+        this.max = size;
         this.in = in;
     }
 
@@ -117,8 +117,8 @@ public class BoundedInputStream extends InputStream {
         if (max>=0 && pos>=max) {
             return -1;
         }
-        int maxRead = max>=0 ? Math.min(len, max-pos) : len;
-        int bytesRead = in.read(b, off, maxRead);
+        long maxRead = max>=0 ? Math.min(len, max-pos) : len;
+        int bytesRead = in.read(b, off, (int)maxRead);
 
         if (bytesRead==-1) {
             return -1;
