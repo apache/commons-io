@@ -22,8 +22,11 @@ import java.io.FilenameFilter;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -1055,4 +1058,181 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, randomFileB, false);
         assertFiltering(filter, dir, false);
     }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests that the method properly filters files from the list.
+     */
+    public void testFilterArray() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        File[] filtered = FileFilterUtils.filter(filter, fileA, fileB);
+
+        assertEquals(1, filtered.length);
+        assertEquals(fileA, filtered[0]);
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests that the method properly filters files from the list.
+     */
+    public void testFilterArray_fromList() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+        List<File> fileList = Arrays.asList(fileA, fileB);
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        File[] filtered = FileFilterUtils.filter(filter, fileList);
+
+        assertEquals(1, filtered.length);
+        assertEquals(fileA, filtered[0]);
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests <code>null</code> parameters and <code>null</code> elements
+     * in the provided list.
+     */
+    public void testFilterArrayNullParameters() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+        try {
+            FileFilterUtils.filter(null, fileA, fileB); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for null filter
+        }
+
+        IOFileFilter filter = FileFilterUtils.trueFileFilter();
+        try {
+            FileFilterUtils.filter(filter, fileA, null); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for list containing null
+        }
+
+        File[] filtered = FileFilterUtils.filter(filter, (File[])null); 
+        assertEquals(0, filtered.length);
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests that the method properly filters files from the list.
+     */
+    public void testFilterList() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+        List<File> fileList = Arrays.asList(fileA, fileB);
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        List<File> filteredList = FileFilterUtils.filterList(filter, fileList);
+
+        assertTrue(filteredList.contains(fileA));
+        assertFalse(filteredList.contains(fileB));
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests that the method properly filters files from the list.
+     */
+    public void testFilterList_fromArray() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        List<File> filteredList = FileFilterUtils.filterList(filter, fileA, fileB);
+
+        assertTrue(filteredList.contains(fileA));
+        assertFalse(filteredList.contains(fileB));
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * that tests <code>null</code> parameters and <code>null</code> elements
+     * in the provided list.
+     */
+    public void testFilterListNullParameters() {
+        try {
+            FileFilterUtils.filterList(null, Collections.<File>emptyList()); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for null filter
+        }
+
+        IOFileFilter filter = FileFilterUtils.trueFileFilter();
+        try {
+            FileFilterUtils.filterList(filter, Arrays.<File>asList((File) null)); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for list containing null
+        }
+
+        List<File> filteredList = FileFilterUtils.filterList(filter, (List<File>)null); 
+        assertEquals(0, filteredList.size());
+    }
+ 
+    /**
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * that tests that the method properly filters files from the set.
+     */
+    public void testFilterSet() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+        Set<File> fileList = new HashSet<File>(Arrays.asList(fileA, fileB));
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        Set<File> filteredSet = FileFilterUtils.filterSet(filter, fileList);
+
+        assertTrue(filteredSet.contains(fileA));
+        assertFalse(filteredSet.contains(fileB));
+    }
+    
+    /**
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * that tests that the method properly filters files from the set.
+     */
+    public void testFilterSet_fromArray() throws Exception {
+        File fileA = newFile("A");
+        File fileB = newFile("B");
+
+        IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
+
+        Set<File> filteredSet = FileFilterUtils.filterSet(filter, fileA, fileB);
+
+        assertTrue(filteredSet.contains(fileA));
+        assertFalse(filteredSet.contains(fileB));
+    }
+
+    /**
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * that tests <code>null</code> parameters and <code>null</code> elements
+     * in the provided set.
+     */
+   public void testFilterSetNullParameters() {
+        try {
+            FileFilterUtils.filterSet(null, Collections.<File>emptySet()); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for null filter
+        }
+
+        IOFileFilter filter = FileFilterUtils.trueFileFilter();
+        try {
+            FileFilterUtils.filterSet(filter, new HashSet<File>(Arrays.<File>asList((File) null))); 
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // Test passes, exception thrown for set containing null
+        }
+
+        Set<File> filteredSet = FileFilterUtils.filterSet(filter, (Set<File>)null); 
+        assertEquals(0, filteredSet.size());
+    }
+    
 }
