@@ -145,7 +145,7 @@ public class FileSystemUtils {
      */
     @Deprecated
     public static long freeSpace(String path) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS, false);
+        return INSTANCE.freeSpaceOS(path, OS, false, -1);
     }
 
     //-----------------------------------------------------------------------
@@ -174,7 +174,36 @@ public class FileSystemUtils {
      * @since Commons IO 1.2, enhanced OS support in 1.3
      */
     public static long freeSpaceKb(String path) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS, true);
+        return freeSpaceKb(path, -1);
+    }
+    /**
+     * Returns the free space on a drive or volume in kilobytes by invoking
+     * the command line.
+     * <pre>
+     * FileSystemUtils.freeSpaceKb("C:");       // Windows
+     * FileSystemUtils.freeSpaceKb("/volume");  // *nix
+     * </pre>
+     * The free space is calculated via the command line.
+     * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
+     * <p>
+     * In order to work, you must be running Windows, or have a implementation of
+     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+     * to rely on this code, please check that it works on your OS by running
+     * some simple tests to compare the command line with the output from this class.
+     * If your operating system isn't supported, please raise a JIRA call detailing
+     * the exact result from df -k and as much other detail as possible, thanks.
+     *
+     * @param path  the path to get free space for, not null, not empty on Unix
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalArgumentException if the path is invalid
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     * @since Commons IO 2.0
+     */
+    public static long freeSpaceKb(String path, long timeout) throws IOException {
+        return INSTANCE.freeSpaceOS(path, OS, true, timeout);
     }
 
     /**
@@ -189,7 +218,25 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs when finding the free space
      */
     public static long freeSpaceKb() throws IOException {
-        return freeSpaceKb(new File(".").getAbsolutePath()); 
+        return freeSpaceKb(-1); 
+    }
+
+    /**
+     * Returns the disk size of the volume which holds the working directory.
+     * <p>
+     * Identical to:
+     * <pre>
+     * freeSpaceKb(new File(".").getAbsolutePath())
+     * </pre>
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
+     * @return the amount of free drive space on the drive or volume in kilobytes
+     * @throws IllegalStateException if an error occurred in initialisation
+     * @throws IOException if an error occurs when finding the free space
+     * @since Commons IO 2.0
+     */
+    public static long freeSpaceKb(long timeout) throws IOException {
+        return freeSpaceKb(new File(".").getAbsolutePath(), timeout); 
     }
     
     //-----------------------------------------------------------------------
@@ -206,22 +253,24 @@ public class FileSystemUtils {
      * @param path  the path to get free space for, not null, not empty on Unix
      * @param os  the operating system code
      * @param kb  whether to normalize to kilobytes
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      */
-    long freeSpaceOS(String path, int os, boolean kb) throws IOException {
+    long freeSpaceOS(String path, int os, boolean kb, long timeout) throws IOException {
         if (path == null) {
             throw new IllegalArgumentException("Path must not be empty");
         }
         switch (os) {
             case WINDOWS:
-                return (kb ? freeSpaceWindows(path) / 1024 : freeSpaceWindows(path));
+                return (kb ? freeSpaceWindows(path, timeout) / 1024 : freeSpaceWindows(path, timeout));
             case UNIX:
-                return freeSpaceUnix(path, kb, false);
+                return freeSpaceUnix(path, kb, false, timeout);
             case POSIX_UNIX:
-                return freeSpaceUnix(path, kb, true);
+                return freeSpaceUnix(path, kb, true, timeout);
             case OTHER:
                 throw new IllegalStateException("Unsupported operating system");
             default:
@@ -235,10 +284,12 @@ public class FileSystemUtils {
      * Find free space on the Windows platform using the 'dir' command.
      *
      * @param path  the path to get free space for, including the colon
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
      */
-    long freeSpaceWindows(String path) throws IOException {
+    long freeSpaceWindows(String path, long timeout) throws IOException {
         path = FilenameUtils.normalize(path);
         if (path.length() > 2 && path.charAt(1) == ':') {
             path = path.substring(0, 2);  // seems to make it work
@@ -248,7 +299,7 @@ public class FileSystemUtils {
         String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
         
         // read in the output of the command to an ArrayList
-        List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE);
+        List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
         
         // now iterate over the lines we just read and find the LAST
         // non-empty line (the free space bytes should be in the last element
@@ -325,10 +376,12 @@ public class FileSystemUtils {
      * @param path  the path to get free space for
      * @param kb  whether to normalize to kilobytes
      * @param posix  whether to use the posix standard format flag
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    long freeSpaceUnix(String path, boolean kb, boolean posix) throws IOException {
+    long freeSpaceUnix(String path, boolean kb, boolean posix, long timeout) throws IOException {
         if (path.length() == 0) {
             throw new IllegalArgumentException("Path must not be empty");
         }
@@ -345,7 +398,7 @@ public class FileSystemUtils {
             (flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path});
         
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
-        List<String> lines = performCommand(cmdAttribs, 3);
+        List<String> lines = performCommand(cmdAttribs, 3, timeout);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
@@ -407,10 +460,12 @@ public class FileSystemUtils {
      *
      * @param cmdAttribs  the command line parameters
      * @param max The maximum limit for the lines returned
+     * @param timeout The timout amount in milliseconds or no timeout if the value
+     *  is zero or less
      * @return the parsed data
      * @throws IOException if an error occurs
      */
-    List<String> performCommand(String[] cmdAttribs, int max) throws IOException {
+    List<String> performCommand(String[] cmdAttribs, int max, long timeout) throws IOException {
         // this method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
@@ -426,6 +481,9 @@ public class FileSystemUtils {
         InputStream err = null;
         BufferedReader inr = null;
         try {
+
+            Thread monitor = ThreadMonitor.start(timeout);
+
             proc = openProcess(cmdAttribs);
             in = proc.getInputStream();
             out = proc.getOutputStream();
@@ -439,6 +497,9 @@ public class FileSystemUtils {
             }
             
             proc.waitFor();
+
+            ThreadMonitor.stop(monitor);
+
             if (proc.exitValue() != 0) {
                 // os command problem, throw exception
                 throw new IOException(
