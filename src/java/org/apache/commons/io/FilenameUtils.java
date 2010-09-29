@@ -1175,7 +1175,7 @@ public class FilenameUtils {
      * always testing case-sensitive.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
      * The check is case-sensitive always.
      * <pre>
@@ -1200,7 +1200,7 @@ public class FilenameUtils {
      * using the case rules of the system.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
      * This is the same as often found on Dos/Unix command lines.
      * The check is case-sensitive on Unix and case-insensitive on Windows.
      * <pre>
@@ -1225,7 +1225,7 @@ public class FilenameUtils {
      * allowing control over case-sensitivity.
      * <p>
      * The wildcard matcher uses the characters '?' and '*' to represent a
-     * single or multiple wildcard characters.
+     * single or multiple (zero or more) wildcard characters.
      * 
      * @param filename  the filename to match on
      * @param wildcardMatcher  the wildcard string to match against
@@ -1317,9 +1317,11 @@ public class FilenameUtils {
 
     /**
      * Splits a string into a number of tokens.
+     * The text is split by '?' and '*'.
+     * Where multiple '*' occur consecutively they are collapsed into a single '*'.
      * 
      * @param text  the text to split
-     * @return the tokens, never null
+     * @return the array of tokens, never null
      */
     static String[] splitOnTokens(String text) {
         // used by wildcardMatch
