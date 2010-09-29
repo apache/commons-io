@@ -63,12 +63,23 @@ public class BoundedInputStream extends InputStream {
         this.in = in;
     }
 
+    /**
+     * Creates a new <code>BoundedInputStream</code> that wraps the given input
+     * stream and is unlimited.
+     *
+     * @param in The wrapped input stream
+     * @param size The maximum number of bytes to return
+     */
     public BoundedInputStream(InputStream in) {
         this(in, -1);
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>read()</code> method if
+     * the current position is less than the limit.
+     * @return the byte read or -1 if the end of stream or
+     * the limit has been reached.
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public int read() throws IOException {
@@ -81,7 +92,11 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>read(byte[])</code> method.
+     * @param bts the buffer to read the bytes into
+     * @return the number of bytes read or -1 if the end of stream or
+     * the limit has been reached.
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public int read(byte[] b) throws IOException {
@@ -89,7 +104,13 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>read(byte[], int, int)</code> method.
+     * @param bts the buffer to read the bytes into
+     * @param off The start offset
+     * @param len The number of bytes to read
+     * @return the number of bytes read or -1 if the end of stream or
+     * the limit has been reached.
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
@@ -108,7 +129,10 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>skip(long)</code> method.
+     * @param ln the number of bytes to skip
+     * @return the actual number of bytes skipped
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public long skip(long n) throws IOException {
@@ -130,7 +154,8 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>toString()</code> method.
+     * @return the delegate's <code>toString()</code>
      */
     @Override
     public String toString() {
@@ -138,7 +163,9 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>close()</code> method
+     * if {@link #isPropagateClose()} is <code>true</code>.
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public void close() throws IOException {
@@ -148,7 +175,8 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>reset()</code> method.
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -157,7 +185,8 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>mark(int)</code> method.
+     * @param readlimit read ahead limit
      */
     @Override
     public synchronized void mark(int readlimit) {
@@ -166,17 +195,35 @@ public class BoundedInputStream extends InputStream {
     }
 
     /**
-     * {@inheritDoc}
+     * Invokes the delegate's <code>markSupported()</code> method.
+     * @return true if mark is supported, otherwise false
      */
     @Override
     public boolean markSupported() {
         return in.markSupported();
     }
 
+    /**
+     * Indicates whether the {@link #close()} method
+     * should propagate to the underling {@link InputStream}.
+     *
+     * @return <code>true</code> if calling {@link #close()}
+     * propagates to the <code>close()</code> method of the
+     * underlying stream or <code>false</code> if it does not.
+     */
     public boolean isPropagateClose() {
         return propagateClose;
     }
 
+    /**
+     * Set whether the {@link #close()} method
+     * should propagate to the underling {@link InputStream}.
+     *
+     * @param propagateClose <code>true</code> if calling
+     * {@link #close()} propagates to the <code>close()</code>
+     * method of the underlying stream or
+     * <code>false</code> if it does not.
+     */
     public void setPropagateClose(boolean propagateClose) {
         this.propagateClose = propagateClose;
     }
