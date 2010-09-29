@@ -363,7 +363,7 @@ public class FileUtils {
         }
 
         //Setup effective file filter
-        IOFileFilter effFileFilter = FileFilterUtils.andFileFilter(fileFilter,
+        IOFileFilter effFileFilter = FileFilterUtils.and(fileFilter,
             FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
 
         //Setup effective directory filter
@@ -371,14 +371,14 @@ public class FileUtils {
         if (dirFilter == null) {
             effDirFilter = FalseFileFilter.INSTANCE;
         } else {
-            effDirFilter = FileFilterUtils.andFileFilter(dirFilter,
+            effDirFilter = FileFilterUtils.and(dirFilter,
                 DirectoryFileFilter.INSTANCE);
         }
 
         //Find files
         Collection<File> files = new java.util.LinkedList<File>();
         innerListFiles(files, directory,
-            FileFilterUtils.orFileFilter(effFileFilter, effDirFilter));
+            FileFilterUtils.or(effFileFilter, effDirFilter));
         return files;
     }
 
