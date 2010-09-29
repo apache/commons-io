@@ -704,6 +704,24 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("~user/a/b", FilenameUtils.getFullPathNoEndSeparator("~user/a/b/c.txt"));
     }
 
+    /**
+     * Test for https://issues.apache.org/jira/browse/IO-248
+     */
+    public void testGetFullPathNoEndSeparator_IO_248() {
+
+        // Test single separator
+        assertEquals("/",  FilenameUtils.getFullPathNoEndSeparator("/"));
+        assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\"));
+
+        // Test one level directory
+        assertEquals("/",  FilenameUtils.getFullPathNoEndSeparator("/abc"));
+        assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\abc"));
+
+        // Test one level directory
+        assertEquals("/abc",  FilenameUtils.getFullPathNoEndSeparator("/abc/xyz"));
+        assertEquals("\\abc", FilenameUtils.getFullPathNoEndSeparator("\\abc\\xyz"));
+    }
+
     public void testGetName() {
         assertEquals(null, FilenameUtils.getName(null));
         assertEquals("noseperator.inthispath", FilenameUtils.getName("noseperator.inthispath"));

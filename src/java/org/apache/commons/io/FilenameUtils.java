@@ -887,6 +887,9 @@ public class FilenameUtils {
             return filename.substring(0, prefix);
         }
         int end = index + (includeSeparator ?  1 : 0);
+        if (end == 0) {
+            end++;
+        }
         return filename.substring(0, end);
     }
 
