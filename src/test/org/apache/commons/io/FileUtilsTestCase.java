@@ -906,6 +906,57 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals("file3.txt", files.get(2).getName());
    }
 
+    public void testCopyDirectoryPreserveDates() throws Exception {
+        File source = new File(getTestDirectory(), "source");
+        File sourceDirectory = new File(source, "directory");
+        File sourceFile = new File(sourceDirectory, "hello.txt");
+
+        // Prepare source data
+        source.mkdirs();
+        sourceDirectory.mkdir();
+        FileUtils.writeStringToFile(sourceFile, "HELLO WORLD", "UTF8");
+        // Set dates in reverse order to avoid overwriting previous values
+        // Also, use full seconds (arguments are in ms) close to today
+        // but still highly unlikely to occur in the real world
+        sourceFile.setLastModified(1000000002000L);
+        sourceDirectory.setLastModified(1000000001000L);
+        source.setLastModified(1000000000000L);
+
+        File target = new File(getTestDirectory(), "target");
+        File targetDirectory = new File(target, "directory");
+        File targetFile = new File(targetDirectory, "hello.txt");
+
+        // Test with preserveFileDate disabled
+        FileUtils.copyDirectory(source, target, false);
+        assertTrue(1000000000000L != target.lastModified());
+        assertTrue(1000000001000L != targetDirectory.lastModified());
+        assertTrue(1000000002000L != targetFile.lastModified());
+        FileUtils.deleteDirectory(target);
+
+        // Test with preserveFileDate enabled
+        FileUtils.copyDirectory(source, target, true);
+        assertEquals(1000000000000L, target.lastModified());
+        assertEquals(1000000001000L, targetDirectory.lastModified());
+        assertEquals(1000000002000L, targetFile.lastModified());
+        FileUtils.deleteDirectory(target);
+
+        // also if the target directory already exists (IO-190)
+        target.mkdirs();
+        FileUtils.copyDirectory(source, target, true);
+        assertEquals(1000000000000L, target.lastModified());
+        assertEquals(1000000001000L, targetDirectory.lastModified());
+        assertEquals(1000000002000L, targetFile.lastModified());
+        FileUtils.deleteDirectory(target);
+
+        // also if the target subdirectory already exists (IO-190)
+        targetDirectory.mkdirs();
+        FileUtils.copyDirectory(source, target, true);
+        assertEquals(1000000000000L, target.lastModified());
+        assertEquals(1000000001000L, targetDirectory.lastModified());
+        assertEquals(1000000002000L, targetFile.lastModified());
+        FileUtils.deleteDirectory(target);
+    }
+
     /** Test for IO-141 */
     public void testCopyDirectoryToChild() throws Exception {
         File grandParentDir = new File(getTestDirectory(), "grandparent");

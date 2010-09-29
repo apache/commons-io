@@ -1081,9 +1081,6 @@ public class FileUtils {
             if (destDir.mkdirs() == false) {
                 throw new IOException("Destination '" + destDir + "' directory cannot be created");
             }
-            if (preserveFileDate) {
-                destDir.setLastModified(srcDir.lastModified());
-            }
         }
         if (destDir.canWrite() == false) {
             throw new IOException("Destination '" + destDir + "' cannot be written to");
@@ -1097,6 +1094,11 @@ public class FileUtils {
                     doCopyFile(file, copiedFile, preserveFileDate);
                 }
             }
+        }
+
+        // Do this last, as the above has probably affected directory metadata
+        if (preserveFileDate) {
+            destDir.setLastModified(srcDir.lastModified());
         }
     }
 
