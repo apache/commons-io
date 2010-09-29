@@ -182,6 +182,30 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertMatch("log.log.abc.log.abc.d", "*log?abc?d", true);
     }
 
+    /**
+     * See https://issues.apache.org/jira/browse/IO-246
+     */
+    public void test_IO_246() {
+
+        // Tests for "*?"
+        assertMatch("aaa", "*?", false);
+
+        // Tests for "?*"
+        assertMatch("",    "?*",   false);
+        assertMatch("a",   "a?*",  false);
+        assertMatch("aa",  "aa?*", false);
+        assertMatch("a",   "?*",   true);
+        assertMatch("aa",  "?*",   true);
+        assertMatch("aaa", "?*",   true);
+
+        // Test ending on "?"
+        assertMatch("",    "?", false);
+        assertMatch("a",   "a?", false);
+        assertMatch("aa",  "aa?", false);
+        assertMatch("aab", "aa?", true);
+        assertMatch("aaa", "*a", true);
+    }
+
     public void testLocaleIndependence() {
         Locale orig = Locale.getDefault();
 

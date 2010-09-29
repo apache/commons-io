@@ -1264,6 +1264,9 @@ public class FilenameUtils {
                 if (wcs[wcsIdx].equals("?")) {
                     // ? so move to next text char
                     textIdx++;
+                    if (textIdx > filename.length()) {
+                        break;
+                    }
                     anyChars = false;
                     
                 } else if (wcs[wcsIdx].equals("*")) {
