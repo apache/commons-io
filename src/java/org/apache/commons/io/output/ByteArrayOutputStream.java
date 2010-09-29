@@ -88,7 +88,9 @@ public class ByteArrayOutputStream extends OutputStream {
             throw new IllegalArgumentException(
                 "Negative initial size: " + size);
         }
-        needNewBuffer(size);
+        synchronized (this) {
+            needNewBuffer(size);
+        }
     }
 
     /**
