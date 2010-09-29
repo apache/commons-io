@@ -39,6 +39,8 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertEquals(true, FilenameUtils.wildcardMatch(null, null));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Foo"));
         assertEquals(true, FilenameUtils.wildcardMatch("", ""));
+        assertEquals(true, FilenameUtils.wildcardMatch("", "*"));
+        assertEquals(false, FilenameUtils.wildcardMatch("", "?"));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo*"));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo", "Fo?"));
         assertEquals(true, FilenameUtils.wildcardMatch("Foo Bar and Catflap", "Fo*"));
@@ -117,9 +119,10 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertArrayEquals( new String[] { "Ad", "*", "er" }, FilenameUtils.splitOnTokens("Ad*er") );
         assertArrayEquals( new String[] { "Ad", "?", "er" }, FilenameUtils.splitOnTokens("Ad?er") );
         assertArrayEquals( new String[] { "Test", "*", "?", "One" }, FilenameUtils.splitOnTokens("Test*?One") );
+        assertArrayEquals( new String[] { "Test", "?", "*", "One" }, FilenameUtils.splitOnTokens("Test?*One") );
         assertArrayEquals( new String[] { "*" }, FilenameUtils.splitOnTokens("****") );
         assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
-        assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
+        assertArrayEquals( new String[] { "*", "?", "*", "?", "*" }, FilenameUtils.splitOnTokens("*?**?*") );
         assertArrayEquals( new String[] { "h", "?", "?", "*" }, FilenameUtils.splitOnTokens("h??*") );
         assertArrayEquals( new String[] { "" }, FilenameUtils.splitOnTokens("") );
     }
