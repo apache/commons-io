@@ -283,9 +283,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToFile2() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file%20n%61me.tx%74");
+        URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
         File file = FileUtils.toFile(url);
-        assertEquals(true, file.toString().indexOf("file name.txt") >= 0);
+        assertEquals(true, file.toString().indexOf("file name%20.txt") >= 0);
     }
 
     public void testToFile3() throws Exception {
@@ -294,11 +294,42 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToFile4() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file%2Xn%61me.txt");
-        try {
-            FileUtils.toFile(url);
-            fail();
-        }  catch (IllegalArgumentException ex) {}
+        URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
+        File file = FileUtils.toFile(url);
+        assertEquals(true, file.toString().indexOf("file% %me.txt%") >= 0);
+    }
+
+    public void testToFileUtf8() throws Exception {
+        URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
+        File file = FileUtils.toFile(url);
+        assertEquals(true, file.toString().indexOf("\u00E4\u00F6\u00FC\u00DF") >= 0);
+    }
+
+    public void testDecodeUrl() {
+        assertEquals("", FileUtils.decodeUrl(""));
+        assertEquals("foo", FileUtils.decodeUrl("foo"));
+        assertEquals("+", FileUtils.decodeUrl("+"));
+        assertEquals("% ", FileUtils.decodeUrl("%25%20"));
+        assertEquals("%20", FileUtils.decodeUrl("%2520"));
+        assertEquals("jar:file:/C:/dir/sub dir/1.0/foo-1.0.jar!/org/Bar.class", FileUtils
+                .decodeUrl("jar:file:/C:/dir/sub%20dir/1.0/foo-1.0.jar!/org/Bar.class"));
+    }
+
+    public void testDecodeUrlLenient() {
+        assertEquals(" ", FileUtils.decodeUrl(" "));
+        assertEquals("\u00E4\u00F6\u00FC\u00DF", FileUtils.decodeUrl("\u00E4\u00F6\u00FC\u00DF"));
+        assertEquals("%", FileUtils.decodeUrl("%"));
+        assertEquals("% ", FileUtils.decodeUrl("%%20"));
+        assertEquals("%2", FileUtils.decodeUrl("%2"));
+        assertEquals("%2G", FileUtils.decodeUrl("%2G"));
+    }
+
+    public void testDecodeUrlNullSafe() {
+        assertNull(FileUtils.decodeUrl(null));
+    }
+
+    public void testDecodeUrlEncodingUtf8() {
+        assertEquals("\u00E4\u00F6\u00FC\u00DF", FileUtils.decodeUrl("%C3%A4%C3%B6%C3%BC%C3%9F"));
     }
 
     // toFiles

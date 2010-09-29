@@ -26,7 +26,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -112,6 +114,11 @@ public class FileUtils {
      * An empty array of type <code>File</code>.
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
+
+    /**
+     * The UTF-8 character set, used to decode octets in URLs.
+     */
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
     //-----------------------------------------------------------------------
     /**
@@ -515,28 +522,70 @@ public class FileUtils {
      * <p>
      * From version 1.1 this method will decode the URL.
      * Syntax such as <code>file:///my%20docs/file.txt</code> will be
-     * correctly decoded to <code>/my docs/file.txt</code>.
+     * correctly decoded to <code>/my docs/file.txt</code>. Starting with version
+     * 1.5, this method uses UTF-8 to decode percent-encoded octets to characters.
+     * Additionally, malformed percent-encoded octets are handled leniently by
+     * passing them through literally.
      *
      * @param url  the file URL to convert, <code>null</code> returns <code>null</code>
      * @return the equivalent <code>File</code> object, or <code>null</code>
      *  if the URL's protocol is not <code>file</code>
-     * @throws IllegalArgumentException if the file is incorrectly encoded
      */
     public static File toFile(URL url) {
-        if (url == null || !url.getProtocol().equals("file")) {
+        if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
             return null;
         } else {
             String filename = url.getFile().replace('/', File.separatorChar);
-            int pos =0;
-            while ((pos = filename.indexOf('%', pos)) >= 0) {
-                if (pos + 2 < filename.length()) {
-                    String hexStr = filename.substring(pos + 1, pos + 3);
-                    char ch = (char) Integer.parseInt(hexStr, 16);
-                    filename = filename.substring(0, pos) + ch + filename.substring(pos + 3);
-                }
-            }
+            filename = decodeUrl(filename);
             return new File(filename);
         }
+    }
+
+    /**
+     * Decodes the specified URL as per RFC 3986, i.e. transforms
+     * percent-encoded octets to characters by decoding with the UTF-8 character
+     * set. This function is primarily intended for usage with
+     * {@link java.net.URL} which unfortunately does not enforce proper URLs. As
+     * such, this method will leniently accept invalid characters or malformed
+     * percent-encoded octets and simply pass them literally through to the
+     * result string. Except for rare edge cases, this will make unencoded URLs
+     * pass through unaltered.
+     * 
+     * @param url  The URL to decode, may be <code>null</code>.
+     * @return The decoded URL or <code>null</code> if the input was
+     *         <code>null</code>.
+     */
+    static String decodeUrl(String url) {
+        String decoded = url;
+        if (url != null && url.indexOf('%') >= 0) {
+            int n = url.length();
+            StringBuffer buffer = new StringBuffer();
+            ByteBuffer bytes = ByteBuffer.allocate(n);
+            for (int i = 0; i < n;) {
+                if (url.charAt(i) == '%') {
+                    try {
+                        do {
+                            byte octet = (byte) Integer.parseInt(url.substring(i + 1, i + 3), 16);
+                            bytes.put(octet);
+                            i += 3;
+                        } while (i < n && url.charAt(i) == '%');
+                        continue;
+                    } catch (RuntimeException e) {
+                        // malformed percent-encoded octet, fall through and
+                        // append characters literally
+                    } finally {
+                        if (bytes.position() > 0) {
+                            bytes.flip();
+                            buffer.append(UTF8.decode(bytes).toString());
+                            bytes.clear();
+                        }
+                    }
+                }
+                buffer.append(url.charAt(i++));
+            }
+            decoded = buffer.toString();
+        }
+        return decoded;
     }
 
     /**
