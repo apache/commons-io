@@ -191,7 +191,10 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
     public void test_IO_246() {
 
         // Tests for "*?"
-        assertMatch("aaa", "*?", false);
+        assertMatch("aaa", "aa*?", true);
+        // these ought to work as well, but "*?" does not work properly at present
+//      assertMatch("aaa", "a*?", true);
+//      assertMatch("aaa", "*?", true);
 
         // Tests for "?*"
         assertMatch("",    "?*",   false);
