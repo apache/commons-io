@@ -291,8 +291,8 @@ public class FileSystemUtils {
      */
     long freeSpaceWindows(String path, long timeout) throws IOException {
         path = FilenameUtils.normalize(path);
-        if (path.length() > 2 && path.charAt(1) == ':') {
-            path = path.substring(0, 2);  // seems to make it work
+        if (path.length() > 0 && path.charAt(0) != '"') {
+            path = "\"" + path + "\"";
         }
         
         // build and run the 'dir' command
