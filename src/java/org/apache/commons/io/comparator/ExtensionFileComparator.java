@@ -60,7 +60,8 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
     public static final Comparator<File> EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
 
     /** Case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> EXTENSION_INSENSITIVE_COMPARATOR = new ExtensionFileComparator(IOCase.INSENSITIVE);
+    public static final Comparator<File> EXTENSION_INSENSITIVE_COMPARATOR
+                                                = new ExtensionFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
     public static final Comparator<File> EXTENSION_INSENSITIVE_REVERSE
