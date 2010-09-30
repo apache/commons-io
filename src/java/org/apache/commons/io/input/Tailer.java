@@ -209,9 +209,9 @@ public class Tailer implements Runnable {
     }
 
     /**
-     * Allows the tailer to complete it's current loop and return.
+     * Allows the tailer to complete its current loop and return.
      */
-    public synchronized void stop() {
+    public void stop() {
         this.run = false;
     }
 
