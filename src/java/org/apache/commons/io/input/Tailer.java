@@ -64,7 +64,7 @@ public class Tailer implements Runnable {
     private volatile boolean run = true;
 
     /**
-     * Creates SimpleTailer for the given file.
+     * Creates SimpleTailer for the given file, starting from the beginning, with the default delay of 1.0s.
      * @param file The file to follow.
      * @param listener The TailerListener which to use.
      */
@@ -73,7 +73,7 @@ public class Tailer implements Runnable {
     }
 
     /**
-     * Creates a SimpleTailer for the given file, with a delay other than the default 1.0s.
+     * Creates a SimpleTailer for the given file, starting from the beginning.
      * @param file The file to follow.
      * @param listener The TailerListener which to use.
      * @param delay The delay between checks of the file for new content in milliseconds.
