@@ -87,6 +87,10 @@ public class TailerTest extends FileBasedTestCase {
         Thread.sleep(delay * 2);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
+        assertNull("Should not generate Exception", listener.exception);
+        assertEquals("Expected init to be called", 1 , listener.initialised);
+        assertEquals("fileNotFound should not be called", 0 , listener.notFound);
+        assertEquals("fileRotated should be be called", 1 , listener.rotated);
     }
 
     /** Start a tailer */
@@ -120,19 +124,27 @@ public class TailerTest extends FileBasedTestCase {
         Thread.sleep(idle);
         tailer.stop();
         Thread.sleep(delay+idle);
-        assertNull(listener.exception);
+        assertNull("Should not generate Exception", listener.exception);
+        assertEquals("Expected init to be called", 1 , listener.initialised);
+        assertEquals("fileNotFound should be called", 1 , listener.notFound);
+        assertEquals("fileRotated should be not be called", 0 , listener.rotated);
     }
 
     /**
      * Test {@link TailerListener} implementation.
      */
-    private static class TestTailerListener extends TailerListenerAdapter {
+    private static class TestTailerListener implements TailerListener {
 
         private final List<String> lines = new ArrayList<String>();
 
         volatile Exception exception = null;
         
-        @Override
+        volatile int notFound = 0;
+
+        volatile int rotated = 0;
+        
+        volatile int initialised = 0;
+
         public void handle(String line) {
             lines.add(line);
         }
@@ -142,9 +154,17 @@ public class TailerTest extends FileBasedTestCase {
         public void clear() {
             lines.clear();
         }
-        @Override
         public void handle(Exception e) {
             exception = e;
+        }
+        public void init(Tailer tailer) {
+            initialised++; // not atomic, but OK because only updated here.
+        }
+        public void fileNotFound() {
+            notFound++; // not atomic, but OK because only updated here.
+        }
+        public void fileRotated() {
+            rotated++; // not atomic, but OK because only updated here.
         }
     }
 }
