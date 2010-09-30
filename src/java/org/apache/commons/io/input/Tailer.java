@@ -61,7 +61,7 @@ public class Tailer implements Runnable {
     /**
      * The tailer will run as long as this value is true.
      */
-    private boolean run = true;
+    private volatile boolean run = true;
 
     /**
      * The object which will be responsible for actually reading the file.
