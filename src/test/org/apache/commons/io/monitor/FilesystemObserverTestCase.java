@@ -60,13 +60,13 @@ public class FilesystemObserverTestCase extends TestCase {
 
         IOFileFilter files = FileFilterUtils.fileFileFilter();
         IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
-        IOFileFilter fileFilter = FileFilterUtils.andFileFilter(files, javaSuffix);
+        IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
         
         IOFileFilter directories = FileFilterUtils.directoryFileFilter();
         IOFileFilter visible = HiddenFileFilter.VISIBLE;
-        IOFileFilter dirFilter = FileFilterUtils.andFileFilter(directories, visible);
+        IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
 
-        IOFileFilter filter = FileFilterUtils.orFileFilter(dirFilter, fileFilter);
+        IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
         
         createObserver(testDir, filter);
     }
@@ -114,7 +114,8 @@ public class FilesystemObserverTestCase extends TestCase {
             File testDirBFile1 = touch(new File(testDirB, "B-file1.java"));
  
             checkAndNotify();
-            checkCollectionSizes("B", 3, 0, 0, 4, 0, 0);
+            checkDirectoryCounts("B", 3, 0, 0);
+            checkFileCounts("B", 4, 0, 0);
             assertTrue("B testDirA",   listener.getCreatedDirectories().contains(testDirA));
             assertTrue("B testDirB",   listener.getCreatedDirectories().contains(testDirB));
             assertTrue("B testDirC",   listener.getCreatedDirectories().contains(testDirC));
@@ -130,14 +131,16 @@ public class FilesystemObserverTestCase extends TestCase {
             testDirAFile4 = touch(testDirAFile4);
             FileUtils.deleteDirectory(testDirB);
             checkAndNotify();
-            checkCollectionSizes("D", 0, 0, 1, 0, 1, 1);
+            checkDirectoryCounts("D", 0, 0, 1);
+            checkFileCounts("D", 0, 1, 1);
             assertTrue("D testDirB",   listener.getDeletedDirectories().contains(testDirB));
             assertTrue("D testDirAFile4", listener.getChangedFiles().contains(testDirAFile4));
             assertTrue("D testDirBFile1", listener.getDeletedFiles().contains(testDirBFile1));
 
             FileUtils.deleteDirectory(testDir);
             checkAndNotify();
-            checkCollectionSizes("E", 0, 0, 2, 0, 0, 3);
+            checkDirectoryCounts("E", 0, 0, 2);
+            checkFileCounts("E", 0, 0, 3);
             assertTrue("E testDirA",   listener.getDeletedDirectories().contains(testDirA));
             assertTrue("E testDirAFile1", listener.getDeletedFiles().contains(testDirAFile1));
             assertFalse("E testDirAFile2", listener.getDeletedFiles().contains(testDirAFile2));
@@ -174,7 +177,8 @@ public class FilesystemObserverTestCase extends TestCase {
             File testDirAFile5 =       new File(testDirA, "A-file5.java");
  
             checkAndNotify();
-            checkCollectionSizes("B", 1, 0, 0, 2, 0, 0);
+            checkDirectoryCounts("B", 1, 0, 0);
+            checkFileCounts("B", 2, 0, 0);
             assertFalse("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
             assertTrue("B testDirAFile2",  listener.getCreatedFiles().contains(testDirAFile2));
             assertFalse("B testDirAFile3", listener.getCreatedFiles().contains(testDirAFile3));
@@ -192,25 +196,22 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Create file with name < first entry
             testDirAFile1 = touch(testDirAFile1);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("D", 0, 1, 0, 1, 0, 0);
+            checkFileCounts("D", 1, 0, 0);
             assertTrue("D testDirAFile1 exists", testDirAFile1.exists());
             assertTrue("D testDirAFile1",  listener.getCreatedFiles().contains(testDirAFile1));
 
             // Create file with name between 2 entries
             testDirAFile3 = touch(testDirAFile3);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("E", 0, 1, 0, 1, 0, 0);
+            checkFileCounts("E", 1, 0, 0);
             assertTrue("E testDirAFile3 exists", testDirAFile3.exists());
             assertTrue("E testDirAFile3",  listener.getCreatedFiles().contains(testDirAFile3));
 
             // Create file with name > last entry
             testDirAFile5 = touch(testDirAFile5);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("F", 0, 1, 0, 1, 0, 0);
+            checkFileCounts("F", 1, 0, 0);
             assertTrue("F testDirAFile5 exists", testDirAFile5.exists());
             assertTrue("F testDirAFile5",  listener.getCreatedFiles().contains(testDirAFile5));
         } catch (Exception e) {
@@ -236,7 +237,8 @@ public class FilesystemObserverTestCase extends TestCase {
             File testDirAFile5 = touch(new File(testDirA, "A-file5.java"));
  
             checkAndNotify();
-            checkCollectionSizes("B", 1, 0, 0, 5, 0, 0);
+            checkDirectoryCounts("B", 1, 0, 0);
+            checkFileCounts("B", 5, 0, 0);
             assertTrue("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
             assertTrue("B testDirAFile2", listener.getCreatedFiles().contains(testDirAFile2));
             assertTrue("B testDirAFile3", listener.getCreatedFiles().contains(testDirAFile3));
@@ -254,23 +256,20 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Update first entry
             testDirAFile1 = touch(testDirAFile1);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("D", 0, 1, 0, 0, 1, 0);
+            checkFileCounts("D", 0, 1, 0);
             assertTrue("D testDirAFile1",  listener.getChangedFiles().contains(testDirAFile1));
 
             // Update file with name between 2 entries
             testDirAFile3 = touch(testDirAFile3);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("E", 0, 1, 0, 0, 1, 0);
+            checkFileCounts("E", 0, 1, 0);
             assertTrue("E testDirAFile3",  listener.getChangedFiles().contains(testDirAFile3));
 
             // Update last entry
             testDirAFile5 = touch(testDirAFile5);
-            testDirA      = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("F", 0, 1, 0, 0, 1, 0);
+            checkFileCounts("F", 0, 1, 0);
             assertTrue("F testDirAFile5",  listener.getChangedFiles().contains(testDirAFile5));
         } catch (Exception e) {
             fail("Threw " + e);
@@ -301,7 +300,8 @@ public class FilesystemObserverTestCase extends TestCase {
             assertTrue("B testDirAFile5 exists", testDirAFile5.exists());
 
             checkAndNotify();
-            checkCollectionSizes("B", 1, 0, 0, 5, 0, 0);
+            checkDirectoryCounts("B", 1, 0, 0);
+            checkFileCounts("B", 5, 0, 0);
             assertTrue("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
             assertTrue("B testDirAFile2", listener.getCreatedFiles().contains(testDirAFile2));
             assertTrue("B testDirAFile3", listener.getCreatedFiles().contains(testDirAFile3));
@@ -313,25 +313,22 @@ public class FilesystemObserverTestCase extends TestCase {
 
             // Delete first entry
             FileUtils.deleteQuietly(testDirAFile1);
-            testDirA = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("D", 0, 1, 0, 0, 0, 1);
+            checkFileCounts("D", 0, 0, 1);
             assertFalse("D testDirAFile1 exists", testDirAFile1.exists());
             assertTrue("D testDirAFile1",  listener.getDeletedFiles().contains(testDirAFile1));
 
             // Delete file with name between 2 entries
             FileUtils.deleteQuietly(testDirAFile3);
-            testDirA = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("E", 0, 1, 0, 0, 0, 1);
+            checkFileCounts("E", 0, 0, 1);
             assertFalse("E testDirAFile3 exists", testDirAFile3.exists());
             assertTrue("E testDirAFile3",  listener.getDeletedFiles().contains(testDirAFile3));
 
             // Delete last entry
             FileUtils.deleteQuietly(testDirAFile5);
-            testDirA = touch(testDirA);
             checkAndNotify();
-            checkCollectionSizes("F", 0, 1, 0, 0, 0, 1);
+            checkFileCounts("F", 0, 0, 1);
             assertFalse("F testDirAFile5 exists", testDirAFile5.exists());
             assertTrue("F testDirAFile5",  listener.getDeletedFiles().contains(testDirAFile5));
 
@@ -363,7 +360,8 @@ public class FilesystemObserverTestCase extends TestCase {
             assertTrue("B testDirAFile2 exists", testDirAFile2.exists());
             assertTrue("B testDirAFile3 exists", testDirAFile3.exists());
             checkAndNotify();
-            checkCollectionSizes("C", 0, 0, 0, 1, 0, 0);
+            checkDirectoryCounts("C", 0, 0, 0);
+            checkFileCounts("C", 1, 0, 0);
             assertTrue("C created", listener.getCreatedFiles().contains(testDirAFile1));
             assertFalse("C created", listener.getCreatedFiles().contains(testDirAFile2));
             assertFalse("C created", listener.getCreatedFiles().contains(testDirAFile3));
@@ -373,7 +371,8 @@ public class FilesystemObserverTestCase extends TestCase {
             testDirAFile2 = touch(testDirAFile2);
             testDirAFile3 = touch(testDirAFile3);
             checkAndNotify();
-            checkCollectionSizes("D", 0, 0, 0, 0, 1, 0);
+            checkDirectoryCounts("D", 0, 0, 0);
+            checkFileCounts("D", 0, 1, 0);
             assertTrue("D changed", listener.getChangedFiles().contains(testDirAFile1));
             assertFalse("D changed", listener.getChangedFiles().contains(testDirAFile2));
             assertFalse("D changed", listener.getChangedFiles().contains(testDirAFile3));
@@ -386,7 +385,8 @@ public class FilesystemObserverTestCase extends TestCase {
             assertFalse("E testDirAFile2 exists", testDirAFile2.exists());
             assertFalse("E testDirAFile3 exists", testDirAFile3.exists());
             checkAndNotify();
-            checkCollectionSizes("E", 0, 0, 0, 0, 0, 1);
+            checkDirectoryCounts("E", 0, 0, 0);
+            checkFileCounts("E", 0, 0, 1);
             assertTrue("E deleted", listener.getDeletedFiles().contains(testDirAFile1));
             assertFalse("E deleted", listener.getDeletedFiles().contains(testDirAFile2));
             assertFalse("E deleted", listener.getDeletedFiles().contains(testDirAFile3));
@@ -409,22 +409,29 @@ public class FilesystemObserverTestCase extends TestCase {
      * Check all the Collections are empty
      */
     private void checkCollectionsEmpty(String label) {
-        checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
+        checkDirectoryCounts("EMPTY-" + label, 0, 0, 0);
+        checkFileCounts("EMPTY-" + label, 0, 0, 0);
     }
 
     /**
-     * Check all the Collections have the expected sizes.
+     * Check all the Directory Collections have the expected sizes.
      */
-    private void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
+    private void checkDirectoryCounts(String label, int dirCreate, int dirChange, int dirDelete) {
         label = label + "[" + listener.getCreatedDirectories().size() +
                         " " + listener.getChangedDirectories().size() +
-                        " " + listener.getDeletedDirectories().size() +
-                        " " + listener.getCreatedFiles().size() +
-                        " " + listener.getChangedFiles().size() +
-                        " " + listener.getDeletedFiles().size() + "]";
+                        " " + listener.getDeletedDirectories().size() + "]";
         assertEquals(label + ": No. of directories created",  dirCreate,  listener.getCreatedDirectories().size());
         assertEquals(label + ": No. of directories changed",  dirChange,  listener.getChangedDirectories().size());
         assertEquals(label + ": No. of directories deleted",  dirDelete,  listener.getDeletedDirectories().size());
+    }
+
+    /**
+     * Check all the File Collections have the expected sizes.
+     */
+    private void checkFileCounts(String label, int fileCreate, int fileChange, int fileDelete) {
+        label = label + "[" + listener.getCreatedFiles().size() +
+                        " " + listener.getChangedFiles().size() +
+                        " " + listener.getDeletedFiles().size() + "]";
         assertEquals(label + ": No. of files created", fileCreate, listener.getCreatedFiles().size());
         assertEquals(label + ": No. of files changed", fileChange, listener.getChangedFiles().size());
         assertEquals(label + ": No. of files deleted", fileDelete, listener.getDeletedFiles().size());
