@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
@@ -122,10 +123,10 @@ public class Tailer implements Runnable {
      * Follows changes in the file, calling the TailerListener's handle method for each new line.
      */
     public void run() {
+        RandomAccessFile reader = null;
         try {
             long last = 0; // The last time the file was checked for changes
             long position = 0; // position within the file
-            RandomAccessFile reader = null;
             // Open the file
             while (run && reader == null) {
                 try {
@@ -157,6 +158,7 @@ public class Tailer implements Runnable {
 
                     // Reopen the reader after rotation
                     try {
+                        IOUtils.closeQuietly(reader);
                         reader = new RandomAccessFile(file, "r");
                         position = 0;
                     } catch (FileNotFoundException e) {
@@ -196,6 +198,8 @@ public class Tailer implements Runnable {
 
             listener.handle(e);
 
+        } finally {
+            IOUtils.closeQuietly(reader);
         }
     }
 
