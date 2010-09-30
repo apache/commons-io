@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -120,7 +122,25 @@ public class TailerTest extends FileBasedTestCase {
         TestTailerListener listener = new TestTailerListener();
         int delay = 100;
         int idle = 50; // allow time for thread to work
-        Tailer tailer = start(file, listener, delay, false);
+        Tailer tailer = Tailer.create(file, listener, delay, false);
+        Thread.sleep(idle);
+        tailer.stop();
+        Thread.sleep(delay+idle);
+        assertNull("Should not generate Exception", listener.exception);
+        assertEquals("Expected init to be called", 1 , listener.initialised);
+        assertEquals("fileNotFound should be called", 1 , listener.notFound);
+        assertEquals("fileRotated should be not be called", 0 , listener.rotated);
+    }
+
+    public void testStopWithNoFileUsingExecutor() throws Exception {
+        File file = new File(getTestDirectory(),"nosuchfile");
+        assertFalse("nosuchfile should not exist", file.exists());
+        TestTailerListener listener = new TestTailerListener();
+        int delay = 100;
+        int idle = 50; // allow time for thread to work
+        Tailer tailer = new Tailer(file, listener, delay, false);
+        Executor exec = new ScheduledThreadPoolExecutor(1);
+        exec.execute(tailer);
         Thread.sleep(idle);
         tailer.stop();
         Thread.sleep(delay+idle);
