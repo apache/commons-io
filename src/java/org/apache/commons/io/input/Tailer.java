@@ -158,10 +158,14 @@ public class Tailer implements Runnable {
 
                     // Reopen the reader after rotation
                     try {
-                        IOUtils.closeQuietly(reader);
+                        // Ensure that the old file is closed iff we re-open it successfully
+                        RandomAccessFile save = reader;
                         reader = new RandomAccessFile(file, "r");
                         position = 0;
+                        // close old file explicitly rather than relying on GC picking up previous RAF
+                        IOUtils.closeQuietly(save);
                     } catch (FileNotFoundException e) {
+                        // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
                     }
                     continue;
