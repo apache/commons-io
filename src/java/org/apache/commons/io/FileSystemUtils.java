@@ -290,7 +290,7 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     long freeSpaceWindows(String path, long timeout) throws IOException {
-        path = FilenameUtils.normalize(path);
+        path = FilenameUtils.normalize(path, false);
         if (path.length() > 0 && path.charAt(0) != '"') {
             path = "\"" + path + "\"";
         }
