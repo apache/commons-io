@@ -28,10 +28,25 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * Example Usage:
  * <pre>
+ *      // Simplest invocation using static helper method:
+ *      TailerListener listener = ...
+ *      Tailer tailer = Tailer.create(file, listener, delay);
+ *      
+ *      // Alternative method using executor:
+ *      TailerListener listener = ...
+ *      Tailer tailer = new Tailer(file, listener, delay);
+ *      Executor executor ...
+ *      executor.execute(tailer);
+ *      
+ *      // Alternative method if you want to handle the threading yourself:
  *      TailerListener listener = ...
  *      Tailer tailer = new Tailer(file, listener, delay);
  *      Thread thread = new Thread(tailer);
+ *      thread.setDaemon(true); // optional
  *      thread.start();
+ *      
+ *      // Remember to stop the tailer when you have done with it:
+ *      tailer.stop();
  * </pre>
  *
  * @version $Id$
@@ -65,29 +80,29 @@ public class Tailer implements Runnable {
     private volatile boolean run = true;
 
     /**
-     * Creates SimpleTailer for the given file, starting from the beginning, with the default delay of 1.0s.
+     * Creates a Tailer for the given file, starting from the beginning, with the default delay of 1.0s.
      * @param file The file to follow.
-     * @param listener The TailerListener which to use.
+     * @param listener the TailerListener to use.
      */
     public Tailer(File file, TailerListener listener) {
         this(file, listener, 1000);
     }
 
     /**
-     * Creates a SimpleTailer for the given file, starting from the beginning.
-     * @param file The file to follow.
-     * @param listener The TailerListener which to use.
-     * @param delay The delay between checks of the file for new content in milliseconds.
+     * Creates a Tailer for the given file, starting from the beginning.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
      */
     public Tailer(File file, TailerListener listener, long delay) {
         this(file, listener, 1000, false);
     }
 
     /**
-     * Creates a SimpleTailer for the given file, with a delay other than the default 1.0s.
-     * @param file The file to follow.
-     * @param listener The TailerListener which to use.
-     * @param delay The delay between checks of the file for new content in milliseconds.
+     * Creates a Tailer for the given file, with a delay other than the default 1.0s.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      */
     public Tailer(File file, TailerListener listener, long delay, boolean end) {
@@ -99,6 +114,44 @@ public class Tailer implements Runnable {
         // Save and prepare the listener
         this.listener = listener;
         listener.init(this);
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file.
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     */
+    public static Tailer create(File file, TailerListener listener, long delay, boolean end) {
+        Tailer tailer = new Tailer(file, listener, delay, end);
+        Thread thread = new Thread(tailer);
+        thread.setDaemon(true);
+        thread.start();
+        return tailer;
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file, starting at the beginning of the file
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
+     */
+    public static Tailer create(File file, TailerListener listener, long delay) {
+        return create(file, listener, delay, false);
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file, starting at the beginning of the file
+     * with the default delay of 1.0s
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     */
+    public static Tailer create(File file, TailerListener listener) {
+        return create(file, listener, 1000, false);
     }
 
     /**
