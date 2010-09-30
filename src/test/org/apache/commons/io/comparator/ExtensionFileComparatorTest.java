@@ -17,6 +17,7 @@
 package org.apache.commons.io.comparator;
 
 import java.io.File;
+import java.util.Comparator;
 
 /**
  * Test case for {@link ExtensionFileComparator}.
@@ -38,9 +39,24 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
         super.setUp();
         comparator = (AbstractFileComparator)ExtensionFileComparator.EXTENSION_COMPARATOR;
         reverse = ExtensionFileComparator.EXTENSION_REVERSE;
-        equalFile1 = new File("file.foo");
-        equalFile2 = new File("file.foo");
-        lessFile   = new File("file.abc");
-        moreFile   = new File("file.xyz");
+        equalFile1 = new File("abc.foo");
+        equalFile2 = new File("def.foo");
+        lessFile   = new File("abc.abc");
+        moreFile   = new File("abc.xyz");
+    }
+
+    /** Test case sensitivity */
+    public void testCaseSensitivity() {
+        File file3 = new File("abc.FOO");
+        Comparator<File> sensitive = new ExtensionFileComparator(null); /* test null as well */
+        assertTrue("sensitive file1 & file2 = 0", sensitive.compare(equalFile1, equalFile2) == 0);
+        assertTrue("sensitive file1 & file3 > 0", sensitive.compare(equalFile1, file3) > 0);
+        assertTrue("sensitive file1 & less  > 0", sensitive.compare(equalFile1, lessFile) > 0);
+
+        Comparator<File> insensitive = ExtensionFileComparator.EXTENSION_INSENSITIVE_COMPARATOR;
+        assertTrue("insensitive file1 & file2 = 0", insensitive.compare(equalFile1, equalFile2) == 0);
+        assertTrue("insensitive file1 & file3 = 0", insensitive.compare(equalFile1, file3) == 0);
+        assertTrue("insensitive file1 & file4 > 0", insensitive.compare(equalFile1, lessFile) > 0);
+        assertTrue("insensitive file3 & less  > 0", insensitive.compare(file3, lessFile) > 0);
     }
 }

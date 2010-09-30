@@ -17,6 +17,7 @@
 package org.apache.commons.io.comparator;
 
 import java.io.File;
+import java.util.Comparator;
 
 /**
  * Test case for {@link NameFileComparator}.
@@ -42,5 +43,20 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
         equalFile2 = new File("b/foo.txt");
         lessFile   = new File("c/ABC.txt");
         moreFile   = new File("d/XYZ.txt");
+    }
+
+    /** Test case sensitivity */
+    public void testCaseSensitivity() {
+        File file3 = new File("a/FOO.txt");
+        Comparator<File> sensitive = new NameFileComparator(null); /* test null as well */
+        assertTrue("sensitive file1 & file2 = 0", sensitive.compare(equalFile1, equalFile2) == 0);
+        assertTrue("sensitive file1 & file3 > 0", sensitive.compare(equalFile1, file3) > 0);
+        assertTrue("sensitive file1 & less  > 0", sensitive.compare(equalFile1, lessFile) > 0);
+
+        Comparator<File> insensitive = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
+        assertTrue("insensitive file1 & file2 = 0", insensitive.compare(equalFile1, equalFile2) == 0);
+        assertTrue("insensitive file1 & file3 = 0", insensitive.compare(equalFile1, file3) == 0);
+        assertTrue("insensitive file1 & file4 > 0", insensitive.compare(equalFile1, lessFile) > 0);
+        assertTrue("insensitive file3 & less  > 0", insensitive.compare(file3, lessFile) > 0);
     }
 }
