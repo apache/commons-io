@@ -64,21 +64,6 @@ public class Tailer implements Runnable {
     private volatile boolean run = true;
 
     /**
-     * The object which will be responsible for actually reading the file.
-     */
-    private RandomAccessFile reader;
-
-    /**
-     * The last position in the file that was read.
-     */
-    private long position;
-
-    /**
-     * The last time the file was checked for changes.
-     */
-    private long last;
-
-    /**
      * Creates SimpleTailer for the given file.
      * @param file The file to follow.
      * @param listener The TailerListener which to use.
@@ -138,6 +123,9 @@ public class Tailer implements Runnable {
      */
     public void run() {
         try {
+            long last = 0; // The last time the file was checked for changes
+            long position = 0; // position within the file
+            RandomAccessFile reader = null;
             // Open the file
             while (run && reader == null) {
                 try {
@@ -183,7 +171,8 @@ public class Tailer implements Runnable {
                     if (length > position) {
 
                         // The file has more content than it did last time
-                        readLines();
+                        last = System.currentTimeMillis();
+                        position = readLines(reader);
 
                     } else if (FileUtils.isFileNewer(file, last)) {
 
@@ -195,7 +184,8 @@ public class Tailer implements Runnable {
                         reader.seek(position);
 
                         // Now we can read new lines
-                        readLines();
+                        last = System.currentTimeMillis();
+                        position = readLines(reader);
                     }
                 }
 
@@ -220,14 +210,13 @@ public class Tailer implements Runnable {
      * Read new lines.
      * @throws java.io.IOException if an I/O error occurs.
      */
-    private void readLines() throws IOException {
-        last = System.currentTimeMillis();
+    private long readLines(RandomAccessFile reader) throws IOException {
         String line = reader.readLine();
         while (line != null) {
             listener.handle(line);
             line = reader.readLine();
         }
-        position = reader.getFilePointer();
+        return reader.getFilePointer();
     }
 
 }
