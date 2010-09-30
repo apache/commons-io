@@ -148,13 +148,14 @@ public class Tailer implements Runnable {
 
                 if (reader == null) {
                     Thread.sleep(delay);
+                } else {
+                    // The current position in the file
+                    position = end ? file.length() : 0;
+                    last = System.currentTimeMillis();
+                    reader.seek(position);                    
                 }
             }
 
-            // The current position in the file
-            position = end ? file.length() : 0;
-            last = System.currentTimeMillis();
-            reader.seek(position);
 
             while (run) {
 

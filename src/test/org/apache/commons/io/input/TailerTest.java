@@ -110,6 +110,19 @@ public class TailerTest extends FileBasedTestCase {
         }
     }
 
+    public void testStopWithNoFile() throws Exception {
+        File file = new File(getTestDirectory(),"nosuchfile");
+        assertFalse("nosuchfile should not exist", file.exists());
+        TestTailerListener listener = new TestTailerListener();
+        int delay = 100;
+        int idle = 50; // allow time for thread to work
+        Tailer tailer = start(file, listener, delay, false);
+        Thread.sleep(idle);
+        tailer.stop();
+        Thread.sleep(delay+idle);
+        assertNull(listener.exception);
+    }
+
     /**
      * Test {@link TailerListener} implementation.
      */
@@ -117,6 +130,9 @@ public class TailerTest extends FileBasedTestCase {
 
         private final List<String> lines = new ArrayList<String>();
 
+        volatile Exception exception = null;
+        
+        @Override
         public void handle(String line) {
             lines.add(line);
         }
@@ -125,6 +141,10 @@ public class TailerTest extends FileBasedTestCase {
         }
         public void clear() {
             lines.clear();
+        }
+        @Override
+        public void handle(Exception e) {
+            exception = e;
         }
     }
 }
