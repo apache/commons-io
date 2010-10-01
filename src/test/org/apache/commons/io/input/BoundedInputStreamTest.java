@@ -34,7 +34,7 @@ public class BoundedInputStreamTest extends TestCase {
     }
 
     /**
-     * Test {@link BoundedInputStream#read()).
+     * Test {@link BoundedInputStream#read()}.
      */
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded = null;
@@ -64,7 +64,7 @@ public class BoundedInputStreamTest extends TestCase {
     }
 
     /**
-     * Test {@link BoundedInputStream#read(byte[], int, int))).
+     * Test {@link BoundedInputStream#read(byte[], int, int)}.
      */
     public void testReadArray() throws Exception {
 
