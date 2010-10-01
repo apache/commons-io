@@ -43,7 +43,7 @@ public class NullWriter extends Writer {
      * Does nothing - output to <code>/dev/null</code>.
      * @param c The character to write
      * @return this writer
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(char c) {
@@ -57,7 +57,7 @@ public class NullWriter extends Writer {
      * @param start The index of the first character to write
      * @param end  The index of the first character to write (exclusive)
      * @return this writer
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(CharSequence csq, int start, int end) {
@@ -69,7 +69,7 @@ public class NullWriter extends Writer {
      * Does nothing - output to <code>/dev/null</code>.
      * @param csq The character sequence to write
      * @return this writer
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(CharSequence csq) {

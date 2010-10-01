@@ -29,7 +29,7 @@ import java.io.Writer;
  * <code>java.io.StringWriter</code> should be used.
  *
  * @version $Revision$ $Date$
- * @since IO 2.0
+ * @since Commons IO 2.0
  */
 public class StringBuilderWriter extends Writer implements Serializable {
 

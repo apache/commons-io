@@ -626,6 +626,7 @@ public class FileFilterUtils {
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         <code>null</code> or the empty String.
+     * @since Commons IO 2.0
      */
     public static IOFileFilter magicNumberFileFilter(String magicNumber) {
         return new MagicNumberFileFilter(magicNumber);
@@ -645,6 +646,7 @@ public class FileFilterUtils {
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         <code>null</code> or the empty String, or if offset is a 
      *         negative number.
+     * @since Commons IO 2.0
      */
     public static IOFileFilter magicNumberFileFilter(String magicNumber, long offset) {
         return new MagicNumberFileFilter(magicNumber, offset);
@@ -662,6 +664,7 @@ public class FileFilterUtils {
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         <code>null</code> or is of length zero.
+     * @since Commons IO 2.0
      */
     public static IOFileFilter magicNumberFileFilter(byte[] magicNumber) {
         return new MagicNumberFileFilter(magicNumber);
@@ -681,6 +684,7 @@ public class FileFilterUtils {
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         <code>null</code>, or contains no bytes, or <code>offset</code> 
      *         is a negative number.
+     * @since Commons IO 2.0
      */
     public static IOFileFilter magicNumberFileFilter(byte[] magicNumber, long offset) {
         return new MagicNumberFileFilter(magicNumber, offset);

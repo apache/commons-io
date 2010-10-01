@@ -58,7 +58,7 @@ import org.apache.commons.io.IOUtils;
  *     System.out.println(tarFile);
  * }
  * </pre></code>
- * 
+ * @since Commons IO 2.0
  */
 public class MagicNumberFileFilter extends AbstractFileFilter implements
         Serializable {

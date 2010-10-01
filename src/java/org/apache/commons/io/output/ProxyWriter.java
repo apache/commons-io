@@ -48,7 +48,7 @@ public class ProxyWriter extends FilterWriter {
      * @param c The character to write
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(char c) throws IOException {
@@ -69,7 +69,7 @@ public class ProxyWriter extends FilterWriter {
      * @param end  The index of the first character to write (exclusive)
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(CharSequence csq, int start, int end) throws IOException {
@@ -88,7 +88,7 @@ public class ProxyWriter extends FilterWriter {
      * @param csq The character sequence to write
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public Writer append(CharSequence csq) throws IOException {

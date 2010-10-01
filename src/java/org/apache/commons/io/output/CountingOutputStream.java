@@ -47,6 +47,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * Updates the count with the number of bytes that are being written.
      *
      * @param n number of bytes to be written to the stream
+     * @since Commons IO 2.0
      */
     @Override
     protected void beforeWrite(int n) {
