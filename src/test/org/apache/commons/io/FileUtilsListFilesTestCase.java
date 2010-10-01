@@ -163,8 +163,8 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         try {
             FileUtils.listFiles(getLocalTestDirectory(), (IOFileFilter)null, (IOFileFilter)null);
             fail("Expected error about null parameter");
-        } catch (Exception e) {
-            //fine
+        } catch (NullPointerException e) {
+            // expected
         }
     }
 
