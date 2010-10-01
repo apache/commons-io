@@ -381,6 +381,7 @@ public class FileFilterUtils {
      * @return a filter that ANDs the two specified filters
      * @deprecated use {@link #and(IOFileFilter...)}
      */
+    @Deprecated
     public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
         return new AndFileFilter(filter1, filter2);
     }
@@ -393,6 +394,7 @@ public class FileFilterUtils {
      * @return a filter that ORs the two specified filters
      * @deprecated use {@link #or(IOFileFilter...)}
      */
+    @Deprecated
     public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
         return new OrFileFilter(filter1, filter2);
     }
@@ -693,7 +695,7 @@ public class FileFilterUtils {
     //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
     private static final IOFileFilter cvsFilter = notFileFilter(
-            and(directoryFileFilter(), nameFileFilter("CVS")));;
+            and(directoryFileFilter(), nameFileFilter("CVS")));
 
     /* Constructed on demand and then cached */
     private static final IOFileFilter svnFilter = notFileFilter(
