@@ -75,9 +75,11 @@ public class ProxyReaderTest extends TestCase {
         CustomNullReader(int len) {
             super(len);
         }
+        @Override
         public int read(char[] chars) throws IOException {
             return chars == null ? 0 : super.read(chars);
         }
+        @Override
         public int read(CharBuffer target) throws IOException {
             return target == null ? 0 : super.read(target);
         }
