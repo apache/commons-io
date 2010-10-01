@@ -35,7 +35,7 @@ public class FilesystemObserverTestCase extends TestCase {
     protected FilesystemObserver observer;
 
     /** Listener which collects file changes */
-    protected CollectionFilesystemListener listener = new CollectionFilesystemListener();
+    protected CollectionFilesystemListener listener = new CollectionFilesystemListener(true);
 
     /** Directory for test files */
     protected File testDir;

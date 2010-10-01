@@ -27,6 +27,7 @@ import java.util.Collection;
  */
 public class CollectionFilesystemListener implements FilesystemListener, Serializable {
 
+    private final boolean clearOnStart;
     private final Collection<File> createdFiles = new ArrayList<File>();
     private final Collection<File> changedFiles = new ArrayList<File>();
     private final Collection<File> deletedFiles = new ArrayList<File>();
@@ -35,11 +36,29 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
     private final Collection<File> deletedDirectories = new ArrayList<File>();
 
     /**
+     * Create a new observer.
+     *
+     * @param clearOnStart true if clear() should be called by onStart().
+     */
+    public CollectionFilesystemListener(boolean clearOnStart) {
+        this.clearOnStart = clearOnStart;
+    }
+
+    /**
      * File system observer started checking event.
      *
      * @param observer The file system observer
      */
     public void onStart(final FilesystemObserver observer) {
+        if (clearOnStart) {
+            clear();
+        }
+    }
+
+    /**
+     * Clear file collections.
+     */
+    public void clear() {
         createdFiles.clear();
         changedFiles.clear();
         deletedFiles.clear();
