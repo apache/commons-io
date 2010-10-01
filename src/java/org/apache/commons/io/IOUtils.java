@@ -32,7 +32,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
-import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
