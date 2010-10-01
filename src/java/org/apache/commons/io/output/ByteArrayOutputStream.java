@@ -272,6 +272,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.0
      */
     public static InputStream toBufferedInputStream(InputStream input)
             throws IOException {

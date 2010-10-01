@@ -69,6 +69,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      *
      * @param n number of bytes read, or -1 if no more bytes are available
      * @throws IOException if the stream could not be closed
+     * @since Commons IO 2.0
      */
     @Override
     protected void afterRead(int n) throws IOException {

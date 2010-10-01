@@ -216,6 +216,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
+     * @since Commons IO 2.0
      */
     public static long freeSpaceKb() throws IOException {
         return freeSpaceKb(-1); 

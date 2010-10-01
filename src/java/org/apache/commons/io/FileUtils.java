@@ -1495,7 +1495,7 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     public static void write(File file, CharSequence data) throws IOException {
         String str = data == null ? null : data.toString();
@@ -1510,7 +1510,7 @@ public class FileUtils {
      * @param encoding  the encoding to use, <code>null</code> means platform default
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     public static void write(File file, CharSequence data, String encoding) throws IOException {
         String str = data == null ? null : data.toString();
@@ -2184,7 +2184,7 @@ public class FileUtils {
      * @param file the file to check
      * @return true if the file is a Symbolic Link
      * @throws IOException if an IO error occurs while checking the file
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     public static boolean isSymlink(File file) throws IOException {
         if (file == null) {

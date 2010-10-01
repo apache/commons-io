@@ -514,6 +514,7 @@ public abstract class DirectoryWalker<T> {
      * @param files the files (possibly filtered) in the directory
      * @return the filtered list of files
      * @throws IOException if an I/O Error occurs
+     * @since Commons IO 2.0
      */
     protected File[] filterDirectoryContents(File directory, int depth, File[] files) throws IOException {
         return files;

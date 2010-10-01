@@ -65,6 +65,7 @@ public class CountingInputStream extends ProxyInputStream {
      * Adds the number of read bytes to the count.
      *
      * @param n number of bytes read, or -1 if no more bytes are available
+     * @since Commons IO 2.0
      */
     @Override
     protected void afterRead(int n) {

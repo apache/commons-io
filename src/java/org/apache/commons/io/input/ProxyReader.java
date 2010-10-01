@@ -108,7 +108,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param target the char buffer to read the characters into
      * @return the number of characters read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     @Override
     public int read(CharBuffer target) throws IOException {

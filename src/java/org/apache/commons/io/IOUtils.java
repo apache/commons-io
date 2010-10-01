@@ -194,6 +194,7 @@ public class IOUtils {
      * </pre>
      *
      * @param channel the Channel to close, may be null or already closed
+     * @since Commons IO 2.0
      */
     public static void closeQuietly(Channel channel) {
         closeQuietly((Closeable)channel);
@@ -333,6 +334,7 @@ public class IOUtils {
      * </pre>
      *
      * @param sock the Socket to close, may be null or already closed
+     * @since Commons IO 2.0
      */
     public static void closeQuietly(Socket sock){
         if (sock != null){
@@ -760,7 +762,7 @@ public class IOUtils {
      *
      * @param input the CharSequence to convert
      * @return an input stream
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     public static InputStream toInputStream(CharSequence input) {
         return toInputStream(input.toString());
@@ -777,7 +779,7 @@ public class IOUtils {
      * @param encoding the encoding to use, null means platform default
      * @throws IOException if the encoding is invalid
      * @return an input stream
-     * @since IO 2.0
+     * @since Commons IO 2.0
      */
     public static InputStream toInputStream(CharSequence input, String encoding) throws IOException {
         return toInputStream(input.toString(), encoding);
@@ -1548,6 +1550,7 @@ public class IOUtils {
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
+     * @since Commons IO 2.0
      */
     public static long skip(InputStream input, long toSkip) throws IOException {
         if (toSkip < 0) {
@@ -1588,6 +1591,7 @@ public class IOUtils {
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
+     * @since Commons IO 2.0
      */
     public static long skip(Reader input, long toSkip) throws IOException {
         if (toSkip < 0) {
@@ -1627,6 +1631,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @throws EOFException if the number of bytes skipped was incorrect 
+     * @since Commons IO 2.0
      */
     public static void skipFully(InputStream input, long toSkip) throws IOException {
         if (toSkip < 0){
@@ -1651,6 +1656,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @throws EOFException if the number of characters skipped was incorrect
+     * @since Commons IO 2.0
      */
     public static void skipFully(Reader input, long toSkip) throws IOException {
         long skipped = skip(input, toSkip);

@@ -38,6 +38,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      *
      * @param files The files to sort, may be null
      * @return The sorted array
+     * @since Commons IO 2.0
      */
     public File[] sort(File... files) {
         if (files != null) {
@@ -54,6 +55,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      *
      * @param files The files to sort, may be null
      * @return The sorted list
+     * @since Commons IO 2.0
      */
     public List<File> sort(List<File> files) {
         if (files != null) {
