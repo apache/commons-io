@@ -86,7 +86,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("fred.EST"), false); //case-sensitive
         assertFiltering(filter, new File("fred.exe"), false);
 
-        filter = FileFilterUtils.orFileFilter( 
+        filter = FileFilterUtils.or( 
                     FileFilterUtils.suffixFileFilter( "tes" ),
                     FileFilterUtils.suffixFileFilter( "est" ) );
         assertFiltering(filter, new File("fred"), false);

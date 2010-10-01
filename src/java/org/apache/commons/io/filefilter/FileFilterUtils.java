@@ -693,11 +693,11 @@ public class FileFilterUtils {
     //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
     private static final IOFileFilter cvsFilter = notFileFilter(
-            andFileFilter(directoryFileFilter(), nameFileFilter("CVS")));;
+            and(directoryFileFilter(), nameFileFilter("CVS")));;
 
     /* Constructed on demand and then cached */
     private static final IOFileFilter svnFilter = notFileFilter(
-            andFileFilter(directoryFileFilter(), nameFileFilter(".svn")));
+            and(directoryFileFilter(), nameFileFilter(".svn")));
 
     /**
      * Decorates a filter to make it ignore CVS directories.
@@ -712,7 +712,7 @@ public class FileFilterUtils {
         if (filter == null) {
             return cvsFilter;
         } else {
-            return andFileFilter(filter, cvsFilter);
+            return and(filter, cvsFilter);
         }
     }
 
@@ -729,7 +729,7 @@ public class FileFilterUtils {
         if (filter == null) {
             return svnFilter;
         } else {
-            return andFileFilter(filter, svnFilter);
+            return and(filter, svnFilter);
         }
     }
 
