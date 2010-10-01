@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  *
  * @version $Id$
 
- * @see FileCleaner
+ * @see FileCleaningTracker
  */
 public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     protected FileCleaningTracker newInstance() {
