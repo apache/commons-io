@@ -39,7 +39,7 @@ import org.apache.commons.io.filefilter.OrFileFilter;
  * @see DirectoryWalker
  *
  */
-@SuppressWarnings("unchecked") // Java4
+@SuppressWarnings({"unchecked","rawtypes"}) // Java4
 public class DirectoryWalkerTestCaseJava4 extends TestCase {
 
     // Directories
