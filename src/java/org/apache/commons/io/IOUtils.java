@@ -172,35 +172,6 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close a <code>Channel</code>.
-     * <p>
-     * Equivalent to {@link Channel#close()}, except any exceptions will be ignored.
-     * This is typically used in finally blocks.
-     * <p>
-     * Example code:
-     * <pre>
-     *   ByteBuffer buffer = ByteBuffer.allocate(1024);
-     *   FileChannel channel = null;
-     *   try {
-     *       FileInputStream in = new FileInputStream("foo.txt");
-     *       channel = in.getChannel();
-     *       channel.read(buffer);
-     *       channel.close(); //close errors are handled
-     *   } catch (Exception e) {
-     *       // error handling
-     *   } finally {
-     *       IOUtils.closeQuietly(channel);
-     *   }
-     * </pre>
-     *
-     * @param channel the Channel to close, may be null or already closed
-     * @since Commons IO 2.0
-     */
-    public static void closeQuietly(Channel channel) {
-        closeQuietly((Closeable)channel);
-    }
-
-    /**
      * Unconditionally close a <code>Writer</code>.
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
