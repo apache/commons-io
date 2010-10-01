@@ -240,7 +240,7 @@ public class Tailer implements Runnable {
                          * this, the file position needs to be reset
                          */
                         position = 0;
-                        reader.seek(position);
+                        reader.seek(position); // cannot be null here
 
                         // Now we can read new lines
                         last = System.currentTimeMillis();
