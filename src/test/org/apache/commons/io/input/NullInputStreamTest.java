@@ -151,7 +151,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.reset();
             fail("Read limit exceeded, expected IOException ");
-        } catch (Exception e) {
+        } catch (IOException e) {
             assertEquals("No Mark IOException message",
                          "No position has been marked",
                          e.getMessage());
@@ -181,7 +181,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.reset();
             fail("Read limit exceeded, expected IOException ");
-        } catch (Exception e) {
+        } catch (IOException e) {
             assertEquals("Read limit IOException message",
                          "Marked position [" + position
                          + "] is no longer valid - passed the read limit ["
@@ -226,7 +226,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.skip(5); //
             fail("Expected IOException for skipping after end of file");
-        } catch (Exception e) {
+        } catch (IOException e) {
             assertEquals("Skip after EOF IOException message",
                     "Skip after end of file",
                     e.getMessage());
