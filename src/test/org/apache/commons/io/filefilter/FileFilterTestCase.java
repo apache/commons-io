@@ -1060,7 +1060,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
      * that tests that the method properly filters files from the list.
      */
     public void testFilterArray() throws Exception {
@@ -1076,7 +1076,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filter(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the list.
      */
     public void testFilterArray_fromList() throws Exception {
@@ -1093,7 +1093,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
      * that tests <code>null</code> parameters and <code>null</code> elements
      * in the provided list.
      */
@@ -1120,7 +1120,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the list.
      */
     public void testFilterList() throws Exception {
@@ -1137,7 +1137,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, File...)}
      * that tests that the method properly filters files from the list.
      */
     public void testFilterList_fromArray() throws Exception {
@@ -1153,7 +1153,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, List)}
+     * Test method for {@link FileFilterUtils#filterList(IOFileFilter, java.lang.Iterable)}
      * that tests <code>null</code> parameters and <code>null</code> elements
      * in the provided list.
      */
@@ -1178,7 +1178,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
  
     /**
-     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the set.
      */
     public void testFilterSet() throws Exception {
@@ -1195,7 +1195,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
     
     /**
-     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, File...)}
      * that tests that the method properly filters files from the set.
      */
     public void testFilterSet_fromArray() throws Exception {
@@ -1211,7 +1211,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, Set)}
+     * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, java.lang.Iterable)}
      * that tests <code>null</code> parameters and <code>null</code> elements
      * in the provided set.
      */
