@@ -272,6 +272,7 @@ public class IOUtils {
      * </pre>
      *
      * @param closeable the object to close, may be null or already closed
+     * @since Commons IO 2.0
      */
     public static void closeQuietly(Closeable closeable) {
         try {
