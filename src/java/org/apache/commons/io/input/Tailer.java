@@ -123,6 +123,7 @@ public class Tailer implements Runnable {
      * @param listener the TailerListener to use.
      * @param delay the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @return The new tailer
      */
     public static Tailer create(File file, TailerListener listener, long delay, boolean end) {
         Tailer tailer = new Tailer(file, listener, delay, end);
@@ -138,6 +139,7 @@ public class Tailer implements Runnable {
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @param delay the delay between checks of the file for new content in milliseconds.
+     * @return The new tailer
      */
     public static Tailer create(File file, TailerListener listener, long delay) {
         return create(file, listener, delay, false);
@@ -149,6 +151,7 @@ public class Tailer implements Runnable {
      * 
      * @param file the file to follow.
      * @param listener the TailerListener to use.
+     * @return The new tailer
      */
     public static Tailer create(File file, TailerListener listener) {
         return create(file, listener, 1000, false);
@@ -269,6 +272,9 @@ public class Tailer implements Runnable {
 
     /**
      * Read new lines.
+     *
+     * @param reader The file to read
+     * @return The new position after the lines have been read
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(RandomAccessFile reader) throws IOException {
