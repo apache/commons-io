@@ -181,7 +181,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         IOFileFilter filter = new DirectoryFileFilter();
 
         assertFiltering(filter, new File("src/"), true);
-        assertFiltering(filter, new File("src/java/"), true);
+        assertFiltering(filter, new File("src/main/java/"), true);
 
         assertFiltering(filter, new File("pom.xml"), false);
 
