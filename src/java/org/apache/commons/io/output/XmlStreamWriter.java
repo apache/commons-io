@@ -48,18 +48,41 @@ public class XmlStreamWriter extends Writer {
 
     private String encoding;
 
+    /**
+     * Construct an new XML stream writer for the specified output stream.
+     *
+     * @param out The output stream
+     */
     public XmlStreamWriter(OutputStream out) {
         this.out = out;
     }
 
+    /**
+     * Construct an new XML stream writer for the specified file.
+     * 
+     * @param file The file to write to
+     * @throws FileNotFoundException if there is an error creating or
+     * opening the file
+     */
     public XmlStreamWriter(File file) throws FileNotFoundException {
         this(new FileOutputStream(file));
     }
 
+    /**
+     * Return the detected encoding.
+     *
+     * @return the detected encoding
+     */
     public String getEncoding() {
         return encoding;
     }
 
+    /**
+     * Close the underlying writer.
+     *
+     * @throws IOException if an error occurs closing the underlying writer
+     */
+    @Override
     public void close() throws IOException {
         if (writer == null) {
             encoding = "UTF-8";
@@ -69,12 +92,26 @@ public class XmlStreamWriter extends Writer {
         writer.close();
     }
 
+    /**
+     * Flush the underlying writer.
+     *
+     * @throws IOException if an error occurs flushing the underlying writer
+     */
+    @Override
     public void flush() throws IOException {
         if (writer != null) {
             writer.flush();
         }
     }
 
+    /**
+     * Detect the encoding.
+     *
+     * @param cbuf the buffer to write the characters from
+     * @param off The start offset
+     * @param len The number of characters to write
+     * @throws IOException if an error occurs detecting the encoding
+     */
     private void detectEncoding(char[] cbuf, int off, int len)
             throws IOException {
         int size = len;
@@ -124,6 +161,15 @@ public class XmlStreamWriter extends Writer {
         }
     }
 
+    /**
+     * Write the characters to the underlying writer, detecing encoding.
+     * 
+     * @param cbuf the buffer to write the characters from
+     * @param off The start offset
+     * @param len The number of characters to write
+     * @throws IOException if an error occurs detecting the encoding
+     */
+    @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
         if (xmlPrologWriter != null) {
             detectEncoding(cbuf, off, len);
