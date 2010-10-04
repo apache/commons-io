@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @see org.apache.commons.io.input.BOMInputStream
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark<a>
  * @version $Id$
- * @Since Commons IO 2.0
+ * @since Commons IO 2.0
  */
 public class ByteOrderMark implements Serializable {
 
