@@ -50,7 +50,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @since Commons IO 2.0
      */
     @Override
-    protected void beforeWrite(int n) {
+    protected synchronized void beforeWrite(int n) {
         count += n;
     }
 
@@ -65,7 +65,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
      */
-    public synchronized int getCount() {
+    public int getCount() {
         long result = getByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
@@ -83,7 +83,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
      */
-    public synchronized int resetCount() {
+    public int resetCount() {
         long result = resetByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
