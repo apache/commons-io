@@ -55,7 +55,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @see java.io.InputStream#skip(long)
      */
     @Override
-    public long skip(final long length) throws IOException {
+    public synchronized long skip(final long length) throws IOException {
         final long skip = super.skip(length);
         this.count += skip;
         return skip;
@@ -68,7 +68,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @since Commons IO 2.0
      */
     @Override
-    protected void afterRead(int n) {
+    protected synchronized void afterRead(int n) {
         if (n != -1) {
             this.count += n;
         }
@@ -85,7 +85,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
      */
-    public synchronized int getCount() {
+    public int getCount() {
         long result = getByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
@@ -103,7 +103,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
      */
-    public synchronized int resetCount() {
+    public int resetCount() {
         long result = resetByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
