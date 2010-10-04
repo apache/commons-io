@@ -159,9 +159,6 @@ public class ByteOrderMark implements Serializable {
                 builder.append(",");
             }
             builder.append("0x");
-            Integer.toBinaryString(0);
-            Integer.toOctalString(0);
-            Integer.toHexString(0);
             builder.append(Integer.toHexString(0xFF & bytes[i]).toUpperCase());
         }
         builder.append(']');
