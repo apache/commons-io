@@ -78,10 +78,17 @@ public class XmlStreamReader extends Reader {
 
     private static final String EBCDIC = "CP1047";
 
-    private static final ByteOrderMark XML_UTF_8    = new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D);
-    private static final ByteOrderMark XML_UTF_16BE = new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F);
-    private static final ByteOrderMark XML_UTF_16LE = new ByteOrderMark(UTF_16LE, 0x3C, 0x00, 0x3F, 0x00);
-    private static final ByteOrderMark XML_EBCDIC   = new ByteOrderMark(EBCDIC,   0x4C, 0x6F, 0xA7, 0x94);
+    private static final ByteOrderMark[] BOMS = new ByteOrderMark[] {
+        ByteOrderMark.UTF_8,
+        ByteOrderMark.UTF_16BE,
+        ByteOrderMark.UTF_16LE
+    };
+    private static final ByteOrderMark[] XML_GUESS_BYTES = new ByteOrderMark[] {
+        new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D),
+        new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F),
+        new ByteOrderMark(UTF_16LE, 0x3C, 0x00, 0x3F, 0x00),
+        new ByteOrderMark(EBCDIC,   0x4C, 0x6F, 0xA7, 0x94)
+    };
 
 
     private static String staticDefaultEncoding = null;
@@ -391,7 +398,8 @@ public class XmlStreamReader extends Reader {
             if (encoding == null) {
                 encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
             }
-            prepareReader(is, encoding);
+            this.encoding = encoding;
+            this.reader = new InputStreamReader(is, encoding);
         }
     }
 
@@ -437,13 +445,13 @@ public class XmlStreamReader extends Reader {
      */
     private void doRawStream(InputStream is, boolean lenient)
             throws IOException {
-        BOMInputStream bom = createBomStream(new BufferedInputStream(is, BUFFER_SIZE)); 
-        BOMInputStream pis = createXmlStream(bom);
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
         String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
-        String encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, pis);
-        prepareReader(pis, encoding);
+        this.encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, pis);
+        this.reader = new InputStreamReader(is, encoding);
     }
 
     /**
@@ -457,54 +465,16 @@ public class XmlStreamReader extends Reader {
      */
     private void doHttpStream(InputStream is, String httpContentType,
             boolean lenient) throws IOException {
-        BOMInputStream bom = createBomStream(new BufferedInputStream(is, BUFFER_SIZE)); 
-        BOMInputStream pis = createXmlStream(bom);
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         String cTMime = getContentTypeMime(httpContentType);
         String cTEnc = getContentTypeEncoding(httpContentType);
         String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
         String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
-        String encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
+        this.encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
                 xmlGuessEnc, xmlEnc, pis, lenient);
-        prepareReader(pis, encoding);
-    }
-
-    /**
-     * Create a stream to detect UTF-8, UTF-16BE and UTF-16LE BOMs and consume them.
-     *
-     * @param delegate The delegate input stream
-     * @return BOM detection stream
-     */
-    private BOMInputStream createBomStream(InputStream delegate) {
-        BOMInputStream bis =
-            new BOMInputStream(delegate, false, ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE);
-        return bis;
-    }
-
-    /**
-     * Create a stream to Guess UTF-8, UTF-16BE, UTF-16LE and EBCDIC encodings
-     * in XML streams.
-     *
-     * @param delegate The delegate input stream
-     * @return XML encoding detection stream
-     */
-    private BOMInputStream createXmlStream(InputStream delegate) {
-        BOMInputStream bis =
-            new BOMInputStream(delegate, true, XML_UTF_8, XML_UTF_16BE, XML_UTF_16LE, XML_EBCDIC);
-        return bis;
-    }
-
-    /**
-     * Prepare the underlying reader.
-     *
-     * @param is InputStream to create the reader from.
-     * @param encoding The encoding
-     * @throws IOException thrown if there is a problem creating the reader.
-     */
-    private void prepareReader(InputStream is, String encoding)
-            throws IOException {
-        reader = new InputStreamReader(is, encoding);
-        this.encoding = encoding;
+        this.reader = new InputStreamReader(is, encoding);
     }
 
     /**
