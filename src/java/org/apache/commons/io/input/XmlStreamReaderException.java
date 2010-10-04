@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.InputStream;
 import java.io.IOException;
 
 /**
@@ -33,6 +32,9 @@ import java.io.IOException;
  * @version $Id$
  */
 public class XmlStreamReaderException extends IOException {
+
+    private static final long serialVersionUID = 1L;
+
     private final String bomEncoding;
 
     private final String xmlGuessEncoding;
@@ -42,8 +44,6 @@ public class XmlStreamReaderException extends IOException {
     private final String contentTypeMime;
 
     private final String contentTypeEncoding;
-
-    private final InputStream is;
 
     /**
      * Creates an exception instance if the charset encoding could not be
@@ -55,11 +55,10 @@ public class XmlStreamReaderException extends IOException {
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     * @param is the unconsumed InputStream.
      */
     public XmlStreamReaderException(String msg, String bomEnc,
-            String xmlGuessEnc, String xmlEnc, InputStream is) {
-        this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc, is);
+            String xmlGuessEnc, String xmlEnc) {
+        this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc);
     }
 
     /**
@@ -74,17 +73,15 @@ public class XmlStreamReaderException extends IOException {
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
-     * @param is the unconsumed InputStream.
      */
     public XmlStreamReaderException(String msg, String ctMime, String ctEnc,
-            String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is) {
+            String bomEnc, String xmlGuessEnc, String xmlEnc) {
         super(msg);
         contentTypeMime = ctMime;
         contentTypeEncoding = ctEnc;
         bomEncoding = bomEnc;
         xmlGuessEncoding = xmlGuessEnc;
         xmlEncoding = xmlEnc;
-        this.is = is;
     }
 
     /**
@@ -135,15 +132,5 @@ public class XmlStreamReaderException extends IOException {
      */
     public String getContentTypeEncoding() {
         return contentTypeEncoding;
-    }
-
-    /**
-     * Returns the unconsumed InputStream to allow the application to do an
-     * alternate encoding detection on the InputStream.
-     *
-     * @return the unconsumed InputStream.
-     */
-    public InputStream getInputStream() {
-        return is;
     }
 }
