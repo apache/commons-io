@@ -182,6 +182,18 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
+     * Return the BOM charset Name - {@link ByteOrderMark#getCharsetName()}.
+     *
+     * @return The BOM charset Name or null if no BOM found
+     * @throws IOException if an error reading the first bytes of the stream occurs
+     * 
+     */
+    public String getBOMCharsetName() throws IOException {
+        getBOM();
+        return (byteOrderMark == null ? null : byteOrderMark.getCharsetName());
+    }
+
+    /**
      * This method reads and either preserves or skips the first bytes in the
      * stream. It behaves like the single-byte <code>read()</code> method,
      * either returning a valid byte or -1 to indicate that the initial bytes

@@ -447,8 +447,8 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
         BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
-        String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
-        String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
+        String bomEnc      = bom.getBOMCharsetName();
+        String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         this.encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, pis);
         this.reader = new InputStreamReader(is, encoding);
@@ -469,8 +469,8 @@ public class XmlStreamReader extends Reader {
         BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         String cTMime = getContentTypeMime(httpContentType);
         String cTEnc = getContentTypeEncoding(httpContentType);
-        String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
-        String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
+        String bomEnc      = bom.getBOMCharsetName();
+        String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         this.encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
                 xmlGuessEnc, xmlEnc, pis, lenient);
