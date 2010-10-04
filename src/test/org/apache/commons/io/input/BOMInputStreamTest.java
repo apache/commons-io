@@ -175,6 +175,21 @@ public class BOMInputStreamTest extends TestCase {
         assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
     }
 
+    public void testGetBOMFirstThenReadInclude() throws Exception {
+        byte[] data = new byte[] { 'A', 'B', 'C' };
+        BOMInputStream in = new BOMInputStream(createDataStream(data, true), true);
+        assertTrue("hasBOM()", in.hasBOM());
+        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+        assertEquals(0xEF, in.read());
+        assertEquals(0xBB, in.read());
+        assertEquals(0xBF, in.read());
+        assertEquals('A', in.read());
+        assertEquals('B', in.read());
+        assertEquals('C', in.read());
+        assertEquals(-1, in.read());
+    }
+
     public void testReadWithMultipleBOM() throws Exception {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         BOMInputStream in = new BOMInputStream(createDataStream(data, true), 
