@@ -108,7 +108,8 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
         }
-        this.wildcards = wildcards;
+        this.wildcards = new String[wildcards.length];
+        System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);
         this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 
