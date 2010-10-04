@@ -603,8 +603,12 @@ public class XmlStreamReader extends Reader {
         String mime = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
-            mime = ((i == -1) ? httpContentType : httpContentType.substring(0,
-                    i)).trim();
+            if (i >= 0) {
+                mime = httpContentType.substring(0, i);
+            } else {
+                mime = httpContentType;
+            }
+            mime = mime.trim();
         }
         return mime;
     }
@@ -701,12 +705,11 @@ public class XmlStreamReader extends Reader {
      * otherwise false
      */
     private static boolean isAppXml(String mime) {
-        return mime != null
-                && (mime.equals("application/xml")
-                        || mime.equals("application/xml-dtd")
-                        || mime
-                                .equals("application/xml-external-parsed-entity") || (mime
-                        .startsWith("application/") && mime.endsWith("+xml")));
+        return mime != null &&
+               (mime.equals("application/xml") || 
+                mime.equals("application/xml-dtd") ||
+                mime.equals("application/xml-external-parsed-entity") ||
+               (mime.startsWith("application/") && mime.endsWith("+xml")));
     }
 
     /**
@@ -717,10 +720,10 @@ public class XmlStreamReader extends Reader {
      * otherwise false
      */
     private static boolean isTextXml(String mime) {
-        return mime != null
-                && (mime.equals("text/xml")
-                        || mime.equals("text/xml-external-parsed-entity") || (mime
-                        .startsWith("text/") && mime.endsWith("+xml")));
+        return mime != null &&
+              (mime.equals("text/xml") ||
+               mime.equals("text/xml-external-parsed-entity") ||
+              (mime.startsWith("text/") && mime.endsWith("+xml")));
     }
 
     private static final MessageFormat RAW_EX_1 = new MessageFormat(
