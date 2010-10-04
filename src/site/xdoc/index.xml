@@ -27,50 +27,62 @@ limitations under the License.
 Commons IO is a library of utilities to assist with developing IO functionality.
 </p>
 <p>
-There are four main areas included:
+There are six main areas included:
 <ul>
-<li>Utility classes - with static methods to perform common tasks</li>
-<li>Filters - various implementations of file filters</li>
-<li>Comparators - various implementations of <code>java.util.Comparator</code> for files</li>
-<li>Streams - useful stream, reader and writer implementations</li>
+<li><a href="api-release/index.html?org/apache/commons/io/package-summary.html">Utility classes</a>
+   - with static methods to perform common tasks</li>
+<li><a href="api-release/index.html?org/apache/commons/io/input/package-summary.html">Input</a>
+   - useful Input Stream and Reader implementations</li>
+<li><a href="api-release/index.html?org/apache/commons/io/output/package-summary.html">Output</a>
+   - useful Output Stream and Writer implementations</li>
+<li><a href="api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">Filters</a>
+   - various implementations of file filters</li>
+<li><a href="api-release/index.html?org/apache/commons/io/comparator/package-summary.html">Comparators</a>
+   - various implementations of <code>java.util.Comparator</code> for files</li>
+<li><a href="api-release/index.html?org/apache/commons/io/monitor/package-summary.html">File Monitor</a>
+   - a component for monitoring file system events</li>
 </ul>
-</p>
-</section>
-<!-- ================================================== -->
-<section name="Documentation">
-<p>
-A getting started <a href="description.html">user guide</a> is available,
-as are some IO <a href="bestpractices.html">best practices</a>
-and various <a href="project-reports.html">project reports</a>.
-</p>
-<p>
-The JavaDoc API documents are available online:
-</p>
-<ul>
-<li>The <a href="api-release/index.html">current release 1.4</a></li>
-<li>The <a href="api-1.3.2/index.html">previous version 1.3.2</a></li>
-<li>The <a href="api-1.3.1/index.html">previous version 1.3.1</a></li>
-<li>The <a href="api-1.3/index.html">previous version 1.3</a></li>
-<li>The <a href="api-1.2/index.html">previous version 1.2</a></li>
-<li>The <a href="api-1.1/index.html">previous version 1.1</a></li>
-<li>The <a href="apidocs/index.html">latest SVN</a></li>
-</ul>
-<p>
-The <a href="source-repository.html">subversion repository</a> can be
-<a href="http://svn.apache.org/viewvc/commons/proper/io/trunk/">browsed</a>.
 </p>
 </section>
 <!-- ================================================== -->
 <section name="Releases">
-<p>
-The latest version is v1.4. - 
-<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a><br />
-The <a href="upgradeto1_4.html">upgrade notes</a> are also available.
 
-</p>
+<subsection name="Commons IO 2.0 (requires JDK 1.5+)">
 <p>
-For previous releases, see the <a href="http://archive.apache.org/dist/commons/io/">Apache Archive</a>
-</p>
+Commons IO 2.0 is the latest version and requires a minimum of JDK 1.5 -
+<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
+</p> 
+<p>
+View the <a href="upgradeto2_0.html">Release Notes</a> and
+<a href="api-release/index.html">JavaDoc API documents</a>
+</p> 
+</subsection>
+
+<subsection name="Commons IO 1.4  (requires JDK 1.3+)">
+<p>
+Commons IO 1.4 requires a minimum of JDK 1.3 - 
+<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
+</p> 
+<p>
+View the <a href="upgradeto1_4.html">Release Notes</a> and
+<a href="api-1.4/index.html">JavaDoc API documents</a>
+</p> 
+</subsection>
+
+<subsection name="Older Releases">
+<p>
+For previous releases, see the <a href="http://archive.apache.org/dist/commons/io/">Apache Archive</a>.
+The JavaDoc API documents are available online:
+</p> 
+<ul>
+<li>The <a href="api-1.3.2/index.html">1.3.2 JavaDoc</a></li>
+<li>The <a href="api-1.3.1/index.html">1.3.1 JavaDoc</a></li>
+<li>The <a href="api-1.3/index.html">1.3 JavaDoc</a></li>
+<li>The <a href="api-1.2/index.html">1.2 JavaDoc</a></li>
+<li>The <a href="api-1.1/index.html">1.1 JavaDoc</a></li>
+</ul>
+</subsection>
+
 </section>
 <!-- ================================================== -->
 <section name="Support">
