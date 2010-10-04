@@ -156,19 +156,6 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException if an error reading the first bytes of the stream occurs
      */
     public ByteOrderMark getBOM() throws IOException {
-        readFirstBytes();
-        return byteOrderMark;
-    }
-
-    /**
-     * This method reads and either preserves or skips the first bytes in the
-     * stream. It behaves like the single-byte <code>read()</code> method,
-     * either returning a valid byte or -1 to indicate that the initial bytes
-     * have been processed already.
-     * @return the byte read (excluding BOM) or -1 if the end of stream
-     * @throws IOException if an I/O error occurs
-     */
-    private int readFirstBytes() throws IOException {
         if (firstBytes == null) {
             int max = 0;
             for (ByteOrderMark bom : boms) {
@@ -191,7 +178,19 @@ public class BOMInputStream extends ProxyInputStream {
                 }
             }
         }
+        return byteOrderMark;
+    }
 
+    /**
+     * This method reads and either preserves or skips the first bytes in the
+     * stream. It behaves like the single-byte <code>read()</code> method,
+     * either returning a valid byte or -1 to indicate that the initial bytes
+     * have been processed already.
+     * @return the byte read (excluding BOM) or -1 if the end of stream
+     * @throws IOException if an I/O error occurs
+     */
+    private int readFirstBytes() throws IOException {
+        getBOM();
         return (fbIndex < fbLength) ? firstBytes[fbIndex++] : -1;
     }
 
