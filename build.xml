@@ -56,13 +56,13 @@
   <property name="component.title"         value="Commons IO"/>
 
   <!-- The current version number of this component -->
-  <property name="component.version"       value="1.5-SNAPSHOT"/>
+  <property name="component.version"       value="2.0-SNAPSHOT"/>
 
   <!-- The base directory for component sources -->
-  <property name="source.home"             value="src/java"/>
+  <property name="source.home"             value="src/main/java"/>
 
   <!-- The base directory for unit test sources -->
-  <property name="test.home"               value="src/test"/>
+  <property name="test.home"               value="src/test/java"/>
 
   <!-- Download lib dir -->
   <property name="download.lib.dir"        value="lib"/>
@@ -71,7 +71,7 @@
   <property name="build.home"              value="target"/>
 
   <!-- The base directory for distribution targets -->
-  <property name="dist.home"               value="${build.home}/dist"/>
+  <property name="dist.home"               value="${build.home}"/>
 
   <!-- Base file name for dist files -->
   <property name="final.name"        value="${component.name}-${component.version}"/>
@@ -233,10 +233,10 @@
     <manifest file="${build.home}/MANIFEST.MF">
         <attribute name="Specification-Title"      value="${component.title}"/>
         <attribute name="Specification-Version"    value="${component.version}"/>
-        <attribute name="Specification-Vendor"     value="Apache Software Foundation"/>
+        <attribute name="Specification-Vendor"     value="The Apache Software Foundation"/>
         <attribute name="Implementation-Title"     value="${component.title}"/>
         <attribute name="Implementation-Version"   value="${component.version}"/> 
-        <attribute name="Implementation-Vendor"    value="Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor"    value="The Apache Software Foundation"/>
         <attribute name="Implementation-Vendor-Id" value="org.apache"/>
         <attribute name="X-Compile-Source-JDK"     value="${compile.source}"/>
         <attribute name="X-Compile-Target-JDK"     value="${compile.target}"/>
@@ -285,7 +285,6 @@
     <copy todir="${stage.src.dir}/${final.name}-src">
       <fileset dir=".">
         <include name="build.xml"/>
-        <include name="build-check-jdk13.xml"/>
         <include name="checkstyle.xml"/>
         <include name="LICENSE.txt"/>
         <include name="NOTICE.txt"/>
@@ -296,9 +295,6 @@
     </copy>
     <copy todir="${stage.src.dir}/${final.name}-src/src">
       <fileset dir="src" />
-    </copy>
-    <copy todir="${stage.src.dir}/${final.name}-src/xdocs">
-      <fileset dir="xdocs" />
     </copy>
 
     <zip  zipfile="${dist.home}/${final.name}.zip"     basedir="${stage.bin.dir}"/>
