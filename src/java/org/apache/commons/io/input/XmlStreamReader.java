@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.text.MessageFormat;
 
+import org.apache.commons.io.ByteOrderMark;
+
 /**
  * Character stream that handles all the necessary Voodo to figure out the
  * charset encoding of the XML document within the stream.
@@ -74,6 +76,12 @@ public class XmlStreamReader extends Reader {
     private static final String UTF_16 = "UTF-16";
 
     private static final String EBCDIC = "CP1047";
+
+    private static final ByteOrderMark XML_UTF_8    = new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D);
+    private static final ByteOrderMark XML_UTF_16BE = new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F);
+    private static final ByteOrderMark XML_UTF_16LE = new ByteOrderMark(UTF_16LE, 0x3C, 0x00, 0x3F, 0x00);
+    private static final ByteOrderMark XML_EBCDIC   = new ByteOrderMark(EBCDIC,   0x4C, 0x6F, 0xA7, 0x94);
+
 
     private static String staticDefaultEncoding = null;
 
@@ -406,9 +414,10 @@ public class XmlStreamReader extends Reader {
 
     private void doRawStream(InputStream is, boolean lenient)
             throws IOException {
-        BufferedInputStream pis = new BufferedInputStream(is, BUFFER_SIZE);
-        String bomEnc = getBOMEncoding(pis);
-        String xmlGuessEnc = getXMLGuessEncoding(pis);
+        BOMInputStream bom = createBomStream(new BufferedInputStream(is, BUFFER_SIZE)); 
+        BOMInputStream pis = createXmlStream(bom);
+        String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
+        String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         String encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, pis);
         prepareReader(pis, encoding);
@@ -416,15 +425,28 @@ public class XmlStreamReader extends Reader {
 
     private void doHttpStream(InputStream is, String httpContentType,
             boolean lenient) throws IOException {
-        BufferedInputStream pis = new BufferedInputStream(is, BUFFER_SIZE);
+        BOMInputStream bom = createBomStream(new BufferedInputStream(is, BUFFER_SIZE)); 
+        BOMInputStream pis = createXmlStream(bom);
         String cTMime = getContentTypeMime(httpContentType);
         String cTEnc = getContentTypeEncoding(httpContentType);
-        String bomEnc = getBOMEncoding(pis);
-        String xmlGuessEnc = getXMLGuessEncoding(pis);
+        String bomEnc      = (bom.hasBOM() ? bom.getBOM().getCharsetName() : null);
+        String xmlGuessEnc = (pis.hasBOM() ? pis.getBOM().getCharsetName() : null);
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         String encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
                 xmlGuessEnc, xmlEnc, pis, lenient);
         prepareReader(pis, encoding);
+    }
+
+    private BOMInputStream createBomStream(InputStream delegate) {
+        BOMInputStream bis =
+            new BOMInputStream(delegate, false, ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_16LE);
+        return bis;
+    }
+
+    private BOMInputStream createXmlStream(InputStream delegate) {
+        BOMInputStream bis =
+            new BOMInputStream(delegate, true, XML_UTF_8, XML_UTF_16BE, XML_UTF_16LE, XML_EBCDIC);
+        return bis;
     }
 
     private void prepareReader(InputStream is, String encoding)
@@ -556,70 +578,12 @@ public class XmlStreamReader extends Reader {
         return encoding;
     }
 
-    // returns the BOM in the stream, NULL if not present,
-    // if there was BOM the in the stream it is consumed
-    private static String getBOMEncoding(BufferedInputStream is)
-            throws IOException {
-        String encoding = null;
-        int[] bytes = new int[3];
-        is.mark(3);
-        bytes[0] = is.read();
-        bytes[1] = is.read();
-        bytes[2] = is.read();
-
-        if (bytes[0] == 0xFE && bytes[1] == 0xFF) {
-            encoding = UTF_16BE;
-            is.reset();
-            is.read();
-            is.read();
-        } else if (bytes[0] == 0xFF && bytes[1] == 0xFE) {
-            encoding = UTF_16LE;
-            is.reset();
-            is.read();
-            is.read();
-        } else if (bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF) {
-            encoding = UTF_8;
-        } else {
-            is.reset();
-        }
-        return encoding;
-    }
-
-    // returns the best guess for the encoding by looking the first bytes of the
-    // stream, '<?'
-    private static String getXMLGuessEncoding(BufferedInputStream is)
-            throws IOException {
-        String encoding = null;
-        int[] bytes = new int[4];
-        is.mark(4);
-        bytes[0] = is.read();
-        bytes[1] = is.read();
-        bytes[2] = is.read();
-        bytes[3] = is.read();
-        is.reset();
-
-        if (bytes[0] == 0x00 && bytes[1] == 0x3C && bytes[2] == 0x00
-                && bytes[3] == 0x3F) {
-            encoding = UTF_16BE;
-        } else if (bytes[0] == 0x3C && bytes[1] == 0x00 && bytes[2] == 0x3F
-                && bytes[3] == 0x00) {
-            encoding = UTF_16LE;
-        } else if (bytes[0] == 0x3C && bytes[1] == 0x3F && bytes[2] == 0x78
-                && bytes[3] == 0x6D) {
-            encoding = UTF_8;
-        } else if (bytes[0] == 0x4C && bytes[1] == 0x6F && bytes[2] == 0xA7
-                && bytes[3] == 0x94) {
-            encoding = EBCDIC;
-        }
-        return encoding;
-    }
-
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
             "<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))",
             Pattern.MULTILINE);
 
     // returns the encoding declared in the <?xml encoding=...?>, NULL if none
-    private static String getXmlProlog(BufferedInputStream is, String guessedEnc)
+    private static String getXmlProlog(InputStream is, String guessedEnc)
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
