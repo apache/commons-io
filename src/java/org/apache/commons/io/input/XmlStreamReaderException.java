@@ -30,6 +30,7 @@ import java.io.IOException;
  *
  * @author Alejandro Abdelnur
  * @version $Id$
+ * @since Commons IO 2.0
  */
 public class XmlStreamReaderException extends IOException {
 
