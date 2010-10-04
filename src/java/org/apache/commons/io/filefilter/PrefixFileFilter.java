@@ -108,7 +108,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         if (prefixes == null) {
             throw new IllegalArgumentException("The array of prefixes must not be null");
         }
-        this.prefixes = prefixes;
+        this.prefixes = new String[prefixes.length];
+        System.arraycopy(prefixes, 0, this.prefixes, 0, prefixes.length);
         this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
     }
 

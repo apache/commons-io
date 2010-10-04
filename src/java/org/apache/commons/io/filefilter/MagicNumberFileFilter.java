@@ -209,7 +209,8 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
         
-        this.magicNumbers = magicNumber;
+        this.magicNumbers = new byte[magicNumber.length];
+        System.arraycopy(magicNumber, 0, this.magicNumbers, 0, magicNumber.length);
         this.byteOffset = offset;
     }
     
@@ -237,7 +238,10 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
                 byte[] fileBytes = new byte[this.magicNumbers.length]; 
                 randomAccessFile = new RandomAccessFile(file, "r");
                 randomAccessFile.seek(byteOffset);
-                randomAccessFile.read(fileBytes);
+                int read = randomAccessFile.read(fileBytes);
+                if (read != magicNumbers.length) {
+                    return false;
+                }
                 return Arrays.equals(this.magicNumbers, fileBytes);
             } catch (IOException ioe) {
                 // Do nothing, fall through and do not accept file

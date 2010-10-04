@@ -1081,7 +1081,7 @@ public class FilenameUtils {
             boolean normalized, IOCase caseSensitivity) {
         
         if (filename1 == null || filename2 == null) {
-            return filename1 == filename2;
+            return (filename1 == null && filename2 == null);
         }
         if (normalized) {
             filename1 = normalize(filename1);

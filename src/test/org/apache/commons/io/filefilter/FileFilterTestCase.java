@@ -942,6 +942,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         
         File classFileA = new File(getTestDirectory(), "A.class");
         File xmlFileB = new File(getTestDirectory(), "B.xml");
+        File emptyFile = new File(getTestDirectory(), "C.xml");
         File dir = new File(getTestDirectory(), "D");
         dir.mkdirs();
         
@@ -951,17 +952,21 @@ public class FileFilterTestCase extends FileBasedTestCase {
         classFileAStream.close();
         
         FileUtils.write(xmlFileB, xmlFileContent);
+        FileUtils.touch(emptyFile);
         
         IOFileFilter filter = new MagicNumberFileFilter(classFileMagicNumber);
         
         assertFiltering(filter, classFileA, true);
         assertFiltering(filter, xmlFileB, false);
+        assertFiltering(filter, emptyFile, false);
         assertFiltering(filter, dir, false);
+        
         
         filter = FileFilterUtils.magicNumberFileFilter(classFileMagicNumber);
         
         assertFiltering(filter, classFileA, true);
         assertFiltering(filter, xmlFileB, false);
+        assertFiltering(filter, emptyFile, false);
         assertFiltering(filter, dir, false);
     }
     
