@@ -97,7 +97,7 @@ public class XmlStreamReader extends Reader {
 
     private String encoding;
 
-    private String defaultEncoding;
+    private final String defaultEncoding;
 
     /**
      * Sets the default encoding to use if none is set in HTTP content-type, XML
