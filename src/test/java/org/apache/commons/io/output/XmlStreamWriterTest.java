@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -47,27 +48,36 @@ public class XmlStreamWriterTest extends TestCase {
         return xml;
     }
 
-    private static void checkXmlContent(String xml, String encoding)
+    private static void checkXmlContent(String xml, String encoding, String defaultEncoding)
             throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        XmlStreamWriter writer = new XmlStreamWriter(out);
+        XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncoding);
         writer.write(xml);
         writer.close();
         byte[] xmlContent = out.toByteArray();
-        String result = new String(xmlContent, encoding);
-        assertEquals(xml, result);
+        assertEquals(encoding, writer.getEncoding());
+        assertTrue(Arrays.equals(xml.getBytes(encoding), xmlContent));
+
     }
 
     private static void checkXmlWriter(String text, String encoding)
             throws IOException {
+        checkXmlWriter(text, encoding, null);
+    }
+
+    private static void checkXmlWriter(String text, String encoding, String defaultEncoding)
+            throws IOException {
         String xml = createXmlContent(text, encoding);
-        String effectiveEncoding = (encoding == null) ? "UTF-8" : encoding;
-        checkXmlContent(xml, effectiveEncoding);
+        String effectiveEncoding = encoding;
+        if (effectiveEncoding == null) {
+            effectiveEncoding = (defaultEncoding == null ? "UTF-8" : defaultEncoding);
+        }
+        checkXmlContent(xml, effectiveEncoding, defaultEncoding);
     }
 
     public void testNoXmlHeader() throws IOException {
         String xml = "<text>text with no XML header</text>";
-        checkXmlContent(xml, "UTF-8");
+        checkXmlContent(xml, "UTF-8", null);
     }
 
     public void testEmpty() throws IOException {
@@ -82,7 +92,11 @@ public class XmlStreamWriterTest extends TestCase {
     }
 
     public void testDefaultEncoding() throws IOException {
-        checkXmlWriter(TEXT_UNICODE, null);
+        checkXmlWriter(TEXT_UNICODE, null, null);
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-8");
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
+        checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
+        checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
     }
 
     public void testUTF8Encoding() throws IOException {
