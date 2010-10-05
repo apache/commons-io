@@ -465,12 +465,10 @@ public class XmlStreamReader extends Reader {
             boolean lenient) throws IOException {
         BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
         BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
-        String cTMime = getContentTypeMime(httpContentType);
-        String cTEnc = getContentTypeEncoding(httpContentType);
         String bomEnc      = bom.getBOMCharsetName();
         String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
-        this.encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
+        this.encoding = calculateHttpEncoding(httpContentType, bomEnc,
                 xmlGuessEnc, xmlEnc, lenient);
         this.reader = new InputStreamReader(is, encoding);
     }
@@ -529,8 +527,7 @@ public class XmlStreamReader extends Reader {
     /**
      * Calculate the HTTP encoding.
      *
-     * @param cTMime Mime Content Type
-     * @param cTEnc the content type encoding
+     * @param httpContentType The HTTP content type
      * @param bomEnc BOM encoding
      * @param xmlGuessEnc XML Guess encoding
      * @param xmlEnc XML encoding
@@ -539,9 +536,11 @@ public class XmlStreamReader extends Reader {
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String calculateHttpEncoding(String cTMime, String cTEnc,
+    private String calculateHttpEncoding(String httpContentType,
             String bomEnc, String xmlGuessEnc, String xmlEnc,
             boolean lenient) throws IOException {
+        String cTMime = getContentTypeMime(httpContentType);
+        String cTEnc  = getContentTypeEncoding(httpContentType);
         String encoding;
         if (lenient & xmlEnc != null) {
             encoding = xmlEnc;
