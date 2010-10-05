@@ -461,8 +461,8 @@ public class XmlStreamReader extends Reader {
             encoding = UTF_8;
         } else if (bomEnc.equals(UTF_16BE) || bomEnc.equals(UTF_16LE)) {
             if (xmlGuessEnc != null && !xmlGuessEnc.equals(bomEnc)) {
-                throw new IOException(RAW_EX_1.format(new Object[] { bomEnc,
-                        xmlGuessEnc, xmlEnc }));
+                throw new XmlStreamReaderException(RAW_EX_1.format(new Object[] { bomEnc,
+                        xmlGuessEnc, xmlEnc }), bomEnc, xmlGuessEnc, xmlEnc, is);
             }
             if (xmlEnc != null && !xmlEnc.equals(UTF_16)
                     && !xmlEnc.equals(bomEnc)) {
