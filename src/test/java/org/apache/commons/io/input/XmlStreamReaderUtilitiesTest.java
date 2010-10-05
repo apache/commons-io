@@ -135,24 +135,24 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         //               Expected   BOM        Guess     XMLEnc    Default
         checkRawEncoding(bomEnc,    bomEnc,    null,     null,     defaultEnc);
         checkRawEncoding(bomEnc,    bomEnc,    bomEnc,   null,     defaultEnc);
-        //checkRawError(RAWMGS1,      bomEnc,    otherEnc, null,     defaultEnc); throws IOException for UTF-16BE/LE
+        checkRawError(RAWMGS1,      bomEnc,    otherEnc, null,     defaultEnc);
         checkRawEncoding(bomEnc,    bomEnc,    null,     bomEnc,   defaultEnc);
         checkRawError(RAWMGS1,      bomEnc,    null,     otherEnc, defaultEnc);
         checkRawEncoding(bomEnc,    bomEnc,    bomEnc,   bomEnc,   defaultEnc);
         checkRawError(RAWMGS1,      bomEnc,    bomEnc,   otherEnc, defaultEnc);
-        //checkRawError(RAWMGS1,      bomEnc,    otherEnc, bomEnc,   defaultEnc); throws IOException for UTF-16BE/LE
+        checkRawError(RAWMGS1,      bomEnc,    otherEnc, bomEnc,   defaultEnc);
 
     }
 
     /** Additional UTF-16 calculateRawEncoding() Test */
     public void testCalculateRawEncodingAdditonalkUTF16() throws IOException {
         //                           BOM         Guess       XML         Default
-//        checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16",   null,       null); throws IOException
+        checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16",   null,       null);
         checkRawEncoding("UTF-16BE", "UTF-16BE", null,       "UTF-16",   null);
         checkRawEncoding("UTF-16BE", "UTF-16BE", "UTF-16BE", "UTF-16",   null);
         checkRawError(RAWMGS1,       "UTF-16BE", null,       "UTF-16LE", null);
         checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16BE", "UTF-16LE", null);
-//        checkRawError(RAWMGS1,       "UTF-16LE", "UTF-16",   null,       null); throws IOException
+        checkRawError(RAWMGS1,       "UTF-16LE", "UTF-16",   null,       null);
         checkRawEncoding("UTF-16LE", "UTF-16LE", null,       "UTF-16",   null);
         checkRawEncoding("UTF-16LE", "UTF-16LE", "UTF-16LE", "UTF-16",   null);
         checkRawError(RAWMGS1,       "UTF-16LE", null,       "UTF-16BE", null);
