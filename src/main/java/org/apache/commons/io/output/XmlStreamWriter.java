@@ -41,32 +41,61 @@ import org.apache.commons.io.input.XmlStreamReader;
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;
 
-    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
+    private final OutputStream out;
 
-    private OutputStream out;
+    private final String defaultEncoding;
+
+    private StringWriter xmlPrologWriter = new StringWriter(BUFFER_SIZE);
 
     private Writer writer;
 
     private String encoding;
 
     /**
-     * Construct an new XML stream writer for the specified output stream.
+     * Construct an new XML stream writer for the specified output stream
+     * with a default encoding of UTF-8.
      *
      * @param out The output stream
      */
     public XmlStreamWriter(OutputStream out) {
-        this.out = out;
+        this(out, null);
     }
 
     /**
-     * Construct an new XML stream writer for the specified file.
+     * Construct an new XML stream writer for the specified output stream
+     * with the specified default encoding.
+     *
+     * @param out The output stream
+     * @param defaultEncoding The default encoding if not encoding could be detected
+     */
+    public XmlStreamWriter(OutputStream out, String defaultEncoding) {
+        this.out = out;
+        this.defaultEncoding = (defaultEncoding != null ? defaultEncoding : "UTF-8");
+    }
+
+    /**
+     * Construct an new XML stream writer for the specified file
+     * with a default encoding of UTF-8.
      * 
      * @param file The file to write to
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
     public XmlStreamWriter(File file) throws FileNotFoundException {
-        this(new FileOutputStream(file));
+        this(file, null);
+    }
+
+    /**
+     * Construct an new XML stream writer for the specified file
+     * with the specified default encoding.
+     * 
+     * @param file The file to write to
+     * @param defaultEncoding The default encoding if not encoding could be detected
+     * @throws FileNotFoundException if there is an error creating or
+     * opening the file
+     */
+    public XmlStreamWriter(File file, String defaultEncoding) throws FileNotFoundException {
+        this(new FileOutputStream(file), defaultEncoding);
     }
 
     /**
@@ -79,6 +108,15 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
+     * Return the default encoding.
+     *
+     * @return the default encoding
+     */
+    public String getDefaultEncoding() {
+        return defaultEncoding;
+    }
+
+    /**
      * Close the underlying writer.
      *
      * @throws IOException if an error occurs closing the underlying writer
@@ -86,7 +124,7 @@ public class XmlStreamWriter extends Writer {
     @Override
     public void close() throws IOException {
         if (writer == null) {
-            encoding = "UTF-8";
+            encoding = defaultEncoding;
             writer = new OutputStreamWriter(out, encoding);
             writer.write(xmlPrologWriter.toString());
         }
@@ -137,18 +175,18 @@ public class XmlStreamWriter extends Writer {
                     } else {
                         // no encoding found in XML prolog: using default
                         // encoding
-                        encoding = "UTF-8";
+                        encoding = defaultEncoding;
                     }
                 } else {
                     if (xmlProlog.length() >= BUFFER_SIZE) {
                         // no encoding found in first characters: using default
                         // encoding
-                        encoding = "UTF-8";
+                        encoding = defaultEncoding;
                     }
                 }
             } else {
                 // no XML prolog: using default encoding
-                encoding = "UTF-8";
+                encoding = defaultEncoding;
             }
             if (encoding != null) {
                 // encoding has been chosen: let's do it
