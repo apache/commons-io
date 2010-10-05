@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Byte Order Mark (BOM) representation.
  *
  * @see org.apache.commons.io.input.BOMInputStream
- * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark<a>
+ * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark</a>
  * @version $Id$
  * @since Commons IO 2.0
  */

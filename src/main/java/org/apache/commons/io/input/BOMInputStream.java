@@ -60,7 +60,7 @@ import org.apache.commons.io.ByteOrderMark;
  * </pre>
  *
  * @see org.apache.commons.io.ByteOrderMark
- * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark<a>
+ * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark</a>
  * @version $Revision$ $Date$
  * @since Commons IO 2.0
  */
