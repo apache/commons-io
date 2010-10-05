@@ -334,11 +334,11 @@ public class XmlStreamReaderTest extends TestCase {
     protected InputStream getXmlStream(String bomType, String xmlType,
             String streamEnc, String prologEnc) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-        int[] bom = (int[]) BOMs.get(bomType);
+        int[] bom = BOMs.get(bomType);
         if (bom == null) {
             bom = new int[0];
         }
-        MessageFormat xml = (MessageFormat) XMLs.get(xmlType);
+        MessageFormat xml = XMLs.get(xmlType);
         for (int i = 0; i < bom.length; i++) {
             baos.write(bom[i]);
         }
