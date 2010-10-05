@@ -183,8 +183,7 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(InputStream is, boolean lenient) throws IOException,
-            XmlStreamReaderException {
+    public XmlStreamReader(InputStream is, boolean lenient) throws IOException {
         defaultEncoding = staticDefaultEncoding;
         try {
             doRawStream(is, lenient);
@@ -313,8 +312,7 @@ public class XmlStreamReader extends Reader {
      *         be determined according to the specs.
      */
     public XmlStreamReader(InputStream is, String httpContentType,
-            boolean lenient, String defaultEncoding) throws IOException,
-            XmlStreamReaderException {
+            boolean lenient, String defaultEncoding) throws IOException {
         this.defaultEncoding = (defaultEncoding == null) ? staticDefaultEncoding
                 : defaultEncoding;
         try {
@@ -362,7 +360,7 @@ public class XmlStreamReader extends Reader {
      *         be determined according to the specs.
      */
     public XmlStreamReader(InputStream is, String httpContentType,
-            boolean lenient) throws IOException, XmlStreamReaderException {
+            boolean lenient) throws IOException {
         this(is, httpContentType, lenient, null);
     }
 
