@@ -434,7 +434,7 @@ public class XmlStreamReader extends Reader {
     }
 
     // InputStream is passed for XmlStreamReaderException creation only
-    private String calculateRawEncoding(String bomEnc, String xmlGuessEnc,
+    String calculateRawEncoding(String bomEnc, String xmlGuessEnc,
             String xmlEnc, InputStream is) throws IOException {
         String encoding;
         if (bomEnc == null) {
@@ -480,7 +480,7 @@ public class XmlStreamReader extends Reader {
     }
 
     // InputStream is passed for XmlStreamReaderException creation only
-    private String calculateHttpEncoding(String cTMime, String cTEnc,
+    String calculateHttpEncoding(String cTMime, String cTEnc,
             String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is,
             boolean lenient) throws IOException {
         String encoding;
@@ -527,7 +527,7 @@ public class XmlStreamReader extends Reader {
     }
 
     // returns MIME type or NULL if httpContentType is NULL
-    private static String getContentTypeMime(String httpContentType) {
+    static String getContentTypeMime(String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
@@ -542,7 +542,7 @@ public class XmlStreamReader extends Reader {
 
     // returns charset parameter value, NULL if not present, NULL if
     // httpContentType is NULL
-    private static String getContentTypeEncoding(String httpContentType) {
+    static String getContentTypeEncoding(String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
@@ -558,7 +558,7 @@ public class XmlStreamReader extends Reader {
 
     // returns the BOM in the stream, NULL if not present,
     // if there was BOM the in the stream it is consumed
-    private static String getBOMEncoding(BufferedInputStream is)
+    static String getBOMEncoding(BufferedInputStream is)
             throws IOException {
         String encoding = null;
         int[] bytes = new int[3];
@@ -668,7 +668,7 @@ public class XmlStreamReader extends Reader {
     }
 
     // indicates if the MIME type belongs to the APPLICATION XML family
-    private static boolean isAppXml(String mime) {
+    static boolean isAppXml(String mime) {
         return mime != null
                 && (mime.equals("application/xml")
                         || mime.equals("application/xml-dtd")
@@ -678,7 +678,7 @@ public class XmlStreamReader extends Reader {
     }
 
     // indicates if the MIME type belongs to the TEXT XML family
-    private static boolean isTextXml(String mime) {
+    static boolean isTextXml(String mime) {
         return mime != null
                 && (mime.equals("text/xml")
                         || mime.equals("text/xml-external-parsed-entity") || (mime
