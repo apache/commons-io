@@ -500,32 +500,28 @@ public class XmlStreamReader extends Reader {
             }
         } else if (bomEnc.equals(UTF_8)) {
             if (xmlGuessEnc != null && !xmlGuessEnc.equals(UTF_8)) {
-                throw new XmlStreamReaderException(RAW_EX_1
-                        .format(new Object[] { bomEnc, xmlGuessEnc, xmlEnc }),
-                        bomEnc, xmlGuessEnc, xmlEnc);
+                String msg = MessageFormat.format(RAW_EX_1, new Object[] { bomEnc, xmlGuessEnc, xmlEnc });
+                throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
             }
             if (xmlEnc != null && !xmlEnc.equals(UTF_8)) {
-                throw new XmlStreamReaderException(RAW_EX_1
-                        .format(new Object[] { bomEnc, xmlGuessEnc, xmlEnc }),
-                        bomEnc, xmlGuessEnc, xmlEnc);
+                String msg = MessageFormat.format(RAW_EX_1, new Object[] { bomEnc, xmlGuessEnc, xmlEnc });
+                throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
             }
             encoding = UTF_8;
         } else if (bomEnc.equals(UTF_16BE) || bomEnc.equals(UTF_16LE)) {
             if (xmlGuessEnc != null && !xmlGuessEnc.equals(bomEnc)) {
-                throw new IOException(RAW_EX_1.format(new Object[] { bomEnc,
-                        xmlGuessEnc, xmlEnc }));
+                String msg = MessageFormat.format(RAW_EX_1, new Object[] { bomEnc, xmlGuessEnc, xmlEnc });
+                throw new IOException(msg);
             }
             if (xmlEnc != null && !xmlEnc.equals(UTF_16)
                     && !xmlEnc.equals(bomEnc)) {
-                throw new XmlStreamReaderException(RAW_EX_1
-                        .format(new Object[] { bomEnc, xmlGuessEnc, xmlEnc }),
-                        bomEnc, xmlGuessEnc, xmlEnc);
+                String msg = MessageFormat.format(RAW_EX_1, new Object[] { bomEnc, xmlGuessEnc, xmlEnc });
+                throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
             }
             encoding = bomEnc;
         } else {
-            throw new XmlStreamReaderException(RAW_EX_2.format(new Object[] {
-                    bomEnc, xmlGuessEnc, xmlEnc }), bomEnc, xmlGuessEnc,
-                    xmlEnc);
+            String msg = MessageFormat.format(RAW_EX_2, new Object[] { bomEnc, xmlGuessEnc, xmlEnc });
+            throw new XmlStreamReaderException(msg, bomEnc, xmlGuessEnc, xmlEnc);
         }
         return encoding;
     }
@@ -565,27 +561,21 @@ public class XmlStreamReader extends Reader {
                     }
                 } else if (bomEnc != null
                         && (cTEnc.equals(UTF_16BE) || cTEnc.equals(UTF_16LE))) {
-                    throw new XmlStreamReaderException(HTTP_EX_1
-                            .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                    xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                            bomEnc, xmlGuessEnc, xmlEnc);
+                    String msg = MessageFormat.format(HTTP_EX_1, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+                    throw new XmlStreamReaderException(msg, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
                 } else if (cTEnc.equals(UTF_16)) {
                     if (bomEnc != null && bomEnc.startsWith(UTF_16)) {
                         encoding = bomEnc;
                     } else {
-                        throw new XmlStreamReaderException(HTTP_EX_2
-                                .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                        xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                                bomEnc, xmlGuessEnc, xmlEnc);
+                        String msg = MessageFormat.format(HTTP_EX_2, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+                        throw new XmlStreamReaderException(msg, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
                     }
                 } else {
                     encoding = cTEnc;
                 }
             } else {
-                throw new XmlStreamReaderException(HTTP_EX_3
-                        .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                xmlGuessEnc, xmlEnc }), cTMime, cTEnc, bomEnc,
-                        xmlGuessEnc, xmlEnc);
+                String msg = MessageFormat.format(HTTP_EX_3, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
+                throw new XmlStreamReaderException(msg, cTMime, cTEnc, bomEnc, xmlGuessEnc, xmlEnc);
             }
         }
         return encoding;
@@ -724,19 +714,19 @@ public class XmlStreamReader extends Reader {
               (mime.startsWith("text/") && mime.endsWith("+xml")));
     }
 
-    private static final MessageFormat RAW_EX_1 = new MessageFormat(
-        "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch");
+    private static final String RAW_EX_1 =
+        "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] encoding mismatch";
 
-    private static final MessageFormat RAW_EX_2 = new MessageFormat(
-        "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] unknown BOM");
+    private static final String RAW_EX_2 =
+        "Invalid encoding, BOM [{0}] XML guess [{1}] XML prolog [{2}] unknown BOM";
 
-    private static final MessageFormat HTTP_EX_1 = new MessageFormat(
-        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], BOM must be NULL");
+    private static final String HTTP_EX_1 =
+        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], BOM must be NULL";
 
-    private static final MessageFormat HTTP_EX_2 = new MessageFormat(
-        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch");
+    private static final String HTTP_EX_2 =
+        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], encoding mismatch";
 
-    private static final MessageFormat HTTP_EX_3 = new MessageFormat(
-        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Invalid MIME");
+    private static final String HTTP_EX_3 =
+        "Invalid encoding, CT-MIME [{0}] CT-Enc [{1}] BOM [{2}] XML guess [{3}] XML prolog [{4}], Invalid MIME";
 
 }
