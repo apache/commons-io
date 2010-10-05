@@ -448,7 +448,7 @@ public class XmlStreamReader extends Reader {
         String bomEnc      = bom.getBOMCharsetName();
         String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
-        this.encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, pis);
+        this.encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
         this.reader = new InputStreamReader(is, encoding);
     }
 
@@ -471,7 +471,7 @@ public class XmlStreamReader extends Reader {
         String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         this.encoding = calculateHttpEncoding(cTMime, cTEnc, bomEnc,
-                xmlGuessEnc, xmlEnc, pis, lenient);
+                xmlGuessEnc, xmlEnc, lenient);
         this.reader = new InputStreamReader(is, encoding);
     }
 
@@ -481,12 +481,11 @@ public class XmlStreamReader extends Reader {
      * @param bomEnc BOM encoding
      * @param xmlGuessEnc XML Guess encoding
      * @param xmlEnc XML encoding
-     * @param is InputStream to create the reader from.
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
     private String calculateRawEncoding(String bomEnc, String xmlGuessEnc,
-            String xmlEnc, InputStream is) throws IOException {
+            String xmlEnc) throws IOException {
         String encoding;
         if (bomEnc == null) {
             if (xmlGuessEnc == null || xmlEnc == null) {
@@ -535,14 +534,13 @@ public class XmlStreamReader extends Reader {
      * @param bomEnc BOM encoding
      * @param xmlGuessEnc XML Guess encoding
      * @param xmlEnc XML encoding
-     * @param is InputStream to create the reader from.
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
     private String calculateHttpEncoding(String cTMime, String cTEnc,
-            String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is,
+            String bomEnc, String xmlGuessEnc, String xmlEnc,
             boolean lenient) throws IOException {
         String encoding;
         if (lenient & xmlEnc != null) {
@@ -553,8 +551,7 @@ public class XmlStreamReader extends Reader {
             if (appXml || textXml) {
                 if (cTEnc == null) {
                     if (appXml) {
-                        encoding = calculateRawEncoding(bomEnc, xmlGuessEnc,
-                                xmlEnc, is);
+                        encoding = calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
                     } else {
                         encoding = (defaultEncoding == null) ? US_ASCII
                                 : defaultEncoding;
