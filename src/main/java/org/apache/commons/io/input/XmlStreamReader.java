@@ -482,7 +482,7 @@ public class XmlStreamReader extends Reader {
      * @return the raw encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String calculateRawEncoding(String bomEnc, String xmlGuessEnc,
+    String calculateRawEncoding(String bomEnc, String xmlGuessEnc,
             String xmlEnc) throws IOException {
 
         // BOM is Null
@@ -541,7 +541,7 @@ public class XmlStreamReader extends Reader {
      * @return the HTTP encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String calculateHttpEncoding(String httpContentType,
+    String calculateHttpEncoding(String httpContentType,
             String bomEnc, String xmlGuessEnc, String xmlEnc,
             boolean lenient) throws IOException {
 
@@ -598,7 +598,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The mime content type
      */
-    private static String getContentTypeMime(String httpContentType) {
+    static String getContentTypeMime(String httpContentType) {
         String mime = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
@@ -622,7 +622,7 @@ public class XmlStreamReader extends Reader {
      * @param httpContentType the HTTP content type
      * @return The content type encoding
      */
-    private static String getContentTypeEncoding(String httpContentType) {
+    static String getContentTypeEncoding(String httpContentType) {
         String encoding = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
@@ -703,7 +703,7 @@ public class XmlStreamReader extends Reader {
      * @return true if the mime type belongs to the APPLICATION XML family,
      * otherwise false
      */
-    private static boolean isAppXml(String mime) {
+    static boolean isAppXml(String mime) {
         return mime != null &&
                (mime.equals("application/xml") || 
                 mime.equals("application/xml-dtd") ||
@@ -718,7 +718,7 @@ public class XmlStreamReader extends Reader {
      * @return true if the mime type belongs to the TEXT XML family,
      * otherwise false
      */
-    private static boolean isTextXml(String mime) {
+    static boolean isTextXml(String mime) {
         return mime != null &&
               (mime.equals("text/xml") ||
                mime.equals("text/xml-external-parsed-entity") ||
