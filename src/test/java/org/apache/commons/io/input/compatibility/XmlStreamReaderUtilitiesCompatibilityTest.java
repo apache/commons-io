@@ -1,0 +1,51 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.io.input.compatibility;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
+
+/**
+ * Test compatibility of the original XmlStreamReader (before all the refactoring).
+ */
+public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
+
+    protected String calculateRawEncoding(String bomEnc, String xmlGuessEnc, String xmlEnc,
+            String defaultEncoding) throws IOException {
+        MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
+        String encoding = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
+        return encoding;
+    }
+    protected String calculateHttpEncoding(String httpContentType, String bomEnc, String xmlGuessEnc,
+            String xmlEnc, boolean lenient, String defaultEncoding) throws IOException {
+        MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
+        String encoding = mock.calculateHttpEncoding(
+                XmlStreamReader.getContentTypeMime(httpContentType),
+                XmlStreamReader.getContentTypeEncoding(httpContentType),
+                bomEnc, xmlGuessEnc, xmlEnc, null, lenient);
+        return encoding;
+    }
+
+    /** Mock {@link XmlStreamReader} implementation */
+    private static class MockXmlStreamReader extends XmlStreamReader {
+        MockXmlStreamReader(String defaultEncoding) throws IOException {
+            super(new ByteArrayInputStream("".getBytes()), null, true, defaultEncoding);
+        }
+    }
+}
