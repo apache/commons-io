@@ -91,27 +91,11 @@ public class XmlStreamReader extends Reader {
     };
 
 
-    private static String staticDefaultEncoding = null;
-
     private Reader reader;
 
     private String encoding;
 
     private final String defaultEncoding;
-
-    /**
-     * Sets the default encoding to use if none is set in HTTP content-type, XML
-     * prolog and the rules based on content-type are not adequate.
-     * <p>
-     * If it is set to NULL the content-type based rules are used.
-     * <p>
-     * By default it is NULL.
-     *
-     * @param encoding charset encoding to default to.
-     */
-    public static void setDefaultEncoding(String encoding) {
-        staticDefaultEncoding = encoding;
-    }
 
     /**
      * Returns the default encoding to use if none is set in HTTP content-type,
@@ -121,8 +105,8 @@ public class XmlStreamReader extends Reader {
      *
      * @return the default encoding to use.
      */
-    public static String getDefaultEncoding() {
-        return staticDefaultEncoding;
+    public String getDefaultEncoding() {
+        return defaultEncoding;
     }
 
     /**
@@ -184,7 +168,39 @@ public class XmlStreamReader extends Reader {
      *         be determined according to the specs.
      */
     public XmlStreamReader(InputStream is, boolean lenient) throws IOException {
-        defaultEncoding = staticDefaultEncoding;
+        this(is, lenient, null);
+    }
+
+    /**
+     * Creates a Reader for a raw InputStream.
+     * <p>
+     * It follows the same logic used for files.
+     * <p>
+     * If lenient detection is indicated and the detection above fails as per
+     * specifications it then attempts the following:
+     * <p>
+     * If the content type was 'text/html' it replaces it with 'text/xml' and
+     * tries the detection again.
+     * <p>
+     * Else if the XML prolog had a charset encoding that encoding is used.
+     * <p>
+     * Else if the content type had a charset encoding that encoding is used.
+     * <p>
+     * Else 'UTF-8' is used.
+     * <p>
+     * If lenient detection is indicated an XmlStreamReaderException is never
+     * thrown.
+     *
+     * @param is InputStream to create a Reader from.
+     * @param lenient indicates if the charset encoding detection should be
+     *        relaxed.
+     * @param defaultEncoding The default encoding
+     * @throws IOException thrown if there is a problem reading the stream.
+     * @throws XmlStreamReaderException thrown if the charset encoding could not
+     *         be determined according to the specs.
+     */
+    public XmlStreamReader(InputStream is, boolean lenient, String defaultEncoding) throws IOException {
+        this.defaultEncoding = defaultEncoding;
         doRawStream(is, lenient);
     }
 
@@ -206,7 +222,7 @@ public class XmlStreamReader extends Reader {
      *         the URL.
      */
     public XmlStreamReader(URL url) throws IOException {
-        this(url.openConnection());
+        this(url.openConnection(), null);
     }
 
     /**
@@ -224,11 +240,12 @@ public class XmlStreamReader extends Reader {
      * the lenient parameter for details.
      *
      * @param conn URLConnection to create a Reader from.
+     * @param defaultEncoding The default encoding
      * @throws IOException thrown if there is a problem reading the stream of
      *         the URLConnection.
      */
-    public XmlStreamReader(URLConnection conn) throws IOException {
-        defaultEncoding = staticDefaultEncoding;
+    public XmlStreamReader(URLConnection conn, String defaultEncoding) throws IOException {
+        this.defaultEncoding = defaultEncoding;
         boolean lenient = true;
         String contentType = conn.getContentType();
         if (conn instanceof HttpURLConnection || contentType != null) {
@@ -296,8 +313,7 @@ public class XmlStreamReader extends Reader {
      */
     public XmlStreamReader(InputStream is, String httpContentType,
             boolean lenient, String defaultEncoding) throws IOException {
-        this.defaultEncoding = (defaultEncoding == null) ? staticDefaultEncoding
-                : defaultEncoding;
+        this.defaultEncoding = defaultEncoding;
         doHttpStream(is, httpContentType, lenient);
     }
 
