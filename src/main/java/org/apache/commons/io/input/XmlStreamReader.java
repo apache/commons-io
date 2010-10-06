@@ -367,17 +367,14 @@ public class XmlStreamReader extends Reader {
      */
     private String doLenientDetection(String httpContentType, InputStream is,
             XmlStreamReaderException ex) throws IOException {
-        if (httpContentType != null) {
-            if (httpContentType.startsWith("text/html")) {
-                httpContentType = httpContentType.substring("text/html"
-                        .length());
-                httpContentType = "text/xml" + httpContentType;
-                try {
-                    return calculateHttpEncoding(httpContentType, ex.getBomEncoding(),
-                            ex.getXmlGuessEncoding(), ex.getXmlEncoding(), true);
-                } catch (XmlStreamReaderException ex2) {
-                    ex = ex2;
-                }
+        if (httpContentType != null && httpContentType.startsWith("text/html")) {
+            httpContentType = httpContentType.substring("text/html".length());
+            httpContentType = "text/xml" + httpContentType;
+            try {
+                return calculateHttpEncoding(httpContentType, ex.getBomEncoding(),
+                        ex.getXmlGuessEncoding(), ex.getXmlEncoding(), true);
+            } catch (XmlStreamReaderException ex2) {
+                ex = ex2;
             }
         }
         String encoding = ex.getXmlEncoding();
