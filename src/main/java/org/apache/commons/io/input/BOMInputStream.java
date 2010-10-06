@@ -27,8 +27,16 @@ import org.apache.commons.io.ByteOrderMark;
  * This class is used to wrap a stream that includes an encoded
  * {@link ByteOrderMark} as its first bytes.
  *
- * This class detects these bytes and, if required, can automatically skip these bytes
- *  and return the subsequent byte as the first byte in the stream.
+ * This class detects these bytes and, if required, can automatically skip them
+ * and return the subsequent byte as the first byte in the stream.
+ *
+ * The {@link ByteOrderMark} implementation has the following pre-defined BOMs:
+ * <ul>
+ *   <li>UTF-8 - {@link ByteOrderMark#UTF_8}</li>
+ *   <li>UTF-16BE - {@link ByteOrderMark#UTF_16LE}</li>
+ *   <li>UTF-16LE - {@link ByteOrderMark#UTF_16BE}</li>
+ * </ul>
+ *
  *
  * <h3>Example 1 - Detect and exclude a UTF-8 BOM</h3>
  * <pre>
@@ -47,7 +55,7 @@ import org.apache.commons.io.ByteOrderMark;
  *      }
  * </pre>
  *
- * <h3>Example 3 - Multiple BOMs</h3>
+ * <h3>Example 3 - Detect Multiple BOMs</h3>
  * <pre>
  *      BOMInputStream bomIn = new BOMInputStream(in, ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE);
  *      if (bomIn.hasBOM() == false) {
@@ -85,7 +93,7 @@ public class BOMInputStream extends ProxyInputStream {
 
     /**
      * Constructs a new BOM InputStream that detects a
-     * a {@link ByteOrderMark#UTF_8} and optionally excludes it.
+     * a {@link ByteOrderMark#UTF_8} and optionally includes it.
      * @param delegate the InputStream to delegate to
      * @param include true to include the UTF-8 BOM or
      * false to exclude it
@@ -106,7 +114,7 @@ public class BOMInputStream extends ProxyInputStream {
 
     /**
      * Constructs a new BOM InputStream that detects the
-     * specified BOMs and optionally excludes them.
+     * specified BOMs and optionally includes them.
      * @param delegate the InputStream to delegate to
      * @param include true to include the specified BOMs or
      * false to exclude them

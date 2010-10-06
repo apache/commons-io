@@ -33,6 +33,7 @@ import java.util.List;
  * @version $Revision$ $Date$
  *
  * @author Steven Caswell
+ * @see FileFilterUtils#and(IOFileFilter...)
  */
 public class AndFileFilter
         extends AbstractFileFilter

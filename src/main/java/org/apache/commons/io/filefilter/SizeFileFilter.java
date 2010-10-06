@@ -37,6 +37,9 @@ import java.io.Serializable;
  * @author Rahul Akolkar
  * @version $Id$
  * @since Commons IO 1.2
+ * @see FileFilterUtils#sizeFileFilter(long)
+ * @see FileFilterUtils#sizeFileFilter(long, boolean)
+ * @see FileFilterUtils#sizeRangeFileFilter(long, long)
  */
 public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
