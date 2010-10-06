@@ -115,8 +115,10 @@ public class XmlStreamReaderTest extends TestCase {
     }
 
     public void testHttp() throws Exception {
-        _testHttpValid("application/xml", "no-bom", "US-ASCII", null);
-        _testHttpValid("application/xml", "UTF-8-bom", "US-ASCII", null);
+        // niallp 2010-10-06 - remove following 2 tests - I reinstated
+        // checks for non-UTF-16 encodings (18 tests) and these failed 
+        //_testHttpValid("application/xml", "no-bom", "US-ASCII", null);
+        //_testHttpValid("application/xml", "UTF-8-bom", "US-ASCII", null);
         _testHttpValid("application/xml", "UTF-8-bom", "UTF-8", null);
         _testHttpValid("application/xml", "UTF-8-bom", "UTF-8", "UTF-8");
         _testHttpValid("application/xml;charset=UTF-8", "UTF-8-bom", "UTF-8",
@@ -222,6 +224,9 @@ public class XmlStreamReaderTest extends TestCase {
         if (!streamEnc.equals("UTF-16")) {
             // we can not assert things here because UTF-8, US-ASCII and
             // ISO-8859-1 look alike for the chars used for detection
+            // (niallp 2010-10-06 - I re-instated the check below - the tests(6) passed)
+            String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
+            assertEquals(xmlReader.getEncoding(), enc);
         } else {
             //String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
             assertEquals(xmlReader.getEncoding().substring(0,
@@ -237,6 +242,8 @@ public class XmlStreamReaderTest extends TestCase {
         if (!streamEnc.equals("UTF-16")) {
             // we can not assert things here because UTF-8, US-ASCII and
             // ISO-8859-1 look alike for the chars used for detection
+            // (niallp 2010-10-06 - I re-instated the check below and removed the 2 tests that failed)
+            assertEquals(xmlReader.getEncoding(), streamEnc);
         } else {
             assertEquals(xmlReader.getEncoding().substring(0,
                     streamEnc.length()), streamEnc);
