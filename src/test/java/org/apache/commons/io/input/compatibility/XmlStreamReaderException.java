@@ -17,7 +17,6 @@
 package org.apache.commons.io.input.compatibility;
 
 import java.io.InputStream;
-import java.io.IOException;
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
@@ -32,16 +31,9 @@ import java.io.IOException;
  * @author Alejandro Abdelnur
  * @version $Id$
  */
-public class XmlStreamReaderException extends IOException {
-    private final String bomEncoding;
+public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStreamReaderException {
 
-    private final String xmlGuessEncoding;
-
-    private final String xmlEncoding;
-
-    private final String contentTypeMime;
-
-    private final String contentTypeEncoding;
+    private static final long serialVersionUID = 1L;
 
     private final InputStream is;
 
@@ -78,63 +70,8 @@ public class XmlStreamReaderException extends IOException {
      */
     public XmlStreamReaderException(String msg, String ctMime, String ctEnc,
             String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is) {
-        super(msg);
-        contentTypeMime = ctMime;
-        contentTypeEncoding = ctEnc;
-        bomEncoding = bomEnc;
-        xmlGuessEncoding = xmlGuessEnc;
-        xmlEncoding = xmlEnc;
+        super(msg, ctMime, ctEnc, bomEnc, xmlGuessEnc, xmlEnc);
         this.is = is;
-    }
-
-    /**
-     * Returns the BOM encoding found in the InputStream.
-     *
-     * @return the BOM encoding, null if none.
-     */
-    public String getBomEncoding() {
-        return bomEncoding;
-    }
-
-    /**
-     * Returns the encoding guess based on the first bytes of the InputStream.
-     *
-     * @return the encoding guess, null if it couldn't be guessed.
-     */
-    public String getXmlGuessEncoding() {
-        return xmlGuessEncoding;
-    }
-
-    /**
-     * Returns the encoding found in the XML prolog of the InputStream.
-     *
-     * @return the encoding of the XML prolog, null if none.
-     */
-    public String getXmlEncoding() {
-        return xmlEncoding;
-    }
-
-    /**
-     * Returns the MIME type in the content-type used to attempt determining the
-     * encoding.
-     *
-     * @return the MIME type in the content-type, null if there was not
-     *         content-type or the encoding detection did not involve HTTP.
-     */
-    public String getContentTypeMime() {
-        return contentTypeMime;
-    }
-
-    /**
-     * Returns the encoding in the content-type used to attempt determining the
-     * encoding.
-     *
-     * @return the encoding in the content-type, null if there was not
-     *         content-type, no encoding in it or the encoding detection did not
-     *         involve HTTP.
-     */
-    public String getContentTypeEncoding() {
-        return contentTypeEncoding;
     }
 
     /**
