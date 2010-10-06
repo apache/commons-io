@@ -105,13 +105,13 @@ Bug fixes from 1.4
   * [IO-231] FileUtils - fix wrong exception message generated in isFileNewer() method
   * [IO-207] FileUtils - fix race condition in forceMkdir() method
   * [IO-217] FileUtils - fix copyDirectoryToDirectory() makes infinite loops
-  * [IO-166] FileUtils - fix URL decoding in toFile(URL
+  * [IO-166] FileUtils - fix URL decoding in toFile(URL)
   * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on sub-directories
   * [IO-240] FileFilterUtils - ensure cvsFilter and svnFilter are only created once.
   * [IO-175] IOUtils - fix copyFile() issues with very large files
   * [IO-191] Improvements from static analysis
   * [IO-216] LockableFileWriter - delete files quietly when an exception is thrown during initialization
-  * [IO-243] SwappedDataInputStream readBoolean is inverted
+  * [IO-243] SwappedDataInputStream - fix readBoolean is inverted
   * [IO-235] Tests - remove unused YellOnFlushAndCloseOutputStream from CopyUtilsTest
   * [IO-161] Tests - fix FileCleaningTrackerTestCase hanging
 
