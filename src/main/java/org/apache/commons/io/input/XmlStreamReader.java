@@ -360,38 +360,6 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Do lenient detection.
-     *
-     * @param httpContentType content-type header to use for the resolution of
-     *        the charset encoding.
-     * @param is the unconsumed InputStream
-     * @param ex The thrown exception
-     * @return the encoding
-     * @throws IOException thrown if there is a problem reading the stream.
-     */
-    private String doLenientDetection(String httpContentType, InputStream is,
-            XmlStreamReaderException ex) throws IOException {
-        if (httpContentType != null && httpContentType.startsWith("text/html")) {
-            httpContentType = httpContentType.substring("text/html".length());
-            httpContentType = "text/xml" + httpContentType;
-            try {
-                return calculateHttpEncoding(httpContentType, ex.getBomEncoding(),
-                        ex.getXmlGuessEncoding(), ex.getXmlEncoding(), true);
-            } catch (XmlStreamReaderException ex2) {
-                ex = ex2;
-            }
-        }
-        String encoding = ex.getXmlEncoding();
-        if (encoding == null) {
-            encoding = ex.getContentTypeEncoding();
-        }
-        if (encoding == null) {
-            encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
-        }
-        return encoding;
-    }
-
-    /**
      * Returns the charset encoding of the XmlStreamReader.
      *
      * @return charset encoding.
@@ -477,6 +445,38 @@ public class XmlStreamReader extends Reader {
                 throw ex;
             }
         }
+    }
+
+    /**
+     * Do lenient detection.
+     *
+     * @param httpContentType content-type header to use for the resolution of
+     *        the charset encoding.
+     * @param is the unconsumed InputStream
+     * @param ex The thrown exception
+     * @return the encoding
+     * @throws IOException thrown if there is a problem reading the stream.
+     */
+    private String doLenientDetection(String httpContentType, InputStream is,
+            XmlStreamReaderException ex) throws IOException {
+        if (httpContentType != null && httpContentType.startsWith("text/html")) {
+            httpContentType = httpContentType.substring("text/html".length());
+            httpContentType = "text/xml" + httpContentType;
+            try {
+                return calculateHttpEncoding(httpContentType, ex.getBomEncoding(),
+                        ex.getXmlGuessEncoding(), ex.getXmlEncoding(), true);
+            } catch (XmlStreamReaderException ex2) {
+                ex = ex2;
+            }
+        }
+        String encoding = ex.getXmlEncoding();
+        if (encoding == null) {
+            encoding = ex.getContentTypeEncoding();
+        }
+        if (encoding == null) {
+            encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
+        }
+        return encoding;
     }
 
     /**
