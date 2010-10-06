@@ -216,19 +216,16 @@ public class XmlStreamReaderTest extends TestCase {
     public void _testAlternateDefaultEncoding(String cT, String bomEnc,
             String streamEnc, String prologEnc, String alternateEnc)
             throws Exception {
-        try {
-            InputStream is = getXmlStream(bomEnc, (prologEnc == null) ? XML1
-                    : XML3, streamEnc, prologEnc);
-            XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false, alternateEnc);
-            if (!streamEnc.equals("UTF-16")) {
-                // we can not assert things here because UTF-8, US-ASCII and
-                // ISO-8859-1 look alike for the chars used for detection
-            } else {
-                //String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
-                assertEquals(xmlReader.getEncoding().substring(0,
-                        streamEnc.length()), streamEnc);
-            }
-        } finally {
+        InputStream is = getXmlStream(bomEnc, (prologEnc == null) ? XML1
+                : XML3, streamEnc, prologEnc);
+        XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false, alternateEnc);
+        if (!streamEnc.equals("UTF-16")) {
+            // we can not assert things here because UTF-8, US-ASCII and
+            // ISO-8859-1 look alike for the chars used for detection
+        } else {
+            //String enc = (alternateEnc != null) ? alternateEnc : streamEnc;
+            assertEquals(xmlReader.getEncoding().substring(0,
+                    streamEnc.length()), streamEnc);
         }
     }
 
