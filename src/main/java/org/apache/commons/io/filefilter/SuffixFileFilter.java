@@ -44,6 +44,8 @@ import org.apache.commons.io.IOCase;
  * @author Federico Barbieri
  * @author Serge Knystautas
  * @author Peter Donald
+ * @see FileFilterUtils#suffixFileFilter(String)
+ * @see FileFilterUtils#suffixFileFilter(String, IOCase)
  */
 public class SuffixFileFilter extends AbstractFileFilter implements Serializable {
     

@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * Compare two files using the <b>default</b> {@link File#isDirectory()} method.
+ * Compare two files using the {@link File#isDirectory()} method.
  * <p>
  * This comparator can be used to sort lists or arrays by directories and files.
  * <p>

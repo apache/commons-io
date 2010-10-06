@@ -41,6 +41,12 @@ import org.apache.commons.io.FileUtils;
  *
  * @author Rahul Akolkar
  * @version $Id$
+ * @see FileFilterUtils#ageFileFilter(Date)
+ * @see FileFilterUtils#ageFileFilter(File)
+ * @see FileFilterUtils#ageFileFilter(long)
+ * @see FileFilterUtils#ageFileFilter(Date, boolean)
+ * @see FileFilterUtils#ageFileFilter(File, boolean)
+ * @see FileFilterUtils#ageFileFilter(long, boolean)
  * @since Commons IO 1.2
  */
 public class AgeFileFilter extends AbstractFileFilter implements Serializable {

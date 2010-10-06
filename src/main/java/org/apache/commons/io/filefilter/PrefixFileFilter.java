@@ -43,6 +43,8 @@ import org.apache.commons.io.IOCase;
  * @author Federico Barbieri
  * @author Serge Knystautas
  * @author Peter Donald
+ * @see FileFilterUtils#prefixFileFilter(String)
+ * @see FileFilterUtils#prefixFileFilter(String, IOCase)
  */
 public class PrefixFileFilter extends AbstractFileFilter implements Serializable {
     

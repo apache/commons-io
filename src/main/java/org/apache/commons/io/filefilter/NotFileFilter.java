@@ -26,6 +26,7 @@ import java.io.Serializable;
  * @version $Revision$ $Date$
  * 
  * @author Stephen Colebourne
+ * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */
 public class NotFileFilter extends AbstractFileFilter implements Serializable {
     

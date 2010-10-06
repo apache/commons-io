@@ -38,6 +38,7 @@ import java.io.Serializable;
  *
  * @author Stephen Colebourne
  * @author Peter Donald
+ * @see FileFilterUtils#directoryFileFilter()
  */
 public class DirectoryFileFilter extends AbstractFileFilter implements Serializable {
 

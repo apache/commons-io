@@ -59,6 +59,10 @@ import org.apache.commons.io.IOUtils;
  * }
  * </pre></code>
  * @since Commons IO 2.0
+ * @see FileFilterUtils#magicNumberFileFilter(byte[])
+ * @see FileFilterUtils#magicNumberFileFilter(String)
+ * @see FileFilterUtils#magicNumberFileFilter(byte[], long)
+ * @see FileFilterUtils#magicNumberFileFilter(String, long)
  */
 public class MagicNumberFileFilter extends AbstractFileFilter implements
         Serializable {

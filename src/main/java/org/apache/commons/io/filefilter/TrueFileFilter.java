@@ -26,6 +26,7 @@ import java.io.Serializable;
  * @version $Revision$ $Date$
  *
  * @author Stephen Colebourne
+ * @see FileFilterUtils#trueFileFilter()
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
 

@@ -28,6 +28,8 @@ import java.io.Serializable;
  * @version $Revision$ $Date$
  * 
  * @author Stephen Colebourne
+ * @see FileFilterUtils#asFileFilter(FileFilter)
+ * @see FileFilterUtils#asFileFilter(FilenameFilter)
  */
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 

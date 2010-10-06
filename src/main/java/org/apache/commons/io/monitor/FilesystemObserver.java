@@ -82,7 +82,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * <p>
  * <a href="http://commons.apache.org/io/">Commons IO</a> has a good range of
  * useful, ready made 
- * <a href="apidocs/org/apache/commons/io/filefilter/package-summary.html">File Filter</a>
+ * <a href="../filefilter/package-summary.html">File Filter</a>
  * implementations for this purpose.
  * <p>
  * For example, to only observe 1) visible directories and 2) files with a ".java" suffix
@@ -107,12 +107,17 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * </pre>
  *
  * <h2>File Comparator</h2>
+ * <p>
+ * <a href="http://commons.apache.org/io/">Commons IO</a> has a range of
+ * useful, ready made  <a href="../comparator/package-summary.html">Comparator</a>
+ * implementations for this purpose.
+ * <p>
  * This implementation works by comparing the file names of the current contents of
  * a directory with the previous contents using the <i>case-sensitive</i> 
  * {@link NameFileComparator#NAME_COMPARATOR} to determine which files have been created,
  * deleted or still exist. However a custom {@link Comparator} can be specified and
  * one example usage would be to compare file names in a <i>case-insensitive</i>
- * manner (@link {@link NameFileComparator#NAME_INSENSITIVE_COMPARATOR} could be used
+ * manner ({@link NameFileComparator#NAME_INSENSITIVE_COMPARATOR} could be used
  * to do that).
  *
  * <h2>FilesystemEntry</h2>
