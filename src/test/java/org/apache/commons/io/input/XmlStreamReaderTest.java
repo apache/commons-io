@@ -219,8 +219,7 @@ public class XmlStreamReaderTest extends TestCase {
         try {
             InputStream is = getXmlStream(bomEnc, (prologEnc == null) ? XML1
                     : XML3, streamEnc, prologEnc);
-            XmlStreamReader.setDefaultEncoding(alternateEnc);
-            XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false);
+            XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false, alternateEnc);
             if (!streamEnc.equals("UTF-16")) {
                 // we can not assert things here because UTF-8, US-ASCII and
                 // ISO-8859-1 look alike for the chars used for detection
@@ -230,7 +229,6 @@ public class XmlStreamReaderTest extends TestCase {
                         streamEnc.length()), streamEnc);
             }
         } finally {
-            XmlStreamReader.setDefaultEncoding(null);
         }
     }
 
