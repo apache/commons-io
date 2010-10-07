@@ -204,9 +204,9 @@ public class FileCleaningTracker {
                 try {
                     // Wait for a tracker to remove.
                     Tracker tracker = (Tracker) q.remove(); // cannot return null
+                    trackers.remove(tracker);
                     tracker.delete();
                     tracker.clear();
-                    trackers.remove(tracker);
                 } catch (InterruptedException e) {
                     continue;
                 }

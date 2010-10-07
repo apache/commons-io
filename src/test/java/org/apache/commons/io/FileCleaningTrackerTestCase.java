@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.ref.ReferenceQueue;
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -281,12 +280,11 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     private void waitUntilTrackCount() throws Exception {
         int count = 0;
-        SoftReference<?> ref = new SoftReference<Object>(new Object());
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<String>();
             try {
                 long i = 0;
-                while (ref.get() != null) {
+                while (theInstance.getTrackCount() != 0) {
                     list.add("A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String " + (i++));
                 }
             } catch (Throwable ignored) {
@@ -295,7 +293,6 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             list = null;
             System.gc(); 
             Thread.sleep(1000);
-            ref = new SoftReference<Object>(new Object());
         }
         if (theInstance.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing SoftReference, try running the testcase with less memory (-Xmx)");
