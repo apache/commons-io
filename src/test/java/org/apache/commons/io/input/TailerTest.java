@@ -17,7 +17,10 @@
 package org.apache.commons.io.input;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -42,9 +45,9 @@ public class TailerTest extends FileBasedTestCase {
 
         // Create & start the Tailer
         long delay = 50;
-        File file = new File(getTestDirectory(), "tailer1-test.txt");
+        final File file = new File(getTestDirectory(), "tailer1-test.txt");
         createFile(file, 0);
-        TestTailerListener listener = new TestTailerListener();
+        final TestTailerListener listener = new TestTailerListener();
         final Tailer tailer = new Tailer(file, listener, delay, false);
         final Thread thread = new Thread(tailer);
         thread.start();
@@ -98,6 +101,30 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
     }
 
+    protected void createFile(File file, long size)
+        throws IOException {
+        super.createFile(file, size);
+
+        // try to make sure file is found
+        // (to stop continuum occasionally failing)
+        RandomAccessFile reader = null;
+        try {
+            while (reader == null) {
+                try {
+                    reader = new RandomAccessFile(file.getPath(), "r");
+                } catch (FileNotFoundException e) {
+                }
+                try {
+                    Thread.sleep(200L);
+                } catch (InterruptedException e) {
+                    // ignore
+                }
+            }
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
+    }
+
     /** Append some lines to a file */
     private void write(File file, String... lines) throws Exception {
         FileWriter writer = null;
@@ -112,23 +139,23 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     public void testStopWithNoFile() throws Exception {
-        File file = new File(getTestDirectory(),"nosuchfile");
+        final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
-        TestTailerListener listener = new TestTailerListener();
+        final TestTailerListener listener = new TestTailerListener();
         int delay = 100;
         int idle = 50; // allow time for thread to work
-        Tailer tailer = Tailer.create(file, listener, delay, false);
+        final Tailer tailer = Tailer.create(file, listener, delay, false);
         Thread.sleep(idle);
         tailer.stop();
         Thread.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
-        assertEquals("fileNotFound should be called", 1 , listener.notFound);
+        assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
     }
 
     public void testStopWithNoFileUsingExecutor() throws Exception {
-        File file = new File(getTestDirectory(),"nosuchfile");
+        final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
         TestTailerListener listener = new TestTailerListener();
         int delay = 100;
@@ -141,7 +168,7 @@ public class TailerTest extends FileBasedTestCase {
         Thread.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
-        assertEquals("fileNotFound should be called", 1 , listener.notFound);
+        assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
     }
 
