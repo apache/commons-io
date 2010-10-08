@@ -37,8 +37,9 @@ public class FileSystemMonitorTestCase extends AbstractMonitorTestCase {
     }
 
     @Override
-    protected void tearDown() throws Exception {
-        FileUtils.deleteDirectory(testDir);
+    protected void setUp() throws Exception {
+        listener = new CollectionFilesystemListener(false);
+        super.setUp();
     }
 
     /**

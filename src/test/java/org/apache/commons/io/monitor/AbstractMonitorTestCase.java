@@ -35,7 +35,7 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     protected FilesystemObserver observer;
 
     /** Listener which collects file changes */
-    protected CollectionFilesystemListener listener = new CollectionFilesystemListener(true);
+    protected CollectionFilesystemListener listener;
 
     /** Test diretory name */
     protected String testDirName = null;
