@@ -178,7 +178,7 @@ public class FileSystemMonitorTestCase extends TestCase {
             file = new File(file.getParent(), file.getName());
             while (lastModified == file.lastModified()) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(200);
                 } catch(InterruptedException ie) {
                     // ignore
                 }
