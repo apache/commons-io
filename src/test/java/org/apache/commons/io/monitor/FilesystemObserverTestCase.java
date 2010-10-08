@@ -37,6 +37,12 @@ public class FilesystemObserverTestCase extends AbstractMonitorTestCase {
         testDirName = "test-observer";
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        listener = new CollectionFilesystemListener(true);
+        super.setUp();
+    }
+
     /**
      * Test checkAndNotify() method
      */
