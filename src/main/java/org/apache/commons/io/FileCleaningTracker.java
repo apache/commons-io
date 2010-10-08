@@ -19,9 +19,11 @@ package org.apache.commons.io;
 import java.io.File;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -50,6 +52,10 @@ public class FileCleaningTracker {
      * Collection of <code>Tracker</code> instances in existence.
      */
     final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
+    /**
+     * Collection of File paths that failed to delete.
+     */
+    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<String>());
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
@@ -151,6 +157,16 @@ public class FileCleaningTracker {
     }
 
     /**
+     * Return the file paths that failed to delete.
+     *
+     * @return the file paths that failed to delete
+     * @since Commons IO 2.0
+     */
+    public List<String> getDeleteFailures() {
+        return deleteFailures;
+    }
+
+    /**
      * Call this method to cause the file cleaner thread to terminate when
      * there are no more objects being tracked for deletion.
      * <p>
@@ -205,7 +221,9 @@ public class FileCleaningTracker {
                     // Wait for a tracker to remove.
                     Tracker tracker = (Tracker) q.remove(); // cannot return null
                     trackers.remove(tracker);
-                    tracker.delete();
+                    if (!tracker.delete()) {
+                        deleteFailures.add(tracker.getPath());
+                    }
                     tracker.clear();
                 } catch (InterruptedException e) {
                     continue;
@@ -241,6 +259,15 @@ public class FileCleaningTracker {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = (deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy);
+        }
+
+        /**
+         * Return the path.
+         *
+         * @return the path
+         */
+        public String getPath() {
+            return path;
         }
 
         /**

@@ -70,6 +70,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         {
             theInstance.q = new ReferenceQueue<Object>();
             theInstance.trackers.clear();
+            theInstance.deleteFailures.clear();
             theInstance.exitWhenFinished = false;
             theInstance.reaper = null;
         }
@@ -94,9 +95,10 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         r = null;
 
         waitUntilTrackCount();
+        pauseForDeleteToComplete(new File(path));
         
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(false, new File(path).exists());
+        assertEquals(showFailures(), false, new File(path).exists());
     }
 
     public void testFileCleanerDirectory() throws Exception {
@@ -150,10 +152,11 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         obj = null;
 
         waitUntilTrackCount();
+        pauseForDeleteToComplete(testFile.getParentFile());
         
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(false, testFile.exists());
-        assertEquals(false, testFile.getParentFile().exists());
+        assertEquals(showFailures(), false, testFile.exists());
+        assertEquals(showFailures(), false, testFile.getParentFile().exists());
     }
 
     public void testFileCleanerNull() throws Exception {
@@ -237,9 +240,10 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         r = null;
 
         waitUntilTrackCount();
+        pauseForDeleteToComplete(new File(path));
         
         assertEquals("10-Track Count", 0, theInstance.getTrackCount());
-        assertEquals("11-testFile exists", false, new File(path).exists());
+        assertEquals("11-testFile exists " + showFailures(), false, new File(path).exists());
         assertEquals("12-exitWhenFinished", true, theInstance.exitWhenFinished);
         assertEquals("13-reaper.isAlive", false, theInstance.reaper.isAlive());
     }
@@ -262,9 +266,10 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         r = null;
 
         waitUntilTrackCount();
+        pauseForDeleteToComplete(new File(path));
         
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(false, new File(path).exists());
+        assertEquals(showFailures(), false, new File(path).exists());
         assertEquals(false, theInstance.exitWhenFinished);
         assertEquals(true, theInstance.reaper.isAlive());
         
@@ -278,6 +283,16 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    private void pauseForDeleteToComplete(File file) throws Exception {
+        int count = 0;
+        while(file.exists() && count++ < 20) {
+            Thread.sleep(500L);
+        }
+    }
+    private String showFailures() throws Exception {
+        return "Failed to delete " + theInstance.deleteFailures.size() + " files";
+    }
+
     private void waitUntilTrackCount() throws Exception {
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
