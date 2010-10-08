@@ -136,13 +136,14 @@ public abstract class AbstractMonitorTestCase extends TestCase {
             FileUtils.touch(file);
             file = new File(file.getParent(), file.getName());
             while (lastModified == file.lastModified()) {
-                sleepHandleInterruped(50L);
+                sleepHandleInterruped(pauseTime);
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());
             }
         } catch (Exception e) {
             fail("Touching " + file + ": " + e);
         }
+        sleepHandleInterruped(pauseTime);
         return file;
     }
 

@@ -81,7 +81,7 @@ public class FileSystemMonitorTestCase extends AbstractMonitorTestCase {
      * Check all the File Collections have the expected sizes.
      */
     private void checkFile(String label, File file, Collection<File> files) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             if (files.contains(file)) {
                 return; // found, test passes
             }
