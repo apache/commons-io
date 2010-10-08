@@ -21,30 +21,11 @@ import java.io.FileFilter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.HiddenFileFilter;
-import org.apache.commons.io.filefilter.IOFileFilter;
-
-import junit.framework.TestCase;
 
 /**
  * {@link FilesystemObserver} Test Case.
  */
-public class FilesystemObserverTestCase extends TestCase {
-
-    /** Filesystem observer */
-    protected FilesystemObserver observer;
-
-    /** Listener which collects file changes */
-    protected CollectionFilesystemListener listener = new CollectionFilesystemListener(true);
-
-    /** Test diretory name */
-    protected String testDirName = "test-observer";
-
-    /** Directory for test files */
-    protected File testDir;
-
-    /** Time in milliseconds to pause in tests */
-    protected long pauseTime = 100L;
+public class FilesystemObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
@@ -53,49 +34,7 @@ public class FilesystemObserverTestCase extends TestCase {
      */
     public FilesystemObserverTestCase(String name) {
         super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        testDir = new File(new File("."), testDirName);
-        if (testDir.exists()) {
-            FileUtils.cleanDirectory(testDir);
-        } else {
-            testDir.mkdir();
-        }
-
-        IOFileFilter files = FileFilterUtils.fileFileFilter();
-        IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
-        IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
-        
-        IOFileFilter directories = FileFilterUtils.directoryFileFilter();
-        IOFileFilter visible = HiddenFileFilter.VISIBLE;
-        IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
-
-        IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
-        
-        createObserver(testDir, filter);
-    }
-
-    /**
-     * Create a {@link FilesystemObserver}.
-     * 
-     * @param file The directory to observe
-     * @param fileFilter The file filter to apply
-     */
-    protected void createObserver(File file, FileFilter fileFilter) {
-        observer = new FilesystemObserver(file, fileFilter);
-        observer.addListener(listener);
-        try {
-            observer.initialize();
-        } catch (Exception e) {
-            fail("Observer init() threw " + e);
-        }
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        FileUtils.deleteDirectory(testDir);
+        testDirName = "test-observer";
     }
 
     /**
@@ -407,64 +346,5 @@ public class FilesystemObserverTestCase extends TestCase {
      */
     protected void checkAndNotify() throws Exception {
         observer.checkAndNotify();
-    }
-
-    /**
-     * Check all the Collections are empty
-     */
-    protected void checkCollectionsEmpty(String label) {
-        checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
-    }
-
-    /**
-     * Check all the Collections have the expected sizes.
-     */
-    protected void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
-        label = label + "[" + listener.getCreatedDirectories().size() +
-                        " " + listener.getChangedDirectories().size() +
-                        " " + listener.getDeletedDirectories().size() +
-                        " " + listener.getCreatedFiles().size() +
-                        " " + listener.getChangedFiles().size() +
-                        " " + listener.getDeletedFiles().size() + "]";
-        assertEquals(label + ": No. of directories created",  dirCreate,  listener.getCreatedDirectories().size());
-        assertEquals(label + ": No. of directories changed",  dirChange,  listener.getChangedDirectories().size());
-        assertEquals(label + ": No. of directories deleted",  dirDelete,  listener.getDeletedDirectories().size());
-        assertEquals(label + ": No. of files created", fileCreate, listener.getCreatedFiles().size());
-        assertEquals(label + ": No. of files changed", fileChange, listener.getChangedFiles().size());
-        assertEquals(label + ": No. of files deleted", fileDelete, listener.getDeletedFiles().size());
-    }
-
-    /**
-     * Either creates a file if it doesn't exist or updates the last modified date/time
-     * if it does.
-     *
-     * @param file The file to touch
-     * @return The file
-     */
-    protected File touch(File file) {
-        long lastModified = file.exists() ? file.lastModified() : 0;
-        try {
-            FileUtils.touch(file);
-            file = new File(file.getParent(), file.getName());
-            while (lastModified == file.lastModified()) {
-                sleepHandleInterruped(50L);
-                FileUtils.touch(file);
-                file = new File(file.getParent(), file.getName());
-            }
-        } catch (Exception e) {
-            fail("Touching " + file + ": " + e);
-        }
-        return file;
-    }
-
-    /**
-     * Thread.sleep(timeInMilliseconds) - ignore InterruptedException
-     */
-    protected void sleepHandleInterruped(long timeInMilliseconds) {
-        try {
-            Thread.sleep(timeInMilliseconds);
-        } catch(InterruptedException ie) {
-            // ignore
-        }
     }
 }
