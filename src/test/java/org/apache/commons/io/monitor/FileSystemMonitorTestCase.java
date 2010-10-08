@@ -24,7 +24,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * {@link FilesystemMonitor} Test Case.
  */
-public class FileSystemMonitorTestCase extends FilesystemObserverTestCase {
+public class FileSystemMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
@@ -53,19 +53,19 @@ public class FileSystemMonitorTestCase extends FilesystemObserverTestCase {
             // Create a File
             checkCollectionsEmpty("A");
             File file1 = touch(new File(testDir, "file1.java"));
-            checkFile("Create", file1, interval, listener.getCreatedFiles());
+            checkFile("Create", file1, listener.getCreatedFiles());
             listener.clear();
 
             // Update a file
             checkCollectionsEmpty("B");
             file1 = touch(file1);
-            checkFile("Update", file1, interval, listener.getChangedFiles());
+            checkFile("Update", file1, listener.getChangedFiles());
             listener.clear();
 
             // Delete a file
             checkCollectionsEmpty("C");
             file1.delete();
-            checkFile("Delete", file1, interval, listener.getDeletedFiles());
+            checkFile("Delete", file1, listener.getDeletedFiles());
             listener.clear();
 
             // Stop monitoring
@@ -80,12 +80,12 @@ public class FileSystemMonitorTestCase extends FilesystemObserverTestCase {
     /**
      * Check all the File Collections have the expected sizes.
      */
-    private void checkFile(String label, File file, long interval, Collection<File> files) {
+    private void checkFile(String label, File file, Collection<File> files) {
         for (int i = 0; i < 5; i++) {
             if (files.contains(file)) {
                 return; // found, test passes
             }
-            sleepHandleInterruped(interval);
+            sleepHandleInterruped(pauseTime);
         }
         fail(label + " " + file + " not found");
     }
