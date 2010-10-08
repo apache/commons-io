@@ -37,8 +37,14 @@ public class FilesystemObserverTestCase extends TestCase {
     /** Listener which collects file changes */
     protected CollectionFilesystemListener listener = new CollectionFilesystemListener(true);
 
+    /** Test diretory name */
+    protected String testDirName = "test-observer";
+
     /** Directory for test files */
     protected File testDir;
+
+    /** Time in milliseconds to pause in tests */
+    protected long pauseTime = 100L;
 
     /**
      * Construct a new test case.
@@ -51,7 +57,7 @@ public class FilesystemObserverTestCase extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        testDir = new File(new File("."), "test-monitor");
+        testDir = new File(new File("."), testDirName);
         if (testDir.exists()) {
             FileUtils.cleanDirectory(testDir);
         } else {
@@ -79,8 +85,6 @@ public class FilesystemObserverTestCase extends TestCase {
      */
     protected void createObserver(File file, FileFilter fileFilter) {
         observer = new FilesystemObserver(file, fileFilter);
-        // FilesystemListener debuglistener = new JDKLoggingFilesystemListener(getClass().getSimpleName(), Level.FINEST); 
-        // observer.addListener(debuglistener);
         observer.addListener(listener);
         try {
             observer.initialize();
@@ -408,14 +412,14 @@ public class FilesystemObserverTestCase extends TestCase {
     /**
      * Check all the Collections are empty
      */
-    private void checkCollectionsEmpty(String label) {
+    protected void checkCollectionsEmpty(String label) {
         checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
     }
 
     /**
      * Check all the Collections have the expected sizes.
      */
-    private void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
+    protected void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
         label = label + "[" + listener.getCreatedDirectories().size() +
                         " " + listener.getChangedDirectories().size() +
                         " " + listener.getDeletedDirectories().size() +
@@ -437,23 +441,30 @@ public class FilesystemObserverTestCase extends TestCase {
      * @param file The file to touch
      * @return The file
      */
-    private File touch(File file) {
+    protected File touch(File file) {
         long lastModified = file.exists() ? file.lastModified() : 0;
         try {
             FileUtils.touch(file);
             file = new File(file.getParent(), file.getName());
             while (lastModified == file.lastModified()) {
-                try {
-                    Thread.sleep(50);
-                } catch(InterruptedException ie) {
-                    // ignore
-                }
+                sleepHandleInterruped(50L);
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());
             }
         } catch (Exception e) {
-            fail("Touching " + file +": " + e);
+            fail("Touching " + file + ": " + e);
         }
         return file;
+    }
+
+    /**
+     * Thread.sleep(timeInMilliseconds) - ignore InterruptedException
+     */
+    protected void sleepHandleInterruped(long timeInMilliseconds) {
+        try {
+            Thread.sleep(timeInMilliseconds);
+        } catch(InterruptedException ie) {
+            // ignore
+        }
     }
 }
