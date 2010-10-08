@@ -45,7 +45,9 @@ public class TailerTest extends FileBasedTestCase {
         File file = new File(getTestDirectory(), "tailer1-test.txt");
         createFile(file, 0);
         TestTailerListener listener = new TestTailerListener();
-        Tailer tailer = start(file, listener, delay, false);
+        final Tailer tailer = new Tailer(file, listener, delay, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
 
         // Write some lines to the file
         write(file, "Line one", "Line two");
@@ -86,6 +88,7 @@ public class TailerTest extends FileBasedTestCase {
 
         // Stop
         tailer.stop();
+        thread.interrupt();
         Thread.sleep(delay * 2);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
@@ -93,14 +96,6 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertEquals("fileNotFound should not be called", 0 , listener.notFound);
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
-    }
-
-    /** Start a tailer */
-    private Tailer start(File file, TailerListener listener, long delay, boolean end) {
-        Tailer tailer = new Tailer(file, listener, delay, end);
-        Thread thread = new Thread(tailer);
-        thread.start();
-        return tailer;
     }
 
     /** Append some lines to a file */

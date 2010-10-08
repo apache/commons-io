@@ -192,7 +192,10 @@ public class Tailer implements Runnable {
                 }
 
                 if (reader == null) {
-                    Thread.sleep(delay);
+                    try {
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                    }
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
@@ -250,8 +253,10 @@ public class Tailer implements Runnable {
                         position = readLines(reader);
                     }
                 }
-
-                Thread.sleep(delay);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                }
             }
 
         } catch (Exception e) {
