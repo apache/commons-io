@@ -43,7 +43,7 @@ public class FilesystemEntry implements Serializable {
 
     private final FilesystemEntry parent;
     private FilesystemEntry[] children;
-    private File file;
+    private final File file;
     private String name;
     private boolean exists;
     private boolean directory;
@@ -79,7 +79,7 @@ public class FilesystemEntry implements Serializable {
      * This implementation refreshes the <code>name</code>, <code>exists</code>
      * <code>directory</code> and <code>lastModified</code> properties.
      */
-    public void refresh() {
+    public void refresh(File file) {
         name = file.getName();
         exists = file.exists();
         if (exists) {
@@ -109,7 +109,7 @@ public class FilesystemEntry implements Serializable {
      *
      * @return whether the file has changed or not
      */
-    public boolean hasChanged() {
+    public boolean hasChanged(File file) {
         return (lastModified != file.lastModified());
     }
 
@@ -158,15 +158,6 @@ public class FilesystemEntry implements Serializable {
      */
     public File getFile() {
         return file;
-    }
-
-    /**
-     * Set the file being monitored.
-     *
-     * @param file the file being monitored
-     */
-    public void setFile(File file) {
-        this.file = file;
     }
 
     /**

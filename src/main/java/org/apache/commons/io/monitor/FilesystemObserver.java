@@ -304,7 +304,7 @@ public class FilesystemObserver implements Serializable {
      * @throws Exception if an error occurs
      */
     public void initialize() throws Exception {
-        rootEntry.refresh();
+        rootEntry.refresh(rootEntry.getFile());
         File[] files = listFiles(rootEntry.getFile());
         FilesystemEntry[] children = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
@@ -389,7 +389,7 @@ public class FilesystemObserver implements Serializable {
      */
     private FilesystemEntry createFileEntry(FilesystemEntry parent, File file) {
         FilesystemEntry entry = parent.newChildInstance(file);
-        entry.refresh();
+        entry.refresh(file);
         File[] files = listFiles(file);
         FilesystemEntry[] children = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
@@ -425,17 +425,16 @@ public class FilesystemObserver implements Serializable {
      * @param file The current file
      */
     private void doMatch(FilesystemEntry entry, File file) {
-        if (entry.hasChanged()) {
+        if (entry.hasChanged(file)) {
             for (FilesystemListener listener : listeners) {
                 if (entry.isDirectory()) {
-                    listener.onDirectoryChange(entry.getFile());
+                    listener.onDirectoryChange(file);
                 } else {
-                    listener.onFileChange(entry.getFile());
+                    listener.onFileChange(file);
                 }
             }
-            entry.refresh();
+            entry.refresh(file);
         }
-        entry.setFile(file);
     }
 
     /**
