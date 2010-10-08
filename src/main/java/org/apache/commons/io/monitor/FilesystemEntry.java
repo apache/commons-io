@@ -48,6 +48,7 @@ public class FilesystemEntry implements Serializable {
     private boolean exists;
     private boolean directory;
     private long lastModified;
+    private long length;
 
     /**
      * Construct a new monitor for a specified {@link File}.
@@ -74,18 +75,39 @@ public class FilesystemEntry implements Serializable {
     }
 
     /**
-     * Refresh the attributes from the underlying {@link File}.
+     * Refresh the attributes from the {@link File}, indicating
+     * whether the file has changed.
      * <p>
-     * This implementation refreshes the <code>name</code>, <code>exists</code>
-     * <code>directory</code> and <code>lastModified</code> properties.
+     * This implementation refreshes the <code>name</code>, <code>exists</code>,
+     * <code>directory</code>, <code>lastModified</code> and <code>length</code>
+     * properties.
+     * <p>
+     * The <code>exists</code>, <code>directory</code>, <code>lastModified</code>
+     * and <code>length</code> properties are compared for changes
+     *
+     * @param file the file instance to compare to
+     * @return <code>true</code> if the file has changed, otherwise <code>false</code>
      */
-    public void refresh(File file) {
-        name = file.getName();
-        exists = file.exists();
-        if (exists) {
-            directory = file.isDirectory();
-            lastModified = file.lastModified();
-        }
+    public boolean refresh(File file) {
+
+        // cache original values
+        boolean origExists       = exists;
+        long    origLastModified = lastModified;
+        boolean origDirectory    = directory;
+        long    origLength       = length;
+
+        // refresh the values
+        name         = file.getName();
+        exists       = file.exists();
+        directory    = (exists ? file.isDirectory() : false);
+        lastModified = (exists ? file.lastModified() : 0);
+        length       = (exists && !directory ? file.length() : 0);
+
+        // Return if there are changes
+        return (exists != origExists ||
+                lastModified != origLastModified ||
+                directory != origDirectory ||
+                length != origLength);
     }
 
     /**
@@ -99,18 +121,6 @@ public class FilesystemEntry implements Serializable {
      */
     public FilesystemEntry newChildInstance(File file) {
         return new FilesystemEntry(this, file);
-    }
-
-    /**
-     * Indicate whether the file has changed or not.
-     * <p>
-     * This implementation compares the <code>lastModified<code>
-     * value of the {@link File} with the stored value.
-     *
-     * @return whether the file has changed or not
-     */
-    public boolean hasChanged(File file) {
-        return (lastModified != file.lastModified());
     }
 
     /**
@@ -196,6 +206,24 @@ public class FilesystemEntry implements Serializable {
      */
     public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
+    }
+
+    /**
+     * Return the length.
+     *
+     * @return the length
+     */
+    public long getLength() {
+        return length;
+    }
+
+    /**
+     * Set the length.
+     *
+     * @param length the length
+     */
+    public void setLength(long length) {
+        this.length = length;
     }
 
     /**

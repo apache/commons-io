@@ -428,7 +428,7 @@ public class FilesystemObserver implements Serializable {
      * @param file The current file
      */
     private void doMatch(FilesystemEntry entry, File file) {
-        if (entry.hasChanged(file)) {
+        if (entry.refresh(file)) {
             for (FilesystemListener listener : listeners) {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
@@ -436,7 +436,6 @@ public class FilesystemObserver implements Serializable {
                     listener.onFileChange(file);
                 }
             }
-            entry.refresh(file);
         }
     }
 
