@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
 
 /**
@@ -169,10 +170,10 @@ public class FilesystemObserver implements Serializable {
      *
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
-     * @param comparator The comparator to use when comparing file names, may be null
+     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FilesystemObserver(String directoryName, FileFilter fileFilter, Comparator<File> comparator) {
-        this(new File(directoryName), fileFilter, comparator);
+    public FilesystemObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
+        this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
     /**
@@ -191,7 +192,7 @@ public class FilesystemObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      */
     public FilesystemObserver(File directory, FileFilter fileFilter) {
-        this(directory, fileFilter, (Comparator<File>)null);
+        this(directory, fileFilter, (IOCase)null);
     }
 
     /**
@@ -200,10 +201,10 @@ public class FilesystemObserver implements Serializable {
      *
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
-     * @param comparator The comparator to use when comparing file names, may be null
+     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FilesystemObserver(File directory, FileFilter fileFilter, Comparator<File> comparator) {
-        this(new FilesystemEntry(directory), fileFilter, comparator);
+    public FilesystemObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
+        this(new FilesystemEntry(directory), fileFilter, caseSensitivity);
     }
 
     /**
@@ -212,9 +213,9 @@ public class FilesystemObserver implements Serializable {
      *
      * @param rootEntry the root directory to observe
      * @param fileFilter The file filter or null if none
-     * @param comparator The comparator to use when comparing file names, may be null
+     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FilesystemObserver(FilesystemEntry rootEntry, FileFilter fileFilter, Comparator<File> comparator) {
+    protected FilesystemObserver(FilesystemEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -223,10 +224,12 @@ public class FilesystemObserver implements Serializable {
         }
         this.rootEntry = rootEntry;
         this.fileFilter = fileFilter;
-        if (comparator == null) {
-            this.comparator = NameFileComparator.NAME_COMPARATOR;
+        if (caseSensitivity == null || caseSensitivity.equals(IOCase.SYSTEM)) {
+            this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
+        } else if (caseSensitivity.equals(IOCase.INSENSITIVE)) {
+            this.comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
         } else {
-            this.comparator = comparator;
+            this.comparator = NameFileComparator.NAME_COMPARATOR;
         }
     }
 
