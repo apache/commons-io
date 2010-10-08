@@ -27,6 +27,7 @@ import java.io.Serializable;
  *   <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
  *   <li>Directory - whether the file is a directory or not (see {@link File#isDirectory()})</li>
  *   <li>Last Modified Date/Time (see {@link File#lastModified()})</li>
+ *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
  * <p>
