@@ -302,6 +302,8 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     private void waitUntilTrackCount() throws Exception {
+        System.gc(); 
+        Thread.sleep(500);
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<String>();
@@ -312,7 +314,6 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
                 }
             } catch (Throwable ignored) {
             }
-            list.clear();
             list = null;
             System.gc(); 
             Thread.sleep(1000);
