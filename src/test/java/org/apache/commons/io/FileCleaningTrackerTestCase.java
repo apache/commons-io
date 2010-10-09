@@ -290,7 +290,11 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         }
     }
     private String showFailures() throws Exception {
-        return "Failed to delete " + theInstance.deleteFailures.size() + " files";
+        if (theInstance.deleteFailures.size() == 1) {
+            return "[Delete Failed: " + theInstance.deleteFailures.get(0) + "]";
+        } else {
+            return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
+        }
     }
 
     private void waitUntilTrackCount() throws Exception {
@@ -310,7 +314,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             Thread.sleep(1000);
         }
         if (theInstance.getTrackCount() != 0) {
-            throw new IllegalStateException("Your JVM is not releasing SoftReference, try running the testcase with less memory (-Xmx)");
+            throw new IllegalStateException("Your JVM is not releasing References, try running the testcase with less memory (-Xmx)");
         }
         
     }
