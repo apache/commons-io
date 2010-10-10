@@ -19,8 +19,6 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.util.Collection;
 
-import org.apache.commons.io.FileUtils;
-
 /**
  * {@link FilesystemMonitor} Test Case.
  */
