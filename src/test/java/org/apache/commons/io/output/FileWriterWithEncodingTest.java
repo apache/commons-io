@@ -27,6 +27,7 @@ import java.util.Map;
 
 import junit.framework.AssertionFailedError;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
@@ -68,10 +69,9 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     }
 
     @Override
-    public void tearDown() {
+    public void tearDown() throws Exception {
+        FileUtils.deleteDirectory(getTestDirectory());
         defaultEncoding = null;
-        file1.delete();
-        file2.delete();
         textContent = null;
     }
 

@@ -41,6 +41,11 @@ public class TailerTest extends FileBasedTestCase {
         super(name);
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        FileUtils.deleteDirectory(getTestDirectory());
+    }
+
     public void testTailer() throws Exception {
 
         // Create & start the Tailer
