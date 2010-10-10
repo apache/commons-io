@@ -193,6 +193,7 @@
           <exclude name="**/testtools/**"/>
           <!-- Ant JUnit does not handle abstract classes -->
           <exclude name="**/*AbstractTestCase*"/>
+            <exclude name="**/Abstract*TestCase*"/>
         </fileset>
       </batchtest>
     </junit>
