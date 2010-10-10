@@ -125,10 +125,9 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * {@link FilesystemEntry} represents the state of a file or directory, capturing
  * {@link File} attributes at a point in time. Custom implementations of
  * {@link FilesystemEntry} can be used to capture additional properties that the
- * basic implementation does not support. The {@link FilesystemEntry#hasChanged()}
+ * basic implementation does not support. The {@link FilesystemEntry#refresh(File)}
  * method is used to determine if a file or directory has changed since the last
- * check. {@link FilesystemEntry#refresh()} stores the current state of the
- * {@link File}'s properties.
+ * check and stores the current state of the {@link File}'s properties.
  *
  * @see FilesystemListener
  * @see FilesystemMonitor

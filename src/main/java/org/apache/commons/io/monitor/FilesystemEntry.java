@@ -35,8 +35,7 @@ import java.io.Serializable;
  * If the state of additional {@link File} attributes is required then create a custom
  * {@link FilesystemEntry} with properties for those attributes. Override the
  * {@link #newChildInstance(File)} to return a new instance of the appropriate type.
- * You may also want to override the {@link #refresh()} and/or {@link #hasChanged()}
- * methods.
+ * You may also want to override the {@link #refresh(File)} method.
  * @see FilesystemObserver
  * @since Commons IO 2.0
  */
