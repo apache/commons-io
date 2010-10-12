@@ -19,20 +19,20 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 
 /**
- * Convenience {@link FilesystemListener} implementation that does nothing.
+ * Convenience {@link FileListener} implementation that does nothing.
  * 
- * @see FilesystemObserver
+ * @see FileObserver
  * @version $Id$
  * @since Commons IO 2.0
  */
-public class FilesystemListenerAdaptor implements FilesystemListener {
+public class FileListenerAdaptor implements FileListener {
 
     /**
      * File system observer started checking event.
      *
      * @param observer The file system observer
      */
-    public void onStart(final FilesystemObserver observer) {
+    public void onStart(final FileObserver observer) {
     }
 
     /**
@@ -88,7 +88,7 @@ public class FilesystemListenerAdaptor implements FilesystemListener {
      *
      * @param observer The file system observer
      */
-    public void onStop(final FilesystemObserver observer) {
+    public void onStop(final FileObserver observer) {
     }
 
 }

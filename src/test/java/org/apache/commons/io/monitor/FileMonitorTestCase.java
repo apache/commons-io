@@ -20,23 +20,23 @@ import java.io.File;
 import java.util.Collection;
 
 /**
- * {@link FilesystemMonitor} Test Case.
+ * {@link FileMonitor} Test Case.
  */
-public class FileSystemMonitorTestCase extends AbstractMonitorTestCase {
+public class FileMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
      *
      * @param name The name of the test
      */
-    public FileSystemMonitorTestCase(String name) {
+    public FileMonitorTestCase(String name) {
         super(name);
         testDirName = "test-monitor";
     }
 
     @Override
     protected void setUp() throws Exception {
-        listener = new CollectionFilesystemListener(false);
+        listener = new CollectionFileListener(false);
         super.setUp();
     }
 
@@ -46,7 +46,7 @@ public class FileSystemMonitorTestCase extends AbstractMonitorTestCase {
     public void testMonitor() {
         try {
             long interval = 100;
-            FilesystemMonitor monitor = new FilesystemMonitor(interval, observer);
+            FileMonitor monitor = new FileMonitor(interval, observer);
             monitor.start();
 
             // Create a File

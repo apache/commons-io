@@ -27,15 +27,15 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
 /**
- * {@link FilesystemObserver} Test Case.
+ * {@link FileObserver} Test Case.
  */
 public abstract class AbstractMonitorTestCase extends TestCase {
 
-    /** Filesystem observer */
-    protected FilesystemObserver observer;
+    /** File observer */
+    protected FileObserver observer;
 
     /** Listener which collects file changes */
-    protected CollectionFilesystemListener listener;
+    protected CollectionFileListener listener;
 
     /** Test diretory name */
     protected String testDirName = null;
@@ -78,13 +78,13 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     }
 
     /**
-     * Create a {@link FilesystemObserver}.
+     * Create a {@link FileObserver}.
      * 
      * @param file The directory to observe
      * @param fileFilter The file filter to apply
      */
     protected void createObserver(File file, FileFilter fileFilter) {
-        observer = new FilesystemObserver(file, fileFilter);
+        observer = new FileObserver(file, fileFilter);
         observer.addListener(listener);
         try {
             observer.initialize();

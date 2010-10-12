@@ -21,23 +21,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A runnable that spawns a monitoring thread triggering any
- * registered {@link FilesystemObserver} at a specified interval.
+ * registered {@link FileObserver} at a specified interval.
  * 
- * @see FilesystemObserver
+ * @see FileObserver
  * @version $Id$
  * @since Commons IO 2.0
  */
-public final class FilesystemMonitor implements Runnable {
+public final class FileMonitor implements Runnable {
 
     private final long interval;
-    private final List<FilesystemObserver> observers = new CopyOnWriteArrayList<FilesystemObserver>();
+    private final List<FileObserver> observers = new CopyOnWriteArrayList<FileObserver>();
     private Thread thread = null;
     private volatile boolean running = false;
 
     /**
      * Construct a monitor with a default interval of 10 seconds.
      */
-    public FilesystemMonitor() {
+    public FileMonitor() {
         this(10000);
     }
 
@@ -47,7 +47,7 @@ public final class FilesystemMonitor implements Runnable {
      * @param interval The amount of time in miliseconds to wait between
      * checks of the file system
      */
-    public FilesystemMonitor(long interval) {
+    public FileMonitor(long interval) {
         this.interval = interval;
     }
 
@@ -58,10 +58,10 @@ public final class FilesystemMonitor implements Runnable {
      * checks of the file system
      * @param observers The set of observers to add to the monitor.
      */
-    public FilesystemMonitor(long interval, FilesystemObserver... observers) {
+    public FileMonitor(long interval, FileObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (FilesystemObserver observer : observers) {
+            for (FileObserver observer : observers) {
                 addObserver(observer);
             }
         }
@@ -72,7 +72,7 @@ public final class FilesystemMonitor implements Runnable {
      *
      * @param observer The file system observer to add
      */
-    public void addObserver(final FilesystemObserver observer) {
+    public void addObserver(final FileObserver observer) {
         if (observer != null) {
             observers.add(observer);
         }
@@ -83,7 +83,7 @@ public final class FilesystemMonitor implements Runnable {
      *
      * @param observer The file system observer to remove
      */
-    public void removeObserver(final FilesystemObserver observer) {
+    public void removeObserver(final FileObserver observer) {
         if (observer != null) {
             while (observers.remove(observer)) {
             }
@@ -91,12 +91,12 @@ public final class FilesystemMonitor implements Runnable {
     }
 
     /**
-     * Returns the set of {@link FilesystemObserver} registered with
+     * Returns the set of {@link FileObserver} registered with
      * this monitor. 
      *
-     * @return The set of {@link FilesystemObserver}
+     * @return The set of {@link FileObserver}
      */
-    public Iterable<FilesystemObserver> getObservers() {
+    public Iterable<FileObserver> getObservers() {
         return observers;
     }
 
@@ -106,7 +106,7 @@ public final class FilesystemMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      */
     public void start() throws Exception {
-        for (FilesystemObserver observer : observers) {
+        for (FileObserver observer : observers) {
             observer.initialize();
         }
         running = true;
@@ -126,7 +126,7 @@ public final class FilesystemMonitor implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        for (FilesystemObserver observer : observers) {
+        for (FileObserver observer : observers) {
             observer.destroy();
         }
     }
@@ -136,7 +136,7 @@ public final class FilesystemMonitor implements Runnable {
      */
     public void run() {
         while (running) {
-            for (FilesystemObserver observer : observers) {
+            for (FileObserver observer : observers) {
                 observer.checkAndNotify();
             }
             if (!running) {

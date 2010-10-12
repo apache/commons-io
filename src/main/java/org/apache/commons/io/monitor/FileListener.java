@@ -20,20 +20,20 @@ import java.io.File;
 /**
  * A listener that receives events of file system modifications.
  * <p>
- * Register {@link FilesystemListener}s with a {@link FilesystemObserver}.
+ * Register {@link FileListener}s with a {@link FileObserver}.
  * 
- * @see FilesystemObserver
+ * @see FileObserver
  * @version $Id$
  * @since Commons IO 2.0
  */
-public interface FilesystemListener {
+public interface FileListener {
 
     /**
      * File system observer started checking event.
      *
      * @param observer The file system observer
      */
-    void onStart(final FilesystemObserver observer);
+    void onStart(final FileObserver observer);
 
     /**
      * Directory created Event.
@@ -82,5 +82,5 @@ public interface FilesystemListener {
      *
      * @param observer The file system observer
      */
-    void onStop(final FilesystemObserver observer);
+    void onStop(final FileObserver observer);
 }

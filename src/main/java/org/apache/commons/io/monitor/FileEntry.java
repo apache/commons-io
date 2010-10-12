@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 
 /**
- * {@link FilesystemEntry} represents the state of a file or directory, capturing
- * the following {@link File} attributes at a point in time:
+ * {@link FileEntry} represents the state of a file or directory, capturing
+ * the following {@link File} attributes at a point in time.
  * <ul>
  *   <li>File Name (see {@link File#getName()})</li>
  *   <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
@@ -33,16 +33,16 @@ import java.io.Serializable;
  * <p>
  * <h3>Custom Implementations</h3>
  * If the state of additional {@link File} attributes is required then create a custom
- * {@link FilesystemEntry} with properties for those attributes. Override the
+ * {@link FileEntry} with properties for those attributes. Override the
  * {@link #newChildInstance(File)} to return a new instance of the appropriate type.
  * You may also want to override the {@link #refresh(File)} method.
- * @see FilesystemObserver
+ * @see FileObserver
  * @since Commons IO 2.0
  */
-public class FilesystemEntry implements Serializable {
+public class FileEntry implements Serializable {
 
-    private final FilesystemEntry parent;
-    private FilesystemEntry[] children;
+    private final FileEntry parent;
+    private FileEntry[] children;
     private final File file;
     private String name;
     private boolean exists;
@@ -55,8 +55,8 @@ public class FilesystemEntry implements Serializable {
      *
      * @param file The file being monitored
      */
-    public FilesystemEntry(File file) {
-        this((FilesystemEntry)null, file);
+    public FileEntry(File file) {
+        this((FileEntry)null, file);
     }
 
     /**
@@ -65,7 +65,7 @@ public class FilesystemEntry implements Serializable {
      * @param parent The parent
      * @param file The file being monitored
      */
-    public FilesystemEntry(FilesystemEntry parent, File file) {
+    public FileEntry(FileEntry parent, File file) {
         if (file == null) {
             throw new IllegalArgumentException("File is missing");
         }
@@ -119,8 +119,8 @@ public class FilesystemEntry implements Serializable {
      * @param file The child file
      * @return a new child instance
      */
-    public FilesystemEntry newChildInstance(File file) {
-        return new FilesystemEntry(this, file);
+    public FileEntry newChildInstance(File file) {
+        return new FileEntry(this, file);
     }
 
     /**
@@ -128,7 +128,7 @@ public class FilesystemEntry implements Serializable {
      *
      * @return the parent entry
      */
-    public FilesystemEntry getParent() {
+    public FileEntry getParent() {
         return parent;
     }
 
@@ -148,8 +148,8 @@ public class FilesystemEntry implements Serializable {
      * array if the file is not a directory or the
      * directory is empty
      */
-    public FilesystemEntry[] getChildren() {
-        return children != null ? children : FilesystemObserver.EMPTY_ENTRIES;
+    public FileEntry[] getChildren() {
+        return children != null ? children : FileObserver.EMPTY_ENTRIES;
     }
 
     /**
@@ -157,7 +157,7 @@ public class FilesystemEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(FilesystemEntry[] children) {
+    public void setChildren(FileEntry[] children) {
         this.children = children;
     }
 

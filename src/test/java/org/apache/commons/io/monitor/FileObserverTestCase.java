@@ -23,23 +23,23 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 /**
- * {@link FilesystemObserver} Test Case.
+ * {@link FileObserver} Test Case.
  */
-public class FilesystemObserverTestCase extends AbstractMonitorTestCase {
+public class FileObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
      *
      * @param name The name of the test
      */
-    public FilesystemObserverTestCase(String name) {
+    public FileObserverTestCase(String name) {
         super(name);
         testDirName = "test-observer";
     }
 
     @Override
     protected void setUp() throws Exception {
-        listener = new CollectionFilesystemListener(true);
+        listener = new CollectionFileListener(true);
         super.setUp();
     }
 
@@ -346,7 +346,7 @@ public class FilesystemObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Call {@link FilesystemObserver#checkAndNotify()}.
+     * Call {@link FileObserver#checkAndNotify()}.
      *
      * @throws Exception if an error occurs
      */
