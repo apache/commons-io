@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import java.io.ByteArrayInputStream;
+
 import junit.framework.TestCase;
 
 /**

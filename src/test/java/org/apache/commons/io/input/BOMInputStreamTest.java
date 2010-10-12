@@ -20,9 +20,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.ByteOrderMark;
-
 import junit.framework.TestCase;
+
+import org.apache.commons.io.ByteOrderMark;
 
 /**
  * Test case for {@link BOMInputStream}.
