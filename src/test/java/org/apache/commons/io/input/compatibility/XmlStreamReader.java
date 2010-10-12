@@ -25,12 +25,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.HttpURLConnection;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.MessageFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.output.XmlStreamWriter;
 
 /**
  * Character stream that handles all the necessary Voodo to figure out the

@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import org.apache.commons.io.TaggedIOException;
-
 import junit.framework.TestCase;
+
+import org.apache.commons.io.TaggedIOException;
 
 /**
  * JUnit Test Case for {@link TaggedInputStream}.

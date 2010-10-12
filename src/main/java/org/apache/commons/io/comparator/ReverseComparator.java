@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.comparator;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
-import java.io.File;
 
 /**
  * Reverses the result of comparing two objects using

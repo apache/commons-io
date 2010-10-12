@@ -19,12 +19,12 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.FileFilter;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
-
-import junit.framework.TestCase;
 
 /**
  * {@link FilesystemObserver} Test Case.
