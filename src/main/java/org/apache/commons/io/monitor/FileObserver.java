@@ -28,25 +28,25 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
 
 /**
- * FilesystemObserver represents the state of files below a root directory,
+ * FileObserver represents the state of files below a root directory,
  * checking the filesystem and notifying listeners of create, change or
  * delete events.
  * <p>
  * To use this implementation:
  * <ul>
- *   <li>Create {@link FilesystemListener} implementation(s) that process
+ *   <li>Create {@link FileListener} implementation(s) that process
  *      the file/directory create, change and delete events</li>
- *   <li>Register the listener(s) with a {@link FilesystemObserver} for
+ *   <li>Register the listener(s) with a {@link FileObserver} for
  *       the appropriate directory.</li>
- *   <li>Either register the observer(s) with a {@link FilesystemMonitor} or
+ *   <li>Either register the observer(s) with a {@link FileMonitor} or
  *       run manually.</li>
  * </ul>
  *
  * <h2>Basic Usage</h2>
- * Create a {@link FilesystemObserver} for the directory and register the listeners:
+ * Create a {@link FileObserver} for the directory and register the listeners:
  * <pre>
  *      File directory = new File(new File("."), "src");
- *      FilesystemObserver observer = new FilesystemObserver(directory);
+ *      FileObserver observer = new FileObserver(directory);
  *      observer.addListener(...);
  *      observer.addListener(...);
  * </pre>
@@ -64,11 +64,11 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *      // finished
  *      observer.finish();
  * </pre>
- * Alternatively, register the oberver(s) with a {@link FilesystemMonitor},
+ * Alternatively, register the oberver(s) with a {@link FileMonitor},
  * which creates a new thread, invoking the observer at the specified interval:
  * <pre>
  *      long interval = ...
- *      FilesystemMonitor monitor = new FilesystemMonitor(interval);
+ *      FileMonitor monitor = new FileMonitor(interval);
  *      monitor.addObserver(observer);
  *      monitor.start();
  *      ...
@@ -87,7 +87,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * implementations for this purpose.
  * <p>
  * For example, to only observe 1) visible directories and 2) files with a ".java" suffix
- * in a root directory called "src" you could set up a {@link FilesystemObserver} in the following
+ * in a root directory called "src" you could set up a {@link FileObserver} in the following
  * way:
  * <pre>
  *      // Create a FileFilter
@@ -100,7 +100,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *      IOFileFilter filter = FileFilterUtils.orFileFilter(dirFilter, fileFilter);
  *
  *      // Create the File system observer and register File Listeners
- *      FilesystemObserver observer = new FilesystemObserver(new File("src"), filter);
+ *      FileObserver observer = new FileObserver(new File("src"), filter);
  *      observer.addListener(...);
  *      observer.addListener(...);
  *
@@ -121,26 +121,26 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * manner ({@link NameFileComparator#NAME_INSENSITIVE_COMPARATOR} could be used
  * to do that).
  *
- * <h2>FilesystemEntry</h2>
- * {@link FilesystemEntry} represents the state of a file or directory, capturing
+ * <h2>FileEntry</h2>
+ * {@link FileEntry} represents the state of a file or directory, capturing
  * {@link File} attributes at a point in time. Custom implementations of
- * {@link FilesystemEntry} can be used to capture additional properties that the
- * basic implementation does not support. The {@link FilesystemEntry#refresh(File)}
+ * {@link FileEntry} can be used to capture additional properties that the
+ * basic implementation does not support. The {@link FileEntry#refresh(File)}
  * method is used to determine if a file or directory has changed since the last
  * check and stores the current state of the {@link File}'s properties.
  *
- * @see FilesystemListener
- * @see FilesystemMonitor
+ * @see FileListener
+ * @see FileMonitor
  * @version $Id$
  * @since Commons IO 2.0
  */
-public class FilesystemObserver implements Serializable {
+public class FileObserver implements Serializable {
 
     private static final File[] EMPTY_FILES = new File[0];
-    static final FilesystemEntry[] EMPTY_ENTRIES = new FilesystemEntry[0];
+    static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
-    private final List<FilesystemListener> listeners = new CopyOnWriteArrayList<FilesystemListener>();
-    private final FilesystemEntry rootEntry;
+    private final List<FileListener> listeners = new CopyOnWriteArrayList<FileListener>();
+    private final FileEntry rootEntry;
     private final FileFilter fileFilter;
     private final Comparator<File> comparator;
 
@@ -149,7 +149,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @param directoryName the name of the directory to observe
      */
-    public FilesystemObserver(String directoryName) {
+    public FileObserver(String directoryName) {
         this(new File(directoryName));
     }
 
@@ -159,7 +159,7 @@ public class FilesystemObserver implements Serializable {
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FilesystemObserver(String directoryName, FileFilter fileFilter) {
+    public FileObserver(String directoryName, FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
     }
 
@@ -171,7 +171,7 @@ public class FilesystemObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FilesystemObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
+    public FileObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
         this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
@@ -180,7 +180,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @param directory the directory to observe
      */
-    public FilesystemObserver(File directory) {
+    public FileObserver(File directory) {
         this(directory, (FileFilter)null);
     }
 
@@ -190,7 +190,7 @@ public class FilesystemObserver implements Serializable {
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FilesystemObserver(File directory, FileFilter fileFilter) {
+    public FileObserver(File directory, FileFilter fileFilter) {
         this(directory, fileFilter, (IOCase)null);
     }
 
@@ -202,8 +202,8 @@ public class FilesystemObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FilesystemObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
-        this(new FilesystemEntry(directory), fileFilter, caseSensitivity);
+    public FileObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
+        this(new FileEntry(directory), fileFilter, caseSensitivity);
     }
 
     /**
@@ -214,7 +214,7 @@ public class FilesystemObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FilesystemObserver(FilesystemEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
+    protected FileObserver(FileEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -237,7 +237,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @return the entry for the root directory
      */
-    public FilesystemEntry getRootEntry() {
+    public FileEntry getRootEntry() {
         return rootEntry;
     }
 
@@ -273,7 +273,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void addListener(final FilesystemListener listener) {
+    public void addListener(final FileListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
@@ -284,7 +284,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void removeListener(final FilesystemListener listener) {
+    public void removeListener(final FileListener listener) {
         if (listener != null) {
             while (listeners.remove(listener)) {
             }
@@ -296,7 +296,7 @@ public class FilesystemObserver implements Serializable {
      *
      * @return The file system listeners
      */
-    public Iterable<FilesystemListener> getListeners() {
+    public Iterable<FileListener> getListeners() {
         return listeners;
     }
 
@@ -308,7 +308,7 @@ public class FilesystemObserver implements Serializable {
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
         File[] files = listFiles(rootEntry.getFile());
-        FilesystemEntry[] children = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
+        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(rootEntry, files[i]);
         }
@@ -329,7 +329,7 @@ public class FilesystemObserver implements Serializable {
     public void checkAndNotify() {
 
         /* fire onStart() */
-        for (FilesystemListener listener : listeners) {
+        for (FileListener listener : listeners) {
             listener.onStart(this);
         }
 
@@ -344,7 +344,7 @@ public class FilesystemObserver implements Serializable {
         }
 
         /* fire onStop() */
-        for (FilesystemListener listener : listeners) {
+        for (FileListener listener : listeners) {
             listener.onStop(this);
         }
     }
@@ -356,10 +356,10 @@ public class FilesystemObserver implements Serializable {
      * @param previous The original list of files
      * @param files  The current list of files
      */
-    private void checkAndNotify(FilesystemEntry parent, FilesystemEntry[] previous, File[] files) {
+    private void checkAndNotify(FileEntry parent, FileEntry[] previous, File[] files) {
         int c = 0;
-        FilesystemEntry[] current = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
-        for (FilesystemEntry entry : previous) {
+        FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
+        for (FileEntry entry : previous) {
             while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
                 current[c] = createFileEntry(parent, files[c]);
                 doCreate(current[c]);
@@ -389,11 +389,11 @@ public class FilesystemObserver implements Serializable {
      * @param file The file to create an entry for
      * @return A new file entry
      */
-    private FilesystemEntry createFileEntry(FilesystemEntry parent, File file) {
-        FilesystemEntry entry = parent.newChildInstance(file);
+    private FileEntry createFileEntry(FileEntry parent, File file) {
+        FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
         File[] files = listFiles(file);
-        FilesystemEntry[] children = files.length > 0 ? new FilesystemEntry[files.length] : EMPTY_ENTRIES;
+        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(entry, files[i]);
         }
@@ -406,16 +406,16 @@ public class FilesystemObserver implements Serializable {
      *
      * @param entry The file entry
      */
-    private void doCreate(FilesystemEntry entry) {
-        for (FilesystemListener listener : listeners) {
+    private void doCreate(FileEntry entry) {
+        for (FileListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryCreate(entry.getFile());
             } else {
                 listener.onFileCreate(entry.getFile());
             }
         }
-        FilesystemEntry[] children = entry.getChildren();
-        for (FilesystemEntry aChildren : children) {
+        FileEntry[] children = entry.getChildren();
+        for (FileEntry aChildren : children) {
             doCreate(aChildren);
         }
     }
@@ -426,9 +426,9 @@ public class FilesystemObserver implements Serializable {
      * @param entry The previous file system entry
      * @param file The current file
      */
-    private void doMatch(FilesystemEntry entry, File file) {
+    private void doMatch(FileEntry entry, File file) {
         if (entry.refresh(file)) {
-            for (FilesystemListener listener : listeners) {
+            for (FileListener listener : listeners) {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
                 } else {
@@ -443,8 +443,8 @@ public class FilesystemObserver implements Serializable {
      *
      * @param entry The file entry
      */
-    private void doDelete(FilesystemEntry entry) {
-        for (FilesystemListener listener : listeners) {
+    private void doDelete(FileEntry entry) {
+        for (FileListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryDelete(entry.getFile());
             } else {

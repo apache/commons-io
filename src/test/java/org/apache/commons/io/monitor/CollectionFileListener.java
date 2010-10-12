@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * {@link FilesystemListener} implementation that adds created, changed and deleted
+ * {@link FileListener} implementation that adds created, changed and deleted
  * files/directories to a set of {@link Collection}s.
  */
-public class CollectionFilesystemListener implements FilesystemListener, Serializable {
+public class CollectionFileListener implements FileListener, Serializable {
 
     private final boolean clearOnStart;
     private final Collection<File> createdFiles = new ArrayList<File>();
@@ -40,7 +40,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @param clearOnStart true if clear() should be called by onStart().
      */
-    public CollectionFilesystemListener(boolean clearOnStart) {
+    public CollectionFileListener(boolean clearOnStart) {
         this.clearOnStart = clearOnStart;
     }
 
@@ -49,7 +49,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @param observer The file system observer
      */
-    public void onStart(final FilesystemObserver observer) {
+    public void onStart(final FileObserver observer) {
         if (clearOnStart) {
             clear();
         }
@@ -180,7 +180,7 @@ public class CollectionFilesystemListener implements FilesystemListener, Seriali
      *
      * @param observer The file system observer
      */
-    public void onStop(final FilesystemObserver observer) {
+    public void onStop(final FileObserver observer) {
     }
 
 }
