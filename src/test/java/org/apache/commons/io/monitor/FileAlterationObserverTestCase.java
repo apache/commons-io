@@ -23,16 +23,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 /**
- * {@link FileObserver} Test Case.
+ * {@link FileAlterationObserver} Test Case.
  */
-public class FileObserverTestCase extends AbstractMonitorTestCase {
+public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
      *
      * @param name The name of the test
      */
-    public FileObserverTestCase(String name) {
+    public FileAlterationObserverTestCase(String name) {
         super(name);
         testDirName = "test-observer";
     }
@@ -346,7 +346,7 @@ public class FileObserverTestCase extends AbstractMonitorTestCase {
     }
 
     /**
-     * Call {@link FileObserver#checkAndNotify()}.
+     * Call {@link FileAlterationObserver#checkAndNotify()}.
      *
      * @throws Exception if an error occurs
      */

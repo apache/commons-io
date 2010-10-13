@@ -28,25 +28,25 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
 
 /**
- * FileObserver represents the state of files below a root directory,
+ * FileAlterationObserver represents the state of files below a root directory,
  * checking the filesystem and notifying listeners of create, change or
  * delete events.
  * <p>
  * To use this implementation:
  * <ul>
- *   <li>Create {@link FileListener} implementation(s) that process
+ *   <li>Create {@link FileAlterationListener} implementation(s) that process
  *      the file/directory create, change and delete events</li>
- *   <li>Register the listener(s) with a {@link FileObserver} for
+ *   <li>Register the listener(s) with a {@link FileAlterationObserver} for
  *       the appropriate directory.</li>
- *   <li>Either register the observer(s) with a {@link FileMonitor} or
+ *   <li>Either register the observer(s) with a {@link FileAlterationMonitor} or
  *       run manually.</li>
  * </ul>
  *
  * <h2>Basic Usage</h2>
- * Create a {@link FileObserver} for the directory and register the listeners:
+ * Create a {@link FileAlterationObserver} for the directory and register the listeners:
  * <pre>
  *      File directory = new File(new File("."), "src");
- *      FileObserver observer = new FileObserver(directory);
+ *      FileAlterationObserver observer = new FileAlterationObserver(directory);
  *      observer.addListener(...);
  *      observer.addListener(...);
  * </pre>
@@ -64,11 +64,11 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *      // finished
  *      observer.finish();
  * </pre>
- * Alternatively, register the oberver(s) with a {@link FileMonitor},
+ * Alternatively, register the oberver(s) with a {@link FileAlterationMonitor},
  * which creates a new thread, invoking the observer at the specified interval:
  * <pre>
  *      long interval = ...
- *      FileMonitor monitor = new FileMonitor(interval);
+ *      FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
  *      monitor.addObserver(observer);
  *      monitor.start();
  *      ...
@@ -87,39 +87,23 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * implementations for this purpose.
  * <p>
  * For example, to only observe 1) visible directories and 2) files with a ".java" suffix
- * in a root directory called "src" you could set up a {@link FileObserver} in the following
+ * in a root directory called "src" you could set up a {@link FileAlterationObserver} in the following
  * way:
  * <pre>
  *      // Create a FileFilter
- *      IOFileFilter directories = FileFilterUtils.directoryFileFilter();
- *      IOFileFilter visible     = HiddenFileFilter.VISIBLE;
- *      IOFileFilter dirFilter   = FileFilterUtils.andFileFilter(directories, visible);
- *      IOFileFilter files       = FileFilterUtils.fileFileFilter();
- *      IOFileFilter javaSuffix  = FileFilterUtils.suffixFileFilter(".java");
- *      IOFileFilter fileFilter  = FileFilterUtils.andFileFilter(files, javaSuffix);
- *      IOFileFilter filter = FileFilterUtils.orFileFilter(dirFilter, fileFilter);
+ *      IOFileFilter directories = FileFilterUtils.and(
+ *                                      FileFilterUtils.directoryFileFilter(),
+ *                                      HiddenFileFilter.VISIBLE);
+ *      IOFileFilter files       = FileFilterUtils.and(
+ *                                      FileFilterUtils.fileFileFilter(),
+ *                                      FileFilterUtils.suffixFileFilter(".java"));
+ *      IOFileFilter filter = FileFilterUtils.or(directories, files);
  *
  *      // Create the File system observer and register File Listeners
- *      FileObserver observer = new FileObserver(new File("src"), filter);
+ *      FileAlterationObserver observer = new FileAlterationObserver(new File("src"), filter);
  *      observer.addListener(...);
  *      observer.addListener(...);
- *
- *      //
  * </pre>
- *
- * <h2>File Comparator</h2>
- * <p>
- * <a href="http://commons.apache.org/io/">Commons IO</a> has a range of
- * useful, ready made  <a href="../comparator/package-summary.html">Comparator</a>
- * implementations for this purpose.
- * <p>
- * This implementation works by comparing the file names of the current contents of
- * a directory with the previous contents using the <i>case-sensitive</i> 
- * {@link NameFileComparator#NAME_COMPARATOR} to determine which files have been created,
- * deleted or still exist. However a custom {@link Comparator} can be specified and
- * one example usage would be to compare file names in a <i>case-insensitive</i>
- * manner ({@link NameFileComparator#NAME_INSENSITIVE_COMPARATOR} could be used
- * to do that).
  *
  * <h2>FileEntry</h2>
  * {@link FileEntry} represents the state of a file or directory, capturing
@@ -129,17 +113,17 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * method is used to determine if a file or directory has changed since the last
  * check and stores the current state of the {@link File}'s properties.
  *
- * @see FileListener
- * @see FileMonitor
+ * @see FileAlterationListener
+ * @see FileAlterationMonitor
  * @version $Id$
  * @since Commons IO 2.0
  */
-public class FileObserver implements Serializable {
+public class FileAlterationObserver implements Serializable {
 
     private static final File[] EMPTY_FILES = new File[0];
     static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
-    private final List<FileListener> listeners = new CopyOnWriteArrayList<FileListener>();
+    private final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<FileAlterationListener>();
     private final FileEntry rootEntry;
     private final FileFilter fileFilter;
     private final Comparator<File> comparator;
@@ -149,7 +133,7 @@ public class FileObserver implements Serializable {
      *
      * @param directoryName the name of the directory to observe
      */
-    public FileObserver(String directoryName) {
+    public FileAlterationObserver(String directoryName) {
         this(new File(directoryName));
     }
 
@@ -159,7 +143,7 @@ public class FileObserver implements Serializable {
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileObserver(String directoryName, FileFilter fileFilter) {
+    public FileAlterationObserver(String directoryName, FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
     }
 
@@ -171,7 +155,7 @@ public class FileObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
+    public FileAlterationObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
         this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
@@ -180,7 +164,7 @@ public class FileObserver implements Serializable {
      *
      * @param directory the directory to observe
      */
-    public FileObserver(File directory) {
+    public FileAlterationObserver(File directory) {
         this(directory, (FileFilter)null);
     }
 
@@ -190,7 +174,7 @@ public class FileObserver implements Serializable {
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileObserver(File directory, FileFilter fileFilter) {
+    public FileAlterationObserver(File directory, FileFilter fileFilter) {
         this(directory, fileFilter, (IOCase)null);
     }
 
@@ -202,7 +186,7 @@ public class FileObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
+    public FileAlterationObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
         this(new FileEntry(directory), fileFilter, caseSensitivity);
     }
 
@@ -214,7 +198,7 @@ public class FileObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FileObserver(FileEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
+    protected FileAlterationObserver(FileEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -273,7 +257,7 @@ public class FileObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void addListener(final FileListener listener) {
+    public void addListener(final FileAlterationListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
@@ -284,7 +268,7 @@ public class FileObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void removeListener(final FileListener listener) {
+    public void removeListener(final FileAlterationListener listener) {
         if (listener != null) {
             while (listeners.remove(listener)) {
             }
@@ -296,7 +280,7 @@ public class FileObserver implements Serializable {
      *
      * @return The file system listeners
      */
-    public Iterable<FileListener> getListeners() {
+    public Iterable<FileAlterationListener> getListeners() {
         return listeners;
     }
 
@@ -329,7 +313,7 @@ public class FileObserver implements Serializable {
     public void checkAndNotify() {
 
         /* fire onStart() */
-        for (FileListener listener : listeners) {
+        for (FileAlterationListener listener : listeners) {
             listener.onStart(this);
         }
 
@@ -344,7 +328,7 @@ public class FileObserver implements Serializable {
         }
 
         /* fire onStop() */
-        for (FileListener listener : listeners) {
+        for (FileAlterationListener listener : listeners) {
             listener.onStop(this);
         }
     }
@@ -407,7 +391,7 @@ public class FileObserver implements Serializable {
      * @param entry The file entry
      */
     private void doCreate(FileEntry entry) {
-        for (FileListener listener : listeners) {
+        for (FileAlterationListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryCreate(entry.getFile());
             } else {
@@ -428,7 +412,7 @@ public class FileObserver implements Serializable {
      */
     private void doMatch(FileEntry entry, File file) {
         if (entry.refresh(file)) {
-            for (FileListener listener : listeners) {
+            for (FileAlterationListener listener : listeners) {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
                 } else {
@@ -444,7 +428,7 @@ public class FileObserver implements Serializable {
      * @param entry The file entry
      */
     private void doDelete(FileEntry entry) {
-        for (FileListener listener : listeners) {
+        for (FileAlterationListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryDelete(entry.getFile());
             } else {

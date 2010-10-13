@@ -27,12 +27,12 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
 /**
- * {@link FileObserver} Test Case.
+ * {@link FileAlterationObserver} Test Case.
  */
 public abstract class AbstractMonitorTestCase extends TestCase {
 
     /** File observer */
-    protected FileObserver observer;
+    protected FileAlterationObserver observer;
 
     /** Listener which collects file changes */
     protected CollectionFileListener listener;
@@ -78,13 +78,13 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     }
 
     /**
-     * Create a {@link FileObserver}.
+     * Create a {@link FileAlterationObserver}.
      * 
      * @param file The directory to observe
      * @param fileFilter The file filter to apply
      */
     protected void createObserver(File file, FileFilter fileFilter) {
-        observer = new FileObserver(file, fileFilter);
+        observer = new FileAlterationObserver(file, fileFilter);
         observer.addListener(listener);
         try {
             observer.initialize();
