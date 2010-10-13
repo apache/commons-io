@@ -20,16 +20,16 @@ import java.io.File;
 import java.util.Collection;
 
 /**
- * {@link FileMonitor} Test Case.
+ * {@link FileAlterationMonitor} Test Case.
  */
-public class FileMonitorTestCase extends AbstractMonitorTestCase {
+public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Construct a new test case.
      *
      * @param name The name of the test
      */
-    public FileMonitorTestCase(String name) {
+    public FileAlterationMonitorTestCase(String name) {
         super(name);
         testDirName = "test-monitor";
     }
@@ -46,7 +46,7 @@ public class FileMonitorTestCase extends AbstractMonitorTestCase {
     public void testMonitor() {
         try {
             long interval = 100;
-            FileMonitor monitor = new FileMonitor(interval, observer);
+            FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
             monitor.start();
 
             // Create a File

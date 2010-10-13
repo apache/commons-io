@@ -15,72 +15,80 @@
  * limitations under the License.
  */
 package org.apache.commons.io.monitor;
+
 import java.io.File;
 
 /**
- * A listener that receives events of file system modifications.
- * <p>
- * Register {@link FileListener}s with a {@link FileObserver}.
+ * Convenience {@link FileAlterationListener} implementation that does nothing.
  * 
- * @see FileObserver
+ * @see FileAlterationObserver
  * @version $Id$
  * @since Commons IO 2.0
  */
-public interface FileListener {
+public class FileAlterationListenerAdaptor implements FileAlterationListener {
 
     /**
      * File system observer started checking event.
      *
      * @param observer The file system observer
      */
-    void onStart(final FileObserver observer);
+    public void onStart(final FileAlterationObserver observer) {
+    }
 
     /**
      * Directory created Event.
      * 
      * @param directory The directory created
      */
-    void onDirectoryCreate(final File directory);
+    public void onDirectoryCreate(final File directory) {
+    }
 
     /**
      * Directory changed Event.
      * 
      * @param directory The directory changed
      */
-    void onDirectoryChange(final File directory);
+    public void onDirectoryChange(final File directory) {
+    }
 
     /**
      * Directory deleted Event.
      * 
      * @param directory The directory deleted
      */
-    void onDirectoryDelete(final File directory);
+    public void onDirectoryDelete(final File directory) {
+    }
 
     /**
      * File created Event.
      * 
      * @param file The file created
      */
-    void onFileCreate(final File file);
+    public void onFileCreate(final File file) {
+    }
 
     /**
      * File changed Event.
      * 
      * @param file The file changed
      */
-    void onFileChange(final File file);
+    public void onFileChange(final File file) {
+    }
 
     /**
      * File deleted Event.
      * 
      * @param file The file deleted
      */
-    void onFileDelete(final File file);
+    public void onFileDelete(final File file) {
+    }
 
     /**
      * File system observer finished checking event.
      *
      * @param observer The file system observer
      */
-    void onStop(final FileObserver observer);
+    public void onStop(final FileAlterationObserver observer) {
+    }
+
 }

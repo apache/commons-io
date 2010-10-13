@@ -21,23 +21,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A runnable that spawns a monitoring thread triggering any
- * registered {@link FileObserver} at a specified interval.
+ * registered {@link FileAlterationObserver} at a specified interval.
  * 
- * @see FileObserver
+ * @see FileAlterationObserver
  * @version $Id$
  * @since Commons IO 2.0
  */
-public final class FileMonitor implements Runnable {
+public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
-    private final List<FileObserver> observers = new CopyOnWriteArrayList<FileObserver>();
+    private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<FileAlterationObserver>();
     private Thread thread = null;
     private volatile boolean running = false;
 
     /**
      * Construct a monitor with a default interval of 10 seconds.
      */
-    public FileMonitor() {
+    public FileAlterationMonitor() {
         this(10000);
     }
 
@@ -47,7 +47,7 @@ public final class FileMonitor implements Runnable {
      * @param interval The amount of time in miliseconds to wait between
      * checks of the file system
      */
-    public FileMonitor(long interval) {
+    public FileAlterationMonitor(long interval) {
         this.interval = interval;
     }
 
@@ -58,10 +58,10 @@ public final class FileMonitor implements Runnable {
      * checks of the file system
      * @param observers The set of observers to add to the monitor.
      */
-    public FileMonitor(long interval, FileObserver... observers) {
+    public FileAlterationMonitor(long interval, FileAlterationObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (FileObserver observer : observers) {
+            for (FileAlterationObserver observer : observers) {
                 addObserver(observer);
             }
         }
@@ -72,7 +72,7 @@ public final class FileMonitor implements Runnable {
      *
      * @param observer The file system observer to add
      */
-    public void addObserver(final FileObserver observer) {
+    public void addObserver(final FileAlterationObserver observer) {
         if (observer != null) {
             observers.add(observer);
         }
@@ -83,7 +83,7 @@ public final class FileMonitor implements Runnable {
      *
      * @param observer The file system observer to remove
      */
-    public void removeObserver(final FileObserver observer) {
+    public void removeObserver(final FileAlterationObserver observer) {
         if (observer != null) {
             while (observers.remove(observer)) {
             }
@@ -91,12 +91,12 @@ public final class FileMonitor implements Runnable {
     }
 
     /**
-     * Returns the set of {@link FileObserver} registered with
+     * Returns the set of {@link FileAlterationObserver} registered with
      * this monitor. 
      *
-     * @return The set of {@link FileObserver}
+     * @return The set of {@link FileAlterationObserver}
      */
-    public Iterable<FileObserver> getObservers() {
+    public Iterable<FileAlterationObserver> getObservers() {
         return observers;
     }
 
@@ -106,7 +106,7 @@ public final class FileMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      */
     public void start() throws Exception {
-        for (FileObserver observer : observers) {
+        for (FileAlterationObserver observer : observers) {
             observer.initialize();
         }
         running = true;
@@ -126,7 +126,7 @@ public final class FileMonitor implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        for (FileObserver observer : observers) {
+        for (FileAlterationObserver observer : observers) {
             observer.destroy();
         }
     }
@@ -136,7 +136,7 @@ public final class FileMonitor implements Runnable {
      */
     public void run() {
         while (running) {
-            for (FileObserver observer : observers) {
+            for (FileAlterationObserver observer : observers) {
                 observer.checkAndNotify();
             }
             if (!running) {
