@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
 
@@ -73,6 +74,11 @@ public class CopyUtilsTest extends FileBasedTestCase {
     // Tests
     // ----------------------------------------------------------------
 
+    public void testCtor() {
+        new CopyUtils();
+        // Nothing to assert, the constructor is public and does not blow up.
+    }
+    
     public void testCopy_byteArrayToOutputStream() throws Exception {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -93,6 +99,14 @@ public class CopyUtilsTest extends FileBasedTestCase {
 
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
+        String inDataStr = "data";
+        String charsetName = "UTF-8";
+        StringWriter writer = new StringWriter(); 
+        CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
+        assertEquals(inDataStr, writer.toString());
     }
 
     public void testCopy_inputStreamToOutputStream() throws Exception {
@@ -124,6 +138,14 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+    }
+
+    public void testCopy_inputStreamToWriterWithEncoding() throws Exception {
+        String inDataStr = "data";
+        String charsetName = "UTF-8";
+        StringWriter writer = new StringWriter();
+        CopyUtils.copy(new ByteArrayInputStream(inDataStr.getBytes(charsetName)), writer, charsetName);
+        assertEquals(inDataStr, writer.toString());
     }
 
     public void testCopy_readerToOutputStream() throws Exception {
