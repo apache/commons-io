@@ -16,10 +16,12 @@
  */
 package org.apache.commons.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -311,14 +313,29 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testFiltering() throws Exception {
+    public void testFilteringFileReader() throws Exception {
         String encoding = "UTF-8";
-        
+
         String fileName = "LineIterator-Filter-test.txt";
         File testFile = new File(getTestDirectory(), fileName);
         List<String> lines = createFile(testFile, encoding, 9);
-        
+
         Reader reader = new FileReader(testFile);
+        this.testFiltering(lines, reader);
+    }
+
+    public void testFilteringBufferedReader() throws Exception {
+        String encoding = "UTF-8";
+
+        String fileName = "LineIterator-Filter-test.txt";
+        File testFile = new File(getTestDirectory(), fileName);
+        List<String> lines = createFile(testFile, encoding, 9);
+
+        Reader reader = new BufferedReader(new FileReader(testFile));
+        this.testFiltering(lines, reader);
+    }
+
+    private void testFiltering(List<String> lines, Reader reader) {
         LineIterator iterator = new LineIterator(reader) {
             @Override
             protected boolean isValidLine(String line) {
