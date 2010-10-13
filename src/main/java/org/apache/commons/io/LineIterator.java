@@ -104,7 +104,7 @@ public class LineIterator implements Iterator<String> {
                 }
             } catch(IOException ioe) {
                 close();
-                throw new IllegalStateException(ioe.toString());
+                throw new IllegalStateException(ioe);
             }
         }
     }
