@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -28,10 +29,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.Test;
 
 /**
  * This is used to test LineIterator for correctness.
- *
+ * 
  * @author Niall Pemberton
  * @author Stephen Colebourne
  * @version $Id$
@@ -59,7 +61,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     /**
      * Test constructor.
      */
@@ -105,12 +107,12 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      */
     public void testMissingFile() throws Exception {
         File testFile = new File(getTestDirectory(), "dummy-missing-file.txt");
-        
+
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(testFile, "UTF-8");
             fail("Expected FileNotFoundException");
-        } catch(FileNotFoundException expected) {
+        } catch (FileNotFoundException expected) {
             // ignore, expected result
         } finally {
             LineIterator.closeQuietly(iterator);
@@ -122,10 +124,10 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      */
     public void testValidEncoding() throws Exception {
         String encoding = "UTF-8";
-        
+
         File testFile = new File(getTestDirectory(), "LineIterator-validEncoding.txt");
         createFile(testFile, encoding, 3);
-        
+
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             int count = 0;
@@ -144,15 +146,15 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      */
     public void testInvalidEncoding() throws Exception {
         String encoding = "XXXXXXXX";
-        
+
         File testFile = new File(getTestDirectory(), "LineIterator-invalidEncoding.txt");
         createFile(testFile, "UTF-8", 3);
-        
+
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(testFile, encoding);
             fail("Expected UnsupportedEncodingException");
-        } catch(UnsupportedEncodingException expected) {
+        } catch (UnsupportedEncodingException expected) {
             // ignore, expected result
         } finally {
             LineIterator.closeQuietly(iterator);
@@ -164,10 +166,10 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      */
     public void testNextOnly() throws Exception {
         String encoding = null;
-        
+
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
         List<String> lines = createFile(testFile, encoding, 3);
-        
+
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             for (int i = 0; i < lines.size(); i++) {
@@ -181,14 +183,32 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /**
+     * Tests hasNext when it throws an exception.
+     */
+    public void testNextWithException() throws Exception {
+        Reader reader = new BufferedReader(new StringReader("")) {
+            @Override
+            public String readLine() throws IOException {
+                throw new IOException("hasNext");
+            }
+        };
+        try {
+            new LineIterator(reader).hasNext();
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException e) {
+            // expected
+        }
+    }
+
+    /**
      * Test the iterator using only the nextLine() method.
      */
     public void testNextLineOnly() throws Exception {
         String encoding = null;
-        
+
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
         List<String> lines = createFile(testFile, encoding, 3);
-        
+
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             for (int i = 0; i < lines.size(); i++) {
@@ -202,21 +222,20 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Test closing the iterator before all the file has been
-     * processed.
+     * Test closing the iterator before all the file has been processed.
      */
     public void testCloseEarly() throws Exception {
         String encoding = "UTF-8";
-        
+
         File testFile = new File(getTestDirectory(), "LineIterator-closeEarly.txt");
         createFile(testFile, encoding, 3);
-        
+
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             // get
             assertTrue("Line expected", iterator.next() instanceof String);
             assertTrue("More expected", iterator.hasNext());
-    
+
             // close
             iterator.close();
             assertFalse("No more expected", iterator.hasNext());
@@ -232,7 +251,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             } catch (NoSuchElementException ex) {
                 // expected
             }
-    
+
             // try closing again
             iterator.close();
             try {
@@ -253,16 +272,15 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Utility method to create and test a file with a specified
-     * number of lines.
+     * Utility method to create and test a file with a specified number of lines.
      */
     private void doTestFileWithSpecifiedLines(int lineCount) throws Exception {
         String encoding = "UTF-8";
-        
+
         String fileName = "LineIterator-" + lineCount + "-test.txt";
         File testFile = new File(getTestDirectory(), fileName);
         List<String> lines = createFile(testFile, encoding, lineCount);
-        
+
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             try {
@@ -271,7 +289,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             } catch (UnsupportedOperationException ex) {
                 // expected
             }
-    
+
             int idx = 0;
             while (iterator.hasNext()) {
                 String line = iterator.next();
@@ -280,7 +298,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
                 idx++;
             }
             assertEquals("Line Count doesn't match", idx, lines.size());
-    
+
             // try calling next() after file processed
             try {
                 iterator.next();
@@ -300,8 +318,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     /**
-     * Utility method to create a test file with a specified
-     * number of lines.
+     * Utility method to create a test file with a specified number of lines.
      */
     private List<String> createFile(File file, String encoding, int lineCount) throws Exception {
         List<String> lines = new ArrayList<String>();
@@ -312,7 +329,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         return lines;
     }
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
     public void testFilteringFileReader() throws Exception {
         String encoding = "UTF-8";
 
@@ -350,7 +367,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             } catch (UnsupportedOperationException ex) {
                 // expected
             }
-            
+
             int idx = 0;
             int actualLines = 0;
             while (iterator.hasNext()) {
@@ -366,7 +383,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             assertEquals("Line Count doesn't match", 9, lines.size());
             assertEquals("Line Count doesn't match", 9, idx);
             assertEquals("Line Count doesn't match", 6, actualLines);
-    
+
             // try calling next() after file processed
             try {
                 iterator.next();
