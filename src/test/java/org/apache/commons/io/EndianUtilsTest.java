@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 
 import junit.framework.TestCase;
@@ -29,6 +30,21 @@ public class EndianUtilsTest extends TestCase {
 
     public EndianUtilsTest(String name) {
         super(name);
+    }
+
+    public void testCtor() throws IOException {
+        new EndianUtils();
+        // Constructor does not blow up.
+    }
+
+    public void testEOFException() throws IOException {
+        ByteArrayInputStream input = new ByteArrayInputStream(new byte[] {});
+        try {
+            EndianUtils.readSwappedDouble(input);
+            fail("Expected EOFException");
+        } catch (EOFException e) {
+            // expected
+        }
     }
 
     public void testSwapShort() {
