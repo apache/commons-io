@@ -299,6 +299,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(true, file.toString().indexOf("file% %me.txt%") >= 0);
     }
 
+    /** IO-252 */
+    public void testToFile5() throws Exception {
+        URL url = new URL("file", null, "both%20are%20100%20%25%20true");
+        File file = FileUtils.toFile(url);
+        assertEquals("both are 100 % true", file.toString());
+    }
     public void testToFileUtf8() throws Exception {
         URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
         File file = FileUtils.toFile(url);
