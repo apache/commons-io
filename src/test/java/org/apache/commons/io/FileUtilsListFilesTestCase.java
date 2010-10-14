@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -85,10 +86,17 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
     
     private Collection<String> filesToFilenames(Collection<File> files) {
-        Collection<String> filenames = new java.util.ArrayList<String>(files.size());
-        Iterator<File> i = files.iterator();
-        while (i.hasNext()) {
-            filenames.add(i.next().getName());
+        Collection<String> filenames = new ArrayList<String>(files.size());
+        for (File file : files) {
+            filenames.add(file.getName());
+        }
+        return filenames;
+    }
+    
+    private Collection<String> filesToFilenames(Iterator<File> files) {
+        Collection<String> filenames = new ArrayList<String>();
+        while (files.hasNext()) {
+            filenames.add(files.next().getName());
         }
         return filenames;
     }
@@ -114,8 +122,31 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
         assertTrue(filenames.contains("README"));
+        assertFalse(filenames.contains("dummy-file.txt"));        
+    }
+
+    public void testIterateFilesByExtension() throws Exception {
+        String[] extensions = { "xml", "txt" };
+
+        Iterator<File> files = FileUtils.iterateFiles(getLocalTestDirectory(), extensions, false);
+        Collection<String> filenames = filesToFilenames(files);
+        assertEquals(1, filenames.size());
+        assertTrue(filenames.contains("dummy-build.xml"));
+        assertFalse(filenames.contains("README"));
         assertFalse(filenames.contains("dummy-file.txt"));
-        
+
+        files = FileUtils.iterateFiles(getLocalTestDirectory(), extensions, true);
+        filenames = filesToFilenames(files);
+        assertEquals(4, filenames.size());
+        assertTrue(filenames.contains("dummy-file.txt"));
+        assertFalse(filenames.contains("dummy-index.html"));
+
+        files = FileUtils.iterateFiles(getLocalTestDirectory(), null, false);
+        filenames = filesToFilenames(files);
+        assertEquals(2, filenames.size());
+        assertTrue(filenames.contains("dummy-build.xml"));
+        assertTrue(filenames.contains("README"));
+        assertFalse(filenames.contains("dummy-file.txt"));
     }
 
     public void testListFiles() throws Exception {
