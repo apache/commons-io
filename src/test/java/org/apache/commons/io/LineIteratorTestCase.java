@@ -218,8 +218,21 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test the iterator using only the nextLine() method.
      */
-    public void testNextLineOnlyWithEncoding() throws Exception {
+    public void testNextLineOnlyNullEncoding() throws Exception {
         String encoding = null;
+
+        File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
+        List<String> lines = createLinesFile(testFile, encoding, 3);
+
+        LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        assertLines(lines, iterator);
+    }
+
+    /**
+     * Test the iterator using only the nextLine() method.
+     */
+    public void testNextLineOnlyUtf8Encoding() throws Exception {
+        String encoding = "UTF-8";
 
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
         List<String> lines = createLinesFile(testFile, encoding, 3);
