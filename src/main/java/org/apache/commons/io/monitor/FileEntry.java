@@ -41,6 +41,8 @@ import java.io.Serializable;
  */
 public class FileEntry implements Serializable {
 
+    static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
+
     private final FileEntry parent;
     private FileEntry[] children;
     private final File file;
@@ -149,7 +151,7 @@ public class FileEntry implements Serializable {
      * directory is empty
      */
     public FileEntry[] getChildren() {
-        return children != null ? children : FileAlterationObserver.EMPTY_ENTRIES;
+        return children != null ? children : EMPTY_ENTRIES;
     }
 
     /**

@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.NameFileComparator;
 
@@ -119,9 +120,6 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * @since Commons IO 2.0
  */
 public class FileAlterationObserver implements Serializable {
-
-    private static final File[] EMPTY_FILES = new File[0];
-    static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
     private final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<FileAlterationListener>();
     private final FileEntry rootEntry;
@@ -292,7 +290,7 @@ public class FileAlterationObserver implements Serializable {
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
         File[] files = listFiles(rootEntry.getFile());
-        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
+        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(rootEntry, files[i]);
         }
@@ -322,7 +320,7 @@ public class FileAlterationObserver implements Serializable {
         if (rootFile.exists()) {
             checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
         } else if (rootEntry.isExists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), EMPTY_FILES);
+            checkAndNotify(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
         } else {
             // Didn't exist and still doesn't
         }
@@ -342,7 +340,7 @@ public class FileAlterationObserver implements Serializable {
      */
     private void checkAndNotify(FileEntry parent, FileEntry[] previous, File[] files) {
         int c = 0;
-        FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
+        FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (FileEntry entry : previous) {
             while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
                 current[c] = createFileEntry(parent, files[c]);
@@ -355,7 +353,7 @@ public class FileAlterationObserver implements Serializable {
                 current[c] = entry;
                 c++;
             } else {
-                checkAndNotify(entry, entry.getChildren(), EMPTY_FILES);
+                checkAndNotify(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
                 doDelete(entry);
             }
         }
@@ -377,7 +375,7 @@ public class FileAlterationObserver implements Serializable {
         FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
         File[] files = listFiles(file);
-        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : EMPTY_ENTRIES;
+        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(entry, files[i]);
         }
@@ -450,7 +448,7 @@ public class FileAlterationObserver implements Serializable {
             children = (fileFilter == null) ? file.listFiles() : file.listFiles(fileFilter);
         }
         if (children == null) {
-            children = EMPTY_FILES;
+            children = FileUtils.EMPTY_FILE_ARRAY;
         }
         if (comparator != null && children.length > 1) {
             Arrays.sort(children, comparator);
