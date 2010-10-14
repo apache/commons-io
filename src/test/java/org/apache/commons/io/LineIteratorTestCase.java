@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.Test;
 
 /**
  * This is used to test LineIterator for correctness.
