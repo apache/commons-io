@@ -1270,7 +1270,18 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         subDir.delete();
     }
 
-    public void testReadFileToString() throws Exception {
+    public void testReadFileToStringWithDefaultEncoding() throws Exception {
+        File file = new File(getTestDirectory(), "read.obj");
+        FileOutputStream out = new FileOutputStream(file);
+        byte[] text = "Hello /u1234".getBytes();
+        out.write(text);
+        out.close();
+        
+        String data = FileUtils.readFileToString(file);
+        assertEquals("Hello /u1234", data);
+    }
+
+    public void testReadFileToStringWithEncoding() throws Exception {
         File file = new File(getTestDirectory(), "read.obj");
         FileOutputStream out = new FileOutputStream(file);
         byte[] text = "Hello /u1234".getBytes("UTF8");
