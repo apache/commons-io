@@ -18,6 +18,7 @@ package org.apache.commons.io.monitor;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * {@link FileAlterationMonitor} Test Case.
@@ -41,13 +42,63 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     }
 
     /**
+     * Test default constructor.
+     */
+    public void testDefaultConstructor() {
+        FileAlterationMonitor monitor = new FileAlterationMonitor();
+        assertEquals("Interval", 10000, monitor.getInterval());
+    }
+
+    /**
+     * Test add/remove observers.
+     */
+    public void testAddRemoveObservers() {
+        FileAlterationObserver[] observers = null;
+        FileAlterationMonitor monitor = null;
+        
+        // Null Observers
+        monitor = new FileAlterationMonitor(123, observers);
+        assertEquals("Interval", 123, monitor.getInterval());
+        assertFalse("Observers[1]", monitor.getObservers().iterator().hasNext());
+
+        // Null Observer
+        observers = new FileAlterationObserver[1]; // observer is null
+        monitor = new FileAlterationMonitor(456, observers);
+        assertFalse("Observers[2]", monitor.getObservers().iterator().hasNext());
+
+        // Null Observer
+        monitor.addObserver(null);
+        assertFalse("Observers[3]", monitor.getObservers().iterator().hasNext());
+        monitor.removeObserver(null);
+
+        // Add Observer
+        FileAlterationObserver observer = new FileAlterationObserver("foo");
+        monitor.addObserver(observer);
+        Iterator<FileAlterationObserver> it = monitor.getObservers().iterator();
+        assertTrue("Observers[4]", it.hasNext());
+        assertEquals("Added", observer, it.next());
+        assertFalse("Observers[5]", it.hasNext());
+
+        // Remove Observer
+        monitor.removeObserver(observer);
+        assertFalse("Observers[6]", monitor.getObservers().iterator().hasNext());
+    }
+
+    /**
      * Test checkAndNotify() method
      */
     public void testMonitor() {
         try {
             long interval = 100;
             FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+            assertEquals("Interval", interval, monitor.getInterval());
             monitor.start();
+
+            try {
+                monitor.start(); // try and start again
+            } catch (IllegalStateException e) {
+                // expected result, monitor already running
+            }
 
             // Create a File
             checkCollectionsEmpty("A");
@@ -70,6 +121,11 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             // Stop monitoring
             monitor.stop();
 
+            try {
+                monitor.stop(); // try and stop again
+            } catch (IllegalStateException e) {
+                // expected result, monitor already stopped
+            }
         } catch (Exception e) {
             e.printStackTrace();
             fail("Threw " + e);
