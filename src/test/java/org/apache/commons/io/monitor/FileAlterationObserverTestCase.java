@@ -77,10 +77,12 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
         FileAlterationObserver observer = null;
 
         observer = new FileAlterationObserver(file);
-        assertEquals("FileAlterationObserver[file='\\foo', listeners=0]", observer.toString());
+        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
+                observer.toString());
   
         observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
-        assertEquals("FileAlterationObserver[file='\\foo', CanReadFileFilter, listeners=0]", observer.toString());
+        assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', CanReadFileFilter, listeners=0]",
+                observer.toString());
 
         assertEquals(file, observer.getDirectory());
   }
