@@ -86,6 +86,7 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     protected void createObserver(File file, FileFilter fileFilter) {
         observer = new FileAlterationObserver(file, fileFilter);
         observer.addListener(listener);
+        observer.addListener(new FileAlterationListenerAdaptor());
         try {
             observer.initialize();
         } catch (Exception e) {
