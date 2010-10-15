@@ -215,39 +215,12 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Return the entry for the root directory.
-     *
-     * @return the entry for the root directory
-     */
-    public FileEntry getRootEntry() {
-        return rootEntry;
-    }
-
-    /**
      * Return the directory being observed.
      *
      * @return the directory being observed
      */
     public File getDirectory() {
         return rootEntry.getFile();
-    }
-
-    /**
-     * Return the file filter, if any.
-     *
-     * @return the file filteror <code>null</code> if none
-     */
-    public FileFilter getFileFilter() {
-        return fileFilter;
-    }
-
-    /**
-     * Return the comparator.
-     *
-     * @return the comparator
-     */
-    public Comparator<File> getComparator() {
-        return comparator;
     }
 
     /**
@@ -467,6 +440,7 @@ public class FileAlterationObserver implements Serializable {
         builder.append(getClass().getSimpleName());
         builder.append("[file='");
         builder.append(getDirectory().getPath());
+        builder.append('\'');
         if (fileFilter != null) {
             builder.append(", ");
             builder.append(fileFilter.toString());
