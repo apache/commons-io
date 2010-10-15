@@ -52,6 +52,15 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
+     * Return the interval.
+     *
+     * @return the interval
+     */
+    public long getInterval() {
+        return interval;
+    }
+
+    /**
      * Construct a monitor with the specified interval and set of observers.
      *
      * @param interval The amount of time in miliseconds to wait between
@@ -105,7 +114,10 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @throws Exception if an error occurs initializing the observer
      */
-    public void start() throws Exception {
+    public synchronized void start() throws Exception {
+        if (running) {
+            throw new IllegalStateException("Monitor is already running");
+        }
         for (FileAlterationObserver observer : observers) {
             observer.initialize();
         }
@@ -119,7 +131,10 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @throws Exception if an error occurs initializing the observer
      */
-    public void stop() throws Exception {
+    public synchronized void stop() throws Exception {
+        if (running == false) {
+            throw new IllegalStateException("Monitor is not running");
+        }
         running = false;
         try {
             thread.join(interval);
