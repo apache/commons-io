@@ -18,8 +18,10 @@ package org.apache.commons.io.monitor;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 /**
@@ -42,6 +44,46 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
         listener = new CollectionFileListener(true);
         super.setUp();
     }
+
+    /**
+     * Test add/remove listeners.
+     */
+    public void testAddRemoveListeners() {
+        FileAlterationObserver observer = new FileAlterationObserver("/foo");
+        // Null Listener
+        observer.addListener(null);
+        assertFalse("Listeners[1]", observer.getListeners().iterator().hasNext());
+        observer.removeListener(null);
+        assertFalse("Listeners[2]", observer.getListeners().iterator().hasNext());
+
+        // Add Listener
+        FileAlterationListenerAdaptor listener = new FileAlterationListenerAdaptor();
+        observer.addListener(listener);
+        Iterator<FileAlterationListener> it = observer.getListeners().iterator();
+        assertTrue("Listeners[3]", it.hasNext());
+        assertEquals("Added", listener, it.next());
+        assertFalse("Listeners[4]", it.hasNext());
+
+        // Remove Listener
+        observer.removeListener(listener);
+        assertFalse("Listeners[5]", observer.getListeners().iterator().hasNext());
+    }
+
+    /**
+     * Test toString().
+     */
+    public void testToString() {
+        File file = new File("/foo");
+        FileAlterationObserver observer = null;
+
+        observer = new FileAlterationObserver(file);
+        assertEquals("FileAlterationObserver[file='\\foo', listeners=0]", observer.toString());
+  
+        observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
+        assertEquals("FileAlterationObserver[file='\\foo', CanReadFileFilter, listeners=0]", observer.toString());
+
+        assertEquals(file, observer.getDirectory());
+  }
 
     /**
      * Test checkAndNotify() method
