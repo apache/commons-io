@@ -80,6 +80,27 @@ public class WriterOutputStreamTest extends TestCase {
     public void testUTF16WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, "UTF-16");
     }
+
+    public void testLargeUTF16WithBufferedWrite() throws IOException {
+        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-16");
+    }
+
+    public void testUTF16BEWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, "UTF-16BE");
+    }
+
+    public void testLargeUTF16BEWithBufferedWrite() throws IOException {
+        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-16BE");
+    }
+
+    public void testUTF16LEWithSingleByteWrite() throws IOException {
+        testWithSingleByteWrite(TEST_STRING, "UTF-16LE");
+    }
+
+    public void testLargeUTF16LEWithBufferedWrite() throws IOException {
+        testWithBufferedWrite(LARGE_TEST_STRING, "UTF-16LE");
+    }
+
     
     public void testFlush() throws IOException {
         StringWriter writer = new StringWriter();
