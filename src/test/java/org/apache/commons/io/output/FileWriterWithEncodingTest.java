@@ -101,8 +101,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     }
 
     public void testDifferentEncoding() throws Exception {
-        Map<String, Charset> map = Charset.availableCharsets();
-        if (map.containsKey("UTF-16BE")) {
+        if (Charset.isSupported("UTF-16BE")) {
             FileWriter fw1 = null;
             FileWriterWithEncoding fw2 = null;
             try {
@@ -130,7 +129,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             assertEquals(true, file1.exists());
             assertEquals(true, file2.exists());
         }
-        if (map.containsKey("UTF-16LE")) {
+        if (Charset.isSupported("UTF-16LE")) {
             FileWriter fw1 = null;
             FileWriterWithEncoding fw2 = null;
             try {
