@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 import junit.framework.AssertionFailedError;
 
