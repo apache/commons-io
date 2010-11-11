@@ -27,29 +27,80 @@ import org.apache.commons.io.IOUtils;
 /**
  * Simple implementation of the unix "tail -f" functionality.
  * <p>
- * Example Usage:
+ * <h2>1. Create a TailerListener implementation</h3>
+ * <p>
+ * First you need to create a {@link TailerListener} implementation
+ * ({@link TailerListenerAdapter} is provided for convenience so that you don't have to
+ * implement every method).
+ * </p>
+ *
+ * <p>For example:</p>
  * <pre>
- *      // Simplest invocation using static helper method:
- *      TailerListener listener = ...
+ *  public class MyTailerListener extends TailerListenerAdapter {
+ *      public void handle(String line) {
+ *          System.out.println(line);
+ *      }
+ *  }
+ * </pre>
+ * 
+ * <h2>2. Using a Tailer</h2>
+ *
+ * You can create and use a Tailer in one of three ways:
+ * <ul>
+ *   <li>Using one of the static helper methods:
+ *     <ul>
+ *       <li>{@link Tailer#create(File, TailerListener)}</li>
+ *       <li>{@link Tailer#create(File, TailerListener, long)}</li>
+ *       <li>{@link Tailer#create(File, TailerListener, long, boolean)}</li>
+ *     </ul>
+ *   </li>
+ *   <li>Using an {@link java.util.concurrent.Executor}</li>
+ *   <li>Using an {@link Thread}</li>
+ * </ul>
+ *
+ * An example of each of these is shown below.
+ * 
+ * <h3>2.1 Using the static helper method</h3>
+ *
+ * <pre>
+ *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = Tailer.create(file, listener, delay);
+ * </pre>
  *      
- *      // Alternative method using executor:
- *      TailerListener listener = ...
+ * <h3>2.2 Use an Executor</h3>
+ * 
+ * <pre>
+ *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = new Tailer(file, listener, delay);
- *      Executor executor ...
+ *
+ *      // stupid executor impl. for demo purposes
+ *      Executor executor = new Executor() {
+ *          public void execute(Runnable command) {
+ *              command.run();
+ *           }
+ *      };
+ *
  *      executor.execute(tailer);
+ * </pre>
  *      
- *      // Alternative method if you want to handle the threading yourself:
- *      TailerListener listener = ...
+ *      
+ * <h3>2.3 Use a Thread</h3>
+ * <pre>
+ *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = new Tailer(file, listener, delay);
  *      Thread thread = new Thread(tailer);
  *      thread.setDaemon(true); // optional
  *      thread.start();
- *      
- *      // Remember to stop the tailer when you have done with it:
+ * </pre>
+ *
+ * <h2>3. Stop Tailing</h3>
+ * <p>Remember to stop the tailer when you have done with it:</p>
+ * <pre>
  *      tailer.stop();
  * </pre>
  *
+ * @see TailerListener
+ * @see TailerListenerAdapter
  * @version $Id$
  * @since Commons IO 2.0
  */
