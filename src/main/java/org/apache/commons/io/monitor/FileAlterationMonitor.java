@@ -52,15 +52,6 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Return the interval.
-     *
-     * @return the interval
-     */
-    public long getInterval() {
-        return interval;
-    }
-
-    /**
      * Construct a monitor with the specified interval and set of observers.
      *
      * @param interval The amount of time in miliseconds to wait between
@@ -74,6 +65,15 @@ public final class FileAlterationMonitor implements Runnable {
                 addObserver(observer);
             }
         }
+    }
+
+    /**
+     * Return the interval.
+     *
+     * @return the interval
+     */
+    public long getInterval() {
+        return interval;
     }
 
     /**
