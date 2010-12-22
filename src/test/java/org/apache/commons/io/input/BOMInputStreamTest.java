@@ -204,6 +204,20 @@ public class BOMInputStreamTest extends TestCase {
         assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
     }
 
+    public void testEmptyBufferWithoutBOM() throws Exception {
+        byte[] data = new byte[] {};
+        InputStream in = new BOMInputStream(createDataStream(data, false));
+        byte[] buf = new byte[1024];
+        assertEquals(-1, in.read(buf));
+    }
+
+    public void testEmptyBufferWithBOM() throws Exception {
+        byte[] data = new byte[] {};
+        InputStream in = new BOMInputStream(createDataStream(data, true));
+        byte[] buf = new byte[1024];
+        assertEquals(-1, in.read(buf));
+    }
+
     public void testLargeBufferWithoutBOM() throws Exception {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         InputStream in = new BOMInputStream(createDataStream(data, false));
