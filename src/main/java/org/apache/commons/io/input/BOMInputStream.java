@@ -284,7 +284,7 @@ public class BOMInputStream extends ProxyInputStream {
             }
         }
         int secondCount = in.read(buf, off, len);
-        return (secondCount < 0) ? firstCount : firstCount + secondCount;
+        return (secondCount < 0) ? (firstCount > 0 ? firstCount : -1) : firstCount + secondCount;
     }
 
     /**
