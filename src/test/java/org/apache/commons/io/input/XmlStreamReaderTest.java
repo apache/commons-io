@@ -26,6 +26,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
+
 import junit.framework.TestCase;
 
 /**
@@ -220,6 +222,25 @@ public class XmlStreamReaderTest extends TestCase {
                 "UTF-8", "UTF-8");
     }
 
+    
+    public void testRawContent() throws Exception {
+        String encoding = "UTF-8";
+        String xml = getXML("no-bom", XML3, encoding, encoding);
+        ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
+        XmlStreamReader xmlReader = new XmlStreamReader(is);
+        assertEquals("Check encoding", xmlReader.getEncoding(), encoding);
+        assertEquals("Check content", xml, IOUtils.toString(xmlReader));
+    }
+
+    public void testHttpContent() throws Exception {
+        String encoding = "UTF-8";
+        String xml = getXML("no-bom", XML3, encoding, encoding);
+        ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
+        XmlStreamReader xmlReader = new XmlStreamReader(is, encoding);
+        assertEquals("Check encoding", xmlReader.getEncoding(), encoding);
+        assertEquals("Check content", xml, IOUtils.toString(xmlReader));
+    }
+
     public void _testAlternateDefaultEncoding(String cT, String bomEnc,
             String streamEnc, String prologEnc, String alternateEnc)
             throws Exception {
@@ -345,13 +366,11 @@ public class XmlStreamReaderTest extends TestCase {
         if (bom == null) {
             bom = new int[0];
         }
-        MessageFormat xml = XMLs.get(xmlType);
         for (int i = 0; i < bom.length; i++) {
             baos.write(bom[i]);
         }
         Writer writer = new OutputStreamWriter(baos, streamEnc);
-        String info = INFO.format(new Object[] { bomType, xmlType, prologEnc });
-        String xmlDoc = xml.format(new Object[] { streamEnc, prologEnc, info });
+        String xmlDoc = getXML(bomType, xmlType, streamEnc, prologEnc);
         writer.write(xmlDoc);
 
         // PADDDING TO TEST THINGS WORK BEYOND PUSHBACK_SIZE
@@ -363,5 +382,16 @@ public class XmlStreamReaderTest extends TestCase {
 
         writer.close();
         return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    /**
+     * Create the XML.
+     */
+    private String getXML(String bomType, String xmlType,
+            String streamEnc, String prologEnc) {
+        MessageFormat xml = XMLs.get(xmlType);
+        String info = INFO.format(new Object[] { bomType, xmlType, prologEnc });
+        String xmlDoc = xml.format(new Object[] { streamEnc, prologEnc, info });
+        return xmlDoc;
     }
 }
