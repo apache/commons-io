@@ -79,20 +79,11 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Return the thread factory.
-     *
-     * @return the threadFactory
-     */
-    public ThreadFactory getThreadFactory() {
-        return threadFactory;
-    }
-
-    /**
      * Set the thread factory.
      *
      * @param threadFactory the thread factory
      */
-    public void setThreadFactory(ThreadFactory threadFactory) {
+    public synchronized void setThreadFactory(ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
     }
 
