@@ -94,7 +94,6 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             listener.clear();
             FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
             assertEquals("Interval", interval, monitor.getInterval());
-            assertNull("Thread Factory", monitor.getThreadFactory());
             monitor.start();
 
             try {
@@ -145,7 +144,6 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
             monitor.setThreadFactory(Executors.defaultThreadFactory());
             assertEquals("Interval", interval, monitor.getInterval());
-            assertNotNull("Thread Factory", monitor.getThreadFactory());
             monitor.start();
 
             // Create a File
