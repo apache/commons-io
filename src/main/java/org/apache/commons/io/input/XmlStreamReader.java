@@ -201,8 +201,10 @@ public class XmlStreamReader extends Reader {
      */
     public XmlStreamReader(InputStream is, boolean lenient, String defaultEncoding) throws IOException {
         this.defaultEncoding = defaultEncoding;
-        this.encoding = doRawStream(is, lenient);
-        this.reader = new InputStreamReader(is, encoding);
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        this.encoding = doRawStream(bom, pis, lenient);
+        this.reader = new InputStreamReader(pis, encoding);
     }
 
     /**
@@ -250,12 +252,14 @@ public class XmlStreamReader extends Reader {
         boolean lenient = true;
         String contentType = conn.getContentType();
         InputStream is = conn.getInputStream();
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
-            this.encoding = doHttpStream(is, contentType, lenient);
+            this.encoding = doHttpStream(bom, pis, contentType, lenient);
         } else {
-            this.encoding = doRawStream(is, lenient);
+            this.encoding = doRawStream(bom, pis, lenient);
         }
-        this.reader = new InputStreamReader(is, encoding);
+        this.reader = new InputStreamReader(pis, encoding);
     }
 
     /**
@@ -317,8 +321,10 @@ public class XmlStreamReader extends Reader {
     public XmlStreamReader(InputStream is, String httpContentType,
             boolean lenient, String defaultEncoding) throws IOException {
         this.defaultEncoding = defaultEncoding;
-        this.encoding = doHttpStream(is, httpContentType, lenient);
-        this.reader = new InputStreamReader(is, encoding);
+        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
+        this.encoding = doHttpStream(bom, pis, httpContentType, lenient);
+        this.reader = new InputStreamReader(pis, encoding);
     }
 
     /**
@@ -394,16 +400,15 @@ public class XmlStreamReader extends Reader {
     /**
      * Process the raw stream.
      *
-     * @param is InputStream to create the reader from.
+     * @param bom BOMInputStream to detect byte order marks
+     * @param pis BOMInputStream to guess XML encoding
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doRawStream(InputStream is, boolean lenient)
+    private String doRawStream(BOMInputStream bom, BOMInputStream pis, boolean lenient)
             throws IOException {
-        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
-        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         String bomEnc      = bom.getBOMCharsetName();
         String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
@@ -411,7 +416,7 @@ public class XmlStreamReader extends Reader {
             return calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
         } catch (XmlStreamReaderException ex) {
             if (lenient) {
-                return doLenientDetection(null, is, ex);
+                return doLenientDetection(null, ex);
             } else {
                 throw ex;
             }
@@ -421,17 +426,16 @@ public class XmlStreamReader extends Reader {
     /**
      * Process a HTTP stream.
      *
-     * @param is InputStream to create the reader from.
+     * @param bom BOMInputStream to detect byte order marks
+     * @param pis BOMInputStream to guess XML encoding
      * @param httpContentType The HTTP content type
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doHttpStream(InputStream is, String httpContentType,
+    private String doHttpStream(BOMInputStream bom, BOMInputStream pis, String httpContentType,
             boolean lenient) throws IOException {
-        BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
-        BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         String bomEnc      = bom.getBOMCharsetName();
         String xmlGuessEnc = pis.getBOMCharsetName();
         String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
@@ -440,7 +444,7 @@ public class XmlStreamReader extends Reader {
                     xmlGuessEnc, xmlEnc, lenient);
         } catch (XmlStreamReaderException ex) {
             if (lenient) {
-                return doLenientDetection(httpContentType, is, ex);
+                return doLenientDetection(httpContentType, ex);
             } else {
                 throw ex;
             }
@@ -452,12 +456,11 @@ public class XmlStreamReader extends Reader {
      *
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
-     * @param is the unconsumed InputStream
      * @param ex The thrown exception
      * @return the encoding
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doLenientDetection(String httpContentType, InputStream is,
+    private String doLenientDetection(String httpContentType,
             XmlStreamReaderException ex) throws IOException {
         if (httpContentType != null && httpContentType.startsWith("text/html")) {
             httpContentType = httpContentType.substring("text/html".length());
