@@ -19,6 +19,7 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.Executors;
 
 /**
  * {@link FileAlterationMonitor} Test Case.
@@ -90,8 +91,10 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     public void testMonitor() {
         try {
             long interval = 100;
+            listener.clear();
             FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
             assertEquals("Interval", interval, monitor.getInterval());
+            assertNull("Thread Factory", monitor.getThreadFactory());
             monitor.start();
 
             try {
@@ -126,6 +129,40 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             } catch (IllegalStateException e) {
                 // expected result, monitor already stopped
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Threw " + e);
+        }
+    }
+
+    /**
+     * Test using a thread factory.
+     */
+    public void testThreadFactory() {
+        try {
+            long interval = 100;
+            listener.clear();
+            FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+            monitor.setThreadFactory(Executors.defaultThreadFactory());
+            assertEquals("Interval", interval, monitor.getInterval());
+            assertNotNull("Thread Factory", monitor.getThreadFactory());
+            monitor.start();
+
+            // Create a File
+            checkCollectionsEmpty("A");
+            File file2 = touch(new File(testDir, "file2.java"));
+            checkFile("Create", file2, listener.getCreatedFiles());
+            listener.clear();
+
+            // Delete a file
+            checkCollectionsEmpty("B");
+            file2.delete();
+            checkFile("Delete", file2, listener.getDeletedFiles());
+            listener.clear();
+
+            // Stop monitoring
+            monitor.stop();
+
         } catch (Exception e) {
             e.printStackTrace();
             fail("Threw " + e);

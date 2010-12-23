@@ -18,6 +18,7 @@ package org.apache.commons.io.monitor;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * A runnable that spawns a monitoring thread triggering any
@@ -32,6 +33,7 @@ public final class FileAlterationMonitor implements Runnable {
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<FileAlterationObserver>();
     private Thread thread = null;
+    private ThreadFactory threadFactory;
     private volatile boolean running = false;
 
     /**
@@ -74,6 +76,24 @@ public final class FileAlterationMonitor implements Runnable {
      */
     public long getInterval() {
         return interval;
+    }
+
+    /**
+     * Return the thread factory.
+     *
+     * @return the threadFactory
+     */
+    public ThreadFactory getThreadFactory() {
+        return threadFactory;
+    }
+
+    /**
+     * Set the thread factory.
+     *
+     * @param threadFactory the thread factory
+     */
+    public void setThreadFactory(ThreadFactory threadFactory) {
+        this.threadFactory = threadFactory;
     }
 
     /**
@@ -122,7 +142,11 @@ public final class FileAlterationMonitor implements Runnable {
             observer.initialize();
         }
         running = true;
-        thread = new Thread(this);
+        if (threadFactory != null) {
+            thread = threadFactory.newThread(this);
+        } else {
+            thread = new Thread(this);
+        }
         thread.start();
     }
 
