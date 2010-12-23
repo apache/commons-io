@@ -28,10 +28,11 @@ limitations under the License.
   <a href="http://ant.apache.org">Ant</a> as a build system.
 </p>
 <p>
-  IO 2.0 requires a minimum of JDK 1.5 to build.
+  Commons IO requires a minimum of JDK 1.5 to build.
 </p>
 <p>
   You may also be interested in the upgrade notes:<br />
+  Upgrade <a href="upgradeto2_0_1.html">from 2.0 to 2.0.1</a><br />
   Upgrade <a href="upgradeto2_0.html">from 1.4 to 2.0</a><br />
   Upgrade <a href="upgradeto1_4.html">from 1.3.2 to 1.4</a><br />
   Upgrade <a href="upgradeto1_3_2.html">from 1.3, or 1.3.1 to 1.3.2</a><br />
