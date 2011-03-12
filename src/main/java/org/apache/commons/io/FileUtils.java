@@ -220,6 +220,32 @@ public class FileUtils {
      * @since Commons IO 1.3
      */
     public static FileOutputStream openOutputStream(File file) throws IOException {
+        return openOutputStream(file, false);
+    }
+
+    /**
+     * Opens a {@link FileOutputStream} for the specified file, checking and
+     * creating the parent directory if it does not exist.
+     * <p>
+     * At the end of the method either the stream will be successfully opened,
+     * or an exception will have been thrown.
+     * <p>
+     * The parent directory will be created if it does not exist.
+     * The file will be created if it does not exist.
+     * An exception is thrown if the file object exists but is a directory.
+     * An exception is thrown if the file exists but cannot be written to.
+     * An exception is thrown if the parent directory cannot be created.
+     * 
+     * @param file  the file to open for output, must not be <code>null</code>
+     * @param append if <code>true</code>, then bytes will be added to the
+     * end of the file rather than overwriting
+     * @return a new {@link FileOutputStream} for the specified file
+     * @throws IOException if the file object is a directory
+     * @throws IOException if the file cannot be written to
+     * @throws IOException if a parent directory needs creating but that fails
+     * @since Commons IO 2.1
+     */
+    public static FileOutputStream openOutputStream(File file, boolean append) throws IOException {
         if (file.exists()) {
             if (file.isDirectory()) {
                 throw new IOException("File '" + file + "' exists but is a directory");
@@ -235,7 +261,7 @@ public class FileUtils {
                 }
             }
         }
-        return new FileOutputStream(file);
+        return new FileOutputStream(file, append);
     }
 
     //-----------------------------------------------------------------------
@@ -1469,9 +1495,25 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file, String data, String encoding) throws IOException {
+        writeStringToFile(file, data, encoding, false);
+    }
+
+    /**
+     * Writes a String to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param append if <code>true</code>, then the String will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since Commons IO 2.1
+     */
+    public static void writeStringToFile(File file, String data, String encoding, boolean append) throws IOException {
         OutputStream out = null;
         try {
-            out = openOutputStream(file);
+            out = openOutputStream(file, append);
             IOUtils.write(data, out, encoding);
         } finally {
             IOUtils.closeQuietly(out);
@@ -1486,7 +1528,21 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      */
     public static void writeStringToFile(File file, String data) throws IOException {
-        writeStringToFile(file, data, null);
+        writeStringToFile(file, data, null, false);
+    }
+
+    /**
+     * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
+     * 
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param append if <code>true</code>, then the String will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 2.1
+     */
+    public static void writeStringToFile(File file, String data, boolean append) throws IOException {
+        writeStringToFile(file, data, null, append);
     }
 
     /**
@@ -1498,8 +1554,21 @@ public class FileUtils {
      * @since Commons IO 2.0
      */
     public static void write(File file, CharSequence data) throws IOException {
-        String str = data == null ? null : data.toString();
-        writeStringToFile(file, str);
+        write(file, data, null, false);
+    }
+
+    /**
+     * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
+     * 
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param append if <code>true</code>, then the data will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 2.1
+     */
+    public static void write(File file, CharSequence data, boolean append) throws IOException {
+        write(file, data, null, append);
     }
 
     /**
@@ -1513,8 +1582,24 @@ public class FileUtils {
      * @since Commons IO 2.0
      */
     public static void write(File file, CharSequence data, String encoding) throws IOException {
+        write(file, data, encoding, false);
+    }
+
+    /**
+     * Writes a CharSequence to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param append if <code>true</code>, then the data will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since IO 2.1
+     */
+    public static void write(File file, CharSequence data, String encoding, boolean append) throws IOException {
         String str = data == null ? null : data.toString();
-        writeStringToFile(file, str, encoding);
+        writeStringToFile(file, str, encoding, append);
     }
 
     /**
@@ -1529,9 +1614,23 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
+        writeByteArrayToFile(file, data, false);
+    }
+
+    /**
+     * Writes a byte array to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @param append if <code>true</code>, then bytes will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since IO 2.1
+     */
+    public static void writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
         OutputStream out = null;
         try {
-            out = openOutputStream(file);
+            out = openOutputStream(file, append);
             out.write(data);
         } finally {
             IOUtils.closeQuietly(out);
@@ -1554,7 +1653,25 @@ public class FileUtils {
      * @since Commons IO 1.1
      */
     public static void writeLines(File file, String encoding, Collection<?> lines) throws IOException {
-        writeLines(file, encoding, lines, null);
+        writeLines(file, encoding, lines, null, false);
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line, optionally appending.
+     * The specified character encoding and the default line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param lines  the lines to write, <code>null</code> entries produce blank lines
+     * @param append if <code>true</code>, then the lines will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since Commons IO 2.1
+     */
+    public static void writeLines(File file, String encoding, Collection<?> lines, boolean append) throws IOException {
+        writeLines(file, encoding, lines, null, append);
     }
 
     /**
@@ -1568,7 +1685,23 @@ public class FileUtils {
      * @since Commons IO 1.3
      */
     public static void writeLines(File file, Collection<?> lines) throws IOException {
-        writeLines(file, null, lines, null);
+        writeLines(file, null, lines, null, false);
+    }
+    
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The default VM encoding and the default line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param lines  the lines to write, <code>null</code> entries produce blank lines
+     * @param append if <code>true</code>, then the lines will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 2.1
+     */
+    public static void writeLines(File file, Collection<?> lines, boolean append) throws IOException {
+        writeLines(file, null, lines, null, append);
     }
 
     /**
@@ -1589,9 +1722,29 @@ public class FileUtils {
      */
     public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding)
         throws IOException {
+        writeLines(file, encoding, lines, lineEnding, false);
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The specified character encoding and the line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param lines  the lines to write, <code>null</code> entries produce blank lines
+     * @param lineEnding  the line separator to use, <code>null</code> is system default
+     * @param append if <code>true</code>, then the lines will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since Commons IO 2.1
+     */
+    public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding, boolean append)
+        throws IOException {
         OutputStream out = null;
         try {
-            out = openOutputStream(file);
+            out = openOutputStream(file, append);
             IOUtils.writeLines(lines, lineEnding, out, encoding);
         } finally {
             IOUtils.closeQuietly(out);
@@ -1610,7 +1763,25 @@ public class FileUtils {
      * @since Commons IO 1.3
      */
     public static void writeLines(File file, Collection<?> lines, String lineEnding) throws IOException {
-        writeLines(file, null, lines, lineEnding);
+        writeLines(file, null, lines, lineEnding, false);
+    }
+
+    /**
+     * Writes the <code>toString()</code> value of each item in a collection to
+     * the specified <code>File</code> line by line.
+     * The default VM encoding and the specified line ending will be used.
+     *
+     * @param file  the file to write to
+     * @param lines  the lines to write, <code>null</code> entries produce blank lines
+     * @param lineEnding  the line separator to use, <code>null</code> is system default
+     * @param append if <code>true</code>, then the lines will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since Commons IO 2.1
+     */
+    public static void writeLines(File file, Collection<?> lines, String lineEnding, boolean append)
+        throws IOException {
+        writeLines(file, null, lines, lineEnding, append);
     }
 
     //-----------------------------------------------------------------------
