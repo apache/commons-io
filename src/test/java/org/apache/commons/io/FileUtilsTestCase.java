@@ -1404,7 +1404,247 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
+    
+    public void testWriteLines_5argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, null, linesToAppend, null, true);
 
+        String expected = "This line was there before you..."
+                + "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteLines_5argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, null, linesToAppend, null, false);
+
+        String expected = "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, linesToAppend, null, true);
+
+        String expected = "This line was there before you..."
+                + "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteLines_4argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, linesToAppend, null, false);
+
+        String expected = "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+
+    public void testWriteLinesEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, null, linesToAppend, true);
+
+        String expected = "This line was there before you..."
+                + "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteLinesEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, null, linesToAppend, false);
+
+        String expected = "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, linesToAppend, true);
+
+        String expected = "This line was there before you..."
+                + "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        List<String> linesToAppend = Arrays.asList(new String[] {
+                "my first line", "The second Line" });
+        FileUtils.writeLines(file, linesToAppend, false);
+
+        String expected = "my first line"
+                + IOUtils.LINE_SEPARATOR + "The second Line"
+                + IOUtils.LINE_SEPARATOR ;
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeStringToFile(file, "this is brand new data", null, true);
+
+        String expected = "This line was there before you..."
+                + "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeStringToFile(file, "this is brand new data", null, false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeStringToFile(file, "this is brand new data", true);
+
+        String expected = "This line was there before you..."
+                + "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeStringToFile(file, "this is brand new data", false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.write(file, "this is brand new data", null, true);
+
+        String expected = "This line was there before you..."
+            + "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.write(file, "this is brand new data", null, false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWrite_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.write(file, "this is brand new data", true);
+
+        String expected = "This line was there before you..."
+            + "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWrite_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.write(file, "this is brand new data", false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteByteArrayToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), true);
+
+        String expected = "This line was there before you..."
+            + "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
+    public void testWriteByteArrayToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+        
+        FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file);
+        assertEquals(expected, actual);
+    }
+    
     //-----------------------------------------------------------------------
     public void testChecksumCRC32() throws Exception {
         // create a test file
