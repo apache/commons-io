@@ -81,9 +81,12 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * Create a proxy class that implements the specified interfaces using
      * the specified ClassLoader or the super ClassLoader.
      *
-     * @param interfaces the interfaces to implemnt
-     * @return the class
+     * @param interfaces the interfaces to implement
+     * @return a proxy class implementing the interfaces
+     * @throws IOException in case of an I/O error
+     * @throws ClassNotFoundException if the Class cannot be found
      * @see java.io.ObjectInputStream#resolveProxyClass(java.lang.String[])
+     * @since Commons IO 2.1
      */
     @Override
     protected Class<?> resolveProxyClass(String[] interfaces) throws IOException,
