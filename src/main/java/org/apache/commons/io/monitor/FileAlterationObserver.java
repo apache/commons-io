@@ -224,6 +224,16 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
+     * Return the fileFilter.
+     *
+     * @return the fileFilter
+     * @since Commons IO 2.1
+     */
+    public FileFilter getFileFilter() {
+        return fileFilter;
+    }
+
+    /**
      * Add a file system listener.
      *
      * @param listener The file system listener
