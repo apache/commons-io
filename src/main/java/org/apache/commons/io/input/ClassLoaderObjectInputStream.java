@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 import java.io.StreamCorruptedException;
+import java.lang.reflect.Proxy;
 
 /**
  * A special ObjectInputStream that loads a class based on a specified
@@ -75,4 +76,27 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
             return super.resolveClass(objectStreamClass);
         }
     }
+
+    /**
+     * Create a proxy class that implements the specified interfaces using
+     * the specified ClassLoader or the super ClassLoader.
+     *
+     * @param interfaces the interfaces to implemnt
+     * @return the class
+     * @see java.io.ObjectInputStream#resolveProxyClass(java.lang.String[])
+     */
+    @Override
+    protected Class<?> resolveProxyClass(String[] interfaces) throws IOException,
+            ClassNotFoundException {
+        Class<?>[] interfaceClasses = new Class[interfaces.length];
+        for (int i = 0; i < interfaces.length; i++) {
+            interfaceClasses[i] = Class.forName(interfaces[i], false, classLoader);
+        }
+        try {
+            return Proxy.getProxyClass(classLoader, interfaceClasses);
+        } catch (IllegalArgumentException e) {
+            return super.resolveProxyClass(interfaces);
+        }
+    }
+    
 }
