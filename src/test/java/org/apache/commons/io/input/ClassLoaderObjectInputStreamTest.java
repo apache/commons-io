@@ -54,5 +54,19 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
 
         assertTrue( !result.booleanValue() );
     }
+
+    public void testResolveProxyClass() throws Exception {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject( Boolean.FALSE );
+        InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+        ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        String[] interfaces = new String[] { Comparable.class.getName() };
+        Class<?> result = clois.resolveProxyClass(interfaces);
+        assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
+    }
     
 }
