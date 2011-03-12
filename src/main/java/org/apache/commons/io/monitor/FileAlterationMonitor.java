@@ -154,8 +154,7 @@ public final class FileAlterationMonitor implements Runnable {
      * Stop monitoring.
      *
      * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
-     * A value of zero will wait until the thread is finished (see {@link Thread#join(long)})
-     * and a negative value will stop the process immediately).
+     * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
      * @throws Exception if an error occurs initializing the observer
      * @since Commons IO 2.1
      */
@@ -165,11 +164,7 @@ public final class FileAlterationMonitor implements Runnable {
         }
         running = false;
         try {
-            if (stopInterval < 0) {
-                thread.interrupt();
-            } else {
-                thread.join(stopInterval);
-            }
+            thread.join(stopInterval);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
