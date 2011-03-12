@@ -147,12 +147,29 @@ public final class FileAlterationMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      */
     public synchronized void stop() throws Exception {
+        stop(interval);
+    }
+
+    /**
+     * Stop monitoring.
+     *
+     * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
+     * A value of zero will wait until the thread to finished (see {@link Thread#join(long)})
+     * and a nagative value will stop the process immediately).
+     * @throws Exception if an error occurs initializing the observer
+     * @since Commons IO 2.1
+     */
+    public synchronized void stop(long stopInterval) throws Exception {
         if (running == false) {
             throw new IllegalStateException("Monitor is not running");
         }
         running = false;
         try {
-            thread.join(interval);
+            if (stopInterval < 0) {
+                thread.interrupt();
+            } else {
+                thread.join(stopInterval);
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
