@@ -122,6 +122,50 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
+     * Construct a file from the set of name elements.
+     * 
+     * @param directory the parent directory
+     * @param names the name elements
+     * @return the file
+     * @since Commons IO 2.1
+     */
+    public static File getFile(File directory, String... names) {
+        if (directory == null) {
+            throw new NullPointerException("directorydirectory must not be null");
+        }
+        if (names == null) {
+            throw new NullPointerException("names must not be null");
+        }
+        File file = directory;
+        for (String name : names) {
+            file = new File(file, name);
+        }
+        return file;
+    }
+
+    /**
+     * Construct a file from the set of name elements.
+     * 
+     * @param names the name elements
+     * @return the file
+     * @since Commons IO 2.1
+     */
+    public static File getFile(String... names) {
+        if (names == null) {
+            throw new NullPointerException("names must not be null");
+        }
+        File file = null;
+        for (String name : names) {
+            if (file == null) {
+                file = new File(name);
+            } else {
+                file = new File(file, name);
+            }
+        }
+        return file;
+    }
+
+    /**
      * Returns the path to the system temporary directory.
      * 
      * @return the path to the system temporary directory.

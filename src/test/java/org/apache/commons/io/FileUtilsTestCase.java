@@ -102,6 +102,49 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     /**
+     * Tests the {@link FileUtils#getFile(String...)} method.
+     */
+    public void testGetFile() {
+        File expected_A = new File("src");
+        File expected_B = new File(expected_A, "main");
+        File expected_C = new File(expected_B, "java");
+        assertEquals("A", expected_A, FileUtils.getFile("src"));
+        assertEquals("B", expected_B, FileUtils.getFile("src", "main"));
+        assertEquals("C", expected_C, FileUtils.getFile("src", "main", "java"));
+        try {
+            FileUtils.getFile((String[])null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
+
+    /**
+     * Tests the {@link FileUtils#getFile(File, String...)} method.
+     */
+    public void testGetFile_Parent() {
+        File parent = new File("parent");
+        File expected_A = new File(parent, "src");
+        File expected_B = new File(expected_A, "main");
+        File expected_C = new File(expected_B, "java");
+        assertEquals("A", expected_A, FileUtils.getFile(parent, "src"));
+        assertEquals("B", expected_B, FileUtils.getFile(parent, "src", "main"));
+        assertEquals("C", expected_C, FileUtils.getFile(parent, "src", "main", "java"));
+        try {
+            FileUtils.getFile(parent, (String[])null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException e) {
+            // expected
+        }
+        try {
+            FileUtils.getFile((File)null, "src");
+            fail("Expected NullPointerException");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
+
+    /**
      * Tests the {@link FileUtils#getTempDirectoryPath()} method.
      */
     public void testGetTempDirectoryPath() {
