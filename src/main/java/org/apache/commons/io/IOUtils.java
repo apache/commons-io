@@ -76,7 +76,6 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * @author Stephen Colebourne
  * @author Gareth Davis
  * @author Ian Springer
- * @author Niall Pemberton
  * @author Sandy McArthur
  * @version $Id$
  */

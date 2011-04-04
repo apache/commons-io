@@ -77,7 +77,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * @author Ian Springer
  * @author Chris Eldredge
  * @author Jim Harrington
- * @author Niall Pemberton
  * @author Sandy McArthur
  * @version $Id$
  */

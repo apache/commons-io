@@ -33,7 +33,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * This is used to test LineIterator for correctness.
  * 
- * @author Niall Pemberton
  * @author Stephen Colebourne
  * @version $Id$
  */
