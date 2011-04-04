@@ -44,7 +44,6 @@ import java.util.NoSuchElementException;
  * }
  * </pre>
  *
- * @author Niall Pemberton
  * @author Stephen Colebourne
  * @author Sandy McArthur
  * @version $Id$
