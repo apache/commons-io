@@ -106,6 +106,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
     }
 
+    @Override
     protected void createFile(File file, long size)
         throws IOException {
         super.createFile(file, size);
