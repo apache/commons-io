@@ -456,8 +456,9 @@ public class FileUtils {
      * its subdirectories).
      * <p>
      * All files found are filtered by an IOFileFilter. This method is
-     * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)}.
-     *
+     * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)},
+     * which supports Iterable ('foreach' loop).
+     * <p>
      * @param directory  the directory to search in
      * @param fileFilter  filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
@@ -516,7 +517,8 @@ public class FileUtils {
     /**
      * Allows iteration over the files in a given directory (and optionally
      * its subdirectories) which match an array of extensions. This method
-     * is based on {@link #listFiles(File, String[], boolean)}.
+     * is based on {@link #listFiles(File, String[], boolean)},
+     * which supports Iterable ('foreach' loop).
      *
      * @param directory  the directory to search in
      * @param extensions  an array of extensions, ex. {"java","xml"}. If this
