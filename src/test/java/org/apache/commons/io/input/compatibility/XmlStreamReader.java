@@ -393,6 +393,7 @@ public class XmlStreamReader extends Reader {
         return encoding;
     }
 
+    @Override
     public int read(char[] buf, int offset, int len) throws IOException {
         return reader.read(buf, offset, len);
     }
@@ -402,6 +403,7 @@ public class XmlStreamReader extends Reader {
      *
      * @throws IOException thrown if there was a problem closing the stream.
      */
+    @Override
     public void close() throws IOException {
         reader.close();
     }
