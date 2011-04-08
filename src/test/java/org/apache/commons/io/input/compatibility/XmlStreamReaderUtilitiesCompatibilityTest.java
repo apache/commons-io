@@ -26,12 +26,14 @@ import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
  */
 public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
 
+    @Override
     protected String calculateRawEncoding(String bomEnc, String xmlGuessEnc, String xmlEnc,
             String defaultEncoding) throws IOException {
         MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
         String encoding = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
         return encoding;
     }
+    @Override
     protected String calculateHttpEncoding(String httpContentType, String bomEnc, String xmlGuessEnc,
             String xmlEnc, boolean lenient, String defaultEncoding) throws IOException {
         MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
