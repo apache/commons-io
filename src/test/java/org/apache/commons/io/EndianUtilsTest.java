@@ -32,7 +32,7 @@ public class EndianUtilsTest extends TestCase {
         super(name);
     }
 
-    public void testCtor() throws IOException {
+    public void testCtor() {
         new EndianUtils();
         // Constructor does not blow up.
     }
