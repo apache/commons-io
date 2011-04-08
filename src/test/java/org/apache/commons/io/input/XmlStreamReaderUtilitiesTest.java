@@ -44,7 +44,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
     }
 
     /** Test for {@link XmlStreamReader#getContentTypeEncoding(String)}. */
-    public void testContentTypeEncoding() throws IOException {
+    public void testContentTypeEncoding() {
         checkContentTypeEncoding(null, null);
         checkContentTypeEncoding(null, "");
         checkContentTypeEncoding(null, "application/xml");
@@ -62,7 +62,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
     }
 
     /** Test for {@link XmlStreamReader#getContentTypeEncoding(String)}. */
-    public void testContentTypeMime() throws IOException {
+    public void testContentTypeMime() {
         checkContentTypeMime(null, null);
         checkContentTypeMime("", "");
         checkContentTypeMime("application/xml", "application/xml");
@@ -74,7 +74,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
     }
 
     /** Test for {@link XmlStreamReader#isAppXml(String)}. */
-    public void testAppXml() throws IOException {
+    public void testAppXml() {
         checkAppXml(false, null);
         checkAppXml(false, "");
         checkAppXml(true,  "application/xml");
@@ -93,7 +93,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
     }
 
     /** Test for {@link XmlStreamReader#isTextXml(String)}. */
-    public void testTextXml() throws IOException {
+    public void testTextXml() {
         checkTextXml(false, null);
         checkTextXml(false, "");
         checkTextXml(true,  "text/xml");
