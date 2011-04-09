@@ -37,12 +37,18 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class TailerTest extends FileBasedTestCase {
 
+    private Tailer tailer;
+    
     public TailerTest(String name) {
         super(name);
     }
 
     @Override
     protected void tearDown() throws Exception {
+        if (tailer != null) {
+            tailer.stop();
+            Thread.sleep(100);
+        }
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
@@ -53,7 +59,7 @@ public class TailerTest extends FileBasedTestCase {
         final File file = new File(getTestDirectory(), "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        final Tailer tailer = new Tailer(file, listener, delay, false);
+        tailer = new Tailer(file, listener, delay, false);
         final Thread thread = new Thread(tailer);
         thread.start();
 
@@ -96,6 +102,7 @@ public class TailerTest extends FileBasedTestCase {
 
         // Stop
         tailer.stop();
+        tailer=null;
         thread.interrupt();
         Thread.sleep(delay * 2);
         write(file, "Line five");
@@ -150,9 +157,10 @@ public class TailerTest extends FileBasedTestCase {
         final TestTailerListener listener = new TestTailerListener();
         int delay = 100;
         int idle = 50; // allow time for thread to work
-        final Tailer tailer = Tailer.create(file, listener, delay, false);
+        tailer = Tailer.create(file, listener, delay, false);
         Thread.sleep(idle);
         tailer.stop();
+        tailer=null;
         Thread.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
@@ -166,11 +174,12 @@ public class TailerTest extends FileBasedTestCase {
         TestTailerListener listener = new TestTailerListener();
         int delay = 100;
         int idle = 50; // allow time for thread to work
-        Tailer tailer = new Tailer(file, listener, delay, false);
+        tailer = new Tailer(file, listener, delay, false);
         Executor exec = new ScheduledThreadPoolExecutor(1);
         exec.execute(tailer);
         Thread.sleep(idle);
         tailer.stop();
+        tailer=null;
         Thread.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
