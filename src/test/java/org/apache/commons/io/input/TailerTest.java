@@ -89,6 +89,10 @@ public class TailerTest extends FileBasedTestCase {
 
         // Delete & re-create
         file.delete();
+        boolean exists = file.exists();
+        String osname = System.getProperty("os.name");
+        boolean isWindows = osname.startsWith("Windows");
+        assertFalse("File should not exist (except on Windows)", exists && !isWindows);
         createFile(file, 0);
         Thread.sleep(delay * 2);
 
