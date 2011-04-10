@@ -223,6 +223,82 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testInputStreamToByteArray_Size()
+        throws Exception {
+        FileInputStream fin = new FileInputStream( m_testFile );
+        try {
+            byte[] out = IOUtils.toByteArray( fin, m_testFile.length());
+            assertNotNull( out );
+            assertTrue( "Not all bytes were read", fin.available() == 0 );
+            assertTrue( "Wrong output size: out.length=" + out.length +
+                        "!=" + FILE_SIZE, out.length == FILE_SIZE );
+            assertEqualContent( out, m_testFile );
+        } finally {
+            fin.close();
+        }
+    }
+
+    public void testInputStreamToByteArray_NegativeSize()
+        throws Exception {
+        FileInputStream fin = new FileInputStream( m_testFile );
+
+        try {
+            IOUtils.toByteArray( fin, -1);
+            fail("IllegalArgumentException excepted");
+        } catch (IllegalArgumentException exc) {
+            assertTrue("Exception message does not start with \"Size must be equal or greater than zero\"",
+                       exc.getMessage().startsWith("Size must be equal or greater than zero"));
+        } finally {
+            fin.close();
+        }
+
+    }
+
+    public void testInputStreamToByteArray_ZeroSize()
+        throws Exception {
+        FileInputStream fin = new FileInputStream( m_testFile );
+
+        try {
+            byte[] out = IOUtils.toByteArray( fin, 0);
+            assertNotNull("Out cannot be null", out);
+            assertTrue("Out length must be 0", out.length == 0);
+        } finally {
+            fin.close();
+        }
+    }
+
+    public void testInputStreamToByteArray_IllegalSize()
+        throws Exception {
+        FileInputStream fin = new FileInputStream( m_testFile );
+
+        try {
+            IOUtils.toByteArray( fin, m_testFile.length() + 1);
+            fail("IOException excepted");
+        } catch (IOException exc) {
+            assertTrue("Exception message does not start with \"Unexpected readed size\"",
+                       exc.getMessage().startsWith("Unexpected readed size"));
+        } finally {
+            fin.close();
+        }
+
+    }
+
+    public void testInputStreamToByteArray_LongSize()
+        throws Exception {
+        FileInputStream fin = new FileInputStream( m_testFile );
+
+        try {
+            IOUtils.toByteArray( fin, (long) Integer.MAX_VALUE + 1);
+            fail("IOException excepted");
+        } catch (IllegalArgumentException exc) {
+            assertTrue("Exception message does not start with \"Size cannot be greater than Integer max value\"",
+                       exc.getMessage().startsWith("Size cannot be greater than Integer max value"));
+        } finally {
+            fin.close();
+        }
+
+    }
+
     public void testInputStreamToBufferedInputStream() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {

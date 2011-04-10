@@ -1428,7 +1428,7 @@ public class FileUtils {
         InputStream in = null;
         try {
             in = openInputStream(file);
-            return IOUtils.toByteArray(in);
+            return IOUtils.toByteArray(in, file.length());
         } finally {
             IOUtils.closeQuietly(in);
         }
