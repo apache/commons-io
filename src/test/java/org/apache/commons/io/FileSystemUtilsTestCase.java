@@ -186,7 +186,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c ");
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c ");
         assertEquals(41411551232L, fsu.freeSpaceWindows("", -1));
     }
 
@@ -203,7 +203,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c \"C:\"");
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\"");
         assertEquals(41411551232L, fsu.freeSpaceWindows("C:", -1));
     }
 
@@ -220,7 +220,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c \"C:\\somedir\"");
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
         assertEquals(41411551232L, fsu.freeSpaceWindows("C:\\somedir", -1));
     }
 
@@ -237,7 +237,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             "17/08/2005  21:44    <DIR>          Desktop\n" +
             "               7 File(s)         180260 bytes\n" +
             "              10 Dir(s)     41411551232 bytes free";
-        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /-c \"C:\\somedir\"");
+        FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\\somedir\"");
         assertEquals(41411551232L, fsu.freeSpaceWindows("\"C:\\somedir\"", -1));
     }
 
