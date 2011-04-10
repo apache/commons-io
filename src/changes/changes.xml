@@ -40,6 +40,10 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="1.4" date="Not yet released">
+      <action dev="sebb" type="fix" issue="IO-263" due-to="Gil Adam">
+        FileSystemUtils.freeSpaceKb throws exception for Windows volumes with no visible files.
+        Improve coverage by also looking for hidden files.
+      </action>
     </release>
 
     <release version="1.3.2" date="2007-Jul-02">
