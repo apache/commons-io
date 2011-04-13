@@ -558,9 +558,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      */
     public static String toString(InputStream input) throws IOException {
-        StringBuilderWriter sw = new StringBuilderWriter();
-        copy(input, sw);
-        return sw.toString();
+        return toString(input, null);
     }
 
     /**
