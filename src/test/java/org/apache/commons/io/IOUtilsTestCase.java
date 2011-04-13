@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -600,6 +601,36 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         } finally {
             in.close();
         }
+    }
+
+    private void testURIToString(String encoding)
+            throws Exception
+    {
+        URI url = m_testFile.toURI();
+        String out = IOUtils.toString(url, encoding);
+        assertNotNull(out);
+        assertEquals("Wrong output size", FILE_SIZE, out.length());
+    }
+
+    public void testURIToStringNoEncoding()
+            throws Exception
+    {
+        URI url = m_testFile.toURI();
+        String out = IOUtils.toString(url);
+        assertNotNull(out);
+        assertEquals("Wrong output size", FILE_SIZE, out.length());
+    }
+
+    public void testURIToStringNullEncoding()
+            throws Exception
+    {
+        testURIToString(null);
+    }
+
+    public void testURIToStringUsAciiEncoding()
+            throws Exception
+    {
+        testURIToString("US-ASCII");
     }
 
     private void testURLToString(String encoding)

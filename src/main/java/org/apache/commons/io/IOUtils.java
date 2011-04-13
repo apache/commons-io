@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -603,12 +604,41 @@ public class IOUtils {
     }
 
     /**
+     * Gets the contents at the given URI.
+     * 
+     * @param uri
+     *            The URI source.
+     * @return The contents of the URL as a String.
+     * @throws IOException if an I/O exception occurs.
+     * @since 2.1.
+     */
+    public static String toString(URI uri) throws IOException {
+        return toString(uri, null);
+    }
+
+    /**
+     * Gets the contents at the given URI.
+     * 
+     * @param uri
+     *            The URI source.
+     * @param encoding
+     *            The encoding name for the URL contents.
+     * @return The contents of the URL as a String.
+     * @throws IOException if an I/O exception occurs.
+     * @since 2.1.
+     */
+    public static String toString(URI uri, String encoding) throws IOException {
+        return toString(uri.toURL(), encoding);
+    }
+
+    /**
      * Gets the contents at the given URL.
      * 
      * @param url
      *            The URL source.
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
+     * @since 2.1.
      */
     public static String toString(URL url) throws IOException {
         return toString(url, null);
@@ -623,6 +653,7 @@ public class IOUtils {
      *            The encoding name for the URL contents.
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
+     * @since 2.1.
      */
     public static String toString(URL url, String encoding) throws IOException {
         InputStream inputStream = url.openStream();
