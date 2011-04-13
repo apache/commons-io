@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -599,6 +600,37 @@ public class IOUtils {
         StringBuilderWriter sw = new StringBuilderWriter();
         copy(input, sw);
         return sw.toString();
+    }
+
+    /**
+     * Gets the contents at the given URL.
+     * 
+     * @param url
+     *            The URL source.
+     * @return The contents of the URL as a String.
+     * @throws IOException if an I/O exception occurs.
+     */
+    public static String toString(URL url) throws IOException {
+        return toString(url, null);
+    }
+
+    /**
+     * Gets the contents at the given URL.
+     * 
+     * @param url
+     *            The URL source.
+     * @param encoding
+     *            The encoding name for the URL contents.
+     * @return The contents of the URL as a String.
+     * @throws IOException if an I/O exception occurs.
+     */
+    public static String toString(URL url, String encoding) throws IOException {
+        InputStream inputStream = url.openStream();
+        try {
+            return toString(inputStream, encoding);
+        } finally {
+            inputStream.close();
+        }
     }
 
     /**

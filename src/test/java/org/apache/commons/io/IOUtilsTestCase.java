@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -137,17 +138,17 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReaderToString()
-        throws Exception
-    {
-        FileReader fin = new FileReader( m_testFile );
-        try {
-            String out = IOUtils.toString( fin );
-            assertNotNull( out );
-            assertEquals( "Wrong output size", FILE_SIZE, out.length());
-        } finally {
-            fin.close();
+            throws Exception
+        {
+            FileReader fin = new FileReader( m_testFile );
+            try {
+                String out = IOUtils.toString( fin );
+                assertNotNull( out );
+                assertEquals( "Wrong output size", FILE_SIZE, out.length());
+            } finally {
+                fin.close();
+            }
         }
-    }
 
     @SuppressWarnings("deprecation") // testing deprecated method
     public void testStringToOutputStream()
@@ -600,4 +601,35 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             in.close();
         }
     }
+
+    private void testURLToString(String encoding)
+            throws Exception
+    {
+        URL url = m_testFile.toURI().toURL();
+        String out = IOUtils.toString(url, encoding);
+        assertNotNull(out);
+        assertEquals("Wrong output size", FILE_SIZE, out.length());
+    }
+
+    public void testURLToStringNoEncoding()
+            throws Exception
+    {
+        URL url = m_testFile.toURI().toURL();
+        String out = IOUtils.toString(url);
+        assertNotNull(out);
+        assertEquals("Wrong output size", FILE_SIZE, out.length());
+    }
+
+    public void testURLToStringNullEncoding()
+            throws Exception
+    {
+        testURLToString(null);
+    }
+
+    public void testURLToStringUsAciiEncoding()
+            throws Exception
+    {
+        testURLToString("US-ASCII");
+    }
+
 }
