@@ -1141,7 +1141,7 @@ public class FileUtils {
             boolean preserveFileDate, List<String> exclusionList) throws IOException {
         // recurse
         File[] files = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
-        if (files == null) {  // null if security restricted
+        if (files == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
             throw new IOException("Failed to list contents of " + srcDir);
         }
         if (destDir.exists()) {
