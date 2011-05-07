@@ -1140,8 +1140,8 @@ public class FileUtils {
     private static void doCopyDirectory(File srcDir, File destDir, FileFilter filter,
             boolean preserveFileDate, List<String> exclusionList) throws IOException {
         // recurse
-        File[] files = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
-        if (files == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
+        File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
+        if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
             throw new IOException("Failed to list contents of " + srcDir);
         }
         if (destDir.exists()) {
@@ -1156,13 +1156,13 @@ public class FileUtils {
         if (destDir.canWrite() == false) {
             throw new IOException("Destination '" + destDir + "' cannot be written to");
         }
-        for (File file : files) {
-            File copiedFile = new File(destDir, file.getName());
-            if (exclusionList == null || !exclusionList.contains(file.getCanonicalPath())) {
-                if (file.isDirectory()) {
-                    doCopyDirectory(file, copiedFile, filter, preserveFileDate, exclusionList);
+        for (File srcFile : srcFiles) {
+            File dstFile = new File(destDir, srcFile.getName());
+            if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
+                if (srcFile.isDirectory()) {
+                    doCopyDirectory(srcFile, dstFile, filter, preserveFileDate, exclusionList);
                 } else {
-                    doCopyFile(file, copiedFile, preserveFileDate);
+                    doCopyFile(srcFile, dstFile, preserveFileDate);
                 }
             }
         }
