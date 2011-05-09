@@ -100,9 +100,9 @@ public class FileUtils {
     public static final long ONE_MB = ONE_KB * ONE_KB;
 
     /**
-     * The number of bytes in a 50 MB.
+     * The file copy buffer size (30 MB)
      */
-    private static final long FIFTY_MB = ONE_MB * 50;
+    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The number of bytes in a gigabyte.
@@ -880,7 +880,7 @@ public class FileUtils {
             long pos = 0;
             long count = 0;
             while (pos < size) {
-                count = (size - pos) > FIFTY_MB ? FIFTY_MB : (size - pos);
+                count = (size - pos) > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : (size - pos);
                 pos += output.transferFrom(input, pos, count);
             }
         } finally {
