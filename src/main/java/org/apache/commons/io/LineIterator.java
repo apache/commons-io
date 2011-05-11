@@ -51,6 +51,8 @@ import java.util.NoSuchElementException;
  */
 public class LineIterator implements Iterator<String> {
 
+    // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
+    
     /** The reader that is being read. */
     private final BufferedReader bufferedReader;
     /** The current line. */
