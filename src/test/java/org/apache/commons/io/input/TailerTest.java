@@ -47,9 +47,42 @@ public class TailerTest extends FileBasedTestCase {
     protected void tearDown() throws Exception {
         if (tailer != null) {
             tailer.stop();
-            Thread.sleep(100);
+            Thread.sleep(1000);
         }
         FileUtils.deleteDirectory(getTestDirectory());
+    }
+    
+    public void FIXME_testTailerEof() throws Exception {
+        // Create & start the Tailer
+        long delay = 50;
+        final File file = new File(getTestDirectory(), "tailer2-test.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        final Tailer tailer = new Tailer(file, listener, delay, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+
+        // Write some lines to the file
+        FileWriter writer = null;
+        try {
+        	writeString(file, "Line");
+            
+            Thread.sleep(delay * 2);
+            List<String> lines = listener.getLines();
+            assertEquals("1 line count", 0, lines.size());
+
+            writeString(file, " one\n");
+            Thread.sleep(delay * 2);
+            lines = listener.getLines();
+
+            assertEquals("1 line count", 1, lines.size());
+            assertEquals("1 line 1", "Line one", lines.get(0));
+
+            listener.clear();
+        } finally {
+            tailer.stop();
+            IOUtils.closeQuietly(writer);
+        }
     }
 
     public void testTailer() throws Exception {
@@ -150,6 +183,17 @@ public class TailerTest extends FileBasedTestCase {
             for (String line : lines) {
                 writer.write(line + "\n");
             }
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+    }
+    
+    /** Append a string to a file */
+    private void writeString(File file, String string) throws Exception {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(file, true);
+            writer.write(string);
         } finally {
             IOUtils.closeQuietly(writer);
         }
