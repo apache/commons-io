@@ -335,12 +335,42 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(RandomAccessFile reader) throws IOException {
-        String line = reader.readLine();
+        long pos = reader.getFilePointer();
+        String line = readLine(reader);
         while (line != null) {
+            pos = reader.getFilePointer();
             listener.handle(line);
-            line = reader.readLine();
+            line = readLine(reader);
         }
-        return reader.getFilePointer();
+        reader.seek(pos); // Ensure we can re-read if necessary
+        return pos;
     }
 
+    /**
+     * Version of readline() that returns null on EOF rather than a partial line.
+     * @param reader the input file
+     * @return the line, or null if EOF reached before '\n' is seen.
+     * @throws IOException if an error occurs.
+     */
+    private String readLine(RandomAccessFile reader) throws IOException {
+        StringBuffer sb  = new StringBuffer();
+        int ch;
+        boolean seenCR = false;
+        while((ch=reader.read()) != -1) {
+            switch(ch) {
+                case '\n':
+                    return sb.toString();
+                case '\r':
+                    seenCR = true;
+                    break;
+                default:
+                    if (seenCR) {
+                        sb.append('\r');
+                        seenCR = false;
+                    }
+                    sb.append((char)ch); // add character, not its ascii value
+            }
+        }
+        return null;
+    }
 }

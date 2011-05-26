@@ -52,7 +52,7 @@ public class TailerTest extends FileBasedTestCase {
         FileUtils.deleteDirectory(getTestDirectory());
     }
     
-    public void FIXME_testTailerEof() throws Exception {
+    public void testTailerEof() throws Exception {
         // Create & start the Tailer
         long delay = 50;
         final File file = new File(getTestDirectory(), "tailer2-test.txt");
@@ -81,6 +81,7 @@ public class TailerTest extends FileBasedTestCase {
             listener.clear();
         } finally {
             tailer.stop();
+            Thread.sleep(delay * 2);
             IOUtils.closeQuietly(writer);
         }
     }
