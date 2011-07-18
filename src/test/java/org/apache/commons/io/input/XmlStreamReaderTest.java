@@ -26,9 +26,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
 import junit.framework.TestCase;
+
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author Alejandro Abdelnur
