@@ -120,13 +120,9 @@ public class ReaderInputStreamTest {
     @Ignore
     public void testCharsetMismatchInfiniteLoop() throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        byte[] input = new byte[] { (byte) 0xE0, (byte) 0xB2, (byte) 0xA0 };
         char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
-        System.out.println("Input: " + new String(input, Charset.forName("UTF-8")));
-
         // Charset charset = Charset.forName("UTF-8"); // works
         Charset charset = Charset.forName("ASCII"); // infinite loop
-
         ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset);
         try {
             while (stream.read() != -1) {
@@ -134,6 +130,5 @@ public class ReaderInputStreamTest {
         } finally {
             stream.close();
         }
-
     }
 }
