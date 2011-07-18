@@ -16,13 +16,19 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.Random;
 
-import junit.framework.TestCase;
+import org.junit.Ignore;
+import org.junit.Test;
 
-public class ReaderInputStreamTest extends TestCase {
+public class ReaderInputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
     
@@ -73,29 +79,61 @@ public class ReaderInputStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, "UTF-8");
     }
     
+    @Test
     public void testLargeUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(LARGE_TEST_STRING, "UTF-8");
     }
     
+    @Test
     public void testUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(TEST_STRING, "UTF-8");
     }
     
+    @Test
     public void testLargeUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(LARGE_TEST_STRING, "UTF-8");
     }
     
+    @Test
     public void testUTF16WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, "UTF-16");
     }
     
+    @Test
     public void testReadZero() throws Exception {
         ReaderInputStream r = new ReaderInputStream(new StringReader("test"));
         byte[] bytes = new byte[30];
         assertEquals(0, r.read(bytes, 0, 0));
+    }
+    
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-277
+     * 
+     * @throws IOException
+     */
+    @Test
+    @Ignore
+    public void testCharsetMismatchInfiniteLoop() throws IOException {
+        // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
+        byte[] input = new byte[] { (byte) 0xE0, (byte) 0xB2, (byte) 0xA0 };
+        char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        System.out.println("Input: " + new String(input, Charset.forName("UTF-8")));
+
+        // Charset charset = Charset.forName("UTF-8"); // works
+        Charset charset = Charset.forName("ASCII"); // infinite loop
+
+        ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset);
+        try {
+            while (stream.read() != -1) {
+            }
+        } finally {
+            stream.close();
+        }
+
     }
 }
