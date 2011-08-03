@@ -40,7 +40,7 @@ import org.apache.commons.io.input.ClosedInputStream;
  * this class can be called after the stream has been closed without
  * generating an <tt>IOException</tt>.
  * <p>
- * This is an alternative implementation of the java.io.ByteArrayOutputStream
+ * This is an alternative implementation of the {@link java.io.ByteArrayOutputStream}
  * class. The original implementation only allocates 32 bytes at the beginning.
  * As this class is designed for heavy duty it starts at 1024 bytes. In contrast
  * to the original it doesn't reallocate the whole memory block but allocates
