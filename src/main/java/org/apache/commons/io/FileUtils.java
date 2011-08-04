@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
@@ -108,6 +109,31 @@ public class FileUtils {
      * The number of bytes in a gigabyte.
      */
     public static final long ONE_GB = ONE_KB * ONE_MB;
+
+    /**
+     * The number of bytes in a terabyte.
+     */
+    public static final long ONE_TB = ONE_KB * ONE_GB;
+
+    /**
+     * The number of bytes in a petabyte.
+     */
+    public static final long ONE_PB = ONE_KB * ONE_TB;
+
+    /**
+     * The number of bytes in an exabyte.
+     */
+    public static final long ONE_EB = ONE_KB * ONE_PB;
+
+    /**
+     * The number of bytes in a zettabyte.
+     */
+    public static final BigInteger ONE_ZB = BigInteger.valueOf(ONE_KB).multiply(BigInteger.valueOf(ONE_EB));
+
+    /**
+     * The number of bytes in a yottabyte.
+     */
+    public static final BigInteger ONE_YB = ONE_ZB.multiply(BigInteger.valueOf(ONE_EB));
 
     /**
      * An empty array of type <code>File</code>.
@@ -324,6 +350,13 @@ public class FileUtils {
     public static String byteCountToDisplaySize(long size) {
         String displaySize;
 
+//        if (size / ONE_EB > 0) {
+//            displaySize = String.valueOf(size / ONE_EB) + " EB";
+//        } else if (size / ONE_PB > 0) {
+//            displaySize = String.valueOf(size / ONE_PB) + " PB";
+//        } else if (size / ONE_TB > 0) {
+//            displaySize = String.valueOf(size / ONE_TB) + " TB";
+//        } else 
         if (size / ONE_GB > 0) {
             displaySize = String.valueOf(size / ONE_GB) + " GB";
         } else if (size / ONE_MB > 0) {
