@@ -324,9 +324,9 @@ public class FileUtils {
             }
         } else {
             File parent = file.getParentFile();
-            if (parent != null && parent.exists() == false) {
-                if (parent.mkdirs() == false) {
-                    throw new IOException("File '" + file + "' could not be created");
+            if (parent != null) {
+                if (!parent.mkdirs() && !parent.isDirectory()) {
+                    throw new IOException("Directory '" + parent + "' could not be created");
                 }
             }
         }
@@ -876,9 +876,10 @@ public class FileUtils {
         if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
             throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
         }
-        if (destFile.getParentFile() != null && destFile.getParentFile().exists() == false) {
-            if (destFile.getParentFile().mkdirs() == false) {
-                throw new IOException("Destination '" + destFile + "' directory cannot be created");
+        File parentFile = destFile.getParentFile();
+        if (parentFile != null) {
+            if (!parentFile.mkdirs() && !parentFile.isDirectory()) {
+                throw new IOException("Destination '" + parentFile + "' directory cannot be created");
             }
         }
         if (destFile.exists() && destFile.canWrite() == false) {
@@ -1182,7 +1183,7 @@ public class FileUtils {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
             }
         } else {
-            if (destDir.mkdirs() == false) {
+            if (!destDir.mkdirs() && !destDir.isDirectory()) {
                 throw new IOException("Destination '" + destDir + "' directory cannot be created");
             }
         }
