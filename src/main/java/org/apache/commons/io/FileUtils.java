@@ -889,6 +889,32 @@ public class FileUtils {
     }
 
     /**
+     * Copy bytes from a <code>File</code> to an <code>OutputStream</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * </p>
+     * 
+     * @param input
+     *            the <code>File</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @return the number of bytes copied
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @since Commons IO 2.1
+     */
+    public static long copyFile(File input, OutputStream output) throws IOException {
+        final FileInputStream fis = new FileInputStream(input);
+        try {
+            return IOUtils.copyLarge(fis, output);
+        } finally {
+            fis.close();
+        }
+    }
+    
+    /**
      * Internal copy file method.
      * 
      * @param srcFile  the validated source file, must not be <code>null</code>

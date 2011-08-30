@@ -43,6 +43,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="sebb" type="fix" issue="IO-280" due-to="sebb">
         Dubious use of mkdirs() return code
       </action>
+      <action dev="ggregory" type="add" issue="IO-282" due-to="ggregory">
+        Add API FileUtils.copyFile(File input, OutputStream output)
+      </action>
 
 <!-- TODO check where these fixes really belong -->
       <action dev="sebb" type="fix" issue="IO-274" due-to="Frank Grimes">
