@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,6 +39,7 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.Assert;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -834,6 +836,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved", 
             testFile1.lastModified() == destination.lastModified());*/  
+    }
+
+    public void testCopyFileToOutputStream() throws Exception {
+        ByteArrayOutputStream destination = new ByteArrayOutputStream();
+        FileUtils.copyFile(testFile1, destination);
+        assertEquals("Check Full copy size", testFile1Size, destination.size());
+        byte[] expected = FileUtils.readFileToByteArray(testFile1);
+        Assert.assertArrayEquals("Check Full copy", expected, destination.toByteArray());
     }
 
     public void IGNOREtestCopyFileLarge() throws Exception {
