@@ -117,7 +117,6 @@ public class ReaderInputStreamTest {
      * @throws IOException
      */
     @Test
-    @Ignore
     public void testCharsetMismatchInfiniteLoop() throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
