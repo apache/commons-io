@@ -93,6 +93,39 @@ public class WriterOutputStream extends OutputStream {
     private final CharBuffer decoderOut;
 
     /**
+     * Constructs a new {@link WriterOutputStream} with a default output buffer size of
+     * 1024 characters. The output buffer will only be flushed when it overflows or when
+     * {@link #flush()} or {@link #close()} is called.
+     * 
+     * @param writer the target {@link Writer}
+     * @param decoder the charset decoder
+     * @since Commons IO 2.1
+     */
+    public WriterOutputStream(Writer writer, CharsetDecoder decoder) {
+        this(writer, decoder, DEFAULT_BUFFER_SIZE, false);
+    }
+
+    /**
+     * Constructs a new {@link WriterOutputStream}.
+     * 
+     * @param writer the target {@link Writer}
+     * @param decoder the charset decoder
+     * @param bufferSize the size of the output buffer in number of characters
+     * @param writeImmediately If <tt>true</tt> the output buffer will be flushed after each
+     *                         write operation, i.e. all available data will be written to the
+     *                         underlying {@link Writer} immediately. If <tt>false</tt>, the
+     *                         output buffer will only be flushed when it overflows or when
+     *                         {@link #flush()} or {@link #close()} is called.
+     * @since Commons IO 2.1
+     */
+    public WriterOutputStream(Writer writer, CharsetDecoder decoder, int bufferSize, boolean writeImmediately) {
+        this.writer = writer;
+        this.decoder = decoder;
+        this.writeImmediately = writeImmediately;
+        decoderOut = CharBuffer.allocate(bufferSize);
+    }
+
+    /**
      * Constructs a new {@link WriterOutputStream}.
      * 
      * @param writer the target {@link Writer}
@@ -105,13 +138,13 @@ public class WriterOutputStream extends OutputStream {
      *                         {@link #flush()} or {@link #close()} is called.
      */
     public WriterOutputStream(Writer writer, Charset charset, int bufferSize, boolean writeImmediately) {
-        this.writer = writer;
-        decoder = charset.newDecoder();
-        decoder.onMalformedInput(CodingErrorAction.REPLACE);
-        decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
-        decoder.replaceWith("?");
-        this.writeImmediately = writeImmediately;
-        decoderOut = CharBuffer.allocate(bufferSize);
+        this(writer,
+             charset.newDecoder()
+                    .onMalformedInput(CodingErrorAction.REPLACE)
+                    .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                    .replaceWith("?"),
+             bufferSize,
+             writeImmediately);
     }
 
     /**

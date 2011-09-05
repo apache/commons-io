@@ -24,6 +24,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -100,14 +101,41 @@ public class ReaderInputStream extends InputStream {
      * Construct a new {@link ReaderInputStream}.
      * 
      * @param reader the target {@link Reader}
+     * @param encoder the charset encoder
+     * @since Commons IO 2.1
+     */
+    public ReaderInputStream(Reader reader, CharsetEncoder encoder) {
+        this(reader, encoder, DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Construct a new {@link ReaderInputStream}.
+     * 
+     * @param reader the target {@link Reader}
+     * @param encoder the charset encoder
+     * @param bufferSize the size of the input buffer in number of characters
+     * @since Commons IO 2.1
+     */
+    public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
+        this.reader = reader;
+        this.encoder = encoder;
+        encoderIn = CharBuffer.allocate(bufferSize);
+        encoderIn.flip();
+    }
+
+    /**
+     * Construct a new {@link ReaderInputStream}.
+     * 
+     * @param reader the target {@link Reader}
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
     public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
-        this.reader = reader;
-        encoder = charset.newEncoder();
-        encoderIn = CharBuffer.allocate(bufferSize);
-        encoderIn.flip();
+        this(reader,
+             charset.newEncoder()
+                    .onMalformedInput(CodingErrorAction.REPLACE)
+                    .onUnmappableCharacter(CodingErrorAction.REPLACE),
+             bufferSize);
     }
 
     /**
