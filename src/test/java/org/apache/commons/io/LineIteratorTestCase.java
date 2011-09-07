@@ -174,7 +174,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         try {
             int count = 0;
             while (iterator.hasNext()) {
-                assertTrue(iterator.next() instanceof String);
                 count++;
             }
             assertEquals(3, count);
