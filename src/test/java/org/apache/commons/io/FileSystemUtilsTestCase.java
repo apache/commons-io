@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import junit.framework.Assert;
+
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
@@ -69,6 +71,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             try {
                 r = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 String line = r.readLine();
+                Assert.assertNotNull("Unexpected null line", line);
                 if (line.indexOf("512") >= 0) {
                     kilobyteBlock = false;
                 }
