@@ -291,7 +291,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             // get
-            assertTrue("Line expected", iterator.next() instanceof String);
+            assertNotNull("Line expected", iterator.next());
             assertTrue("More expected", iterator.hasNext());
 
             // close
