@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.1" date="Not yet released">
+      <action dev="ggregory" type="add" issue="IO-284" due-to="ggregory">
+        Add IOUtils API toString for URL and URI to get contents
+      </action>        
       <action dev="sebb" type="fix" issue="IO-280" due-to="sebb">
         Dubious use of mkdirs() return code
       </action>
