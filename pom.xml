@@ -288,6 +288,24 @@
           <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
+          <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
+          <!-- TODO: <onlyCurrentVersion>true</onlyCurrentVersion> -->
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+              <!-- <report>jira-report</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>      
     </plugins>    
   </reporting>
 </project>
