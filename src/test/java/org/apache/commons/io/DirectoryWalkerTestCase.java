@@ -21,7 +21,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -246,8 +245,7 @@ public class DirectoryWalkerTestCase extends TestCase {
      */
     private List<File> directoriesOnly(Collection<File> results) {
         List<File> list = new ArrayList<File>(results.size());
-        for (Iterator<File> it = results.iterator(); it.hasNext(); ) {
-            File file = it.next();
+        for (File file : results) {
             if (file.isDirectory()) {
                 list.add(file);
             }
@@ -260,8 +258,7 @@ public class DirectoryWalkerTestCase extends TestCase {
      */
     private List<File> filesOnly(Collection<File> results) {
         List<File> list = new ArrayList<File>(results.size());
-        for (Iterator<File> it = results.iterator(); it.hasNext(); ) {
-            File file = it.next();
+        for (File file : results) {
             if (file.isFile()) {
                 list.add(file);
             }

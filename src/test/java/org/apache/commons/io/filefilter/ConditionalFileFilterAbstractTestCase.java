@@ -18,7 +18,6 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public abstract class ConditionalFileFilterAbstractTestCase
@@ -63,8 +62,7 @@ public abstract class ConditionalFileFilterAbstractTestCase
       fileFilter.addFileFilter(filters.get(i));
       assertEquals("file filters count: ", i+1, fileFilter.getFileFilters().size());
     }
-    for(Iterator<IOFileFilter> iter = fileFilter.getFileFilters().iterator(); iter.hasNext();) {
-      IOFileFilter filter = iter.next();
+    for (IOFileFilter filter : fileFilter.getFileFilters()) {
       assertTrue("found file filter", filters.contains(filter));
     }
     assertEquals("file filters count", filters.size(), fileFilter.getFileFilters().size());

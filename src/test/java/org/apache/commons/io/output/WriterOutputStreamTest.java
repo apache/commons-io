@@ -40,8 +40,8 @@ public class WriterOutputStreamTest extends TestCase {
         byte[] bytes = testString.getBytes(charsetName);
         StringWriter writer = new StringWriter();
         WriterOutputStream out = new WriterOutputStream(writer, charsetName);
-        for (int i=0; i<bytes.length; i++) {
-            out.write(bytes[i]);
+        for (byte b : bytes) {
+            out.write(b);
         }
         out.close();
         assertEquals(testString, writer.toString());

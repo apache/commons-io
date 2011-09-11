@@ -229,8 +229,8 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
 
         try {
             for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < locales.length; j++) {
-                    Locale.setDefault(locales[j]);
+                for (Locale locale : locales) {
+                    Locale.setDefault(locale);
                     assertTrue("Test data corrupt: " + i, data[i][0].equalsIgnoreCase(data[i][1]));
                     boolean match = FilenameUtils.wildcardMatch(data[i][0], data[i][1], IOCase.INSENSITIVE);
                     assertTrue(Locale.getDefault().toString() + ": " + i, match);

@@ -44,11 +44,11 @@ public class ReaderInputStreamTest {
     private void testWithSingleByteRead(String testString, String charsetName) throws IOException {
         byte[] bytes = testString.getBytes(charsetName);
         ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
-        for (int i=0; i<bytes.length; i++) {
+        for (byte b : bytes) {
             int read = in.read();
             assertTrue(read >= 0);
             assertTrue(read <= 255);
-            assertEquals(bytes[i], (byte)read);
+            assertEquals(b, (byte)read);
         }
         assertEquals(-1, in.read());
     }

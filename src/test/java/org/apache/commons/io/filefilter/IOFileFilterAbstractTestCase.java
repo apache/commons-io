@@ -86,17 +86,17 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
   }
 
   public void resetFalseFilters(TesterFalseFileFilter[] filters) {
-    for(int i = 0; i < filters.length; i++) {
-      if(filters[i] != null) {
-        filters[i].reset();
+    for (TesterFalseFileFilter filter : filters) {
+      if(filter != null) {
+        filter.reset();
       }
     }
   }
   
   public void resetTrueFilters(TesterTrueFileFilter[] filters) {
-    for(int i = 0; i < filters.length; i++) {
-      if(filters[i] != null) {
-        filters[i].reset();
+    for (TesterTrueFileFilter filter : filters) {
+      if(filter != null) {
+        filter.reset();
       }
     }
   }

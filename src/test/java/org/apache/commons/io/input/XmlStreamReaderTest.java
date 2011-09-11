@@ -366,8 +366,8 @@ public class XmlStreamReaderTest extends TestCase {
         if (bom == null) {
             bom = new int[0];
         }
-        for (int i = 0; i < bom.length; i++) {
-            baos.write(bom[i]);
+        for (int element : bom) {
+            baos.write(element);
         }
         Writer writer = new OutputStreamWriter(baos, streamEnc);
         String xmlDoc = getXML(bomType, xmlType, streamEnc, prologEnc);
