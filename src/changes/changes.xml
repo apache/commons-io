@@ -70,8 +70,6 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="add" issue="IO-182">
         Add new APPEND parameter for writing string into files
       </action>
-
-<!-- TODO check where these fixes really belong -->
       <action dev="sebb" type="fix" issue="IO-274" due-to="Frank Grimes">
         Tailer returning partial lines when reaching EOF before EOL
       </action>
