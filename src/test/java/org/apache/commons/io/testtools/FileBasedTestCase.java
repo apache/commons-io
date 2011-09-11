@@ -98,8 +98,8 @@ public abstract class FileBasedTestCase extends TestCase {
         }
         PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         try {
-            for (int i = 0; i < data.length; i++) {
-                output.println(data[i]);
+            for (String element : data) {
+                output.println(element);
             }
         } finally {
             IOUtils.closeQuietly(output);

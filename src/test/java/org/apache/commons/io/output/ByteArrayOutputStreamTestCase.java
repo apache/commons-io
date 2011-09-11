@@ -61,8 +61,8 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
                 java.io.ByteArrayOutputStream ref, 
                 int[] instructions) {
         int written = 0;
-        for (int i = 0; i < instructions.length; i++) {
-            written += writeData(baout, ref, instructions[i]);
+        for (int instruction : instructions) {
+            written += writeData(baout, ref, instruction);
         }
         return written;
     }

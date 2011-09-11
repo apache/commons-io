@@ -223,12 +223,11 @@ public class DemuxTestCase
         public void run()
         {
             m_demux.bindStream( m_output );
-            for( int i = 0; i < m_data.length; i++ )
-            {
+            for (byte element : m_data) {
                 try
                 {
                     //System.out.println( "Writing: " + (char)m_data[ i ] );
-                    m_demux.write( m_data[ i ] );
+                    m_demux.write( element );
                     int sleepTime = Math.abs( c_random.nextInt() % 10 );
                     Thread.sleep( sleepTime );
                 }

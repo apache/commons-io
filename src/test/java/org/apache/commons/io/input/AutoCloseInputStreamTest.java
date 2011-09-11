@@ -59,8 +59,8 @@ public class AutoCloseInputStreamTest extends TestCase {
      * Test the <code>read()</code> method.
      */
     public void testRead() throws IOException {
-        for (int i = 0; i < data.length; i++) {
-            assertEquals("read()", data[i], stream.read());
+        for (byte element : data) {
+            assertEquals("read()", element, stream.read());
             assertFalse("closed", closed);
         }
         assertEquals("read()", -1, stream.read());
