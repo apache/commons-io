@@ -39,7 +39,11 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.1" date="Not yet released">
+    <!-- The 2.1 release date is the date RC is cut -->
+    <release version="2.1" date="2011-09-20">
+      <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">
+        Use standard Maven directory layout
+      </action>        
       <action dev="ggregory" type="add" issue="IO-284" due-to="ggregory">
         Add IOUtils API toString for URL and URI to get contents
       </action>        
