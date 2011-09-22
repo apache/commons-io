@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>21</version>
+    <version>22</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -147,6 +147,15 @@
         <role>Java Developer</role>
       </roles>
     </developer>
+    <developer>
+      <name>Gary D. Gregory</name>
+      <id>ggregory</id>
+      <email>ggregory@apache.org</email>
+      <url>http://www.garygregory.com</url>
+      <organization>Seagull Software</organization>
+      <organizationUrl>http://www.seagullsoftware.com</organizationUrl>
+      <timezone>-5</timezone>
+    </developer>
   </developers>
 
   <contributors>
@@ -273,9 +282,8 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
-        <version>2.3</version>
         <configuration>
-          <comparisonVersion>2.0</comparisonVersion>
+          <comparisonVersion>2.0.1</comparisonVersion>
           <minSeverity>info</minSeverity>
         </configuration>
       </plugin>
@@ -292,7 +300,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>2.6</version>
         <configuration>
           <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
           <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
