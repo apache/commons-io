@@ -95,32 +95,32 @@ limitations under the License.
       </p>
     </subsection>
     </section>
-    <section name="Commons IO 2.0.1 (requires JDK 1.5+)">
+    <section name="Commons IO 2.1 (requires JDK 1.5+)">
       <subsection name="Binaries">
         <table>
           <tr>
-              <td><a href="[preferred]/commons/io/binaries/commons-io-2.0.1-bin.tar.gz">commons-io-2.0.1-bin.tar.gz</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.tar.gz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/binaries/commons-io-2.1-bin.tar.gz">commons-io-2.1-bin.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.1-bin.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.1-bin.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/commons/io/binaries/commons-io-2.0.1-bin.zip">commons-io-2.0.1-bin.zip</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.0.1-bin.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/binaries/commons-io-2.1-bin.zip">commons-io-2.1-bin.zip</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.1-bin.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/binaries/commons-io-2.1-bin.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
       <subsection name="Source">
         <table>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.0.1-src.tar.gz">commons-io-2.0.1-src.tar.gz</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.0.1-src.tar.gz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.0.1-src.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.1-src.tar.gz">commons-io-2.1-src.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.1-src.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.1-src.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.0.1-src.zip">commons-io-2.0.1-src.zip</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.0.1-src.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.0.1-src.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.1-src.zip">commons-io-2.1-src.zip</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.1-src.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.1-src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
