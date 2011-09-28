@@ -40,7 +40,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The 2.1 release date is the date RC is cut -->
-    <release version="2.1" date="TDB">
+    <release version="2.1" date="2011-Sep-28">
       <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">
         Use standard Maven directory layout
       </action>        
