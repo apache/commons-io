@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 2.0.1 to 2.1</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 2.0.1 to version 2.1
+<source>
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+file comparators and endian transformation classes.
+
+Compatibility with 2.0.1 and 1.4
+--------------------------------
+
+Binary compatible - Yes
+
+Source compatible - Yes
+
+Semantic compatible - Yes
+  Check the bug fixes section for semantic bug fixes
+
+Commons IO 2.1 requires a minimum of JDK 1.5
+  (Commons IO 1.4 had a minimum of JDK 1.3) 
+
+
+New features since 2.0.1
+------------------------
+
+o Use standard Maven directory layout  Issue: IO-285. Thanks to ggregory. 
+o Add IOUtils API toString for URL and URI to get contents  Issue: IO-284. Thanks to ggregory. 
+o Add API FileUtils.copyFile(File input, OutputStream output)  Issue: IO-282. Thanks to ggregory. 
+o FileAlterationObserver has no getter for FileFilter  Issue: IO-262. 
+o Add FileUtils.getFile API with varargs parameter  Issue: IO-261. 
+o Add new APPEND parameter for writing string into files  Issue: IO-182. 
+o Add new read method "toByteArray" to handle InputStream with known size.  Issue: IO-251. Thanks to Marco Albini. 
+
+Fixed Bugs since 2.0.1
+----------------------
+
+o Dubious use of mkdirs() return code  Issue: IO-280. Thanks to sebb. 
+o ReaderInputStream enters infinite loop when it encounters an unmappable character  Issue: IO-277. 
+o FileUtils.moveFile() JavaDoc should specify FileExistsException thrown  Issue: IO-264. 
+o ClassLoaderObjectInputStream does not handle Proxy classes  Issue: IO-260. 
+o Tailer returning partial lines when reaching EOF before EOL  Issue: IO-274. Thanks to Frank Grimes. 
+o FileUtils.copyFile() throws IOException when copying large files to a shared directory (on Windows)  Issue: IO-266. Thanks to Igor Smereka. 
+o FileSystemUtils.freeSpaceKb throws exception for Windows volumes with no visible files.
+        Improve coverage by also looking for hidden files.  Issue: IO-263. Thanks to Gil Adam. 
+
+Changes since 2.0.1
+-------------------
+o FileAlterationMonitor.stop(boolean allowIntervalToFinish)  Issue: IO-259. 
+</source>
+</p>
+</section>
+
+</body>
+</document>
