@@ -153,13 +153,14 @@
 
   <target name="compile" depends="init" description="Compile">
 
-    <javac  srcdir="${source.home}"
+    <javac srcdir="${source.home}"
            destdir="${build.home}/classes"
-             source="${compile.source}"
-             target="${compile.target}"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
+           source="${compile.source}"
+           target="${compile.target}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           includeantruntime="false">
       <classpath refid="compile.classpath"/>
     </javac>
   </target>
@@ -173,7 +174,8 @@
              destdir="${build.home}/test-classes"
              debug="${compile.debug}"
              deprecation="${compile.deprecation}"
-             optimize="${compile.optimize}">
+             optimize="${compile.optimize}"
+             includeantruntime="false">
           <classpath refid="test.classpath"/>
       </javac>
     </target>
@@ -335,7 +337,7 @@
         <mkdir dir="${download.lib.dir}" />
         <get dest="${download.lib.dir}/junit.jar"
             usetimestamp="true" ignoreerrors="true"
-            src="http://www.ibiblio.org/maven/junit/jars/junit-3.8.1.jar"/>
+            src="https://github.com/downloads/KentBeck/junit/junit-4.10.jar"/>
     </target>
       
 </project>
