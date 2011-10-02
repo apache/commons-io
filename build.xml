@@ -38,7 +38,7 @@
   <property name="repository"              value="${user.home}/.m2/repository"/>
 
   <!-- The directories corresponding to your necessary dependencies -->
-  <property name="junit.version"           value="4.8.2"/>
+  <property name="junit.version"           value="4.10"/>
   <property name="junit.home"              value="${repository}/junit/junit/${junit.version}"/>
   <property name="junit.jar"               value="${junit.home}/junit-${junit.version}.jar"/>
 
