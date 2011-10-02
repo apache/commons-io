@@ -89,17 +89,18 @@ public class TailerTest extends FileBasedTestCase {
     public void testTailer() throws Exception {
 
         // Create & start the Tailer
-        long delay = 50;
+        long delayMillis = 50;
         final File file = new File(getTestDirectory(), "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        tailer = new Tailer(file, listener, delay, false);
+        tailer = new Tailer(file, listener, delayMillis, false);
         final Thread thread = new Thread(tailer);
         thread.start();
 
         // Write some lines to the file
         write(file, "Line one", "Line two");
-        Thread.sleep(delay * 2);
+        final long testDelayMillis = delayMillis * 10;
+        Thread.sleep(testDelayMillis);
         List<String> lines = listener.getLines();
         assertEquals("1 line count", 2, lines.size());
         assertEquals("1 line 1", "Line one", lines.get(0));
@@ -108,7 +109,7 @@ public class TailerTest extends FileBasedTestCase {
 
         // Write another line to the file
         write(file, "Line three");
-        Thread.sleep(delay * 2);
+        Thread.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("2 line count", 1, lines.size());
         assertEquals("2 line 3", "Line three", lines.get(0));
@@ -128,11 +129,11 @@ public class TailerTest extends FileBasedTestCase {
         boolean isWindows = osname.startsWith("Windows");
         assertFalse("File should not exist (except on Windows)", exists && !isWindows);
         createFile(file, 0);
-        Thread.sleep(delay * 2);
+        Thread.sleep(testDelayMillis);
 
         // Write another line
         write(file, "Line four");
-        Thread.sleep(delay * 2);
+        Thread.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("4 line count", 1, lines.size());
         assertEquals("4 line 3", "Line four", lines.get(0));
@@ -142,7 +143,7 @@ public class TailerTest extends FileBasedTestCase {
         tailer.stop();
         tailer=null;
         thread.interrupt();
-        Thread.sleep(delay * 2);
+        Thread.sleep(testDelayMillis);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
         assertNull("Should not generate Exception", listener.exception);
