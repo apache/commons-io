@@ -39,7 +39,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * @param file  the File to check
      * @return true if this file matches the test
      */
-    public boolean accept(File file);
+    boolean accept(File file);
 
     /**
      * Checks to see if the File should be accepted by this filter.
@@ -50,6 +50,6 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * @param name  the filename within the directory to check
      * @return true if this file matches the test
      */
-    public boolean accept(File dir, String name);
+    boolean accept(File dir, String name);
     
 }
