@@ -20,7 +20,6 @@
 <!--
         "IO" component of the Apache Commons Subproject
         $Id$
-        $Revision$ $Date$
 -->
 
 
@@ -220,7 +219,7 @@
                  bottom="Copyright (c) 2002-${current.year}  Apache Software Foundation"
            classpathref="compile.classpath">
         <link href="http://java.sun.com/javaee/5/docs/api/"/>
-        <link href="http://download.oracle.com/javase/1.5.0/docs/api/index.html"/>        
+        <link href="http://download.oracle.com/javase/1.5.0/docs/api/index.html"/>
     </javadoc>
   </target>
 
@@ -238,7 +237,7 @@
         <attribute name="Specification-Version"    value="${component.version}"/>
         <attribute name="Specification-Vendor"     value="The Apache Software Foundation"/>
         <attribute name="Implementation-Title"     value="${component.title}"/>
-        <attribute name="Implementation-Version"   value="${component.version}"/> 
+        <attribute name="Implementation-Version"   value="${component.version}"/>
         <attribute name="Implementation-Vendor"    value="The Apache Software Foundation"/>
         <attribute name="Implementation-Vendor-Id" value="org.apache"/>
         <attribute name="X-Compile-Source-JDK"     value="${compile.source}"/>
@@ -321,7 +320,7 @@
 
 <!-- ========== Download Dependencies =========================================== -->
 
-    <target name="download-dependencies" 
+    <target name="download-dependencies"
            depends="check-availability" unless="skip.download">
         <echo message="doing download-dependencies..." />
         <antcall target="download-junit" />
@@ -340,6 +339,6 @@
             usetimestamp="true" ignoreerrors="true"
             src="http://repo1.maven.org/maven2/junit/junit/${junit.version}/junit-${junit.version}.jar"/>
     </target>
-      
+
 </project>
 
