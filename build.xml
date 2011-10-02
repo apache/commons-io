@@ -106,7 +106,7 @@
 
   <!-- Construct compile classpath -->
   <path id="downloaded.lib.classpath">
-    <pathelement location="${download.lib.dir}/junit.jar"/>
+    <pathelement location="${download.lib.dir}/junit-${junit.version}.jar"/>
   </path>
 
 <!-- ========== Test Execution Defaults =================================== -->
@@ -335,9 +335,10 @@
     <target name="download-junit" unless="junit.found">
         <echo message="Downloading junit..."/>
         <mkdir dir="${download.lib.dir}" />
-        <get dest="${download.lib.dir}/junit.jar"
+        <!-- TODO check hash of jar -->
+        <get dest="${download.lib.dir}"
             usetimestamp="true" ignoreerrors="true"
-            src="https://github.com/downloads/KentBeck/junit/junit-4.10.jar"/>
+            src="http://repo1.maven.org/maven2/junit/junit/${junit.version}/junit-${junit.version}.jar"/>
     </target>
       
 </project>
