@@ -55,7 +55,7 @@
   <property name="component.title"         value="Commons IO"/>
 
   <!-- The current version number of this component -->
-  <property name="component.version"       value="2.1-SNAPSHOT"/>
+  <property name="component.version"       value="2.1"/>
 
   <!-- The base directory for component sources -->
   <property name="source.home"             value="src/main/java"/>
