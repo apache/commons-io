@@ -160,8 +160,6 @@
       <id>ggregory</id>
       <email>ggregory@apache.org</email>
       <url>http://www.garygregory.com</url>
-      <organization>Seagull Software</organization>
-      <organizationUrl>http://www.seagullsoftware.com</organizationUrl>
       <timezone>-5</timezone>
     </developer>
   </developers>
