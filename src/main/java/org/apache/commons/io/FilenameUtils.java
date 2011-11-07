@@ -247,7 +247,7 @@ public class FilenameUtils {
      * @since Commons IO 2.0
      */
     public static String normalize(String filename, boolean unixSeparator) {
-        char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+        char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
         return doNormalize(filename, separator, true);
     }
 
