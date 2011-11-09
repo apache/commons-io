@@ -1350,7 +1350,7 @@ public class FilenameUtils {
                 }
                 if (array[i] == '?') {
                     list.add("?");
-                } else if (list.size() == 0 ||
+                } else if (list.isEmpty() ||
                         (i > 0 && list.get(list.size() - 1).equals("*") == false)) {
                     list.add("*");
                 }

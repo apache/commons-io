@@ -116,7 +116,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file) {
-        if (this.fileFilters.size() == 0) {
+        if (this.fileFilters.isEmpty()) {
             return false;
         }
         for (IOFileFilter fileFilter : fileFilters) {
@@ -132,7 +132,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file, final String name) {
-        if (this.fileFilters.size() == 0) {
+        if (this.fileFilters.isEmpty()) {
             return false;
         }
         for (IOFileFilter fileFilter : fileFilters) {
