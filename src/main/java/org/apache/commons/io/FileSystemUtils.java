@@ -507,7 +507,7 @@ public class FileSystemUtils {
                         "Command line returned OS error code '" + proc.exitValue() +
                         "' for command " + Arrays.asList(cmdAttribs));
             }
-            if (lines.size() == 0) {
+            if (lines.isEmpty()) {
                 // unknown problem, throw exception
                 throw new IOException(
                         "Command line did not return any info " +
