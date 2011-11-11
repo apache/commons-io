@@ -324,10 +324,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize((1024 * 1024 * 1024 * 2) - 1), "1 GB");
-//        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
-//        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
-//        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
-//        assertEquals(FileUtils.byteCountToDisplaySize(Long.MAX_VALUE), "7 EB");
+        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
+        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
+        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
+        assertEquals(FileUtils.byteCountToDisplaySize(Long.MAX_VALUE), "7 EB");
         // Other MAX_VALUEs
         assertEquals(FileUtils.byteCountToDisplaySize(Character.MAX_VALUE), "63 KB");
         assertEquals(FileUtils.byteCountToDisplaySize(Short.MAX_VALUE), "31 KB");

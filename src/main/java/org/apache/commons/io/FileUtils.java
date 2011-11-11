@@ -352,14 +352,13 @@ public class FileUtils {
     public static String byteCountToDisplaySize(long size) {
         String displaySize;
 
-//        if (size / ONE_EB > 0) {
-//            displaySize = String.valueOf(size / ONE_EB) + " EB";
-//        } else if (size / ONE_PB > 0) {
-//            displaySize = String.valueOf(size / ONE_PB) + " PB";
-//        } else if (size / ONE_TB > 0) {
-//            displaySize = String.valueOf(size / ONE_TB) + " TB";
-//        } else 
-        if (size / ONE_GB > 0) {
+        if (size / ONE_EB > 0) {
+            displaySize = String.valueOf(size / ONE_EB) + " EB";
+        } else if (size / ONE_PB > 0) {
+            displaySize = String.valueOf(size / ONE_PB) + " PB";
+        } else if (size / ONE_TB > 0) {
+            displaySize = String.valueOf(size / ONE_TB) + " TB";
+        } else if (size / ONE_GB > 0) {
             displaySize = String.valueOf(size / ONE_GB) + " GB";
         } else if (size / ONE_MB > 0) {
             displaySize = String.valueOf(size / ONE_MB) + " MB";
