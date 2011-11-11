@@ -262,7 +262,8 @@
               <!-- limit memory size see IO-161 -->
               <argLine>-Xmx25M</argLine>
             <includes>
-              <include>**/*Test*</include>
+              <!-- Only include test classes, not test data -->
+              <include>**/*Test*.class</include>
             </includes>
             <excludes>
               <exclude>**/*AbstractTestCase*</exclude>
