@@ -601,6 +601,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, lf, null));
         assertTrue(FileUtils.contentEqualsIgnoreEOL(crlf, lf, null));
 
+        // Check the files behave OK when EOL is not ignored
+        assertTrue(FileUtils.contentEquals(cr, cr));
+        assertTrue(FileUtils.contentEquals(crlf, crlf));
+        assertTrue(FileUtils.contentEquals(lf, lf));
+
+        assertFalse(FileUtils.contentEquals(cr, crlf));
+        assertFalse(FileUtils.contentEquals(cr, lf));
+        assertFalse(FileUtils.contentEquals(crlf, lf));
+
         // Equal files
         file1.createNewFile();
         file2.createNewFile();
