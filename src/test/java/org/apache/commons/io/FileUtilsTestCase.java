@@ -539,6 +539,75 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(true, FileUtils.contentEquals(file, file2));
     }
 
+    public void testContentEqualsIgnoreEOL() throws Exception {
+        // Non-existent files
+        File file1 = new File(getTestDirectory(), getName());
+        File file2 = new File(getTestDirectory(), getName() + "2");
+        // both don't  exist
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file1, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file2, file2, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file2, file1, null));
+
+        // Directories
+        try {
+            FileUtils.contentEqualsIgnoreEOL(getTestDirectory(), getTestDirectory(), null);
+            fail("Comparing directories should fail with an IOException");
+        } catch (IOException ioe) {
+            //expected
+        }
+
+        // Different files
+        File tfile1 = new File(getTestDirectory(), getName() + ".txt1");
+        tfile1.deleteOnExit();
+        FileUtils.write(tfile1,"123\r");
+
+        File tfile2 = new File(getTestDirectory(), getName() + ".txt2");
+        tfile1.deleteOnExit();
+        FileUtils.write(tfile2,"123\n");
+
+        File tfile3 = new File(getTestDirectory(), getName() + ".collection");
+        tfile3.deleteOnExit();
+        FileUtils.write(tfile3,"123\r\n2");
+
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile1, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(tfile2, tfile2, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(tfile3, tfile3, null));
+
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile2, null));
+        assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile3, null));
+        assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile2, tfile3, null));
+
+        URL urlCR = getClass().getResource("FileUtilsTestDataCR.dat");
+        assertNotNull(urlCR);
+        File cr = new File(urlCR.getPath());
+        assertTrue(cr.exists());
+
+        URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.dat");
+        assertNotNull(urlCRLF);
+        File crlf = new File(urlCRLF.getPath());
+        assertTrue(crlf.exists());
+
+        URL urlLF = getClass().getResource("FileUtilsTestDataLF.dat");
+        assertNotNull(urlLF);
+        File lf = new File(urlLF.getPath());
+        assertTrue(lf.exists());
+
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, cr, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(crlf, crlf, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(lf, lf, null));
+
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, crlf, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, lf, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(crlf, lf, null));
+
+        // Equal files
+        file1.createNewFile();
+        file2.createNewFile();
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file1, null));
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
+    }
+
     // copyURLToFile
 
     public void testCopyURLToFile() throws Exception {

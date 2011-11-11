@@ -39,6 +39,12 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.1.1" date="TBA">
+      <action dev="sebb" type="add" issue="IO-275" due-to="CJ Aspromgos">
+        FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
+        Added contentEqualsIgnoreEOL methods to both classes
+      </action>        
+    </release>
     <!-- The 2.1 release date is the date RC is cut -->
     <release version="2.1" date="2011-Sep-28">
       <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">

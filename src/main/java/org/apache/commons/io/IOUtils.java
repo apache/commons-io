@@ -1629,6 +1629,44 @@ public class IOUtils {
     }
 
     /**
+     * Compare the contents of two Readers to determine if they are equal or
+     * not, ignoring EOL characters.
+     * <p>
+     * This method buffers the input internally using
+     * <code>BufferedReader</code> if they are not already buffered.
+     *
+     * @param input1  the first reader
+     * @param input2  the second reader
+     * @return true if the content of the readers are equal (ignoring EOL differences),  false otherwise
+     * @throws NullPointerException if either input is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.1.1
+     */
+    public static boolean contentEqualsIgnoreEOL(Reader input1, Reader input2)
+            throws IOException {
+        BufferedReader br1;
+        if (input1 instanceof BufferedReader) {
+            br1 = (BufferedReader) input1;
+        } else {
+            br1 = new BufferedReader(input1);
+        }
+        BufferedReader br2;
+        if (input2 instanceof BufferedReader) {
+            br2 = (BufferedReader) input2;
+        } else {
+            br2 = new BufferedReader(input2);
+        }
+
+        String line1 = br1.readLine();
+        String line2 = br2.readLine();
+        while (line1 != null && line2 != null && line1.equals(line2)) {
+            line1 = br1.readLine();
+            line2 = br2.readLine();
+        }
+        return line1 == null ? (line2 == null ? true : false) : line1.equals(line2);
+    }
+
+    /**
      * Skip bytes from an input byte stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for

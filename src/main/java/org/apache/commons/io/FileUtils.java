@@ -23,7 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -613,6 +615,63 @@ public class FileUtils {
             input1 = new FileInputStream(file1);
             input2 = new FileInputStream(file2);
             return IOUtils.contentEquals(input1, input2);
+
+        } finally {
+            IOUtils.closeQuietly(input1);
+            IOUtils.closeQuietly(input2);
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Compares the contents of two files to determine if they are equal or not.
+     * <p>
+     * This method checks to see if the two files point to the same file, 
+     * before resorting to line-by-line comparison of the contents.
+     * <p>
+     *
+     * @param file1  the first file
+     * @param file2  the second file
+     * @param charsetName the character encoding to be used. 
+     *        May be null, in which case the platform default is used
+     * @return true if the content of the files are equal or neither exists,
+     *         false otherwise
+     * @throws IOException in case of an I/O error
+     * @since 2.1.1
+     * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
+     */
+    public static boolean contentEqualsIgnoreEOL(File file1, File file2, String charsetName) throws IOException {
+        boolean file1Exists = file1.exists();
+        if (file1Exists != file2.exists()) {
+            return false;
+        }
+
+        if (!file1Exists) {
+            // two not existing files are equal
+            return true;
+        }
+
+        if (file1.isDirectory() || file2.isDirectory()) {
+            // don't want to compare directory contents
+            throw new IOException("Can't compare directories, only files");
+        }
+
+        if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
+            // same file
+            return true;
+        }
+
+        Reader input1 = null;
+        Reader input2 = null;
+        try {
+            if (charsetName == null) {
+                input1 = new InputStreamReader(new FileInputStream(file1));
+                input2 = new InputStreamReader(new FileInputStream(file2));
+            } else {
+                input1 = new InputStreamReader(new FileInputStream(file1), charsetName);
+                input2 = new InputStreamReader(new FileInputStream(file2), charsetName);
+            }
+            return IOUtils.contentEqualsIgnoreEOL(input1, input2);
 
         } finally {
             IOUtils.closeQuietly(input1);
