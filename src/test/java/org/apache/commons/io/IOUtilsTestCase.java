@@ -663,4 +663,28 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         testURLToString("US-ASCII");
     }
 
+    public void testcontentEqualsIgnoreEOL() throws Exception {
+        Reader r1; 
+        Reader r2; 
+
+        r1 = new CharArrayReader("".toCharArray());
+        r2 = new CharArrayReader("".toCharArray());
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+
+        r1 = new CharArrayReader("1".toCharArray());
+        r2 = new CharArrayReader("1".toCharArray());
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+
+        r1 = new CharArrayReader("1".toCharArray());
+        r2 = new CharArrayReader("2".toCharArray());
+        assertFalse(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+
+        r1 = new CharArrayReader("123\rabc".toCharArray());
+        r2 = new CharArrayReader("123\nabc".toCharArray());
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+
+        r1 = new CharArrayReader("321".toCharArray());
+        r2 = new CharArrayReader("321\r\n".toCharArray());
+        assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+    }
 }
