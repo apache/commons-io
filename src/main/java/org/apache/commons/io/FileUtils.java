@@ -1430,6 +1430,55 @@ public class FileUtils {
     }
 
     /**
+     * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
+     * <p>
+     * Files are normalized before comparison.
+     * </p>
+     * 
+     * Edge cases:
+     * <ul>
+     * <li>A {@code directory} must not be null: if null, throw IllegalArgumentException</li>
+     * <li>A {@code directory} must be a directory: if not a directory, throw IllegalArgumentException</li>
+     * <li>A directory does not contain itself: return false</li>
+     * <li>A null child file is not contained in any parent: return false</li>
+     * </ul>
+     * 
+     * @param directory
+     *            the file to consider as the parent.
+     * @param child
+     *            the file to consider as the child.
+     * @return true is the candidate leaf is under by the specified composite. False otherwise.
+     * @throws IOException
+     *             if an IO error occurs while checking the files.
+     * @since 2.2
+     */
+    public static boolean directoryContains(final File directory, final File child) throws IOException {
+
+        // Fail fast against NullPointerException
+        if (directory == null) {
+            throw new IllegalArgumentException("Directory must not be null");
+        }
+
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("Not a directory: " + directory);
+        }
+
+        if (child == null) {
+            return false;
+        }
+
+        // Canonicalize paths (normalizes relative paths)
+        String canonicalParent = directory.getCanonicalPath();
+        String canonicalChild = child.getCanonicalPath();
+
+        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
+            return false;
+        }
+
+        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
+    }
+    
+    /**
      * Cleans a directory without deleting it.
      *
      * @param directory directory to clean
@@ -2546,4 +2595,5 @@ public class FileUtils {
             return true;
         }
     }
+
 }
