@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -687,4 +688,52 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         r2 = new CharArrayReader("321\r\n".toCharArray());
         assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
     }
+
+    public void testReadStream() throws Exception{
+        final int size = 1027;
+
+        byte[] buffer = new byte[size];
+        
+        InputStream input = new ByteArrayInputStream(new byte [size]);
+        try {
+            IOUtils.readFully(input, buffer, 0, -1);
+            fail("Should have failed with IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // expected
+        }
+        IOUtils.readFully(input, buffer, 0, 0);
+        IOUtils.readFully(input, buffer, 0, size-1);
+        try {
+            IOUtils.readFully(input, buffer, 0, 2);
+            fail("Should have failed with EOFxception");
+        } catch (EOFException expected) {
+            // expected
+        }
+        IOUtils.closeQuietly(input);
+
+    }
+
+    public void testReadReader() throws Exception{
+        final int size = 1027;
+
+        char [] buffer = new char[size];
+        
+        Reader input = new CharArrayReader(new char[size]);
+        IOUtils.readFully(input, buffer, 0, 0);
+        IOUtils.readFully(input, buffer, 0, size-3);
+        try {
+            IOUtils.readFully(input, buffer, 0, -1);
+            fail("Should have failed with IllegalArgumentException");
+        } catch (IllegalArgumentException expected){
+            // expected
+        }
+        try {
+            IOUtils.readFully(input, buffer, 0, 5);
+            fail("Should have failed with EOFException");
+        } catch (EOFException expected) {
+            // expected
+        }
+        IOUtils.closeQuietly(input);
+    }
+
 }
