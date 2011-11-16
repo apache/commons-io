@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
@@ -309,6 +310,39 @@ public class IOUtils {
      * @since Commons IO 2.0
      */
     public static void closeQuietly(Socket sock){
+        if (sock != null){
+            try {
+                sock.close();
+            } catch (IOException ioe) {
+                // ignored
+            }
+        }
+    }
+
+    /**
+     * Unconditionally close a <code>ServerSocket</code>.
+     * <p>
+     * Equivalent to {@link ServerSocket#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   ServerSocket socket = null;
+     *   try {
+     *       socket = new ServerSocket();
+     *       // process socket
+     *       socket.close();
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(socket);
+     *   }
+     * </pre>
+     *
+     * @param sock the ServerSocket to close, may be null or already closed
+     * @since 2.2
+     */
+    public static void closeQuietly(ServerSocket sock){
         if (sock != null){
             try {
                 sock.close();
