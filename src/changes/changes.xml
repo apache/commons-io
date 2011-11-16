@@ -39,7 +39,10 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.1.1" date="TBA">
+    <release version="2.2" date="TBA">
+      <action dev="sebb" type="add" issue="IO-290" due-to="sebb">
+        Add read/readFully methods to IOUtils
+      </action>        
       <action dev="sebb" type="add" issue="IO-288" due-to="Georg Henzler">
         Supply a ReversedLinesFileReader
       </action>        

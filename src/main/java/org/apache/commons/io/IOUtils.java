@@ -1791,7 +1791,174 @@ public class IOUtils {
     public static void skipFully(Reader input, long toSkip) throws IOException {
         long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
+            throw new EOFException("Chars to skip: "+toSkip+" actual: "+skipped);
         }
+    }
+    
+
+    /**
+     * Read characters from an input character stream.
+     * This implementation guarantees that it will read as many characters
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link Reader}.
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @param offset inital offset into buffer
+     * @param length length to read, must be >= 0
+     * @return actual length read; may be less than requested if EOF was reached
+     * @throws IOException if a read error occurs
+     */
+    public static int read(Reader input, char[] buffer, int offset, int length) throws IOException {
+        if (length < 0){
+            throw new IllegalArgumentException("Length must not be negative: "+length);
+        }
+        int remaining = length;
+        while ( remaining > 0 ) {
+            int location = ( length - remaining );
+            int count = input.read( buffer, location, remaining );
+            if ( -1 == count ) { // EOF
+                break;
+            }
+            remaining -= count;
+        }
+        return length - remaining;
+    }
+
+    /**
+     * Read characters from an input character stream.
+     * This implementation guarantees that it will read as many characters
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link Reader}.
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @return actual length read; may be less than requested if EOF was reached
+     * @throws IOException if a read error occurs
+     */
+    public static int read(Reader input, char[] buffer) throws IOException {
+        return read(input, buffer, 0, buffer.length);
+    }
+
+    /**
+     * Read bytes from an input stream.
+     * This implementation guarantees that it will read as many bytes
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link InputStream}.
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @param offset inital offset into buffer
+     * @param length length to read, must be >= 0
+     * @return actual length read; may be less than requested if EOF was reached
+     * @throws IOException if a read error occurs
+     */
+    public static int read(InputStream input, byte[] buffer, int offset, int length) throws IOException {
+        if (length < 0){
+            throw new IllegalArgumentException("Length must not be negative: "+length);
+        }
+        int remaining = length;
+        while ( remaining > 0 ) {
+            int location = ( length - remaining );
+            int count = input.read( buffer, location, remaining );
+            if ( -1 == count ) { // EOF
+                break;
+            }
+            remaining -= count;
+        }
+        return length - remaining;
+    }
+    
+    /**
+     * Read bytes from an input stream.
+     * This implementation guarantees that it will read as many bytes
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link InputStream}.
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @return actual length read; may be less than requested if EOF was reached
+     * @throws IOException if a read error occurs
+     */
+    public static int read(InputStream input, byte[] buffer) throws IOException {
+        return read(input, buffer, 0, buffer.length);
+    }
+
+    /**
+     * Read the requested number of characters or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link Reader#read(char[], int, int)} may
+     * not skip as many characters as requested (most likely because of reaching EOF).
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @param offset inital offset into buffer
+     * @param length length to read, must be >= 0
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if length is negative
+     * @throws EOFException if the number of characters read was incorrect
+     */
+    public static void readFully(Reader input, char[] buffer, int offset, int length) throws IOException {
+        int actual = read(input, buffer, offset, length);
+        if (actual != length){
+            throw new EOFException("Length to read: "+length+" actual: "+actual);            
+        }
+    }
+
+    /**
+     * Read the requested number of characters or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link Reader#read(char[], int, int)} may
+     * not skip as many characters as requested (most likely because of reaching EOF).
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if length is negative
+     * @throws EOFException if the number of characters read was incorrect
+     */
+    public static void readFully(Reader input, char[] buffer) throws IOException {
+        readFully(input, buffer, 0, buffer.length);
+    }
+
+    /**
+     * Read the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
+     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * @param offset inital offset into buffer
+     * @param length length to read, must be >= 0
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if length is negative
+     * @throws EOFException if the number of bytes read was incorrect
+     */
+    public static void readFully(InputStream input, byte[] buffer, int offset, int length) throws IOException {
+        int actual = read(input, buffer, offset, length);
+        if (actual != length){
+            throw new EOFException("Length to read: "+length+" actual: "+actual);            
+        }
+    }
+
+    /**
+     * Read the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
+     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * 
+     * @param input where to read input from
+     * @param buffer destination
+     * 
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if length is negative
+     * @throws EOFException if the number of bytes read was incorrect
+     */
+    public static void readFully(InputStream input, byte[] buffer) throws IOException {
+        readFully(input, buffer, 0, buffer.length);
     }
 }
