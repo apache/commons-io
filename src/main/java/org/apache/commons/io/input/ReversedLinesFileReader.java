@@ -53,7 +53,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file
      *            the file to be read
-     * @throws IOException
+     * @throws IOException  if an I/O error occurs
      */
     public ReversedLinesFileReader(final File file) throws IOException {
         this(file, 4096, Charset.defaultCharset().toString());
@@ -69,7 +69,7 @@ public class ReversedLinesFileReader implements Closeable {
      *            match with the block size of the underlying file system).
      * @param encoding
      *            the encoding of the file
-     * @throws IOException
+     * @throws IOException  if an I/O error occurs
      */
     public ReversedLinesFileReader(final File file, final int blockSize, final String encoding) throws IOException {
         this.blockSize = blockSize;
@@ -104,12 +104,15 @@ public class ReversedLinesFileReader implements Closeable {
             // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
             byteDecrement = 1;
         } else if(charset == Charset.forName("UTF-16BE") || charset == Charset.forName("UTF-16LE")) {
-            // UTF-16 new line sequences are not allowed as second tuple of four byte sequences, however byte order has to be specified
+            // UTF-16 new line sequences are not allowed as second tuple of four byte sequences,
+            // however byte order has to be specified
             byteDecrement = 2;
         } else if(charset == Charset.forName("UTF-16")) {
-            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
+            throw new UnsupportedEncodingException(
+                    "For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
         } else {
-            throw new UnsupportedEncodingException("Encoding "+encoding+" is not supported yet (feel free to submit a patch)");
+            throw new UnsupportedEncodingException(
+                    "Encoding "+encoding+" is not supported yet (feel free to submit a patch)");
         }
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
         newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
@@ -122,7 +125,7 @@ public class ReversedLinesFileReader implements Closeable {
      * Returns the lines of the file from bottom to top.
      *
      * @return the next line or null if the start of the file is reached
-     * @throws IOException
+     * @throws IOException  if an I/O error occurs
      */
     public String readLine() throws IOException {
 
@@ -148,6 +151,8 @@ public class ReversedLinesFileReader implements Closeable {
 
     /**
      * Closes underlying resources.
+     *
+     * @throws IOException  if an I/O error occurs
      */
     public void close() throws IOException {
         randomAccessFile.close();
