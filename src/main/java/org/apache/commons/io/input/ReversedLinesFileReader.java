@@ -31,256 +31,256 @@ import java.nio.charset.CharsetEncoder;
  */
 public class ReversedLinesFileReader implements Closeable {
 
-	private final int blockSize;
-	private final String encoding;
+    private final int blockSize;
+    private final String encoding;
 
-	private final RandomAccessFile randomAccessFile;
+    private final RandomAccessFile randomAccessFile;
 
-	private final long totalByteLength;
-	private final long totalBlockCount;
+    private final long totalByteLength;
+    private final long totalBlockCount;
 
-	private final byte[][] newLineSequences;
-	private final int avoidNewlineSplitBufferSize;
-	private final int byteDecrement;
-	
+    private final byte[][] newLineSequences;
+    private final int avoidNewlineSplitBufferSize;
+    private final int byteDecrement;
+
     private FilePart currentFilePart;
 
-	private boolean trailingNewlineOfFileSkipped = false;
+    private boolean trailingNewlineOfFileSkipped = false;
 
-	/**
-	 * Creates a ReversedLinesFileReader with default block size of 4KB and the
-	 * platform's default encoding.
-	 *
-	 * @param file
-	 *            the file to be read
-	 * @throws IOException
-	 */
-	public ReversedLinesFileReader(final File file) throws IOException {
-		this(file, 4096, Charset.defaultCharset().toString());
-	}
+    /**
+     * Creates a ReversedLinesFileReader with default block size of 4KB and the
+     * platform's default encoding.
+     *
+     * @param file
+     *            the file to be read
+     * @throws IOException
+     */
+    public ReversedLinesFileReader(final File file) throws IOException {
+        this(file, 4096, Charset.defaultCharset().toString());
+    }
 
-	/**
-	 * Creates a ReversedLinesFileReader with the given block size and encoding.
-	 *
-	 * @param file
-	 *            the file to be read
-	 * @param blockSize
-	 *            size of the internal buffer (for ideal performance this should
-	 *            match with the block size of the underlying file system).
-	 * @param encoding
-	 *            the encoding of the file
-	 * @throws IOException
-	 */
-	public ReversedLinesFileReader(final File file, final int blockSize, final String encoding) throws IOException {
-		this.blockSize = blockSize;
-		this.encoding = encoding;
-		
-		randomAccessFile = new RandomAccessFile(file, "r");
-		totalByteLength = randomAccessFile.length();
-		int lastBlockLength = (int) (totalByteLength % blockSize);
-		if (lastBlockLength > 0) {
-	        totalBlockCount = totalByteLength / blockSize + 1;
-		} else {
+    /**
+     * Creates a ReversedLinesFileReader with the given block size and encoding.
+     *
+     * @param file
+     *            the file to be read
+     * @param blockSize
+     *            size of the internal buffer (for ideal performance this should
+     *            match with the block size of the underlying file system).
+     * @param encoding
+     *            the encoding of the file
+     * @throws IOException
+     */
+    public ReversedLinesFileReader(final File file, final int blockSize, final String encoding) throws IOException {
+        this.blockSize = blockSize;
+        this.encoding = encoding;
+
+        randomAccessFile = new RandomAccessFile(file, "r");
+        totalByteLength = randomAccessFile.length();
+        int lastBlockLength = (int) (totalByteLength % blockSize);
+        if (lastBlockLength > 0) {
+            totalBlockCount = totalByteLength / blockSize + 1;
+        } else {
             totalBlockCount = totalByteLength / blockSize;
-			if (totalByteLength > 0) {
-				lastBlockLength = blockSize;
-			}
-		}
-		currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
+            if (totalByteLength > 0) {
+                lastBlockLength = blockSize;
+            }
+        }
+        currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
 
-		// --- check & prepare encoding ---
-		Charset charset = Charset.forName(encoding);
-		CharsetEncoder charsetEncoder = charset.newEncoder();
-		float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
-		if(maxBytesPerChar==1f) {
-			// all one byte encodings are no problem
-			byteDecrement = 1;
-		} else if(charset == Charset.forName("UTF-8")) {
-			// UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
-			// http://en.wikipedia.org/wiki/UTF-8
-			byteDecrement = 1;
-		} else if(charset == Charset.forName("Shift_JIS")) {
-			// Same as for UTF-8
-			// http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
-			byteDecrement = 1;
-		} else if(charset == Charset.forName("UTF-16BE") || charset == Charset.forName("UTF-16LE")) {
-			// UTF-16 new line sequences are not allowed as second tuple of four byte sequences, however byte order has to be specified
-			byteDecrement = 2;
-		} else if(charset == Charset.forName("UTF-16")) {
-			throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
-		} else {
-			throw new UnsupportedEncodingException("Encoding "+encoding+" is not supported yet (feel free to submit a patch)");
-		}
-		// NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
-		newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
-		
-		avoidNewlineSplitBufferSize = newLineSequences[0].length;
+        // --- check & prepare encoding ---
+        Charset charset = Charset.forName(encoding);
+        CharsetEncoder charsetEncoder = charset.newEncoder();
+        float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
+        if(maxBytesPerChar==1f) {
+            // all one byte encodings are no problem
+            byteDecrement = 1;
+        } else if(charset == Charset.forName("UTF-8")) {
+            // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
+            // http://en.wikipedia.org/wiki/UTF-8
+            byteDecrement = 1;
+        } else if(charset == Charset.forName("Shift_JIS")) {
+            // Same as for UTF-8
+            // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+            byteDecrement = 1;
+        } else if(charset == Charset.forName("UTF-16BE") || charset == Charset.forName("UTF-16LE")) {
+            // UTF-16 new line sequences are not allowed as second tuple of four byte sequences, however byte order has to be specified
+            byteDecrement = 2;
+        } else if(charset == Charset.forName("UTF-16")) {
+            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
+        } else {
+            throw new UnsupportedEncodingException("Encoding "+encoding+" is not supported yet (feel free to submit a patch)");
+        }
+        // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
+        newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
 
-	}
+        avoidNewlineSplitBufferSize = newLineSequences[0].length;
 
-	/**
-	 * Returns the lines of the file from bottom to top.
-	 *
-	 * @return the next line or null if the start of the file is reached
-	 * @throws IOException
-	 */
-	public String readLine() throws IOException {
+    }
 
-		String line = currentFilePart.readLine();
-		while (line == null) {
-			currentFilePart = currentFilePart.rollOver();
-			if (currentFilePart != null) {
-				line = currentFilePart.readLine();
-			} else {
-				// no more fileparts: we're done, leave line set to null
-				break;
-			}
-		}
-		
-		// aligned behaviour wiht BufferedReader that doesn't return a last, emtpy line
-		if("".equals(line) && !trailingNewlineOfFileSkipped) {
-			trailingNewlineOfFileSkipped = true;
-			line = readLine();
-		}
-		
-		return line;
-	}
+    /**
+     * Returns the lines of the file from bottom to top.
+     *
+     * @return the next line or null if the start of the file is reached
+     * @throws IOException
+     */
+    public String readLine() throws IOException {
 
-	/**
-	 * Closes underlying resources.
-	 */
-	public void close() throws IOException {
-		randomAccessFile.close();
-	}
+        String line = currentFilePart.readLine();
+        while (line == null) {
+            currentFilePart = currentFilePart.rollOver();
+            if (currentFilePart != null) {
+                line = currentFilePart.readLine();
+            } else {
+                // no more fileparts: we're done, leave line set to null
+                break;
+            }
+        }
 
-	private class FilePart {
-		private final long no;
-		private final byte[] data;
+        // aligned behaviour wiht BufferedReader that doesn't return a last, emtpy line
+        if("".equals(line) && !trailingNewlineOfFileSkipped) {
+            trailingNewlineOfFileSkipped = true;
+            line = readLine();
+        }
 
-		private byte[] leftOver;
+        return line;
+    }
 
-		private int currentLastBytePos;
+    /**
+     * Closes underlying resources.
+     */
+    public void close() throws IOException {
+        randomAccessFile.close();
+    }
 
-		private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
-			this.no = no;
-			int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
-			this.data = new byte[dataLength];
-			final long off = (no - 1) * blockSize;
+    private class FilePart {
+        private final long no;
+        private final byte[] data;
 
-			// read data
-			if (no > 0 /* file not empty */) {
-				randomAccessFile.seek(off);
-				final int countRead = randomAccessFile.read(data, 0, length);
-				if (countRead != length) {
-					throw new IllegalStateException("Count of requested bytes and actually read bytes don't match");
-				}
-			}
-			// copy left over part into data arr
-			if (leftOverOfLastFilePart != null) {
-				System.arraycopy(leftOverOfLastFilePart, 0, data, length, leftOverOfLastFilePart.length);
-			}
-			this.currentLastBytePos = data.length - 1;
-			this.leftOver = null;
-		}
+        private byte[] leftOver;
 
-		private FilePart rollOver() throws IOException {
+        private int currentLastBytePos;
 
-			if (currentLastBytePos > -1) {
-				throw new IllegalStateException("Current currentLastCharPos unexpectedly positive... "
-						+ "last readLine() should have returned something! currentLastCharPos=" + currentLastBytePos);
-			}
+        private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
+            this.no = no;
+            int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
+            this.data = new byte[dataLength];
+            final long off = (no - 1) * blockSize;
 
-			if (no > 1) {
-				return new FilePart(no - 1, blockSize, leftOver);
-			} else {
-				// NO 1 was the last FilePart, we're finished
-				if (leftOver != null) {
-					throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
-							+ new String(leftOver, encoding));
-				}
-				return null;
-			}
-		}
+            // read data
+            if (no > 0 /* file not empty */) {
+                randomAccessFile.seek(off);
+                final int countRead = randomAccessFile.read(data, 0, length);
+                if (countRead != length) {
+                    throw new IllegalStateException("Count of requested bytes and actually read bytes don't match");
+                }
+            }
+            // copy left over part into data arr
+            if (leftOverOfLastFilePart != null) {
+                System.arraycopy(leftOverOfLastFilePart, 0, data, length, leftOverOfLastFilePart.length);
+            }
+            this.currentLastBytePos = data.length - 1;
+            this.leftOver = null;
+        }
 
-		private String readLine() throws IOException {
+        private FilePart rollOver() throws IOException {
 
-			String line = null;
-			int newLineMatchByteCount;
-			
-			boolean isLastFilePart = (no == 1);			
+            if (currentLastBytePos > -1) {
+                throw new IllegalStateException("Current currentLastCharPos unexpectedly positive... "
+                        + "last readLine() should have returned something! currentLastCharPos=" + currentLastBytePos);
+            }
 
-			int i = currentLastBytePos;
-			while (i > -1) {
-				
-				if (!isLastFilePart && i < avoidNewlineSplitBufferSize) {
-					// avoidNewlineSplitBuffer: for all except the last file part we
-					// take a few bytes to the next file part to avoid splitting of newlines
-					createLeftOver();
-					break; // skip last few bytes and leave it to the next file part
-				}
-				
-				// --- check for newline ---
-				if ((newLineMatchByteCount = getNewLineMatchByteCount(data, i)) > 0 /* found newline */) {
-					final int lineStart = i + 1;
-					int lineLengthBytes = currentLastBytePos - lineStart + 1;
+            if (no > 1) {
+                return new FilePart(no - 1, blockSize, leftOver);
+            } else {
+                // NO 1 was the last FilePart, we're finished
+                if (leftOver != null) {
+                    throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
+                            + new String(leftOver, encoding));
+                }
+                return null;
+            }
+        }
 
-					if (lineLengthBytes < 0) {
-						throw new IllegalStateException("Unexpected negative line length="+lineLengthBytes);
-					}
-					byte[] lineData = new byte[lineLengthBytes];
-					System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
+        private String readLine() throws IOException {
 
-					line = new String(lineData, encoding);
-					
-					currentLastBytePos = i - newLineMatchByteCount;
-					break; // found line
-				}
+            String line = null;
+            int newLineMatchByteCount;
 
-				// --- move cursor ---
-				i -= byteDecrement;
+            boolean isLastFilePart = (no == 1);
 
-				// --- end of file part handling ---
-				if (i < 0) {
-					createLeftOver();
-					break; // end of file part
-				}
-			}
-			
-			// --- last file part handling ---
-			if (isLastFilePart && leftOver != null) {
-				// there will be no line break anymore, this is the first line of the file
-				line = new String(leftOver, encoding);
-				leftOver = null;
-			}			
+            int i = currentLastBytePos;
+            while (i > -1) {
 
-			return line;
-		}
+                if (!isLastFilePart && i < avoidNewlineSplitBufferSize) {
+                    // avoidNewlineSplitBuffer: for all except the last file part we
+                    // take a few bytes to the next file part to avoid splitting of newlines
+                    createLeftOver();
+                    break; // skip last few bytes and leave it to the next file part
+                }
 
-		private void createLeftOver() {
-			int lineLengthBytes = currentLastBytePos + 1;
-			if (lineLengthBytes > 0) {
-				// create left over for next block
-				leftOver = new byte[lineLengthBytes];
-				System.arraycopy(data, 0, leftOver, 0, lineLengthBytes);
-			} else {
-				leftOver = null;
-			}
-			currentLastBytePos = -1;
-		}
+                // --- check for newline ---
+                if ((newLineMatchByteCount = getNewLineMatchByteCount(data, i)) > 0 /* found newline */) {
+                    final int lineStart = i + 1;
+                    int lineLengthBytes = currentLastBytePos - lineStart + 1;
 
-		private int getNewLineMatchByteCount(byte[] data, int i) {
-			for (byte[] newLineSequence : newLineSequences) {
-				boolean match = true;
-				for (int j = newLineSequence.length - 1; j >= 0; j--) {
-					int k = i + j - (newLineSequence.length - 1);
-					match &= k >= 0 && data[k] == newLineSequence[j];
-				}
-				if (match) {
-					return newLineSequence.length;
-				}
-			}
-			return 0;
-		}
-	}
+                    if (lineLengthBytes < 0) {
+                        throw new IllegalStateException("Unexpected negative line length="+lineLengthBytes);
+                    }
+                    byte[] lineData = new byte[lineLengthBytes];
+                    System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
+
+                    line = new String(lineData, encoding);
+
+                    currentLastBytePos = i - newLineMatchByteCount;
+                    break; // found line
+                }
+
+                // --- move cursor ---
+                i -= byteDecrement;
+
+                // --- end of file part handling ---
+                if (i < 0) {
+                    createLeftOver();
+                    break; // end of file part
+                }
+            }
+
+            // --- last file part handling ---
+            if (isLastFilePart && leftOver != null) {
+                // there will be no line break anymore, this is the first line of the file
+                line = new String(leftOver, encoding);
+                leftOver = null;
+            }
+
+            return line;
+        }
+
+        private void createLeftOver() {
+            int lineLengthBytes = currentLastBytePos + 1;
+            if (lineLengthBytes > 0) {
+                // create left over for next block
+                leftOver = new byte[lineLengthBytes];
+                System.arraycopy(data, 0, leftOver, 0, lineLengthBytes);
+            } else {
+                leftOver = null;
+            }
+            currentLastBytePos = -1;
+        }
+
+        private int getNewLineMatchByteCount(byte[] data, int i) {
+            for (byte[] newLineSequence : newLineSequences) {
+                boolean match = true;
+                for (int j = newLineSequence.length - 1; j >= 0; j--) {
+                    int k = i + j - (newLineSequence.length - 1);
+                    match &= k >= 0 && data[k] == newLineSequence[j];
+                }
+                if (match) {
+                    return newLineSequence.length;
+                }
+            }
+            return 0;
+        }
+    }
 
 }

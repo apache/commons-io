@@ -28,40 +28,40 @@ import org.junit.Test;
 
 
 public class ReversedLinesFileReaderTestSimple {
-	
+
     private ReversedLinesFileReader reversedLinesFileReader;
 
-	@After
-	public void closeReader() {
-		try {
-			reversedLinesFileReader.close();
-		} catch(Exception e) {
-			// ignore
-		}
-	}
-	
-	@Test
-	public void testFileSizeIsExactMultipleOfBlockSize() throws URISyntaxException, IOException {
-		int blockSize = 10;
-		File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
-		reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize, "ISO-8859-1");
-		String testLine = "123456789";
-		assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
-		assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
-	}	
-	
-	@Test(expected=UnsupportedEncodingException.class)
-	public void testUnsupportedEncodingUTF16() throws URISyntaxException, IOException {
-		File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-		new ReversedLinesFileReader(testFileEmpty, 4096, "UTF-16");
-	}
-	
-	@Test(expected=UnsupportedEncodingException.class)
-	public void testUnsupportedEncodingBig5() throws URISyntaxException, IOException {
-		File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-		new ReversedLinesFileReader(testFileEncodingBig5, 4096, "Big5");
-	}	
-	
+    @After
+    public void closeReader() {
+        try {
+            reversedLinesFileReader.close();
+        } catch(Exception e) {
+            // ignore
+        }
+    }
+
+    @Test
+    public void testFileSizeIsExactMultipleOfBlockSize() throws URISyntaxException, IOException {
+        int blockSize = 10;
+        File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
+        reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize, "ISO-8859-1");
+        String testLine = "123456789";
+        assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
+    }
+
+    @Test(expected=UnsupportedEncodingException.class)
+    public void testUnsupportedEncodingUTF16() throws URISyntaxException, IOException {
+        File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
+        new ReversedLinesFileReader(testFileEmpty, 4096, "UTF-16");
+    }
+
+    @Test(expected=UnsupportedEncodingException.class)
+    public void testUnsupportedEncodingBig5() throws URISyntaxException, IOException {
+        File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
+        new ReversedLinesFileReader(testFileEncodingBig5, 4096, "Big5");
+    }
+
 
 
 }
