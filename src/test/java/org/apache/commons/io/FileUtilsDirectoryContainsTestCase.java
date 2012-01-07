@@ -145,6 +145,18 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.directoryContains(top, file));
     }
 
+    /**
+     * Test to demonstrate a file which does not exist returns true
+     * @throws IOException
+     */
+    @Test
+    public void testFileDoesNotExistBug() throws IOException {
+        final File file = new File(top, "DOESNOTEXIST");
+        assertTrue("Check directory exists", top.exists());
+        assertFalse("Check file does not exist", file.exists());
+        assertTrue("Show Bug", FileUtils.directoryContains(top, file)); /** should be false */
+    }
+
     @Test
     public void testUnrealizedContainment() throws IOException {
         final File dir = new File("DOESNOTEXIST");
