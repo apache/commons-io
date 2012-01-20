@@ -35,6 +35,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.Selector;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -319,6 +320,39 @@ public class IOUtils {
         }
     }
 
+    /**
+     * Unconditionally close a <code>Selector</code>.
+     * <p>
+     * Equivalent to {@link Selector#close()}, except any exceptions will be ignored.
+     * This is typically used in finally blocks.
+     * <p>
+     * Example code:
+     * <pre>
+     *   Selector selector = null;
+     *   try {
+     *       selector = Selector.open();
+     *       // process socket
+     *       
+     *   } catch (Exception e) {
+     *       // error handling
+     *   } finally {
+     *       IOUtils.closeQuietly(selector);
+     *   }
+     * </pre>
+     *
+     * @param selector the Selector to close, may be null or already closed
+     * @since 2.2
+     */
+    public static void closeQuietly(Selector selector){
+        if (selector != null){
+            try {
+              selector.close();
+            } catch (IOException ioe) {
+                // ignored
+            }
+        }
+    }
+    
     /**
      * Unconditionally close a <code>ServerSocket</code>.
      * <p>
