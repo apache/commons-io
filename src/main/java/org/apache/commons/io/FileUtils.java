@@ -1451,6 +1451,7 @@ public class FileUtils {
      * @throws IOException
      *             if an IO error occurs while checking the files.
      * @since 2.2
+     * @see FilenameUtils#directoryContains(String, String)
      */
     public static boolean directoryContains(final File directory, final File child) throws IOException {
         
