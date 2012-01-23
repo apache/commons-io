@@ -1453,31 +1453,31 @@ public class FileUtils {
      * @since 2.2
      */
     public static boolean directoryContains(final File directory, final File child) throws IOException {
-
+        
         // Fail fast against NullPointerException
         if (directory == null) {
             throw new IllegalArgumentException("Directory must not be null");
         }
-
+    
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Not a directory: " + directory);
         }
-
+    
         if (child == null) {
             return false;
         }
-
+    
+        if (!directory.exists() || !child.exists()) {
+            return false;
+        }
+    
         // Canonicalize paths (normalizes relative paths)
         String canonicalParent = directory.getCanonicalPath();
         String canonicalChild = child.getCanonicalPath();
-
-        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
-            return false;
-        }
-
-        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
-    }
     
+        return FilenameUtils.directoryContains(canonicalParent, canonicalChild);
+    }
+
     /**
      * Cleans a directory without deleting it.
      *
