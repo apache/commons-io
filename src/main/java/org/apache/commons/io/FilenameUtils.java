@@ -534,21 +534,22 @@ public class FilenameUtils {
      * @since 2.2
      * @see FileUtils#directoryContains(File, File)
      */
-    public static boolean directoryContains(final String canonicalParent, final String canonicalChild) throws IOException {
-        
+    public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
+            throws IOException {
+
         // Fail fast against NullPointerException
         if (canonicalParent == null) {
             throw new IllegalArgumentException("Directory must not be null");
         }
-    
+
         if (canonicalChild == null) {
             return false;
         }
-        
+
         if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
             return false;
         }
-    
+
         return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
     }
 
