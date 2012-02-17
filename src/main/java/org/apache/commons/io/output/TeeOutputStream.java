@@ -36,7 +36,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      * @param out the main OutputStream
      * @param branch the second OutputStream
      */
-    public TeeOutputStream( OutputStream out, OutputStream branch ) {
+    public TeeOutputStream(OutputStream out, OutputStream branch) {
         super(out);
         this.branch = branch;
     }
@@ -87,12 +87,24 @@ public class TeeOutputStream extends ProxyOutputStream {
     }
 
     /**
-     * Closes both streams. 
-     * @throws IOException if an I/O error occurs
+     * Closes both output streams.
+     * 
+     * If closing the main output stream throws an exception, attempt to close the branch output stream.
+     * 
+     * If closing the main and branch output streams both throw exceptions, which exceptions is thrown by this method is
+     * currently unspecified and subject to change.
+     * 
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
-    public void close() throws IOException {
-        super.close();
+    public void close() throws IOException {        
+        try {
+            super.close();
+        } catch (IOException e) {
+            this.branch.close();
+            throw e;
+        }
         this.branch.close();
     }
 
