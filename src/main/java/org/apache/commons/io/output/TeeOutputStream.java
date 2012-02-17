@@ -98,14 +98,12 @@ public class TeeOutputStream extends ProxyOutputStream {
      *             if an I/O error occurs
      */
     @Override
-    public void close() throws IOException {        
+    public void close() throws IOException {
         try {
             super.close();
-        } catch (IOException e) {
+        } finally {
             this.branch.close();
-            throw e;
         }
-        this.branch.close();
     }
 
 }
