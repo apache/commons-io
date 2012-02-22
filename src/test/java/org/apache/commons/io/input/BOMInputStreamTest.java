@@ -362,14 +362,22 @@ public class BOMInputStreamTest extends TestCase {
     }
     
     public void testReadTwiceWithoutBOM() throws Exception {
-    	InputStream inputStream = this.getClass().getResourceAsStream("/org/apache/commons/io/testfileNoBOM.xml");
-    	Assert.assertNotNull(inputStream);
-    	BOMInputStream bomInputStream = new BOMInputStream(inputStream);
-    	bomInputStream.mark(1000000);
+        this.readBOMInputStreamTwice("/org/apache/commons/io/testfileNoBOM.xml");
+    }
 
-    	this.readFile(bomInputStream);
-    	bomInputStream.reset();
-    	this.readFile(bomInputStream);
+    public void testReadTwiceWithBOM() throws Exception {
+        this.readBOMInputStreamTwice("/org/apache/commons/io/testfileBOM.xml");
+    }
+
+    public void readBOMInputStreamTwice(String resource) throws Exception {
+        InputStream inputStream = this.getClass().getResourceAsStream(resource);
+        Assert.assertNotNull(inputStream);
+        BOMInputStream bomInputStream = new BOMInputStream(inputStream);
+        bomInputStream.mark(1000000);
+
+        this.readFile(bomInputStream);
+        bomInputStream.reset();
+        this.readFile(bomInputStream);
     }
 
     private void readFile(BOMInputStream bomInputStream) throws Exception {
