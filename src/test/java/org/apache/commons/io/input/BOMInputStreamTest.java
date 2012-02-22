@@ -23,6 +23,7 @@ import java.io.InputStream;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.junit.Assert;
 
 /**
  * Test case for {@link BOMInputStream}.
@@ -358,6 +359,25 @@ public class BOMInputStreamTest extends TestCase {
         } catch (IllegalArgumentException e) {
             // expected
         }
+    }
+    
+    public void testReadTwiceWithoutBOM() throws Exception {
+    	InputStream inputStream = this.getClass().getResourceAsStream("/org/apache/commons/io/testfileNoBOM.xml");
+    	Assert.assertNotNull(inputStream);
+    	BOMInputStream bomInputStream = new BOMInputStream(inputStream);
+    	bomInputStream.mark(1000000);
+
+    	this.readFile(bomInputStream);
+    	bomInputStream.reset();
+    	this.readFile(bomInputStream);
+    }
+
+    private void readFile(BOMInputStream bomInputStream) throws Exception {
+        int bytes = 0;
+        byte[] bytesFromStream = new byte[100];
+        do {
+            bytes = bomInputStream.read(bytesFromStream);
+        } while (bytes > 0);
     }
 
     // this is here for coverage
