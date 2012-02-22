@@ -165,6 +165,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public ByteOrderMark getBOM() throws IOException {
         if (firstBytes == null) {
+            fbLength = 0;
             int max = 0;
             for (ByteOrderMark bom : boms) {
                 max = Math.max(max, bom.length());
