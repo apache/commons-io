@@ -43,7 +43,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" issue="IO-303" due-to="fabian.barney">
         TeeOutputStream does not call branch.close() when main.close() throws an exception 
       </action>        
-      <action dev="ggregory" type="add" issue="IO-302" due-to="jsteuerwald">
+      <action dev="ggregory" type="add" issue="IO-302" due-to="jsteuerwald, detinho">
         ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times
       </action>        
       <action dev="ggregory" type="add" issue="IO-301" due-to="kaykay.unique">
