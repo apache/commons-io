@@ -109,6 +109,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     public void testCloseSelectorIOException() {
         Selector selector = new SelectorAdapter() {
+            @Override
             public void close() throws IOException {
                 throw new IOException();
             }

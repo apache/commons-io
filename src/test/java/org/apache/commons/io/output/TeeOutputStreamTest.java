@@ -31,6 +31,7 @@ public class TeeOutputStreamTest extends TestCase {
 
     private static class ExceptionOnCloseByteArrayOutputStream extends ByteArrayOutputStream {
 
+        @Override
         public void close() throws IOException {
             throw new IOException();
         }
@@ -40,6 +41,7 @@ public class TeeOutputStreamTest extends TestCase {
 
         boolean closed;
 
+        @Override
         public void close() throws IOException {
             super.close();
             closed = true;
