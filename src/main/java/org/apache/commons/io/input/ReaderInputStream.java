@@ -92,7 +92,7 @@ public class ReaderInputStream extends InputStream {
      * as it is only used to transfer data from the decoder to the
      * buffer provided by the caller.
      */
-    private final ByteBuffer encoderOut = ByteBuffer.allocate(128);
+    private final ByteBuffer encoderOut;
 
     private CoderResult lastCoderResult;
     private boolean endOfInput;
@@ -119,8 +119,10 @@ public class ReaderInputStream extends InputStream {
     public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
         this.reader = reader;
         this.encoder = encoder;
-        encoderIn = CharBuffer.allocate(bufferSize);
-        encoderIn.flip();
+        this.encoderIn = CharBuffer.allocate(bufferSize);
+        this.encoderIn.flip();
+        this.encoderOut = ByteBuffer.allocate(128);
+        this.encoderOut.flip();
     }
 
     /**
@@ -181,6 +183,26 @@ public class ReaderInputStream extends InputStream {
         this(reader, Charset.defaultCharset());
     }
 
+    private void fillBuffer() throws IOException {
+        if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
+            encoderIn.compact();
+            int position = encoderIn.position();
+            // We don't use Reader#read(CharBuffer) here because it is more efficient
+            // to write directly to the underlying char array (the default implementation
+            // copies data to a temporary char array).
+            int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
+            if (c == -1) {
+                endOfInput = true;
+            } else {
+                encoderIn.position(position+c);
+            }
+            encoderIn.flip();
+        }
+        encoderOut.compact();
+        lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
+        encoderOut.flip();
+    }
+    
     /**
      * Read the specified number of bytes into an array.
      * 
@@ -195,31 +217,15 @@ public class ReaderInputStream extends InputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         int read = 0;
         while (len > 0) {
-            if (encoderOut.position() > 0) {
-                encoderOut.flip();
+            if (encoderOut.hasRemaining()) {
                 int c = Math.min(encoderOut.remaining(), len);
                 encoderOut.get(b, off, c);
                 off += c;
                 len -= c;
                 read += c;
-                encoderOut.compact();
             } else {
-                if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
-                    encoderIn.compact();
-                    int position = encoderIn.position();
-                    // We don't use Reader#read(CharBuffer) here because it is more efficient
-                    // to write directly to the underlying char array (the default implementation
-                    // copies data to a temporary char array).
-                    int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
-                    if (c == -1) {
-                        endOfInput = true;
-                    } else {
-                        encoderIn.position(position+c);
-                    }
-                    encoderIn.flip();
-                }
-                lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
-                if (endOfInput && encoderOut.position() == 0) {
+                fillBuffer();
+                if (endOfInput && !encoderOut.hasRemaining()) {
                     break;
                 }
             }
@@ -249,8 +255,16 @@ public class ReaderInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        byte[] b = new byte[1];
-        return read(b) == -1 ? -1 : b[0] & 0xFF;
+        for (;;) {
+            if (encoderOut.hasRemaining()) {
+                return encoderOut.get() & 0xFF;
+            } else {
+                fillBuffer();
+                if (endOfInput && !encoderOut.hasRemaining()) {
+                    return -1;
+                }
+            }
+        }
     }
 
     /**

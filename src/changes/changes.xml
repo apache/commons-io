@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action dev="sebb" type="update" issue="IO-296" due-to="Oleg Kalnichevski">
+        ReaderInputStream optimization: more efficient reading of small chunks of data
+      </action>        
       <action dev="sebb" type="fix" issue="IO-298" due-to="Christian Schulte">
         Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'
       </action>        
