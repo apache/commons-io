@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action dev="sebb" type="fix" issue="IO-298" due-to="Christian Schulte">
+        Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'
+      </action>        
       <action dev="ggregory" type="add" issue="IO-304" due-to="liangly">
         The second constructor of Tailer class does not pass 'delay' to the third one 
       </action>        
