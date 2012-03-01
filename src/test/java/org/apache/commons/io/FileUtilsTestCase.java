@@ -1345,6 +1345,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File subDir = new File(srcDir, "list_test" );
         subDir.mkdir();
 
+        File subDir2 = new File(subDir, "subdir" );
+        subDir2.mkdir();
+
         String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
         int[] fileSizes = {123, 234, 345, 456, 678, 789};
 
@@ -1360,7 +1363,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         int count = files.size();
         Object[] fileObjs = files.toArray();
 
-        assertEquals(files.size(), fileNames.length);
+        assertEquals(fileNames.length, files.size());
 
         Map<String, String> foundFileNames = new HashMap<String, String>();
 
@@ -1377,6 +1380,33 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(foundFileNames.size(), fileNames.length);
 
         subDir.delete();
+    }
+    
+    public void testListFilesWithDirs() throws IOException {
+    	File srcDir = getTestDirectory();
+    	
+    	File subDir1 = new File(srcDir, "subdir");
+    	subDir1.mkdir();
+    	
+    	File subDir2 = new File(subDir1, "subdir2");
+    	subDir2.mkdir();
+    	
+    	File someFile = new File(subDir2, "a.txt");
+    	createFile(someFile, 100);
+    	
+    	File subDir3 = new File(subDir2, "subdir3");
+    	subDir3.mkdir();
+    	
+    	Collection<File> files = FileUtils.listFilesAndDirs(subDir1, 
+    						new WildcardFileFilter("*.*"), new WildcardFileFilter("*"));
+    	
+    	assertEquals(4, files.size());
+    	assertTrue("Should contain the directory.", files.contains(subDir1));
+    	assertTrue("Should contain the directory.", files.contains(subDir2));
+    	assertTrue("Should contain the file.", files.contains(someFile));
+    	assertTrue("Should contain the directory.", files.contains(subDir3));
+    	
+    	subDir1.delete();
     }
 
     public void testIterateFiles() throws Exception {
@@ -1413,6 +1443,36 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(foundFileNames.size(), fileNames.length);
 
         subDir.delete();
+    }
+    
+    public void testIterateFilesAndDirs() throws IOException {
+    	File srcDir = getTestDirectory();
+    	
+    	File subDir1 = new File(srcDir, "subdir");
+    	subDir1.mkdir();
+    	
+    	File subDir2 = new File(subDir1, "subdir2");
+    	subDir2.mkdir();
+    	
+    	File someFile = new File(subDir2, "a.txt");
+    	createFile(someFile, 100);
+    	
+    	File subDir3 = new File(subDir2, "subdir3");
+    	subDir3.mkdir();
+    	
+    	Collection<File> filesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3);
+    	
+    	int filesCount = 0;
+    	Iterator<File> files = FileUtils.iterateFilesAndDirs(subDir1, 
+                                                new WildcardFileFilter("*.*"),
+                                                new WildcardFileFilter("*"));
+        while (files.hasNext()) {
+            filesCount++;
+            File file = files.next();
+            assertTrue("Should contain the directory/file", filesAndDirs.contains(file));
+        }
+    	
+    	assertEquals(filesCount, filesAndDirs.size());
     }
 
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
