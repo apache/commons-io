@@ -83,7 +83,7 @@ public class BoundedInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if (max>=0 && pos==max) {
+        if (max >= 0 && pos >= max) {
             return -1;
         }
         int result = in.read();
