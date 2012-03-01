@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action dev="ggregory" type="add" issue="IO-304" due-to="liangly">
+        The second constructor of Tailer class does not pass 'delay' to the third one 
+      </action>        
       <action dev="ggregory" type="add" issue="IO-303" due-to="fabian.barney">
         TeeOutputStream does not call branch.close() when main.close() throws an exception 
       </action>        

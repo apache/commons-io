@@ -147,7 +147,7 @@ public class Tailer implements Runnable {
      * @param delay the delay between checks of the file for new content in milliseconds.
      */
     public Tailer(File file, TailerListener listener, long delay) {
-        this(file, listener, 1000, false);
+        this(file, listener, delay, false);
     }
 
     /**
