@@ -415,14 +415,19 @@ public class FileUtils {
      * @param files the collection of files found.
      * @param directory the directory to search in.
      * @param filter the filter to apply to files and directories.
+     * @param includeSubDirectories indicates if will include the subdirectories themselves
      */
     private static void innerListFiles(Collection<File> files, File directory,
-            IOFileFilter filter) {
+            IOFileFilter filter, boolean includeSubDirectories) {
         File[] found = directory.listFiles((FileFilter) filter);
+        
         if (found != null) {
             for (File file : found) {
                 if (file.isDirectory()) {
-                    innerListFiles(files, file, filter);
+                    if (includeSubDirectories) {
+                        files.add(file);
+                    }
+                    innerListFiles(files, file, filter, includeSubDirectories);
                 } else {
                     files.add(file);
                 }
@@ -457,31 +462,76 @@ public class FileUtils {
      */
     public static Collection<File> listFiles(
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(
-                    "Parameter 'directory' is not a directory");
-        }
-        if (fileFilter == null) {
-            throw new NullPointerException("Parameter 'fileFilter' is null");
-        }
+        validateListFilesParameters(directory, fileFilter);
 
-        //Setup effective file filter
-        IOFileFilter effFileFilter = FileFilterUtils.and(fileFilter,
-            FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
+        IOFileFilter effFileFilter = setupEfectiveFileFilter(fileFilter);
+        IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
 
-        //Setup effective directory filter
-        IOFileFilter effDirFilter;
+        //Find files
+        Collection<File> files = new java.util.LinkedList<File>();
+        innerListFiles(files, directory,
+            FileFilterUtils.or(effFileFilter, effDirFilter), false);
+        return files;
+    }
+
+    private static void validateListFilesParameters(File directory,
+    		IOFileFilter fileFilter) {
+    	if (!directory.isDirectory()) {
+    		throw new IllegalArgumentException(
+    				"Parameter 'directory' is not a directory");
+    	}
+    	if (fileFilter == null) {
+    		throw new NullPointerException("Parameter 'fileFilter' is null");
+    	}
+    }
+
+    private static IOFileFilter setupEfectiveFileFilter(IOFileFilter fileFilter) {
+    	return FileFilterUtils.and(fileFilter,
+    			FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
+    }
+
+	private static IOFileFilter setupEffectiveDirFilter(IOFileFilter dirFilter) {
+		IOFileFilter effDirFilter;
         if (dirFilter == null) {
             effDirFilter = FalseFileFilter.INSTANCE;
         } else {
             effDirFilter = FileFilterUtils.and(dirFilter,
                 DirectoryFileFilter.INSTANCE);
         }
+        return effDirFilter;
+	}
+
+    /**
+     * Finds files within a given directory (and optionally its
+     * subdirectories). All files found are filtered by an IOFileFilter.
+     * <p>
+     * The resulting collection includes the subdirectories themselves.
+     * <p>
+     * @see org.apache.commons.io.FileUtils#listFiles  
+     *
+     * @param directory  the directory to search in
+     * @param fileFilter  filter to apply when finding files.
+     * @param dirFilter  optional filter to apply when finding subdirectories.
+     * If this parameter is <code>null</code>, subdirectories will not be included in the
+     * search. Use TrueFileFilter.INSTANCE to match all directories.
+     * @return an collection of java.io.File with the matching files
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     */
+    public static Collection<File> listFilesAndDirs(
+            File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+        validateListFilesParameters(directory, fileFilter);
+
+        IOFileFilter effFileFilter = setupEfectiveFileFilter(fileFilter);
+        IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
 
         //Find files
         Collection<File> files = new java.util.LinkedList<File>();
+        if (directory.isDirectory()) {
+            files.add(directory);
+        }
         innerListFiles(files, directory,
-            FileFilterUtils.or(effFileFilter, effDirFilter));
+            FileFilterUtils.or(effFileFilter, effDirFilter), true);
         return files;
     }
 
@@ -507,6 +557,30 @@ public class FileUtils {
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
+
+    /**
+     * Allows iteration over the files in given directory (and optionally
+     * its subdirectories).
+     * <p>
+     * All files found are filtered by an IOFileFilter. This method is
+     * based on {@link #listFilesAndDirs(File, IOFileFilter, IOFileFilter)},
+     * which supports Iterable ('foreach' loop).
+     * <p>
+     * The resulting iterator includes the subdirectories themselves.
+     * 
+     * @param directory  the directory to search in
+     * @param fileFilter  filter to apply when finding files.
+     * @param dirFilter  optional filter to apply when finding subdirectories.
+     * If this parameter is <code>null</code>, subdirectories will not be included in the
+     * search. Use TrueFileFilter.INSTANCE to match all directories.
+     * @return an iterator of java.io.File for the matching files
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     */
+	public static Iterator<File> iterateFilesAndDirs(
+			File directory,	IOFileFilter fileFilter, IOFileFilter dirFilter) {
+		return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
+	}
 
     //-----------------------------------------------------------------------
     /**

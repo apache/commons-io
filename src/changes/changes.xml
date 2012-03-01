@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action dev="sebb" type="add" issue="IO-173" due-to="Marcos Vinícius da Silva">
+        FileUtils.listFiles() doesn't return directories
+      </action>        
       <action dev="sebb" type="fix" issue="IO-276" due-to="nkami">
         "FileUtils#deleteDirectoryOnExit(File)" does not work
       </action>        
