@@ -2061,10 +2061,10 @@ public class FileUtils {
             return;
         }
 
+        directory.deleteOnExit();
         if (!isSymlink(directory)) {
             cleanDirectoryOnExit(directory);
         }
-        directory.deleteOnExit();
     }
 
     /**
