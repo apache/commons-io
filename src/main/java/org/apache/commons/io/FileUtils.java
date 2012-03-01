@@ -1365,6 +1365,7 @@ public class FileUtils {
             FileOutputStream output = openOutputStream(destination);
             try {
                 IOUtils.copy(source, output);
+                output.close(); // don't swallow close Exception if copy completes normally
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -1728,6 +1729,7 @@ public class FileUtils {
         try {
             out = openOutputStream(file, append);
             IOUtils.write(data, out, encoding);
+            out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);
         }
@@ -1845,6 +1847,7 @@ public class FileUtils {
         try {
             out = openOutputStream(file, append);
             out.write(data);
+            out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);
         }
@@ -1959,6 +1962,7 @@ public class FileUtils {
         try {
             out = openOutputStream(file, append);
             IOUtils.writeLines(lines, lineEnding, out, encoding);
+            out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);
         }
