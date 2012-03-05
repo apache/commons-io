@@ -27,7 +27,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * Test cases for FileUtils.cleanDirectory() method.
  *
  * @version $Id$
- * @author Chris Eldredge
  */
 public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     final File top = getLocalTestDirectory();

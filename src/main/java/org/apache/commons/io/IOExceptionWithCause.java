@@ -23,7 +23,6 @@ import java.io.IOException;
  * Subclasses IOException with the {@link Throwable} constructors missing before Java 6. If you are using Java 6,
  * consider this class deprecated and use {@link IOException}.
  * 
- * @author <a href="http://commons.apache.org/io/">Apache Commons IO</a>
  * @version $Id$
  * @since Commons IO 1.4
  */

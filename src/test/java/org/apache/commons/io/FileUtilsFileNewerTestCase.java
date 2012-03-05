@@ -23,8 +23,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * This is used to test FileUtils for correctness.
- *
- * @author <a href="mailto:alban.peignier@free.fr">Alban Peignier</a>
  */
 public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
 

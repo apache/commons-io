@@ -77,16 +77,6 @@ import java.util.Stack;
  * <p>
  * Origin of code: Excalibur, Alexandria, Tomcat, Commons-Utils.
  *
- * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
- * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
- * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @author Matthew Hawthorne
- * @author Martin Cooper
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @author Stephen Colebourne
  * @version $Id$
  * @since Commons IO 1.1
  */

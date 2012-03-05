@@ -44,7 +44,6 @@ import org.apache.commons.io.FilenameUtils;
  * }
  * </pre>
  *
- * @author Jason Anderson
  * @version $Revision$ $Date$
  * @since Commons IO 1.1
  * @deprecated Use WilcardFileFilter. Deprecated as this class performs directory

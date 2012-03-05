@@ -25,8 +25,6 @@ import org.apache.commons.io.input.ProxyInputStream;
 
 /**
  * Helper class for checking behaviour of IO classes.
- * 
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  */
 public class YellOnCloseInputStream extends ProxyInputStream {
 

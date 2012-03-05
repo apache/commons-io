@@ -27,8 +27,6 @@ import java.io.OutputStream;
  * <p>
  * Origin of code: POI.
  *
- * @author Scott Sanders
- * @author Marc Johnson
  * @version $Id$
  */
 public class HexDump {

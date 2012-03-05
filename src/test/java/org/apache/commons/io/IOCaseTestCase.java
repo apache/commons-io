@@ -27,7 +27,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * This is used to test IOCase for correctness.
  *
- * @author Stephen Colebourne
  * @version $Id$
  */
 public class IOCaseTestCase extends FileBasedTestCase {

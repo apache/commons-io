@@ -28,8 +28,6 @@ import org.apache.commons.io.output.NullOutputStream;
 /**
  * Tests the CountingInputStream.
  *
- * @author Marcelo Liberato
- * @author Stephen Colebourne
  * @version $Id$
  */
 public class CountingInputStreamTest extends TestCase {

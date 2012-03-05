@@ -26,8 +26,6 @@ import java.io.FilenameFilter;
  * 
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
- * 
- * @author Stephen Colebourne
  */
 public interface IOFileFilter extends FileFilter, FilenameFilter {
 

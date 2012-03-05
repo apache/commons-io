@@ -39,12 +39,6 @@ import java.util.StringTokenizer;
  * <li>Get the free space on a drive
  * </ul>
  *
- * @author Frank W. Zammetti
- * @author Stephen Colebourne
- * @author Thomas Ledoux
- * @author James Urie
- * @author Magnus Grimsell
- * @author Thomas Ledoux
  * @version $Id$
  * @since Commons IO 1.1
  */

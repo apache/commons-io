@@ -47,10 +47,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * <li>The output stream must not have been closed (a byte/char is written to test this, and subsequent size checked)</li>
  * </ul>
  * Due to interdependencies in IOUtils and IOUtilsTestlet, one bug may cause multiple tests to fail.
- * 
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @author Gareth Davis
- * @author Ian Springer
  */
 public class IOUtilsTestCase extends FileBasedTestCase {
 

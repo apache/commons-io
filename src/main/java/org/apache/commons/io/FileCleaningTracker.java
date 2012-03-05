@@ -39,8 +39,6 @@ import java.util.List;
  * {@link #exitWhenFinished}, typically in
  * {@link javax.servlet.ServletContextListener#contextDestroyed} or similar.
  *
- * @author Noel Bergman
- * @author Martin Cooper
  * @version $Id$
  */
 public class FileCleaningTracker {

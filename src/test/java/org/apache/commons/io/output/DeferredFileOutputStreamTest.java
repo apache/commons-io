@@ -27,8 +27,6 @@ import junit.framework.TestCase;
 /**
  * Unit tests for the <code>DeferredFileOutputStream</code> class.
  *
- * @author <a href="mailto:martinc@apache.org">Martin Cooper</a>
- *
  * @version $Id$
  */
 public class DeferredFileOutputStreamTest extends TestCase

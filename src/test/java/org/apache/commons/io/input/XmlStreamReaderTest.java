@@ -31,7 +31,6 @@ import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 
 /**
- * @author Alejandro Abdelnur
  */
 public class XmlStreamReaderTest extends TestCase {
     private static final String XML5 = "xml-prolog-encoding-spaced-single-quotes";

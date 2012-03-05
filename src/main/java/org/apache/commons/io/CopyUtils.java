@@ -102,9 +102,6 @@ import java.io.Writer;
  * <p>
  * Origin of code: Excalibur.
  *
- * @author Peter Donald
- * @author Jeff Turner
- * @author Matthew Hawthorne
  * @version $Id$
  * @deprecated Use IOUtils. Will be removed in 2.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().

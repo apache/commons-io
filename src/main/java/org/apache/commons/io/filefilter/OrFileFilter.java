@@ -31,8 +31,6 @@ import java.util.List;
  *
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
- *
- * @author Steven Caswell
  * @see FileFilterUtils#or(IOFileFilter...)
  */
 public class OrFileFilter

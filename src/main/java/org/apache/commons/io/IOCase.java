@@ -31,7 +31,6 @@ import java.io.Serializable;
  * Wherever possible, you should use the <code>check</code> methods in this
  * class to compare filenames.
  *
- * @author Stephen Colebourne
  * @version $Id$
  * @since Commons IO 1.3
  */

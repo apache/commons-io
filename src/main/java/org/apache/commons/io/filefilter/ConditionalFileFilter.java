@@ -23,8 +23,6 @@ import java.util.List;
  *
  * @since Commons IO 1.1
  * @version $Revision$ $Date$
- *
- * @author Steven Caswell
  */
 public interface ConditionalFileFilter {
 

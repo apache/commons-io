@@ -22,8 +22,6 @@ import junit.framework.TestCase;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementation.
- *
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  */
 public class ByteArrayOutputStreamTestCase extends TestCase {
 

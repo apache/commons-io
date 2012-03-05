@@ -31,8 +31,6 @@ import org.apache.commons.io.output.DemuxOutputStream;
 
 /**
  * Basic unit tests for the multiplexing streams.
- *
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  */
 public class DemuxTestCase
     extends TestCase

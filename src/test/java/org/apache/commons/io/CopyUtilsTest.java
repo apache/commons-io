@@ -34,9 +34,6 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 /**
  * JUnit tests for CopyUtils.
  * 
- * @author Jeff Turner
- * @author Matthew Hawthorne
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  * @version $Id$
  * @see CopyUtils
  */

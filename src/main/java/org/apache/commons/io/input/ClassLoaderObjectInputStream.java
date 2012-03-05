@@ -29,7 +29,6 @@ import java.lang.reflect.Proxy;
  * <p>
  * This is useful in dynamic container environments.
  *
- * @author Paul Hammant
  * @version $Id$
  * @since Commons IO 1.1
  */

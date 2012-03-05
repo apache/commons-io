@@ -37,10 +37,6 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 /**
  * JUnit tests for IOUtils copy methods.
  * 
- * @author Jeff Turner
- * @author Matthew Hawthorne
- * @author Jeremias Maerki
- * @author Stephen Colebourne
  * @version $Id$
  * @see IOUtils
  */

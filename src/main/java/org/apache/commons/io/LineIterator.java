@@ -44,8 +44,6 @@ import java.util.NoSuchElementException;
  * }
  * </pre>
  *
- * @author Stephen Colebourne
- * @author Sandy McArthur
  * @version $Id$
  * @since Commons IO 1.2
  */

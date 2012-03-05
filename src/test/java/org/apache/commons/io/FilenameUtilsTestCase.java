@@ -26,9 +26,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * This is used to test FilenameUtils for correctness.
  *
- * @author Peter Donald
- * @author Matthew Hawthorne
- * @author Martin Cooper
  * @version $Id$
  * @see FilenameUtils
  */
