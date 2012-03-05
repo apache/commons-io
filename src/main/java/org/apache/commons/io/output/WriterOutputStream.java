@@ -68,7 +68,6 @@ import java.nio.charset.CodingErrorAction;
  * 
  * @see org.apache.commons.io.input.ReaderInputStream
  * 
- * @author <a href="mailto:veithen@apache.org">Andreas Veithen</a>
  * @since Commons IO 2.0
  */
 public class WriterOutputStream extends OutputStream {

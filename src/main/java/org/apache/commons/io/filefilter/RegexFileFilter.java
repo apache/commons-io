@@ -39,7 +39,6 @@ import org.apache.commons.io.IOCase;
  * }
  * </pre>
  *
- * @author Oliver Siegmar
  * @version $Revision$
  * @since Commons IO 1.4
  */

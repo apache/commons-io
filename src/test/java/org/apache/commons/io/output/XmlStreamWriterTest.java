@@ -23,7 +23,6 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 /**
- * @author Herve Boutemy
  * @version $Id$
  */
 public class XmlStreamWriterTest extends TestCase {

@@ -28,7 +28,6 @@ import java.io.IOException;
  * <p>
  * This class captures the strategy to use and is designed for user subclassing.
  *
- * @author Stephen Colebourne
  * @version $Id$
  * @since Commons IO 1.3
  */

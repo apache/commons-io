@@ -25,8 +25,6 @@ import org.apache.commons.io.output.ProxyOutputStream;
 
 /**
  * Helper class for checking behaviour of IO classes.
- * 
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
  */
 public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
 

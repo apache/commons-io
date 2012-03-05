@@ -36,11 +36,6 @@ import org.apache.commons.io.IOCase;
  * 
  * @since Commons IO 1.0
  * @version $Id$
- * 
- * @author Stephen Colebourne
- * @author Jeremias Maerki
- * @author Masato Tezuka
- * @author Rahul Akolkar
  */
 public class FileFilterUtils {
     

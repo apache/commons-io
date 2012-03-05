@@ -45,12 +45,6 @@ import org.apache.commons.io.IOUtils;
  * <code>java.io.tmpdir</code>.
  * The encoding may also be specified, and defaults to the platform default.
  *
- * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
- * @author <a href="mailto:ms@collab.net">Michael Salmon</a>
- * @author <a href="mailto:jon@collab.net">Jon S. Stevens</a>
- * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author Stephen Colebourne
- * @author Andy Lehane
  * @version $Id$
  */
 public class LockableFileWriter extends Writer {

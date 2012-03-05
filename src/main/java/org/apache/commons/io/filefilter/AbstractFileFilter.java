@@ -27,8 +27,6 @@ import java.io.File;
  *
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
- * 
- * @author Stephen Colebourne
  */
 public abstract class AbstractFileFilter implements IOFileFilter {
 

@@ -36,8 +36,6 @@ import java.io.Serializable;
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
  *
- * @author Stephen Colebourne
- * @author Peter Donald
  * @see FileFilterUtils#directoryFileFilter()
  */
 public class DirectoryFileFilter extends AbstractFileFilter implements Serializable {

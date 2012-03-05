@@ -27,7 +27,6 @@ import java.io.Serializable;
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
  * 
- * @author Stephen Colebourne
  * @see FileFilterUtils#asFileFilter(FileFilter)
  * @see FileFilterUtils#asFileFilter(FilenameFilter)
  */

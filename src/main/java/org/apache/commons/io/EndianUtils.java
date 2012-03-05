@@ -33,7 +33,6 @@ import java.io.OutputStream;
  * <p>
  * Origin of code: Excalibur
  *
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @version $Id$
  * @see org.apache.commons.io.input.SwappedDataInputStream
  */

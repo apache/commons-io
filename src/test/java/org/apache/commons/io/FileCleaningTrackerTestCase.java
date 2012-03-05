@@ -27,11 +27,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
  *
- * @author Noel Bergman
- * @author Martin Cooper
- *
  * @version $Id$
-
  * @see FileCleaningTracker
  */
 public class FileCleaningTrackerTestCase extends FileBasedTestCase {

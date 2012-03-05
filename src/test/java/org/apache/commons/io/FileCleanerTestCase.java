@@ -20,9 +20,6 @@ package org.apache.commons.io;
 /**
  * This is used to test FileCleaner for correctness.
  *
- * @author Noel Bergman
- * @author Martin Cooper
- *
  * @version $Id$
 
  * @see FileCleaner

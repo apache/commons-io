@@ -37,9 +37,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 
 /**
  * Base class for testcases doing tests with files.
- * 
- * @author Jeremias Maerki
- * @author Gareth Davis
  */
 public abstract class FileBasedTestCase extends TestCase {
 

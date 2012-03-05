@@ -58,7 +58,6 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
  * Apache License 2.0.
  *
- * @author Alejandro Abdelnur
  * @version $Id$
  * @see XmlStreamWriter
  */

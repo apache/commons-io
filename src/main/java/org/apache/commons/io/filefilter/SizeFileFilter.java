@@ -34,7 +34,6 @@ import java.io.Serializable;
  * }
  * </pre>
  *
- * @author Rahul Akolkar
  * @version $Id$
  * @since Commons IO 1.2
  * @see FileFilterUtils#sizeFileFilter(long)

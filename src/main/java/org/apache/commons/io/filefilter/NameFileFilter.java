@@ -38,11 +38,6 @@ import org.apache.commons.io.IOCase;
  *
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
- * 
- * @author Stephen Colebourne
- * @author Federico Barbieri
- * @author Serge Knystautas
- * @author Peter Donald
  * @see FileFilterUtils#nameFileFilter(String)
  * @see FileFilterUtils#nameFileFilter(String, IOCase)
  */

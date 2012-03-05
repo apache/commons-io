@@ -44,10 +44,6 @@ import org.junit.Assert;
 /**
  * This is used to test FileUtils for correctness.
  *
- * @author Peter Donald
- * @author Matthew Hawthorne
- * @author Stephen Colebourne
- * @author Jim Harrington
  * @version $Id$
  * @see FileUtils
  */

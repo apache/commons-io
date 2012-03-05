@@ -24,8 +24,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 
 
 /**
- * @author Scott Sanders (sanders at apache dot org)
- * @author Marc Johnson (mjohnson at apache dot org)
  * @version $Revision$ $Date$
  */
 

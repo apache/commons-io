@@ -74,13 +74,6 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * <p>
  * Origin of code: Excalibur.
  *
- * @author Peter Donald
- * @author Jeff Turner
- * @author Matthew Hawthorne
- * @author Stephen Colebourne
- * @author Gareth Davis
- * @author Ian Springer
- * @author Sandy McArthur
  * @version $Id$
  */
 public class IOUtils {

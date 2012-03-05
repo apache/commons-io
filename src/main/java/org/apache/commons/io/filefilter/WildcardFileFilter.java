@@ -45,7 +45,6 @@ import org.apache.commons.io.IOCase;
  * }
  * </pre>
  *
- * @author Jason Anderson
  * @version $Revision$ $Date$
  * @since Commons IO 1.3
  */

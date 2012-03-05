@@ -68,19 +68,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
  *
- * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
- * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
- * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
- * @author <a href="mailto:peter@apache.org">Peter Donald</a>
- * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @author Matthew Hawthorne
- * @author <a href="mailto:jeremias@apache.org">Jeremias Maerki</a>
- * @author Stephen Colebourne
- * @author Ian Springer
- * @author Chris Eldredge
- * @author Jim Harrington
- * @author Sandy McArthur
  * @version $Id$
  */
 public class FileUtils {

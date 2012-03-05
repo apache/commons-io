@@ -32,7 +32,6 @@ import java.io.InputStream;
  * See the protected methods for ways in which a subclass can easily decorate
  * a stream with custom pre-, post- or error processing functionality.
  *
- * @author Stephen Colebourne
  * @version $Id$
  */
 public abstract class ProxyInputStream extends FilterInputStream {

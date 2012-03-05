@@ -32,7 +32,6 @@ import java.util.List;
  * @since Commons IO 1.0
  * @version $Revision$ $Date$
  *
- * @author Steven Caswell
  * @see FileFilterUtils#and(IOFileFilter...)
  */
 public class AndFileFilter
