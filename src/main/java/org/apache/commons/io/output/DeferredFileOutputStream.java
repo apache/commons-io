@@ -194,7 +194,7 @@ public class DeferredFileOutputStream
      */
     public boolean isInMemory()
     {
-        return (!isThresholdExceeded());
+        return !isThresholdExceeded();
     }
 
 
