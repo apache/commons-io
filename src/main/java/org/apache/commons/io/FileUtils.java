@@ -461,20 +461,17 @@ public class FileUtils {
         return files;
     }
 
-    private static void validateListFilesParameters(File directory,
-    		IOFileFilter fileFilter) {
-    	if (!directory.isDirectory()) {
-    		throw new IllegalArgumentException(
-    				"Parameter 'directory' is not a directory");
-    	}
-    	if (fileFilter == null) {
-    		throw new NullPointerException("Parameter 'fileFilter' is null");
-    	}
+    private static void validateListFilesParameters(File directory, IOFileFilter fileFilter) {
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException("Parameter 'directory' is not a directory");
+        }
+        if (fileFilter == null) {
+            throw new NullPointerException("Parameter 'fileFilter' is null");
+        }
     }
 
     private static IOFileFilter setupEfectiveFileFilter(IOFileFilter fileFilter) {
-    	return FileFilterUtils.and(fileFilter,
-    			FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
+        return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
 	private static IOFileFilter setupEffectiveDirFilter(IOFileFilter dirFilter) {
