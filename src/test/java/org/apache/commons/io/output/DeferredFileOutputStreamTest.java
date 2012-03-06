@@ -209,7 +209,7 @@ public class DeferredFileOutputStreamTest extends TestCase
         testFile.delete();
 
         DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length /2, testFile);
+                new DeferredFileOutputStream(testBytes.length / 2, testFile);
         try{
             dfos.write(testBytes);
 
