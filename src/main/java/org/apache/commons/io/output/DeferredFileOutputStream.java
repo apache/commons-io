@@ -221,10 +221,10 @@ public class DeferredFileOutputStream
      * the temporary file created or null.
      * <p>
      * If the constructor specifying the file is used then it returns that
-     * same output file, even when threashold has not been reached.
+     * same output file, even when threshold has not been reached.
      * <p>
      * If constructor specifying a temporary file prefix/suffix is used
-     * then the temporary file created once the threashold is reached is returned
+     * then the temporary file created once the threshold is reached is returned
      * If the threshold was not reached then <code>null</code> is returned.
      *
      * @return The file for this output stream, or <code>null</code> if no such
