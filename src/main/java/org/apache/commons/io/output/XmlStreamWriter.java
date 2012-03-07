@@ -69,7 +69,7 @@ public class XmlStreamWriter extends Writer {
      */
     public XmlStreamWriter(OutputStream out, String defaultEncoding) {
         this.out = out;
-        this.defaultEncoding = (defaultEncoding != null ? defaultEncoding : "UTF-8");
+        this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
 
     /**
