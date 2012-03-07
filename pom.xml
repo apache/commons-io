@@ -311,6 +311,7 @@
           <statusIds>Resolved,Closed</statusIds>
           <!-- Don't include sub-task -->
           <typeIds>Bug,New Feature,Task,Improvement,Wish,Test</typeIds>
+          <maxEntries>300</maxEntries>
         </configuration>
         <reportSets>
           <reportSet>
