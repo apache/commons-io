@@ -303,7 +303,6 @@
         <configuration>
           <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
           <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
-          <!-- TODO: <onlyCurrentVersion>true</onlyCurrentVersion> -->
           <columnNames>Fix Version,Key,Component,Summary,Type,Resolution,Status</columnNames>
           <!-- Sort cols have to be reversed in JIRA 4 -->
           <sortColumnNames>Key DESC,Type,Fix Version DESC</sortColumnNames>
