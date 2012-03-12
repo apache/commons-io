@@ -480,20 +480,26 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Returns a filter that accepts files in addition to the {@link File} objects accepted by the given filter.
+     * 
+     * @param fileFilter a base filter to add to
+     * @return a filter that accepts files 
+     */
     private static IOFileFilter setUpEffectiveFileFilter(IOFileFilter fileFilter) {
         return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
-	private static IOFileFilter setUpEffectiveDirFilter(IOFileFilter dirFilter) {
-		IOFileFilter effDirFilter;
-        if (dirFilter == null) {
-            effDirFilter = FalseFileFilter.INSTANCE;
-        } else {
-            effDirFilter = FileFilterUtils.and(dirFilter,
+    /**
+     * Returns a filter that accepts directories in addition to the {@link File} objects accepted by the given filter.
+     * 
+     * @param dirFilter a base filter to add to
+     * @return a filter that accepts directories 
+     */
+    private static IOFileFilter setUpEffectiveDirFilter(IOFileFilter dirFilter) {
+        return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilterUtils.and(dirFilter,
                 DirectoryFileFilter.INSTANCE);
-        }
-        return effDirFilter;
-	}
+    }
 
     /**
      * Finds files within a given directory (and optionally its
@@ -571,10 +577,9 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
-	public static Iterator<File> iterateFilesAndDirs(
-			File directory,	IOFileFilter fileFilter, IOFileFilter dirFilter) {
-		return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
-	}
+    public static Iterator<File> iterateFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
+        return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
+    }
 
     //-----------------------------------------------------------------------
     /**
