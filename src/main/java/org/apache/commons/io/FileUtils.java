@@ -452,7 +452,7 @@ public class FileUtils {
         validateListFilesParameters(directory, fileFilter);
 
         IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-        IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
+        IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
         Collection<File> files = new java.util.LinkedList<File>();
@@ -474,7 +474,7 @@ public class FileUtils {
         return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
-	private static IOFileFilter setupEffectiveDirFilter(IOFileFilter dirFilter) {
+	private static IOFileFilter setUpEffectiveDirFilter(IOFileFilter dirFilter) {
 		IOFileFilter effDirFilter;
         if (dirFilter == null) {
             effDirFilter = FalseFileFilter.INSTANCE;
@@ -507,7 +507,7 @@ public class FileUtils {
         validateListFilesParameters(directory, fileFilter);
 
         IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-        IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
+        IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
         Collection<File> files = new java.util.LinkedList<File>();
