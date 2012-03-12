@@ -461,6 +461,16 @@ public class FileUtils {
         return files;
     }
 
+    /**
+     * Validates the given arguments.
+     * <ul>
+     * <li>Throws {@link IllegalArgumentException} if {@code directory} is not a directory</li>
+     * <li>Throws {@link NullPointerException} if {@code fileFilter} is null</li>
+     * </ul>
+     * 
+     * @param directory The File to test
+     * @param fileFilter The IOFileFilter to test
+     */
     private static void validateListFilesParameters(File directory, IOFileFilter fileFilter) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Parameter 'directory' is not a directory");
