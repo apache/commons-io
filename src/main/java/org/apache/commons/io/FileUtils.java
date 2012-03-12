@@ -451,7 +451,7 @@ public class FileUtils {
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         validateListFilesParameters(directory, fileFilter);
 
-        IOFileFilter effFileFilter = setupEfectiveFileFilter(fileFilter);
+        IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
         IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
 
         //Find files
@@ -470,7 +470,7 @@ public class FileUtils {
         }
     }
 
-    private static IOFileFilter setupEfectiveFileFilter(IOFileFilter fileFilter) {
+    private static IOFileFilter setUpEffectiveFileFilter(IOFileFilter fileFilter) {
         return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
@@ -506,7 +506,7 @@ public class FileUtils {
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         validateListFilesParameters(directory, fileFilter);
 
-        IOFileFilter effFileFilter = setupEfectiveFileFilter(fileFilter);
+        IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
         IOFileFilter effDirFilter = setupEffectiveDirFilter(dirFilter);
 
         //Find files
