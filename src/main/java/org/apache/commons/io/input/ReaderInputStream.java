@@ -182,6 +182,12 @@ public class ReaderInputStream extends InputStream {
         this(reader, Charset.defaultCharset());
     }
 
+    /**
+     * Fills the internal char buffer from the reader.
+     * 
+     * @throws IOException
+     *             If an I/O error occurs
+     */
     private void fillBuffer() throws IOException {
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
             encoderIn.compact();

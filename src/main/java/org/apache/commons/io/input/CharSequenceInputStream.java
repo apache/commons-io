@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
@@ -93,7 +94,13 @@ public class CharSequenceInputStream extends InputStream {
         this(s, charset, 2048);
     }
 
-    private void fillBuffer() throws IOException {
+    /**
+     * Fills the byte output buffer from the input char buffer.
+     * 
+     * @throws CharacterCodingException
+     *             an error encoding data
+     */
+    private void fillBuffer() throws CharacterCodingException {
         this.bbuf.compact();
         CoderResult result = this.encoder.encode(this.cbuf, this.bbuf, true);
         if (result.isError()) {
