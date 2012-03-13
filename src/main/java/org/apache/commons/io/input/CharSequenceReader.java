@@ -104,7 +104,7 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (array == null) {
             throw new NullPointerException("Character array is missing");
         }
-        if (length < 0 || (offset + length) > array.length) {
+        if (length < 0 || offset < 0 || (offset + length) > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + offset + ", length=" + length);
         }
