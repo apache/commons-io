@@ -1708,7 +1708,7 @@ public class IOUtils {
      * @return true if the content of the readers are equal (ignoring EOL differences),  false otherwise
      * @throws NullPointerException if either input is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.1.1
+     * @since Commons IO 2.2
      */
     public static boolean contentEqualsIgnoreEOL(Reader input1, Reader input2)
             throws IOException {
@@ -1876,6 +1876,7 @@ public class IOUtils {
      * @param length length to read, must be >= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
+     * @since 2.2
      */
     public static int read(Reader input, char[] buffer, int offset, int length) throws IOException {
         if (length < 0){
@@ -1903,6 +1904,7 @@ public class IOUtils {
      * @param buffer destination
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
+     * @since 2.2
      */
     public static int read(Reader input, char[] buffer) throws IOException {
         return read(input, buffer, 0, buffer.length);
@@ -1966,6 +1968,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of characters read was incorrect
+     * @since 2.2
      */
     public static void readFully(Reader input, char[] buffer, int offset, int length) throws IOException {
         int actual = read(input, buffer, offset, length);
@@ -1986,6 +1989,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of characters read was incorrect
+     * @since 2.2
      */
     public static void readFully(Reader input, char[] buffer) throws IOException {
         readFully(input, buffer, 0, buffer.length);
@@ -2005,6 +2009,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect
+     * @since 2.2
      */
     public static void readFully(InputStream input, byte[] buffer, int offset, int length) throws IOException {
         int actual = read(input, buffer, offset, length);
@@ -2025,6 +2030,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect
+     * @since 2.2
      */
     public static void readFully(InputStream input, byte[] buffer) throws IOException {
         readFully(input, buffer, 0, buffer.length);

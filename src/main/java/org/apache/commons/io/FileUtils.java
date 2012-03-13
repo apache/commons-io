@@ -576,6 +576,7 @@ public class FileUtils {
      * @return an iterator of java.io.File for the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
+     * @since 2.2
      */
     public static Iterator<File> iterateFilesAndDirs(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
@@ -709,7 +710,7 @@ public class FileUtils {
      * @return true if the content of the files are equal or neither exists,
      *         false otherwise
      * @throws IOException in case of an I/O error
-     * @since 2.1.1
+     * @since 2.2
      * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
      */
     public static boolean contentEqualsIgnoreEOL(File file1, File file2, String charsetName) throws IOException {
