@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action issue="IO-287" dev="bayard" type="add" due-to="Ron Kuris, Gary Gregory">
+        Use terabyte (TB) , petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)
+      </action>        
       <action issue="IO-306" dev="sebb" type="fix">
         ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0
       </action>        
