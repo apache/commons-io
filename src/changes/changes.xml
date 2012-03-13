@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action dev="sebb" type="fix" issue="IO-306">
+        ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0
+      </action>        
       <action dev="sebb" type="add" issue="IO-173" due-to="Marcos Vinícius da Silva">
         FileUtils.listFiles() doesn't return directories
       </action>        

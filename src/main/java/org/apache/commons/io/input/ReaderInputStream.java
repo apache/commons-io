@@ -221,6 +221,9 @@ public class ReaderInputStream extends InputStream {
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int read = 0;
+        if (len == 0) {
+            return 0; // Always return 0 if len == 0
+        }
         while (len > 0) {
             if (encoderOut.hasRemaining()) {
                 int c = Math.min(encoderOut.remaining(), len);
