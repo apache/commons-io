@@ -158,4 +158,10 @@ public class CharSequenceInputStreamTest {
         r.reset();
     }
 
+    @Test
+    public void testMarkSupported() throws Exception {
+        InputStream r = new CharSequenceInputStream("test", "UTF-8");
+        assertTrue(r.markSupported());
+    }
+
 }
