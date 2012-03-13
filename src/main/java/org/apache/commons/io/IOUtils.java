@@ -127,7 +127,14 @@ public class IOUtils {
      */
     private static final int SKIP_BUFFER_SIZE = 2048;
     
-    // Allocated in the skip method if necessary.
+    // Allocated in the relevant skip method if necessary.
+    /*
+     * N.B. no need to synchronize these because:
+     * - we don't care if the buffer is created multiple times (the data is ignored)
+     * - we always use the same size buffer, so if it it is recreated it will still be OK
+     * (if the buffer size were variable, we would need to synch. to ensure some other thread
+     * did not create a smaller one)
+     */
     private static char[] SKIP_CHAR_BUFFER;
     private static byte[] SKIP_BYTE_BUFFER;
 
