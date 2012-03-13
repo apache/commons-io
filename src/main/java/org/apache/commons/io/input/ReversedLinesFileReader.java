@@ -161,12 +161,20 @@ public class ReversedLinesFileReader implements Closeable {
 
     private class FilePart {
         private final long no;
+
         private final byte[] data;
 
         private byte[] leftOver;
 
         private int currentLastBytePos;
 
+        /**
+         * ctor
+         * @param no the part number
+         * @param length its length
+         * @param leftOverOfLastFilePart remainder
+         * @throws IOException if there is a problem reading the file
+         */
         private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
             this.no = no;
             int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
@@ -189,6 +197,12 @@ public class ReversedLinesFileReader implements Closeable {
             this.leftOver = null;
         }
 
+        /**
+         * handle block rollover
+         * 
+         * @return the new FilePart or null
+         * @throws IOException if there was a problem reading the file
+         */
         private FilePart rollOver() throws IOException {
 
             if (currentLastBytePos > -1) {
@@ -208,6 +222,11 @@ public class ReversedLinesFileReader implements Closeable {
             }
         }
 
+        /**
+         * read a line.
+         * @return the line or null
+         * @throws IOException if there is an error reading from the file
+         */
         private String readLine() throws IOException {
 
             String line = null;
@@ -262,6 +281,9 @@ public class ReversedLinesFileReader implements Closeable {
             return line;
         }
 
+        /**
+         * create buffer containing any left over bytes.
+         */
         private void createLeftOver() {
             int lineLengthBytes = currentLastBytePos + 1;
             if (lineLengthBytes > 0) {
@@ -274,6 +296,12 @@ public class ReversedLinesFileReader implements Closeable {
             currentLastBytePos = -1;
         }
 
+        /**
+         * find newline sequence and return its length
+         * @param data buffer to scan
+         * @param i start offset in buffer
+         * @return length of newline sequence or 0 if none found
+         */
         private int getNewLineMatchByteCount(byte[] data, int i) {
             for (byte[] newLineSequence : newLineSequences) {
                 boolean match = true;
