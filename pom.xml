@@ -238,6 +238,19 @@
   </properties>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Temporarily needed until CP25 is available -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>clirr-maven-plugin</artifactId>
+          <version>${commons.clirr.version}</version>
+          <configuration>
+            <minSeverity>${minSeverity}</minSeverity>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -299,7 +312,6 @@
         <version>${commons.changes.version}</version>
         <configuration>
           <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
-          <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
           <columnNames>Fix Version,Key,Component,Summary,Type,Resolution,Status</columnNames>
           <!-- Sort cols have to be reversed in JIRA 4 -->
           <sortColumnNames>Key DESC,Type,Fix Version DESC</sortColumnNames>
