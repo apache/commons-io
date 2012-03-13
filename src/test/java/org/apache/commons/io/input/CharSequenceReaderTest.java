@@ -16,28 +16,24 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.Reader;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Test case for {@link CharSequenceReader}.
  *
  * @version $Revision$ $Date$
  */
-public class CharSequenceReaderTest extends TestCase {
+public class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];
 
-    /**
-     * Contruct a new test case.
-     * @param name The name of the test
-     */
-    public CharSequenceReaderTest(String name) {
-        super(name);
-    }
-
     /** Test {@link Reader#close()}. */
+    @Test
     public void testClose() throws IOException {
         Reader reader = new CharSequenceReader("FooBar");
         checkRead(reader, "Foo");
@@ -46,12 +42,14 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#markSupported()}. */
+    @Test
     public void testMarkSupported() {
         Reader reader = new CharSequenceReader("FooBar");
         assertTrue(reader.markSupported());
     }
 
     /** Test {@link Reader#mark(int)}. */
+    @Test
     public void testMark() throws IOException {
         Reader reader = new CharSequenceReader("FooBar");
         checkRead(reader, "Foo");
@@ -66,6 +64,7 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#skip(long)}. */
+    @Test
     public void testSkip() throws IOException {
         Reader reader = new CharSequenceReader("FooBar");
         assertEquals(3, reader.skip(3));
@@ -81,6 +80,7 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#read()}. */
+    @Test
     public void testRead() throws IOException {
         Reader reader = new CharSequenceReader("Foo");
         assertEquals('F', reader.read());
@@ -91,6 +91,7 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#read(char[])}. */
+    @Test
     public void testReadCharArray() throws IOException {
         Reader reader = new CharSequenceReader("FooBar");
         char[] chars = new char[2];
@@ -106,6 +107,7 @@ public class CharSequenceReaderTest extends TestCase {
     }
 
     /** Test {@link Reader#read(char[], int, int)}. */
+    @Test
     public void testReadCharArrayPortion() throws IOException {
         char[] chars = new char[10];
         Reader reader = new CharSequenceReader("FooBar");
