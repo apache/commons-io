@@ -117,7 +117,10 @@ public class CharSequenceInputStream extends InputStream {
         if (len < 0 || (off + len) > b.length) {
             throw new IndexOutOfBoundsException("Array Size=" + b.length +
                     ", offset=" + off + ", length=" + len);
-        }        
+        }
+        if (len == 0) {
+            return 0; // must return 0 for zero length read
+        }
         if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
             return -1;
         }
