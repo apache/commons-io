@@ -109,6 +109,13 @@ public class CharSequenceInputStreamTest {
         byte[] bytes = new byte[30];
         assertEquals(0, r.read(bytes, 0, 0));
     }
+
+    @Test
+    public void testReadZeroEmptyString() throws Exception {
+        InputStream r = new CharSequenceInputStream("", "UTF-8");
+        byte[] bytes = new byte[30];
+        assertEquals(0, r.read(bytes, 0, 0));
+    }
     
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {
