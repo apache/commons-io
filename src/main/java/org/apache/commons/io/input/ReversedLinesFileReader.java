@@ -198,7 +198,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * handle block rollover
+         * Handles block rollover
          * 
          * @return the new FilePart or null
          * @throws IOException if there was a problem reading the file
@@ -223,7 +223,8 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * read a line.
+         * Reads a line.
+         * 
          * @return the line or null
          * @throws IOException if there is an error reading from the file
          */
@@ -282,7 +283,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * create buffer containing any left over bytes.
+         * Creates the buffer containing any left over bytes.
          */
         private void createLeftOver() {
             int lineLengthBytes = currentLastBytePos + 1;
@@ -297,7 +298,8 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         /**
-         * find newline sequence and return its length
+         * Finds the new-line sequence and return its length.
+         * 
          * @param data buffer to scan
          * @param i start offset in buffer
          * @return length of newline sequence or 0 if none found
