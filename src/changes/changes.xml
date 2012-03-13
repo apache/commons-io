@@ -40,52 +40,52 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
-      <action dev="sebb" type="fix" issue="IO-306">
+      <action issue="IO-306" dev="sebb" type="fix">
         ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0
       </action>        
-      <action dev="sebb" type="add" issue="IO-173" due-to="Marcos Vinícius da Silva">
+      <action issue="IO-173" dev="sebb" type="add" due-to="Marcos Vinícius da Silva">
         FileUtils.listFiles() doesn't return directories
       </action>        
-      <action dev="sebb" type="fix" issue="IO-276" due-to="nkami">
+      <action issue="IO-276" dev="sebb" type="fix" due-to="nkami">
         "FileUtils#deleteDirectoryOnExit(File)" does not work
       </action>        
-      <action dev="sebb" type="fix" issue="IO-273" due-to="sebb">
+      <action issue="IO-273" dev="sebb" type="fix" due-to="sebb">
         BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...)
       </action>        
-      <action dev="sebb" type="add" issue="IO-297" due-to="Oleg Kalnichevski">
+      <action issue="IO-297" dev="sebb" type="add" due-to="Oleg Kalnichevski">
         CharSequenceInputStream to efficiently stream content of a CharSequence
       </action>        
-      <action dev="sebb" type="update" issue="IO-296" due-to="Oleg Kalnichevski">
+      <action issue="IO-296" dev="sebb" type="update" due-to="Oleg Kalnichevski">
         ReaderInputStream optimization: more efficient reading of small chunks of data
       </action>        
-      <action dev="sebb" type="fix" issue="IO-298" due-to="Christian Schulte">
+      <action issue="IO-298" dev="sebb" type="fix" due-to="Christian Schulte">
         Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'
       </action>        
-      <action dev="ggregory" type="add" issue="IO-304" due-to="liangly">
+      <action issue="IO-304" dev="ggregory" type="add" due-to="liangly">
         The second constructor of Tailer class does not pass 'delay' to the third one 
       </action>        
-      <action dev="ggregory" type="add" issue="IO-303" due-to="fabian.barney">
+      <action issue="IO-303" dev="ggregory" type="add" due-to="fabian.barney">
         TeeOutputStream does not call branch.close() when main.close() throws an exception 
       </action>        
-      <action dev="ggregory" type="add" issue="IO-302" due-to="jsteuerwald, detinho">
+      <action issue="IO-302" dev="ggregory" type="add" due-to="jsteuerwald, detinho">
         ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times
       </action>        
-      <action dev="ggregory" type="add" issue="IO-301" due-to="kaykay.unique">
+      <action issue="IO-301" dev="ggregory" type="add" due-to="kaykay.unique">
         Add IOUtils.closeQuietly(Selector) necessary 
       </action>        
-      <action dev="sebb" type="add" issue="IO-292" due-to="sebb">
+      <action issue="IO-292" dev="sebb" type="add" due-to="sebb">
         IOUtils.closeQuietly() should take a ServerSocket as a parameter
       </action>        
-      <action dev="sebb" type="add" issue="IO-290" due-to="sebb">
+      <action issue="IO-290" dev="sebb" type="add" due-to="sebb">
         Add read/readFully methods to IOUtils
       </action>        
-      <action dev="sebb" type="add" issue="IO-288" due-to="Georg Henzler">
+      <action issue="IO-288" dev="sebb" type="add" due-to="Georg Henzler">
         Supply a ReversedLinesFileReader
       </action>        
-      <action dev="ggregory" type="add" issue="IO-291" due-to="ggregory">
+      <action issue="IO-291" dev="ggregory" type="add" due-to="ggregory">
         Add new function FileUtils.directoryContains.
       </action>        
-      <action dev="sebb" type="add" issue="IO-275" due-to="CJ Aspromgos">
+      <action issue="IO-275" dev="sebb" type="add" due-to="CJ Aspromgos">
         FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
         Added contentEqualsIgnoreEOL methods to both classes
       </action>        
