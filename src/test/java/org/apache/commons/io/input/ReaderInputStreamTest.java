@@ -105,9 +105,24 @@ public class ReaderInputStreamTest {
     
     @Test
     public void testReadZero() throws Exception {
-        ReaderInputStream r = new ReaderInputStream(new StringReader("test"));
+        final String inStr = "test";
+        ReaderInputStream r = new ReaderInputStream(new StringReader(inStr));
         byte[] bytes = new byte[30];
         assertEquals(0, r.read(bytes, 0, 0));
+        assertEquals(inStr.length(), r.read(bytes, 0, inStr.length()+1));
+        // Should always return 0 for length == 0
+        assertEquals(0, r.read(bytes, 0, 0));
+    }
+    
+    @Test
+    public void testReadZeroEmptyString() throws Exception {
+        ReaderInputStream r = new ReaderInputStream(new StringReader(""));
+        byte[] bytes = new byte[30];
+        // Should always return 0 for length == 0
+        assertEquals(0, r.read(bytes, 0, 0));
+        assertEquals(-1, r.read(bytes, 0, 1));
+        assertEquals(0, r.read(bytes, 0, 0));
+        assertEquals(-1, r.read(bytes, 0, 1));
     }
     
     /**
