@@ -46,9 +46,9 @@ public class CharSequenceInputStreamTest {
         InputStream in = new CharSequenceInputStream(testString, charsetName, 512);
         for (byte b : bytes) {
             int read = in.read();
-            assertTrue(read >= 0);
-            assertTrue(read <= 255);
-            assertEquals(b, (byte)read);
+            assertTrue("read "+read+" >=0 ", read >= 0);
+            assertTrue("read "+read+" <= 255", read <= 255);
+            assertEquals("Should agree with input", b, (byte)read);
         }
         assertEquals(-1, in.read());
     }
@@ -63,13 +63,13 @@ public class CharSequenceInputStreamTest {
             int bufferLength = random.nextInt(64);
             int read = in.read(buffer, bufferOffset, bufferLength);
             if (read == -1) {
-                assertEquals(offset, expected.length);
+                assertEquals("EOF: offset should equal length", expected.length, offset);
                 break;
             } else {
-                assertTrue(read <= bufferLength);
+                assertTrue("Read "+read+" <= "+bufferLength, read <= bufferLength);
                 while (read > 0) {
-                    assertTrue(offset < expected.length);
-                    assertEquals(expected[offset], buffer[bufferOffset]);
+                    assertTrue("offset "+offset+" < "+expected.length, offset < expected.length);
+                    assertEquals("bytes should agree", expected[offset], buffer[bufferOffset]);
                     offset++;
                     bufferOffset++;
                     read--;
