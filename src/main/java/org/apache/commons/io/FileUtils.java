@@ -2651,7 +2651,10 @@ public class FileUtils {
      * <p>
      * Will not return true if there is a Symbolic Link anywhere in the path,
      * only if the specific file is.
-     *
+     * <p>
+     * <b>Note:</b> the current implementation always returns {@code false} if the system
+     * is detected as Windows using {@link FilenameUtils#isSystemWindows()}
+     * 
      * @param file the file to check
      * @return true if the file is a Symbolic Link
      * @throws IOException if an IO error occurs while checking the file
