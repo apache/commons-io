@@ -2310,6 +2310,21 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testIO300() throws Exception {
+        final File testDirectory = getTestDirectory();
+        File src = new File(testDirectory, "dir1");
+        File dest = new File(src,"dir2");
+        assertTrue(dest.mkdirs());
+        assertTrue(src.exists());
+        try {
+            FileUtils.moveDirectoryToDirectory(src, dest, false);
+            fail("expected IOException");
+        } catch (IOException ioe) {
+            // expected
+        }
+        assertTrue(src.exists());
+    }
+
     public void testIO276() throws Exception {
         File dir = new File("target", "IO276");
         assertTrue(dir+" should not be present",dir.mkdirs());
