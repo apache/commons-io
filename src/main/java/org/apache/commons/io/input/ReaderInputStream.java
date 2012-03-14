@@ -220,6 +220,13 @@ public class ReaderInputStream extends InputStream {
      */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
+        if (b == null) {
+            throw new NullPointerException("Byte array must not be null");
+        }
+        if (len < 0 || off < 0 || (off + len) > b.length) {
+            throw new IndexOutOfBoundsException("Array Size=" + b.length +
+                    ", offset=" + off + ", length=" + len);
+        }
         int read = 0;
         if (len == 0) {
             return 0; // Always return 0 if len == 0
