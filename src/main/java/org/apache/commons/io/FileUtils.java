@@ -32,6 +32,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -2491,6 +2492,9 @@ public class FileUtils {
         }
         boolean rename = srcDir.renameTo(destDir);
         if (!rename) {
+            if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
+                throw new IOException("Cannot move directory: "+srcDir+" to a subdirectory of itself: "+destDir);
+            }
             copyDirectory( srcDir, destDir );
             deleteDirectory( srcDir );
             if (srcDir.exists()) {
