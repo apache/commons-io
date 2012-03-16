@@ -4,7 +4,6 @@ $Id$
 			    Version 2.1
 			   Release Notes
 
-
 INTRODUCTION:
 
 Commons IO is a package of Java utility classes for java.io's hierarchy.  
@@ -13,6 +12,36 @@ reuse as to justify existence in java.io.
 
 Commons IO contains utility classes, stream implementations, file filters, 
 file comparators and endian transformation classes.
+
+==============================================================================
+Commons IO Package Version 2.2
+==============================================================================
+
+New features:
+o Use terabyte (TB) , petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)  Issue: IO-287. Thanks to Ron Kuris, Gary Gregory. 
+o FileUtils.listFiles() doesn't return directories  Issue: IO-173. Thanks to Marcos Vinícius da Silva. 
+o CharSequenceInputStream to efficiently stream content of a CharSequence  Issue: IO-297. Thanks to Oleg Kalnichevski. 
+o The second constructor of Tailer class does not pass 'delay' to the third one  Issue: IO-304. Thanks to liangly. 
+o TeeOutputStream does not call branch.close() when main.close() throws an exception  Issue: IO-303. Thanks to fabian.barney. 
+o ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times  Issue: IO-302. Thanks to jsteuerwald, detinho. 
+o Add IOUtils.closeQuietly(Selector) necessary  Issue: IO-301. Thanks to kaykay.unique. 
+o IOUtils.closeQuietly() should take a ServerSocket as a parameter  Issue: IO-292. Thanks to sebb. 
+o Add read/readFully methods to IOUtils  Issue: IO-290. Thanks to sebb. 
+o Supply a ReversedLinesFileReader  Issue: IO-288. Thanks to Georg Henzler. 
+o Add new function FileUtils.directoryContains.  Issue: IO-291. Thanks to ggregory. 
+o FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
+        Added contentEqualsIgnoreEOL methods to both classes  Issue: IO-275. Thanks to CJ Aspromgos. 
+
+Fixed Bugs:
+o FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory  Issue: IO-300. 
+o ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters  Issue: IO-307. 
+o ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0  Issue: IO-306. 
+o "FileUtils#deleteDirectoryOnExit(File)" does not work  Issue: IO-276. Thanks to nkami. 
+o BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...)  Issue: IO-273. Thanks to sebb. 
+o Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'  Issue: IO-298. Thanks to Christian Schulte. 
+
+Changes:
+o ReaderInputStream optimization: more efficient reading of small chunks of data  Issue: IO-296. Thanks to Oleg Kalnichevski. 
 
 ==============================================================================
 Commons IO Package Version 2.1
@@ -40,7 +69,6 @@ o FileSystemUtils.freeSpaceKb throws exception for Windows volumes with no visib
 Changes:
 o FileAlterationMonitor.stop(boolean allowIntervalToFinish)  Issue: IO-259. 
 
-
 ==============================================================================
 Commons IO Package Version 2.0.1
 ==============================================================================
@@ -57,12 +85,10 @@ Semantic compatible - Yes
 Commons IO 2.0.1 requires a minimum of JDK 1.5
  (Commons IO 1.4 had a minimum of JDK 1.3) 
 
-
 Enhancements from 2.0
 ---------------------
 
    * [IO-256] - Provide thread factory for FileAlternationMonitor
-
 
 Bug fixes from 2.0
 ------------------
@@ -86,7 +112,6 @@ Semantic compatible - Yes
 Commons IO 2.0 requires a minimum of JDK 1.5
  (Commons IO 1.4 had a minimum of JDK 1.3) 
 
-
 Deprecations from 1.4
 ---------------------
 
@@ -98,7 +123,6 @@ Deprecations from 1.4
 - FileFilterUtils
   - andFileFilter(IOFileFilter, IOFileFilter) in favour of and(IOFileFilter...) 
   - orFileFilter(IOFileFilter, IOFileFilter)  in favour of or(IOFileFilter...)
-
 
 Enhancements from 1.4
 ---------------------
@@ -145,7 +169,6 @@ Enhancements from 1.4
   * [IO-211] Proxy Input/Output streams - add pre/post processing support
   * [IO-242] Proxy Reader/Writer - add pre/post processing support
 
-
 Bug fixes from 1.4
 ------------------
   * [IO-214] ByteArrayOutputStream - fix inconsistent synchronization of fields
@@ -173,7 +196,6 @@ Bug fixes from 1.4
   * [IO-243] SwappedDataInputStream - fix readBoolean is inverted
   * [IO-235] Tests - remove unused YellOnFlushAndCloseOutputStream from CopyUtilsTest
   * [IO-161] Tests - fix FileCleaningTrackerTestCase hanging
-
 
 Documentation changes from 1.4
 ------------------------------
@@ -207,11 +229,9 @@ Commons IO 1.4 introduces four new implementations which depend on JDK 1.4 featu
 It has been built with the JDK source and target options set to JDK 1.3 and, except for
 those implementations, can be used with JDK 1.3 (see IO IO-127).
 
-
 Deprecations from 1.3.2
 -----------------------
 - FileCleaner deprecated in favour of FileCleaningTracker [see IO-116]
-
 
 Bug fixes from 1.3.2
 --------------------
@@ -224,7 +244,6 @@ Bug fixes from 1.3.2
 
 - HexDump
   - HexDump's use of static StringBuffers isn't thread-safe [IO-136]
-
 
 Enhancements from 1.3.2
 -----------------------
@@ -293,7 +312,6 @@ Enhancements from 1.3.2
   - PathFileComparator - compares files using file paths.
   - SizeFileComparator - compares files using file sizes.
   
-  
 ==============================================================================
 Commons IO Package Version 1.3.2
 ==============================================================================
@@ -306,7 +324,6 @@ Source compatible - Yes
 
 Semantic compatible - Yes
 
-
 Compatibility with 1.3
 ----------------------
 Binary compatible - No
@@ -317,14 +334,12 @@ Source compatible - No
 
 Semantic compatible - Yes
 
-
 Enhancements since 1.3.1
 ------------------------
 
 - Created the FileCleaningTracker, basically a non-static version of the
   FileCleaner, which can be controlled by the user. [IO-116]
 - The FileCleaner is deprecated.
-
 
 Bug fixes from 1.3.1
 --------------------
@@ -335,14 +350,12 @@ Bug fixes from 1.3.1
   - Both readSwappedUnsignedInteger(...) methods could return negative 
     numbers due to int/long casting. [IO-117]
 
-
 Bug fixes from 1.3
 ------------------
 
 - FileUtils
   - NPE in openOutputStream(File) when file has no parent in path [IO-112]
   - readFileToString(File) is not static [IO-113]
-
 
 ==============================================================================
 Commons IO Package Version 1.3.1
@@ -358,14 +371,12 @@ Source compatible - No
 
 Semantic compatible - Yes
 
-
 Bug fixes from 1.3
 ------------------
 
 - FileUtils
   - NPE in openOutputStream(File) when file has no parent in path [IO-112]
   - readFileToString(File) is not static [IO-113]
-  
   
 ==============================================================================
 Commons IO Package Version 1.3
@@ -380,7 +391,6 @@ Source compatible - Yes
 Semantic compatible - Yes
   Check the bug fixes section for semantic bug fixes
 
-
 Deprecations from 1.2
 ---------------------
 - WildcardFilter deprecated, replaced by WildcardFileFilter
@@ -391,7 +401,6 @@ Deprecations from 1.2
     thus isn't that useful
   - freeSpaceKb returns much better and more consistent results
   - freeSpaceKb existed in v1.2, so this is a gentle cutover
-
 
 Bug fixes from 1.2
 ------------------
@@ -556,7 +565,6 @@ Enhancements from 1.2
 - ByteArrayOutputStream  [IO-97]
   - Performance enhancements
 
-
 ==============================================================================
 Commons IO Package Version 1.2
 ==============================================================================
@@ -569,10 +577,8 @@ Source compatible - Yes
 
 Semantic compatible - Yes
 
-
 Deprecations from 1.1
 ---------------------
-
 
 Bug fixes from 1.1
 ------------------
@@ -585,7 +591,6 @@ Bug fixes from 1.1
 - LockableFileWriter
   Locking mechanism was broken and only provided limited protection [38942]
   File deletion and locking in case of constructor error was broken
-
 
 Enhancements from 1.1
 ---------------------
@@ -607,7 +612,6 @@ Enhancements from 1.1
 
 - FileUtils.copyDirectoryToDirectory
   New method to copy a directory to within another directory [36315]
-  
   
 ==============================================================================
 Commons IO Package Version 1.1
@@ -637,7 +641,6 @@ plus these bug fixes may affect you semantically:
 - FileUtils.sizeOfDirectory()  (Bug fix 36801)
     May now return a size of 0 if the directory is security restricted
 
-
 Deprecations from 1.0
 ---------------------
 - CopyUtils has been deprecated.
@@ -647,7 +650,6 @@ Deprecations from 1.0
 - IOUtils.toByteArray(String) - Use {@link String#getBytes()}
 - IOUtils.toString(byte[]) - Use {@link String#String(byte[])}
 - IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
-
 
 Bug fixes from 1.0
 ------------------
@@ -678,7 +680,6 @@ Bug fixes from 1.0
 
 - FileUtils - writeStringToFile()
     Null encoding now correctly uses the platform default
-
 
 Enhancements from 1.0
 ---------------------
@@ -776,8 +777,7 @@ Enhancements from 1.0
     Create directories if necesssary
 
 - IOUtils and EndianUtils are no longer final  [28978]
-    Allows developers to have subclasses if desired
-    
+    Allows developers to have subclasses if desired   
 
 ==============================================================================
 Feedback
