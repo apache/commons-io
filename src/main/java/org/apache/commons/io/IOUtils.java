@@ -1458,6 +1458,51 @@ public class IOUtils {
     }
 
     /**
+     * Copy some or all bytes from a large (over 2GB) <code>InputStream</code> to an
+     * <code>OutputStream</code>, optionally skipping input bytes.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @param offset : number of bytes to skip from input before copying
+     *         -ve values are ignored
+     * @param length : number of bytes to copy. -ve means all
+     * @return the number of bytes copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.2
+     */
+    public static long copyLarge(InputStream input, OutputStream output, final long offset, final long length)
+            throws IOException {
+        if( offset > 0){
+            skipFully( input, offset);
+        }
+        if (length == 0) {
+            return 0;
+        }
+        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        int bytesToRead = buffer.length;
+        if (length > 0 && length < buffer.length) {
+            bytesToRead = (int) length;
+        }
+        int read;
+        long totalRead = 0;
+        while(bytesToRead > 0 && -1 != (read=input.read(buffer, 0, bytesToRead))) {
+            output.write( buffer, 0, read);
+            totalRead += read;
+            if (length > 0) { // only adjust length if not reading to the end
+                // Note the cast must work because buffer.length is an integer
+                bytesToRead = (int) Math.min(length - totalRead, buffer.length);
+            }
+        }
+        return totalRead;
+    }
+
+    /**
      * Copy bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the default character encoding of the platform.
      * <p>
@@ -1559,6 +1604,51 @@ public class IOUtils {
             count += n;
         }
         return count;
+    }
+
+    /**
+     * Copy some or all chars from a large (over 2GB) <code>InputStream</code> to an
+     * <code>OutputStream</code>, optionally skipping input chars.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @param offset : number of chars to skip from input before copying
+     *         -ve values are ignored
+     * @param length : number of chars to copy. -ve means all
+     * @return the number of chars copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since Commons IO 2.2
+     */
+    public static long copyLarge(Reader input, Writer output, final long offset, final long length)
+            throws IOException {
+        if( offset > 0){
+            skipFully( input, offset);
+        }
+        if (length == 0) {
+            return 0;
+        }
+        char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+        int bytesToRead = buffer.length;
+        if (length > 0 && length < buffer.length) {
+            bytesToRead = (int) length;
+        }
+        int read;
+        long totalRead = 0;
+        while(bytesToRead > 0 && -1 != (read=input.read(buffer, 0, bytesToRead))) {
+            output.write( buffer, 0, read);
+            totalRead += read;
+            if (length > 0) { // only adjust length if not reading to the end
+                // Note the cast must work because buffer.length is an integer
+                bytesToRead = (int) Math.min(length - totalRead, buffer.length);
+            }
+        }
+        return totalRead;
     }
 
     /**

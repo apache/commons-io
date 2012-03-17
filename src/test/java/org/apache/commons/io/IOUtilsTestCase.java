@@ -17,7 +17,9 @@
 package org.apache.commons.io;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,10 +75,23 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             throw new RuntimeException("Can't run this test because " + "environment could not be built: "
                     + ioe.getMessage());
         }
+        // Create and init a byte array as input data
+        iarr = new byte[200];
+        Arrays.fill( iarr, (byte)-1);
+        for( int i=0; i< 80; i++){
+            iarr[i] = (byte) i;
+        }
+        carr = new char[200];
+        Arrays.fill( carr, (char)-1);
+        for( int i=0; i< 80; i++){
+            carr[i] = (char) i;
+        }
     }
 
     @Override
     public void tearDown() {
+        carr = null;
+        iarr = null;
         try {
             FileUtils.deleteDirectory(getTestDirectory());
         } catch (IOException ioe) {
@@ -718,4 +733,259 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(input);
     }
 
+    // Tests from IO-305
+    
+    private byte[] iarr = null;
+    
+    public void testNoSkip() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream( iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method 
+            assertEquals(100, IOUtils.copyLarge( is, os, 0, 100));
+            byte[] oarr = os.toByteArray();
+            
+            // check that output length is correct
+            assertEquals( 100, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals( -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testSkip() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream( iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method 
+            assertEquals(100, IOUtils.copyLarge( is, os, 10, 100));
+            byte[] oarr = os.toByteArray();
+            
+            // check that output length is correct
+            assertEquals( 100, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 11, oarr[1] );
+            assertEquals( 79, oarr[69] );
+            assertEquals( -1, oarr[70] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testSkipInvalid() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream( iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method 
+            IOUtils.copyLarge( is, os, 1000, 100);
+            fail( "Should have thrown EOFException");
+        }
+        catch( EOFException eofe){
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testFullLength() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream( iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method 
+            assertEquals(200, IOUtils.copyLarge( is, os, 0, -1));
+            byte[] oarr = os.toByteArray();
+            
+            // check that output length is correct
+            assertEquals( 200, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals( -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testExtraLength() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream( iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method
+            // for extra length, it reads till EOF
+            assertEquals(200, IOUtils.copyLarge( is, os, 0, 2000));
+            byte[] oarr = os.toByteArray();
+            
+            // check that output length is correct
+            assertEquals( 200, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals( -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    private char[] carr = null;
+
+    public void testCharNoSkip() throws IOException {
+        CharArrayReader is = null;
+        CharArrayWriter os = null;
+        try {
+            // Create streams
+            is = new CharArrayReader( carr);
+            os = new CharArrayWriter();
+
+            // Test our copy method 
+            assertEquals(100, IOUtils.copyLarge( is, os, 0, 100));
+            char[] oarr = os.toCharArray();
+            
+            // check that output length is correct
+            assertEquals( 100, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals((char) -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testCharSkip() throws IOException {
+        CharArrayReader is = null;
+        CharArrayWriter os = null;
+        try {
+            // Create streams
+            is = new CharArrayReader( carr);
+            os = new CharArrayWriter();
+
+            // Test our copy method 
+            assertEquals(100, IOUtils.copyLarge( is, os, 10, 100));
+            char[] oarr = os.toCharArray();
+            
+            // check that output length is correct
+            assertEquals( 100, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 11, oarr[1] );
+            assertEquals( 79, oarr[69] );
+            assertEquals((char) -1, oarr[70] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testCharSkipInvalid() throws IOException {
+        CharArrayReader is = null;
+        CharArrayWriter os = null;
+        try {
+            // Create streams
+            is = new CharArrayReader( carr);
+            os = new CharArrayWriter();
+
+            // Test our copy method 
+            IOUtils.copyLarge( is, os, 1000, 100);
+            fail( "Should have thrown EOFException");
+        }
+        catch( EOFException eofe){
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testCharFullLength() throws IOException {
+        CharArrayReader is = null;
+        CharArrayWriter os = null;
+        try {
+            // Create streams
+            is = new CharArrayReader( carr);
+            os = new CharArrayWriter();
+
+            // Test our copy method 
+            assertEquals(200, IOUtils.copyLarge( is, os, 0, -1));
+            char[] oarr = os.toCharArray();
+            
+            // check that output length is correct
+            assertEquals( 200, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals((char) -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
+    public void testCharExtraLength() throws IOException {
+        CharArrayReader is = null;
+        CharArrayWriter os = null;
+        try {
+            // Create streams
+            is = new CharArrayReader( carr);
+            os = new CharArrayWriter();
+
+            // Test our copy method
+            // for extra length, it reads till EOF
+            assertEquals(200, IOUtils.copyLarge( is, os, 0, 2000));
+            char[] oarr = os.toCharArray();
+            
+            // check that output length is correct
+            assertEquals( 200, oarr.length );
+            // check that output data corresponds to input data
+            assertEquals( 1, oarr[1] );
+            assertEquals( 79, oarr[79] );
+            assertEquals((char) -1, oarr[80] );
+            
+        }
+        finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
 }

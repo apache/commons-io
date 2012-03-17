@@ -24,6 +24,7 @@ $release.description.replaceAll("  ", "
 Changes in this version include:
 
 New features:
+o IO-305:  New copyLarge() method in IOUtils that takes additional offset, length arguments Thanks to Manoj Mokashi. 
 o IO-287:  Use terabyte (TB) , petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size) Thanks to Ron Kuris, Gary Gregory. 
 o IO-173:  FileUtils.listFiles() doesn't return directories Thanks to Marcos Vinícius da Silva. 
 o IO-297:  CharSequenceInputStream to efficiently stream content of a CharSequence Thanks to Oleg Kalnichevski. 
