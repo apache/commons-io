@@ -81,8 +81,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         try {
             fw1 = new FileWriter(file1);  // default encoding
             fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
-            assertEquals(true, file1.exists());
-            assertEquals(true, file2.exists());
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
             
             fw1.write(textContent);
             fw2.write(textContent);
@@ -95,8 +95,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             IOUtils.closeQuietly(fw1);
             IOUtils.closeQuietly(fw2);
         }
-        assertEquals(true, file1.exists());
-        assertEquals(true, file2.exists());
+        assertTrue(file1.exists());
+        assertTrue(file2.exists());
     }
 
     public void testDifferentEncoding() throws Exception {
@@ -106,8 +106,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             try {
                 fw1 = new FileWriter(file1);  // default encoding
                 fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
-                assertEquals(true, file1.exists());
-                assertEquals(true, file2.exists());
+                assertTrue(file1.exists());
+                assertTrue(file2.exists());
                 
                 fw1.write(textContent);
                 fw2.write(textContent);
@@ -125,8 +125,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 IOUtils.closeQuietly(fw1);
                 IOUtils.closeQuietly(fw2);
             }
-            assertEquals(true, file1.exists());
-            assertEquals(true, file2.exists());
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
         }
         if (Charset.isSupported("UTF-16LE")) {
             FileWriter fw1 = null;
@@ -134,8 +134,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             try {
                 fw1 = new FileWriter(file1);  // default encoding
                 fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
-                assertEquals(true, file1.exists());
-                assertEquals(true, file2.exists());
+                assertTrue(file1.exists());
+                assertTrue(file2.exists());
                 
                 fw1.write(textContent);
                 fw2.write(textContent);
@@ -153,8 +153,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 IOUtils.closeQuietly(fw1);
                 IOUtils.closeQuietly(fw2);
             }
-            assertEquals(true, file1.exists());
-            assertEquals(true, file2.exists());
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
         }
     }
 
@@ -166,11 +166,11 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             fail();
         } catch (IOException ex) {
             // expected
-            assertEquals(false, file1.exists());
+            assertFalse(file1.exists());
         } finally {
             IOUtils.closeQuietly(writer);
         }
-        assertEquals(false, file1.exists());
+        assertFalse(file1.exists());
     }
 
     //-----------------------------------------------------------------------
@@ -181,11 +181,11 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             fail();
         } catch (IOException ex) {
             // expected
-            assertEquals(false, file1.exists());
+            assertFalse(file1.exists());
         } finally {
             IOUtils.closeQuietly(writer);
         }
-        assertEquals(false, file1.exists());
+        assertFalse(file1.exists());
     }
 
     //-----------------------------------------------------------------------
@@ -196,11 +196,11 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             fail();
         } catch (NullPointerException ex) {
             // expected
-            assertEquals(false, file1.exists());
+            assertFalse(file1.exists());
         } finally {
             IOUtils.closeQuietly(writer);
         }
-        assertEquals(false, file1.exists());
+        assertFalse(file1.exists());
     }
 
     //-----------------------------------------------------------------------
@@ -211,11 +211,11 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             fail();
         } catch (NullPointerException ex) {
             // expected
-            assertEquals(false, file1.exists());
+            assertFalse(file1.exists());
         } finally {
             IOUtils.closeQuietly(writer);
         }
-        assertEquals(false, file1.exists());
+        assertFalse(file1.exists());
     }
 
 }

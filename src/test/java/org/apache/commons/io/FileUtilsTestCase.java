@@ -228,7 +228,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             } finally {
                 IOUtils.closeQuietly(out);
             }
-            assertEquals(true, file.exists());
+            assertTrue(file.exists());
         } finally {
             if (file.delete() == false) {
                 file.deleteOnExit();
@@ -255,7 +255,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         } finally {
             IOUtils.closeQuietly(out);
         }
-        assertEquals(true, file.exists());
+        assertTrue(file.exists());
     }
 
     public void test_openOutputStream_existsButIsDirectory() throws Exception {
@@ -281,7 +281,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         } finally {
             IOUtils.closeQuietly(out);
         }
-        assertEquals(true, file.exists());
+        assertTrue(file.exists());
     }
 
     public void test_openOutputStream_notExistsCannotCreate() throws Exception {
@@ -334,13 +334,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testToFile1() throws Exception {
         URL url = new URL("file", null, "a/b/c/file.txt");
         File file = FileUtils.toFile(url);
-        assertEquals(true, file.toString().indexOf("file.txt") >= 0);
+        assertTrue(file.toString().indexOf("file.txt") >= 0);
     }
 
     public void testToFile2() throws Exception {
         URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
         File file = FileUtils.toFile(url);
-        assertEquals(true, file.toString().indexOf("file name%20.txt") >= 0);
+        assertTrue(file.toString().indexOf("file name%20.txt") >= 0);
     }
 
     public void testToFile3() throws Exception {
@@ -351,7 +351,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testToFile4() throws Exception {
         URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
         File file = FileUtils.toFile(url);
-        assertEquals(true, file.toString().indexOf("file% %me.txt%") >= 0);
+        assertTrue(file.toString().indexOf("file% %me.txt%") >= 0);
     }
 
     /** IO-252 */
@@ -363,7 +363,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testToFileUtf8() throws Exception {
         URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
         File file = FileUtils.toFile(url);
-        assertEquals(true, file.toString().indexOf("\u00E4\u00F6\u00FC\u00DF") >= 0);
+        assertTrue(file.toString().indexOf("\u00E4\u00F6\u00FC\u00DF") >= 0);
     }
 
     public void testDecodeUrl() {
@@ -448,14 +448,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         URL[] urls = FileUtils.toURLs(files);
         
         assertEquals(files.length, urls.length);
-        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
-        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") >= 0);
-        assertEquals(true, urls[1].toExternalForm().startsWith("file:"));
-        assertEquals(true, urls[1].toExternalForm().indexOf("file2.txt") >= 0);
+        assertTrue(urls[0].toExternalForm().startsWith("file:"));
+        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") >= 0);
+        assertTrue(urls[1].toExternalForm().startsWith("file:"));
+        assertTrue(urls[1].toExternalForm().indexOf("file2.txt") >= 0);
 
         // Test escaped char
-        assertEquals(true, urls[2].toExternalForm().startsWith("file:"));
-        assertEquals(true, urls[2].toExternalForm().indexOf("test%20file.txt") >= 0);
+        assertTrue(urls[2].toExternalForm().startsWith("file:"));
+        assertTrue(urls[2].toExternalForm().indexOf("test%20file.txt") >= 0);
     }
 
 //    public void testToURLs2() throws Exception {
@@ -466,8 +466,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 //        URL[] urls = FileUtils.toURLs(files);
 //        
 //        assertEquals(files.length, urls.length);
-//        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
-//        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") > 0);
+//        assertTrue(urls[0].toExternalForm().startsWith("file:"));
+//        assertTrue(urls[0].toExternalForm().indexOf("file1.txt") > 0);
 //        assertEquals(null, urls[1]);
 //    }
 //
@@ -520,19 +520,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             getClass().getResource("/java/util/Collection.class"),
             objFile2);
 
-        assertEquals(false, FileUtils.contentEquals(objFile1, objFile2));
-        assertEquals(false, FileUtils.contentEquals(objFile1b, objFile2));
-        assertEquals(true, FileUtils.contentEquals(objFile1, objFile1b));
+        assertFalse(FileUtils.contentEquals(objFile1, objFile2));
+        assertFalse(FileUtils.contentEquals(objFile1b, objFile2));
+        assertTrue(FileUtils.contentEquals(objFile1, objFile1b));
 
-        assertEquals(true, FileUtils.contentEquals(objFile1, objFile1));
-        assertEquals(true, FileUtils.contentEquals(objFile1b, objFile1b));
-        assertEquals(true, FileUtils.contentEquals(objFile2, objFile2));
+        assertTrue(FileUtils.contentEquals(objFile1, objFile1));
+        assertTrue(FileUtils.contentEquals(objFile1b, objFile1b));
+        assertTrue(FileUtils.contentEquals(objFile2, objFile2));
 
         // Equal files
         file.createNewFile();
         file2.createNewFile();
-        assertEquals(true, FileUtils.contentEquals(file, file));
-        assertEquals(true, FileUtils.contentEquals(file, file2));
+        assertTrue(FileUtils.contentEquals(file, file));
+        assertTrue(FileUtils.contentEquals(file, file2));
     }
 
     public void testContentEqualsIgnoreEOL() throws Exception {
@@ -995,7 +995,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Check exists", destDir.exists());
         assertTrue("Check exists", actualDestDir.exists());
         assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(actualDestDir));
-        assertEquals(true, new File(actualDestDir, "sub/A.txt").exists());
+        assertTrue(new File(actualDestDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
     }
 
@@ -1014,7 +1014,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         assertTrue("Check exists", destDir.exists());
         assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
-        assertEquals(true, new File(destDir, "sub/A.txt").exists());
+        assertTrue(new File(destDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
     }
 
@@ -1033,7 +1033,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyDirectory(srcDir, destDir);
         
         assertEquals(FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
-        assertEquals(true, new File(destDir, "sub/A.txt").exists());
+        assertTrue(new File(destDir, "sub/A.txt").exists());
     }
 
     public void testCopyDirectoryFiltered() throws Exception {

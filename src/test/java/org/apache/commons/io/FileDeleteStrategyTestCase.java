@@ -47,12 +47,12 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
     public void testDeleteNormal() throws Exception {
         File baseDir = getTestDirectory();
         File subDir = new File(baseDir, "test");
-        assertEquals(true, subDir.mkdir());
+        assertTrue(subDir.mkdir());
         File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
-        assertEquals(true, subDir.exists());
-        assertEquals(true, subFile.exists());
+        assertTrue(subDir.exists());
+        assertTrue(subFile.exists());
         // delete dir
         try {
             FileDeleteStrategy.NORMAL.delete(subDir);
@@ -60,61 +60,61 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         } catch (IOException ex) {
             // expected
         }
-        assertEquals(true, subDir.exists());
-        assertEquals(true, subFile.exists());
+        assertTrue(subDir.exists());
+        assertTrue(subFile.exists());
         // delete file
         FileDeleteStrategy.NORMAL.delete(subFile);
-        assertEquals(true, subDir.exists());
-        assertEquals(false, subFile.exists());
+        assertTrue(subDir.exists());
+        assertFalse(subFile.exists());
         // delete dir
         FileDeleteStrategy.NORMAL.delete(subDir);
-        assertEquals(false, subDir.exists());
+        assertFalse(subDir.exists());
         // delete dir
         FileDeleteStrategy.NORMAL.delete(subDir);  // no error
-        assertEquals(false, subDir.exists());
+        assertFalse(subDir.exists());
     }
 
     public void testDeleteQuietlyNormal() throws Exception {
         File baseDir = getTestDirectory();
         File subDir = new File(baseDir, "test");
-        assertEquals(true, subDir.mkdir());
+        assertTrue(subDir.mkdir());
         File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
-        assertEquals(true, subDir.exists());
-        assertEquals(true, subFile.exists());
+        assertTrue(subDir.exists());
+        assertTrue(subFile.exists());
         // delete dir
-        assertEquals(false, FileDeleteStrategy.NORMAL.deleteQuietly(subDir));
-        assertEquals(true, subDir.exists());
-        assertEquals(true, subFile.exists());
+        assertFalse(FileDeleteStrategy.NORMAL.deleteQuietly(subDir));
+        assertTrue(subDir.exists());
+        assertTrue(subFile.exists());
         // delete file
-        assertEquals(true, FileDeleteStrategy.NORMAL.deleteQuietly(subFile));
-        assertEquals(true, subDir.exists());
-        assertEquals(false, subFile.exists());
+        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(subFile));
+        assertTrue(subDir.exists());
+        assertFalse(subFile.exists());
         // delete dir
-        assertEquals(true, FileDeleteStrategy.NORMAL.deleteQuietly(subDir));
-        assertEquals(false, subDir.exists());
+        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(subDir));
+        assertFalse(subDir.exists());
         // delete dir
-        assertEquals(true, FileDeleteStrategy.NORMAL.deleteQuietly(subDir));  // no error
-        assertEquals(false, subDir.exists());
+        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(subDir));  // no error
+        assertFalse(subDir.exists());
     }
 
     public void testDeleteForce() throws Exception {
         File baseDir = getTestDirectory();
         File subDir = new File(baseDir, "test");
-        assertEquals(true, subDir.mkdir());
+        assertTrue(subDir.mkdir());
         File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
-        assertEquals(true, subDir.exists());
-        assertEquals(true, subFile.exists());
+        assertTrue(subDir.exists());
+        assertTrue(subFile.exists());
         // delete dir
         FileDeleteStrategy.FORCE.delete(subDir);
-        assertEquals(false, subDir.exists());
-        assertEquals(false, subFile.exists());
+        assertFalse(subDir.exists());
+        assertFalse(subFile.exists());
         // delete dir
         FileDeleteStrategy.FORCE.delete(subDir);  // no error
-        assertEquals(false, subDir.exists());
+        assertFalse(subDir.exists());
     }
 
     public void testDeleteNull() throws Exception {
@@ -124,7 +124,7 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         } catch (NullPointerException ex) {
             // expected
         }
-        assertEquals(true, FileDeleteStrategy.NORMAL.deleteQuietly((File) null));
+        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly((File) null));
     }
 
     public void testToString() {

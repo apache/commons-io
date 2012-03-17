@@ -80,8 +80,8 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     public void test_isCaseSensitive() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.isCaseSensitive());
-        assertEquals(false, IOCase.INSENSITIVE.isCaseSensitive());
+        assertTrue(IOCase.SENSITIVE.isCaseSensitive());
+        assertFalse(IOCase.INSENSITIVE.isCaseSensitive());
         assertEquals(!WINDOWS, IOCase.SYSTEM.isCaseSensitive());
     }
     //-----------------------------------------------------------------------
@@ -124,15 +124,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     public void test_checkEquals_functionality() throws Exception {
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", ""));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "A"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "AB"));
-        assertEquals(true, IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "BC"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "C"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "ABCD"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("", "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkEquals("", ""));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", ""));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "A"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "AB"));
+        assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "BC"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "C"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "ABCD"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("", "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkEquals("", ""));
         
         try {
             IOCase.SENSITIVE.checkEquals("ABC", null);
@@ -149,27 +149,27 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     public void test_checkEquals_case() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
-        assertEquals(false, IOCase.SENSITIVE.checkEquals("ABC", "Abc"));
+        assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "Abc"));
         
-        assertEquals(true, IOCase.INSENSITIVE.checkEquals("ABC", "ABC"));
-        assertEquals(true, IOCase.INSENSITIVE.checkEquals("ABC", "Abc"));
+        assertTrue(IOCase.INSENSITIVE.checkEquals("ABC", "ABC"));
+        assertTrue(IOCase.INSENSITIVE.checkEquals("ABC", "Abc"));
         
-        assertEquals(true, IOCase.SYSTEM.checkEquals("ABC", "ABC"));
+        assertTrue(IOCase.SYSTEM.checkEquals("ABC", "ABC"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEquals("ABC", "Abc"));
     }
 
     //-----------------------------------------------------------------------
     public void test_checkStartsWith_functionality() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("ABC", ""));
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("ABC", "A"));
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("ABC", "ABC"));
-        assertEquals(false, IOCase.SENSITIVE.checkStartsWith("ABC", "BC"));
-        assertEquals(false, IOCase.SENSITIVE.checkStartsWith("ABC", "C"));
-        assertEquals(false, IOCase.SENSITIVE.checkStartsWith("ABC", "ABCD"));
-        assertEquals(false, IOCase.SENSITIVE.checkStartsWith("", "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("", ""));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", ""));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "A"));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "BC"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "C"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "ABCD"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("", "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("", ""));
         
         try {
             IOCase.SENSITIVE.checkStartsWith("ABC", null);
@@ -186,27 +186,27 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     public void test_checkStartsWith_case() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
-        assertEquals(false, IOCase.SENSITIVE.checkStartsWith("ABC", "Ab"));
+        assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "Ab"));
         
-        assertEquals(true, IOCase.INSENSITIVE.checkStartsWith("ABC", "AB"));
-        assertEquals(true, IOCase.INSENSITIVE.checkStartsWith("ABC", "Ab"));
+        assertTrue(IOCase.INSENSITIVE.checkStartsWith("ABC", "AB"));
+        assertTrue(IOCase.INSENSITIVE.checkStartsWith("ABC", "Ab"));
         
-        assertEquals(true, IOCase.SYSTEM.checkStartsWith("ABC", "AB"));
+        assertTrue(IOCase.SYSTEM.checkStartsWith("ABC", "AB"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkStartsWith("ABC", "Ab"));
     }
 
     //-----------------------------------------------------------------------
     public void test_checkEndsWith_functionality() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("ABC", ""));
-        assertEquals(false, IOCase.SENSITIVE.checkEndsWith("ABC", "A"));
-        assertEquals(false, IOCase.SENSITIVE.checkEndsWith("ABC", "AB"));
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("ABC", "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("ABC", "C"));
-        assertEquals(false, IOCase.SENSITIVE.checkEndsWith("ABC", "ABCD"));
-        assertEquals(false, IOCase.SENSITIVE.checkEndsWith("", "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("", ""));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", ""));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "A"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "AB"));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "C"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "ABCD"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("", "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("", ""));
         
         try {
             IOCase.SENSITIVE.checkEndsWith("ABC", null);
@@ -223,13 +223,13 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     public void test_checkEndsWith_case() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
-        assertEquals(false, IOCase.SENSITIVE.checkEndsWith("ABC", "Bc"));
+        assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "Bc"));
         
-        assertEquals(true, IOCase.INSENSITIVE.checkEndsWith("ABC", "BC"));
-        assertEquals(true, IOCase.INSENSITIVE.checkEndsWith("ABC", "Bc"));
+        assertTrue(IOCase.INSENSITIVE.checkEndsWith("ABC", "BC"));
+        assertTrue(IOCase.INSENSITIVE.checkEndsWith("ABC", "Bc"));
         
-        assertEquals(true, IOCase.SYSTEM.checkEndsWith("ABC", "BC"));
+        assertTrue(IOCase.SYSTEM.checkEndsWith("ABC", "BC"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEndsWith("ABC", "Bc"));
     }
 
@@ -299,25 +299,25 @@ public class IOCaseTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     public void test_checkRegionMatches_functionality() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, ""));
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "A"));
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "ABC"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "BC"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "C"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "ABCD"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("", 0, "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("", 0, ""));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, ""));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "A"));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "BC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "C"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "ABCD"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 0, "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("", 0, ""));
         
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, ""));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "A"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "AB"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "ABC"));
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "BC"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "C"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "ABCD"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("", 1, "ABC"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("", 1, ""));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, ""));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "A"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "AB"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "ABC"));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "BC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "C"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "ABCD"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, ""));
         
         try {
             IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null);
@@ -346,13 +346,13 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     public void test_checkRegionMatches_case() throws Exception {
-        assertEquals(true, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
-        assertEquals(false, IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
+        assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
+        assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
         
-        assertEquals(true, IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "AB"));
-        assertEquals(true, IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
+        assertTrue(IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "AB"));
+        assertTrue(IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
         
-        assertEquals(true, IOCase.SYSTEM.checkRegionMatches("ABC", 0, "AB"));
+        assertTrue(IOCase.SYSTEM.checkRegionMatches("ABC", 0, "AB"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkRegionMatches("ABC", 0, "Ab"));
     }
 

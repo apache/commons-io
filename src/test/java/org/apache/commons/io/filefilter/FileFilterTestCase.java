@@ -446,7 +446,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
 
         AndFileFilter f = new AndFileFilter((List<IOFileFilter>) null);
-        assertEquals(true, f.getFileFilters().isEmpty());
+        assertTrue(f.getFileFilters().isEmpty());
     }
 
     public void testOr() throws Exception {
@@ -483,7 +483,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
         
         OrFileFilter f = new OrFileFilter((List<IOFileFilter>) null);
-        assertEquals(true, f.getFileFilters().isEmpty());
+        assertTrue(f.getFileFilters().isEmpty());
     }
     public void testFileFilterUtils_and() throws Exception {
         IOFileFilter trueFilter = TrueFileFilter.INSTANCE;
