@@ -1,6 +1,22 @@
+## Licensed to the Apache Software Foundation (ASF) under one
+## or more contributor license agreements.  See the NOTICE file
+## distributed with this work for additional information
+## regarding copyright ownership.  The ASF licenses this file
+## to you under the Apache License, Version 2.0 (the
+## "License"); you may not use this file except in compliance
+## with the License.  You may obtain a copy of the License at
+##
+##  http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing,
+## software distributed under the License is distributed on an
+## "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+## KIND, either express or implied.  See the License for the
+## specific language governing permissions and limitations
+## under the License.
 
              Commons IO Package
-                Version 2.2
+                Version ${version}
                Release Notes
 
 INTRODUCTION:
@@ -13,42 +29,121 @@ Commons IO contains utility classes, stream implementations, file filters,
 file comparators and endian transformation classes.
 
 ==============================================================================
-Commons IO Package Version 2.2
+Commons IO Package Version ${version}
 ==============================================================================
 
-The Commons IO library contains utility classes, stream implementations, file filters, file comparators and endian classes.
+$introduction.replaceAll("(?<!\015)\012", "
+")
 
+## N.B. the available variables are described here:
+## http://maven.apache.org/plugins/maven-changes-plugin/examples/using-a-custom-announcement-template.html
+##
+## Hack to improve layout: replace all pairs of spaces with a single new-line
 $release.description.replaceAll("  ", "
 ")
 
+#if ($release.getActions().size() == 0)
+No changes defined in this version.
+#else
 Changes in this version include:
 
+## indent to be used if there is no issue attribute.
+## should be the same as the indent in the changes.xml file
+## less 2 spaces for the 'o' and trailing space
+#set($indent='          ')
+#if ($release.getActions('add').size() !=0)
 New features:
-o IO-287:  Use terabyte (TB) , petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size) Thanks to Ron Kuris, Gary Gregory. 
-o IO-173:  FileUtils.listFiles() doesn't return directories Thanks to Marcos Vinícius da Silva. 
-o IO-297:  CharSequenceInputStream to efficiently stream content of a CharSequence Thanks to Oleg Kalnichevski. 
-o IO-304:  The second constructor of Tailer class does not pass 'delay' to the third one Thanks to liangly. 
-o IO-303:  TeeOutputStream does not call branch.close() when main.close() throws an exception Thanks to fabian.barney. 
-o IO-302:  ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times Thanks to jsteuerwald, detinho. 
-o IO-301:  Add IOUtils.closeQuietly(Selector) necessary Thanks to kaykay.unique. 
-o IO-292:  IOUtils.closeQuietly() should take a ServerSocket as a parameter Thanks to sebb. 
-o IO-290:  Add read/readFully methods to IOUtils Thanks to sebb. 
-o IO-288:  Supply a ReversedLinesFileReader Thanks to Georg Henzler. 
-o IO-291:  Add new function FileUtils.directoryContains. Thanks to ggregory. 
-o IO-275:  FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
-        Added contentEqualsIgnoreEOL methods to both classes Thanks to CJ Aspromgos. 
+#foreach($actionItem in $release.getActions('add'))
+## Use replaceAll to fix up LF-only line ends on Windows.
+#set($action=$actionItem.getAction().replaceAll("\n","
+"))
+#if ($actionItem.getIssue())
+#set($issue=$actionItem.getIssue())
+#else
+#set($issue="")
+#end
+#if ($actionItem.getDueTo())
+#set($dueto=$actionItem.getDueTo())
+#else
+#set($dueto="")
+#end
+o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks to $dueto. #end
 
+#set($issue="")
+#set($dueto="")
+#end 
+#end
+
+#if ($release.getActions('fix').size() !=0)
 Fixed Bugs:
-o IO-300:  FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory 
-o IO-307:  ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters 
-o IO-306:  ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0 
-o IO-276:  "FileUtils#deleteDirectoryOnExit(File)" does not work Thanks to nkami. 
-o IO-273:  BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...) Thanks to sebb. 
-o IO-298:  Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException' Thanks to Christian Schulte. 
+#foreach($actionItem in $release.getActions('fix'))
+## Use replaceAll to fix up LF-only line ends on Windows.
+#set($action=$actionItem.getAction().replaceAll("\n","
+"))
+#if ($actionItem.getIssue())
+#set($issue=$actionItem.getIssue())
+#else
+#set($issue="")
+#end
+#if ($actionItem.getDueTo())
+#set($dueto=$actionItem.getDueTo())
+#else
+#set($dueto="")
+#end
+o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks to $dueto. #end
 
+#set($issue="")
+#set($dueto="")
+#end
+#end
+
+#if ($release.getActions('update').size() !=0)
 Changes:
-o IO-296:  ReaderInputStream optimization: more efficient reading of small chunks of data Thanks to Oleg Kalnichevski. 
+#foreach($actionItem in $release.getActions('update'))
+## Use replaceAll to fix up LF-only line ends on Windows.
+#set($action=$actionItem.getAction().replaceAll("\n","
+"))
+#if ($actionItem.getIssue())
+#set($issue=$actionItem.getIssue())
+#else
+#set($issue="")
+#end
+#if ($actionItem.getDueTo())
+#set($dueto=$actionItem.getDueTo())
+#else
+#set($dueto="")
+#end
+o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks to $dueto. #end
 
+#set($issue="")
+#set($dueto="")
+#end
+#end
+
+#if ($release.getActions('remove').size() !=0)
+Removed:
+#foreach($actionItem in $release.getActions('remove'))
+## Use replaceAll to fix up LF-only line ends on Windows.
+#set($action=$actionItem.getAction().replaceAll("\n","
+"))
+#if ($actionItem.getIssue())
+#set($issue=$actionItem.getIssue())
+#else
+#set($issue="")
+#end
+#if ($actionItem.getDueTo())
+#set($dueto=$actionItem.getDueTo())
+#else
+#set($dueto="")
+#end
+o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks to $dueto. #end
+
+#set($issue="")
+#set($dueto="")
+#end
+#end
+## End of main loop
+#end
 
 ==============================================================================
 Commons IO Package Version 2.1
