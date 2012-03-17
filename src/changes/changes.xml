@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA">
+      <action issue="IO-305" dev="sebb" type="add" due-to="Manoj Mokashi">
+        New copyLarge() method in IOUtils that takes additional offset, length arguments
+      </action>        
       <action issue="IO-300" dev="sebb" type="fix">
         FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory
       </action>        
