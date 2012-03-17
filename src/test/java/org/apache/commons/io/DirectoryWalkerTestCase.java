@@ -509,7 +509,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         @Override
         protected void handleDirectoryEnd(File directory, int depth, Collection<File> results) throws IOException {
             results.add(directory);
-            assertEquals(false, cancelled);
+            assertFalse(cancelled);
             if (cancelFileName.equals(directory.getName())) {
                 cancelled = true;
             }
@@ -519,7 +519,7 @@ public class DirectoryWalkerTestCase extends TestCase {
         @Override
         protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
             results.add(file);
-            assertEquals(false, cancelled);
+            assertFalse(cancelled);
             if (cancelFileName.equals(file.getName())) {
                 cancelled = true;
             }
