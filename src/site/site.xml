@@ -29,9 +29,6 @@
             <item name="User guide"           href="/description.html"/>
             <item name="Best practices"       href="/bestpractices.html"/>
             <item name="Javadoc 2.2"          href="api-release/index.html"/>
-            <item name="Javadoc 2.1"          href="api-2.1/index.html"/>
-            <item name="Javadoc 2.0.1"        href="api-2.0.1/index.html"/>
-            <item name="Javadoc 2.0"          href="api-2.0/index.html"/>
             <item name="Javadoc 1.4"          href="api-1.4/index.html"/>
         </menu>
 
