@@ -5,12 +5,12 @@
 
 INTRODUCTION:
 
-Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Commons IO is a package of Java utility classes like java.io.  
 Classes in this package are considered to be so standard and of such high 
 reuse as to justify existence in java.io.
 
 Commons IO contains utility classes, stream implementations, file filters, 
-file comparators and endian transformation classes.
+file comparators, endian transformation classes, and much more.
 
 ==============================================================================
 Commons IO Package Version 2.2
