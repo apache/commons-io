@@ -16,11 +16,6 @@ file comparators and endian transformation classes.
 Commons IO Package Version 2.2
 ==============================================================================
 
-The Commons IO library contains utility classes, stream implementations, file filters, file comparators and endian classes.
-
-$release.description.replaceAll("  ", "
-")
-
 Changes in this version include:
 
 New features:
@@ -50,6 +45,13 @@ o IO-298:  Various methods of class 'org.apache.commons.io.FileUtils' incorrectl
 Changes:
 o IO-296:  ReaderInputStream optimization: more efficient reading of small chunks of data Thanks to Oleg Kalnichevski. 
 
+Compatibility with 2.1 and 1.4:
+Binary compatible: Yes
+Source compatible: Yes
+Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes
+
+Commons IO 2.2 requires a minimum of JDK 1.5. 
+Commons IO 1.4 requires a minimum of JDK 1.3. 
 
 ==============================================================================
 Commons IO Package Version 2.1
