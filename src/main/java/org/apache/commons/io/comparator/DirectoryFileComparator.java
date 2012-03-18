@@ -40,7 +40,7 @@ import java.util.Comparator;
  * </pre>
  * <p>
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @since Commons IO 2.0
  */
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {

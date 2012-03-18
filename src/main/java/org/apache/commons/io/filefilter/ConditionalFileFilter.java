@@ -22,7 +22,7 @@ import java.util.List;
  * Defines operations for conditional file filters.
  *
  * @since Commons IO 1.1
- * @version $Revision$ $Date$
+ * @version $Revision$
  */
 public interface ConditionalFileFilter {
 

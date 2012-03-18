@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Revision$
  */
 
 public class TeeOutputStreamTest extends TestCase {

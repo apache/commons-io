@@ -23,7 +23,7 @@ import java.io.Serializable;
  * A file filter that always returns false.
  *
  * @since Commons IO 1.0
- * @version $Revision$ $Date$
+ * @version $Revision$
  *
  * @see FileFilterUtils#falseFileFilter()
  */

@@ -46,7 +46,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  * <p>
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @since Commons IO 1.4
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {

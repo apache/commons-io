@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Abstract file {@link Comparator} which provides sorting for file arrays and lists.
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @since Commons IO 2.0
  */
 abstract class AbstractFileComparator implements Comparator<File> {

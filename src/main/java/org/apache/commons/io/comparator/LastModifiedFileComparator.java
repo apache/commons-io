@@ -42,7 +42,7 @@ import java.util.Comparator;
  * </pre>
  * <p>
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @since Commons IO 1.4
  */
 public class LastModifiedFileComparator extends AbstractFileComparator implements Serializable {
