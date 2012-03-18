@@ -27,7 +27,7 @@ import org.junit.Test;
 /**
  * Test case for {@link CharSequenceReader}.
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  */
 public class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];

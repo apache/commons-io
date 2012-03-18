@@ -37,7 +37,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @see FileFilterUtils#prefixFileFilter(String)
  * @see FileFilterUtils#prefixFileFilter(String, IOCase)
  */

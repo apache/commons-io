@@ -28,7 +28,7 @@ import java.io.Writer;
  * For safe usage with multiple {@link Thread}s then
  * <code>java.io.StringWriter</code> should be used.
  *
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @since Commons IO 2.0
  */
 public class StringBuilderWriter extends Writer implements Serializable {

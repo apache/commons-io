@@ -23,7 +23,7 @@ import java.io.Serializable;
  * This filter produces a logical NOT of the filters specified.
  *
  * @since Commons IO 1.0
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */
 public class NotFileFilter extends AbstractFileFilter implements Serializable {

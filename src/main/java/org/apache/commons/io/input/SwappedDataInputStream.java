@@ -30,7 +30,7 @@ import org.apache.commons.io.EndianUtils;
  * <p>
  * <b>Origin of code: </b>Avalon Excalibur (IO)
  *
- * @version CVS $Revision$ $Date$
+ * @version CVS $Revision$
  */
 public class SwappedDataInputStream extends ProxyInputStream
     implements DataInput

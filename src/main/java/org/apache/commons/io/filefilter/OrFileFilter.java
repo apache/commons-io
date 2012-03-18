@@ -30,7 +30,7 @@ import java.util.List;
  * <code>true</code>.
  *
  * @since Commons IO 1.0
- * @version $Revision$ $Date$
+ * @version $Revision$
  * @see FileFilterUtils#or(IOFileFilter...)
  */
 public class OrFileFilter
