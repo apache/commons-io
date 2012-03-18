@@ -24,7 +24,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 
 public class HexDumpTest extends TestCase {

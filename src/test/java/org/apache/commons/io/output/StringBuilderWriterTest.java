@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 /**
  * Test case for {@link StringBuilderWriter}.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class StringBuilderWriterTest extends TestCase {
     private static final char[] FOOBAR_CHARS = new char[] {'F', 'o', 'o', 'B', 'a', 'r'};

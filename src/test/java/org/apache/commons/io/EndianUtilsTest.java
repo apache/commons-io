@@ -24,7 +24,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class EndianUtilsTest extends TestCase {
 

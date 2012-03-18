@@ -26,7 +26,7 @@ import java.io.File;
  * otherwise your class will infinitely loop.
  *
  * @since Commons IO 1.0
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class AbstractFileFilter implements IOFileFilter {
 

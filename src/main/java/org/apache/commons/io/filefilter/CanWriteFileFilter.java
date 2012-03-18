@@ -50,7 +50,7 @@ import java.io.Serializable;
  *    <code>CanReadFileFilter.READ_ONLY</code>.
  *
  * @since Commons IO 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {
     
