@@ -22,7 +22,7 @@ import junit.framework.TestCase;
  * Really not a lot to do here, but checking that no 
  * Exceptions are thrown. 
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class NullWriterTest extends TestCase {
 

@@ -34,7 +34,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since Commons IO 1.0
- * @version $Revision$
+ * @version $Id$
  *
  * @see FileFilterUtils#directoryFileFilter()
  */

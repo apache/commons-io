@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 /**
  * Test {@link ProxyReader}. 
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class ProxyReaderTest extends TestCase {
 

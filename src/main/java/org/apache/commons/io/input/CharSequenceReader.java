@@ -25,7 +25,7 @@ import java.io.Serializable;
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  *
- * @version $Revision$
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class CharSequenceReader extends Reader implements Serializable {

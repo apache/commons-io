@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 /**
  * Tests that the encoding is actually set and used.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class FileWriterWithEncodingTest extends FileBasedTestCase {
 

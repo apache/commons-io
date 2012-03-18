@@ -25,7 +25,7 @@ import java.io.FilenameFilter;
  * interfaces together.
  * 
  * @since Commons IO 1.0
- * @version $Revision$
+ * @version $Id$
  */
 public interface IOFileFilter extends FileFilter, FilenameFilter {
 
