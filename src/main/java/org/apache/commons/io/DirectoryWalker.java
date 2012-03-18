@@ -246,7 +246,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class DirectoryWalker<T> {
 

@@ -58,7 +58,7 @@ import java.io.InputStream;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public class NullInputStream extends InputStream {
 

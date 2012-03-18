@@ -24,7 +24,7 @@ import java.util.Comparator;
  * Reverses the result of comparing two objects using
  * the delegate {@link Comparator}.
  *
- * @version $Revision$
+ * @version $Id$
  * @since Commons IO 1.4
  */
 class ReverseComparator extends AbstractFileComparator implements Serializable {

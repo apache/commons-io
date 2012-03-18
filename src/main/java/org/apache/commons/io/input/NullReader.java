@@ -58,7 +58,7 @@ import java.io.Reader;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public class NullReader extends Reader {
 

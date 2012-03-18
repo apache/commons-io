@@ -28,7 +28,7 @@ import org.apache.commons.io.input.NullInputStream;
 
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 
 public class CountingOutputStreamTest extends TestCase {

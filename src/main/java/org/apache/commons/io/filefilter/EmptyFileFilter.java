@@ -49,7 +49,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since Commons IO 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
     

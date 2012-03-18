@@ -39,7 +39,7 @@ import java.util.List;
  *       comparator.sort(list);
  * </pre>
  *
- * @version $Revision$
+ * @version $Id$
  * @since Commons IO 2.0
  */
 public class CompositeFileComparator extends AbstractFileComparator implements Serializable {

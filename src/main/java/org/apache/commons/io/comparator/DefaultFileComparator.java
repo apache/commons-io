@@ -41,7 +41,7 @@ import java.util.Comparator;
  * </pre>
  * <p>
  *
- * @version $Revision$
+ * @version $Id$
  * @since Commons IO 1.4
  */
 public class DefaultFileComparator extends AbstractFileComparator implements Serializable {

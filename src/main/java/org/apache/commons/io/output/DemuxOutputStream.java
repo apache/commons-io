@@ -23,7 +23,7 @@ import java.io.OutputStream;
  * Data written to this stream is forwarded to a stream that has been associated
  * with this thread.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class DemuxOutputStream
     extends OutputStream
