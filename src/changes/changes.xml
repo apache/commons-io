@@ -39,7 +39,7 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.2" date="2012-03-18">
+    <release version="2.2" date="2012-03-18" description="">
       <action issue="IO-305" dev="sebb" type="add" due-to="Manoj Mokashi">
         New copyLarge() method in IOUtils that takes additional offset, length arguments
       </action>        
