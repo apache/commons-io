@@ -21,27 +21,24 @@
 
 INTRODUCTION:
 
-Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Commons IO is a package of Java utility classes like java.io.  
 Classes in this package are considered to be so standard and of such high 
 reuse as to justify existence in java.io.
-
-Commons IO contains utility classes, stream implementations, file filters, 
-file comparators and endian transformation classes.
-
-==============================================================================
-Commons IO Package Version ${version}
-==============================================================================
 
 $introduction.replaceAll("(?<!\015)\012", "
 ")
 
+==============================================================================
+Commons IO Package Version ${version}
+==============================================================================
+##
 ## N.B. the available variables are described here:
 ## http://maven.apache.org/plugins/maven-changes-plugin/examples/using-a-custom-announcement-template.html
 ##
 ## Hack to improve layout: replace all pairs of spaces with a single new-line
 $release.description.replaceAll("  ", "
 ")
-
+##
 #if ($release.getActions().size() == 0)
 No changes defined in this version.
 #else
@@ -137,13 +134,21 @@ Removed:
 #set($dueto="")
 #end
 o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks to $dueto. #end
-
+##
 #set($issue="")
 #set($dueto="")
 #end
 #end
 ## End of main loop
 #end
+##
+Compatibility with 2.1 and 1.4:
+Binary compatible: Yes
+Source compatible: Yes
+Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes
+
+Commons IO 2.2 requires a minimum of JDK 1.5. 
+Commons IO 1.4 requires a minimum of JDK 1.3. 
 
 ==============================================================================
 Commons IO Package Version 2.1

@@ -9,7 +9,7 @@ Commons IO is a package of Java utility classes like java.io.
 Classes in this package are considered to be so standard and of such high 
 reuse as to justify existence in java.io.
 
-Commons IO contains utility classes, stream implementations, file filters, 
+The Commons IO library contains utility classes, stream implementations, file filters, 
 file comparators, endian transformation classes, and much more.
 
 ==============================================================================
