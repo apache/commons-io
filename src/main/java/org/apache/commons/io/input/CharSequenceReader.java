@@ -40,7 +40,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param charSequence The character sequence, may be <code>null</code>
      */
     public CharSequenceReader(CharSequence charSequence) {
-        this.charSequence = (charSequence != null ? charSequence : "");
+        this.charSequence = charSequence != null ? charSequence : "";
     }
 
     /**
@@ -104,7 +104,7 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (array == null) {
             throw new NullPointerException("Character array is missing");
         }
-        if (length < 0 || offset < 0 || (offset + length) > array.length) {
+        if (length < 0 || offset < 0 || offset + length > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + offset + ", length=" + length);
         }
@@ -144,7 +144,7 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (idx >= charSequence.length()) {
             return -1;
         }
-        int dest = (int)Math.min(charSequence.length(), (idx + n));
+        int dest = (int)Math.min(charSequence.length(), idx + n);
         int count = dest - idx;
         idx = dest;
         return count;

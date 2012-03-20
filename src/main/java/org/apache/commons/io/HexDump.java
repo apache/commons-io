@@ -73,7 +73,7 @@ public class HexDump {
             throws IOException, ArrayIndexOutOfBoundsException,
             IllegalArgumentException {
         
-        if ((index < 0) || (index >= data.length)) {
+        if (index < 0 || index >= data.length) {
             throw new ArrayIndexOutOfBoundsException(
                     "illegal index: " + index + " into array of length "
                     + data.length);
@@ -100,7 +100,7 @@ public class HexDump {
                 buffer.append(' ');
             }
             for (int k = 0; k < chars_read; k++) {
-                if ((data[k + j] >= ' ') && (data[k + j] < 127)) {
+                if (data[k + j] >= ' ' && data[k + j] < 127) {
                     buffer.append((char) data[k + j]);
                 } else {
                     buffer.append('.');
@@ -139,7 +139,7 @@ public class HexDump {
     private static StringBuilder dump(StringBuilder _lbuffer, long value) {
         for (int j = 0; j < 8; j++) {
             _lbuffer
-                    .append(_hexcodes[((int) (value >> _shifts[j])) & 15]);
+                    .append(_hexcodes[(int) (value >> _shifts[j]) & 15]);
         }
         return _lbuffer;
     }
@@ -153,7 +153,7 @@ public class HexDump {
      */
     private static StringBuilder dump(StringBuilder _cbuffer, byte value) {
         for (int j = 0; j < 2; j++) {
-            _cbuffer.append(_hexcodes[(value >> _shifts[j + 6]) & 15]);
+            _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
         }
         return _cbuffer;
     }

@@ -402,7 +402,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
             @Override
             protected boolean isValidLine(String line) {
                 char c = line.charAt(line.length() - 1);
-                return ((c - 48) % 3 != 1);
+                return (c - 48) % 3 != 1;
             }
         };
         try {

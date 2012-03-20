@@ -163,7 +163,7 @@ public class NullReaderTest extends TestCase {
 
         // Read further
         for (int i = 0; i < 3; i++) {
-            assertEquals("Read After Mark [" + i +"]",  (position + i), reader.read());
+            assertEquals("Read After Mark [" + i +"]",  position + i, reader.read());
         }
 
         // Reset
@@ -171,7 +171,7 @@ public class NullReaderTest extends TestCase {
 
         // Read From marked position
         for (int i = 0; i < readlimit + 1; i++) {
-            assertEquals("Read After Reset [" + i +"]",  (position + i), reader.read());
+            assertEquals("Read After Reset [" + i +"]",  position + i, reader.read());
         }
 
         // Reset after read limit passed
@@ -242,7 +242,7 @@ public class NullReaderTest extends TestCase {
         }
         @Override
         protected int processChar() {
-            return ((int)getPosition() - 1);
+            return (int)getPosition() - 1;
         }
         @Override
         protected void processChars(char[] chars, int offset, int length) {

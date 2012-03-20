@@ -261,7 +261,7 @@ public class FileSystemUtils {
         }
         switch (os) {
             case WINDOWS:
-                return (kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout));
+                return kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout);
             case UNIX:
                 return freeSpaceUnix(path, kb, false, timeout);
             case POSIX_UNIX:
@@ -390,7 +390,7 @@ public class FileSystemUtils {
             flags += "P";
         }
         String[] cmdAttribs = 
-            (flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path});
+            flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path};
         
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         List<String> lines = performCommand(cmdAttribs, 3, timeout);

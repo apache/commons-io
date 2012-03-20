@@ -32,7 +32,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class FilenameUtilsTestCase extends FileBasedTestCase {
     
     private static final String SEP = "" + File.separatorChar;
-    private static final boolean WINDOWS = (File.separatorChar == '\\');
+    private static final boolean WINDOWS = File.separatorChar == '\\';
 
     private File testFile1;
     private File testFile2;

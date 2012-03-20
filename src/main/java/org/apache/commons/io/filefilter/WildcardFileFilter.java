@@ -77,7 +77,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
             throw new IllegalArgumentException("The wildcard must not be null");
         }
         this.wildcards = new String[] { wildcard };
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -109,7 +109,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         }
         this.wildcards = new String[wildcards.length];
         System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -136,7 +136,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
         this.wildcards = wildcards.toArray(new String[wildcards.size()]);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     //-----------------------------------------------------------------------

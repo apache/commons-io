@@ -31,7 +31,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class IOCaseTestCase extends FileBasedTestCase {
 
-    private static final boolean WINDOWS = (File.separatorChar == '\\');
+    private static final boolean WINDOWS = File.separatorChar == '\\';
 
     public IOCaseTestCase(String name) {
         super(name);

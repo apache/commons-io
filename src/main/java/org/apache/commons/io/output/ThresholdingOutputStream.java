@@ -199,7 +199,7 @@ public abstract class ThresholdingOutputStream
      */
     public boolean isThresholdExceeded()
     {
-        return (written > threshold);
+        return written > threshold;
     }
 
 
@@ -218,7 +218,7 @@ public abstract class ThresholdingOutputStream
      */
     protected void checkThreshold(int count) throws IOException
     {
-        if (!thresholdExceeded && (written + count > threshold))
+        if (!thresholdExceeded && written + count > threshold)
         {
             thresholdExceeded = true;
             thresholdReached();

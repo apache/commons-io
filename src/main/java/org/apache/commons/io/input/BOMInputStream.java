@@ -137,7 +137,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException if an error reading the first bytes of the stream occurs
      */
     public boolean hasBOM() throws IOException {
-        return (getBOM() != null);
+        return getBOM() != null;
     }
 
     /**
@@ -154,7 +154,7 @@ public class BOMInputStream extends ProxyInputStream {
         if (!boms.contains(bom)) {
             throw new IllegalArgumentException("Stream not configure to detect " + bom);
         }
-        return (byteOrderMark != null && getBOM().equals(bom));
+        return byteOrderMark != null && getBOM().equals(bom);
     }
 
     /**
@@ -199,7 +199,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public String getBOMCharsetName() throws IOException {
         getBOM();
-        return (byteOrderMark == null ? null : byteOrderMark.getCharsetName());
+        return byteOrderMark == null ? null : byteOrderMark.getCharsetName();
     }
 
     /**
@@ -212,7 +212,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private int readFirstBytes() throws IOException {
         getBOM();
-        return (fbIndex < fbLength) ? firstBytes[fbIndex++] : -1;
+        return fbIndex < fbLength ? firstBytes[fbIndex++] : -1;
     }
 
     /**
@@ -260,7 +260,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public int read() throws IOException {
         int b = readFirstBytes();
-        return (b >= 0) ? b : in.read();
+        return b >= 0 ? b : in.read();
     }
 
     /**
@@ -276,7 +276,7 @@ public class BOMInputStream extends ProxyInputStream {
     public int read(byte[] buf, int off, int len) throws IOException {
         int firstCount = 0;
         int b = 0;
-        while ((len > 0) && (b >= 0)) {
+        while (len > 0 && b >= 0) {
             b = readFirstBytes();
             if (b >= 0) {
                 buf[off++] = (byte) (b & 0xFF);
@@ -285,7 +285,7 @@ public class BOMInputStream extends ProxyInputStream {
             }
         }
         int secondCount = in.read(buf, off, len);
-        return (secondCount < 0) ? (firstCount > 0 ? firstCount : -1) : firstCount + secondCount;
+        return secondCount < 0 ? firstCount > 0 ? firstCount : -1 : firstCount + secondCount;
     }
 
     /**
@@ -308,7 +308,7 @@ public class BOMInputStream extends ProxyInputStream {
     @Override
     public synchronized void mark(int readlimit) {
         markFbIndex = fbIndex;
-        markedAtStart = (firstBytes == null);
+        markedAtStart = firstBytes == null;
         in.mark(readlimit);
     }
 
@@ -335,7 +335,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public long skip(long n) throws IOException {
-        while ((n > 0) && (readFirstBytes() >= 0)) {
+        while (n > 0 && readFirstBytes() >= 0) {
             n--;
         }
         return in.skip(n);

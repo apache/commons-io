@@ -256,7 +256,7 @@ public class NullInputStream extends InputStream {
         if (mark < 0) {
             throw new IOException("No position has been marked");
         }
-        if (position > (mark + readlimit)) {
+        if (position > mark + readlimit) {
             throw new IOException("Marked position [" + mark +
                     "] is no longer valid - passed the read limit [" +
                     readlimit + "]");

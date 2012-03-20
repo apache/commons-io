@@ -148,7 +148,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         FileSystemUtils fsu = new FileSystemUtils() {
             @Override
             protected long freeSpaceUnix(String path, boolean kb, boolean posix, long timeout) throws IOException {
-                return (kb ? 12345L : 54321);
+                return kb ? 12345L : 54321;
             }
         };
         assertEquals(54321L, fsu.freeSpaceOS("", 2, false, -1));

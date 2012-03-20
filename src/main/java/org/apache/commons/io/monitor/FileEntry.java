@@ -101,15 +101,15 @@ public class FileEntry implements Serializable {
         // refresh the values
         name         = file.getName();
         exists       = file.exists();
-        directory    = (exists ? file.isDirectory() : false);
-        lastModified = (exists ? file.lastModified() : 0);
-        length       = (exists && !directory ? file.length() : 0);
+        directory    = exists ? file.isDirectory() : false;
+        lastModified = exists ? file.lastModified() : 0;
+        length       = exists && !directory ? file.length() : 0;
 
         // Return if there are changes
-        return (exists != origExists ||
+        return exists != origExists ||
                 lastModified != origLastModified ||
                 directory != origDirectory ||
-                length != origLength);
+                length != origLength;
     }
 
     /**

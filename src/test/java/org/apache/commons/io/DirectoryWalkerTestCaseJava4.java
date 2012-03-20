@@ -94,7 +94,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
      */
     public void testFilter() {
         List results = new TestFileFinder(dirsAndFilesFilter, -1).find(javaDir);
-        assertEquals("Result Size", (1 + dirs.length + ioFiles.length + outputFiles.length), results.size());
+        assertEquals("Result Size", 1 + dirs.length + ioFiles.length + outputFiles.length, results.size());
         assertTrue("Start Dir", results.contains(javaDir));
         checkContainsFiles("Dir", dirs, results);
         checkContainsFiles("IO File", ioFiles, results);
@@ -137,7 +137,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
      */
     public void testFilterAndLimitD() {
         List results = new TestFileFinder(dirsAndFilesFilter, 5).find(javaDir);
-        assertEquals("[D] Result Size", (1 + dirs.length + ioFiles.length), results.size());
+        assertEquals("[D] Result Size", 1 + dirs.length + ioFiles.length, results.size());
         assertTrue("[D] Start Dir", results.contains(javaDir));
         checkContainsFiles("[D] Dir", dirs, results);
         checkContainsFiles("[D] File", ioFiles, results);
@@ -148,7 +148,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
      */
     public void testFilterDirAndFile1() {
         List results = new TestFileFinder(dirsFilter, iofilesFilter, -1).find(javaDir);
-        assertEquals("[DirAndFile1] Result Size", (1 + dirs.length + ioFiles.length), results.size());
+        assertEquals("[DirAndFile1] Result Size", 1 + dirs.length + ioFiles.length, results.size());
         assertTrue("[DirAndFile1] Start Dir", results.contains(javaDir));
         checkContainsFiles("[DirAndFile1] Dir", dirs, results);
         checkContainsFiles("[DirAndFile1] File", ioFiles, results);
@@ -159,7 +159,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
      */
     public void testFilterDirAndFile2() {
         List results = new TestFileFinder((IOFileFilter) null, (IOFileFilter) null, -1).find(javaDir);
-        assertTrue("[DirAndFile2] Result Size", results.size() > (1 + dirs.length + ioFiles.length));
+        assertTrue("[DirAndFile2] Result Size", results.size() > 1 + dirs.length + ioFiles.length);
         assertTrue("[DirAndFile2] Start Dir", results.contains(javaDir));
         checkContainsFiles("[DirAndFile2] Dir", dirs, results);
         checkContainsFiles("[DirAndFile2] File", ioFiles, results);
@@ -171,7 +171,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     public void testFilterDirAndFile3() {
         List results = new TestFileFinder(dirsFilter, (IOFileFilter) null, -1).find(javaDir);
         List resultDirs = directoriesOnly(results);
-        assertEquals("[DirAndFile3] Result Size", (1 + dirs.length), resultDirs.size());
+        assertEquals("[DirAndFile3] Result Size", 1 + dirs.length, resultDirs.size());
         assertTrue("[DirAndFile3] Start Dir", results.contains(javaDir));
         checkContainsFiles("[DirAndFile3] Dir", dirs, resultDirs);
     }

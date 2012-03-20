@@ -101,7 +101,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public String toString() {
-        String delegate = (fileFilter != null ? fileFilter.toString() : filenameFilter.toString()); 
+        String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString(); 
         return super.toString() + "(" + delegate + ")";
     }
     

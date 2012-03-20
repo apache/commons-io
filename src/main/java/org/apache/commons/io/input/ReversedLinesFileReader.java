@@ -233,7 +233,7 @@ public class ReversedLinesFileReader implements Closeable {
             String line = null;
             int newLineMatchByteCount;
 
-            boolean isLastFilePart = (no == 1);
+            boolean isLastFilePart = no == 1;
 
             int i = currentLastBytePos;
             while (i > -1) {

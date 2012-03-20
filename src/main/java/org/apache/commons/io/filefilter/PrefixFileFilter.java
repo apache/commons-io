@@ -73,7 +73,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
             throw new IllegalArgumentException("The prefix must not be null");
         }
         this.prefixes = new String[] {prefix};
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         }
         this.prefixes = new String[prefixes.length];
         System.arraycopy(prefixes, 0, this.prefixes, 0, prefixes.length);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -136,7 +136,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
         this.prefixes = prefixes.toArray(new String[prefixes.size()]);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**

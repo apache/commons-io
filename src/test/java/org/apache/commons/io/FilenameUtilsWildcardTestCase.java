@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 
 public class FilenameUtilsWildcardTestCase extends TestCase {
 
-    private static final boolean WINDOWS = (File.separatorChar == '\\');
+    private static final boolean WINDOWS = File.separatorChar == '\\';
 
     public FilenameUtilsWildcardTestCase(String name) {
         super(name);

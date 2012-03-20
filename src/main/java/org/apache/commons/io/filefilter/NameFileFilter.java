@@ -70,7 +70,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
         this.names = new String[] {name};
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -102,7 +102,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         }
         this.names = new String[names.length];
         System.arraycopy(names, 0, this.names, 0, names.length);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -129,7 +129,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The list of names must not be null");
         }
         this.names = names.toArray(new String[names.size()]);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     //-----------------------------------------------------------------------

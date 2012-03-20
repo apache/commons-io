@@ -146,7 +146,7 @@ public class FilenameUtils {
      * @return true if it is a separator character
      */
     private static boolean isSeparator(char ch) {
-        return (ch == UNIX_SEPARATOR) || (ch == WINDOWS_SEPARATOR);
+        return ch == UNIX_SEPARATOR || ch == WINDOWS_SEPARATOR;
     }
 
     //-----------------------------------------------------------------------
@@ -332,7 +332,7 @@ public class FilenameUtils {
      * @since Commons IO 2.0
      */
     public static String normalizeNoEndSeparator(String filename, boolean unixSeparator) {
-         char separator = (unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR);
+         char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
         return doNormalize(filename, separator, false);
     }
 
@@ -361,7 +361,7 @@ public class FilenameUtils {
         filename.getChars(0, filename.length(), array, 0);
         
         // fix separators throughout
-        char otherSeparator = (separator == SYSTEM_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_SEPARATOR);
+        char otherSeparator = separator == SYSTEM_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_SEPARATOR;
         for (int i = 0; i < array.length; i++) {
             if (array[i] == otherSeparator) {
                 array[i] = separator;
@@ -413,14 +413,14 @@ public class FilenameUtils {
                     if (array[j] == separator) {
                         // remove b/../ from a/b/../c
                         System.arraycopy(array, i + 1, array, j + 1, size - i);
-                        size -= (i - j);
+                        size -= i - j;
                         i = j + 1;
                         continue outer;
                     }
                 }
                 // remove a/../ from a/../c
                 System.arraycopy(array, i + 1, array, prefix, size - i);
-                size -= (i + 1 - prefix);
+                size -= i + 1 - prefix;
                 i = prefix + 1;
             }
         }
@@ -635,7 +635,7 @@ public class FilenameUtils {
             if (ch0 == '~') {
                 return 2;  // return a length greater than the input
             }
-            return (isSeparator(ch0) ? 1 : 0);
+            return isSeparator(ch0) ? 1 : 0;
         } else {
             if (ch0 == '~') {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
@@ -643,8 +643,8 @@ public class FilenameUtils {
                 if (posUnix == -1 && posWin == -1) {
                     return len + 1;  // return a length greater than the input
                 }
-                posUnix = (posUnix == -1 ? posWin : posUnix);
-                posWin = (posWin == -1 ? posUnix : posWin);
+                posUnix = posUnix == -1 ? posWin : posUnix;
+                posWin = posWin == -1 ? posUnix : posWin;
                 return Math.min(posUnix, posWin) + 1;
             }
             char ch1 = filename.charAt(1);
@@ -661,14 +661,14 @@ public class FilenameUtils {
             } else if (isSeparator(ch0) && isSeparator(ch1)) {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
                 int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
-                if ((posUnix == -1 && posWin == -1) || posUnix == 2 || posWin == 2) {
+                if (posUnix == -1 && posWin == -1 || posUnix == 2 || posWin == 2) {
                     return -1;
                 }
-                posUnix = (posUnix == -1 ? posWin : posUnix);
-                posWin = (posWin == -1 ? posUnix : posWin);
+                posUnix = posUnix == -1 ? posWin : posUnix;
+                posWin = posWin == -1 ? posUnix : posWin;
                 return Math.min(posUnix, posWin) + 1;
             } else {
-                return (isSeparator(ch0) ? 1 : 0);
+                return isSeparator(ch0) ? 1 : 0;
             }
         }
     }
@@ -713,7 +713,7 @@ public class FilenameUtils {
         }
         int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
         int lastSeparator = indexOfLastSeparator(filename);
-        return (lastSeparator > extensionPos ? -1 : extensionPos);
+        return lastSeparator > extensionPos ? -1 : extensionPos;
     }
 
     //-----------------------------------------------------------------------
@@ -1114,7 +1114,7 @@ public class FilenameUtils {
             boolean normalized, IOCase caseSensitivity) {
         
         if (filename1 == null || filename2 == null) {
-            return (filename1 == null && filename2 == null);
+            return filename1 == null && filename2 == null;
         }
         if (normalized) {
             filename1 = normalize(filename1);
@@ -1147,7 +1147,7 @@ public class FilenameUtils {
             return false;
         }
         if (extension == null || extension.length() == 0) {
-            return (indexOfExtension(filename) == -1);
+            return indexOfExtension(filename) == -1;
         }
         String fileExt = getExtension(filename);
         return fileExt.equals(extension);
@@ -1169,7 +1169,7 @@ public class FilenameUtils {
             return false;
         }
         if (extensions == null || extensions.length == 0) {
-            return (indexOfExtension(filename) == -1);
+            return indexOfExtension(filename) == -1;
         }
         String fileExt = getExtension(filename);
         for (String extension : extensions) {
@@ -1196,7 +1196,7 @@ public class FilenameUtils {
             return false;
         }
         if (extensions == null || extensions.isEmpty()) {
-            return (indexOfExtension(filename) == -1);
+            return indexOfExtension(filename) == -1;
         }
         String fileExt = getExtension(filename);
         for (String extension : extensions) {
@@ -1384,7 +1384,7 @@ public class FilenameUtils {
                 if (array[i] == '?') {
                     list.add("?");
                 } else if (list.isEmpty() ||
-                        (i > 0 && list.get(list.size() - 1).equals("*") == false)) {
+                        i > 0 && list.get(list.size() - 1).equals("*") == false) {
                     list.add("*");
                 }
             } else {

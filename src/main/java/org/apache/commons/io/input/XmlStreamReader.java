@@ -477,7 +477,7 @@ public class XmlStreamReader extends Reader {
             encoding = ex.getContentTypeEncoding();
         }
         if (encoding == null) {
-            encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
+            encoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
         }
         return encoding;
     }
@@ -497,7 +497,7 @@ public class XmlStreamReader extends Reader {
         // BOM is Null
         if (bomEnc == null) {
             if (xmlGuessEnc == null || xmlEnc == null) {
-                return (defaultEncoding == null ? UTF_8 : defaultEncoding);
+                return defaultEncoding == null ? UTF_8 : defaultEncoding;
             }
             if (xmlEnc.equals(UTF_16) &&
                (xmlGuessEnc.equals(UTF_16BE) || xmlGuessEnc.equals(UTF_16LE))) {
@@ -576,7 +576,7 @@ public class XmlStreamReader extends Reader {
             if (appXml) {
                 return calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
             } else {
-                return (defaultEncoding == null) ? US_ASCII : defaultEncoding;
+                return defaultEncoding == null ? US_ASCII : defaultEncoding;
             }
         }
 
@@ -638,8 +638,8 @@ public class XmlStreamReader extends Reader {
             if (i > -1) {
                 String postMime = httpContentType.substring(i + 1);
                 Matcher m = CHARSET_PATTERN.matcher(postMime);
-                encoding = (m.find()) ? m.group(1) : null;
-                encoding = (encoding != null) ? encoding.toUpperCase(Locale.US) : null;
+                encoding = m.find() ? m.group(1) : null;
+                encoding = encoding != null ? encoding.toUpperCase(Locale.US) : null;
             }
         }
         return encoding;
@@ -717,7 +717,7 @@ public class XmlStreamReader extends Reader {
                (mime.equals("application/xml") || 
                 mime.equals("application/xml-dtd") ||
                 mime.equals("application/xml-external-parsed-entity") ||
-               (mime.startsWith("application/") && mime.endsWith("+xml")));
+               mime.startsWith("application/") && mime.endsWith("+xml"));
     }
 
     /**
@@ -731,7 +731,7 @@ public class XmlStreamReader extends Reader {
         return mime != null &&
               (mime.equals("text/xml") ||
                mime.equals("text/xml-external-parsed-entity") ||
-              (mime.startsWith("text/") && mime.endsWith("+xml")));
+              mime.startsWith("text/") && mime.endsWith("+xml"));
     }
 
     private static final String RAW_EX_1 =

@@ -305,7 +305,7 @@ public class XmlStreamReader extends Reader {
     public XmlStreamReader(InputStream is, String httpContentType,
             boolean lenient, String defaultEncoding) throws IOException,
             XmlStreamReaderException {
-        this.defaultEncoding = (defaultEncoding == null) ? staticDefaultEncoding
+        this.defaultEncoding = defaultEncoding == null ? staticDefaultEncoding
                 : defaultEncoding;
         try {
             doHttpStream(is, httpContentType, lenient);
@@ -377,7 +377,7 @@ public class XmlStreamReader extends Reader {
                 encoding = ex.getContentTypeEncoding();
             }
             if (encoding == null) {
-                encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
+                encoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
             }
             prepareReader(ex.getInputStream(), encoding);
         }
@@ -442,7 +442,7 @@ public class XmlStreamReader extends Reader {
         String encoding;
         if (bomEnc == null) {
             if (xmlGuessEnc == null || xmlEnc == null) {
-                encoding = (defaultEncoding == null) ? UTF_8 : defaultEncoding;
+                encoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
             } else if (xmlEnc.equals(UTF_16)
                     && (xmlGuessEnc.equals(UTF_16BE) || xmlGuessEnc
                             .equals(UTF_16LE))) {
@@ -498,7 +498,7 @@ public class XmlStreamReader extends Reader {
                         encoding = calculateRawEncoding(bomEnc, xmlGuessEnc,
                                 xmlEnc, is);
                     } else {
-                        encoding = (defaultEncoding == null) ? US_ASCII
+                        encoding = defaultEncoding == null ? US_ASCII
                                 : defaultEncoding;
                     }
                 } else if (bomEnc != null
@@ -534,7 +534,7 @@ public class XmlStreamReader extends Reader {
         String mime = null;
         if (httpContentType != null) {
             int i = httpContentType.indexOf(";");
-            mime = ((i == -1) ? httpContentType : httpContentType.substring(0,
+            mime = (i == -1 ? httpContentType : httpContentType.substring(0,
                     i)).trim();
         }
         return mime;
@@ -552,8 +552,8 @@ public class XmlStreamReader extends Reader {
             if (i > -1) {
                 String postMime = httpContentType.substring(i + 1);
                 Matcher m = CHARSET_PATTERN.matcher(postMime);
-                encoding = (m.find()) ? m.group(1) : null;
-                encoding = (encoding != null) ? encoding.toUpperCase() : null;
+                encoding = m.find() ? m.group(1) : null;
+                encoding = encoding != null ? encoding.toUpperCase() : null;
             }
         }
         return encoding;
@@ -676,16 +676,16 @@ public class XmlStreamReader extends Reader {
                 && (mime.equals("application/xml")
                         || mime.equals("application/xml-dtd")
                         || mime
-                                .equals("application/xml-external-parsed-entity") || (mime
-                        .startsWith("application/") && mime.endsWith("+xml")));
+                                .equals("application/xml-external-parsed-entity") || mime
+                        .startsWith("application/") && mime.endsWith("+xml"));
     }
 
     // indicates if the MIME type belongs to the TEXT XML family
     static boolean isTextXml(String mime) {
         return mime != null
                 && (mime.equals("text/xml")
-                        || mime.equals("text/xml-external-parsed-entity") || (mime
-                        .startsWith("text/") && mime.endsWith("+xml")));
+                        || mime.equals("text/xml-external-parsed-entity") || mime
+                        .startsWith("text/") && mime.endsWith("+xml"));
     }
 
     private static final MessageFormat RAW_EX_1 = new MessageFormat(
