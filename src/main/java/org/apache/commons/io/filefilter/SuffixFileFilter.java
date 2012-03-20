@@ -74,7 +74,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
             throw new IllegalArgumentException("The suffix must not be null");
         }
         this.suffixes = new String[] {suffix};
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -108,7 +108,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         }
         this.suffixes = new String[suffixes.length];
         System.arraycopy(suffixes, 0, this.suffixes, 0, suffixes.length);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -137,7 +137,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
         this.suffixes = suffixes.toArray(new String[suffixes.size()]);
-        this.caseSensitivity = (caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**

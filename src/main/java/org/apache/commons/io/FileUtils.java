@@ -619,7 +619,7 @@ public class FileUtils {
             filter = new SuffixFileFilter(suffixes);
         }
         return listFiles(directory, filter,
-            (recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE));
+            recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
     }
 
     /**
@@ -1072,7 +1072,7 @@ public class FileUtils {
             long pos = 0;
             long count = 0;
             while (pos < size) {
-                count = (size - pos) > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : (size - pos);
+                count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
                 pos += output.transferFrom(input, pos, count);
             }
         } finally {

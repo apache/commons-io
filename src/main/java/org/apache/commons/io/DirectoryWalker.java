@@ -301,8 +301,8 @@ public abstract class DirectoryWalker<T> {
         if (directoryFilter == null && fileFilter == null) {
             this.filter = null;
         } else {
-            directoryFilter = (directoryFilter != null ? directoryFilter : TrueFileFilter.TRUE);
-            fileFilter = (fileFilter != null ? fileFilter : TrueFileFilter.TRUE);
+            directoryFilter = directoryFilter != null ? directoryFilter : TrueFileFilter.TRUE;
+            fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.TRUE;
             directoryFilter = FileFilterUtils.makeDirectoryOnly(directoryFilter);
             fileFilter = FileFilterUtils.makeFileOnly(fileFilter);
             this.filter = FileFilterUtils.or(directoryFilter, fileFilter);
@@ -354,7 +354,7 @@ public abstract class DirectoryWalker<T> {
             int childDepth = depth + 1;
             if (depthLimit < 0 || childDepth <= depthLimit) {
                 checkIfCancelled(directory, depth, results);
-                File[] childFiles = (filter == null ? directory.listFiles() : directory.listFiles(filter));
+                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);
                 childFiles = filterDirectoryContents(directory, depth, childFiles);
                 if (childFiles == null) {
                     handleRestricted(directory, childDepth, results);

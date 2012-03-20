@@ -53,7 +53,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class IOUtilsTestCase extends FileBasedTestCase {
 
     /** Determine if this is windows. */
-    private static final boolean WINDOWS = (File.separatorChar == '\\');
+    private static final boolean WINDOWS = File.separatorChar == '\\';
     /*
      * Note: this is not particularly beautiful code. A better way to check for flush and close status would be to
      * implement "trojan horse" wrapper implementations of the various stream classes, which set a flag when relevant

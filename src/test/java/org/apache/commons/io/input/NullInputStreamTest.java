@@ -53,7 +53,7 @@ public class NullInputStreamTest extends TestCase {
         int size = 5;
         InputStream input = new TestNullInputStream(size);
         for (int i = 0; i < size; i++) {
-            assertEquals("Check Size [" + i + "]", (size - i), input.available());
+            assertEquals("Check Size [" + i + "]", size - i, input.available());
             assertEquals("Check Value [" + i + "]", i, input.read());
         }
         assertEquals("Available after contents all read", 0, input.available());
@@ -166,7 +166,7 @@ public class NullInputStreamTest extends TestCase {
 
         // Read further
         for (int i = 0; i < 3; i++) {
-            assertEquals("Read After Mark [" + i +"]",  (position + i), input.read());
+            assertEquals("Read After Mark [" + i +"]",  position + i, input.read());
         }
 
         // Reset
@@ -174,7 +174,7 @@ public class NullInputStreamTest extends TestCase {
 
         // Read From marked position
         for (int i = 0; i < readlimit + 1; i++) {
-            assertEquals("Read After Reset [" + i +"]",  (position + i), input.read());
+            assertEquals("Read After Reset [" + i +"]",  position + i, input.read());
         }
 
         // Reset after read limit passed
@@ -245,7 +245,7 @@ public class NullInputStreamTest extends TestCase {
         }
         @Override
         protected int processByte() {
-            return ((int)getPosition() - 1);
+            return (int)getPosition() - 1;
         }
         @Override
         protected void processBytes(byte[] bytes, int offset, int length) {

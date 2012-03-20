@@ -43,7 +43,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
      */
     static final String SVN_DIR_NAME = ".svn";
     
-    private static final boolean WINDOWS = (File.separatorChar == '\\');
+    private static final boolean WINDOWS = File.separatorChar == '\\';
 
     public FileFilterTestCase(String name) {
         super(name);

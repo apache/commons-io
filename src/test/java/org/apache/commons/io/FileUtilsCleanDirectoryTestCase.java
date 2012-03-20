@@ -147,7 +147,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
             return false;
         }
         int result = proc.waitFor();
-        return (result == 0);
+        return result == 0;
     }
 
 }

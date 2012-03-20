@@ -76,9 +76,9 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     public boolean accept(File file) {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            return (files == null || files.length == 0);
+            return files == null || files.length == 0;
         } else {
-            return (file.length() == 0);
+            return file.length() == 0;
         }
     }
     

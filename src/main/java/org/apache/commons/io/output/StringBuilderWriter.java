@@ -57,7 +57,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      * @param builder The String builder
      */
     public StringBuilderWriter(StringBuilder builder) {
-        this.builder = (builder != null ? builder : new StringBuilder());
+        this.builder = builder != null ? builder : new StringBuilder();
     }
 
     /**

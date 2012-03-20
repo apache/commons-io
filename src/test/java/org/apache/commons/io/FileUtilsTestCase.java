@@ -319,7 +319,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1023), "1023 MB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize((1024 * 1024 * 1024 * 2) - 1), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024 * 2 - 1), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
@@ -1127,8 +1127,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File childDir       = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        long expectedCount = (LIST_WALKER.list(grandParentDir).size() * 2);
-        long expectedSize =  (FileUtils.sizeOfDirectory(grandParentDir) * 2);
+        long expectedCount = LIST_WALKER.list(grandParentDir).size() * 2;
+        long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) * 2;
         FileUtils.copyDirectory(grandParentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
@@ -1332,8 +1332,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.touch(file) ;
         assertEquals("FileUtils.touch() didn't empty the file.", 1, file.length());
         assertEquals("FileUtils.touch() changed lastModified", false, y2k == file.lastModified());
-        assertEquals("FileUtils.touch() changed lastModified to more than now-3s", true, file.lastModified() >= (now - 3000));
-        assertEquals("FileUtils.touch() changed lastModified to less than now+3s", true, file.lastModified() <= (now + 3000));
+        assertEquals("FileUtils.touch() changed lastModified to more than now-3s", true, file.lastModified() >= now - 3000);
+        assertEquals("FileUtils.touch() changed lastModified to less than now+3s", true, file.lastModified() <= now + 3000);
     }
 
     public void testListFiles() throws Exception {
@@ -1365,7 +1365,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         for (int i = 0; i < count; ++i) {
             boolean found = false;
-            for(int j = 0; (( !found ) && (j < fileNames.length)); ++j) {
+            for(int j = 0; !found && j < fileNames.length; ++j) {
                 if ( fileNames[j].equals(((File) fileObjs[i]).getName())) {
                     foundFileNames.put(fileNames[j], fileNames[j]);
                     found = true;
@@ -1428,7 +1428,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             boolean found = false;
             String fileName = files.next().getName();
 
-            for (int j = 0; (( !found ) && (j < fileNames.length)); ++j) {
+            for (int j = 0; !found && j < fileNames.length; ++j) {
                 if ( fileNames[j].equals(fileName)) {
                     foundFileNames.put(fileNames[j], fileNames[j]);
                     found = true;

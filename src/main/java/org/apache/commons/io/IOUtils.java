@@ -480,7 +480,7 @@ public class IOUtils {
         int offset = 0;
         int readed;
 
-        while(offset < size && (readed = input.read(data, offset, (size - offset))) != -1) {
+        while(offset < size && (readed = input.read(data, offset, size - offset)) != -1) {
             offset += readed;
         }
 
@@ -1750,7 +1750,7 @@ public class IOUtils {
         }
 
         int ch2 = input2.read();
-        return (ch2 == -1);
+        return ch2 == -1;
     }
 
     /**
@@ -1787,7 +1787,7 @@ public class IOUtils {
         }
 
         int ch2 = input2.read();
-        return (ch2 == -1);
+        return ch2 == -1;
     }
 
     /**
@@ -1825,7 +1825,7 @@ public class IOUtils {
             line1 = br1.readLine();
             line2 = br2.readLine();
         }
-        return line1 == null ? (line2 == null ? true : false) : line1.equals(line2);
+        return line1 == null ? line2 == null ? true : false : line1.equals(line2);
     }
 
     /**
@@ -1978,7 +1978,7 @@ public class IOUtils {
         }
         int remaining = length;
         while ( remaining > 0 ) {
-            int location = ( length - remaining );
+            int location = length - remaining;
             int count = input.read( buffer, location, remaining );
             if ( -1 == count ) { // EOF
                 break;
@@ -2023,7 +2023,7 @@ public class IOUtils {
         }
         int remaining = length;
         while ( remaining > 0 ) {
-            int location = ( length - remaining );
+            int location = length - remaining;
             int count = input.read( buffer, location, remaining );
             if ( -1 == count ) { // EOF
                 break;

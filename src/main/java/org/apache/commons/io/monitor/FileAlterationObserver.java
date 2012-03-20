@@ -428,7 +428,7 @@ public class FileAlterationObserver implements Serializable {
     private File[] listFiles(File file) {
         File[] children = null;
         if (file.isDirectory()) {
-            children = (fileFilter == null) ? file.listFiles() : file.listFiles(fileFilter);
+            children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
         }
         if (children == null) {
             children = FileUtils.EMPTY_FILE_ARRAY;

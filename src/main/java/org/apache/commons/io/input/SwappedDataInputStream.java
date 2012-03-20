@@ -55,7 +55,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     public boolean readBoolean()
         throws IOException, EOFException
     {
-        return ( 0 != readByte() );
+        return 0 != readByte();
     }
 
     /**
@@ -136,7 +136,7 @@ public class SwappedDataInputStream extends ProxyInputStream
 
         while( remaining > 0 )
         {
-            int location = offset + ( length - remaining );
+            int location = offset + length - remaining;
             int count = read( data, location, remaining );
 
             if( -1 == count )

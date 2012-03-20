@@ -69,7 +69,7 @@ public class XmlStreamWriterTest extends TestCase {
         String xml = createXmlContent(text, encoding);
         String effectiveEncoding = encoding;
         if (effectiveEncoding == null) {
-            effectiveEncoding = (defaultEncoding == null ? "UTF-8" : defaultEncoding);
+            effectiveEncoding = defaultEncoding == null ? "UTF-8" : defaultEncoding;
         }
         checkXmlContent(xml, effectiveEncoding, defaultEncoding);
     }
