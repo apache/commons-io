@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -41,6 +42,13 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
         assertEquals("test1 name", "test1", TEST_BOM_1.getCharsetName());
         assertEquals("test2 name", "test2", TEST_BOM_2.getCharsetName());
         assertEquals("test3 name", "test3", TEST_BOM_3.getCharsetName());
+    }
+
+    /** Tests that {@link ByteOrderMark#getCharsetName()} can be loaded as a {@link java.nio.charset.Charset} as advertised. */
+    public void testConstantCharsetNames() {
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_16BE.getCharsetName()));
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_16LE.getCharsetName()));
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_8.getCharsetName()));
     }
 
     /** Test {@link ByteOrderMark#length()} */
