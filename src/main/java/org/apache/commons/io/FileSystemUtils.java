@@ -40,7 +40,7 @@ import java.util.StringTokenizer;
  * </ul>
  *
  * @version $Id$
- * @since Commons IO 1.1
+ * @since 1.1
  */
 public class FileSystemUtils {
 
@@ -133,7 +133,7 @@ public class FileSystemUtils {
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 1.1, enhanced OS support in 1.2 and 1.3
+     * @since 1.1, enhanced OS support in 1.2 and 1.3
      * @deprecated Use freeSpaceKb(String)
      *  Deprecated from 1.3, may be removed in 2.0
      */

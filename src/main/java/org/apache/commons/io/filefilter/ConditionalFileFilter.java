@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Defines operations for conditional file filters.
  *
- * @since Commons IO 1.1
+ * @since 1.1
  * @version $Id$
  */
 public interface ConditionalFileFilter {
@@ -31,7 +31,7 @@ public interface ConditionalFileFilter {
      * the list.
      *
      * @param ioFileFilter the filter to be added
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     void addFileFilter(IOFileFilter ioFileFilter);
 
@@ -39,7 +39,7 @@ public interface ConditionalFileFilter {
      * Returns this conditional file filter's list of file filters.
      *
      * @return the file filter list
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     List<IOFileFilter> getFileFilters();
 
@@ -49,7 +49,7 @@ public interface ConditionalFileFilter {
      * @param ioFileFilter filter to be removed
      * @return <code>true</code> if the filter was found in the list,
      * <code>false</code> otherwise
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     boolean removeFileFilter(IOFileFilter ioFileFilter);
 
@@ -58,7 +58,7 @@ public interface ConditionalFileFilter {
      * file filters on this filter.
      *
      * @param fileFilters the list of filters
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     void setFileFilters(List<IOFileFilter> fileFilters);
 

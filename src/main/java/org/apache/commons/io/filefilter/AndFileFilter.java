@@ -44,7 +44,7 @@ public class AndFileFilter
     /**
      * Constructs a new instance of <code>AndFileFilter</code>.
      *
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public AndFileFilter() {
         this.fileFilters = new ArrayList<IOFileFilter>();
@@ -55,7 +55,7 @@ public class AndFileFilter
      * with the specified list of filters.
      *
      * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public AndFileFilter(final List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
