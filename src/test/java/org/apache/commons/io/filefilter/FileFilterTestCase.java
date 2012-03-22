@@ -1101,7 +1101,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
             // expected
         }
         try {
-            new MagicNumberFileFilter(new byte[]{0}, 0);
+            new MagicNumberFileFilter(new byte[]{0}, -1);
             fail();
         } catch (IllegalArgumentException iae) {
             // expected
