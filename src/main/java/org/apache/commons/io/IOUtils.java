@@ -1449,7 +1449,27 @@ public class IOUtils {
      */
     public static long copyLarge(InputStream input, OutputStream output)
             throws IOException {
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        return copyLarge(input, output, new byte[DEFAULT_BUFFER_SIZE]);
+    }
+
+    /**
+     * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
+     * <code>OutputStream</code>.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * <p>
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @param buffer the buffer to use for the copy
+     * @return the number of bytes copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.2
+     */
+    public static long copyLarge(InputStream input, OutputStream output, byte[] buffer)
+            throws IOException {
         long count = 0;
         int n = 0;
         while (EOF != (n = input.read(buffer))) {
@@ -1478,15 +1498,39 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(InputStream input, OutputStream output, final long inputOffset, final long length)
+    public static long copyLarge(InputStream input, OutputStream output, long inputOffset, long length)
             throws IOException {
+        return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);
+    }
+
+    /**
+     * Copy some or all bytes from a large (over 2GB) <code>InputStream</code> to an
+     * <code>OutputStream</code>, optionally skipping input bytes.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     * <p>
+     * 
+     * @param input  the <code>InputStream</code> to read from
+     * @param output  the <code>OutputStream</code> to write to
+     * @param inputOffset : number of bytes to skip from input before copying
+     *         -ve values are ignored
+     * @param length : number of bytes to copy. -ve means all
+     * @param buffer the buffer to use for the copy
+     *
+     * @return the number of bytes copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.2
+     */
+    public static long copyLarge(InputStream input, OutputStream output, 
+            final long inputOffset, final long length, byte[] buffer)  throws IOException {
         if (inputOffset > 0) {
             skipFully(input, inputOffset);
         }
         if (length == 0) {
             return 0;
         }
-        final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         final int bufferLength = buffer.length;
         int bytesToRead = bufferLength;
         if (length > 0 && length < bufferLength) {
@@ -1599,7 +1643,25 @@ public class IOUtils {
      * @since 1.3
      */
     public static long copyLarge(Reader input, Writer output) throws IOException {
-        char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+        return copyLarge(input, output, new char[DEFAULT_BUFFER_SIZE]);
+    }
+
+    /**
+     * Copy chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     *
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @param buffer the buffer to be used for the copy
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.2
+     */
+    public static long copyLarge(Reader input, Writer output, char [] buffer) throws IOException {
         long count = 0;
         int n = 0;
         while (EOF != (n = input.read(buffer))) {
@@ -1630,13 +1692,36 @@ public class IOUtils {
      */
     public static long copyLarge(Reader input, Writer output, final long inputOffset, final long length)
             throws IOException {
+        return  copyLarge(input, output, inputOffset, length, new char[DEFAULT_BUFFER_SIZE]);
+    }
+
+    /**
+     * Copy some or all chars from a large (over 2GB) <code>InputStream</code> to an
+     * <code>OutputStream</code>, optionally skipping input chars.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     * 
+     * @param input  the <code>Reader</code> to read from
+     * @param output  the <code>Writer</code> to write to
+     * @param inputOffset : number of chars to skip from input before copying
+     *         -ve values are ignored
+     * @param length : number of chars to copy. -ve means all
+     * @param buffer the buffer to be used for the copy
+     * @return the number of chars copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.2
+     */
+    public static long copyLarge(Reader input, Writer output, final long inputOffset, final long length, char [] buffer)
+            throws IOException {
         if (inputOffset > 0) {
             skipFully(input, inputOffset);
         }
         if (length == 0) {
             return 0;
         }
-        char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         int bytesToRead = buffer.length;
         if (length > 0 && length < buffer.length) {
             bytesToRead = (int) length;

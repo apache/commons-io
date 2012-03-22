@@ -40,6 +40,10 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA" description="">
+      <!-- Note: the issue was not raised by Manoj, but arose from IO-305 and tests he performed -->
+      <action issue="IO-308" dev="sebb" type="add" due-to="Manoj Mokashi">
+        Allow applications to provide buffer (or size) for copyLarge methods.
+      </action>        
       <action issue="IO-311" dev="sebb" type="fix" due-to="Robert Muir">
         IOUtils.read(InputStream/Reader) ignores the offset parameter
       </action>        
