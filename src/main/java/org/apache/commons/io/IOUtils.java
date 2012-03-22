@@ -2049,7 +2049,7 @@ public class IOUtils {
      * Read the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
-     * not skip as many characters as requested (most likely because of reaching EOF).
+     * not read as many characters as requested (most likely because of reaching EOF).
      * 
      * @param input where to read input from
      * @param buffer destination
@@ -2072,7 +2072,7 @@ public class IOUtils {
      * Read the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
-     * not skip as many characters as requested (most likely because of reaching EOF).
+     * not read as many characters as requested (most likely because of reaching EOF).
      * 
      * @param input where to read input from
      * @param buffer destination
@@ -2090,7 +2090,7 @@ public class IOUtils {
      * Read the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
-     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * not read as many bytes as requested (most likely because of reaching EOF).
      * 
      * @param input where to read input from
      * @param buffer destination
@@ -2113,7 +2113,7 @@ public class IOUtils {
      * Read the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
-     * not skip as many bytes as requested (most likely because of reaching EOF).
+     * not read as many bytes as requested (most likely because of reaching EOF).
      * 
      * @param input where to read input from
      * @param buffer destination
