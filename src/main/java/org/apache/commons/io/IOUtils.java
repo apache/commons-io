@@ -1470,7 +1470,7 @@ public class IOUtils {
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
-     * @param offset : number of bytes to skip from input before copying
+     * @param inputOffset : number of bytes to skip from input before copying
      *         -ve values are ignored
      * @param length : number of bytes to copy. -ve means all
      * @return the number of bytes copied
@@ -1478,10 +1478,10 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(InputStream input, OutputStream output, final long offset, final long length)
+    public static long copyLarge(InputStream input, OutputStream output, final long inputOffset, final long length)
             throws IOException {
-        if (offset > 0) {
-            skipFully(input, offset);
+        if (inputOffset > 0) {
+            skipFully(input, inputOffset);
         }
         if (length == 0) {
             return 0;
@@ -1620,7 +1620,7 @@ public class IOUtils {
      * 
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>Writer</code> to write to
-     * @param offset : number of chars to skip from input before copying
+     * @param inputOffset : number of chars to skip from input before copying
      *         -ve values are ignored
      * @param length : number of chars to copy. -ve means all
      * @return the number of chars copied
@@ -1628,10 +1628,10 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(Reader input, Writer output, final long offset, final long length)
+    public static long copyLarge(Reader input, Writer output, final long inputOffset, final long length)
  throws IOException {
-        if (offset > 0) {
-            skipFully(input, offset);
+        if (inputOffset > 0) {
+            skipFully(input, inputOffset);
         }
         if (length == 0) {
             return 0;
