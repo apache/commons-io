@@ -259,8 +259,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             byte[] out = IOUtils.toByteArray(fin, m_testFile.length());
             assertNotNull(out);
-            assertTrue("Not all bytes were read", fin.available() == 0);
-            assertTrue("Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE, out.length == FILE_SIZE);
+            assertEquals("Not all bytes were read", 0, fin.available());
+            assertEquals("Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE, FILE_SIZE, out.length);
             assertEqualContent(out, m_testFile);
         } finally {
             fin.close();
@@ -288,7 +288,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             byte[] out = IOUtils.toByteArray(fin, 0);
             assertNotNull("Out cannot be null", out);
-            assertTrue("Out length must be 0", out.length == 0);
+            assertEquals("Out length must be 0", 0, out.length);
         } finally {
             fin.close();
         }
