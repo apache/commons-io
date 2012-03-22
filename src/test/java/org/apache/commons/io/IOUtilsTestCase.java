@@ -103,12 +103,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         super(name);
     }
 
-    public void testCloseNullSelector() {
+    public void testCloseQuietlyNullSelector() {
         Selector selector = null;
         IOUtils.closeQuietly(selector);
     }
 
-    public void testCloseSelector() {
+    public void testCloseQuietlySelector() {
         Selector selector = null;
         try {
             selector = Selector.open();
@@ -118,7 +118,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCloseSelectorIOException() {
+    public void testCloseQuietlySelectorIOException() {
         Selector selector = new SelectorAdapter() {
             @Override
             public void close() throws IOException {
@@ -128,7 +128,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(selector);
     }
 
-    public void testCloseSelectorTwice() {
+    public void testCloseQuietlySelectorTwice() {
         Selector selector = null;
         try {
             selector = Selector.open();
