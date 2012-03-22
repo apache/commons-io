@@ -81,6 +81,7 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
+    private static final int EOF = -1;
     /**
      * The Unix directory separator character.
      */
@@ -481,7 +482,7 @@ public class IOUtils {
         int offset = 0;
         int readed;
 
-        while (offset < size && (readed = input.read(data, offset, size - offset)) != -1) {
+        while (offset < size && (readed = input.read(data, offset, size - offset)) != EOF) {
             offset += readed;
         }
 
@@ -1451,7 +1452,7 @@ public class IOUtils {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         long count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -1492,7 +1493,7 @@ public class IOUtils {
         }
         int read;
         long totalRead = 0;
-        while (bytesToRead > 0 && -1 != (read = input.read(buffer, 0, bytesToRead))) {
+        while (bytesToRead > 0 && EOF != (read = input.read(buffer, 0, bytesToRead))) {
             output.write(buffer, 0, read);
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
@@ -1600,7 +1601,7 @@ public class IOUtils {
         char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         long count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -1641,7 +1642,7 @@ public class IOUtils {
         }
         int read;
         long totalRead = 0;
-        while (bytesToRead > 0 && -1 != (read = input.read(buffer, 0, bytesToRead))) {
+        while (bytesToRead > 0 && EOF != (read = input.read(buffer, 0, bytesToRead))) {
             output.write(buffer, 0, read);
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
@@ -1742,7 +1743,7 @@ public class IOUtils {
         }
 
         int ch = input1.read();
-        while (-1 != ch) {
+        while (EOF != ch) {
             int ch2 = input2.read();
             if (ch != ch2) {
                 return false;
@@ -1751,7 +1752,7 @@ public class IOUtils {
         }
 
         int ch2 = input2.read();
-        return ch2 == -1;
+        return ch2 == EOF;
     }
 
     /**
@@ -1779,7 +1780,7 @@ public class IOUtils {
         }
 
         int ch = input1.read();
-        while (-1 != ch) {
+        while (EOF != ch) {
             int ch2 = input2.read();
             if (ch != ch2) {
                 return false;
@@ -1788,7 +1789,7 @@ public class IOUtils {
         }
 
         int ch2 = input2.read();
-        return ch2 == -1;
+        return ch2 == EOF;
     }
 
     /**
@@ -1977,7 +1978,7 @@ public class IOUtils {
         while (remaining > 0) {
             int location = length - remaining;
             int count = input.read(buffer, location, remaining);
-            if (-1 == count) { // EOF
+            if (EOF == count) { // EOF
                 break;
             }
             remaining -= count;
@@ -2023,7 +2024,7 @@ public class IOUtils {
         while (remaining > 0) {
             int location = length - remaining;
             int count = input.read(buffer, location, remaining);
-            if (-1 == count) { // EOF
+            if (EOF == count) { // EOF
                 break;
             }
             remaining -= count;
