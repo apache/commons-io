@@ -517,6 +517,7 @@ public class FileUtils {
      * @return an collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
+     * @since 2.2
      */
     public static Collection<File> listFilesAndDirs(
             File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {

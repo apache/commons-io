@@ -33,7 +33,7 @@ import java.nio.charset.CodingErrorAction;
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  *
- * @since Commons IO 2.2
+ * @since 2.2
  */
 public class CharSequenceInputStream extends InputStream {
 
