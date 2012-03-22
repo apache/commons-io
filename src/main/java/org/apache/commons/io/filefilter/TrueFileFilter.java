@@ -50,7 +50,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param file  the file to check
+     * @param file  the file to check (ignored)
      * @return true
      */
     public boolean accept(File file) {
@@ -60,8 +60,8 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param dir  the directory to check
-     * @param name  the filename
+     * @param dir  the directory to check (ignored)
+     * @param name  the filename (ignored)
      * @return true
      */
     public boolean accept(File dir, String name) {

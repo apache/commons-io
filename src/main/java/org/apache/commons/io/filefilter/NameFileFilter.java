@@ -153,12 +153,12 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the filename matches.
      * 
-     * @param file  the File directory
+     * @param dir  the File directory (ignored)
      * @param name  the filename
      * @return true if the filename matches
      */
     @Override
-    public boolean accept(File file, String name) {
+    public boolean accept(File dir, String name) {
         for (String name2 : names) {
             if (caseSensitivity.checkEquals(name, name2)) {
                 return true;
