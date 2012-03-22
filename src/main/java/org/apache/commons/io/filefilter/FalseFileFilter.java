@@ -51,7 +51,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param file  the file to check
+     * @param file  the file to check (ignored)
      * @return false
      */
     public boolean accept(File file) {
@@ -61,8 +61,8 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param dir  the directory to check
-     * @param name  the filename
+     * @param dir  the directory to check (ignored)
+     * @param name  the filename (ignored)
      * @return false
      */
     public boolean accept(File dir, String name) {

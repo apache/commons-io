@@ -143,7 +143,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Checks to see if the filename matches one of the wildcards.
      *
-     * @param dir  the file directory
+     * @param dir  the file directory (ignored)
      * @param name  the filename
      * @return true if the filename matches one of the wildcards
      */
