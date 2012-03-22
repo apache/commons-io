@@ -1486,9 +1486,10 @@ public class IOUtils {
         if (length == 0) {
             return 0;
         }
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-        int bytesToRead = buffer.length;
-        if (length > 0 && length < buffer.length) {
+        final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        final int bufferLength = buffer.length;
+        int bytesToRead = bufferLength;
+        if (length > 0 && length < bufferLength) {
             bytesToRead = (int) length;
         }
         int read;
@@ -1498,7 +1499,7 @@ public class IOUtils {
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
                 // Note the cast must work because buffer.length is an integer
-                bytesToRead = (int) Math.min(length - totalRead, buffer.length);
+                bytesToRead = (int) Math.min(length - totalRead, bufferLength);
             }
         }
         return totalRead;
