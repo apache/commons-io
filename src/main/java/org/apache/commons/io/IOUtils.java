@@ -1977,7 +1977,7 @@ public class IOUtils {
         int remaining = length;
         while (remaining > 0) {
             int location = length - remaining;
-            int count = input.read(buffer, location, remaining);
+            int count = input.read(buffer, offset + location, remaining);
             if (EOF == count) { // EOF
                 break;
             }
@@ -2023,7 +2023,7 @@ public class IOUtils {
         int remaining = length;
         while (remaining > 0) {
             int location = length - remaining;
-            int count = input.read(buffer, location, remaining);
+            int count = input.read(buffer, offset + location, remaining);
             if (EOF == count) { // EOF
                 break;
             }

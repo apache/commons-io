@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Selector;
@@ -731,6 +732,23 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             // expected
         }
         IOUtils.closeQuietly(input);
+    }
+    
+    public void testReadReaderWithOffset() throws Exception {
+        Reader reader = new StringReader("abcd1234");
+        char[] buffer = "wx00000000".toCharArray();
+        IOUtils.readFully(reader, buffer, 2, 8);
+        assertEquals("wxabcd1234", new String(buffer));
+        IOUtils.closeQuietly(reader);
+    }
+    
+    public void testReadStreamWithOffset() throws Exception {
+        byte[] bytes = "abcd1234".getBytes("UTF-8");
+        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        byte[] buffer = "wx00000000".getBytes("UTF-8");
+        IOUtils.readFully(stream, buffer, 2, 8);
+        assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, "UTF-8"));
+        IOUtils.closeQuietly(stream);
     }
 
     // Tests from IO-305
