@@ -1307,7 +1307,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue(file2.delete());
         
         String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
-        assertTrue("FileUtils.fileRead()", contents.equals("This is a test"));
+        assertEquals("FileUtils.fileRead()", "This is a test", contents);
 
     }
 
