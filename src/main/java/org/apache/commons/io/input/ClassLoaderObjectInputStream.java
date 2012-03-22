@@ -30,7 +30,7 @@ import java.lang.reflect.Proxy;
  * This is useful in dynamic container environments.
  *
  * @version $Id$
- * @since Commons IO 1.1
+ * @since 1.1
  */
 public class ClassLoaderObjectInputStream extends ObjectInputStream {
 

@@ -841,7 +841,7 @@ public class FileUtils {
      *  if there was a <code>null</code> at that index in the input array
      * @throws IllegalArgumentException if any file is not a URL file
      * @throws IllegalArgumentException if any file is incorrectly encoded
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static File[] toFiles(URL[] urls) {
         if (urls == null || urls.length == 0) {
@@ -1153,7 +1153,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static void copyDirectory(File srcDir, File destDir) throws IOException {
         copyDirectory(srcDir, destDir, true);
@@ -1183,7 +1183,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static void copyDirectory(File srcDir, File destDir,
             boolean preserveFileDate) throws IOException {
@@ -1327,7 +1327,7 @@ public class FileUtils {
      * @param preserveFileDate  whether to preserve the file date
      * @param exclusionList  List of files and directories to exclude from the copy, may be null
      * @throws IOException if an error occurs
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     private static void doCopyDirectory(File srcDir, File destDir, FileFilter filter,
             boolean preserveFileDate, List<String> exclusionList) throws IOException {
@@ -1665,7 +1665,7 @@ public class FileUtils {
      * @param file  the file to read, must not be <code>null</code>
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static byte[] readFileToByteArray(File file) throws IOException {
         InputStream in = null;
@@ -1686,7 +1686,7 @@ public class FileUtils {
      * @return the list of Strings representing each line in the file, never <code>null</code>
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static List<String> readLines(File file, String encoding) throws IOException {
         InputStream in = null;
@@ -1900,7 +1900,7 @@ public class FileUtils {
      * @param file  the file to write to
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
         writeByteArrayToFile(file, data, false);
@@ -1940,7 +1940,7 @@ public class FileUtils {
      * @param lines  the lines to write, <code>null</code> entries produce blank lines
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static void writeLines(File file, String encoding, Collection<?> lines) throws IOException {
         writeLines(file, encoding, lines, null, false);
@@ -2008,7 +2008,7 @@ public class FileUtils {
      * @param lineEnding  the line separator to use, <code>null</code> is system default
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since Commons IO 1.1
+     * @since 1.1
      */
     public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding)
         throws IOException {
