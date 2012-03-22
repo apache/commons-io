@@ -105,6 +105,7 @@ public class IOUtils {
      * The system line separator string.
      */
     public static final String LINE_SEPARATOR;
+    
     static {
         // avoid security issues
         StringBuilderWriter buf = new StringBuilderWriter(4);
@@ -468,11 +469,11 @@ public class IOUtils {
      */
     public static byte[] toByteArray(InputStream input, int size) throws IOException {
 
-        if(size < 0) {
+        if (size < 0) {
             throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
         }
-        
-        if(size == 0) {
+
+        if (size == 0) {
             return new byte[0];
         }
 
@@ -480,11 +481,11 @@ public class IOUtils {
         int offset = 0;
         int readed;
 
-        while(offset < size && (readed = input.read(data, offset, size - offset)) != -1) {
+        while (offset < size && (readed = input.read(data, offset, size - offset)) != -1) {
             offset += readed;
         }
 
-        if(offset != size) {
+        if (offset != size) {
             throw new IOException("Unexpected readed size. current: " + offset + ", excepted: " + size);
         }
 
@@ -1478,8 +1479,8 @@ public class IOUtils {
      */
     public static long copyLarge(InputStream input, OutputStream output, final long offset, final long length)
             throws IOException {
-        if( offset > 0){
-            skipFully( input, offset);
+        if (offset > 0) {
+            skipFully(input, offset);
         }
         if (length == 0) {
             return 0;
@@ -1491,8 +1492,8 @@ public class IOUtils {
         }
         int read;
         long totalRead = 0;
-        while(bytesToRead > 0 && -1 != (read=input.read(buffer, 0, bytesToRead))) {
-            output.write( buffer, 0, read);
+        while (bytesToRead > 0 && -1 != (read = input.read(buffer, 0, bytesToRead))) {
+            output.write(buffer, 0, read);
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
                 // Note the cast must work because buffer.length is an integer
@@ -1626,9 +1627,9 @@ public class IOUtils {
      * @since Commons IO 2.2
      */
     public static long copyLarge(Reader input, Writer output, final long offset, final long length)
-            throws IOException {
-        if( offset > 0){
-            skipFully( input, offset);
+ throws IOException {
+        if (offset > 0) {
+            skipFully(input, offset);
         }
         if (length == 0) {
             return 0;
@@ -1640,8 +1641,8 @@ public class IOUtils {
         }
         int read;
         long totalRead = 0;
-        while(bytesToRead > 0 && -1 != (read=input.read(buffer, 0, bytesToRead))) {
-            output.write( buffer, 0, read);
+        while (bytesToRead > 0 && -1 != (read = input.read(buffer, 0, bytesToRead))) {
+            output.write(buffer, 0, read);
             totalRead += read;
             if (length > 0) { // only adjust length if not reading to the end
                 // Note the cast must work because buffer.length is an integer
@@ -1846,27 +1847,25 @@ public class IOUtils {
      */
     public static long skip(InputStream input, long toSkip) throws IOException {
         if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: "+toSkip);
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
         /*
-         * N.B. no need to synchronize this because:
-         * - we don't care if the buffer is created multiple times (the data is ignored)
-         * - we always use the same size buffer, so if it it is recreated it will still be OK
-         * (if the buffer size were variable, we would need to synch. to ensure some other thread
-         * did not create a smaller one)
+         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
+         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
          */
-        if (SKIP_BYTE_BUFFER == null){
+        if (SKIP_BYTE_BUFFER == null) {
             SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
         }
-        long remain=toSkip;
-        while(remain > 0) {
+        long remain = toSkip;
+        while (remain > 0) {
             long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
             }
             remain -= n;
         }
-        return toSkip - remain;   
+        return toSkip - remain;
     }
 
     /**
@@ -1887,27 +1886,25 @@ public class IOUtils {
      */
     public static long skip(Reader input, long toSkip) throws IOException {
         if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: "+toSkip);
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
         /*
-         * N.B. no need to synchronize this because:
-         * - we don't care if the buffer is created multiple times (the data is ignored)
-         * - we always use the same size buffer, so if it it is recreated it will still be OK
-         * (if the buffer size were variable, we would need to synch. to ensure some other thread
-         * did not create a smaller one)
+         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
+         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
          */
-        if (SKIP_CHAR_BUFFER == null){
+        if (SKIP_CHAR_BUFFER == null) {
             SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];
         }
-        long remain=toSkip;
-        while(remain > 0) {
+        long remain = toSkip;
+        while (remain > 0) {
             long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
             }
             remain -= n;
         }
-        return toSkip - remain;   
+        return toSkip - remain;
     }
 
     /**
@@ -1926,12 +1923,12 @@ public class IOUtils {
      * @since Commons IO 2.0
      */
     public static void skipFully(InputStream input, long toSkip) throws IOException {
-        if (toSkip < 0){
-            throw new IllegalArgumentException("Bytes to skip must not be negative: "+toSkip);
+        if (toSkip < 0) {
+            throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
         }
         long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Bytes to skip: "+toSkip+" actual: "+skipped);
+            throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
         }
     }
 
@@ -1953,7 +1950,7 @@ public class IOUtils {
     public static void skipFully(Reader input, long toSkip) throws IOException {
         long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
-            throw new EOFException("Chars to skip: "+toSkip+" actual: "+skipped);
+            throw new EOFException("Chars to skip: " + toSkip + " actual: " + skipped);
         }
     }
     
@@ -1973,14 +1970,14 @@ public class IOUtils {
      * @since 2.2
      */
     public static int read(Reader input, char[] buffer, int offset, int length) throws IOException {
-        if (length < 0){
-            throw new IllegalArgumentException("Length must not be negative: "+length);
+        if (length < 0) {
+            throw new IllegalArgumentException("Length must not be negative: " + length);
         }
         int remaining = length;
-        while ( remaining > 0 ) {
+        while (remaining > 0) {
             int location = length - remaining;
-            int count = input.read( buffer, location, remaining );
-            if ( -1 == count ) { // EOF
+            int count = input.read(buffer, location, remaining);
+            if (-1 == count) { // EOF
                 break;
             }
             remaining -= count;
@@ -2018,14 +2015,14 @@ public class IOUtils {
      * @throws IOException if a read error occurs
      */
     public static int read(InputStream input, byte[] buffer, int offset, int length) throws IOException {
-        if (length < 0){
-            throw new IllegalArgumentException("Length must not be negative: "+length);
+        if (length < 0) {
+            throw new IllegalArgumentException("Length must not be negative: " + length);
         }
         int remaining = length;
-        while ( remaining > 0 ) {
+        while (remaining > 0) {
             int location = length - remaining;
-            int count = input.read( buffer, location, remaining );
-            if ( -1 == count ) { // EOF
+            int count = input.read(buffer, location, remaining);
+            if (-1 == count) { // EOF
                 break;
             }
             remaining -= count;
@@ -2066,8 +2063,8 @@ public class IOUtils {
      */
     public static void readFully(Reader input, char[] buffer, int offset, int length) throws IOException {
         int actual = read(input, buffer, offset, length);
-        if (actual != length){
-            throw new EOFException("Length to read: "+length+" actual: "+actual);            
+        if (actual != length) {
+            throw new EOFException("Length to read: " + length + " actual: " + actual);
         }
     }
 
@@ -2107,8 +2104,8 @@ public class IOUtils {
      */
     public static void readFully(InputStream input, byte[] buffer, int offset, int length) throws IOException {
         int actual = read(input, buffer, offset, length);
-        if (actual != length){
-            throw new EOFException("Length to read: "+length+" actual: "+actual);            
+        if (actual != length) {
+            throw new EOFException("Length to read: " + length + " actual: " + actual);
         }
     }
 
