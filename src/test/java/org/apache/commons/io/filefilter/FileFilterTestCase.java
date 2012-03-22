@@ -75,6 +75,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
                 "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
                 expected, filter.accept(file));
         }
+        assertNotNull(filter.toString());
     }
 
     public void testSuffix() throws Exception {
@@ -445,8 +446,16 @@ public class FileFilterTestCase extends FileBasedTestCase {
         } catch (IllegalArgumentException ex) {
         }
 
+        try {
+            new AndFileFilter(null, falseFilter);
+            fail();
+        } catch (IllegalArgumentException ex) {
+        }
+
         AndFileFilter f = new AndFileFilter((List<IOFileFilter>) null);
         assertTrue(f.getFileFilters().isEmpty());
+        
+        assertNotNull(f.toString()); // TODO better tests
     }
 
     public void testOr() throws Exception {
@@ -646,9 +655,11 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         IOFileFilter filter = new DelegateFileFilter((FileFilter) orFilter);
         assertFiltering( filter, testFile, false );
+        assertNotNull(filter.toString()); // TODO better test
 
         filter = new DelegateFileFilter((FilenameFilter) orFilter);
         assertFiltering( filter, testFile, false );
+        assertNotNull(filter.toString()); // TODO better test
 
         try {
             new DelegateFileFilter((FileFilter) null);
@@ -1064,6 +1075,45 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, dir, false);
     }
 
+    public void testMagicNumberFileFilterValidation() {
+        try {
+            new MagicNumberFileFilter((String)null, 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            new MagicNumberFileFilter((String)"", -1);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            new MagicNumberFileFilter("", 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            new MagicNumberFileFilter((byte[])null, 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            new MagicNumberFileFilter(new byte[]{0}, 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+        try {
+            new MagicNumberFileFilter(new byte[]{}, 0);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+}
+
     /**
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
      * that tests that the method properly filters files from the list.
@@ -1239,5 +1289,28 @@ public class FileFilterTestCase extends FileBasedTestCase {
         Set<File> filteredSet = FileFilterUtils.filterSet(filter, (Set<File>)null); 
         assertEquals(0, filteredSet.size());
     }
-    
+
+       public void testEnsureTestCoverage() {
+           assertNotNull(new FileFilterUtils()); // dummy for test coverage
+       }
+       
+       public void testNullFilters() {
+           try {
+               FileFilterUtils.toList((IOFileFilter)null);
+               fail("Expected IllegalArgumentException");
+           } catch (IllegalArgumentException expected) {
+               // expected
+           }
+           try {
+               FileFilterUtils.toList(new IOFileFilter[]{null});
+               fail("Expected IllegalArgumentException");
+           } catch (IllegalArgumentException expected) {
+            // expected
+           }
+       }
+       
+       public void testDelegation() { // TODO improve these tests
+           assertNotNull(FileFilterUtils.asFileFilter((FileFilter)FalseFileFilter.INSTANCE));
+           assertNotNull(FileFilterUtils.asFileFilter((FilenameFilter)FalseFileFilter.INSTANCE).toString());
+       }
 }
