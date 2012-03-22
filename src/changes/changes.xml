@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA" description="">
+      <action issue="IO-311" dev="sebb" type="fix" due-to="Robert Muir">
+        IOUtils.read(InputStream/Reader) ignores the offset parameter
+      </action>        
       <action issue="IO-312" dev="sebb" type="fix">
         CharSequenceInputStream(CharSequence s, Charset charset, int bufferSize) ignores bufferSize
       </action>        
