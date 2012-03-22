@@ -1083,7 +1083,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
             // expected
         }
         try {
-            new MagicNumberFileFilter((String)"", -1);
+            new MagicNumberFileFilter("0", -1);
             fail();
         } catch (IllegalArgumentException iae) {
             // expected
