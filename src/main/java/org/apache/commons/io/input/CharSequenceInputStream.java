@@ -55,7 +55,7 @@ public class CharSequenceInputStream extends InputStream {
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
-        this.bbuf = ByteBuffer.allocate(124);
+        this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
         this.cbuf = CharBuffer.wrap(s);
         this.mark = -1;
@@ -181,13 +181,17 @@ public class CharSequenceInputStream extends InputStream {
     public void close() throws IOException {
     }
 
+    /**
+     * {@inheritDoc}
+     * @param readlimit max read limit (ignored)
+     */
     @Override
-    public void mark(int readlimit) {
+    public synchronized void mark(@SuppressWarnings("unused") int readlimit) {
         this.mark = this.cbuf.position();
     }
 
     @Override
-    public void reset() throws IOException {
+    public synchronized void reset() throws IOException {
         if (this.mark != -1) {
             this.cbuf.position(this.mark);
             this.mark = -1;
