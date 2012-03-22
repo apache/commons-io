@@ -61,7 +61,7 @@ import org.apache.commons.io.ByteOrderMark;
  *
  * @version $Id$
  * @see org.apache.commons.io.output.XmlStreamWriter
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class XmlStreamReader extends Reader {
     private static final int BUFFER_SIZE = 4096;

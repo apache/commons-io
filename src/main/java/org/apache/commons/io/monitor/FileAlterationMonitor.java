@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadFactory;
  * 
  * @see FileAlterationObserver
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public final class FileAlterationMonitor implements Runnable {
 
@@ -156,7 +156,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @param stopInterval the amount of time in milliseconds to wait for the thread to finish.
      * A value of zero will wait until the thread is finished (see {@link Thread#join(long)}).
      * @throws Exception if an error occurs initializing the observer
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public synchronized void stop(long stopInterval) throws Exception {
         if (running == false) {

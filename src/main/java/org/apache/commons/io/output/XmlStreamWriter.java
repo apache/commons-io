@@ -35,7 +35,7 @@ import org.apache.commons.io.input.XmlStreamReader;
  *
  * @version $Id$
  * @see XmlStreamReader
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class XmlStreamWriter extends Writer {
     private static final int BUFFER_SIZE = 4096;

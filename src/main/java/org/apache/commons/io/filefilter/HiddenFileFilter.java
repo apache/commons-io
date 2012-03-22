@@ -45,7 +45,7 @@ import java.io.Serializable;
  * }
  * </pre>
  *
- * @since Commons IO 1.3
+ * @since 1.3
  * @version $Id$
  */
 public class HiddenFileFilter extends AbstractFileFilter implements Serializable {

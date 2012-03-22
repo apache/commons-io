@@ -24,7 +24,7 @@ import java.io.Serializable;
  * wrapped exception. Both the tag and the original exception can be used
  * to determine further processing when this exception is caught.
  *
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class TaggedIOException extends IOExceptionWithCause {
 

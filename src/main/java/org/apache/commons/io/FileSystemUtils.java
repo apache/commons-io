@@ -165,7 +165,7 @@ public class FileSystemUtils {
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 1.2, enhanced OS support in 1.3
+     * @since 1.2, enhanced OS support in 1.3
      */
     public static long freeSpaceKb(String path) throws IOException {
         return freeSpaceKb(path, -1);
@@ -194,7 +194,7 @@ public class FileSystemUtils {
      * @throws IllegalArgumentException if the path is invalid
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static long freeSpaceKb(String path, long timeout) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, true, timeout);
@@ -210,7 +210,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static long freeSpaceKb() throws IOException {
         return freeSpaceKb(-1); 
@@ -228,7 +228,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static long freeSpaceKb(long timeout) throws IOException {
         return freeSpaceKb(new File(".").getAbsolutePath(), timeout); 

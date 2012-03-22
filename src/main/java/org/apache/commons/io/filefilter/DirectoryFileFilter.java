@@ -33,7 +33,7 @@ import java.io.Serializable;
  * }
  * </pre>
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  *
  * @see FileFilterUtils#directoryFileFilter()
@@ -42,7 +42,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
 
     /**
      * Singleton instance of directory filter.
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static final IOFileFilter DIRECTORY = new DirectoryFileFilter();
     /**

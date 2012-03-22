@@ -107,7 +107,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param target the char buffer to read the characters into
      * @return the number of characters read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     public int read(CharBuffer target) throws IOException {
@@ -216,7 +216,7 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add pre-processing steps also to them.
      *
-     * @since Commons IO 2.0
+     * @since 2.0
      * @param n number of chars that the caller asked to be read
      * @throws IOException if the pre-processing fails
      */
@@ -236,7 +236,7 @@ public abstract class ProxyReader extends FilterReader {
      * {@link #reset()}. You need to explicitly override those methods if
      * you want to add post-processing steps also to them.
      *
-     * @since Commons IO 2.0
+     * @since 2.0
      * @param n number of chars read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
      */
@@ -250,7 +250,7 @@ public abstract class ProxyReader extends FilterReader {
      * handling. The default behaviour is to re-throw the exception.
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     protected void handleIOException(IOException e) throws IOException {
         throw e;

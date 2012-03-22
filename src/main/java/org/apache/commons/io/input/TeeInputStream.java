@@ -32,7 +32,7 @@ import java.io.OutputStream;
  * stream will also closed.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class TeeInputStream extends ProxyInputStream {
 

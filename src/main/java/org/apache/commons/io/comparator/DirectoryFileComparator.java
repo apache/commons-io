@@ -41,7 +41,7 @@ import java.util.Comparator;
  * <p>
  *
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {
 

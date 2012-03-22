@@ -29,7 +29,7 @@ import java.io.IOException;
  * already read.
  *
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class XmlStreamReaderException extends IOException {
 

@@ -47,7 +47,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * Updates the count with the number of bytes that are being written.
      *
      * @param n number of bytes to be written to the stream
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     protected synchronized void beforeWrite(int n) {
@@ -99,7 +99,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      *
      * @return the number of bytes accumulated
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public synchronized long getByteCount() {
         return this.count;
@@ -113,7 +113,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * result in incorrect count for files over 2GB.
      *
      * @return the count previous to resetting
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public synchronized long resetByteCount() {
         long tmp = this.count;

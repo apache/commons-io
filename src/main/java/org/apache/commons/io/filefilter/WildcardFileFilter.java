@@ -46,7 +46,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * @version $Id$
- * @since Commons IO 1.3
+ * @since 1.3
  */
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 

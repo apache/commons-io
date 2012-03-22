@@ -26,7 +26,7 @@ import java.io.InputStream;
  * This class is mostly useful for testing error handling in code that uses an
  * input stream.
  *
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class BrokenInputStream extends InputStream {
 

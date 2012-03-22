@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * A file filter that always returns true.
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  * @see FileFilterUtils#trueFileFilter()
  */
@@ -30,7 +30,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Singleton instance of true filter.
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static final IOFileFilter TRUE = new TrueFileFilter();
     /**

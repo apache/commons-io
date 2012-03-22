@@ -25,7 +25,7 @@ import java.util.Comparator;
  * the delegate {@link Comparator}.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 class ReverseComparator extends AbstractFileComparator implements Serializable {
 

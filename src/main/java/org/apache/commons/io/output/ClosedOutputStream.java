@@ -28,7 +28,7 @@ import java.io.OutputStream;
  * a <code>null</code> output stream.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class ClosedOutputStream extends OutputStream {
     

@@ -42,7 +42,7 @@ import java.util.Comparator;
  * <p>
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class DefaultFileComparator extends AbstractFileComparator implements Serializable {
 
