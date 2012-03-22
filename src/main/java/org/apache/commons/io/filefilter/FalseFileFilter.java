@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * A file filter that always returns false.
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  *
  * @see FileFilterUtils#falseFileFilter()
@@ -31,7 +31,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Singleton instance of false filter.
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static final IOFileFilter FALSE = new FalseFileFilter();
     /**

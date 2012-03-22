@@ -70,7 +70,7 @@ import org.apache.commons.io.ByteOrderMark;
  * @see org.apache.commons.io.ByteOrderMark
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia - Byte Order Mark</a>
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class BOMInputStream extends ProxyInputStream {
     private final boolean include;

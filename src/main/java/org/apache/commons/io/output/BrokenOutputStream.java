@@ -26,7 +26,7 @@ import java.io.OutputStream;
  * This class is mostly useful for testing error handling in code that uses an
  * output stream.
  *
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class BrokenOutputStream extends OutputStream {
 

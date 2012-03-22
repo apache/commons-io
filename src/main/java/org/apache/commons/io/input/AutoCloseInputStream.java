@@ -32,7 +32,7 @@ import java.io.InputStream;
  * releasing resources once the last byte has been read) do not do that.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class AutoCloseInputStream extends ProxyInputStream {
 
@@ -69,7 +69,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      *
      * @param n number of bytes read, or -1 if no more bytes are available
      * @throws IOException if the stream could not be closed
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     protected void afterRead(int n) throws IOException {

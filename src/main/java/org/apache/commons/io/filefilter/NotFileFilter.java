@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * This filter produces a logical NOT of the filters specified.
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */

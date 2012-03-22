@@ -59,7 +59,7 @@ import org.apache.commons.io.TaggedIOException;
  * </pre>
  *
  * @see TaggedIOException
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class TaggedOutputStream extends ProxyOutputStream {
 

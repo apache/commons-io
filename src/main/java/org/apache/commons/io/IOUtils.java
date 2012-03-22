@@ -277,7 +277,7 @@ public class IOUtils {
      * </pre>
      *
      * @param closeable the object to close, may be null or already closed
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void closeQuietly(Closeable closeable) {
         try {
@@ -310,7 +310,7 @@ public class IOUtils {
      * </pre>
      *
      * @param sock the Socket to close, may be null or already closed
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void closeQuietly(Socket sock){
         if (sock != null){
@@ -407,7 +407,7 @@ public class IOUtils {
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static InputStream toBufferedInputStream(InputStream input) throws IOException {
         return ByteArrayOutputStream.toBufferedInputStream(input);
@@ -446,7 +446,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs or <code>InputStream</code> size differ from parameter size
      * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
      * @see IOUtils#toByteArray(java.io.InputStream, int)
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public static byte[] toByteArray(InputStream input, long size) throws IOException {
 
@@ -466,7 +466,7 @@ public class IOUtils {
      * @return the requested byte array
      * @throws IOException if an I/O error occurs or <code>InputStream</code> size differ from parameter size
      * @throws IllegalArgumentException if size is less than zero
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public static byte[] toByteArray(InputStream input, int size) throws IOException {
 
@@ -870,7 +870,7 @@ public class IOUtils {
      * @param reader  the <code>Reader</code> to read from, not null
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the reader is null
-     * @since Commons IO 1.2
+     * @since 1.2
      */
     public static LineIterator lineIterator(Reader reader) {
         return new LineIterator(reader);
@@ -904,7 +904,7 @@ public class IOUtils {
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
      * @throws IOException if an I/O error occurs, such as if the encoding is invalid
-     * @since Commons IO 1.2
+     * @since 1.2
      */
     public static LineIterator lineIterator(InputStream input, String encoding) 
                      throws IOException {
@@ -924,7 +924,7 @@ public class IOUtils {
      *
      * @param input the CharSequence to convert
      * @return an input stream
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static InputStream toInputStream(CharSequence input) {
         return toInputStream(input.toString());
@@ -941,7 +941,7 @@ public class IOUtils {
      * @param encoding the encoding to use, null means platform default
      * @throws IOException if the encoding is invalid
      * @return an input stream
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static InputStream toInputStream(CharSequence input, String encoding) throws IOException {
         return toInputStream(input.toString(), encoding);
@@ -1123,7 +1123,7 @@ public class IOUtils {
      * @param output  the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void write(CharSequence data, Writer output) throws IOException {
         if (data != null) {
@@ -1142,7 +1142,7 @@ public class IOUtils {
      * @param output  the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void write(CharSequence data, OutputStream output)
             throws IOException {
@@ -1165,7 +1165,7 @@ public class IOUtils {
      * @param encoding  the encoding to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void write(CharSequence data, OutputStream output, String encoding)
             throws IOException {
@@ -1445,7 +1445,7 @@ public class IOUtils {
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static long copyLarge(InputStream input, OutputStream output)
             throws IOException {
@@ -1595,7 +1595,7 @@ public class IOUtils {
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static long copyLarge(Reader input, Writer output) throws IOException {
         char[] buffer = new char[DEFAULT_BUFFER_SIZE];
@@ -1844,7 +1844,7 @@ public class IOUtils {
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static long skip(InputStream input, long toSkip) throws IOException {
         if (toSkip < 0) {
@@ -1883,7 +1883,7 @@ public class IOUtils {
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static long skip(Reader input, long toSkip) throws IOException {
         if (toSkip < 0) {
@@ -1921,7 +1921,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @throws EOFException if the number of bytes skipped was incorrect 
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void skipFully(InputStream input, long toSkip) throws IOException {
         if (toSkip < 0) {
@@ -1946,7 +1946,7 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @throws EOFException if the number of characters skipped was incorrect
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static void skipFully(Reader input, long toSkip) throws IOException {
         long skipped = skip(input, toSkip);

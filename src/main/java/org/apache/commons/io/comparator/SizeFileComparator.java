@@ -47,7 +47,7 @@ import org.apache.commons.io.FileUtils;
  * <code>sumDirectoryContents</code> is <code>true</code>.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {
 

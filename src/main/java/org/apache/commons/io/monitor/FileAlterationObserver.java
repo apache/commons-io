@@ -117,7 +117,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * @see FileAlterationListener
  * @see FileAlterationMonitor
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class FileAlterationObserver implements Serializable {
 
@@ -227,7 +227,7 @@ public class FileAlterationObserver implements Serializable {
      * Return the fileFilter.
      *
      * @return the fileFilter
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public FileFilter getFileFilter() {
         return fileFilter;

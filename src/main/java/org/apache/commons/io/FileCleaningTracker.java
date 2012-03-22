@@ -158,7 +158,7 @@ public class FileCleaningTracker {
      * Return the file paths that failed to delete.
      *
      * @return the file paths that failed to delete
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public List<String> getDeleteFailures() {
         return deleteFailures;

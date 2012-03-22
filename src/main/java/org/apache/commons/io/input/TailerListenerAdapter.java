@@ -20,7 +20,7 @@ package org.apache.commons.io.input;
  * {@link TailerListener} Adapter.
  *
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class TailerListenerAdapter implements TailerListener {
 

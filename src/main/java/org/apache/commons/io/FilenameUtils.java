@@ -84,13 +84,13 @@ public class FilenameUtils {
 
     /**
      * The extension separator character.
-     * @since Commons IO 1.4
+     * @since 1.4
      */
     public static final char EXTENSION_SEPARATOR = '.';
 
     /**
      * The extension separator String.
-     * @since Commons IO 1.4
+     * @since 1.4
      */
     public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
 
@@ -235,7 +235,7 @@ public class FilenameUtils {
      * @param unixSeparator <code>true</code> if a unix separator should
      * be used or <code>false</code> if a windows separator should be used.
      * @return the normalized filename, or null if invalid
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static String normalize(String filename, boolean unixSeparator) {
         char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
@@ -329,7 +329,7 @@ public class FilenameUtils {
      * @param unixSeparator <code>true</code> if a unix separator should
      * be used or <code>false</code> if a windows separtor should be used.
      * @return the normalized filename, or null if invalid
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     public static String normalizeNoEndSeparator(String filename, boolean unixSeparator) {
          char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
@@ -1107,7 +1107,7 @@ public class FilenameUtils {
      * @param normalized  whether to normalize the filenames
      * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
      * @return true if the filenames are equal, null equals null
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static boolean equals(
             String filename1, String filename2,
@@ -1272,7 +1272,7 @@ public class FilenameUtils {
      * @param wildcardMatcher  the wildcard string to match against
      * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
      * @return true if the filename matches the wilcard string
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public static boolean wildcardMatch(String filename, String wildcardMatcher, IOCase caseSensitivity) {
         if (filename == null && wildcardMatcher == null) {

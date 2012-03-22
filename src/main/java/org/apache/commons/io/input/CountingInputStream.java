@@ -64,7 +64,7 @@ public class CountingInputStream extends ProxyInputStream {
      * Adds the number of read bytes to the count.
      *
      * @param n number of bytes read, or -1 if no more bytes are available
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     protected synchronized void afterRead(int n) {
@@ -118,7 +118,7 @@ public class CountingInputStream extends ProxyInputStream {
      * result in incorrect count for files over 2GB.
      *
      * @return the number of bytes accumulated
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public synchronized long getByteCount() {
         return this.count;
@@ -132,7 +132,7 @@ public class CountingInputStream extends ProxyInputStream {
      * result in incorrect count for files over 2GB.
      *
      * @return the count previous to resetting
-     * @since Commons IO 1.3
+     * @since 1.3
      */
     public synchronized long resetByteCount() {
         long tmp = this.count;

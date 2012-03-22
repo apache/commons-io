@@ -29,7 +29,7 @@ import java.util.List;
  * Checking of the file filter list stops when the first filter returns
  * <code>false</code>.
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  *
  * @see FileFilterUtils#and(IOFileFilter...)

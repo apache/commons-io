@@ -23,7 +23,7 @@ import java.io.File;
  * 
  * @see FileAlterationObserver
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class FileAlterationListenerAdaptor implements FileAlterationListener {
 

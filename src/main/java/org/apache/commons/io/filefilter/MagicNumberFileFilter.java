@@ -58,7 +58,7 @@ import org.apache.commons.io.IOUtils;
  *     System.out.println(tarFile);
  * }
  * </pre></code>
- * @since Commons IO 2.0
+ * @since 2.0
  * @see FileFilterUtils#magicNumberFileFilter(byte[])
  * @see FileFilterUtils#magicNumberFileFilter(String)
  * @see FileFilterUtils#magicNumberFileFilter(byte[], long)

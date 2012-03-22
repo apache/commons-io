@@ -102,7 +102,7 @@ import org.apache.commons.io.IOUtils;
  * @see TailerListener
  * @see TailerListenerAdapter
  * @version $Id$
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class Tailer implements Runnable {
 

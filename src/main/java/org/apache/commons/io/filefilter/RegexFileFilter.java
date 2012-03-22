@@ -40,7 +40,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class RegexFileFilter extends AbstractFileFilter implements Serializable {
 

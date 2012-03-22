@@ -26,7 +26,7 @@ import java.io.InputStream;
  * more input would still be available to other components.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class CloseShieldInputStream extends ProxyInputStream {
 

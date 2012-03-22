@@ -27,7 +27,7 @@ import java.io.InputStream;
  * <code>null</code> input stream.
  *
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class ClosedInputStream extends InputStream {
     

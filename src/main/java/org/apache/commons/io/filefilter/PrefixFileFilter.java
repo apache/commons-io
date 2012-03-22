@@ -36,7 +36,7 @@ import org.apache.commons.io.IOCase;
  * }
  * </pre>
  *
- * @since Commons IO 1.0
+ * @since 1.0
  * @version $Id$
  * @see FileFilterUtils#prefixFileFilter(String)
  * @see FileFilterUtils#prefixFileFilter(String, IOCase)
@@ -66,7 +66,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefix  the prefix to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix is null
-     * @since Commons IO 1.4
+     * @since 1.4
      */
     public PrefixFileFilter(String prefix, IOCase caseSensitivity) {
         if (prefix == null) {
@@ -99,7 +99,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefixes  the prefixes to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix is null
-     * @since Commons IO 1.4
+     * @since 1.4
      */
     public PrefixFileFilter(String[] prefixes, IOCase caseSensitivity) {
         if (prefixes == null) {
@@ -129,7 +129,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
-     * @since Commons IO 1.4
+     * @since 1.4
      */
     public PrefixFileFilter(List<String> prefixes, IOCase caseSensitivity) {
         if (prefixes == null) {

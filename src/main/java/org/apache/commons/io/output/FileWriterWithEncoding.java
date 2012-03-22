@@ -44,7 +44,7 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * 
  *
- * @since Commons IO 1.4
+ * @since 1.4
  * @version $Id$
  */
 public class FileWriterWithEncoding extends Writer {

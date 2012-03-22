@@ -68,7 +68,7 @@ import java.nio.charset.CodingErrorAction;
  * 
  * @see org.apache.commons.io.input.ReaderInputStream
  * 
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class WriterOutputStream extends OutputStream {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
@@ -98,7 +98,7 @@ public class WriterOutputStream extends OutputStream {
      * 
      * @param writer the target {@link Writer}
      * @param decoder the charset decoder
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public WriterOutputStream(Writer writer, CharsetDecoder decoder) {
         this(writer, decoder, DEFAULT_BUFFER_SIZE, false);
@@ -115,7 +115,7 @@ public class WriterOutputStream extends OutputStream {
      *                         underlying {@link Writer} immediately. If <tt>false</tt>, the
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public WriterOutputStream(Writer writer, CharsetDecoder decoder, int bufferSize, boolean writeImmediately) {
         this.writer = writer;

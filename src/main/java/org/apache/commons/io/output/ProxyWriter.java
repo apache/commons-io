@@ -47,7 +47,7 @@ public class ProxyWriter extends FilterWriter {
      * @param c The character to write
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     public Writer append(char c) throws IOException {
@@ -68,7 +68,7 @@ public class ProxyWriter extends FilterWriter {
      * @param end  The index of the first character to write (exclusive)
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     public Writer append(CharSequence csq, int start, int end) throws IOException {
@@ -87,7 +87,7 @@ public class ProxyWriter extends FilterWriter {
      * @param csq The character sequence to write
      * @return this writer
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     @Override
     public Writer append(CharSequence csq) throws IOException {
@@ -235,7 +235,7 @@ public class ProxyWriter extends FilterWriter {
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
      *
-     * @since Commons IO 2.0
+     * @since 2.0
      * @param n number of chars to be written
      * @throws IOException if the pre-processing fails
      */
@@ -252,7 +252,7 @@ public class ProxyWriter extends FilterWriter {
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
      *
-     * @since Commons IO 2.0
+     * @since 2.0
      * @param n number of chars written
      * @throws IOException if the post-processing fails
      */
@@ -266,7 +266,7 @@ public class ProxyWriter extends FilterWriter {
      * handling. The default behaviour is to re-throw the exception.
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     protected void handleIOException(IOException e) throws IOException {
         throw e;

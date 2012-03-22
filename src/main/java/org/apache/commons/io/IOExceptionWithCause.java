@@ -24,7 +24,7 @@ import java.io.IOException;
  * consider this class deprecated and use {@link IOException}.
  * 
  * @version $Id$
- * @since Commons IO 1.4
+ * @since 1.4
  */
 public class IOExceptionWithCause extends IOException {
 

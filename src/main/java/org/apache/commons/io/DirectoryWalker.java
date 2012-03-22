@@ -245,7 +245,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * @since Commons IO 1.3
+ * @since 1.3
  * @version $Id$
  */
 public abstract class DirectoryWalker<T> {
@@ -514,7 +514,7 @@ public abstract class DirectoryWalker<T> {
      * @param files the files (possibly filtered) in the directory
      * @return the filtered list of files
      * @throws IOException if an I/O Error occurs
-     * @since Commons IO 2.0
+     * @since 2.0
      */
     protected File[] filterDirectoryContents(File directory, int depth, File[] files) throws IOException {
         return files;

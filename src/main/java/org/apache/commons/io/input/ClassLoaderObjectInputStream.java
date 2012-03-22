@@ -85,7 +85,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @throws IOException in case of an I/O error
      * @throws ClassNotFoundException if the Class cannot be found
      * @see java.io.ObjectInputStream#resolveProxyClass(java.lang.String[])
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     @Override
     protected Class<?> resolveProxyClass(String[] interfaces) throws IOException,

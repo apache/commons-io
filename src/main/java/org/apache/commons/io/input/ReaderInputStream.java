@@ -72,7 +72,7 @@ import java.nio.charset.CodingErrorAction;
  * 
  * @see org.apache.commons.io.output.WriterOutputStream
  * 
- * @since Commons IO 2.0
+ * @since 2.0
  */
 public class ReaderInputStream extends InputStream {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
@@ -101,7 +101,7 @@ public class ReaderInputStream extends InputStream {
      * 
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public ReaderInputStream(Reader reader, CharsetEncoder encoder) {
         this(reader, encoder, DEFAULT_BUFFER_SIZE);
@@ -113,7 +113,7 @@ public class ReaderInputStream extends InputStream {
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
      * @param bufferSize the size of the input buffer in number of characters
-     * @since Commons IO 2.1
+     * @since 2.1
      */
     public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
         this.reader = reader;
