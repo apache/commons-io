@@ -1475,7 +1475,7 @@ public class IOUtils {
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.2
+     * @since 2.2
      */
     public static long copyLarge(InputStream input, OutputStream output, final long offset, final long length)
             throws IOException {
@@ -1624,7 +1624,7 @@ public class IOUtils {
      * @return the number of chars copied
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.2
+     * @since 2.2
      */
     public static long copyLarge(Reader input, Writer output, final long offset, final long length)
  throws IOException {
@@ -1803,7 +1803,7 @@ public class IOUtils {
      * @return true if the content of the readers are equal (ignoring EOL differences),  false otherwise
      * @throws NullPointerException if either input is null
      * @throws IOException if an I/O error occurs
-     * @since Commons IO 2.2
+     * @since 2.2
      */
     public static boolean contentEqualsIgnoreEOL(Reader input1, Reader input2)
             throws IOException {
@@ -2013,6 +2013,7 @@ public class IOUtils {
      * @param length length to read, must be >= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
+     * @since 2.2
      */
     public static int read(InputStream input, byte[] buffer, int offset, int length) throws IOException {
         if (length < 0) {
@@ -2040,6 +2041,7 @@ public class IOUtils {
      * @param buffer destination
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
+     * @since 2.2
      */
     public static int read(InputStream input, byte[] buffer) throws IOException {
         return read(input, buffer, 0, buffer.length);
