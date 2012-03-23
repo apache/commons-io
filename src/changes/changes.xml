@@ -40,6 +40,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <release version="2.2" date="TBA" description="">
+      <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
+        Add IOUTils.toBufferedReader(Reader)
+      </action>        
       <!-- Note: the issue was not raised by Manoj, but arose from IO-305 and tests he performed -->
       <action issue="IO-308" dev="sebb" type="add" due-to="Manoj Mokashi">
         Allow applications to provide buffer (or size) for copyLarge methods.
