@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
+import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Selector;
@@ -107,6 +110,40 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testCloseQuietlyNullSelector() {
         Selector selector = null;
         IOUtils.closeQuietly(selector);
+    }
+
+    public void testCloseableCloseQuietlyOnException() {
+        IOUtils.closeQuietly(new Closeable() {            
+            public void close() throws IOException {
+                throw new IOException();
+            }
+        });
+    }
+
+    public void testSocketCloseQuietlyOnException() {
+        IOUtils.closeQuietly(new Socket() {            
+            public void close() throws IOException {
+                throw new IOException();
+            }
+        });
+    }
+
+    public void testServerSocketCloseQuietlyOnException() throws IOException {
+        IOUtils.closeQuietly(new ServerSocket() {            
+            public void close() throws IOException {
+                throw new IOException();
+            }
+        });
+    }
+
+    public void testSocketCloseQuietly() {
+        IOUtils.closeQuietly((Socket) null);
+        IOUtils.closeQuietly(new Socket());
+    }
+
+    public void testServerSocketCloseQuietly() throws IOException {
+        IOUtils.closeQuietly((ServerSocket) null);
+        IOUtils.closeQuietly(new ServerSocket());
     }
 
     public void testCloseQuietlySelector() {
