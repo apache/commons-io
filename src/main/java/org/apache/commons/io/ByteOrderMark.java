@@ -19,12 +19,12 @@ package org.apache.commons.io;
 import java.io.Serializable;
 
 /**
- * Byte Order Mark (BOM) representation -
- * see {@link org.apache.commons.io.input.BOMInputStream}.
- *
+ * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
+ * 
  * @see org.apache.commons.io.input.BOMInputStream
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia: Byte Order Mark</a>
- * @see <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings (Non-Normative)</a>
+ * @see <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings
+ *      (Non-Normative)</a>
  * @version $Id$
  * @since 2.0
  */
