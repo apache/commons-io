@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
@@ -722,6 +723,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         r1 = new CharArrayReader("321".toCharArray());
         r2 = new CharArrayReader("321\r\n".toCharArray());
         assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
+    }
+
+    public void testContentEqualsReaderReader() throws Exception {
+        assertTrue(IOUtils.contentEquals(new StringReader(""), new StringReader("")));
+        assertTrue(IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
+        assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
+        assertFalse(IOUtils.contentEquals(new StringReader("ABCD"), new StringReader("ABC")));
+        assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
     }
 
     public void testReadStream() throws Exception {

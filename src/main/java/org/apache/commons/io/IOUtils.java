@@ -413,6 +413,19 @@ public class IOUtils {
         return ByteArrayOutputStream.toBufferedInputStream(input);
     }
 
+    /**
+     * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a toBufferedReader for the given
+     * reader.
+     * 
+     * @param reader
+     *            the reader to wrap or return
+     * @return the given reader or a new {@link BufferedReader} for the given reader
+     * @since 2.2
+     */
+    public static BufferedReader toBufferedReader(Reader reader) {
+        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+    }
+    
     // read toByteArray
     //-----------------------------------------------------------------------
     /**
@@ -833,7 +846,7 @@ public class IOUtils {
      * @since 1.1
      */
     public static List<String> readLines(Reader input) throws IOException {
-        BufferedReader reader = new BufferedReader(input);
+        BufferedReader reader = toBufferedReader(input);
         List<String> list = new ArrayList<String>();
         String line = reader.readLine();
         while (line != null) {
@@ -1858,12 +1871,9 @@ public class IOUtils {
      */
     public static boolean contentEquals(Reader input1, Reader input2)
             throws IOException {
-        if (!(input1 instanceof BufferedReader)) {
-            input1 = new BufferedReader(input1);
-        }
-        if (!(input2 instanceof BufferedReader)) {
-            input2 = new BufferedReader(input2);
-        }
+        
+        input1 = toBufferedReader(input1);
+        input2 = toBufferedReader(input2);
 
         int ch = input1.read();
         while (EOF != ch) {
@@ -1894,18 +1904,8 @@ public class IOUtils {
      */
     public static boolean contentEqualsIgnoreEOL(Reader input1, Reader input2)
             throws IOException {
-        BufferedReader br1;
-        if (input1 instanceof BufferedReader) {
-            br1 = (BufferedReader) input1;
-        } else {
-            br1 = new BufferedReader(input1);
-        }
-        BufferedReader br2;
-        if (input2 instanceof BufferedReader) {
-            br2 = (BufferedReader) input2;
-        } else {
-            br2 = new BufferedReader(input2);
-        }
+        BufferedReader br1 = toBufferedReader(input1);
+        BufferedReader br2 = toBufferedReader(input2);
 
         String line1 = br1.readLine();
         String line2 = br2.readLine();
