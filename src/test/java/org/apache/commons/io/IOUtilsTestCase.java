@@ -699,7 +699,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         testURLToString("US-ASCII");
     }
 
-    public void testcontentEqualsIgnoreEOL() throws Exception {
+    public void testContentEqualsIgnoreEOL() throws Exception {
         Reader r1;
         Reader r2;
 
