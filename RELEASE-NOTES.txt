@@ -19,31 +19,36 @@ Commons IO Package Version 2.2
 Changes in this version include:
 
 New features:
-o IO-305:  New copyLarge() method in IOUtils that takes additional offset, length arguments Thanks to Manoj Mokashi. 
-o IO-287:  Use terabyte (TB) , petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size) Thanks to Ron Kuris, Gary Gregory. 
-o IO-173:  FileUtils.listFiles() doesn't return directories Thanks to Marcos Vinícius da Silva. 
-o IO-297:  CharSequenceInputStream to efficiently stream content of a CharSequence Thanks to Oleg Kalnichevski. 
-o IO-304:  The second constructor of Tailer class does not pass 'delay' to the third one Thanks to liangly. 
-o IO-303:  TeeOutputStream does not call branch.close() when main.close() throws an exception Thanks to fabian.barney. 
-o IO-302:  ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times Thanks to jsteuerwald, detinho. 
-o IO-301:  Add IOUtils.closeQuietly(Selector) necessary Thanks to kaykay.unique. 
-o IO-292:  IOUtils.closeQuietly() should take a ServerSocket as a parameter Thanks to sebb. 
-o IO-290:  Add read/readFully methods to IOUtils Thanks to sebb. 
-o IO-288:  Supply a ReversedLinesFileReader Thanks to Georg Henzler. 
-o IO-291:  Add new function FileUtils.directoryContains. Thanks to ggregory. 
-o IO-275:  FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
-        Added contentEqualsIgnoreEOL methods to both classes Thanks to CJ Aspromgos. 
+o Add IOUTils.toBufferedReader(Reader)  Issue: IO-313. Thanks to ggregory. 
+o Allow applications to provide buffer (or size) for copyLarge methods.  Issue: IO-308. Thanks to Manoj Mokashi. 
+o New copyLarge() method in IOUtils that takes additional offset, length arguments  Issue: IO-305. Thanks to Manoj Mokashi. 
+o Use terabyte (TB), petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)  Issue: IO-287. Thanks to Ron Kuris, Gary Gregory. 
+o FileUtils.listFiles() doesn't return directories  Issue: IO-173. Thanks to Marcos Vinícius da Silva. 
+o CharSequenceInputStream to efficiently stream content of a CharSequence  Issue: IO-297. Thanks to Oleg Kalnichevski. 
+o The second constructor of Tailer class does not pass 'delay' to the third one  Issue: IO-304. Thanks to liangly. 
+o TeeOutputStream does not call branch.close() when main.close() throws an exception  Issue: IO-303. Thanks to fabian.barney. 
+o ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times  Issue: IO-302. Thanks to jsteuerwald, detinho. 
+o Add IOUtils.closeQuietly(Selector) necessary  Issue: IO-301. Thanks to kaykay.unique. 
+o IOUtils.closeQuietly() should take a ServerSocket as a parameter  Issue: IO-292. Thanks to sebb. 
+o Add read/readFully methods to IOUtils  Issue: IO-290. Thanks to sebb. 
+o Supply a ReversedLinesFileReader  Issue: IO-288. Thanks to Georg Henzler. 
+o Add new function FileUtils.directoryContains.  Issue: IO-291. Thanks to ggregory. 
+o FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
+        Added contentEqualsIgnoreEOL methods to both classes  Issue: IO-275. Thanks to CJ Aspromgos. 
 
 Fixed Bugs:
-o IO-300:  FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory 
-o IO-307:  ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters 
-o IO-306:  ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0 
-o IO-276:  "FileUtils#deleteDirectoryOnExit(File)" does not work Thanks to nkami. 
-o IO-273:  BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...) Thanks to sebb. 
-o IO-298:  Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException' Thanks to Christian Schulte. 
+o IOUtils.read(InputStream/Reader) ignores the offset parameter  Issue: IO-311. Thanks to Robert Muir. 
+o CharSequenceInputStream(CharSequence s, Charset charset, int bufferSize) ignores bufferSize  Issue: IO-312. 
+o FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory  Issue: IO-300. 
+o ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters  Issue: IO-307. 
+o ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0  Issue: IO-306. 
+o "FileUtils#deleteDirectoryOnExit(File)" does not work  Issue: IO-276. Thanks to nkami. 
+o BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...)  Issue: IO-273. Thanks to sebb. 
+o Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'  Issue: IO-298. Thanks to Christian Schulte. 
 
 Changes:
-o IO-296:  ReaderInputStream optimization: more efficient reading of small chunks of data Thanks to Oleg Kalnichevski. 
+o ReaderInputStream optimization: more efficient reading of small chunks of data  Issue: IO-296. Thanks to Oleg Kalnichevski. 
+
 
 Compatibility with 2.1 and 1.4:
 Binary compatible: Yes
