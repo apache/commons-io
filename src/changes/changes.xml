@@ -39,7 +39,7 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.2" date="TBA" description="">
+    <release version="2.2" date="2012-March-26 " description="">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
         Add IOUTils.toBufferedReader(Reader)
       </action>        
