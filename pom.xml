@@ -227,7 +227,7 @@ file comparators, endian transformation classes, and much more.
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
     <commons.componentid>io</commons.componentid>
-    <commons.release.version>2.2</commons.release.version>
+    <commons.release.version>2.3</commons.release.version>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.release.desc>(requires JDK 1.5+)</commons.release.desc>
     <commons.release.2.version>1.4</commons.release.2.version>
