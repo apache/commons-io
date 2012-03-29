@@ -45,7 +45,12 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.2" date="2012-March-26 " description="">
+    <!-- The release date is the date RC is cut -->
+    <release version="2.3" date="TBD" description="">
+    </release>
+  </body>
+  <body>
+    <release version="2.2" date="2012-March-26" description="">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
         Add IOUTils.toBufferedReader(Reader)
       </action>        
@@ -121,7 +126,6 @@ The <action> type attribute can be add,update,fix,remove.
         Added contentEqualsIgnoreEOL methods to both classes
       </action>        
     </release>
-    <!-- The 2.1 release date is the date RC is cut -->
     <release version="2.1" date="2011-Sep-28">
       <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">
         Use standard Maven directory layout
