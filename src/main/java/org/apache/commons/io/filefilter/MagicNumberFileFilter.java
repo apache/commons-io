@@ -106,7 +106,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @param magicNumber the magic number to look for in the file.
      * 
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code>, or contains no bytes.
+     *         {@code null}, or contains no bytes.
      */
     public MagicNumberFileFilter(byte[] magicNumber) {
         this(magicNumber, 0);
@@ -131,7 +131,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *        The string is converted to bytes using the platform default charset.
      *
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code> or the empty String.
+     *         {@code null} or the empty String.
      */
     public MagicNumberFileFilter(String magicNumber) {
         this(magicNumber, 0);
@@ -154,7 +154,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @param offset the byte offset in the file to start comparing bytes.
      * 
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code> or the empty String, or <code>offset</code> is 
+     *         {@code null} or the empty String, or <code>offset</code> is 
      *         a negative number.
      */
     public MagicNumberFileFilter(String magicNumber, long offset) {
@@ -199,7 +199,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @param offset the byte offset in the file to start comparing bytes.
      * 
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code>, or contains no bytes, or <code>offset</code> 
+     *         {@code null}, or contains no bytes, or <code>offset</code> 
      *         is a negative number.
      */
     public MagicNumberFileFilter(byte[] magicNumber, long offset) {

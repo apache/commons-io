@@ -48,7 +48,7 @@ class ThreadMonitor implements Runnable {
      *
      * @param timeout The timout amount in milliseconds
      * or no timeout if the value is zero or less
-     * @return The monitor thread or <code>null</code>
+     * @return The monitor thread or {@code null}
      * if the timout amount is not greater than zero
      */
     public static Thread start(long timeout) {
@@ -61,7 +61,7 @@ class ThreadMonitor implements Runnable {
      * @param thread The thread The thread to monitor
      * @param timeout The timout amount in milliseconds
      * or no timeout if the value is zero or less
-     * @return The monitor thread or <code>null</code>
+     * @return The monitor thread or {@code null}
      * if the timout amount is not greater than zero
      */
     public static Thread start(Thread thread, long timeout) {
@@ -78,7 +78,7 @@ class ThreadMonitor implements Runnable {
     /**
      * Stop monitoring the specified thread.
      *
-     * @param thread The monitor thread, may be <code>null</code>
+     * @param thread The monitor thread, may be {@code null}
      */
     public static void stop(Thread thread) {
         if (thread != null) {

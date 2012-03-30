@@ -161,7 +161,7 @@ public class FilenameUtils {
      * A double slash will be merged to a single slash (but UNC names are handled).
      * A single dot path segment will be removed.
      * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, <code>null</code>
+     * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -204,7 +204,7 @@ public class FilenameUtils {
      * A double slash will be merged to a single slash (but UNC names are handled).
      * A single dot path segment will be removed.
      * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, <code>null</code>
+     * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -255,7 +255,7 @@ public class FilenameUtils {
      * A double slash will be merged to a single slash (but UNC names are handled).
      * A single dot path segment will be removed.
      * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, <code>null</code>
+     * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows except
@@ -300,7 +300,7 @@ public class FilenameUtils {
      * A double slash will be merged to a single slash (but UNC names are handled).
      * A single dot path segment will be removed.
      * A double dot will cause that path segment and the one before to be removed.
-     * If the double dot has no parent path segment to work with, <code>null</code>
+     * If the double dot has no parent path segment to work with, {@code null}
      * is returned.
      * <p>
      * The output will be the same on both Unix and Windows including
@@ -989,8 +989,8 @@ public class FilenameUtils {
      * The output will be the same irrespective of the machine that the code is running on.
      *
      * @param filename the filename to retrieve the extension of.
-     * @return the extension of the file or an empty string if none exists or <code>null</code>
-     * if the filename is <code>null</code>.
+     * @return the extension of the file or an empty string if none exists or {@code null}
+     * if the filename is {@code null}.
      */
     public static String getExtension(String filename) {
         if (filename == null) {
