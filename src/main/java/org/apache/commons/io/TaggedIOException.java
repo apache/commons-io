@@ -58,7 +58,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      *
      * @param throwable The Throwable object to check
      * @param tag tag object
-     * @return <code>true</code> if the throwable has the specified tag,
+     * @return {@code true} if the throwable has the specified tag,
      * otherwise <code>false</code>
      */
     public static boolean isTaggedWith(Throwable throwable, Object tag) {

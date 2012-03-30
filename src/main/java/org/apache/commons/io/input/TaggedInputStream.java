@@ -81,7 +81,7 @@ public class TaggedInputStream extends ProxyInputStream {
      * Tests if the given exception was caused by this stream.
      *
      * @param exception an exception
-     * @return <code>true</code> if the exception was thrown by this stream,
+     * @return {@code true} if the exception was thrown by this stream,
      *         <code>false</code> otherwise
      */
     public boolean isCauseOf(Throwable exception) {

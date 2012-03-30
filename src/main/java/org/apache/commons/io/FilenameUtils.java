@@ -232,7 +232,7 @@ public class FilenameUtils {
      * the separator character.
      *
      * @param filename  the filename to normalize, null returns null
-     * @param unixSeparator <code>true</code> if a unix separator should
+     * @param unixSeparator {@code true} if a unix separator should
      * be used or <code>false</code> if a windows separator should be used.
      * @return the normalized filename, or null if invalid
      * @since 2.0
@@ -326,7 +326,7 @@ public class FilenameUtils {
      * </pre>
      *
      * @param filename  the filename to normalize, null returns null
-     * @param unixSeparator <code>true</code> if a unix separator should
+     * @param unixSeparator {@code true} if a unix separator should
      * be used or <code>false</code> if a windows separtor should be used.
      * @return the normalized filename, or null if invalid
      * @since 2.0

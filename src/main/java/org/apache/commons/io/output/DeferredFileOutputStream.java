@@ -189,7 +189,7 @@ public class DeferredFileOutputStream
      * Determines whether or not the data for this output stream has been
      * retained in memory.
      *
-     * @return <code>true</code> if the data is available in memory;
+     * @return {@code true} if the data is available in memory;
      *         <code>false</code> otherwise.
      */
     public boolean isInMemory()

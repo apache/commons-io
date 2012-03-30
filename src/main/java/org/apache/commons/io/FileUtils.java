@@ -297,7 +297,7 @@ public class FileUtils {
      * An exception is thrown if the parent directory cannot be created.
      * 
      * @param file  the file to open for output, must not be {@code null}
-     * @param append if <code>true</code>, then bytes will be added to the
+     * @param append if {@code true}, then bytes will be added to the
      * end of the file rather than overwriting
      * @return a new {@link FileOutputStream} for the specified file
      * @throws IOException if the file object is a directory
@@ -918,7 +918,7 @@ public class FileUtils {
      * If the destination file exists, then this method will overwrite it.
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
-     * <code>true</code> tries to preserve the file's last modified
+     * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
@@ -979,7 +979,7 @@ public class FileUtils {
      * If the destination file exists, then this method will overwrite it.
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
-     * <code>true</code> tries to preserve the file's last modified
+     * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
@@ -1173,7 +1173,7 @@ public class FileUtils {
      * the source with the destination, with the source taking precedence.
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
-     * <code>true</code> tries to preserve the files' last modified
+     * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
@@ -1253,7 +1253,7 @@ public class FileUtils {
      * the source with the destination, with the source taking precedence.
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
-     * <code>true</code> tries to preserve the files' last modified
+     * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
@@ -1484,7 +1484,7 @@ public class FileUtils {
      * </ul>
      *
      * @param file  file or directory to delete, can be {@code null}
-     * @return <code>true</code> if the file or directory was deleted, otherwise
+     * @return {@code true} if the file or directory was deleted, otherwise
      * <code>false</code>
      *
      * @since 1.4
@@ -1832,7 +1832,7 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param encoding  the encoding to use, {@code null} means platform default
-     * @param append if <code>true</code>, then the String will be added to the
+     * @param append if {@code true}, then the String will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.3
@@ -1854,7 +1854,7 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param encoding  the encoding to use, {@code null} means platform default
-     * @param append if <code>true</code>, then the String will be added to the
+     * @param append if {@code true}, then the String will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @throws UnsupportedCharsetException
@@ -1882,7 +1882,7 @@ public class FileUtils {
      * 
      * @param file  the file to write
      * @param data  the content to write to the file
-     * @param append if <code>true</code>, then the String will be added to the
+     * @param append if {@code true}, then the String will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
@@ -1908,7 +1908,7 @@ public class FileUtils {
      * 
      * @param file  the file to write
      * @param data  the content to write to the file
-     * @param append if <code>true</code>, then the data will be added to the
+     * @param append if {@code true}, then the data will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
@@ -1950,7 +1950,7 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param encoding  the encoding to use, {@code null} means platform default
-     * @param append if <code>true</code>, then the data will be added to the
+     * @param append if {@code true}, then the data will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since IO 2.3
@@ -1966,7 +1966,7 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param encoding  the encoding to use, {@code null} means platform default
-     * @param append if <code>true</code>, then the data will be added to the
+     * @param append if {@code true}, then the data will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @throws UnsupportedCharsetException
@@ -1998,7 +1998,7 @@ public class FileUtils {
      *
      * @param file  the file to write to
      * @param data  the content to write to the file
-     * @param append if <code>true</code>, then bytes will be added to the
+     * @param append if {@code true}, then bytes will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since IO 2.1
@@ -2041,7 +2041,7 @@ public class FileUtils {
      * @param file  the file to write to
      * @param encoding  the encoding to use, {@code null} means platform default
      * @param lines  the lines to write, {@code null} entries produce blank lines
-     * @param append if <code>true</code>, then the lines will be added to the
+     * @param append if {@code true}, then the lines will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
@@ -2072,7 +2072,7 @@ public class FileUtils {
      *
      * @param file  the file to write to
      * @param lines  the lines to write, {@code null} entries produce blank lines
-     * @param append if <code>true</code>, then the lines will be added to the
+     * @param append if {@code true}, then the lines will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
@@ -2111,7 +2111,7 @@ public class FileUtils {
      * @param encoding  the encoding to use, {@code null} means platform default
      * @param lines  the lines to write, {@code null} entries produce blank lines
      * @param lineEnding  the line separator to use, {@code null} is system default
-     * @param append if <code>true</code>, then the lines will be added to the
+     * @param append if {@code true}, then the lines will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
@@ -2152,7 +2152,7 @@ public class FileUtils {
      * @param file  the file to write to
      * @param lines  the lines to write, {@code null} entries produce blank lines
      * @param lineEnding  the line separator to use, {@code null} is system default
-     * @param append if <code>true</code>, then the lines will be added to the
+     * @param append if {@code true}, then the lines will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
@@ -2595,7 +2595,7 @@ public class FileUtils {
      *
      * @param src the file to be moved
      * @param destDir the destination file
-     * @param createDestDir If <code>true</code> create the destination directory,
+     * @param createDestDir If {@code true} create the destination directory,
      * otherwise if <code>false</code> throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the directory exists in the destination directory
@@ -2672,7 +2672,7 @@ public class FileUtils {
      *
      * @param srcFile the file to be moved
      * @param destDir the destination file
-     * @param createDestDir If <code>true</code> create the destination directory,
+     * @param createDestDir If {@code true} create the destination directory,
      * otherwise if <code>false</code> throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the destination file exists
@@ -2707,7 +2707,7 @@ public class FileUtils {
      *
      * @param src the file or directory to be moved
      * @param destDir the destination directory 
-     * @param createDestDir If <code>true</code> create the destination directory,
+     * @param createDestDir If {@code true} create the destination directory,
      * otherwise if <code>false</code> throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the directory or file exists in the destination directory
