@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.3" date="TBD" description="">
+      <action issue="IO-318" dev="ggregory" type="add" due-to="ggregory">
+        Add Charset sister APIs to method that take a String charset name.
+      </action>            
     </release>
     <release version="2.2" date="2012-March-26" description="">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
