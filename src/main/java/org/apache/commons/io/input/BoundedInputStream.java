@@ -209,7 +209,7 @@ public class BoundedInputStream extends InputStream {
      *
      * @return {@code true} if calling {@link #close()}
      * propagates to the <code>close()</code> method of the
-     * underlying stream or <code>false</code> if it does not.
+     * underlying stream or {@code false} if it does not.
      */
     public boolean isPropagateClose() {
         return propagateClose;
@@ -222,7 +222,7 @@ public class BoundedInputStream extends InputStream {
      * @param propagateClose {@code true} if calling
      * {@link #close()} propagates to the <code>close()</code>
      * method of the underlying stream or
-     * <code>false</code> if it does not.
+     * {@code false} if it does not.
      */
     public void setPropagateClose(boolean propagateClose) {
         this.propagateClose = propagateClose;

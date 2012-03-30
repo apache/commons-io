@@ -1485,7 +1485,7 @@ public class FileUtils {
      *
      * @param file  file or directory to delete, can be {@code null}
      * @return {@code true} if the file or directory was deleted, otherwise
-     * <code>false</code>
+     * {@code false}
      *
      * @since 1.4
      */
@@ -2596,7 +2596,7 @@ public class FileUtils {
      * @param src the file to be moved
      * @param destDir the destination file
      * @param createDestDir If {@code true} create the destination directory,
-     * otherwise if <code>false</code> throw an IOException
+     * otherwise if {@code false} throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the directory exists in the destination directory
      * @throws IOException if source or destination is invalid
@@ -2673,7 +2673,7 @@ public class FileUtils {
      * @param srcFile the file to be moved
      * @param destDir the destination file
      * @param createDestDir If {@code true} create the destination directory,
-     * otherwise if <code>false</code> throw an IOException
+     * otherwise if {@code false} throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the destination file exists
      * @throws IOException if source or destination is invalid
@@ -2708,7 +2708,7 @@ public class FileUtils {
      * @param src the file or directory to be moved
      * @param destDir the destination directory 
      * @param createDestDir If {@code true} create the destination directory,
-     * otherwise if <code>false</code> throw an IOException
+     * otherwise if {@code false} throw an IOException
      * @throws NullPointerException if source or destination is {@code null}
      * @throws FileExistsException if the directory or file exists in the destination directory
      * @throws IOException if source or destination is invalid

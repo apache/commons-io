@@ -83,7 +83,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
      * 
      * @param file  the File to check.
      * @return {@code true} if the file can be
-     *  read, otherwise <code>false</code>.
+     *  read, otherwise {@code false}.
      */
     @Override
     public boolean accept(File file) {

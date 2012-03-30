@@ -272,7 +272,7 @@ public class FileCleaningTracker {
          * Deletes the file associated with this tracker instance.
          *
          * @return {@code true} if the file was deleted successfully;
-         *         <code>false</code> otherwise.
+         *         {@code false} otherwise.
          */
         public boolean delete() {
             return deleteStrategy.deleteQuietly(new File(path));

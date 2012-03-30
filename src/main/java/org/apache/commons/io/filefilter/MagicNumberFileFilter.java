@@ -232,7 +232,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @param file the file to accept or reject.
      * 
      * @return {@code true} if the file contains the filter's magic number 
-     *         at the specified offset, <code>false</code> otherwise.
+     *         at the specified offset, {@code false} otherwise.
      */
     @Override
     public boolean accept(File file) {

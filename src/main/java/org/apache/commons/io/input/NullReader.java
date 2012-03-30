@@ -159,7 +159,7 @@ public class NullReader extends Reader {
      *
      * @return Either The character value returned by <code>processChar()</code>
      * or <code>-1</code> if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -182,7 +182,7 @@ public class NullReader extends Reader {
      * @param chars The character array to read into
      * @return The number of characters read or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -200,7 +200,7 @@ public class NullReader extends Reader {
      * @param length The number of characters to read.
      * @return The number of characters read or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -254,7 +254,7 @@ public class NullReader extends Reader {
      * @param numberOfChars The number of characters to skip.
      * @return The number of characters skipped or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -306,7 +306,7 @@ public class NullReader extends Reader {
      * Handle End of File.
      *
      * @return <code>-1</code> if <code>throwEofException</code> is
-     * set to <code>false</code>
+     * set to {@code false}
      * @throws EOFException if <code>throwEofException</code> is set
      * to {@code true}.
      */

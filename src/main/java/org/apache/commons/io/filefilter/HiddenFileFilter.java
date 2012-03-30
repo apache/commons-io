@@ -67,7 +67,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      * 
      * @param file  the File to check
      * @return {@code true} if the file is
-     *  <i>hidden</i>, otherwise <code>false</code>.
+     *  <i>hidden</i>, otherwise {@code false}.
      */
     @Override
     public boolean accept(File file) {

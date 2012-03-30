@@ -195,7 +195,7 @@ public abstract class ThresholdingOutputStream
      * this output stream.
      *
      * @return {@code true} if the threshold has been reached;
-     *         <code>false</code> otherwise.
+     *         {@code false} otherwise.
      */
     public boolean isThresholdExceeded()
     {

@@ -176,7 +176,7 @@ public class NullInputStream extends InputStream {
      *
      * @return Either The byte value returned by <code>processByte()</code>
      * or <code>-1</code> if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -199,7 +199,7 @@ public class NullInputStream extends InputStream {
      * @param bytes The byte array to read into
      * @return The number of bytes read or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -217,7 +217,7 @@ public class NullInputStream extends InputStream {
      * @param length The number of bytes to read.
      * @return The number of bytes read or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -271,7 +271,7 @@ public class NullInputStream extends InputStream {
      * @param numberOfBytes The number of bytes to skip.
      * @return The number of bytes skipped or <code>-1</code>
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to <code>false</code>.
+     * <code>throwEofException</code> is set to {@code false}.
      * @throws EOFException if the end of file is reached and
      * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
@@ -323,7 +323,7 @@ public class NullInputStream extends InputStream {
      * Handle End of File.
      *
      * @return <code>-1</code> if <code>throwEofException</code> is
-     * set to <code>false</code>
+     * set to {@code false}
      * @throws EOFException if <code>throwEofException</code> is set
      * to {@code true}.
      */

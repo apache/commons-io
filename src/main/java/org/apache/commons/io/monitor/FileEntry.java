@@ -88,7 +88,7 @@ public class FileEntry implements Serializable {
      * and <code>length</code> properties are compared for changes
      *
      * @param file the file instance to compare to
-     * @return {@code true} if the file has changed, otherwise <code>false</code>
+     * @return {@code true} if the file has changed, otherwise {@code false}
      */
     public boolean refresh(File file) {
 
