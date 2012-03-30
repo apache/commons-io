@@ -46,8 +46,6 @@ import java.util.List;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.Assert;
 
-// Note: jdk1.2 dependency
-
 /**
  * This is used to test IOUtils for correctness. The following checks are performed:
  * <ul>
@@ -291,12 +289,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         Assert.assertArrayEquals(expecteds, actuals);
     }
     
-    public void testToCharset() {
-        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null));
-        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null));
-        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset()));
-        Assert.assertEquals(Charset.forName("UTF-8"), Charsets.toCharset(Charset.forName("UTF-8")));
-    }
     public void testInputStreamToByteArray() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
