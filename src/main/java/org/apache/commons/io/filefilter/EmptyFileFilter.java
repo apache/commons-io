@@ -70,7 +70,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
      * 
      * @param file  the file or directory to check
      * @return {@code true} if the file or directory
-     *  is <i>empty</i>, otherwise <code>false</code>.
+     *  is <i>empty</i>, otherwise {@code false}.
      */
     @Override
     public boolean accept(File file) {

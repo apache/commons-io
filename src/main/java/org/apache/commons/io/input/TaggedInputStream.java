@@ -82,7 +82,7 @@ public class TaggedInputStream extends ProxyInputStream {
      *
      * @param exception an exception
      * @return {@code true} if the exception was thrown by this stream,
-     *         <code>false</code> otherwise
+     *         {@code false} otherwise
      */
     public boolean isCauseOf(Throwable exception) {
         return TaggedIOException.isTaggedWith(exception, tag);
