@@ -271,7 +271,7 @@ public class FileCleaningTracker {
         /**
          * Deletes the file associated with this tracker instance.
          *
-         * @return <code>true</code> if the file was deleted successfully;
+         * @return {@code true} if the file was deleted successfully;
          *         <code>false</code> otherwise.
          */
         public boolean delete() {

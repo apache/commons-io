@@ -81,7 +81,7 @@ public class LineIterator implements Iterator<String> {
      * If there is an <code>IOException</code> then {@link #close()} will
      * be called on this instance.
      *
-     * @return <code>true</code> if the Reader has more lines
+     * @return {@code true} if the Reader has more lines
      * @throws IllegalStateException if an IO exception occurs
      */
     public boolean hasNext() {

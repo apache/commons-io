@@ -164,7 +164,7 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Invokes the delegate's <code>close()</code> method
-     * if {@link #isPropagateClose()} is <code>true</code>.
+     * if {@link #isPropagateClose()} is {@code true}.
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -207,7 +207,7 @@ public class BoundedInputStream extends InputStream {
      * Indicates whether the {@link #close()} method
      * should propagate to the underling {@link InputStream}.
      *
-     * @return <code>true</code> if calling {@link #close()}
+     * @return {@code true} if calling {@link #close()}
      * propagates to the <code>close()</code> method of the
      * underlying stream or <code>false</code> if it does not.
      */
@@ -219,7 +219,7 @@ public class BoundedInputStream extends InputStream {
      * Set whether the {@link #close()} method
      * should propagate to the underling {@link InputStream}.
      *
-     * @param propagateClose <code>true</code> if calling
+     * @param propagateClose {@code true} if calling
      * {@link #close()} propagates to the <code>close()</code>
      * method of the underlying stream or
      * <code>false</code> if it does not.

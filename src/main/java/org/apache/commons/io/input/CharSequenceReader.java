@@ -65,7 +65,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Mark is supported (returns true).
      *
-     * @return <code>true</code>
+     * @return {@code true}
      */
     @Override
     public boolean markSupported() {

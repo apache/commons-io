@@ -24,10 +24,10 @@ import java.util.List;
 
 /**
  * A {@link java.io.FileFilter} providing conditional OR logic across a list of
- * file filters. This filter returns <code>true</code> if any filters in the
- * list return <code>true</code>. Otherwise, it returns <code>false</code>.
+ * file filters. This filter returns {@code true} if any filters in the
+ * list return {@code true}. Otherwise, it returns <code>false</code>.
  * Checking of the file filter list stops when the first filter returns
- * <code>true</code>.
+ * {@code true}.
  *
  * @since 1.0
  * @version $Id$

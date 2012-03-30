@@ -47,7 +47,7 @@ public interface ConditionalFileFilter {
      * Removes the specified file filter.
      *
      * @param ioFileFilter filter to be removed
-     * @return <code>true</code> if the filter was found in the list,
+     * @return {@code true} if the filter was found in the list,
      * <code>false</code> otherwise
      * @since 1.1
      */

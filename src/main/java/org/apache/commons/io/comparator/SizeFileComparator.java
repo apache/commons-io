@@ -44,7 +44,7 @@ import org.apache.commons.io.FileUtils;
  * </pre>
  * <p>
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
- * <code>sumDirectoryContents</code> is <code>true</code>.
+ * <code>sumDirectoryContents</code> is {@code true}.
  *
  * @version $Id$
  * @since 1.4
@@ -83,10 +83,10 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * Construct a file size comparator instance specifying whether the size of
      * the directory contents should be aggregated.
      * <p>
-     * If the <code>sumDirectoryContents</code> is <code>true</code> The size of
+     * If the <code>sumDirectoryContents</code> is {@code true} The size of
      * directories is calculated using  {@link FileUtils#sizeOfDirectory(File)}.
      *
-     * @param sumDirectoryContents <code>true</code> if the sum of the directoryies contents
+     * @param sumDirectoryContents {@code true} if the sum of the directoryies contents
      *  should be calculated, otherwise <code>false</code> if directories should be treated
      *  as size zero (see {@link FileUtils#sizeOfDirectory(File)}).
      */

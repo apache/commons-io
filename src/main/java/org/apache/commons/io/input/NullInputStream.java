@@ -178,7 +178,7 @@ public class NullInputStream extends InputStream {
      * or <code>-1</code> if the end of file has been reached and
      * <code>throwEofException</code> is set to <code>false</code>.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to <code>true</code>.
+     * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -201,7 +201,7 @@ public class NullInputStream extends InputStream {
      * if the end of file has been reached and
      * <code>throwEofException</code> is set to <code>false</code>.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to <code>true</code>.
+     * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -219,7 +219,7 @@ public class NullInputStream extends InputStream {
      * if the end of file has been reached and
      * <code>throwEofException</code> is set to <code>false</code>.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to <code>true</code>.
+     * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -273,7 +273,7 @@ public class NullInputStream extends InputStream {
      * if the end of file has been reached and
      * <code>throwEofException</code> is set to <code>false</code>.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to <code>true</code>.
+     * <code>throwEofException</code> is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -325,7 +325,7 @@ public class NullInputStream extends InputStream {
      * @return <code>-1</code> if <code>throwEofException</code> is
      * set to <code>false</code>
      * @throws EOFException if <code>throwEofException</code> is set
-     * to <code>true</code>.
+     * to {@code true}.
      */
     private int doEndOfFile() throws EOFException {
         eof = true;
