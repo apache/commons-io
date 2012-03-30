@@ -24,11 +24,15 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * This is used to test LineIterator for correctness.
@@ -87,6 +91,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     /** @see junit.framework.TestCase#setUp() */
     @Override
+    @Before
     protected void setUp() throws Exception {
         File dir = getTestDirectory();
         if (dir.exists()) {
@@ -98,6 +103,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     /** @see junit.framework.TestCase#tearDown() */
     @Override
+    @After
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
@@ -106,6 +112,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test constructor.
      */
+    @Test
     public void testConstructor() throws Exception {
         try {
             new LineIterator((Reader) null);
@@ -118,6 +125,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with no lines.
      */
+    @Test
     public void testZeroLines() throws Exception {
         doTestFileWithSpecifiedLines(0);
     }
@@ -125,6 +133,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with 1 line.
      */
+    @Test
     public void testOneLines() throws Exception {
         doTestFileWithSpecifiedLines(1);
     }
@@ -132,6 +141,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with 2 lines.
      */
+    @Test
     public void testTwoLines() throws Exception {
         doTestFileWithSpecifiedLines(2);
     }
@@ -139,6 +149,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with 3 lines.
      */
+    @Test
     public void testThreeLines() throws Exception {
         doTestFileWithSpecifiedLines(3);
     }
@@ -146,6 +157,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a missing File.
      */
+    @Test
     public void testMissingFile() throws Exception {
         File testFile = new File(getTestDirectory(), "dummy-missing-file.txt");
 
@@ -163,6 +175,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with a Valid encoding.
      */
+    @Test
     public void testValidEncoding() throws Exception {
         String encoding = "UTF-8";
 
@@ -185,6 +198,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test a file with an Invalid encoding.
      */
+    @Test    
     public void testInvalidEncoding() throws Exception {
         String encoding = "XXXXXXXX";
 
@@ -194,8 +208,8 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         LineIterator iterator = null;
         try {
             iterator = FileUtils.lineIterator(testFile, encoding);
-            fail("Expected UnsupportedEncodingException");
-        } catch (UnsupportedEncodingException expected) {
+            fail("Expected UnsupportedCharsetException");
+        } catch (UnsupportedCharsetException expected) {
             // ignore, expected result
         } finally {
             LineIterator.closeQuietly(iterator);
@@ -205,6 +219,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test the iterator using only the nextLine() method.
      */
+    @Test
     public void testNextLineOnlyDefaultEncoding() throws Exception {
         File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
         List<String> lines = createLinesFile(testFile, 3);
@@ -216,6 +231,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test the iterator using only the nextLine() method.
      */
+    @Test
     public void testNextLineOnlyNullEncoding() throws Exception {
         String encoding = null;
 
@@ -229,6 +245,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test the iterator using only the nextLine() method.
      */
+    @Test
     public void testNextLineOnlyUtf8Encoding() throws Exception {
         String encoding = "UTF-8";
 
@@ -242,6 +259,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test the iterator using only the next() method.
      */
+    @Test
     public void testNextOnly() throws Exception {
         String encoding = null;
 
@@ -263,6 +281,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Tests hasNext when it throws an exception.
      */
+    @Test
     public void testNextWithException() throws Exception {
         Reader reader = new BufferedReader(new StringReader("")) {
             @Override
@@ -281,6 +300,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Test closing the iterator before all the file has been processed.
      */
+    @Test
     public void testCloseEarly() throws Exception {
         String encoding = "UTF-8";
 
@@ -375,6 +395,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     // -----------------------------------------------------------------------
+    @Test
     public void testFilteringFileReader() throws Exception {
         String encoding = "UTF-8";
 
@@ -386,6 +407,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         this.testFiltering(lines, reader);
     }
 
+    @Test
     public void testFilteringBufferedReader() throws Exception {
         String encoding = "UTF-8";
 
