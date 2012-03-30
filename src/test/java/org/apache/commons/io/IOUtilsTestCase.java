@@ -292,10 +292,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
     
     public void testToCharset() {
-        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset((String) null));
-        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset((Charset) null));
-        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset(Charset.defaultCharset()));
-        Assert.assertEquals(Charset.forName("UTF-8"), IOUtils.toCharset(Charset.forName("UTF-8")));
+        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null));
+        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null));
+        Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset()));
+        Assert.assertEquals(Charset.forName("UTF-8"), Charsets.toCharset(Charset.forName("UTF-8")));
     }
     public void testInputStreamToByteArray() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
