@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.UnsupportedCharsetException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -159,12 +160,12 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_encoding_badEncoding() {
+    public void testConstructor_File_encoding_badEncoding() throws IOException {
         Writer writer = null;
         try {
             writer = new LockableFileWriter(file, "BAD-ENCODE");
             fail();
-        } catch (IOException ex) {
+        } catch (UnsupportedCharsetException ex) {
             // expected
             assertFalse(file.exists());
             assertFalse(lockFile.exists());
