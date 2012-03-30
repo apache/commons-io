@@ -1544,7 +1544,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testWriteCharSequence2() throws Exception {
         File file = new File(getTestDirectory(), "write.txt");
-        FileUtils.write(file, "Hello /u1234", null);
+        FileUtils.write(file, "Hello /u1234", (String) null);
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
@@ -1735,7 +1735,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        FileUtils.writeStringToFile(file, "this is brand new data", null, true);
+        FileUtils.writeStringToFile(file, "this is brand new data", (String) null, true);
 
         String expected = "This line was there before you..."
                 + "this is brand new data";
@@ -1747,7 +1747,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        FileUtils.writeStringToFile(file, "this is brand new data", null, false);
+        FileUtils.writeStringToFile(file, "this is brand new data", (String) null, false);
 
         String expected = "this is brand new data";
         String actual = FileUtils.readFileToString(file);
@@ -1781,7 +1781,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        FileUtils.write(file, "this is brand new data", null, true);
+        FileUtils.write(file, "this is brand new data", (String) null, true);
 
         String expected = "This line was there before you..."
             + "this is brand new data";
@@ -1793,7 +1793,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        FileUtils.write(file, "this is brand new data", null, false);
+        FileUtils.write(file, "this is brand new data", (String) null, false);
 
         String expected = "this is brand new data";
         String actual = FileUtils.readFileToString(file);

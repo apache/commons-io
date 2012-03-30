@@ -26,12 +26,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -1633,16 +1635,35 @@ public class FileUtils {
      * @param encoding  the encoding to use, <code>null</code> means platform default
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since 2.3
      */
-    public static String readFileToString(File file, String encoding) throws IOException {
+    public static String readFileToString(File file, Charset encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
-            return IOUtils.toString(in, encoding);
+            return IOUtils.toString(in, Charsets.toCharset(encoding));
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    /**
+     * Reads the contents of a file into a String. The file is always closed.
+     * 
+     * @param file
+     *            the file to read, must not be <code>null</code>
+     * @param encoding
+     *            the encoding to use, <code>null</code> means platform default
+     * @return the file contents, never <code>null</code>
+     * @throws IOException
+     *             in case of an I/O error
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 2.3
+     */
+    public static String readFileToString(File file, String encoding) throws IOException {
+        return readFileToString(file, Charsets.toCharset(encoding));
     }
 
 
@@ -1656,7 +1677,7 @@ public class FileUtils {
      * @since 1.3.1
      */
     public static String readFileToString(File file) throws IOException {
-        return readFileToString(file, null);
+        return readFileToString(file, Charset.defaultCharset());
     }
 
     /**
@@ -1686,17 +1707,35 @@ public class FileUtils {
      * @param encoding  the encoding to use, <code>null</code> means platform default
      * @return the list of Strings representing each line in the file, never <code>null</code>
      * @throws IOException in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since 1.1
+     * @since 2.3
      */
-    public static List<String> readLines(File file, String encoding) throws IOException {
+    public static List<String> readLines(File file, Charset encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
-            return IOUtils.readLines(in, encoding);
+            return IOUtils.readLines(in, Charsets.toCharset(encoding));
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    /**
+     * Reads the contents of a file line by line to a List of Strings. The file is always closed.
+     * 
+     * @param file
+     *            the file to read, must not be <code>null</code>
+     * @param encoding
+     *            the encoding to use, <code>null</code> means platform default
+     * @return the list of Strings representing each line in the file, never <code>null</code>
+     * @throws IOException
+     *             in case of an I/O error
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 1.1
+     */
+    public static List<String> readLines(File file, String encoding) throws IOException {
+        return readLines(file, Charsets.toCharset(encoding));
     }
 
     /**
@@ -1709,7 +1748,7 @@ public class FileUtils {
      * @since 1.3
      */
     public static List<String> readLines(File file) throws IOException {
-        return readLines(file, null);
+        return readLines(file, Charset.defaultCharset());
     }
 
     /**
@@ -1796,10 +1835,9 @@ public class FileUtils {
      * @param append if <code>true</code>, then the String will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
-     * @since 2.1
+     * @since 2.3
      */
-    public static void writeStringToFile(File file, String data, String encoding, boolean append) throws IOException {
+    public static void writeStringToFile(File file, String data, Charset encoding, boolean append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -1811,6 +1849,24 @@ public class FileUtils {
     }
 
     /**
+     * Writes a String to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param append if <code>true</code>, then the String will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported by the VM
+     * @since 2.1
+     */
+    public static void writeStringToFile(File file, String data, String encoding, boolean append) throws IOException {
+        writeStringToFile(file, data, Charsets.toCharset(encoding), append);
+    }
+
+    /**
      * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
      * 
      * @param file  the file to write
@@ -1818,7 +1874,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      */
     public static void writeStringToFile(File file, String data) throws IOException {
-        writeStringToFile(file, data, null, false);
+        writeStringToFile(file, data, Charset.defaultCharset(), false);
     }
 
     /**
@@ -1832,7 +1888,7 @@ public class FileUtils {
      * @since 2.1
      */
     public static void writeStringToFile(File file, String data, boolean append) throws IOException {
-        writeStringToFile(file, data, null, append);
+        writeStringToFile(file, data, Charset.defaultCharset(), append);
     }
 
     /**
@@ -1844,7 +1900,7 @@ public class FileUtils {
      * @since 2.0
      */
     public static void write(File file, CharSequence data) throws IOException {
-        write(file, data, null, false);
+        write(file, data, Charset.defaultCharset(), false);
     }
 
     /**
@@ -1858,7 +1914,20 @@ public class FileUtils {
      * @since 2.1
      */
     public static void write(File file, CharSequence data, boolean append) throws IOException {
-        write(file, data, null, append);
+        write(file, data, Charset.defaultCharset(), append);
+    }
+
+    /**
+     * Writes a CharSequence to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @throws IOException in case of an I/O error
+     * @since 2.3
+     */
+    public static void write(File file, CharSequence data, Charset encoding) throws IOException {
+        write(file, data, encoding, false);
     }
 
     /**
@@ -1884,12 +1953,29 @@ public class FileUtils {
      * @param append if <code>true</code>, then the data will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
-     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since IO 2.3
+     */
+    public static void write(File file, CharSequence data, Charset encoding, boolean append) throws IOException {
+        String str = data == null ? null : data.toString();
+        writeStringToFile(file, str, encoding, append);
+    }
+
+    /**
+     * Writes a CharSequence to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, <code>null</code> means platform default
+     * @param append if <code>true</code>, then the data will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported by the VM
      * @since IO 2.1
      */
     public static void write(File file, CharSequence data, String encoding, boolean append) throws IOException {
-        String str = data == null ? null : data.toString();
-        writeStringToFile(file, str, encoding, append);
+        write(file, data, Charsets.toCharset(encoding), append);
     }
 
     /**
