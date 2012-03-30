@@ -2327,10 +2327,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testIO276() throws Exception {
         File dir = new File("target", "IO276");
-        assertTrue(dir+" should not be present",dir.mkdirs());
-        File file = new File(dir,"IO276.txt");
-        assertTrue(file+" should not be present",file.createNewFile());
-        FileUtils.forceDeleteOnExit(dir); 
+        assertTrue(dir + " should not be present", dir.mkdirs());
+        File file = new File(dir, "IO276.txt");
+        assertTrue(file + " should not be present", file.createNewFile());
+        FileUtils.forceDeleteOnExit(dir);
         // If this does not work, test will fail next time (assuming target is not cleaned)
     }
 
