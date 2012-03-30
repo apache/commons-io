@@ -28,7 +28,8 @@
             <item name="Download"             href="http://commons.apache.org/io/download_io.cgi"/>
             <item name="User guide"           href="/description.html"/>
             <item name="Best practices"       href="/bestpractices.html"/>
-            <item name="Javadoc 2.2"          href="api-release/index.html"/>
+            <item name="Javadoc 2.3"          href="api-release/index.html"/>
+            <item name="Javadoc 2.2"          href="api-2.2/index.html"/>
             <item name="Javadoc 1.4"          href="api-1.4/index.html"/>
         </menu>
 
