@@ -162,7 +162,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         Writer writer = new OutputStreamWriter(baout, "US-ASCII");
         
-        IOUtils.write(inData, writer, null);
+        IOUtils.write(inData, writer, (String) null);
         out.off();
         writer.flush();
         
@@ -244,7 +244,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
-        IOUtils.write(csq, out, null);
+        IOUtils.write(csq, out, (String) null);
         out.off();
         out.flush();
 
@@ -362,7 +362,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
-        IOUtils.write(str, out, null);
+        IOUtils.write(str, out, (String) null);
         out.off();
         out.flush();
 
@@ -481,7 +481,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
-        IOUtils.write(str.toCharArray(), out, null);
+        IOUtils.write(str.toCharArray(), out, (String) null);
         out.off();
         out.flush();
 
@@ -643,7 +643,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
-        IOUtils.writeLines(list, "*", out, null);
+        IOUtils.writeLines(list, "*", out, (String) null);
         
         out.off();
         out.flush();

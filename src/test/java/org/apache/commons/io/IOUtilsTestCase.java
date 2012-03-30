@@ -33,15 +33,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Selector;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.Assert;
 
 // Note: jdk1.2 dependency
 
@@ -77,7 +80,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             createFile(m_testFile, FILE_SIZE);
         } catch (IOException ioe) {
-            throw new RuntimeException("Can't run this test because " + "environment could not be built: "
+            throw new RuntimeException("Can't run this test because the environment could not be built: "
                     + ioe.getMessage());
         }
         // Create and init a byte array as input data
@@ -99,8 +102,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         iarr = null;
         try {
             FileUtils.deleteDirectory(getTestDirectory());
-        } catch (IOException ioe) {
-            throw new RuntimeException("Could not clear up " + getTestDirectory());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not clear up " + getTestDirectory() + ": " + e);
         }
     }
 
@@ -279,6 +282,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         deleteFile(destination);
     }
 
+    public void testToByteArray_Reader() throws IOException {
+        final String charsetName = "UTF-8";
+        final byte[] expecteds = charsetName.getBytes(charsetName);
+        byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
+        Assert.assertArrayEquals(expecteds, actuals);
+        actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
+        Assert.assertArrayEquals(expecteds, actuals);
+    }
+    
+    public void testToCharset() {
+        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset((String) null));
+        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset((Charset) null));
+        Assert.assertEquals(Charset.defaultCharset(), IOUtils.toCharset(Charset.defaultCharset()));
+        Assert.assertEquals(Charset.forName("UTF-8"), IOUtils.toCharset(Charset.forName("UTF-8")));
+    }
     public void testInputStreamToByteArray() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
@@ -443,7 +461,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         InputStream inStream = IOUtils.toInputStream(csq);
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(), bytes);
-        inStream = IOUtils.toInputStream(csq, null);
+        inStream = IOUtils.toInputStream(csq, (String) null);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(), bytes);
         inStream = IOUtils.toInputStream(csq, "UTF-8");
@@ -464,7 +482,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         InputStream inStream = IOUtils.toInputStream(str);
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(), bytes);
-        inStream = IOUtils.toInputStream(str, null);
+        inStream = IOUtils.toInputStream(str, (String) null);
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(), bytes);
         inStream = IOUtils.toInputStream(str, "UTF-8");

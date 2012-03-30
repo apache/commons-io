@@ -201,7 +201,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         Writer writer = new OutputStreamWriter(baout, "US-ASCII");
         
-        IOUtils.copy(in, writer, null);
+        IOUtils.copy(in, writer, (String) null);
         out.off();
         writer.flush();
 
@@ -295,7 +295,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.copy(reader, out, null);
+        IOUtils.copy(reader, out, (String) null);
         // note: this method *does* flush.
         // note: we don't flush here; this IOUtils method does it for us
 
