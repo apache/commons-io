@@ -68,8 +68,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * 
      * @since 2.0
      */
@@ -113,8 +113,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * 
      * @since 2.0
      */
@@ -144,8 +144,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * @since 2.0
      */
     public static List<File> filterList(IOFileFilter filter, Iterable<File> files) {
@@ -173,8 +173,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * @since 2.0
      */
     public static List<File> filterList(IOFileFilter filter, File... files) {
@@ -203,8 +203,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * 
      * @since 2.0
      */
@@ -234,8 +234,8 @@ public class FileFilterUtils {
      * 
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      * 
      * @since 2.0
      */
@@ -262,8 +262,8 @@ public class FileFilterUtils {
      * @param <T> the type of the file collection.
      * @return a subset of <code>files</code> that is accepted by the 
      *         file filter.
-     * @throws IllegalArgumentException if the filter is <code>null</code> 
-     *         or <code>files</code> contains a <code>null</code> value. 
+     * @throws IllegalArgumentException if the filter is {@code null} 
+     *         or <code>files</code> contains a {@code null} value. 
      */
     private static <T extends Collection<File>> T filter(IOFileFilter filter,
             Iterable<File> files, T acceptedFiles) {
@@ -650,7 +650,7 @@ public class FileFilterUtils {
      *         magic number.
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code> or the empty String.
+     *         {@code null} or the empty String.
      * @see MagicNumberFileFilter
      * @since 2.0
      */
@@ -670,7 +670,7 @@ public class FileFilterUtils {
      *         at the specified offset.
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code> or the empty String, or if offset is a 
+     *         {@code null} or the empty String, or if offset is a 
      *         negative number.
      * @see MagicNumberFileFilter
      * @since 2.0
@@ -690,7 +690,7 @@ public class FileFilterUtils {
      *         magic number.
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code> or is of length zero.
+     *         {@code null} or is of length zero.
      * @see MagicNumberFileFilter
      * @since 2.0
      */
@@ -710,7 +710,7 @@ public class FileFilterUtils {
      *         at the specified offset.
      *         
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
-     *         <code>null</code>, or contains no bytes, or <code>offset</code> 
+     *         {@code null}, or contains no bytes, or <code>offset</code> 
      *         is a negative number.
      * @see MagicNumberFileFilter
      * @since 2.0
@@ -730,7 +730,7 @@ public class FileFilterUtils {
 
     /**
      * Decorates a filter to make it ignore CVS directories.
-     * Passing in <code>null</code> will return a filter that accepts everything
+     * Passing in {@code null} will return a filter that accepts everything
      * except CVS directories.
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter
@@ -747,7 +747,7 @@ public class FileFilterUtils {
 
     /**
      * Decorates a filter to make it ignore SVN directories.
-     * Passing in <code>null</code> will return a filter that accepts everything
+     * Passing in {@code null} will return a filter that accepts everything
      * except SVN directories.
      * 
      * @param filter  the filter to decorate, null means an unrestricted filter

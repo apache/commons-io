@@ -37,7 +37,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     /**
      * Construct a new instance with the specified character sequence.
      *
-     * @param charSequence The character sequence, may be <code>null</code>
+     * @param charSequence The character sequence, may be {@code null}
      */
     public CharSequenceReader(CharSequence charSequence) {
         this.charSequence = charSequence != null ? charSequence : "";

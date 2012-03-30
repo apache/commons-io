@@ -210,7 +210,7 @@ public final class IOCase implements Serializable {
      * @param strStartIndex  the index to start at in str
      * @param search  the start to search for, not null
      * @return the first index of the search String,
-     *  -1 if no match or <code>null</code> string input
+     *  -1 if no match or {@code null} string input
      * @throws NullPointerException if either string is null
      * @since 2.0
      */

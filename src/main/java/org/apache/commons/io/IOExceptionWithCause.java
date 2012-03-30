@@ -43,7 +43,7 @@ public class IOExceptionWithCause extends IOException {
      * @param message
      *            the message (see {@link #getMessage()})
      * @param cause
-     *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
+     *            the cause (see {@link #getCause()}). A {@code null} value is allowed.
      */
     public IOExceptionWithCause(String message, Throwable cause) {
         super(message);
@@ -58,7 +58,7 @@ public class IOExceptionWithCause extends IOException {
      * </p>
      * 
      * @param cause
-     *            the cause (see {@link #getCause()}). A <code>null</code> value is allowed.
+     *            the cause (see {@link #getCause()}). A {@code null} value is allowed.
      */
     public IOExceptionWithCause(Throwable cause) {
         super(cause == null ? null : cause.toString());

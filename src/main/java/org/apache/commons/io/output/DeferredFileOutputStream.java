@@ -201,9 +201,9 @@ public class DeferredFileOutputStream
     /**
      * Returns the data for this output stream as an array of bytes, assuming
      * that the data has been retained in memory. If the data was written to
-     * disk, this method returns <code>null</code>.
+     * disk, this method returns {@code null}.
      *
-     * @return The data for this output stream, or <code>null</code> if no such
+     * @return The data for this output stream, or {@code null} if no such
      *         data is available.
      */
     public byte[] getData()
@@ -225,9 +225,9 @@ public class DeferredFileOutputStream
      * <p>
      * If constructor specifying a temporary file prefix/suffix is used
      * then the temporary file created once the threshold is reached is returned
-     * If the threshold was not reached then <code>null</code> is returned.
+     * If the threshold was not reached then {@code null} is returned.
      *
-     * @return The file for this output stream, or <code>null</code> if no such
+     * @return The file for this output stream, or {@code null} if no such
      *         file exists.
      */
     public File getFile()

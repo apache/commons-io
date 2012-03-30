@@ -271,7 +271,7 @@ public abstract class DirectoryWalker<T> {
      * <p>
      * The filter controls which files and directories will be navigated to as
      * part of the walk. The {@link FileFilterUtils} class is useful for combining
-     * various filters together. A <code>null</code> filter means that no
+     * various filters together. A {@code null} filter means that no
      * filtering should occur and all files and directories will be visited.
      *
      * @param filter  the filter to apply, null means visit all files
@@ -290,7 +290,7 @@ public abstract class DirectoryWalker<T> {
      * The filters control which files and directories will be navigated to as part
      * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly(IOFileFilter)}
      * and {@link FileFilterUtils#makeFileOnly(IOFileFilter)} internally to combine the filters.
-     * A <code>null</code> filter means that no filtering should occur.
+     * A {@code null} filter means that no filtering should occur.
      *
      * @param directoryFilter  the filter to apply to directories, null means visit all directories
      * @param fileFilter  the filter to apply to files, null means visit all files

@@ -1149,7 +1149,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     /**
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
-     * that tests <code>null</code> parameters and <code>null</code> elements
+     * that tests {@code null} parameters and {@code null} elements
      * in the provided list.
      */
     public void testFilterArrayNullParameters() throws Exception {
@@ -1209,7 +1209,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     /**
      * Test method for {@link FileFilterUtils#filterList(IOFileFilter, java.lang.Iterable)}
-     * that tests <code>null</code> parameters and <code>null</code> elements
+     * that tests {@code null} parameters and {@code null} elements
      * in the provided list.
      */
     public void testFilterListNullParameters() {
@@ -1267,7 +1267,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     /**
      * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, java.lang.Iterable)}
-     * that tests <code>null</code> parameters and <code>null</code> elements
+     * that tests {@code null} parameters and {@code null} elements
      * in the provided set.
      */
    public void testFilterSetNullParameters() {

@@ -24,7 +24,7 @@ import java.io.InputStream;
  * <p>
  * Typically uses of this class include testing for corner cases in methods
  * that accept input streams and acting as a sentinel value instead of a
- * <code>null</code> input stream.
+ * {@code null} input stream.
  *
  * @version $Id$
  * @since 1.4
