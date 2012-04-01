@@ -63,8 +63,9 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * @see FileUtils#isFileNewer(File, File)
      */
     public void testIsFileNewer() {
-        if (!m_testFile1.exists())
+        if (!m_testFile1.exists()) {
             throw new IllegalStateException("The m_testFile1 should exist");
+        }
 
         long fileLastModified = m_testFile1.lastModified();
         final long TWO_SECOND = 2000;
@@ -83,8 +84,9 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      */
     public void testIsFileNewerImaginaryFile() {
         File imaginaryFile = new File(getTestDirectory(), "imaginaryFile");
-        if (imaginaryFile.exists())
+        if (imaginaryFile.exists()) {
             throw new IllegalStateException("The imaginary File exists");
+        }
 
         testIsFileNewer("imaginary file can be newer" , imaginaryFile, m_testFile2.lastModified(), false);
     }

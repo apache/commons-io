@@ -1226,8 +1226,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testCopyFile1ToDir() throws Exception {
         File directory = new File(getTestDirectory(), "subdir");
-        if (!directory.exists())
+        if (!directory.exists()) {
             directory.mkdirs();
+        }
         File destination = new File(directory, testFile1.getName());
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
@@ -1251,8 +1252,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testCopyFile2ToDir() throws Exception {
         File directory = new File(getTestDirectory(), "subdir");
-        if (!directory.exists())
+        if (!directory.exists()) {
             directory.mkdirs();
+        }
         File destination = new File(directory, testFile1.getName());
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
