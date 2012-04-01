@@ -255,21 +255,27 @@ public class TailerTest extends FileBasedTestCase {
         public void handle(String line) {
             lines.add(line);
         }
+        
         public List<String> getLines() {
             return lines;
         }
+        
         public void clear() {
             lines.clear();
         }
+        
         public void handle(Exception e) {
             exception = e;
         }
+        
         public void init(Tailer tailer) {
             initialised++; // not atomic, but OK because only updated here.
         }
+        
         public void fileNotFound() {
             notFound++; // not atomic, but OK because only updated here.
         }
+        
         public void fileRotated() {
             rotated++; // not atomic, but OK because only updated here.
         }
