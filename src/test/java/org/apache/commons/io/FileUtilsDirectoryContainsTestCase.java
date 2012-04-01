@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.Test;
 
 /**
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
