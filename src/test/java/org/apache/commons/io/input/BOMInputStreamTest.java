@@ -50,7 +50,7 @@ public class BOMInputStreamTest extends TestCase {
         return new ByteArrayInputStream(data);
     }
 
-    private void assertData(byte[] expected, byte[] actual, int off, int len)
+    private void assertData(byte[] expected, byte[] actual, int len)
         throws Exception {
         assertEquals("length", expected.length, len);
         for (int ii = 0; ii < expected.length; ii++) {
@@ -97,7 +97,7 @@ public class BOMInputStreamTest extends TestCase {
 
         assertData(
                 new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'A', 'B' },
-                buf, 0, len);
+                buf, len);
     }
 
     public void testReadWithoutBOM() throws Exception {
@@ -223,30 +223,30 @@ public class BOMInputStreamTest extends TestCase {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         InputStream in = new BOMInputStream(createDataStream(data, false));
         byte[] buf = new byte[1024];
-        assertData(data, buf, 0, in.read(buf));
+        assertData(data, buf, in.read(buf));
     }
 
     public void testLargeBufferWithBOM() throws Exception {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         InputStream in = new BOMInputStream(createDataStream(data, true));
         byte[] buf = new byte[1024];
-        assertData(data, buf, 0, in.read(buf));
+        assertData(data, buf, in.read(buf));
     }
 
     public void testSmallBufferWithoutBOM() throws Exception {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         InputStream in = new BOMInputStream(createDataStream(data, false));
         byte[] buf = new byte[1024];
-        assertData(new byte[] { 'A', 'B' }, buf, 0, in.read(buf, 0, 2));
-        assertData(new byte[] { 'C' }, buf, 0, in.read(buf, 0, 2));
+        assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
+        assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
     }
 
     public void testSmallBufferWithBOM() throws Exception {
         byte[] data = new byte[] { 'A', 'B', 'C' };
         InputStream in = new BOMInputStream(createDataStream(data, true));
         byte[] buf = new byte[1024];
-        assertData(new byte[] { 'A', 'B' }, buf, 0, in.read(buf, 0, 2));
-        assertData(new byte[] { 'C' }, buf, 0, in.read(buf, 0, 2));
+        assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
+        assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
     }
 
     public void testLeadingNonBOMSingleRead() throws Exception {
@@ -262,7 +262,7 @@ public class BOMInputStreamTest extends TestCase {
         byte[] data = new byte[] { (byte) 0xEF, (byte) 0xAB, (byte) 0xCD };
         InputStream in = new BOMInputStream(createDataStream(data, false));
         byte[] buf = new byte[1024];
-        assertData(data, buf, 0, in.read(buf));
+        assertData(data, buf, in.read(buf));
     }
 
     public void testSkipWithoutBOM() throws Exception {
