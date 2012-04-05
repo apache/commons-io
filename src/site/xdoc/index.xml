@@ -69,17 +69,6 @@ View the <a href="upgradeto2_2.html">Release Notes</a> and
 </p> 
 </subsection>
 
-<subsection name="Commons IO 1.4  (requires JDK 1.3+)">
-<p>
-Commons IO 1.4 requires a minimum of JDK 1.3 - 
-<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
-</p> 
-<p>
-View the <a href="upgradeto1_4.html">Release Notes</a> and
-<a href="api-1.4/index.html">JavaDoc API documents</a>
-</p> 
-</subsection>
-
 <subsection name="Older Releases">
 <p>
 For previous releases, see the <a href="http://archive.apache.org/dist/commons/io/">Apache Archive</a>.
