@@ -20,10 +20,35 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 /**
- * Helps use {@link Charset}
+ * Charsets required of every implementation of the Java platform.
  * 
- * @version $Id$
+ * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard
+ * charsets</a>:
+ * <p>
+ * <cite>Every implementation of the Java platform is required to support the following character encodings. Consult the
+ * release documentation for your implementation to see if any other encodings are supported. Consult the release
+ * documentation for your implementation to see if any other encodings are supported. </cite>
+ * </p>
+ * 
+ * <ul>
+ * <li><code>US-ASCII</code><br/>
+ * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
+ * <li><code>ISO-8859-1</code><br/>
+ * ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.</li>
+ * <li><code>UTF-8</code><br/>
+ * Eight-bit Unicode Transformation Format.</li>
+ * <li><code>UTF-16BE</code><br/>
+ * Sixteen-bit Unicode Transformation Format, big-endian byte order.</li>
+ * <li><code>UTF-16LE</code><br/>
+ * Sixteen-bit Unicode Transformation Format, little-endian byte order.</li>
+ * <li><code>UTF-16</code><br/>
+ * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
+ * accepted on input, big-endian used on output.)</li>
+ * </ul>
+ * 
+ * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
+ * @version $Id$
  */
 public class Charsets {
     //
