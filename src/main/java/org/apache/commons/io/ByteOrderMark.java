@@ -51,7 +51,7 @@ public class ByteOrderMark implements Serializable {
      * UTF-32LE BOM (Big-Endian)
      * @since 2.2 
      */
-    public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFE, 0xFF, 0x00, 0x00);
+    public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFF, 0xFE, 0x00, 0x00);
     
     private final String charsetName;
     private final int[] bytes;
