@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.3" date="TBD" description="">
+      <action issue="IO-321" dev="ggregory" type="add" due-to="ggregory">
+        ByteOrderMark UTF_32LE is incorrect.
+      </action>            
       <action issue="IO-318" dev="ggregory" type="add" due-to="ggregory">
         Add Charset sister APIs to method that take a String charset name.
       </action>            
