@@ -46,9 +46,11 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
 
     /** Tests that {@link ByteOrderMark#getCharsetName()} can be loaded as a {@link java.nio.charset.Charset} as advertised. */
     public void testConstantCharsetNames() {
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_8.getCharsetName()));
         assertNotNull(Charset.forName(ByteOrderMark.UTF_16BE.getCharsetName()));
         assertNotNull(Charset.forName(ByteOrderMark.UTF_16LE.getCharsetName()));
-        assertNotNull(Charset.forName(ByteOrderMark.UTF_8.getCharsetName()));
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_32BE.getCharsetName()));
+        assertNotNull(Charset.forName(ByteOrderMark.UTF_32LE.getCharsetName()));
     }
 
     /** Test {@link ByteOrderMark#length()} */
