@@ -16,6 +16,9 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,18 +26,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.input.DemuxInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
+import org.junit.Test;
 
 /**
  * Basic unit tests for the multiplexing streams.
  */
-public class DemuxTestCase
-    extends TestCase
-{
+public class DemuxTestCase {
     private static final String T1 = "Thread1";
     private static final String T2 = "Thread2";
     private static final String T3 = "Thread3";
@@ -48,11 +48,6 @@ public class DemuxTestCase
     private static final Random c_random = new Random();
     private HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<String, ByteArrayOutputStream>();
     private HashMap<String, Thread> m_threadMap = new HashMap<String, Thread>();
-
-    public DemuxTestCase( String name )
-    {
-        super( name );
-    }
 
     private String getOutput( String threadName )
     {
@@ -117,6 +112,7 @@ public class DemuxTestCase
         m_threadMap.put( name, thread );
     }
 
+    @Test
     public void testOutputStream()
         throws Exception
     {
@@ -135,6 +131,7 @@ public class DemuxTestCase
         assertEquals( "Data4", DATA4, getOutput( T4 ) );
     }
 
+    @Test
     public void testInputStream()
         throws Exception
     {
