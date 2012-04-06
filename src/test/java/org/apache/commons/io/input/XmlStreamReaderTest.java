@@ -16,6 +16,10 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,13 +30,13 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  */
-public class XmlStreamReaderTest extends TestCase {
+public class XmlStreamReaderTest {
     private static final String XML5 = "xml-prolog-encoding-spaced-single-quotes";
     private static final String XML4 = "xml-prolog-encoding-single-quotes";
     private static final String XML3 = "xml-prolog-encoding-double-quotes";
@@ -71,14 +75,45 @@ public class XmlStreamReaderTest extends TestCase {
         }
     }
 
-    public void testRawNoBom() throws Exception {
+    @Test
+    public void testRawNoBomUsAscii() throws Exception {
         _testRawNoBomValid("US-ASCII");
+    }
+
+    @Test
+    public void testRawNoBomUtf8() throws Exception {
         _testRawNoBomValid("UTF-8");
+    }
+
+    @Test
+    public void testRawNoBomUtf16BE() throws Exception {
         _testRawNoBomValid("UTF-16BE");
+    }
+
+    @Test
+    public void testRawNoBomUtf16LE() throws Exception {
         _testRawNoBomValid("UTF-16LE");
-        //_testRawNoBomValid("UTF-32BE");
-        //_testRawNoBomValid("UTF-32LE");
+    }
+
+    @Test
+    @Ignore
+    public void testRawNoBomUtf32BE() throws Exception {
+        _testRawNoBomValid("UTF-32BE");
+    }
+
+    @Test
+    @Ignore
+    public void testRawNoBomUtf32LE() throws Exception {
+        _testRawNoBomValid("UTF-32LE");
+    }
+
+    @Test
+    public void testRawNoBomIso8859_1() throws Exception {
         _testRawNoBomValid("ISO-8859-1");
+    }
+
+    @Test
+    public void testRawNoBomCp1047() throws Exception {
         _testRawNoBomValid("CP1047");
     }
 
@@ -108,14 +143,9 @@ public class XmlStreamReaderTest extends TestCase {
         }
     }
 
-    public void testRawBom() throws Exception {
+    @Test
+    public void testRawBomUtf8() throws Exception {
         _testRawBomValid("UTF-8");
-        _testRawBomValid("UTF-16BE");
-        _testRawBomValid("UTF-16LE");
-        //_testRawBomValid("UTF-32BE");
-        //_testRawBomValid("UTF-32LE");
-        _testRawBomValid("UTF-16");
-
         _testRawBomInvalid("UTF-8-bom", "US-ASCII", "US-ASCII");
         _testRawBomInvalid("UTF-8-bom", "ISO-8859-1", "ISO-8859-1");
         _testRawBomInvalid("UTF-8-bom", "UTF-8", "UTF-16");
@@ -126,6 +156,27 @@ public class XmlStreamReaderTest extends TestCase {
         _testRawBomInvalid("UTF-16LE-bom", "UTF-16LE", "UTF-8");
     }
 
+    @Test
+    public void testRawBomUtf16() throws Exception {
+        _testRawBomValid("UTF-16BE");
+        _testRawBomValid("UTF-16LE");
+        _testRawBomValid("UTF-16");
+
+        _testRawBomInvalid("UTF-16BE-bom", "UTF-16BE", "UTF-16LE");
+        _testRawBomInvalid("UTF-16LE-bom", "UTF-16LE", "UTF-16BE");
+        _testRawBomInvalid("UTF-16LE-bom", "UTF-16LE", "UTF-8");
+    }
+
+    @Ignore
+    @Test
+    public void testRawBomUtf32() throws Exception {
+        _testRawBomValid("UTF-32BE");
+        _testRawBomValid("UTF-32LE");
+        _testRawBomValid("UTF-32");
+    }
+
+
+    @Test
     public void testHttp() throws Exception {
         // niallp 2010-10-06 - remove following 2 tests - I reinstated
         // checks for non-UTF-16 encodings (18 tests) and these failed 
@@ -226,8 +277,8 @@ public class XmlStreamReaderTest extends TestCase {
         _testHttpLenient("text/html;charset=UTF-16BE", "no-bom", "US-ASCII",
                 "UTF-8", "UTF-8");
     }
-
     
+    @Test
     public void testRawContent() throws Exception {
         String encoding = "UTF-8";
         String xml = getXML("no-bom", XML3, encoding, encoding);
@@ -237,6 +288,7 @@ public class XmlStreamReaderTest extends TestCase {
         assertEquals("Check content", xml, IOUtils.toString(xmlReader));
     }
 
+    @Test
     public void testHttpContent() throws Exception {
         String encoding = "UTF-8";
         String xml = getXML("no-bom", XML3, encoding, encoding);
@@ -310,6 +362,7 @@ public class XmlStreamReaderTest extends TestCase {
             + "    <atom:title encoding='base64'><![CDATA\n"
             + "aW5nTGluZSIgLz4";
 
+    @Test
     public void testEncodingAttributeXML() throws Exception {
         InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML
                 .getBytes("UTF-8"));
