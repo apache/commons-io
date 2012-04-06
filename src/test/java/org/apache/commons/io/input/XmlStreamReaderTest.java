@@ -167,8 +167,8 @@ public class XmlStreamReaderTest {
         _testRawBomInvalid("UTF-16LE-bom", "UTF-16LE", "UTF-8");
     }
 
-    @Ignore
     @Test
+    @Ignore
     public void testRawBomUtf32() throws Exception {
         _testRawBomValid("UTF-32BE");
         _testRawBomValid("UTF-32LE");
