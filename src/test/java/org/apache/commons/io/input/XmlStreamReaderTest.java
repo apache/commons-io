@@ -74,6 +74,10 @@ public class XmlStreamReaderTest extends TestCase {
     public void testRawNoBom() throws Exception {
         _testRawNoBomValid("US-ASCII");
         _testRawNoBomValid("UTF-8");
+        _testRawNoBomValid("UTF-16BE");
+        _testRawNoBomValid("UTF-16LE");
+        //_testRawNoBomValid("UTF-32BE");
+        //_testRawNoBomValid("UTF-32LE");
         _testRawNoBomValid("ISO-8859-1");
         _testRawNoBomValid("CP1047");
     }
@@ -108,6 +112,8 @@ public class XmlStreamReaderTest extends TestCase {
         _testRawBomValid("UTF-8");
         _testRawBomValid("UTF-16BE");
         _testRawBomValid("UTF-16LE");
+        //_testRawBomValid("UTF-32BE");
+        //_testRawBomValid("UTF-32LE");
         _testRawBomValid("UTF-16");
 
         _testRawBomInvalid("UTF-8-bom", "US-ASCII", "US-ASCII");
@@ -316,6 +322,8 @@ public class XmlStreamReaderTest extends TestCase {
     private static final int[] NO_BOM_BYTES = {};
     private static final int[] UTF_16BE_BOM_BYTES = { 0xFE, 0xFF };
     private static final int[] UTF_16LE_BOM_BYTES = { 0xFF, 0XFE };
+    private static final int[] UTF_32BE_BOM_BYTES = { 0x00, 0x00, 0xFE, 0xFF };
+    private static final int[] UTF_32LE_BOM_BYTES = { 0xFF, 0XFE, 0x00, 0x00 };
     private static final int[] UTF_8_BOM_BYTES = { 0xEF, 0xBB, 0xBF };
 
     private static final Map<String, int[]> BOMs = new HashMap<String, int[]>();
@@ -324,6 +332,8 @@ public class XmlStreamReaderTest extends TestCase {
         BOMs.put("no-bom", NO_BOM_BYTES);
         BOMs.put("UTF-16BE-bom", UTF_16BE_BOM_BYTES);
         BOMs.put("UTF-16LE-bom", UTF_16LE_BOM_BYTES);
+        BOMs.put("UTF-32BE-bom", UTF_32BE_BOM_BYTES);
+        BOMs.put("UTF-32LE-bom", UTF_32LE_BOM_BYTES);
         BOMs.put("UTF-16-bom", NO_BOM_BYTES); // it's added by the writer
         BOMs.put("UTF-8-bom", UTF_8_BOM_BYTES);
     }
