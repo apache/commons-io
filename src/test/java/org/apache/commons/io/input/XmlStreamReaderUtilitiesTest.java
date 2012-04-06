@@ -57,6 +57,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkContentTypeEncoding("UTF-16", "application/xml;charset='UTF-16'");
         checkContentTypeEncoding("UTF-16", "application/xml;charset=\"UTF-16\"");
     }
+
     private void checkContentTypeEncoding(String expected, String httpContentType) {
         assertEquals("ContentTypeEncoding=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeEncoding(httpContentType));
     }
@@ -69,6 +70,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkContentTypeMime("application/xml", "application/xml;");
         checkContentTypeMime("application/xml", "application/xml;charset=utf-16");
     }
+    
     private void checkContentTypeMime(String expected, String httpContentType) {
         assertEquals("ContentTypeMime=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeMime(httpContentType));
     }
@@ -88,6 +90,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkAppXml(true,  "application/xml-dtd");
         checkAppXml(true,  "application/xml-external-parsed-entity");
     }
+    
     private void checkAppXml(boolean expected, String mime) {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isAppXml(mime));
     }
@@ -104,6 +107,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkTextXml(false, "application/xml");
         checkTextXml(false, "application/atom+xml");
     }
+    
     private void checkTextXml(boolean expected, String mime) {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isTextXml(mime));
     }
@@ -131,6 +135,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         testCalculateRawEncodingStandard("UTF-16BE", "UTF-8",    "UTF-16LE");
         testCalculateRawEncodingStandard("UTF-16LE", "UTF-8",    "UTF-16BE");
     }
+    
     private void testCalculateRawEncodingStandard(String bomEnc, String otherEnc, String defaultEnc) throws IOException {
         //               Expected   BOM        Guess     XMLEnc    Default
         checkRawEncoding(bomEnc,    bomEnc,    null,     null,     defaultEnc);
@@ -158,6 +163,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkRawError(RAWMGS1,       "UTF-16LE", null,       "UTF-16BE", null);
         checkRawError(RAWMGS1,       "UTF-16LE", "UTF-16LE", "UTF-16BE", null);
     }
+    
     private void checkRawEncoding(String expected,
             String bomEnc, String xmlGuessEnc, String xmlEnc, String defaultEncoding) throws IOException {
         StringBuilder builder = new StringBuilder();
@@ -169,12 +175,14 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         String encoding = calculateRawEncoding(bomEnc,xmlGuessEnc,xmlEnc, defaultEncoding);
         assertEquals(builder.toString(), expected, encoding);
     }
+    
     protected String calculateRawEncoding(String bomEnc, String xmlGuessEnc, String xmlEnc,
             String defaultEncoding) throws IOException {
         MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
         String encoding = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
         return encoding;
     }
+    
     private void checkRawError(String msgSuffix,
             String bomEnc, String xmlGuessEnc, String xmlEnc, String defaultEncoding) {
         try {
@@ -217,6 +225,7 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         checkHttpEncoding("UTF-8",    false,  APPXML_UTF8,    null,       null,       null,       null);
         checkHttpEncoding("UTF-8",    false,  APPXML_UTF8,    "UTF-16BE", "UTF-16BE", "UTF-16BE", "UTF-16BE");
     }
+    
     private void checkHttpEncoding(String expected, boolean lenient, String httpContentType,
             String bomEnc, String xmlGuessEnc, String xmlEnc, String defaultEncoding) throws IOException {
         StringBuilder builder = new StringBuilder();
@@ -230,12 +239,14 @@ public class XmlStreamReaderUtilitiesTest extends TestCase {
         String encoding = calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient, defaultEncoding);
         assertEquals(builder.toString(), expected, encoding);
     }
+    
     protected String calculateHttpEncoding(String httpContentType, String bomEnc, String xmlGuessEnc,
             String xmlEnc, boolean lenient, String defaultEncoding) throws IOException {
         MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
         String encoding = mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
         return encoding;
     }
+    
     private void checkHttpError(String msgSuffix, boolean lenienet, String httpContentType,
             String bomEnc, String xmlGuessEnc, String xmlEnc, String defaultEncoding) {
         try {
