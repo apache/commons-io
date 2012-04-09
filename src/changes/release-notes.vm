@@ -142,6 +142,53 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 ## End of main loop
 #end
 ##
+Compatibility with 2.2 and 1.4:
+Binary compatible: Yes.
+Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes.
+
+Commons IO 2.3 requires JDK 1.6 or later. 
+Commons IO 2.2 requires JDK 1.5 or later. 
+Commons IO 1.4 requires JDK 1.3 or later. 
+
+==============================================================================
+Commons IO Package Version 2.2
+==============================================================================
+
+Changes in this version include:
+
+New features:
+o Add IOUTils.toBufferedReader(Reader)  Issue: IO-313. Thanks to ggregory. 
+o Allow applications to provide buffer (or size) for copyLarge methods.  Issue: IO-308. Thanks to Manoj Mokashi. 
+o New copyLarge() method in IOUtils that takes additional offset, length arguments  Issue: IO-305. Thanks to Manoj Mokashi. 
+o Use terabyte (TB), petabyte (PB) and exabyte (EB) in FileUtils.byteCountToDisplaySize(long size)  Issue: IO-287. Thanks to Ron Kuris, Gary Gregory. 
+o FileUtils.listFiles() doesn't return directories  Issue: IO-173. Thanks to Marcos Vinícius da Silva. 
+o CharSequenceInputStream to efficiently stream content of a CharSequence  Issue: IO-297. Thanks to Oleg Kalnichevski. 
+o The second constructor of Tailer class does not pass 'delay' to the third one  Issue: IO-304. Thanks to liangly. 
+o TeeOutputStream does not call branch.close() when main.close() throws an exception  Issue: IO-303. Thanks to fabian.barney. 
+o ArrayIndexOutOfBoundsException in BOMInputStream when reading a file without BOM multiple times  Issue: IO-302. Thanks to jsteuerwald, detinho. 
+o Add IOUtils.closeQuietly(Selector) necessary  Issue: IO-301. Thanks to kaykay.unique. 
+o IOUtils.closeQuietly() should take a ServerSocket as a parameter  Issue: IO-292. Thanks to sebb. 
+o Add read/readFully methods to IOUtils  Issue: IO-290. Thanks to sebb. 
+o Supply a ReversedLinesFileReader  Issue: IO-288. Thanks to Georg Henzler. 
+o Add new function FileUtils.directoryContains.  Issue: IO-291. Thanks to ggregory. 
+o FileUtils.contentEquals and IOUtils.contentEquals - Add option to ignore "line endings"
+        Added contentEqualsIgnoreEOL methods to both classes  Issue: IO-275. Thanks to CJ Aspromgos. 
+
+Fixed Bugs:
+o IOUtils.read(InputStream/Reader) ignores the offset parameter  Issue: IO-311. Thanks to Robert Muir. 
+o CharSequenceInputStream(CharSequence s, Charset charset, int bufferSize) ignores bufferSize  Issue: IO-312. 
+o FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory  Issue: IO-300. 
+o ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters  Issue: IO-307. 
+o ReaderInputStream#read(byte[] b, int off, int len) should always return 0 for length == 0  Issue: IO-306. 
+o "FileUtils#deleteDirectoryOnExit(File)" does not work  Issue: IO-276. Thanks to nkami. 
+o BoundedInputStream.read() treats max differently from BoundedInputStream.read(byte[]...)  Issue: IO-273. Thanks to sebb. 
+o Various methods of class 'org.apache.commons.io.FileUtils' incorrectly suppress 'java.io.IOException'  Issue: IO-298. Thanks to Christian Schulte. 
+
+Changes:
+o ReaderInputStream optimization: more efficient reading of small chunks of data  Issue: IO-296. Thanks to Oleg Kalnichevski. 
+
+
 Compatibility with 2.1 and 1.4:
 Binary compatible: Yes
 Source compatible: Yes
