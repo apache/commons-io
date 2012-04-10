@@ -113,14 +113,14 @@ limitations under the License.
       <subsection name="Source">
         <table>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.2-src.tar.gz">commons-io-2.2-src.tar.gz</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.2-src.tar.gz.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.2-src.tar.gz.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.3-src.tar.gz">commons-io-2.3-src.tar.gz</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.3-src.tar.gz.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.3-src.tar.gz.asc">pgp</a></td>
           </tr>
           <tr>
-              <td><a href="[preferred]/commons/io/source/commons-io-2.2-src.zip">commons-io-2.2-src.zip</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.2-src.zip.md5">md5</a></td>
-              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.2-src.zip.asc">pgp</a></td>
+              <td><a href="[preferred]/commons/io/source/commons-io-2.3-src.zip">commons-io-2.3-src.zip</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.3-src.zip.md5">md5</a></td>
+              <td><a href="http://www.apache.org/dist/commons/io/source/commons-io-2.3-src.zip.asc">pgp</a></td>
           </tr>
         </table>
       </subsection>
