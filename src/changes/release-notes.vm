@@ -15,9 +15,9 @@
 ## specific language governing permissions and limitations
 ## under the License.
 
-             Commons IO Package
-                Version ${version}
-               Release Notes
+Apache Commons IO 
+Version ${version}
+Release Notes
 
 INTRODUCTION:
 
@@ -29,7 +29,7 @@ $introduction.replaceAll("(?<!\015)\012", "
 ")
 
 ==============================================================================
-Commons IO Package Version ${version}
+Apache Commons IO Version ${version}
 ==============================================================================
 ##
 ## N.B. the available variables are described here:
@@ -152,7 +152,7 @@ Commons IO 2.2 requires JDK 1.5 or later.
 Commons IO 1.4 requires JDK 1.3 or later. 
 
 ==============================================================================
-Commons IO Package Version 2.2
+Apache Commons IO Version 2.2
 ==============================================================================
 
 Changes in this version include:
@@ -198,7 +198,7 @@ Commons IO 2.2 requires a minimum of JDK 1.5.
 Commons IO 1.4 requires a minimum of JDK 1.3. 
 
 ==============================================================================
-Commons IO Package Version 2.1
+Apache Commons IO Version 2.1
 ==============================================================================
 
 New features:
@@ -224,7 +224,7 @@ Changes:
 o FileAlterationMonitor.stop(boolean allowIntervalToFinish)  Issue: IO-259. 
 
 ==============================================================================
-Commons IO Package Version 2.0.1
+Apache Commons IO Package 2.0.1
 ==============================================================================
 
 Compatibility with 2.0 and 1.4
@@ -251,7 +251,7 @@ Bug fixes from 2.0
    * [IO-258] - XmlStreamReader consumes the stream during encoding detection
 
 ==============================================================================
-Commons IO Package Version 2.0
+Apache Commons IO Package 2.0
 ==============================================================================
 
 Compatibility with 1.4
@@ -366,7 +366,7 @@ Documentation changes from 1.4
   * [IO-212 ProxyInputStream.skip() documentation corrections
 
 ==============================================================================
-Commons IO Package Version 1.4
+Apache Commons IO Version 1.4
 ==============================================================================
 
 Compatibility with 1.3.2
@@ -467,7 +467,7 @@ Enhancements from 1.3.2
   - SizeFileComparator - compares files using file sizes.
   
 ==============================================================================
-Commons IO Package Version 1.3.2
+Apache Commons IO Version 1.3.2
 ==============================================================================
 
 Compatibility with 1.3.1
@@ -512,7 +512,7 @@ Bug fixes from 1.3
   - readFileToString(File) is not static [IO-113]
 
 ==============================================================================
-Commons IO Package Version 1.3.1
+Apache Commons IO Version 1.3.1
 ==============================================================================
 
 Compatibility with 1.3
@@ -533,7 +533,7 @@ Bug fixes from 1.3
   - readFileToString(File) is not static [IO-113]
   
 ==============================================================================
-Commons IO Package Version 1.3
+Apache Commons IO Version 1.3
 ==============================================================================
 
 Compatibility with 1.2
@@ -720,7 +720,7 @@ Enhancements from 1.2
   - Performance enhancements
 
 ==============================================================================
-Commons IO Package Version 1.2
+Apache Commons IO Version 1.2
 ==============================================================================
 
 Compatibility with 1.1
@@ -768,7 +768,7 @@ Enhancements from 1.1
   New method to copy a directory to within another directory [36315]
   
 ==============================================================================
-Commons IO Package Version 1.1
+Apache Commons IO Version 1.1
 ==============================================================================
 
 Incompatible changes from 1.0
