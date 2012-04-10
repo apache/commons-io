@@ -271,12 +271,8 @@ public class LockableFileWriter extends Writer {
         OutputStream stream = null;
         Writer writer = null;
         try {
-            if (encoding == null) {
-                writer = new FileWriter(file.getAbsolutePath(), append);
-            } else {
-                stream = new FileOutputStream(file.getAbsolutePath(), append);
-                writer = new OutputStreamWriter(stream, encoding);
-            }
+            stream = new FileOutputStream(file.getAbsolutePath(), append);
+            writer = new OutputStreamWriter(stream, Charsets.toCharset(encoding));
         } catch (IOException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
