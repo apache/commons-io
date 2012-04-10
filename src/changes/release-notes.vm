@@ -145,7 +145,7 @@ o#if($!issue != "") $issue: #else$indent#end ${action} #if($!dueto != "")Thanks 
 Compatibility with 2.2 and 1.4:
 Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
-Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes.
+Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
 Commons IO 2.3 requires JDK 1.6 or later. 
 Commons IO 2.2 requires JDK 1.5 or later. 
