@@ -22,8 +22,8 @@ import java.nio.charset.UnsupportedCharsetException;
 /**
  * Charsets required of every implementation of the Java platform.
  * 
- * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard
- * charsets</a>:
+ * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">
+ * Standard charsets</a>:
  * <p>
  * <cite>Every implementation of the Java platform is required to support the following character encodings. Consult the
  * release documentation for your implementation to see if any other encodings are supported. Consult the release
@@ -52,12 +52,12 @@ import java.nio.charset.UnsupportedCharsetException;
  */
 public class Charsets {
     //
-    // This class should only contain Charset instances for required encodings. This guarantees that it will load correctly and
-    // without delay on all Java platforms.
+    // This class should only contain Charset instances for required encodings. This guarantees that it will load
+    // correctly and without delay on all Java platforms.
     //
 
     /**
-     * Returns the given Charset or the default Charset if the given Charset is null. 
+     * Returns the given Charset or the default Charset if the given Charset is null.
      * 
      * @param charset
      *            A charset or null.
