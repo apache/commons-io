@@ -31,19 +31,27 @@ Commons IO is a package of Java utility classes like java.io.
 Classes in this package are considered to be so standard and of such high 
 reuse as to justify existence in java.io.
 
-Commons IO contains utility classes, stream implementations, file filters, 
+The Commons IO library contains utility classes, stream implementations, file filters, 
 file comparators, endian transformation classes, and much more.
 
-TODO
+==============================================================================
+Apache Commons IO Version 2.3-SNAPSHOT
+==============================================================================
 
-Compatibility with 2.3 and 2.2:
-Binary compatible: Yes
-Source compatible: No
-Semantic compatible: No. See IO-318 for the difference in thrown exceptions for APIs that specify an unsupported encoding name.
+Changes in this version include:
 
-Commons IO 2.3 requires a minimum of JDK 1.6. 
-Commons IO 2.2 requires a minimum of JDK 1.5. 
-Commons IO 1.4 requires a minimum of JDK 1.3. 
+New features:
+o IO-321:  ByteOrderMark UTF_32LE is incorrect. Thanks to ggregory. 
+o IO-318:  Add Charset sister APIs to method that take a String charset name. Thanks to ggregory. 
+
+Compatibility with 2.2 and 1.4:
+Binary compatible: Yes.
+Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+
+Commons IO 2.3 requires JDK 1.6 or later. 
+Commons IO 2.2 requires JDK 1.5 or later. 
+Commons IO 1.4 requires JDK 1.3 or later. 
 </source>
 </p>
 </section>
