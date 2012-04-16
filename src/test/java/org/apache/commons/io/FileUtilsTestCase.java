@@ -1545,7 +1545,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testWriteStringToFile2() throws Exception {
         File file = new File(getTestDirectory(), "write.txt");
-        FileUtils.writeStringToFile(file, "Hello /u1234", null);
+        FileUtils.writeStringToFile(file, "Hello /u1234", (String)null);
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
