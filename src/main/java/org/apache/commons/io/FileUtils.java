@@ -2353,10 +2353,13 @@ public class FileUtils {
 
     /**
      * Counts the size of a directory recursively (sum of the length of all files).
-     *
-     * @param directory  directory to inspect, must not be {@code null}
-     * @return size of directory in bytes, 0 if directory is security restricted
-     * @throws NullPointerException if the directory is {@code null}
+     * 
+     * @param directory
+     *            directory to inspect, must not be {@code null}
+     * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
+     *         is greater than {@link Long#MAX_VALUE}.
+     * @throws NullPointerException
+     *             if the directory is {@code null}
      */
     public static long sizeOfDirectory(File directory) {
         if (!directory.exists()) {
@@ -2377,6 +2380,9 @@ public class FileUtils {
             try {
                 if (!isSymlink(file)) {
                     size += sizeOf(file);
+                    if (size < 0) {
+                        break;
+                    }
                 }
             } catch (IOException ioe) {
                 // Ignore exceptions caught when asking if a File is a symlink.
