@@ -754,7 +754,7 @@ public class IOUtils {
      *            The URI source.
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
-     * @since 2.1.
+     * @since 2.1
      */
     public static String toString(URI uri) throws IOException {
         return toString(uri, Charset.defaultCharset());
@@ -787,7 +787,7 @@ public class IOUtils {
      * @throws UnsupportedCharsetException
      *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
-     * @since 2.1.
+     * @since 2.1
      */
     public static String toString(URI uri, String encoding) throws IOException {
         return toString(uri, Charsets.toCharset(encoding));
@@ -800,7 +800,7 @@ public class IOUtils {
      *            The URL source.
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
-     * @since 2.1.
+     * @since 2.1
      */
     public static String toString(URL url) throws IOException {
         return toString(url, Charset.defaultCharset());
@@ -838,7 +838,7 @@ public class IOUtils {
      * @throws UnsupportedCharsetException
      *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
-     * @since 2.1.
+     * @since 2.1
      */
     public static String toString(URL url, String encoding) throws IOException {
         return toString(url, Charsets.toCharset(encoding));
