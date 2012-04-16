@@ -2360,13 +2360,11 @@ public class FileUtils {
      */
     public static long sizeOfDirectory(File directory) {
         if (!directory.exists()) {
-            String message = directory + " does not exist";
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(directory + " does not exist");
         }
 
         if (!directory.isDirectory()) {
-            String message = directory + " is not a directory";
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(directory + " is not a directory");
         }
 
         long size = 0;
