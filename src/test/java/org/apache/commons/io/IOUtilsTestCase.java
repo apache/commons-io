@@ -37,6 +37,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.Selector;
 import java.util.Arrays;
 import java.util.List;
@@ -438,6 +439,29 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         } finally {
             fin.close();
         }
+    }
+
+    public void testToByteArrayFromURI() throws Exception {
+        URI url = m_testFile.toURI();
+        byte[] actual = IOUtils.toByteArray(url);
+        Assert.assertEquals(FILE_SIZE, actual.length);
+    }
+
+    public void testToByteArrayFromURL() throws Exception {
+        URL url = m_testFile.toURI().toURL();
+        byte[] actual = IOUtils.toByteArray(url);
+        Assert.assertEquals(FILE_SIZE, actual.length);
+    }
+
+    public void testToByteArrayFromURLConnection() throws Exception {
+        URLConnection urlConn = m_testFile.toURI().toURL().openConnection();
+        byte[] actual;
+        try {
+            actual = IOUtils.toByteArray(urlConn);
+        } finally {
+            IOUtils.close(urlConn);
+        }
+        Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
     /**
