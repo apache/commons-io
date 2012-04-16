@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -56,6 +57,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Size of test directory.
      */
     private static final int TEST_DIRECTORY_SIZE = 0;
+    
+    /**
+     * Size of test directory.
+     */
+    private static final BigInteger TEST_DIRECTORY_SIZE_BI = BigInteger.ZERO;
     
     /**
      * List files recursively
@@ -713,6 +719,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         file.mkdir();
 
         // Create a cyclic symlink
+        this.createCircularSymLink(file);
+
+        assertEquals(
+            "Unexpected directory size",
+            TEST_DIRECTORY_SIZE,
+            FileUtils.sizeOfDirectory(file));
+    }
+
+    private void createCircularSymLink(File file) throws IOException {
         if(!FilenameUtils.isSystemWindows()) {
             Runtime.getRuntime()
                 .exec("ln -s " + file + "/.. " + file + "/cycle");
@@ -724,11 +739,37 @@ public class FileUtilsTestCase extends FileBasedTestCase {
               //don't fail
             }
         }
+    }
+
+    public void testSizeOfDirectoryAsBigInteger() throws Exception {
+        File file = new File(getTestDirectory(), getName());
+
+        // Non-existent file
+        try {
+            FileUtils.sizeOfDirectoryAsBigInteger(file);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {}
+
+        // Creates file
+        file.createNewFile();
+        file.deleteOnExit();
+
+        // Existing file
+        try {
+            FileUtils.sizeOfDirectoryAsBigInteger(file);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {}
+
+        // Existing directory
+        file.delete();
+        file.mkdir();
+
+        this.createCircularSymLink(file);
 
         assertEquals(
             "Unexpected directory size",
-            TEST_DIRECTORY_SIZE,
-            FileUtils.sizeOfDirectory(file));
+            TEST_DIRECTORY_SIZE_BI,
+            FileUtils.sizeOfDirectoryAsBigInteger(file));
     }
 
     /**
@@ -767,6 +808,44 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals("Unexpected directory size",
             TEST_DIRECTORY_SIZE,
             FileUtils.sizeOf(getTestDirectory()));
+    }
+    
+    /**
+     * Tests the {@link FileUtils#sizeOf(File)} method.
+     * @throws Exception
+     */
+    public void testSizeOfAsBigInteger() throws Exception {
+        File file = new File(getTestDirectory(), getName());
+
+        // Null argument
+        try {
+            FileUtils.sizeOfAsBigInteger(null);
+            fail("Exception expected.");
+        } catch (NullPointerException ex) {}
+        
+        // Non-existent file
+        try {
+            FileUtils.sizeOfAsBigInteger(file);
+            fail("Exception expected.");
+        } catch (IllegalArgumentException ex) {}
+
+        // Creates file
+        file.createNewFile();
+        file.deleteOnExit();
+
+        // New file
+        assertEquals(BigInteger.ZERO, FileUtils.sizeOfAsBigInteger(file));
+        file.delete();
+
+        // Existing file
+        assertEquals("Unexpected files size",
+            BigInteger.valueOf(testFile1Size), 
+            FileUtils.sizeOfAsBigInteger(testFile1));
+        
+        // Existing directory
+        assertEquals("Unexpected directory size",
+            TEST_DIRECTORY_SIZE_BI,
+            FileUtils.sizeOfAsBigInteger(getTestDirectory()));
     }
     
     // isFileNewer / isFileOlder
