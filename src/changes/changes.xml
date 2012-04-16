@@ -47,7 +47,7 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
-      <action issue="IO-319" dev="ggregory" type="add" due-to="ggregory">
+      <action issue="IO-319" dev="ggregory" type="add" due-to="raviprak">
         FileUtils.sizeOfDirectory follows symbolic links.
       </action>            
     </release>
