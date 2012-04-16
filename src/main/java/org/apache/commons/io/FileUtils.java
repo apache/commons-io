@@ -2354,12 +2354,20 @@ public class FileUtils {
 
         long size = 0;
 
-        File[] files = directory.listFiles();
+        final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
             return 0L;
         }
-        for (File file : files) {
-            size += sizeOf(file);
+        for (final File file : files) {
+            boolean isSymLink;
+            try {
+                isSymLink = isSymlink(file);
+            } catch (IOException ioe) {
+                isSymLink = true;
+            }
+            if (!isSymLink) {
+                size += sizeOf(file);
+            }
         }
 
         return size;
