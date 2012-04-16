@@ -2376,14 +2376,11 @@ public class FileUtils {
             return 0L;
         }
         for (final File file : files) {
-            boolean isSymLink;
             try {
-                isSymLink = isSymlink(file);
+                if (!isSymlink(file)) {
+                    size += sizeOf(file);
+                }
             } catch (IOException ioe) {
-                isSymLink = true;
-            }
-            if (!isSymLink) {
-                size += sizeOf(file);
             }
         }
 
