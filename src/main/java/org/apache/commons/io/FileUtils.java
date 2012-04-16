@@ -2381,6 +2381,7 @@ public class FileUtils {
                     size += sizeOf(file);
                 }
             } catch (IOException ioe) {
+                // Ignore exceptions caught when asking if a File is a symlink.
             }
         }
 
