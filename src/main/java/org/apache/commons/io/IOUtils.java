@@ -32,10 +32,12 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
@@ -151,6 +153,19 @@ public class IOUtils {
     }
 
     //-----------------------------------------------------------------------
+    
+    /**
+     * Closes a URLConnection.
+     * 
+     * @param conn the connection to close.
+     * @since 2.4
+     */
+    public static void close(URLConnection conn) {
+        if (conn instanceof HttpURLConnection) {
+            ((HttpURLConnection) conn).disconnect();
+        }
+    }
+
     /**
      * Unconditionally close an <code>Reader</code>.
      * <p>
@@ -584,6 +599,64 @@ public class IOUtils {
     @Deprecated
     public static byte[] toByteArray(String input) throws IOException {
         return input.getBytes();
+    }
+
+    /**
+     * Get the contents of a <code>URI</code> as a <code>byte[]</code>.
+     * 
+     * @param uri
+     *            the <code>URI</code> to read
+     * @return the requested byte array
+     * @throws NullPointerException
+     *             if the uri is null
+     * @throws IOException
+     *             if an I/O exception occurs
+     * @since 2.4
+     */
+    public static byte[] toByteArray(URI uri) throws IOException {
+        return IOUtils.toByteArray(uri.toURL());
+    }
+
+    /**
+     * Get the contents of a <code>URL</code> as a <code>byte[]</code>.
+     * 
+     * @param url
+     *            the <code>URL</code> to read
+     * @return the requested byte array
+     * @throws NullPointerException
+     *             if the input is null
+     * @throws IOException
+     *             if an I/O exception occurs
+     * @since 2.4
+     */
+    public static byte[] toByteArray(URL url) throws IOException {
+        URLConnection conn = url.openConnection();
+        try {
+            return IOUtils.toByteArray(conn);
+        } finally {
+            close(conn);
+        }
+    }
+
+    /**
+     * Get the contents of a <code>URLConnection</code> as a <code>byte[]</code>.
+     * 
+     * @param urlConn
+     *            the <code>URLConnection</code> to read
+     * @return the requested byte array
+     * @throws NullPointerException
+     *             if the urlConn is null
+     * @throws IOException
+     *             if an I/O exception occurs
+     * @since 2.4
+     */
+    public static byte[] toByteArray(URLConnection urlConn) throws IOException {
+        InputStream inputStream = urlConn.getInputStream();
+        try {
+            return IOUtils.toByteArray(inputStream);
+        } finally {
+            inputStream.close();
+        }
     }
 
     // read char[]
