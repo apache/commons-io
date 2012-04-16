@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1546,6 +1547,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testWriteStringToFile2() throws Exception {
         File file = new File(getTestDirectory(), "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (String)null);
+        byte[] text = "Hello /u1234".getBytes();
+        assertEqualContent(text, file);
+    }
+
+    public void testWriteStringToFile3() throws Exception {
+        File file = new File(getTestDirectory(), "write.txt");
+        FileUtils.writeStringToFile(file, "Hello /u1234", (Charset)null);
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
