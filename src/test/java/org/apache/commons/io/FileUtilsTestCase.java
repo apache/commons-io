@@ -1008,7 +1008,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         assertTrue("Check exists", destDir.exists());
         assertTrue("Check exists", actualDestDir.exists());
-        assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(actualDestDir));
+        long srcSize = FileUtils.sizeOfDirectory(srcDir);
+        assertTrue("Size > 0", srcSize > 0);
+        assertEquals("Check size", srcSize, FileUtils.sizeOfDirectory(actualDestDir));
         assertTrue(new File(actualDestDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
     }
@@ -1027,7 +1029,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyDirectory(srcDir, destDir);
         
         assertTrue("Check exists", destDir.exists());
-        assertEquals("Check size", FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
+        long sizeOfSrcDirectory = FileUtils.sizeOfDirectory(srcDir);
+        assertTrue("Size > 0",sizeOfSrcDirectory > 0);
+        assertEquals("Check size", sizeOfSrcDirectory, FileUtils.sizeOfDirectory(destDir));
         assertTrue(new File(destDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
     }
@@ -1046,7 +1050,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         
         FileUtils.copyDirectory(srcDir, destDir);
         
-        assertEquals(FileUtils.sizeOfDirectory(srcDir), FileUtils.sizeOfDirectory(destDir));
+        long srcSize = FileUtils.sizeOfDirectory(srcDir);
+        assertTrue("Size > 0",srcSize > 0);
+        assertEquals(srcSize, FileUtils.sizeOfDirectory(destDir));
         assertTrue(new File(destDir, "sub/A.txt").exists());
     }
 
@@ -1132,6 +1138,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyDirectory(parentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+        assertTrue("Count > 0", expectedCount > 0);
+        assertTrue("Size > 0", expectedSize > 0);
     }
 
     /** Test for IO-141 */
@@ -1146,6 +1154,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyDirectory(grandParentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
+        assertTrue("Size > 0",expectedSize > 0);
     }
 
     /** Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
