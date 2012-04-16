@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
+      <action issue="IO-326" dev="ggregory" type="fix" due-to="ggregory">
+        Add new FileUtils.sizeOf[Directory] APIs to return BigInteger.
+      </action>            
       <action issue="IO-325" dev="ggregory" type="fix" due-to="raviprak">
         Add IOUtils.toByteArray methods to work with URL and URI.
       </action>            
