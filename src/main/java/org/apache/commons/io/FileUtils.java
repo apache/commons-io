@@ -2352,6 +2352,39 @@ public class FileUtils {
     }
 
     /**
+     * Returns the size of the specified file or directory. If the provided 
+     * {@link File} is a regular file, then the file's length is returned.
+     * If the argument is a directory, then the size of the directory is
+     * calculated recursively. If a directory or subdirectory is security 
+     * restricted, its size will not be included.
+     * 
+     * @param file the regular file or directory to return the size 
+     *        of (must not be {@code null}).
+     * 
+     * @return the length of the file, or recursive size of the directory, 
+     *         provided (in bytes).
+     * 
+     * @throws NullPointerException if the file is {@code null}
+     * @throws IllegalArgumentException if the file does not exist.
+     *         
+     * @since 2.4
+     */
+    public static BigInteger sizeOfAsBigInteger(File file) {
+
+        if (!file.exists()) {
+            String message = file + " does not exist";
+            throw new IllegalArgumentException(message);
+        }
+
+        if (file.isDirectory()) {
+            return sizeOfDirectoryAsBigInteger(file);
+        } else {
+            return BigInteger.valueOf(file.length());
+        }
+
+    }
+
+    /**
      * Counts the size of a directory recursively (sum of the length of all files).
      * 
      * @param directory
@@ -2362,20 +2395,14 @@ public class FileUtils {
      *             if the directory is {@code null}
      */
     public static long sizeOfDirectory(File directory) {
-        if (!directory.exists()) {
-            throw new IllegalArgumentException(directory + " does not exist");
-        }
-
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory + " is not a directory");
-        }
-
-        long size = 0;
+        checkDirectory(directory);
 
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
             return 0L;
         }
+        long size = 0;
+
         for (final File file : files) {
             try {
                 if (!isSymlink(file)) {
@@ -2390,6 +2417,48 @@ public class FileUtils {
         }
 
         return size;
+    }
+
+    /**
+     * Counts the size of a directory recursively (sum of the length of all files).
+     * 
+     * @param directory
+     *            directory to inspect, must not be {@code null}
+     * @return size of directory in bytes, 0 if directory is security restricted.
+     * @throws NullPointerException
+     *             if the directory is {@code null}
+     *  @since 2.4
+     */
+    public static BigInteger sizeOfDirectoryAsBigInteger(File directory) {
+        checkDirectory(directory);
+
+        final File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            return BigInteger.ZERO;
+        }
+        BigInteger size = BigInteger.ZERO;
+
+        for (final File file : files) {
+            try {
+                if (!isSymlink(file)) {
+                    size.add(BigInteger.valueOf(sizeOf(file)));
+                }
+            } catch (IOException ioe) {
+                // Ignore exceptions caught when asking if a File is a symlink.
+            }
+        }
+
+        return size;
+    }
+
+    private static void checkDirectory(File directory) {
+        if (!directory.exists()) {
+            throw new IllegalArgumentException(directory + " does not exist");
+        }
+
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(directory + " is not a directory");
+        }
     }
 
     //-----------------------------------------------------------------------
