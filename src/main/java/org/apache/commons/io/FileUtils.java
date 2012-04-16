@@ -1821,6 +1821,23 @@ public class FileUtils {
      * @param encoding  the encoding to use, {@code null} means platform default
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
+     * @since 2.4
+     */
+    public static void writeStringToFile(File file, String data, Charset encoding) throws IOException {
+        writeStringToFile(file, data, encoding, false);
+    }
+
+    /**
+     * Writes a String to a file creating the file if it does not exist.
+     *
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, {@code null} means platform default
+     * @throws IOException in case of an I/O error
+     * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file, String data, String encoding) throws IOException {
         writeStringToFile(file, data, encoding, false);
