@@ -314,7 +314,40 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     // byteCountToDisplaySize
-    public void testByteCountToDisplaySize() {
+    public void testByteCountToDisplaySizeBigInteger() {
+        final BigInteger b1023 = BigInteger.valueOf(1023);
+        final BigInteger b1025 = BigInteger.valueOf(1025);
+        final BigInteger KB1 = BigInteger.valueOf(1024);
+        final BigInteger MB1 = KB1.multiply(KB1);
+        final BigInteger GB1 = MB1.multiply(KB1);
+        final BigInteger GB2 = GB1.add(GB1);
+        final BigInteger TB1 = GB1.multiply(KB1);
+        final BigInteger PB1 = TB1.multiply(KB1);
+        final BigInteger EB1 = PB1.multiply(KB1);
+        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.ZERO), "0 bytes");
+        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.ONE), "1 bytes");
+        assertEquals(FileUtils.byteCountToDisplaySize(b1023), "1023 bytes");
+        assertEquals(FileUtils.byteCountToDisplaySize(KB1), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplaySize(b1025), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplaySize(MB1.subtract(BigInteger.ONE)), "1023 KB");
+        assertEquals(FileUtils.byteCountToDisplaySize(MB1), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplaySize(MB1.add(BigInteger.ONE)), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplaySize(GB1.subtract(BigInteger.ONE)), "1023 MB");
+        assertEquals(FileUtils.byteCountToDisplaySize(GB1), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(GB1.add(BigInteger.ONE)), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(GB2), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(GB2.subtract(BigInteger.ONE)), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(TB1), "1 TB");
+        assertEquals(FileUtils.byteCountToDisplaySize(PB1), "1 PB");
+        assertEquals(FileUtils.byteCountToDisplaySize(EB1), "1 EB");
+        assertEquals(FileUtils.byteCountToDisplaySize(Long.MAX_VALUE), "7 EB");
+        // Other MAX_VALUEs
+        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)), "63 KB");
+        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)), "31 KB");
+        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)), "1 GB");
+    }
+
+    public void testByteCountToDisplaySizeLong() {
         assertEquals(FileUtils.byteCountToDisplaySize(0), "0 bytes");
         assertEquals(FileUtils.byteCountToDisplaySize(1), "1 bytes");
         assertEquals(FileUtils.byteCountToDisplaySize(1023), "1023 bytes");
@@ -326,6 +359,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1023), "1023 MB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 2), "2 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024 * 2 - 1), "1 GB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
         assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
