@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>24</version>
+    <version>25</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -306,30 +306,6 @@ file comparators, endian transformation classes, and much more.
           <effort>Default</effort>
           <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${commons.changes.version}</version>
-        <configuration>
-          <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
-          <columnNames>Fix Version,Key,Component,Summary,Type,Resolution,Status</columnNames>
-          <!-- Sort cols have to be reversed in JIRA 4 -->
-          <sortColumnNames>Key DESC,Type,Fix Version DESC</sortColumnNames>
-          <resolutionIds>Fixed</resolutionIds>
-          <statusIds>Resolved,Closed</statusIds>
-          <!-- Don't include sub-task -->
-          <typeIds>Bug,New Feature,Task,Improvement,Wish,Test</typeIds>
-          <maxEntries>300</maxEntries>
-        </configuration>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-              <report>jira-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
       </plugin>
       <plugin>
         <groupId>org.apache.rat</groupId>
