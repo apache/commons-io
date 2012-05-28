@@ -234,8 +234,6 @@ file comparators, endian transformation classes, and much more.
     <commons.release.2.desc>(requires JDK 1.5+)</commons.release.2.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
-    <!-- temporary override of parent -->
-    <commons.clirr.version>2.4</commons.clirr.version>
   </properties>
 
   <build>
