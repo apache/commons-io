@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
+      <action issue="IO-329" dev="ggregory" type="fix" due-to="tivv">
+        FileUtils.writeLines uses unbuffered IO.
+      </action>            
       <action issue="IO-327" dev="ggregory" type="add" due-to="ggregory">
         Add byteCountToDisplaySize(BigInteger).
       </action>            

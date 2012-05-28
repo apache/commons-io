@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -2201,11 +2202,11 @@ public class FileUtils {
      * @since 2.1
      */
     public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding, boolean append)
-        throws IOException {
-        OutputStream out = null;
+            throws IOException {
+        FileOutputStream out = null;
         try {
             out = openOutputStream(file, append);
-            IOUtils.writeLines(lines, lineEnding, out, encoding);
+            IOUtils.writeLines(lines, lineEnding, new BufferedOutputStream(out), encoding);
             out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);
