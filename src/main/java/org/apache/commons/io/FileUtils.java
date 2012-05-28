@@ -2206,7 +2206,9 @@ public class FileUtils {
         FileOutputStream out = null;
         try {
             out = openOutputStream(file, append);
-            IOUtils.writeLines(lines, lineEnding, new BufferedOutputStream(out), encoding);
+            final BufferedOutputStream buffer = new BufferedOutputStream(out);
+            IOUtils.writeLines(lines, lineEnding, buffer, encoding);
+            buffer.flush();
             out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);
