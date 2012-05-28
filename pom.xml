@@ -238,17 +238,6 @@ file comparators, endian transformation classes, and much more.
 
   <build>
     <pluginManagement>
-      <plugins>
-        <!-- Temporarily needed until CP25 is available -->
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>clirr-maven-plugin</artifactId>
-          <version>${commons.clirr.version}</version>
-          <configuration>
-            <minSeverity>${minSeverity}</minSeverity>
-          </configuration>
-        </plugin>
-      </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
@@ -265,7 +254,6 @@ file comparators, endian transformation classes, and much more.
           <excludes>
             <exclude>**/*AbstractTestCase*</exclude>
             <exclude>**/testtools/**</exclude>
-
             <!-- http://jira.codehaus.org/browse/SUREFIRE-44 -->
             <exclude>**/*$*</exclude>
           </excludes>
