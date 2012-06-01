@@ -106,6 +106,15 @@ import org.apache.commons.io.IOUtils;
  */
 public class Tailer implements Runnable {
 
+    private static final String RAF_MODE = "r";
+
+    private static final int DEFAULT_BUFSIZE = 4096;
+  
+    /**
+     * Buffer on top of RandomAccessFile.
+     */
+    private byte inbuf[];
+    
     /**
      * The file which will be tailed.
      */
@@ -158,18 +167,50 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      */
     public Tailer(File file, TailerListener listener, long delay, boolean end) {
+        this(file, listener, delay, end, DEFAULT_BUFSIZE);
+    }
+    
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param bufSize Buffer size
+     */
+    public Tailer(File file, TailerListener listener, long delay, boolean end, int bufSize) {
 
         this.file = file;
         this.delay = delay;
         this.end = end;
+        
+        this.inbuf = new byte[bufSize];
 
         // Save and prepare the listener
         this.listener = listener;
         listener.init(this);
     }
-
+    
     /**
      * Creates and starts a Tailer for the given file.
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param buffer size.
+     * @return The new tailer
+     */
+    public static Tailer create(File file, TailerListener listener, long delay, boolean end, int bufSize) {
+        Tailer tailer = new Tailer(file, listener, delay, end, bufSize);
+        Thread thread = new Thread(tailer);
+        thread.setDaemon(true);
+        thread.start();
+        return tailer;
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file with default buffer size.
      * 
      * @param file the file to follow.
      * @param listener the TailerListener to use.
@@ -178,11 +219,7 @@ public class Tailer implements Runnable {
      * @return The new tailer
      */
     public static Tailer create(File file, TailerListener listener, long delay, boolean end) {
-        Tailer tailer = new Tailer(file, listener, delay, end);
-        Thread thread = new Thread(tailer);
-        thread.setDaemon(true);
-        thread.start();
-        return tailer;
+        return create(file, listener, delay, end, DEFAULT_BUFSIZE);
     }
 
     /**
@@ -238,7 +275,7 @@ public class Tailer implements Runnable {
             // Open the file
             while (run && reader == null) {
                 try {
-                    reader = new RandomAccessFile(file, "r");
+                    reader = new RandomAccessFile(file, RAF_MODE);
                 } catch (FileNotFoundException e) {
                     listener.fileNotFound();
                 }
@@ -252,10 +289,9 @@ public class Tailer implements Runnable {
                     // The current position in the file
                     position = end ? file.length() : 0;
                     last = System.currentTimeMillis();
-                    reader.seek(position);                    
+                    reader.seek(position);
                 }
             }
-
 
             while (run) {
 
@@ -271,7 +307,7 @@ public class Tailer implements Runnable {
                     try {
                         // Ensure that the old file is closed iff we re-open it successfully
                         RandomAccessFile save = reader;
-                        reader = new RandomAccessFile(file, "r");
+                        reader = new RandomAccessFile(file, RAF_MODE);
                         position = 0;
                         // close old file explicitly rather than relying on GC picking up previous RAF
                         IOUtils.closeQuietly(save);
@@ -293,9 +329,9 @@ public class Tailer implements Runnable {
 
                     } else if (FileUtils.isFileNewer(file, last)) {
 
-                        /* This can happen if the file is truncated or overwritten
-                         * with the exact same length of information. In cases like
-                         * this, the file position needs to be reset
+                        /*
+                         * This can happen if the file is truncated or overwritten with the exact same length of
+                         * information. In cases like this, the file position needs to be reset
                          */
                         position = 0;
                         reader.seek(position); // cannot be null here
@@ -335,31 +371,22 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(RandomAccessFile reader) throws IOException {
-        long pos = reader.getFilePointer();
-        String line = readLine(reader);
-        while (line != null) {
-            pos = reader.getFilePointer();
-            listener.handle(line);
-            line = readLine(reader);
-        }
-        reader.seek(pos); // Ensure we can re-read if necessary
-        return pos;
-    }
+        StringBuilder sb = new StringBuilder();
 
-    /**
-     * Version of readline() that returns null on EOF rather than a partial line.
-     * @param reader the input file
-     * @return the line, or null if EOF reached before '\n' is seen.
-     * @throws IOException if an error occurs.
-     */
-    private String readLine(RandomAccessFile reader) throws IOException {
-        StringBuffer sb  = new StringBuffer();
-        int ch;
+        long pos = reader.getFilePointer();
+        long rePos = pos; // position to re-read
+
+        int num;
         boolean seenCR = false;
-        while((ch=reader.read()) != -1) {
-            switch(ch) {
+        while (run && ((num = reader.read(inbuf)) != -1)) {
+            for (int i = 0; i < num; i++) {
+                byte ch = inbuf[i];
+                switch (ch) {
                 case '\n':
-                    return sb.toString();
+                    listener.handle(sb.toString());
+                    sb = new StringBuilder();
+                    rePos = pos + i + 1;
+                    break;
                 case '\r':
                     seenCR = true;
                     break;
@@ -368,9 +395,15 @@ public class Tailer implements Runnable {
                         sb.append('\r');
                         seenCR = false;
                     }
-                    sb.append((char)ch); // add character, not its ascii value
+                    sb.append((char) ch); // add character, not its ascii value
+                }
             }
+
+            pos = reader.getFilePointer();
         }
-        return null;
+
+        reader.seek(rePos); // Ensure we can re-read if necessary
+        return rePos;
     }
+
 }
