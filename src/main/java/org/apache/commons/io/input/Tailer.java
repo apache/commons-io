@@ -106,6 +106,8 @@ import org.apache.commons.io.IOUtils;
  */
 public class Tailer implements Runnable {
 
+    private static final int DEFAULT_DELAY_MILLIS = 1000;
+
     private static final String RAF_MODE = "r";
 
     private static final int DEFAULT_BUFSIZE = 4096;
@@ -146,7 +148,7 @@ public class Tailer implements Runnable {
      * @param listener the TailerListener to use.
      */
     public Tailer(File file, TailerListener listener) {
-        this(file, listener, 1000);
+        this(file, listener, DEFAULT_DELAY_MILLIS);
     }
 
     /**
@@ -243,7 +245,7 @@ public class Tailer implements Runnable {
      * @return The new tailer
      */
     public static Tailer create(File file, TailerListener listener) {
-        return create(file, listener, 1000, false);
+        return create(file, listener, DEFAULT_DELAY_MILLIS, false);
     }
 
     /**
