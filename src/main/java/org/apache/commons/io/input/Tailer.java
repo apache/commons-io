@@ -123,7 +123,7 @@ public class Tailer implements Runnable {
     /**
      * The amount of time to wait for the file to be updated.
      */
-    private final long delay;
+    private final long delayMillis;
 
     /**
      * Whether to tail from the end or start of file
@@ -153,35 +153,35 @@ public class Tailer implements Runnable {
      * Creates a Tailer for the given file, starting from the beginning.
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      */
-    public Tailer(File file, TailerListener listener, long delay) {
-        this(file, listener, delay, false);
+    public Tailer(File file, TailerListener listener, long delayMillis) {
+        this(file, listener, delayMillis, false);
     }
 
     /**
      * Creates a Tailer for the given file, with a delay other than the default 1.0s.
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      */
-    public Tailer(File file, TailerListener listener, long delay, boolean end) {
-        this(file, listener, delay, end, DEFAULT_BUFSIZE);
+    public Tailer(File file, TailerListener listener, long delayMillis, boolean end) {
+        this(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
     }
     
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufSize Buffer size
      */
-    public Tailer(File file, TailerListener listener, long delay, boolean end, int bufSize) {
+    public Tailer(File file, TailerListener listener, long delayMillis, boolean end, int bufSize) {
 
         this.file = file;
-        this.delay = delay;
+        this.delayMillis = delayMillis;
         this.end = end;
         
         this.inbuf = new byte[bufSize];
@@ -196,13 +196,13 @@ public class Tailer implements Runnable {
      * 
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
-     * @param buffer size.
+     * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(File file, TailerListener listener, long delay, boolean end, int bufSize) {
-        Tailer tailer = new Tailer(file, listener, delay, end, bufSize);
+    public static Tailer create(File file, TailerListener listener, long delayMillis, boolean end, int bufSize) {
+        Tailer tailer = new Tailer(file, listener, delayMillis, end, bufSize);
         Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
@@ -214,12 +214,12 @@ public class Tailer implements Runnable {
      * 
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @return The new tailer
      */
-    public static Tailer create(File file, TailerListener listener, long delay, boolean end) {
-        return create(file, listener, delay, end, DEFAULT_BUFSIZE);
+    public static Tailer create(File file, TailerListener listener, long delayMillis, boolean end) {
+        return create(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
     }
 
     /**
@@ -227,11 +227,11 @@ public class Tailer implements Runnable {
      * 
      * @param file the file to follow.
      * @param listener the TailerListener to use.
-     * @param delay the delay between checks of the file for new content in milliseconds.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @return The new tailer
      */
-    public static Tailer create(File file, TailerListener listener, long delay) {
-        return create(file, listener, delay, false);
+    public static Tailer create(File file, TailerListener listener, long delayMillis) {
+        return create(file, listener, delayMillis, false);
     }
 
     /**
@@ -256,12 +256,12 @@ public class Tailer implements Runnable {
     }
 
     /**
-     * Return the delay.
+     * Return the delay in milliseconds.
      *
-     * @return the delay
+     * @return the delay in milliseconds.
      */
     public long getDelay() {
-        return delay;
+        return delayMillis;
     }
 
     /**
@@ -282,7 +282,7 @@ public class Tailer implements Runnable {
 
                 if (reader == null) {
                     try {
-                        Thread.sleep(delay);
+                        Thread.sleep(delayMillis);
                     } catch (InterruptedException e) {
                     }
                 } else {
@@ -342,7 +342,7 @@ public class Tailer implements Runnable {
                     }
                 }
                 try {
-                    Thread.sleep(delay);
+                    Thread.sleep(delayMillis);
                 } catch (InterruptedException e) {
                 }
             }
