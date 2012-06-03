@@ -30,8 +30,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
     protected String calculateRawEncoding(String bomEnc, String xmlGuessEnc, String xmlEnc,
             String defaultEncoding) throws IOException {
         MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
-        String encoding = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
-        return encoding;
+        return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
     }
     @Override
     protected String calculateHttpEncoding(String httpContentType, String bomEnc, String xmlGuessEnc,
