@@ -47,6 +47,12 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
+      <action issue="IO-320" dev="ggregory" type="add">
+        Add XmlStreamReader support for UTF-32.
+      </action>            
+      <action issue="IO-331" dev="ggregory" type="add">
+        BOMInputStream wrongly detects UTF-32LE_BOM files as UTF-16LE_BOM files in method getBOM().
+      </action>            
       <action issue="IO-332" dev="ggregory" type="fix" due-to="liangly">
         Improve tailer's reading performance.
       </action>            
