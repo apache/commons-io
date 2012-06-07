@@ -42,13 +42,13 @@ public class ByteOrderMark implements Serializable {
     public static final ByteOrderMark UTF_16LE = new ByteOrderMark("UTF-16LE", 0xFF, 0xFE);
 
     /** 
-     * UFT-32BE BOM (Big-Endian)
+     * UTF-32BE BOM (Big-Endian)
      * @since 2.2 
      */
     public static final ByteOrderMark UTF_32BE = new ByteOrderMark("UTF-32BE", 0x00, 0x00, 0xFE, 0xFF);
     
     /** 
-     * UTF-32LE BOM (Big-Endian)
+     * UTF-32LE BOM (Little-Endian)
      * @since 2.2 
      */
     public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFF, 0xFE, 0x00, 0x00);
