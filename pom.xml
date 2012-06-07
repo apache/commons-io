@@ -234,6 +234,21 @@ file comparators, endian transformation classes, and much more.
     <commons.release.2.desc>(requires JDK 1.5+)</commons.release.2.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
+    <commons.osgi.export>
+        <!-- Explicit list of packages from IO 1.4 -->
+        org.apache.commons.io;
+        org.apache.commons.io.comparator;
+        org.apache.commons.io.filefilter;
+        org.apache.commons.io.input;
+        org.apache.commons.io.output;version=1.4.9999;-noimport:=true,
+        <!-- Same list plus * for new packages -->
+        org.apache.commons.io;
+        org.apache.commons.io.comparator;
+        org.apache.commons.io.filefilter;
+        org.apache.commons.io.input;
+        org.apache.commons.io.output;
+        org.apache.commons.io.*;version=${project.version};-noimport:=true
+    </commons.osgi.export>
   </properties>
 
   <build>
