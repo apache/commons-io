@@ -467,6 +467,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(0, files.length);
     }
 
+    public void testToFiles3a() throws Exception {
+        URL[] urls = new URL[0]; // empty array
+        File[] files = FileUtils.toFiles(urls);
+        
+        assertEquals(0, files.length);
+    }
+
     public void testToFiles4() throws Exception {
         URL[] urls = new URL[] {
             new URL("file", null, "file1.txt"),
@@ -518,6 +525,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 //        
 //        assertEquals(0, urls.length);
 //    }
+
+    public void testToURLs3a() throws Exception {
+        File[] files = new File[0]; // empty array
+        URL[] urls = FileUtils.toURLs(files);
+        
+        assertEquals(0, urls.length);
+    }
 
     // contentEquals
 
