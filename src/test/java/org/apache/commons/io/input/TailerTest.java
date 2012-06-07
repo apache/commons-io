@@ -38,7 +38,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class TailerTest extends FileBasedTestCase {
 
     private Tailer tailer;
-    
+
     public TailerTest(String name) {
         super(name);
     }
@@ -51,7 +51,7 @@ public class TailerTest extends FileBasedTestCase {
         }
         FileUtils.deleteDirectory(getTestDirectory());
     }
-    
+
     public void testTailerEof() throws Exception {
         // Create & start the Tailer
         long delay = 50;
@@ -65,8 +65,8 @@ public class TailerTest extends FileBasedTestCase {
         // Write some lines to the file
         FileWriter writer = null;
         try {
-        	writeString(file, "Line");
-            
+            writeString(file, "Line");
+
             Thread.sleep(delay * 2);
             List<String> lines = listener.getLines();
             assertEquals("1 line count", 0, lines.size());
@@ -189,7 +189,7 @@ public class TailerTest extends FileBasedTestCase {
             IOUtils.closeQuietly(writer);
         }
     }
-    
+
     /** Append a string to a file */
     private void writeString(File file, String string) throws Exception {
         FileWriter writer = null;
@@ -245,37 +245,37 @@ public class TailerTest extends FileBasedTestCase {
         private final List<String> lines = new ArrayList<String>();
 
         volatile Exception exception = null;
-        
+
         volatile int notFound = 0;
 
         volatile int rotated = 0;
-        
+
         volatile int initialised = 0;
 
         public void handle(String line) {
             lines.add(line);
         }
-        
+
         public List<String> getLines() {
             return lines;
         }
-        
+
         public void clear() {
             lines.clear();
         }
-        
+
         public void handle(Exception e) {
             exception = e;
         }
-        
+
         public void init(Tailer tailer) {
             initialised++; // not atomic, but OK because only updated here.
         }
-        
+
         public void fileNotFound() {
             notFound++; // not atomic, but OK because only updated here.
         }
-        
+
         public void fileRotated() {
             rotated++; // not atomic, but OK because only updated here.
         }
