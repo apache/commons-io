@@ -385,17 +385,23 @@ public class Tailer implements Runnable {
                 byte ch = inbuf[i];
                 switch (ch) {
                 case '\n':
+                    seenCR = false; // swallow CR before LF
                     listener.handle(sb.toString());
-                    sb = new StringBuilder();
+                    sb.setLength(0);
                     rePos = pos + i + 1;
                     break;
                 case '\r':
+                    if (seenCR) {
+                        sb.append('\r');
+                    }
                     seenCR = true;
                     break;
                 default:
                     if (seenCR) {
-                        sb.append('\r');
-                        seenCR = false;
+                        seenCR = false; // swallow final CR
+                        listener.handle(sb.toString());
+                        sb.setLength(0);
+                        rePos = pos + i + 1;
                     }
                     sb.append((char) ch); // add character, not its ascii value
                 }
