@@ -21,7 +21,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -50,6 +52,57 @@ public class TailerTest extends FileBasedTestCase {
             Thread.sleep(1000);
         }
         FileUtils.deleteDirectory(getTestDirectory());
+        Thread.sleep(1000);
+    }
+
+    public void testLongFile() throws Exception {
+        long delay = 50;
+        
+        File file = new File(getTestDirectory(), "testLongFile.txt");
+        createFile(file, 0);
+        Writer writer = new FileWriter(file, true);
+        for (int i = 0; i < 100000; i++) {
+            writer.write("LineLineLineLineLineLineLineLineLineLine\n");
+        }
+        writer.write("SBTOURIST\n");
+        IOUtils.closeQuietly(writer);
+
+        TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delay, false);
+
+        long start = System.currentTimeMillis();
+
+        Thread thread = new Thread(tailer);
+        thread.start();
+
+        List<String> lines = listener.getLines();
+        while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
+            lines = listener.getLines();
+        }
+        System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
+
+        listener.clear();
+    }
+
+    public void testBufferBreak() throws Exception {
+        long delay = 50;
+
+        File file = new File(getTestDirectory(), "testBufferBreak.txt");
+        createFile(file, 0);
+        writeString(file, "SBTOURIST\n");
+
+        TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delay, false, 1);
+
+        Thread thread = new Thread(tailer);
+        thread.start();
+
+        List<String> lines = listener.getLines();
+        while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
+            lines = listener.getLines();
+        }
+
+        listener.clear();
     }
 
     public void testTailerEof() throws Exception {
@@ -242,7 +295,8 @@ public class TailerTest extends FileBasedTestCase {
      */
     private static class TestTailerListener implements TailerListener {
 
-        private final List<String> lines = new ArrayList<String>();
+        // Must be synchronised because it is written by one thread and read by another
+        private final List<String> lines = Collections.synchronizedList(new ArrayList<String>());
 
         volatile Exception exception = null;
 
