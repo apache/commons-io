@@ -936,9 +936,10 @@ public class FileUtils {
      * <p>
      * Returns an array of the same size as the input.
      *
-     * @param files  the files to convert
+     * @param files  the files to convert, must not be {@code null}
      * @return an array of URLs matching the input
      * @throws IOException if a file cannot be converted
+     * @throws NullPointerException if the parameter is null
      */
     public static URL[] toURLs(File[] files) throws IOException {
         URL[] urls = new URL[files.length];
