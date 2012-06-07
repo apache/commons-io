@@ -297,6 +297,8 @@ public class Tailer implements Runnable {
 
             while (run) {
 
+                boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
+
                 // Check the file length to see if it was rotated
                 long length = file.length();
 
@@ -326,10 +328,10 @@ public class Tailer implements Runnable {
                     if (length > position) {
 
                         // The file has more content than it did last time
-                        last = System.currentTimeMillis();
                         position = readLines(reader);
+                        last = System.currentTimeMillis();
 
-                    } else if (FileUtils.isFileNewer(file, last)) {
+                    } else if (newer) {
 
                         /*
                          * This can happen if the file is truncated or overwritten with the exact same length of
@@ -339,8 +341,8 @@ public class Tailer implements Runnable {
                         reader.seek(position); // cannot be null here
 
                         // Now we can read new lines
-                        last = System.currentTimeMillis();
                         position = readLines(reader);
+                        last = System.currentTimeMillis();
                     }
                 }
                 try {
