@@ -244,11 +244,13 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     /** Append a string to a file */
-    private void writeString(File file, String string) throws Exception {
+    private void writeString(File file, String ... strings) throws Exception {
         FileWriter writer = null;
         try {
             writer = new FileWriter(file, true);
-            writer.write(string);
+            for (String string : strings) {
+                writer.write(string);
+            }
         } finally {
             IOUtils.closeQuietly(writer);
         }
@@ -301,8 +303,7 @@ public class TailerTest extends FileBasedTestCase {
         thread.start();
 
         // Write some lines to the file
-        writeString(file, "CRLF\r\nLF\nCR\rCRCR\r\rtrail");
-        //                 1       2   3   4    
+        writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
         final long testDelayMillis = delayMillis * 10;
         Thread.sleep(testDelayMillis);
         List<String> lines = listener.getLines();
