@@ -59,6 +59,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-332" dev="ggregory" type="fix" due-to="liangly">
         Improve tailer's reading performance.
       </action>            
+      <action issue="IO-279" dev="ggregory" type="fix">
+        Improve Tailer performance with buffered reads (see IO-332).
+      </action>            
       <action issue="IO-329" dev="ggregory" type="fix" due-to="tivv">
         FileUtils.writeLines uses unbuffered IO.
       </action>            
