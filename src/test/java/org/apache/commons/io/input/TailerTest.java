@@ -290,6 +290,35 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
     }
 
+    public void testIO335() throws Exception { // test CR behaviour
+        // Create & start the Tailer
+        long delayMillis = 50;
+        final File file = new File(getTestDirectory(), "tailer-testio334.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        tailer = new Tailer(file, listener, delayMillis, false);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+
+        // Write some lines to the file
+        writeString(file, "CRLF\r\nLF\nCR\rCRCR\r\rtrail");
+        //                 1       2   3   4    
+        final long testDelayMillis = delayMillis * 10;
+        Thread.sleep(testDelayMillis);
+        List<String> lines = listener.getLines();
+        assertEquals("line count", 4, lines.size());
+        assertEquals("line 1", "CRLF", lines.get(0));
+        assertEquals("line 2", "LF", lines.get(1));
+        assertEquals("line 3", "CR", lines.get(2));
+        assertEquals("line 4", "CRCR\r", lines.get(3));
+
+        // Stop
+        tailer.stop();
+        tailer=null;
+        thread.interrupt();
+        Thread.sleep(testDelayMillis);
+    }
+
     /**
      * Test {@link TailerListener} implementation.
      */

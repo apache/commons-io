@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
+      <action issue="IO-335" dev="sebb" type="fix">
+        Tailer#readLines - incorrect CR handling.
+      </action>            
       <action issue="IO-334" dev="sebb" type="fix">
         FileUtils.toURLs throws NPE for null parameter.
         Documented the behaviour.
