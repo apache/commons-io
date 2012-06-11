@@ -138,6 +138,11 @@ public class Tailer implements Runnable {
     private final TailerListener listener;
 
     /**
+     * Whether to close and reopen the file whilst waiting for more input.
+     */
+    private final boolean reOpen;
+    
+    /**
      * The tailer will run as long as this value is true.
      */
     private volatile boolean run = true;
@@ -173,6 +178,18 @@ public class Tailer implements Runnable {
     }
     
     /**
+     * Creates a Tailer for the given file, with a delay other than the default 1.0s.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks 
+     */
+    public Tailer(File file, TailerListener listener, long delayMillis, boolean end, boolean reOpen) {
+        this(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+    }
+    
+    /**
      * Creates a Tailer for the given file, with a specified buffer size.
      * @param file the file to follow.
      * @param listener the TailerListener to use.
@@ -181,7 +198,19 @@ public class Tailer implements Runnable {
      * @param bufSize Buffer size
      */
     public Tailer(File file, TailerListener listener, long delayMillis, boolean end, int bufSize) {
-
+        this(file, listener, delayMillis, end, false, bufSize);
+    }
+    
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks 
+     * @param bufSize Buffer size
+     */
+    public Tailer(File file, TailerListener listener, long delayMillis, boolean end, boolean reOpen, int bufSize) {
         this.file = file;
         this.delayMillis = delayMillis;
         this.end = end;
@@ -191,6 +220,7 @@ public class Tailer implements Runnable {
         // Save and prepare the listener
         this.listener = listener;
         listener.init(this);
+        this.reOpen = reOpen;
     }
     
     /**
@@ -212,6 +242,26 @@ public class Tailer implements Runnable {
     }
 
     /**
+     * Creates and starts a Tailer for the given file.
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen whether to close/reopen the file between chunks
+     * @param bufSize buffer size.
+     * @return The new tailer
+     */
+    public static Tailer create(File file, TailerListener listener, long delayMillis, boolean end, boolean reOpen, 
+            int bufSize) {
+        Tailer tailer = new Tailer(file, listener, delayMillis, end, reOpen, bufSize);
+        Thread thread = new Thread(tailer);
+        thread.setDaemon(true);
+        thread.start();
+        return tailer;
+    }
+
+    /**
      * Creates and starts a Tailer for the given file with default buffer size.
      * 
      * @param file the file to follow.
@@ -222,6 +272,20 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(File file, TailerListener listener, long delayMillis, boolean end) {
         return create(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file with default buffer size.
+     * 
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen whether to close/reopen the file between chunks
+     * @return The new tailer
+     */
+    public static Tailer create(File file, TailerListener listener, long delayMillis, boolean end, boolean reOpen) {
+        return create(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
     }
 
     /**
@@ -345,9 +409,16 @@ public class Tailer implements Runnable {
                         last = System.currentTimeMillis();
                     }
                 }
+                if (reOpen) {
+                    IOUtils.closeQuietly(reader);
+                }
                 try {
                     Thread.sleep(delayMillis);
                 } catch (InterruptedException e) {
+                }
+                if (run && reOpen) {
+                    reader = new RandomAccessFile(file, RAF_MODE);
+                    reader.seek(position);
                 }
             }
 

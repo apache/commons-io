@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-TDB-TDB" description="">
+      <action issue="IO-269" dev="ggregory" type="add" due-to="sebb">
+        Tailer locks file from deletion/rename on Windows.
+      </action>            
       <action issue="IO-279" dev="sebb" type="fix" due-to="Sergio Bossa, Chris Baron">
         Tailer erroneously considers file as new.
       </action>            
