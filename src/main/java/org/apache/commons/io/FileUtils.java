@@ -2511,7 +2511,7 @@ public class FileUtils {
         for (final File file : files) {
             try {
                 if (!isSymlink(file)) {
-                    size.add(BigInteger.valueOf(sizeOf(file)));
+                    size = size.add(BigInteger.valueOf(sizeOf(file)));
                 }
             } catch (IOException ioe) {
                 // Ignore exceptions caught when asking if a File is a symlink.

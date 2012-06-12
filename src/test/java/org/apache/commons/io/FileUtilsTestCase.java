@@ -64,6 +64,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     private static final BigInteger TEST_DIRECTORY_SIZE_BI = BigInteger.ZERO;
     
     /**
+     * Size (greater of zero) of test file.
+     */
+    private static final BigInteger TEST_DIRECTORY_SIZE_GT_ZERO_BI = BigInteger.valueOf(100);
+    
+    /**
      * List files recursively
      */
     private static final ListDirectoryWalker LIST_WALKER = new ListDirectoryWalker();
@@ -796,7 +801,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.sizeOfDirectoryAsBigInteger(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (IllegalArgumentException ex) {
+        }
 
         // Creates file
         file.createNewFile();
@@ -806,7 +812,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.sizeOfDirectoryAsBigInteger(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (IllegalArgumentException ex) {
+        }
 
         // Existing directory
         file.delete();
@@ -814,10 +821,21 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         this.createCircularSymLink(file);
 
-        assertEquals(
-            "Unexpected directory size",
-            TEST_DIRECTORY_SIZE_BI,
-            FileUtils.sizeOfDirectoryAsBigInteger(file));
+        assertEquals("Unexpected directory size", TEST_DIRECTORY_SIZE_BI, FileUtils.sizeOfDirectoryAsBigInteger(file));
+
+        // Existing directory which size is greater than zero
+        file.delete();
+        file.mkdir();
+
+        File nonEmptyFile = new File(file, "nonEmptyFile" + System.nanoTime());
+        this.createFile(nonEmptyFile, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
+        nonEmptyFile.deleteOnExit();
+
+        assertEquals("Unexpected directory size", TEST_DIRECTORY_SIZE_GT_ZERO_BI,
+                FileUtils.sizeOfDirectoryAsBigInteger(file));
+
+        nonEmptyFile.delete();
+        file.delete();
     }
 
     /**

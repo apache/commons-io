@@ -25,7 +25,7 @@ o IO-333:  Export OSGi packages at version 1.x in addition to 2.x. Thanks to fme
 o IO-320:  Add XmlStreamReader support for UTF-32. Thanks to ggregory. 
 o IO-331:  BOMInputStream wrongly detects UTF-32LE_BOM files as UTF-16LE_BOM files in method getBOM(). Thanks to ggregory. 
 o IO-327:  Add byteCountToDisplaySize(BigInteger). Thanks to ggregory. 
-o IO-326:  Add new FileUtils.sizeOf[Directory] APIs to return BigInteger. Thanks to ggregory. 
+o IO-326:  Add new FileUtils.sizeOf[Directory] APIs to return BigInteger. Thanks to ggregory, kinow. 
 o IO-325:  Add IOUtils.toByteArray methods to work with URL and URI. Thanks to raviprak. 
 o IO-324:  Add missing Charset sister APIs to method that take a String charset name. Thanks to raviprak. 
 
