@@ -167,7 +167,7 @@ public class FileUtils {
     /**
      * The number of bytes in a yottabyte.
      */
-    public static final BigInteger ONE_YB = ONE_ZB.multiply(BigInteger.valueOf(ONE_EB));
+    public static final BigInteger ONE_YB = ONE_KB_BI.multiply(ONE_ZB);
 
     /**
      * An empty array of type <code>File</code>.
