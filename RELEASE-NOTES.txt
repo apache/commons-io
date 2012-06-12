@@ -30,6 +30,7 @@ o IO-325:  Add IOUtils.toByteArray methods to work with URL and URI. Thanks to r
 o IO-324:  Add missing Charset sister APIs to method that take a String charset name. Thanks to raviprak. 
 
 Fixed Bugs:
+o IO-336:  Yottabyte (YB) incorrectly defined in FileUtils. Thanks to rleavelle. 
 o IO-279:  Tailer erroneously considers file as new. Thanks to Sergio Bossa, Chris Baron. 
 o IO-335:  Tailer#readLines - incorrect CR handling. 
 o IO-334:  FileUtils.toURLs throws NPE for null parameter; document the behavior. 
