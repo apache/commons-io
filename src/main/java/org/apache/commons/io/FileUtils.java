@@ -2521,11 +2521,16 @@ public class FileUtils {
         return size;
     }
 
+    /**
+     * Checks that the given {@code File} exists and is a directory.
+     * 
+     * @param directory The {@code File} to check.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     */
     private static void checkDirectory(File directory) {
         if (!directory.exists()) {
             throw new IllegalArgumentException(directory + " does not exist");
         }
-
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory + " is not a directory");
         }
