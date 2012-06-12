@@ -47,13 +47,13 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
-<subsection name="Commons IO 2.3 (requires JDK 1.6+)">
+<subsection name="Commons IO 2.4 (requires JDK 1.6+)">
 <p>
-Commons IO 2.3 is the latest version and requires a minimum of JDK 1.6 -
+Commons IO 2.4 is the latest version and requires a minimum of JDK 1.6 -
 <a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
 </p> 
 <p>
-View the <a href="upgradeto2_3.html">Release Notes</a> and
+View the <a href="upgradeto2_4.html">Release Notes</a> and
 <a href="api-release/index.html">JavaDoc API documents</a>
 </p> 
 </subsection>
