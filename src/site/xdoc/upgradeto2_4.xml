@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 2.3 to 2.4</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 2.3 to version 2.4
+<source>
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Commons IO library contains utility classes, stream implementations, file filters, 
+file comparators, endian transformation classes, and much more.
+
+==============================================================================
+Apache Commons IO Version 2.4-SNAPSHOT
+==============================================================================
+
+Changes in this version include:
+
+New features:
+o IO-269:  Tailer locks file from deletion/rename on Windows. Thanks to sebb. 
+o IO-333:  Export OSGi packages at version 1.x in addition to 2.x. Thanks to fmeschbe. 
+o IO-320:  Add XmlStreamReader support for UTF-32. Thanks to ggregory. 
+o IO-331:  BOMInputStream wrongly detects UTF-32LE_BOM files as UTF-16LE_BOM files in method getBOM(). Thanks to ggregory. 
+o IO-327:  Add byteCountToDisplaySize(BigInteger). Thanks to ggregory. 
+o IO-326:  Add new FileUtils.sizeOf[Directory] APIs to return BigInteger. Thanks to ggregory. 
+o IO-325:  Add IOUtils.toByteArray methods to work with URL and URI. Thanks to raviprak. 
+o IO-324:  Add missing Charset sister APIs to method that take a String charset name. Thanks to raviprak. 
+
+Fixed Bugs:
+o IO-279:  Tailer erroneously considers file as new. Thanks to Sergio Bossa, Chris Baron. 
+o IO-335:  Tailer#readLines - incorrect CR handling. 
+o IO-334:  FileUtils.toURLs throws NPE for null parameter; document the behavior. 
+o IO-332:  Improve tailer's reading performance. Thanks to liangly. 
+o IO-279:  Improve Tailer performance with buffered reads (see IO-332). 
+o IO-329:  FileUtils.writeLines uses unbuffered IO. Thanks to tivv. 
+o IO-319:  FileUtils.sizeOfDirectory follows symbolic links. Thanks to raviprak. 
+
+Compatibility with 2.3:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Compatibility with 2.2 and 1.4:
+Binary compatible: Yes.
+Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+
+Commons IO 2.4 requires JDK 1.6 or later.
+Commons IO 2.3 requires JDK 1.6 or later.
+Commons IO 2.2 requires JDK 1.5 or later.
+Commons IO 1.4 requires JDK 1.3 or later.
+</source>
+</p>
+</section>
+
+</body>
+</document>
