@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.4" date="2012-TDB-TDB" description="">
+    <release version="2.4" date="2012-TBD-TBD" description="New features and bug fixes.">
       <action issue="IO-269" dev="ggregory" type="add" due-to="sebb">
         Tailer locks file from deletion/rename on Windows.
       </action>            
@@ -57,16 +57,15 @@ The <action> type attribute can be add,update,fix,remove.
         Tailer#readLines - incorrect CR handling.
       </action>            
       <action issue="IO-334" dev="sebb" type="fix">
-        FileUtils.toURLs throws NPE for null parameter.
-        Documented the behaviour.
+        FileUtils.toURLs throws NPE for null parameter; document the behavior.
       </action>            
       <action issue="IO-333" dev="ggregory" type="add" due-to="fmeschbe">
         Export OSGi packages at version 1.x in addition to 2.x.
       </action>            
-      <action issue="IO-320" dev="ggregory" type="add">
+      <action issue="IO-320" dev="ggregory" type="add" due-to="ggregory">
         Add XmlStreamReader support for UTF-32.
       </action>            
-      <action issue="IO-331" dev="ggregory" type="add">
+      <action issue="IO-331" dev="ggregory" type="add" due-to="ggregory">
         BOMInputStream wrongly detects UTF-32LE_BOM files as UTF-16LE_BOM files in method getBOM().
       </action>            
       <action issue="IO-332" dev="ggregory" type="fix" due-to="liangly">
@@ -95,7 +94,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>            
     </release>
     <!-- The release date is the date RC is cut -->
-    <release version="2.3" date="2012-April-10" description="">
+    <release version="2.3" date="2012-April-10" description="New features and bug fixes.">
       <action issue="IO-322" dev="ggregory" type="add" due-to="ggregory">
         Add and use class Charsets.
       </action>            
@@ -106,7 +105,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add Charset sister APIs to method that take a String charset name.
       </action>            
     </release>
-    <release version="2.2" date="2012-March-26" description="">
+    <release version="2.2" date="2012-March-26" description="New features and bug fixes.">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
         Add IOUTils.toBufferedReader(Reader)
       </action>        
@@ -124,7 +123,7 @@ The <action> type attribute can be add,update,fix,remove.
         New copyLarge() method in IOUtils that takes additional offset, length arguments
       </action>        
       <action issue="IO-300" dev="sebb" type="fix">
-        FileUtils.moveDirectoryToDirectory removes source directory if destination is a subdirectory
+        FileUtils.moveDirectoryToDirectory removes source directory if destination is a sub-directory
       </action>        
       <action issue="IO-307" dev="sebb" type="fix">
         ReaderInputStream#read(byte[] b, int off, int len) should check for valid parameters
@@ -182,7 +181,7 @@ The <action> type attribute can be add,update,fix,remove.
         Added contentEqualsIgnoreEOL methods to both classes
       </action>        
     </release>
-    <release version="2.1" date="2011-Sep-28">
+    <release version="2.1" date="2011-Sep-28" description="New features and bug fixes.">
       <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">
         Use standard Maven directory layout
       </action>        
@@ -250,7 +249,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
     </release>
 
-    <release version="1.3.2" date="2007-Jul-02">
+    <release version="1.3.2" date="2007-Jul-02" description="Bug fixes.">
       <action dev="jochen" type="fix" issue="IO-115">
         Some tests, which are implicitly assuming a Unix-like file
         system, are now skipped on Windows.
