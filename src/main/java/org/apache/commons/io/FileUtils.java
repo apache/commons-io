@@ -2038,7 +2038,7 @@ public class FileUtils {
      * @param append if {@code true}, then the data will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
-     * @since IO 2.3
+     * @since 2.3
      */
     public static void write(File file, CharSequence data, Charset encoding, boolean append) throws IOException {
         String str = data == null ? null : data.toString();
