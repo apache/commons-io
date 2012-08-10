@@ -560,6 +560,17 @@ public class BOMInputStreamTest {
     }
 
     @Test
+    public void testReadXmlWithBOMUcs2() throws Exception {
+        // UCS-2 is BE.
+        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
+        // XML parser does not know what to do with UTF-32
+        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
+        // XML parser does not know what to do with UTF-32
+        parseXml(createUtf16BeDataStream(data, true));
+    }
+
+    @Test
     public void testReadXmlWithBOMUtf16Be() throws Exception {
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(Charsets.UTF_16BE);
         parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
@@ -578,8 +589,9 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
+        // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
-        // Expect failure:        
+        // XML parser does not know what to do with UTF-32
         parseXml(createUtf32BeDataStream(data, true));
     }
 
@@ -588,8 +600,9 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
+        // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE));
-        // Expect failure:        
+        // XML parser does not know what to do with UTF-32
         parseXml(createUtf32LeDataStream(data, true));
     }
 
