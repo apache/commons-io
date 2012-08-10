@@ -515,7 +515,7 @@ public class BOMInputStreamTest {
     @Test
     public void testReadWithBOMUtf8() throws Exception {
         byte[] data = "ABC".getBytes(Charsets.UTF_8);
-        BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true));
+        BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), ByteOrderMark.UTF_8);
         assertEquals('A', in.read());
         assertEquals('B', in.read());
         assertEquals('C', in.read());
@@ -562,14 +562,14 @@ public class BOMInputStreamTest {
     @Test
     public void testReadXmlWithBOMUtf16Be() throws Exception {
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(Charsets.UTF_16BE);
-        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true)));
+        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
         parseXml(createUtf16BeDataStream(data, true));
     }
 
     @Test
     public void testReadXmlWithBOMUtf16Le() throws Exception {
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(Charsets.UTF_16LE);
-        parseXml(new BOMInputStream(createUtf16LeDataStream(data, true)));
+        parseXml(new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE));
         parseXml(createUtf16LeDataStream(data, true));
     }
 
@@ -578,7 +578,7 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
-        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true)));
+        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
         // Expect failure:        
         parseXml(createUtf32BeDataStream(data, true));
     }
@@ -588,7 +588,7 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
-        parseXml(new BOMInputStream(createUtf32LeDataStream(data, true)));
+        parseXml(new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE));
         // Expect failure:        
         parseXml(createUtf32LeDataStream(data, true));
     }
