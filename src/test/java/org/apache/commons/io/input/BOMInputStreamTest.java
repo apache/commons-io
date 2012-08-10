@@ -16,25 +16,35 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import junit.framework.TestCase;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * Test case for {@link BOMInputStream}.
  *
  * @version $Id$
  */
-public class BOMInputStreamTest extends TestCase {
+public class BOMInputStreamTest {
     //----------------------------------------------------------------------------
     //  Support code
     //----------------------------------------------------------------------------
@@ -217,6 +227,55 @@ public class BOMInputStreamTest extends TestCase {
         } catch (IllegalArgumentException e) {
             // expected - not configured for UTF-16BE
         }
+    }
+
+    @Test
+    public void testReadXmlWithBOMUtf8() throws Exception {
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(Charsets.UTF_8);
+        BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true));
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
+    }
+
+    @Test
+    public void testReadXmlWithBOMUtf16Be() throws Exception {
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(Charsets.UTF_16BE);
+        BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true));
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
+    }
+
+    @Test
+    public void testReadXmlWithBOMUtf16Le() throws Exception {
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(Charsets.UTF_16LE);
+        BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true));
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
+    }
+
+    @Ignore
+    @Test
+    public void testReadXmlWithBOMUtf32Be() throws Exception {
+        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
+        BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true));
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
+    }
+
+    @Ignore
+    @Test
+    public void testReadXmlWithBOMUtf32Le() throws Exception {
+        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
+        BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true));
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
     }
 
     @Test
