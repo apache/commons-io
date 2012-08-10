@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
 import org.junit.Assert;
+import org.junit.Assume;
 
 /**
  * Test case for {@link BOMInputStream}.
@@ -39,7 +40,7 @@ public class BOMInputStreamTest extends TestCase {
     /**
      *  Creates the underlying data stream, with or without BOM.
      */
-    public InputStream createUtf8DataStream(byte[] baseData, boolean addBOM) {
+    private InputStream createUtf8DataStream(byte[] baseData, boolean addBOM) {
         byte[] data = baseData;
         if (addBOM) {
             data = new byte[baseData.length + 3];
@@ -54,7 +55,7 @@ public class BOMInputStreamTest extends TestCase {
     /**
      *  Creates the underlying data stream, with or without BOM.
      */
-    public InputStream createUtf16BeDataStream(byte[] baseData, boolean addBOM) {
+    private InputStream createUtf16BeDataStream(byte[] baseData, boolean addBOM) {
         byte[] data = baseData;
         if (addBOM) {
             data = new byte[baseData.length + 2];
@@ -68,7 +69,7 @@ public class BOMInputStreamTest extends TestCase {
     /**
      *  Creates the underlying data stream, with or without BOM.
      */
-    public InputStream createUtf16LeDataStream(byte[] baseData, boolean addBOM) {
+    private InputStream createUtf16LeDataStream(byte[] baseData, boolean addBOM) {
         byte[] data = baseData;
         if (addBOM) {
             data = new byte[baseData.length + 2];
@@ -215,6 +216,27 @@ public class BOMInputStreamTest extends TestCase {
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // expected - not configured for UTF-16LE
+        }
+    }
+
+    public void testReadWithBOMUtf32Be() throws Exception {
+        byte[] data = "ABC".getBytes("UTF_32BE");
+        BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_32BE);
+        assertEquals(0, in.read());
+        assertEquals('A', in.read());
+        assertEquals(0, in.read());
+        assertEquals('B', in.read());
+        assertEquals(0, in.read());
+        assertEquals('C', in.read());
+        assertEquals(-1, in.read());
+        assertTrue("hasBOM()", in.hasBOM());
+        assertTrue("hasBOM(UTF-32BE)", in.hasBOM(ByteOrderMark.UTF_32BE));
+        assertEquals("getBOM", ByteOrderMark.UTF_32BE, in.getBOM());
+        try {
+            in.hasBOM(ByteOrderMark.UTF_32LE);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // expected - not configured for UTF-32LE
         }
     }
 
@@ -459,7 +481,7 @@ public class BOMInputStreamTest extends TestCase {
         this.readBOMInputStreamTwice("/org/apache/commons/io/testfileBOM.xml");
     }
 
-    public void readBOMInputStreamTwice(String resource) throws Exception {
+    private void readBOMInputStreamTwice(String resource) throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream(resource);
         Assert.assertNotNull(inputStream);
         BOMInputStream bomInputStream = new BOMInputStream(inputStream);
