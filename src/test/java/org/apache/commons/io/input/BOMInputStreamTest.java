@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
@@ -38,6 +39,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Test case for {@link BOMInputStream}.
@@ -230,30 +232,17 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    public void testReadXmlWithBOMUtf8() throws Exception {
-        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(Charsets.UTF_8);
-        BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
-        assertNotNull(doc);
-        assertEquals("X", doc.getFirstChild().getNodeName());
-    }
-
-    @Test
     public void testReadXmlWithBOMUtf16Be() throws Exception {
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(Charsets.UTF_16BE);
-        BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true));
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
-        assertNotNull(doc);
-        assertEquals("X", doc.getFirstChild().getNodeName());
+        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true)));
+        parseXml(createUtf16BeDataStream(data, true));
     }
 
     @Test
     public void testReadXmlWithBOMUtf16Le() throws Exception {
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(Charsets.UTF_16LE);
-        BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true));
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
-        assertNotNull(doc);
-        assertEquals("X", doc.getFirstChild().getNodeName());
+        parseXml(new BOMInputStream(createUtf16LeDataStream(data, true)));
+        parseXml(createUtf16LeDataStream(data, true));
     }
 
     @Ignore
@@ -261,10 +250,8 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
-        BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true));
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
-        assertNotNull(doc);
-        assertEquals("X", doc.getFirstChild().getNodeName());
+        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true)));
+        parseXml(createUtf32BeDataStream(data, true));
     }
 
     @Ignore
@@ -272,10 +259,15 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
-        BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true));
-        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
-        assertNotNull(doc);
-        assertEquals("X", doc.getFirstChild().getNodeName());
+        parseXml(new BOMInputStream(createUtf32LeDataStream(data, true)));
+        parseXml(createUtf32LeDataStream(data, true));
+    }
+
+    @Test
+    public void testReadXmlWithBOMUtf8() throws Exception {
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(Charsets.UTF_8);
+        parseXml(new BOMInputStream(createUtf8DataStream(data, true)));
+        parseXml(createUtf8DataStream(data, true));
     }
 
     @Test
@@ -621,6 +613,12 @@ public class BOMInputStreamTest {
     @Test
     public void testReadTwiceWithBOM() throws Exception {
         this.readBOMInputStreamTwice("/org/apache/commons/io/testfileBOM.xml");
+    }
+
+    private void parseXml(InputStream in) throws SAXException, IOException, ParserConfigurationException {
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
     }
 
     private void readBOMInputStreamTwice(String resource) throws Exception {
