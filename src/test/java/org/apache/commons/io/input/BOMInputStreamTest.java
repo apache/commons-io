@@ -251,6 +251,7 @@ public class BOMInputStreamTest {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, true)));
+        // Expect failure:        
         parseXml(createUtf32BeDataStream(data, true));
     }
 
@@ -260,6 +261,7 @@ public class BOMInputStreamTest {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         parseXml(new BOMInputStream(createUtf32LeDataStream(data, true)));
+        // Expect failure:        
         parseXml(createUtf32LeDataStream(data, true));
     }
 
