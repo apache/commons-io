@@ -26,6 +26,7 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +36,6 @@ import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
 import org.junit.Assert;
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -160,6 +160,12 @@ public class BOMInputStreamTest {
     //----------------------------------------------------------------------------
 
     private void parseXml(InputStream in) throws SAXException, IOException, ParserConfigurationException {
+        final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
+        assertNotNull(doc);
+        assertEquals("X", doc.getFirstChild().getNodeName());
+    }
+
+    private void parseXml(Reader in) throws SAXException, IOException, ParserConfigurationException {
         final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(in));
         assertNotNull(doc);
         assertEquals("X", doc.getFirstChild().getNodeName());
@@ -594,26 +600,22 @@ public class BOMInputStreamTest {
         parseXml(createUtf16LeDataStream(data, true));
     }
 
-    @Ignore
     @Test
     public void testReadXmlWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
-        // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
-        // XML parser does not know what to do with UTF-32
-        parseXml(createUtf32BeDataStream(data, true));
+        // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
+        parseXml(new XmlStreamReader(createUtf32BeDataStream(data, true)));
     }
 
-    @Ignore
     @Test
     public void testReadXmlWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
-        // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE));
-        // XML parser does not know what to do with UTF-32
-        parseXml(createUtf32LeDataStream(data, true));
+        // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
+        parseXml(new XmlStreamReader(createUtf32LeDataStream(data, true)));
     }
 
     @Test
