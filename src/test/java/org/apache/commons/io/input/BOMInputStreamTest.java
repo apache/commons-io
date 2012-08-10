@@ -245,6 +245,22 @@ public class BOMInputStreamTest {
         parseXml(createUtf16LeDataStream(data, true));
     }
 
+    @Test
+    public void testReadXmlWithoutBOMUtf32Be() throws Exception {
+        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
+        parseXml(new BOMInputStream(createUtf32BeDataStream(data, false)));
+        parseXml(createUtf32BeDataStream(data, false));
+    }
+
+    @Test
+    public void testReadXmlWithoutBOMUtf32Le() throws Exception {
+        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
+        parseXml(new BOMInputStream(createUtf32LeDataStream(data, false)));
+        parseXml(createUtf32BeDataStream(data, false));
+    }
+
     @Ignore
     @Test
     public void testReadXmlWithBOMUtf32Be() throws Exception {
