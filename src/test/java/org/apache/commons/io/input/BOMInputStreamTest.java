@@ -564,10 +564,20 @@ public class BOMInputStreamTest {
         // UCS-2 is BE.
         Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
         byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
-        // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
-        // XML parser does not know what to do with UTF-32
         parseXml(createUtf16BeDataStream(data, true));
+    }
+
+    @Test
+    public void testReadXmlWithBOMUcs4() throws Exception {
+        // UCS-4 is BE or LE?
+        // Hm: ISO-10646-UCS-4 is not supported on Oracle 1.6.0_31
+        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
+        byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-4\"?><X/>".getBytes("ISO-10646-UCS-4");
+        // XML parser does not know what to do with UTF-32
+        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
+        // XML parser does not know what to do with UTF-32
+        parseXml(createUtf32BeDataStream(data, true));
     }
 
     @Test
