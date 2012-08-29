@@ -37,7 +37,7 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = (AbstractFileComparator)ExtensionFileComparator.EXTENSION_COMPARATOR;
+        comparator = ExtensionFileComparator.EXTENSION_COMPARATOR;
         reverse = ExtensionFileComparator.EXTENSION_REVERSE;
         equalFile1 = new File("abc.foo");
         equalFile2 = new File("def.foo");

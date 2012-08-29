@@ -37,7 +37,7 @@ public class PathFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = (AbstractFileComparator)PathFileComparator.PATH_COMPARATOR;
+        comparator = PathFileComparator.PATH_COMPARATOR;
         reverse = PathFileComparator.PATH_REVERSE;
         equalFile1 = new File("foo/file.txt");
         equalFile2 = new File("foo/file.txt");
