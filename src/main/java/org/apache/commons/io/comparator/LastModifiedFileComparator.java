@@ -18,7 +18,6 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Comparator;
 
 /**
  * Compare the <b>last modified date/time</b> of two files for order 
@@ -48,10 +47,10 @@ import java.util.Comparator;
 public class LastModifiedFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Last modified comparator instance */
-    public static final Comparator<File> LASTMODIFIED_COMPARATOR = new LastModifiedFileComparator();
+    public static final LastModifiedFileComparator LASTMODIFIED_COMPARATOR = new LastModifiedFileComparator();
 
     /** Reverse last modified comparator instance */
-    public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseComparator(LASTMODIFIED_COMPARATOR);
+    public static final ReverseComparator LASTMODIFIED_REVERSE = new ReverseComparator(LASTMODIFIED_COMPARATOR);
 
     /**
      * Compare the last the last modified date/time of two files.

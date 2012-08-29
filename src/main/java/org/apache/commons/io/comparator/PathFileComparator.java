@@ -18,7 +18,6 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Comparator;
 
 import org.apache.commons.io.IOCase;
 
@@ -52,22 +51,22 @@ import org.apache.commons.io.IOCase;
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> PATH_COMPARATOR = new PathFileComparator();
+    public static final PathFileComparator PATH_COMPARATOR = new PathFileComparator();
 
     /** Reverse case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);
+    public static final ReverseComparator PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);
 
     /** Case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);
+    public static final PathFileComparator PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);
+    public static final ReverseComparator PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);
 
     /** System sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);
+    public static final PathFileComparator PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);
+    public static final ReverseComparator PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;

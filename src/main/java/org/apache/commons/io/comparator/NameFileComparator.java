@@ -18,7 +18,6 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Comparator;
 
 import org.apache.commons.io.IOCase;
 
@@ -52,22 +51,22 @@ import org.apache.commons.io.IOCase;
 public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> NAME_COMPARATOR = new NameFileComparator();
+    public static final NameFileComparator NAME_COMPARATOR = new NameFileComparator();
 
     /** Reverse case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> NAME_REVERSE = new ReverseComparator(NAME_COMPARATOR);
+    public static final ReverseComparator NAME_REVERSE = new ReverseComparator(NAME_COMPARATOR);
 
     /** Case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> NAME_INSENSITIVE_COMPARATOR = new NameFileComparator(IOCase.INSENSITIVE);
+    public static final NameFileComparator NAME_INSENSITIVE_COMPARATOR = new NameFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> NAME_INSENSITIVE_REVERSE = new ReverseComparator(NAME_INSENSITIVE_COMPARATOR);
+    public static final ReverseComparator NAME_INSENSITIVE_REVERSE = new ReverseComparator(NAME_INSENSITIVE_COMPARATOR);
 
     /** System sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> NAME_SYSTEM_COMPARATOR = new NameFileComparator(IOCase.SYSTEM);
+    public static final NameFileComparator NAME_SYSTEM_COMPARATOR = new NameFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> NAME_SYSTEM_REVERSE = new ReverseComparator(NAME_SYSTEM_COMPARATOR);
+    public static final ReverseComparator NAME_SYSTEM_REVERSE = new ReverseComparator(NAME_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;

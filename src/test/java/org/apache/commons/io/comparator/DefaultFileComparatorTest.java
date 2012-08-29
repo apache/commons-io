@@ -36,7 +36,7 @@ public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = (AbstractFileComparator)DefaultFileComparator.DEFAULT_COMPARATOR;
+        comparator = DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
         equalFile1 = new File("foo");
         equalFile2 = new File("foo");

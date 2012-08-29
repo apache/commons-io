@@ -58,7 +58,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /** @see junit.framework.TestCase#setUp() */
     @Override
     protected void setUp() throws Exception {
-        comparator = (AbstractFileComparator)DefaultFileComparator.DEFAULT_COMPARATOR;
+        comparator = DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
     }
 
