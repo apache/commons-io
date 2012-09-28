@@ -322,6 +322,16 @@ public class Tailer implements Runnable {
     }
 
     /**
+     * Gets whether to keep on running.
+     * 
+     * @return whether to keep on running.
+     * @since 2.5
+     */
+    protected boolean getRun() {
+        return run;
+    }
+
+    /**
      * Return the delay in milliseconds.
      *
      * @return the delay in milliseconds.
@@ -339,7 +349,7 @@ public class Tailer implements Runnable {
             long last = 0; // The last time the file was checked for changes
             long position = 0; // position within the file
             // Open the file
-            while (run && reader == null) {
+            while (getRun() && reader == null) {
                 try {
                     reader = new RandomAccessFile(file, RAF_MODE);
                 } catch (FileNotFoundException e) {
@@ -359,7 +369,7 @@ public class Tailer implements Runnable {
                 }
             }
 
-            while (run) {
+            while (getRun()) {
 
                 boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
 
@@ -416,7 +426,7 @@ public class Tailer implements Runnable {
                     Thread.sleep(delayMillis);
                 } catch (InterruptedException e) {
                 }
-                if (run && reOpen) {
+                if (getRun() && reOpen) {
                     reader = new RandomAccessFile(file, RAF_MODE);
                     reader.seek(position);
                 }
@@ -453,7 +463,7 @@ public class Tailer implements Runnable {
 
         int num;
         boolean seenCR = false;
-        while (run && ((num = reader.read(inbuf)) != -1)) {
+        while (getRun() && ((num = reader.read(inbuf)) != -1)) {
             for (int i = 0; i < num; i++) {
                 byte ch = inbuf[i];
                 switch (ch) {
