@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.4-SNAPSHOT</version>
+  <version>2.5-SNAPSHOT</version>
   <name>Commons IO</name>
 
   <inceptionYear>2002</inceptionYear>
@@ -228,7 +228,7 @@ file comparators, endian transformation classes, and much more.
     <maven.compile.target>1.6</maven.compile.target>
     <commons.componentid>io</commons.componentid>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.release.version>2.4</commons.release.version>
+    <commons.release.version>2.5</commons.release.version>
     <commons.release.desc>(requires JDK 1.6+)</commons.release.desc>
     <commons.release.2.version>2.2</commons.release.2.version>
     <commons.release.2.desc>(requires JDK 1.5+)</commons.release.2.desc>
