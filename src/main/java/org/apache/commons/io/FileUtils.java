@@ -542,7 +542,7 @@ public class FileUtils {
      */
     private static void validateListFilesParameters(File directory, IOFileFilter fileFilter) {
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter 'directory' is not a directory");
+            throw new IllegalArgumentException("Parameter 'directory' is not a directory: " + directory);
         }
         if (fileFilter == null) {
             throw new NullPointerException("Parameter 'fileFilter' is null");
