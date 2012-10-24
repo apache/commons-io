@@ -2057,7 +2057,7 @@ public class FileUtils {
      * @throws UnsupportedCharsetException
      *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported by the VM
-     * @since IO 2.1
+     * @since 2.1
      */
     public static void write(File file, CharSequence data, String encoding, boolean append) throws IOException {
         write(file, data, Charsets.toCharset(encoding), append);
@@ -2086,7 +2086,7 @@ public class FileUtils {
      * @param append if {@code true}, then bytes will be added to the
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
-     * @since IO 2.1
+     * @since 2.1
      */
     public static void writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
         writeByteArrayToFile(file, data, 0, data.length, append);
