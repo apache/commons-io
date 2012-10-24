@@ -167,7 +167,7 @@
 
 <!-- ========== Unit Test Targets ========================================= -->
 
-    <target name="compile.tests" depends="compile, download-dependencies" description="Compile unit test cases dependant on JDK version">
+    <target name="compile.tests" depends="compile, download-dependencies" description="Compile unit test cases dependent on JDK version">
 
       <javac srcdir="${test.home}"
              destdir="${build.home}/test-classes"
