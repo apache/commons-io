@@ -163,7 +163,7 @@ public class ReversedLinesFileReader implements Closeable {
             }
         }
 
-        // aligned behaviour wiht BufferedReader that doesn't return a last, emtpy line
+        // aligned behaviour with BufferedReader that doesn't return a last, empty line
         if("".equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
             line = readLine();

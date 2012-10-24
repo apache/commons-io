@@ -17,9 +17,9 @@
 package org.apache.commons.io;
 
 /**
- * Monitors a thread, interrupting it of it reaches the specified timout.
+ * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
- * This works by sleeping until the specified timout amount and then
+ * This works by sleeping until the specified timeout amount and then
  * interrupting the thread being monitored. If the thread being monitored
  * completes its work before being interrupted, it should <code>interrupt()<code>
  * the <i>monitor</i> thread.
@@ -46,10 +46,10 @@ class ThreadMonitor implements Runnable {
     /**
      * Start monitoring the current thread.
      *
-     * @param timeout The timout amount in milliseconds
+     * @param timeout The timeout amount in milliseconds
      * or no timeout if the value is zero or less
      * @return The monitor thread or {@code null}
-     * if the timout amount is not greater than zero
+     * if the timeout amount is not greater than zero
      */
     public static Thread start(long timeout) {
         return start(Thread.currentThread(), timeout);
@@ -59,10 +59,10 @@ class ThreadMonitor implements Runnable {
      * Start monitoring the specified thread.
      *
      * @param thread The thread The thread to monitor
-     * @param timeout The timout amount in milliseconds
+     * @param timeout The timeout amount in milliseconds
      * or no timeout if the value is zero or less
      * @return The monitor thread or {@code null}
-     * if the timout amount is not greater than zero
+     * if the timeout amount is not greater than zero
      */
     public static Thread start(Thread thread, long timeout) {
         Thread monitor = null;
@@ -90,7 +90,7 @@ class ThreadMonitor implements Runnable {
      * Construct and new monitor.
      *
      * @param thread The thread to monitor
-     * @param timeout The timout amount in milliseconds
+     * @param timeout The timeout amount in milliseconds
      */
     private ThreadMonitor(Thread thread, long timeout) {
         this.thread = thread;
@@ -98,7 +98,7 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Sleep until the specified timout amount and then
+     * Sleep until the specified timeout amount and then
      * interrupt the thread being monitored.
      *
      * @see Runnable#run()

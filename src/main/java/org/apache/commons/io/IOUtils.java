@@ -2392,7 +2392,7 @@ public class IOUtils {
      * 
      * @param input where to read input from
      * @param buffer destination
-     * @param offset inital offset into buffer
+     * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
@@ -2438,7 +2438,7 @@ public class IOUtils {
      * 
      * @param input where to read input from
      * @param buffer destination
-     * @param offset inital offset into buffer
+     * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
@@ -2484,7 +2484,7 @@ public class IOUtils {
      * 
      * @param input where to read input from
      * @param buffer destination
-     * @param offset inital offset into buffer
+     * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
      * 
      * @throws IOException if there is a problem reading the file
@@ -2525,7 +2525,7 @@ public class IOUtils {
      * 
      * @param input where to read input from
      * @param buffer destination
-     * @param offset inital offset into buffer
+     * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
      * 
      * @throws IOException if there is a problem reading the file

@@ -42,7 +42,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     public static final IOFileFilter INSTANCE = TRUE;
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected TrueFileFilter() {
     }

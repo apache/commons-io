@@ -215,7 +215,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * generating an <tt>IOException</tt>.
      *
      * @throws IOException never (this method should not declare this exception
-     * but it has to now due to backwards compatability)
+     * but it has to now due to backwards compatibility)
      */
     @Override
     public void close() throws IOException {

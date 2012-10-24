@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * the low-order byte is stored in memory at the lowest address, and
  * subsequent bytes at higher addresses. For "Big Endian" architectures
  * (eg Motorola), the situation is reversed.
- * This class helps you solve this incompatability.
+ * This class helps you solve this incompatibility.
  * <p>
  * Origin of code: Excalibur
  *

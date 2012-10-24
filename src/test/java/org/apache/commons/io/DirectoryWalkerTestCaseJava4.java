@@ -306,7 +306,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
             fail("IOException: " + cancelName + " " + ex);
         }
 
-        // Suppress CancelException (use same file name as preceeding test)
+        // Suppress CancelException (use same file name as preceding test)
         try {
             List results = new TestCancelWalker(cancelName, true).find(javaDir);
             File lastFile = (File) results.get(results.size() - 1);
@@ -348,7 +348,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
             fail("IOException: " + cancelName + " " + ex);
         }
         
-        // Suppress CancelException (use same file name as preceeding test)
+        // Suppress CancelException (use same file name as preceding test)
         try {
             walker = new TestMultiThreadCancelWalker(cancelName, true);
             List results = walker.find(javaDir);

@@ -26,7 +26,7 @@ import org.apache.commons.io.IOCase;
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their path either in a case-sensitive, case-insensitive or
- * system dependant case sensitive way. A number of singleton instances
+ * system dependent case sensitive way. A number of singleton instances
  * are provided for the various case sensitivity options (using {@link IOCase})
  * and the reverse of those options.
  * <p>

@@ -89,7 +89,7 @@ Bug fixes from 1.0
     Bytes from calls to this method were not previously counted
 
 - NullOutputStream  [33481]
-    Remove unecessary synchronization
+    Remove unnecessary synchronization
 
 - AbstractFileFilter - accept(File, String)  [30992]
     Fixed broken implementation
