@@ -2089,10 +2089,44 @@ public class FileUtils {
      * @since IO 2.1
      */
     public static void writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
+        writeByteArrayToFile(file, data, 0, data.length, append);
+    }
+
+    /**
+     * Writes {@code len} bytes from the specified byte array starting
+     * at offset {@code off} to a file, creating the file if it does
+     * not exist.
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @param off   the start offset in the data
+     * @param len   the number of bytes to write
+     * @throws IOException in case of an I/O error
+     * @since 2.5
+     */
+    public static void writeByteArrayToFile(File file, byte[] data, int off, int len) throws IOException {
+        writeByteArrayToFile(file, data, off, len, false);
+    }
+
+    /**
+     * Writes {@code len} bytes from the specified byte array starting
+     * at offset {@code off} to a file, creating the file if it does
+     * not exist.
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @param off   the start offset in the data
+     * @param len   the number of bytes to write
+     * @param append if {@code true}, then bytes will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since 2.5
+     */
+    public static void writeByteArrayToFile(File file, byte[] data, int off, int len, boolean append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
-            out.write(data);
+            out.write(data, off, len);
             out.close(); // don't swallow close Exception if copy completes normally
         } finally {
             IOUtils.closeQuietly(out);

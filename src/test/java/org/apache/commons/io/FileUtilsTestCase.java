@@ -1733,6 +1733,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEqualContent(data, file);
     }
 
+    public void testWriteByteArrayToFile_WithOffsetAndLength() throws Exception {
+        File file = new File(getTestDirectory(), "write.obj");
+        byte[] data = new byte[] { 11, 21, 32, 41, 51 };
+        byte[] writtenData = new byte[3];
+        System.arraycopy(data, 1, writtenData, 0, 3);
+        FileUtils.writeByteArrayToFile(file, data, 1, 3);
+        assertEqualContent(writtenData, file);
+    }
+
     public void testWriteLines_4arg() throws Exception {
         Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
@@ -2023,6 +2032,30 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
     
+    public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+
+        byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
+
+        String expected = "This line was there before you..." + "this is brand new data";
+        String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        assertEquals(expected, actual);
+    }
+
+    public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldDeletePreviousFileLines() throws Exception {
+        File file = newFile("lines.txt");
+        FileUtils.writeStringToFile(file, "This line was there before you...");
+
+        byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        FileUtils.writeByteArrayToFile(file, data, 10, 22, false);
+
+        String expected = "this is brand new data";
+        String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        assertEquals(expected, actual);
+    }
+
     //-----------------------------------------------------------------------
     public void testChecksumCRC32() throws Exception {
         // create a test file
