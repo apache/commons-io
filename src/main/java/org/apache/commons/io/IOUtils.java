@@ -1749,6 +1749,30 @@ public class IOUtils {
     }
 
     /**
+     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code> using an internal buffer of the
+     * given size.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * <p>
+     * 
+     * @param input
+     *            the <code>InputStream</code> to read from
+     * @param output
+     *            the <code>OutputStream</code> to write to
+     * @param bufferSize
+     *            the bufferSize used to copy from the input to the output
+     * @return the number of bytes copied
+     * @throws NullPointerException
+     *             if the input or output is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @since 2.5
+     */
+    public static long copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
+        return copyLarge(input, output, new byte[bufferSize]);
+    }
+
+    /**
      * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>.
      * <p>
@@ -1766,7 +1790,7 @@ public class IOUtils {
      */
     public static long copyLarge(InputStream input, OutputStream output)
             throws IOException {
-        return copyLarge(input, output, new byte[DEFAULT_BUFFER_SIZE]);
+        return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**

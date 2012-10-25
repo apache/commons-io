@@ -86,6 +86,39 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         assertEquals(inData.length,count);
     }
 
+    public void testCopy_inputStreamToOutputStreamWithBufferSize() throws Exception {
+        testCopy_inputStreamToOutputStreamWithBufferSize(1);
+        testCopy_inputStreamToOutputStreamWithBufferSize(2);
+        testCopy_inputStreamToOutputStreamWithBufferSize(4);
+        testCopy_inputStreamToOutputStreamWithBufferSize(8);
+        testCopy_inputStreamToOutputStreamWithBufferSize(16);
+        testCopy_inputStreamToOutputStreamWithBufferSize(32);
+        testCopy_inputStreamToOutputStreamWithBufferSize(64);
+        testCopy_inputStreamToOutputStreamWithBufferSize(128);
+        testCopy_inputStreamToOutputStreamWithBufferSize(256);
+        testCopy_inputStreamToOutputStreamWithBufferSize(512);
+        testCopy_inputStreamToOutputStreamWithBufferSize(1024);
+        testCopy_inputStreamToOutputStreamWithBufferSize(2048);
+        testCopy_inputStreamToOutputStreamWithBufferSize(4096);
+        testCopy_inputStreamToOutputStreamWithBufferSize(8192);
+        testCopy_inputStreamToOutputStreamWithBufferSize(16384);
+    }
+
+    private void testCopy_inputStreamToOutputStreamWithBufferSize(int bufferSize) throws Exception {
+        InputStream in = new ByteArrayInputStream(inData);
+        in = new YellOnCloseInputStream(in);
+
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+
+        long count = IOUtils.copy(in, out, bufferSize);
+        
+        assertEquals("Not all bytes were read", 0, in.available());
+        assertEquals("Sizes differ", inData.length, baout.size());
+        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length,count);
+    }
+
     public void testCopy_inputStreamToOutputStream_nullIn() throws Exception {
         OutputStream out = new ByteArrayOutputStream();
         try {
