@@ -2382,6 +2382,11 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#skip(long)} may
      * not skip as many bytes as requested (most likely because of reaching EOF).
+     * <p>
+     * Note that the implementation uses {@link #skip(InputStream, long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of characters are skipped.
+     * </p>
      * 
      * @param input stream to skip
      * @param toSkip the number of bytes to skip
@@ -2407,6 +2412,11 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#skip(long)} may
      * not skip as many characters as requested (most likely because of reaching EOF).
+     * <p>
+     * Note that the implementation uses {@link #skip(Reader, long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of characters are skipped.
+     * </p>
      * 
      * @param input stream to skip
      * @param toSkip the number of characters to skip
