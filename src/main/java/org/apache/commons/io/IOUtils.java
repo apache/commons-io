@@ -2286,13 +2286,21 @@ public class IOUtils {
      * Skip bytes from an input byte stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
-     * subclasses of {@link Reader}.
+     * skip() implementations in subclasses of {@link InputStream}.
+     * <p>
+     * Note that the implementation uses {@link InputStream#read(byte[], int, int)} rather
+     * than delegating to {@link InputStream#skip(long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of bytes are skipped.
+     * </p>
+     *
      *   
      * @param input byte stream to skip
      * @param toSkip number of bytes to skip.
      * @return number of bytes actually skipped.
      * 
      * @see InputStream#skip(long)
+     * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
@@ -2312,6 +2320,7 @@ public class IOUtils {
         }
         long remain = toSkip;
         while (remain > 0) {
+            // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
             long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
@@ -2325,13 +2334,20 @@ public class IOUtils {
      * Skip characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
-     * subclasses of {@link Reader}.
-     *   
+     * skip() implementations in subclasses of {@link Reader}.
+     * <p>
+     * Note that the implementation uses {@link Reader#read(char[], int, int)} rather
+     * than delegating to {@link Reader#skip(long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of characters are skipped.
+     * </p>
+     *
      * @param input character stream to skip
      * @param toSkip number of characters to skip.
      * @return number of characters actually skipped.
      * 
      * @see Reader#skip(long)
+     * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
      * 
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
@@ -2351,6 +2367,7 @@ public class IOUtils {
         }
         long remain = toSkip;
         while (remain > 0) {
+            // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
             long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
