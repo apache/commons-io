@@ -189,5 +189,10 @@ public class CharSequenceInputStreamTest {
         testIO_356(10, 10); // OK
         testIO_356(10, 20); // OK
         testIO_356(10, 13); // fails
+        for(int bs = 1; bs <= 10; bs++) {
+            for(int ds = 1; ds <= 20; ds++) {
+                testIO_356(bs, ds);                
+            }
+        }
     }
 }
