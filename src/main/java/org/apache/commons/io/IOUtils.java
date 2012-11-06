@@ -1826,7 +1826,12 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
+     * Note that the implementation uses {@link #skip(InputStream, long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of characters are skipped.
+     * </p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * 
      * @param input  the <code>InputStream</code> to read from
@@ -1850,7 +1855,12 @@ public class IOUtils {
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
+     * Note that the implementation uses {@link #skip(InputStream, long)}.
+     * This means that the method may be considerably less efficient than using the actual skip implementation,
+     * this is done to guarantee that the correct number of characters are skipped.
+     * </p>
      * 
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
