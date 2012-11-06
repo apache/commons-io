@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,6 +40,8 @@ public class CharSequenceInputStreamTest {
         LARGE_TEST_STRING = buffer.toString();
     }
     
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     private Random random = new Random();
     
     private void testWithSingleByteRead(String testString, String charsetName) throws IOException {
@@ -164,4 +167,27 @@ public class CharSequenceInputStreamTest {
         assertTrue(r.markSupported());
     }
 
+    private void testIO_356(int bufferSize, int dataSize) throws Exception {
+        CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, "UTF-8", bufferSize);
+
+        is.mark(dataSize);
+
+        byte[] data1 = new byte[dataSize];
+        is.read(data1);
+
+        is.reset(); // should allow data to be re-read
+
+        byte[] data2 = new byte[dataSize];
+        is.read(data2);
+
+        is.close();
+        assertArrayEquals("bufferSize="+bufferSize+" dataSize="+dataSize, data1, data2); // data buffers should be identical
+    }
+    
+    @Test
+    public void testIO_356() throws Exception {
+        testIO_356(10, 10); // OK
+        testIO_356(10, 20); // OK
+        testIO_356(10, 13); // fails
+    }
 }
