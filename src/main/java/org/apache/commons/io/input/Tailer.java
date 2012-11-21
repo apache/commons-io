@@ -355,7 +355,6 @@ public class Tailer implements Runnable {
                 } catch (FileNotFoundException e) {
                     listener.fileNotFound();
                 }
-
                 if (reader == null) {
                     try {
                         Thread.sleep(delayMillis);
@@ -368,19 +367,13 @@ public class Tailer implements Runnable {
                     reader.seek(position);
                 }
             }
-
             while (getRun()) {
-
                 boolean newer = FileUtils.isFileNewer(file, last); // IO-279, must be done first
-
                 // Check the file length to see if it was rotated
                 long length = file.length();
-
                 if (length < position) {
-
                     // File was rotated
                     listener.fileRotated();
-
                     // Reopen the reader after rotation
                     try {
                         // Ensure that the old file is closed iff we re-open it successfully
@@ -395,18 +388,13 @@ public class Tailer implements Runnable {
                     }
                     continue;
                 } else {
-
                     // File was not rotated
-
                     // See if the file needs to be read again
                     if (length > position) {
-
                         // The file has more content than it did last time
                         position = readLines(reader);
                         last = System.currentTimeMillis();
-
                     } else if (newer) {
-
                         /*
                          * This can happen if the file is truncated or overwritten with the exact same length of
                          * information. In cases like this, the file position needs to be reset
@@ -431,11 +419,8 @@ public class Tailer implements Runnable {
                     reader.seek(position);
                 }
             }
-
         } catch (Exception e) {
-
             listener.handle(e);
-
         } finally {
             IOUtils.closeQuietly(reader);
         }
