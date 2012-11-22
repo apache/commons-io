@@ -40,8 +40,7 @@ import org.apache.commons.io.IOUtils;
  *      public void handle(String line) {
  *          System.out.println(line);
  *      }
- *  }
- * </pre>
+ *  }</pre>
  * 
  * <h2>2. Using a Tailer</h2>
  *
@@ -64,10 +63,9 @@ import org.apache.commons.io.IOUtils;
  *
  * <pre>
  *      TailerListener listener = new MyTailerListener();
- *      Tailer tailer = Tailer.create(file, listener, delay);
- * </pre>
+ *      Tailer tailer = Tailer.create(file, listener, delay);</pre>
  *      
- * <h3>2.2 Use an Executor</h3>
+ * <h3>2.2 Using an Executor</h3>
  * 
  * <pre>
  *      TailerListener listener = new MyTailerListener();
@@ -84,25 +82,32 @@ import org.apache.commons.io.IOUtils;
  * </pre>
  *      
  *      
- * <h3>2.3 Use a Thread</h3>
+ * <h3>2.3 Using a Thread</h3>
  * <pre>
  *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = new Tailer(file, listener, delay);
  *      Thread thread = new Thread(tailer);
  *      thread.setDaemon(true); // optional
- *      thread.start();
- * </pre>
+ *      thread.start();</pre>
  *
- * <h2>3. Stop Tailing</h3>
+ * <h2>3. Stopping a Tailer</h3>
  * <p>Remember to stop the tailer when you have done with it:</p>
  * <pre>
  *      tailer.stop();
  * </pre>
  *
+ * <h2>4. Interrupting a Tailer</h3>
+ * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.</p>
+ * <pre>
+ *      thread.interrupt();
+ * </pre>
+ * <p>If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.</p>
+ * 
  * @see TailerListener
  * @see TailerListenerAdapter
  * @version $Id$
  * @since 2.0
+ * @since 2.5 Updated behavior and documentation for {@link Thread#interrupt()}
  */
 public class Tailer implements Runnable {
 
@@ -356,10 +361,7 @@ public class Tailer implements Runnable {
                     listener.fileNotFound();
                 }
                 if (reader == null) {
-                    try {
-                        Thread.sleep(delayMillis);
-                    } catch (InterruptedException e) {
-                    }
+                    Thread.sleep(delayMillis);
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
@@ -410,20 +412,25 @@ public class Tailer implements Runnable {
                 if (reOpen) {
                     IOUtils.closeQuietly(reader);
                 }
-                try {
-                    Thread.sleep(delayMillis);
-                } catch (InterruptedException e) {
-                }
+                Thread.sleep(delayMillis);
                 if (getRun() && reOpen) {
                     reader = new RandomAccessFile(file, RAF_MODE);
                     reader.seek(position);
                 }
             }
-        } catch (Exception e) {
-            listener.handle(e);
+        } catch (InterruptedException e) {            
+            Thread.currentThread().interrupt();
+            stop(e);
+        } catch (Exception e) {            
+            stop(e);
         } finally {
             IOUtils.closeQuietly(reader);
         }
+    }
+
+    private void stop(Exception e) {
+        listener.handle(e);
+        stop();
     }
 
     /**

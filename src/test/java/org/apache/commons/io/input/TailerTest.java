@@ -199,7 +199,8 @@ public class TailerTest extends FileBasedTestCase {
         Thread.sleep(testDelayMillis);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
-        assertNull("Should not generate Exception", listener.exception);
+        assertNotNull("Missing InterruptedException", listener.exception);
+        assertTrue("Unexpected Exception: " + listener.exception, listener.exception instanceof InterruptedException);
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertEquals("fileNotFound should not be called", 0 , listener.notFound);
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
@@ -271,6 +272,33 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
+    }
+
+    /**
+     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
+     * 
+     * @throws Exception
+     */
+    public void testInterrupt() throws Exception {
+        final File file = new File(getTestDirectory(), "nosuchfile");
+        assertFalse("nosuchfile should not exist", file.exists());
+        final TestTailerListener listener = new TestTailerListener();
+        // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
+        int delay = 1000;
+        int idle = 50; // allow time for thread to work
+        Tailer tailer = new Tailer(file, listener, delay, false, 4096);
+        Thread thread = new Thread(tailer);
+        thread.setDaemon(true);
+        thread.start();
+        Thread.sleep(idle);
+        thread.interrupt();
+        tailer = null;
+        Thread.sleep(delay + idle);
+        assertNotNull("Missing InterruptedException", listener.exception);
+        assertTrue("Unexpected Exception: " + listener.exception, listener.exception instanceof InterruptedException);
+        assertEquals("Expected init to be called", 1, listener.initialised);
+        assertTrue("fileNotFound should be called", listener.notFound > 0);
+        assertEquals("fileRotated should be not be called", 0, listener.rotated);
     }
 
     public void testStopWithNoFileUsingExecutor() throws Exception {
