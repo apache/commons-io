@@ -940,16 +940,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         ByteArrayOutputStream os = null;
         try {
             // Create streams
-            is = new ByteArrayInputStream( iarr);
+            is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
 
-            // Test our copy method 
-            IOUtils.copyLarge( is, os, 1000, 100);
-            fail( "Should have thrown EOFException");
-        }
-        catch( EOFException eofe){
-        }
-        finally {
+            // Test our copy method
+            IOUtils.copyLarge(is, os, 1000, 100);
+            fail("Should have thrown EOFException");
+        } catch (EOFException eofe) {
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
