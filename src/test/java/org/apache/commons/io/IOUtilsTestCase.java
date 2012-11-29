@@ -885,7 +885,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     
     private byte[] iarr = null;
     
-    public void testNoSkip() throws IOException {
+    public void testCopyLarge_NoSkip() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
@@ -910,7 +910,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testSkip() throws IOException {
+    public void testCopyLarge_Skip() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
@@ -935,7 +935,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testSkipInvalid() throws IOException {
+    public void testCopyLarge_SkipInvalid() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
@@ -953,7 +953,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testFullLength() throws IOException {
+    public void testCopyLarge_FullLength() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
@@ -978,7 +978,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testExtraLength() throws IOException {
+    public void testCopyLarge_ExtraLength() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
         try {
@@ -1006,7 +1006,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     private char[] carr = null;
 
-    public void testCharNoSkip() throws IOException {
+    public void testCopyLarge_CharNoSkip() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
@@ -1031,7 +1031,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCharSkip() throws IOException {
+    public void testCopyLarge_CharSkip() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
@@ -1056,7 +1056,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCharSkipInvalid() throws IOException {
+    public void testCopyLarge_CharSkipInvalid() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
@@ -1074,7 +1074,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCharFullLength() throws IOException {
+    public void testCopyLarge_CharFullLength() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
@@ -1099,7 +1099,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCharExtraLength() throws IOException {
+    public void testCopyLarge_CharExtraLength() throws IOException {
         CharArrayReader is = null;
         CharArrayWriter os = null;
         try {
