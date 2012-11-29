@@ -110,12 +110,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         super(name);
     }
 
-    public void testCloseQuietlyNullSelector() {
+    public void testCloseQuietly_SelectorNull() {
         Selector selector = null;
         IOUtils.closeQuietly(selector);
     }
 
-    public void testCloseableCloseQuietlyOnException() {
+    public void testCloseQuietly_CloseableIOException() {
         IOUtils.closeQuietly(new Closeable() {            
             public void close() throws IOException {
                 throw new IOException();
@@ -123,7 +123,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         });
     }
 
-    public void testSocketCloseQuietlyOnException() {
+    public void testCloseQuietly_SocketIOException() {
         IOUtils.closeQuietly(new Socket() {            
             @Override
             public void close() throws IOException {
@@ -132,7 +132,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         });
     }
 
-    public void testServerSocketCloseQuietlyOnException() throws IOException {
+    public void testCloseQuietly_ServerSocketIOException() throws IOException {
         IOUtils.closeQuietly(new ServerSocket() {            
             @Override
             public void close() throws IOException {
@@ -141,17 +141,17 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         });
     }
 
-    public void testSocketCloseQuietly() {
+    public void testCloseQuietly_Socket() {
         IOUtils.closeQuietly((Socket) null);
         IOUtils.closeQuietly(new Socket());
     }
 
-    public void testServerSocketCloseQuietly() throws IOException {
+    public void testCloseQuietly_ServerSocket() throws IOException {
         IOUtils.closeQuietly((ServerSocket) null);
         IOUtils.closeQuietly(new ServerSocket());
     }
 
-    public void testCloseQuietlySelector() {
+    public void testCloseQuietly_Selector() {
         Selector selector = null;
         try {
             selector = Selector.open();
@@ -161,7 +161,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testCloseQuietlySelectorIOException() {
+    public void testCloseQuietly_SelectorIOException() {
         Selector selector = new SelectorAdapter() {
             @Override
             public void close() throws IOException {
@@ -171,7 +171,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(selector);
     }
 
-    public void testCloseQuietlySelectorTwice() {
+    public void testCloseQuietly_SelectorTwice() {
         Selector selector = null;
         try {
             selector = Selector.open();
@@ -561,7 +561,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testReaderToCharArray() throws Exception {
+    public void testToCharArray_Reader() throws Exception {
         FileReader fr = new FileReader(m_testFile);
         try {
             char[] out = IOUtils.toCharArray(fr);
