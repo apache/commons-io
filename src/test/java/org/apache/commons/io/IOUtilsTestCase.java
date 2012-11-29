@@ -201,7 +201,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertTrue("Content not equal according to java.util.Arrays#equals()", Arrays.equals(b0, b1));
     }
 
-    public void testInputStreamToString() throws Exception {
+    public void testToString_InputStream() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             String out = IOUtils.toString(fin);
@@ -257,7 +257,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
-    public void testStringToWriter() throws Exception {
+    public void testCopy_String_Writer() throws Exception {
         File destination = newFile("copy6.txt");
         FileReader fin = new FileReader(m_testFile);
         String str;
@@ -404,7 +404,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
-    public void testByteArrayToWriter() throws Exception {
+    public void testCopy_ByteArray_Writer() throws Exception {
         File destination = newFile("copy7.txt");
         FileInputStream fin = new FileInputStream(m_testFile);
         byte[] in;
@@ -429,7 +429,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
-    public void testByteArrayToString() throws Exception {
+    public void testToString_ByteArray() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             byte[] in = IOUtils.toByteArray(fin);
@@ -756,7 +756,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertTrue(IOUtils.contentEqualsIgnoreEOL(r1, r2));
     }
 
-    public void testContentEqualsReaderReader() throws Exception {
+    public void testContentEquals_Reader_Reader() throws Exception {
         assertTrue(IOUtils.contentEquals(new StringReader(""), new StringReader("")));
         assertTrue(IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
@@ -764,7 +764,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
     }
 
-    public void testReadStream() throws Exception {
+    public void testReadFully_InputStream_ByteArray() throws Exception {
         final int size = 1027;
 
         byte[] buffer = new byte[size];
