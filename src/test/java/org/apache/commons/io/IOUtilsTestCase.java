@@ -182,7 +182,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    // -----------------------------------------------------------------------
     public void testConstants() throws Exception {
         assertEquals('/', IOUtils.DIR_SEPARATOR_UNIX);
         assertEquals('\\', IOUtils.DIR_SEPARATOR_WINDOWS);
@@ -197,7 +196,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    // -----------------------------------------------------------------------
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(byte[] b0, byte[] b1) {
         assertTrue("Content not equal according to java.util.Arrays#equals()", Arrays.equals(b0, b1));
@@ -573,7 +571,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    // -----------------------------------------------------------------------
     public void testReadLines_InputStream() throws Exception {
         File file = newFile("lines.txt");
         InputStream in = null;
@@ -591,7 +588,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    // -----------------------------------------------------------------------
     public void testReadLines_InputStream_String() throws Exception {
         File file = newFile("lines.txt");
         InputStream in = null;
@@ -609,7 +605,6 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    // -----------------------------------------------------------------------
     public void testReadLines_Reader() throws Exception {
         File file = newFile("lines.txt");
         Reader in = null;
