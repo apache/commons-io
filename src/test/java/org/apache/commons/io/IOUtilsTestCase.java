@@ -215,7 +215,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testReaderToString() throws Exception {
+    public void testToString_Reader() throws Exception {
         FileReader fin = new FileReader(m_testFile);
         try {
             String out = IOUtils.toString(fin);
@@ -292,7 +292,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         Assert.assertArrayEquals(expecteds, actuals);
     }
     
-    public void testInputStreamToByteArray() throws Exception {
+    public void testToByteArray_InputStream() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             byte[] out = IOUtils.toByteArray(fin);
@@ -305,7 +305,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testInputStreamToByteArray_Size() throws Exception {
+    public void testToByteArray_InputStream_Size() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             byte[] out = IOUtils.toByteArray(fin, m_testFile.length());
@@ -318,7 +318,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testInputStreamToByteArray_NegativeSize() throws Exception {
+    public void testToByteArray_InputStream_NegativeSize() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
@@ -333,7 +333,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     }
 
-    public void testInputStreamToByteArray_ZeroSize() throws Exception {
+    public void testToByteArray_InputStream_SizeZero() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
@@ -345,7 +345,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testInputStreamToByteArray_IllegalSize() throws Exception {
+    public void testToByteArray_InputStream_SizeIllegal() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
@@ -360,7 +360,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     }
 
-    public void testInputStreamToByteArray_LongSize() throws Exception {
+    public void testToByteArray_InputStream_SizeLong() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
@@ -375,7 +375,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     }
 
-    public void testInputStreamToBufferedInputStream() throws Exception {
+    public void testToBufferedInputStream_InputStream() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             InputStream in = IOUtils.toBufferedInputStream(fin);
@@ -391,7 +391,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
-    public void testStringToByteArray() throws Exception {
+    public void testToByteArray_String() throws Exception {
         FileReader fin = new FileReader(m_testFile);
         try {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
@@ -443,19 +443,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testToByteArrayFromURI() throws Exception {
+    public void testToByteArray_URI() throws Exception {
         URI url = m_testFile.toURI();
         byte[] actual = IOUtils.toByteArray(url);
         Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
-    public void testToByteArrayFromURL() throws Exception {
+    public void testToByteArray_URL() throws Exception {
         URL url = m_testFile.toURI().toURL();
         byte[] actual = IOUtils.toByteArray(url);
         Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
-    public void testToByteArrayFromURLConnection() throws Exception {
+    public void testToByteArray_URLConnection() throws Exception {
         URLConnection urlConn = m_testFile.toURI().toURL().openConnection();
         byte[] actual;
         try {
@@ -474,7 +474,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      *             on error
      */
-    public void testCharSequenceToInputStream() throws Exception {
+    public void testToInputStream_CharSequence() throws Exception {
         CharSequence csq = new StringBuilder("Abc123Xyz!");
         InputStream inStream = IOUtils.toInputStream(csq);
         byte[] bytes = IOUtils.toByteArray(inStream);
@@ -495,7 +495,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      *             on error
      */
-    public void testStringToInputStream() throws Exception {
+    public void testToInputStream_String() throws Exception {
         String str = "Abc123Xyz!";
         InputStream inStream = IOUtils.toInputStream(str);
         byte[] bytes = IOUtils.toByteArray(inStream);
@@ -535,7 +535,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         deleteFile(destination);
     }
 
-    public void testInputStreamToCharArray() throws Exception {
+    public void testToCharArray_InputStream() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             char[] out = IOUtils.toCharArray(fin);
@@ -548,7 +548,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testInputStreamToCharArrayWithEncoding() throws Exception {
+    public void testToCharArray_InputStream_CharsetName() throws Exception {
         FileInputStream fin = new FileInputStream(m_testFile);
         try {
             char[] out = IOUtils.toCharArray(fin, "UTF-8");
@@ -627,7 +627,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testSkipStream() throws Exception {
+    public void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
 
         InputStream input = new ByteArrayInputStream(new byte[size]);
@@ -649,7 +649,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     }
 
-    public void testSkipReader() throws Exception {
+    public void testSkipFully_Reader() throws Exception {
         final int size = 1027;
 
         Reader input = new CharArrayReader(new char[size]);
@@ -670,7 +670,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(input);
     }
 
-    public void testSkipFileReader() throws Exception {
+    public void testSkip_FileReader() throws Exception {
         FileReader in = new FileReader(m_testFile);
         try {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
@@ -681,7 +681,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testSkipFileInput() throws Exception {
+    public void testSkip_InputStream() throws Exception {
         InputStream in = new FileInputStream(m_testFile);
         try {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
@@ -692,48 +692,48 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    private void testURIToString(String encoding) throws Exception {
-        URI url = m_testFile.toURI();
-        String out = IOUtils.toString(url, encoding);
+    private void testToString_URI(String encoding) throws Exception {
+        URI uri = m_testFile.toURI();
+        String out = IOUtils.toString(uri, encoding);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    public void testURIToStringNoEncoding() throws Exception {
+    public void testToString_URI() throws Exception {
         URI url = m_testFile.toURI();
         String out = IOUtils.toString(url);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    public void testURIToStringNullEncoding() throws Exception {
-        testURIToString(null);
+    public void testToString_URI_CharsetNameNull() throws Exception {
+        testToString_URI(null);
     }
 
-    public void testURIToStringUsAciiEncoding() throws Exception {
-        testURIToString("US-ASCII");
+    public void testToString_URI_CharsetName() throws Exception {
+        testToString_URI("US-ASCII");
     }
 
-    private void testURLToString(String encoding) throws Exception {
+    private void testToString_URL(String encoding) throws Exception {
         URL url = m_testFile.toURI().toURL();
         String out = IOUtils.toString(url, encoding);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    public void testURLToStringNoEncoding() throws Exception {
+    public void testToString_URL() throws Exception {
         URL url = m_testFile.toURI().toURL();
         String out = IOUtils.toString(url);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    public void testURLToStringNullEncoding() throws Exception {
-        testURLToString(null);
+    public void testToString_URL_CharsetNameNull() throws Exception {
+        testToString_URL(null);
     }
 
-    public void testURLToStringUsAciiEncoding() throws Exception {
-        testURLToString("US-ASCII");
+    public void testToString_URL_CharsetName() throws Exception {
+        testToString_URL("US-ASCII");
     }
 
     public void testContentEqualsIgnoreEOL() throws Exception {
@@ -841,7 +841,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    public void testReadReader() throws Exception {
+    public void testReadFully_Reader() throws Exception {
         final int size = 1027;
 
         char[] buffer = new char[size];
@@ -864,7 +864,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(input);
     }
     
-    public void testReadReaderWithOffset() throws Exception {
+    public void testReadFully_Reader_Offset() throws Exception {
         Reader reader = new StringReader("abcd1234");
         char[] buffer = "wx00000000".toCharArray();
         IOUtils.readFully(reader, buffer, 2, 8);
@@ -872,7 +872,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(reader);
     }
     
-    public void testReadStreamWithOffset() throws Exception {
+    public void testReadFully_InputStream_Offset() throws Exception {
         byte[] bytes = "abcd1234".getBytes("UTF-8");
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         byte[] buffer = "wx00000000".getBytes("UTF-8");
