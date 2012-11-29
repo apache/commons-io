@@ -890,22 +890,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         ByteArrayOutputStream os = null;
         try {
             // Create streams
-            is = new ByteArrayInputStream( iarr);
+            is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
 
-            // Test our copy method 
-            assertEquals(100, IOUtils.copyLarge( is, os, 0, 100));
+            // Test our copy method
+            assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             byte[] oarr = os.toByteArray();
-            
+
             // check that output length is correct
-            assertEquals( 100, oarr.length );
+            assertEquals(100, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals( -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals(-1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -916,22 +915,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         ByteArrayOutputStream os = null;
         try {
             // Create streams
-            is = new ByteArrayInputStream( iarr);
+            is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
 
-            // Test our copy method 
-            assertEquals(100, IOUtils.copyLarge( is, os, 10, 100));
+            // Test our copy method
+            assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             byte[] oarr = os.toByteArray();
-            
+
             // check that output length is correct
-            assertEquals( 100, oarr.length );
+            assertEquals(100, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 11, oarr[1] );
-            assertEquals( 79, oarr[69] );
-            assertEquals( -1, oarr[70] );
-            
-        }
-        finally {
+            assertEquals(11, oarr[1]);
+            assertEquals(79, oarr[69]);
+            assertEquals(-1, oarr[70]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -962,22 +960,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         ByteArrayOutputStream os = null;
         try {
             // Create streams
-            is = new ByteArrayInputStream( iarr);
+            is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
 
-            // Test our copy method 
-            assertEquals(200, IOUtils.copyLarge( is, os, 0, -1));
+            // Test our copy method
+            assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             byte[] oarr = os.toByteArray();
-            
+
             // check that output length is correct
-            assertEquals( 200, oarr.length );
+            assertEquals(200, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals( -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals(-1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -988,23 +985,22 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         ByteArrayOutputStream os = null;
         try {
             // Create streams
-            is = new ByteArrayInputStream( iarr);
+            is = new ByteArrayInputStream(iarr);
             os = new ByteArrayOutputStream();
 
             // Test our copy method
             // for extra length, it reads till EOF
-            assertEquals(200, IOUtils.copyLarge( is, os, 0, 2000));
+            assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             byte[] oarr = os.toByteArray();
-            
+
             // check that output length is correct
-            assertEquals( 200, oarr.length );
+            assertEquals(200, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals( -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals(-1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -1017,22 +1013,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         CharArrayWriter os = null;
         try {
             // Create streams
-            is = new CharArrayReader( carr);
+            is = new CharArrayReader(carr);
             os = new CharArrayWriter();
 
-            // Test our copy method 
-            assertEquals(100, IOUtils.copyLarge( is, os, 0, 100));
+            // Test our copy method
+            assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             char[] oarr = os.toCharArray();
-            
+
             // check that output length is correct
-            assertEquals( 100, oarr.length );
+            assertEquals(100, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals((char) -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals((char) -1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -1043,22 +1038,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         CharArrayWriter os = null;
         try {
             // Create streams
-            is = new CharArrayReader( carr);
+            is = new CharArrayReader(carr);
             os = new CharArrayWriter();
 
-            // Test our copy method 
-            assertEquals(100, IOUtils.copyLarge( is, os, 10, 100));
+            // Test our copy method
+            assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             char[] oarr = os.toCharArray();
-            
+
             // check that output length is correct
-            assertEquals( 100, oarr.length );
+            assertEquals(100, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 11, oarr[1] );
-            assertEquals( 79, oarr[69] );
-            assertEquals((char) -1, oarr[70] );
-            
-        }
-        finally {
+            assertEquals(11, oarr[1]);
+            assertEquals(79, oarr[69]);
+            assertEquals((char) -1, oarr[70]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -1069,16 +1063,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         CharArrayWriter os = null;
         try {
             // Create streams
-            is = new CharArrayReader( carr);
+            is = new CharArrayReader(carr);
             os = new CharArrayWriter();
 
-            // Test our copy method 
-            IOUtils.copyLarge( is, os, 1000, 100);
-            fail( "Should have thrown EOFException");
-        }
-        catch( EOFException eofe){
-        }
-        finally {
+            // Test our copy method
+            IOUtils.copyLarge(is, os, 1000, 100);
+            fail("Should have thrown EOFException");
+        } catch (EOFException eofe) {
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -1089,22 +1081,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         CharArrayWriter os = null;
         try {
             // Create streams
-            is = new CharArrayReader( carr);
+            is = new CharArrayReader(carr);
             os = new CharArrayWriter();
 
-            // Test our copy method 
-            assertEquals(200, IOUtils.copyLarge( is, os, 0, -1));
+            // Test our copy method
+            assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             char[] oarr = os.toCharArray();
-            
+
             // check that output length is correct
-            assertEquals( 200, oarr.length );
+            assertEquals(200, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals((char) -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals((char) -1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
@@ -1115,23 +1106,22 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         CharArrayWriter os = null;
         try {
             // Create streams
-            is = new CharArrayReader( carr);
+            is = new CharArrayReader(carr);
             os = new CharArrayWriter();
 
             // Test our copy method
             // for extra length, it reads till EOF
-            assertEquals(200, IOUtils.copyLarge( is, os, 0, 2000));
+            assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
             char[] oarr = os.toCharArray();
-            
+
             // check that output length is correct
-            assertEquals( 200, oarr.length );
+            assertEquals(200, oarr.length);
             // check that output data corresponds to input data
-            assertEquals( 1, oarr[1] );
-            assertEquals( 79, oarr[79] );
-            assertEquals((char) -1, oarr[80] );
-            
-        }
-        finally {
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals((char) -1, oarr[80]);
+
+        } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
         }
