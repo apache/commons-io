@@ -998,7 +998,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     /**
      * Test for {@link IOUtils#toInputStream(CharSequence)} and {@link IOUtils#toInputStream(CharSequence, String)}.
      * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
-     * {@link #testInputStreamToByteArray()} to ensure this method functions correctly.
+     * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      * 
      * @throws Exception
      *             on error
@@ -1021,7 +1021,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     /**
      * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}. Note, this test
      * utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
-     * {@link #testInputStreamToByteArray()} to ensure this method functions correctly.
+     * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
      * 
      * @throws Exception
      *             on error
