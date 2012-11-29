@@ -510,7 +510,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
-    public void testByteArrayToOutputStream() throws Exception {
+    public void testCopy_ByteArray_OutputStream() throws Exception {
         File destination = newFile("copy8.txt");
         FileInputStream fin = new FileInputStream(m_testFile);
         byte[] in;
