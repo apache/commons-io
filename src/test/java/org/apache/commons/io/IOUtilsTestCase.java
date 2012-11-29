@@ -38,6 +38,8 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
 import java.util.Arrays;
 import java.util.List;
@@ -789,6 +791,54 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
         IOUtils.closeQuietly(input);
 
+    }
+
+    public void testRead_ReadableByteChannel() throws Exception {
+        ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
+        final FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        FileChannel input = fileInputStream.getChannel();
+        try {
+            assertEquals(FILE_SIZE, IOUtils.read(input, buffer));
+            assertEquals(0, IOUtils.read(input, buffer));
+            assertEquals(0, buffer.remaining());
+            assertEquals(0, input.read(buffer));
+            buffer.clear();
+            try {
+                IOUtils.readFully(input, buffer);
+                fail("Should have failed with EOFxception");
+            } catch (EOFException expected) {
+                // expected
+            }
+        } finally {
+            IOUtils.closeQuietly(input);
+            IOUtils.closeQuietly(fileInputStream);
+        }}
+
+    public void testReadFully_ReadableByteChannel() throws Exception {
+        ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
+        final FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        FileChannel input = fileInputStream.getChannel();
+        try {
+            IOUtils.readFully(input, buffer);
+            assertEquals(FILE_SIZE, buffer.position());
+            assertEquals(0, buffer.remaining());
+            assertEquals(0, input.read(buffer));
+            IOUtils.readFully(input, buffer);
+            assertEquals(FILE_SIZE, buffer.position());
+            assertEquals(0, buffer.remaining());
+            assertEquals(0, input.read(buffer));
+            IOUtils.readFully(input, buffer);
+            buffer.clear();
+            try {
+                IOUtils.readFully(input, buffer);
+                fail("Should have failed with EOFxception");
+            } catch (EOFException expected) {
+                // expected
+            }
+        } finally {
+            IOUtils.closeQuietly(input);
+            IOUtils.closeQuietly(fileInputStream);
+        }
     }
 
     public void testReadReader() throws Exception {

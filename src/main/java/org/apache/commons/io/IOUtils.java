@@ -38,6 +38,8 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
@@ -2538,6 +2540,30 @@ public class IOUtils {
     }
 
     /**
+     * Reads bytes from a ReadableByteChannel.
+     * <p>
+     * This implementation guarantees that it will read as many bytes
+     * as possible before giving up; this may not always be the case for
+     * subclasses of {@link ReadableByteChannel}.
+     *
+     * @param input the byte channel to read
+     * @param buffer byte buffer destination
+     * @return the actual length read; may be less than requested if EOF was reached
+     * @throws IOException if a read error occurs
+     * @since 2.5
+     */
+    public static int read(ReadableByteChannel input, ByteBuffer buffer) throws IOException {
+        int length = buffer.remaining();
+        while (buffer.remaining() > 0) {
+            int count = input.read(buffer);
+            if (EOF == count) { // EOF
+                break;
+            }
+        }
+        return length - buffer.remaining();
+    }
+
+    /**
      * Read the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
@@ -2617,5 +2643,26 @@ public class IOUtils {
      */
     public static void readFully(InputStream input, byte[] buffer) throws IOException {
         readFully(input, buffer, 0, buffer.length);
+    }
+
+    /**
+     * Reads the requested number of bytes or fail if there are not enough left.
+     * <p>
+     * This allows for the possibility that {@link ReadableByteChannel#read(ByteBuffer)} may
+     * not read as many bytes as requested (most likely because of reaching EOF).
+     *
+     * @param input the byte channel to read
+     * @param buffer byte buffer destination
+     *
+     * @throws IOException if there is a problem reading the file
+     * @throws EOFException if the number of bytes read was incorrect
+     * @since 2.5
+     */
+    public static void readFully(ReadableByteChannel input, ByteBuffer buffer) throws IOException {
+        int expected = buffer.remaining();
+        int actual = read(input, buffer);
+        if (actual != expected) {
+            throw new EOFException("Length to read: " + expected + " actual: " + actual);
+        }
     }
 }
