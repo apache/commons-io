@@ -31,16 +31,16 @@ import org.junit.Test;
 public class CharsetsTestCase {
 
     @Test
+    public void testIso8859_1() {
+        Assert.assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
+    }
+    
+    @Test
     public void testToCharset() {
         Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((String) null));
         Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset((Charset) null));
         Assert.assertEquals(Charset.defaultCharset(), Charsets.toCharset(Charset.defaultCharset()));
         Assert.assertEquals(Charset.forName("UTF-8"), Charsets.toCharset(Charset.forName("UTF-8")));
-    }
-    
-    @Test
-    public void testIso8859_1() {
-        Assert.assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
     }
 
     @Test
