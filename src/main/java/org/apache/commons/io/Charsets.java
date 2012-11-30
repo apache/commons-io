@@ -18,6 +18,9 @@ package org.apache.commons.io;
 
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.Collections;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Charsets required of every implementation of the Java platform.
@@ -25,8 +28,8 @@ import java.nio.charset.UnsupportedCharsetException;
  * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">
  * Standard charsets</a>:
  * <p>
- * <cite>Every implementation of the Java platform is required to support the following character encodings. Consult the
- * release documentation for your implementation to see if any other encodings are supported. Consult the release
+ * <cite>Every implementation of the Java platform is required to support the following character encodings. Consult
+ * the release documentation for your implementation to see if any other encodings are supported. Consult the release
  * documentation for your implementation to see if any other encodings are supported. </cite>
  * </p>
  * 
@@ -55,6 +58,30 @@ public class Charsets {
     // This class should only contain Charset instances for required encodings. This guarantees that it will load
     // correctly and without delay on all Java platforms.
     //
+
+    /**
+     * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
+     * Java platform.
+     * <p>
+     * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">
+     * Standard charsets</a>:
+     * </p>
+     * 
+     * @return An immutable, case-insensitive map from canonical charset names to charset objects.
+     * @see Charset#availableCharsets()
+     * @since 2.5
+     */
+    public static SortedMap<String, Charset> requiredCharsets() {
+        // maybe cache?
+        TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
+        m.put(ISO_8859_1.name(), ISO_8859_1);
+        m.put(US_ASCII.name(), US_ASCII);
+        m.put(UTF_16.name(), UTF_16);
+        m.put(UTF_16BE.name(), UTF_16BE);
+        m.put(UTF_16LE.name(), UTF_16LE);
+        m.put(UTF_8.name(), UTF_8);
+        return Collections.unmodifiableSortedMap(m);
+    }
 
     /**
      * Returns the given Charset or the default Charset if the given Charset is null.
