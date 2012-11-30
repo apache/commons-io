@@ -37,6 +37,8 @@ import java.nio.charset.CodingErrorAction;
  */
 public class CharSequenceInputStream extends InputStream {
 
+    private static final int BUFFER_SIZE = 2048;
+    
     private final CharsetEncoder encoder;
     private final CharBuffer cbuf;
     private final ByteBuffer bbuf;
@@ -80,7 +82,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use
      */
     public CharSequenceInputStream(final CharSequence s, final Charset charset) {
-        this(s, charset, 2048);
+        this(s, charset, BUFFER_SIZE);
     }
 
     /**
@@ -91,7 +93,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use
      */
     public CharSequenceInputStream(final CharSequence s, final String charset) {
-        this(s, charset, 2048);
+        this(s, charset, BUFFER_SIZE);
     }
 
     /**
