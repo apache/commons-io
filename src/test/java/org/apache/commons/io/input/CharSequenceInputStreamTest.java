@@ -143,12 +143,14 @@ public class CharSequenceInputStreamTest {
         is.mark(dataSize);
 
         byte[] data1 = new byte[dataSize];
-        is.read(data1);
+        final int readCount1 = is.read(data1);
+        assertEquals(dataSize, readCount1);
 
         is.reset(); // should allow data to be re-read
 
         byte[] data2 = new byte[dataSize];
-        is.read(data2);
+        final int readCount2 = is.read(data2);
+        assertEquals(dataSize, readCount2);
 
         is.close();
         
