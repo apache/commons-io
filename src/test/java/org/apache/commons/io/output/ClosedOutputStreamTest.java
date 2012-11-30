@@ -32,7 +32,7 @@ public class ClosedOutputStreamTest extends TestCase {
         try {
             new ClosedOutputStream().write('x');
             fail("write(b)");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
     }

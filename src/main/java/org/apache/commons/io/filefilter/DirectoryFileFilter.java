@@ -66,7 +66,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      * @return true if the file is a directory
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return file.isDirectory();
     }
 

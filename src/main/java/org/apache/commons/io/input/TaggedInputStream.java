@@ -73,7 +73,7 @@ public class TaggedInputStream extends ProxyInputStream {
      *
      * @param proxy input stream to be decorated
      */
-    public TaggedInputStream(InputStream proxy) {
+    public TaggedInputStream(final InputStream proxy) {
         super(proxy);
     }
 
@@ -84,7 +84,7 @@ public class TaggedInputStream extends ProxyInputStream {
      * @return {@code true} if the exception was thrown by this stream,
      *         {@code false} otherwise
      */
-    public boolean isCauseOf(Throwable exception) {
+    public boolean isCauseOf(final Throwable exception) {
         return TaggedIOException.isTaggedWith(exception, tag);
     }
 
@@ -98,7 +98,7 @@ public class TaggedInputStream extends ProxyInputStream {
      * @param throwable an exception
      * @throws IOException original exception, if any, thrown by this stream
      */
-    public void throwIfCauseOf(Throwable throwable) throws IOException {
+    public void throwIfCauseOf(final Throwable throwable) throws IOException {
         TaggedIOException.throwCauseIfTaggedWith(throwable, tag);
     }
 
@@ -109,7 +109,7 @@ public class TaggedInputStream extends ProxyInputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void handleIOException(IOException e) throws IOException {
+    protected void handleIOException(final IOException e) throws IOException {
         throw new TaggedIOException(e, tag);
     }
 

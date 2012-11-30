@@ -31,7 +31,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     final File top = getLocalTestDirectory();
 
-    public FileUtilsCleanDirectoryTestCase(String name) {
+    public FileUtilsCleanDirectoryTestCase(final String name) {
         super(name);
     }
 
@@ -100,7 +100,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         try {
             FileUtils.cleanDirectory(top);
             fail("expected IOException");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Failed to list contents of " +
                     top.getAbsolutePath(), e.getMessage());
         }
@@ -119,16 +119,16 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         try {
             FileUtils.cleanDirectory(top);
             fail("expected IOException");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Unable to delete file: " +
                     file.getAbsolutePath(), e.getMessage());
         }
     }
 
-    private boolean chmod(File file, int mode, boolean recurse)
+    private boolean chmod(final File file, final int mode, final boolean recurse)
             throws InterruptedException {
         // TODO: Refactor this to FileSystemUtils
-        List<String> args = new ArrayList<String>();
+        final List<String> args = new ArrayList<String>();
         args.add("chmod");
 
         if (recurse) {
@@ -143,10 +143,10 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         try {
             proc = Runtime.getRuntime().exec(
                     args.toArray(new String[args.size()]));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return false;
         }
-        int result = proc.waitFor();
+        final int result = proc.waitFor();
         return result == 0;
     }
 

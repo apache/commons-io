@@ -41,7 +41,7 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
     private File file3;
     final File top = getTestDirectory();
 
-    public FileUtilsDirectoryContainsTestCase(String name) {
+    public FileUtilsDirectoryContainsTestCase(final String name) {
         super(name);
     }
 
@@ -122,7 +122,7 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         try {
             assertFalse(FileUtils.directoryContains(dir, file1));
             fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
     }
@@ -132,7 +132,7 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         try {
             assertTrue(FileUtils.directoryContains(file1, file1));
             fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
     }
@@ -165,7 +165,7 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         assertFalse(file.exists());
         try {
             assertTrue(FileUtils.directoryContains(dir, file));
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
     }

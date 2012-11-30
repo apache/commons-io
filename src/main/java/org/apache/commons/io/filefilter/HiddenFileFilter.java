@@ -70,7 +70,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
      *  <i>hidden</i>, otherwise {@code false}.
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return file.isHidden();
     }
     

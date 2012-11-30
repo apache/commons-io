@@ -36,7 +36,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @param file  the File to check
      * @return true if this file matches the test
      */
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return accept(file.getParentFile(), file.getName());
     }
 
@@ -47,7 +47,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * @param name  the filename within the directory to check
      * @return true if this file matches the test
      */
-    public boolean accept(File dir, String name) {
+    public boolean accept(final File dir, final String name) {
         return accept(new File(dir, name));
     }
 

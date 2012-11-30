@@ -37,7 +37,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @param filter  the filter, must not be null
      * @throws IllegalArgumentException if the filter is null
      */
-    public NotFileFilter(IOFileFilter filter) {
+    public NotFileFilter(final IOFileFilter filter) {
         if (filter == null) {
             throw new IllegalArgumentException("The filter must not be null");
         }
@@ -51,7 +51,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @return true if the filter returns false
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return ! filter.accept(file);
     }
     
@@ -63,7 +63,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @return true if the filter returns false
      */
     @Override
-    public boolean accept(File file, String name) {
+    public boolean accept(final File file, final String name) {
         return ! filter.accept(file, name);
     }
 

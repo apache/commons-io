@@ -35,7 +35,7 @@ public class SwappedDataInputStreamTest extends TestCase {
     private SwappedDataInputStream sdis;
     private byte[] bytes;
 
-    public SwappedDataInputStreamTest(String name) {
+    public SwappedDataInputStreamTest(final String name) {
         super(name);
     }
 
@@ -51,7 +51,7 @@ public class SwappedDataInputStreamTest extends TestCase {
             0x07,
             0x08
         };
-        ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+        final ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
         this.sdis = new SwappedDataInputStream( bais );
     }
 
@@ -66,8 +66,8 @@ public class SwappedDataInputStreamTest extends TestCase {
             0x01,
             0x02,
         };
-        ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
-        SwappedDataInputStream sdis = new SwappedDataInputStream( bais );
+        final ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
+        final SwappedDataInputStream sdis = new SwappedDataInputStream( bais );
         assertEquals( false, sdis.readBoolean() );
         assertEquals( true, sdis.readBoolean() );
         assertEquals( true, sdis.readBoolean() );
@@ -90,7 +90,7 @@ public class SwappedDataInputStreamTest extends TestCase {
     }
 
     public void testReadFully() throws IOException {
-        byte[] bytesIn = new byte[8];
+        final byte[] bytesIn = new byte[8];
         this.sdis.readFully(bytesIn);
         for( int i=0; i<8; i++) {
             assertEquals( bytes[i], bytesIn[i] );
@@ -105,7 +105,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         try {
             this.sdis.readLine();
             fail("readLine should be unsupported. ");
-        } catch(UnsupportedOperationException uoe) {
+        } catch(final UnsupportedOperationException uoe) {
         }
     }
 
@@ -129,7 +129,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         try {
             this.sdis.readUTF();
             fail("readUTF should be unsupported. ");
-        } catch(UnsupportedOperationException uoe) {
+        } catch(final UnsupportedOperationException uoe) {
         }
     }
 

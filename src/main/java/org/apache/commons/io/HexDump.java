@@ -68,8 +68,8 @@ public class HexDump {
      * @throws IllegalArgumentException if the output stream is null
      */
 
-    public static void dump(byte[] data, long offset,
-                            OutputStream stream, int index)
+    public static void dump(final byte[] data, final long offset,
+                            final OutputStream stream, final int index)
             throws IOException, ArrayIndexOutOfBoundsException,
             IllegalArgumentException {
         
@@ -82,7 +82,7 @@ public class HexDump {
             throw new IllegalArgumentException("cannot write to nullstream");
         }
         long display_offset = offset + index;
-        StringBuilder buffer = new StringBuilder(74);
+        final StringBuilder buffer = new StringBuilder(74);
 
         for (int j = index; j < data.length; j += 16) {
             int chars_read = data.length - j;
@@ -136,7 +136,7 @@ public class HexDump {
      * @param value  the long value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(StringBuilder _lbuffer, long value) {
+    private static StringBuilder dump(final StringBuilder _lbuffer, final long value) {
         for (int j = 0; j < 8; j++) {
             _lbuffer
                     .append(_hexcodes[(int) (value >> _shifts[j]) & 15]);
@@ -151,7 +151,7 @@ public class HexDump {
      * @param value  the byte value to be dumped
      * @return StringBuilder containing the dumped value.
      */
-    private static StringBuilder dump(StringBuilder _cbuffer, byte value) {
+    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {
         for (int j = 0; j < 2; j++) {
             _cbuffer.append(_hexcodes[value >> _shifts[j + 6] & 15]);
         }

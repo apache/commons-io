@@ -37,7 +37,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * 
      * @param out  the OutputStream to write to
      */
-    public CountingOutputStream( OutputStream out ) {
+    public CountingOutputStream( final OutputStream out ) {
         super(out);
     }
 
@@ -50,7 +50,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @since 2.0
      */
     @Override
-    protected synchronized void beforeWrite(int n) {
+    protected synchronized void beforeWrite(final int n) {
         count += n;
     }
 
@@ -66,7 +66,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @throws ArithmeticException if the byte count is too large
      */
     public int getCount() {
-        long result = getByteCount();
+        final long result = getByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
         }
@@ -84,7 +84,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @throws ArithmeticException if the byte count is too large
      */
     public int resetCount() {
-        long result = resetByteCount();
+        final long result = resetByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
         }
@@ -116,7 +116,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @since 1.3
      */
     public synchronized long resetByteCount() {
-        long tmp = this.count;
+        final long tmp = this.count;
         this.count = 0;
         return tmp;
     }

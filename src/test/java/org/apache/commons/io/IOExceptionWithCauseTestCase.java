@@ -30,8 +30,8 @@ public class IOExceptionWithCauseTestCase extends TestCase {
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(String,Throwable)} constructor.
      */
     public void testIOExceptionStringThrowable() {
-        Throwable cause = new IllegalArgumentException("cause");
-        IOExceptionWithCause exception = new IOExceptionWithCause("message", cause);
+        final Throwable cause = new IllegalArgumentException("cause");
+        final IOExceptionWithCause exception = new IOExceptionWithCause("message", cause);
         this.validate(exception, cause, "message");
     }
 
@@ -39,12 +39,12 @@ public class IOExceptionWithCauseTestCase extends TestCase {
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(Throwable)} constructor.
      */
     public void testIOExceptionThrowable() {
-        Throwable cause = new IllegalArgumentException("cause");
-        IOExceptionWithCause exception = new IOExceptionWithCause(cause);
+        final Throwable cause = new IllegalArgumentException("cause");
+        final IOExceptionWithCause exception = new IOExceptionWithCause(cause);
         this.validate(exception, cause, "java.lang.IllegalArgumentException: cause");
     }
 
-    void validate(Throwable throwable, Throwable expectedCause, String expectedMessage) {
+    void validate(final Throwable throwable, final Throwable expectedCause, final String expectedMessage) {
         assertEquals(expectedMessage, throwable.getMessage());
         assertEquals(expectedCause, throwable.getCause());
         assertSame(expectedCause, throwable.getCause());

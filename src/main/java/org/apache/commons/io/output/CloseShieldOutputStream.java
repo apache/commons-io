@@ -36,7 +36,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      *
      * @param out underlying output stream
      */
-    public CloseShieldOutputStream(OutputStream out) {
+    public CloseShieldOutputStream(final OutputStream out) {
         super(out);
     }
 

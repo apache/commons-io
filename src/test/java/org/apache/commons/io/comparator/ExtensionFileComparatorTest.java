@@ -29,7 +29,7 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
      *
      * @param name Name of the test
      */
-    public ExtensionFileComparatorTest(String name) {
+    public ExtensionFileComparatorTest(final String name) {
         super(name);
     }
 
@@ -47,13 +47,13 @@ public class ExtensionFileComparatorTest extends ComparatorAbstractTestCase {
 
     /** Test case sensitivity */
     public void testCaseSensitivity() {
-        File file3 = new File("abc.FOO");
-        Comparator<File> sensitive = new ExtensionFileComparator(null); /* test null as well */
+        final File file3 = new File("abc.FOO");
+        final Comparator<File> sensitive = new ExtensionFileComparator(null); /* test null as well */
         assertTrue("sensitive file1 & file2 = 0", sensitive.compare(equalFile1, equalFile2) == 0);
         assertTrue("sensitive file1 & file3 > 0", sensitive.compare(equalFile1, file3) > 0);
         assertTrue("sensitive file1 & less  > 0", sensitive.compare(equalFile1, lessFile) > 0);
 
-        Comparator<File> insensitive = ExtensionFileComparator.EXTENSION_INSENSITIVE_COMPARATOR;
+        final Comparator<File> insensitive = ExtensionFileComparator.EXTENSION_INSENSITIVE_COMPARATOR;
         assertTrue("insensitive file1 & file2 = 0", insensitive.compare(equalFile1, equalFile2) == 0);
         assertTrue("insensitive file1 & file3 = 0", insensitive.compare(equalFile1, file3) == 0);
         assertTrue("insensitive file1 & file4 > 0", insensitive.compare(equalFile1, lessFile) > 0);

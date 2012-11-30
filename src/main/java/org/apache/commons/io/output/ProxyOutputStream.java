@@ -38,7 +38,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * 
      * @param proxy  the OutputStream to delegate to
      */
-    public ProxyOutputStream(OutputStream proxy) {
+    public ProxyOutputStream(final OutputStream proxy) {
         super(proxy);
         // the proxy is stored in a protected superclass variable named 'out'
     }
@@ -49,12 +49,12 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(int idx) throws IOException {
+    public void write(final int idx) throws IOException {
         try {
             beforeWrite(1);
             out.write(idx);
             afterWrite(1);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -65,13 +65,13 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(byte[] bts) throws IOException {
+    public void write(final byte[] bts) throws IOException {
         try {
-            int len = bts != null ? bts.length : 0;
+            final int len = bts != null ? bts.length : 0;
             beforeWrite(len);
             out.write(bts);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -84,12 +84,12 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(byte[] bts, int st, int end) throws IOException {
+    public void write(final byte[] bts, final int st, final int end) throws IOException {
         try {
             beforeWrite(end);
             out.write(bts, st, end);
             afterWrite(end);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -102,7 +102,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     public void flush() throws IOException {
         try {
             out.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -115,7 +115,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     public void close() throws IOException {
         try {
             out.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -133,7 +133,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param n number of bytes to be written
      * @throws IOException if the pre-processing fails
      */
-    protected void beforeWrite(int n) throws IOException {
+    protected void beforeWrite(final int n) throws IOException {
     }
 
     /**
@@ -150,7 +150,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param n number of bytes written
      * @throws IOException if the post-processing fails
      */
-    protected void afterWrite(int n) throws IOException {
+    protected void afterWrite(final int n) throws IOException {
     }
 
     /**
@@ -162,7 +162,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if an I/O error occurs
      * @since 2.0
      */
-    protected void handleIOException(IOException e) throws IOException {
+    protected void handleIOException(final IOException e) throws IOException {
         throw e;
     }
 

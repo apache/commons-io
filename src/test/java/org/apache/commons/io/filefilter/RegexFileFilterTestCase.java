@@ -28,7 +28,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class RegexFileFilterTestCase extends FileBasedTestCase {
 
-    public RegexFileFilterTestCase(String name) {
+    public RegexFileFilterTestCase(final String name) {
         super(name);
     }
 
@@ -42,7 +42,7 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
-    public void assertFiltering(IOFileFilter filter, File file, boolean expected) throws Exception {
+    public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
         assertEquals(
@@ -89,28 +89,28 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         try {
             new RegexFileFilter((String)null);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
 
         try {
             new RegexFileFilter((String)null, Pattern.CASE_INSENSITIVE);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
 
         try {
             new RegexFileFilter((String)null, IOCase.INSENSITIVE);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
 
         try {
             new RegexFileFilter((java.util.regex.Pattern)null);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
     }

@@ -34,7 +34,7 @@ public class ProxyOutputStreamTest extends TestCase {
     protected void setUp() {
         original = new ByteArrayOutputStream(){
             @Override
-            public void write(byte[] ba) throws IOException {
+            public void write(final byte[] ba) throws IOException {
                 if (ba != null){
                     super.write(ba);
                 }
@@ -50,7 +50,7 @@ public class ProxyOutputStreamTest extends TestCase {
     }
 
     public void testWriteNullBaSucceeds() throws Exception {
-        byte[] ba = null;
+        final byte[] ba = null;
         original.write(ba);
         proxied.write(ba);
     }

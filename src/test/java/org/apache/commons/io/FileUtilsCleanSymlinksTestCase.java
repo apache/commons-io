@@ -30,7 +30,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
     final File top = getTestDirectory();
 
-    public FileUtilsCleanSymlinksTestCase(String name) {
+    public FileUtilsCleanSymlinksTestCase(final String name) {
         super(name);
     }
 
@@ -225,9 +225,9 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.isSymlink(realChild));
     }
 
-    private void setupSymlink(File res, File link) throws Exception {
+    private void setupSymlink(final File res, final File link) throws Exception {
         // create symlink
-        List<String> args = new ArrayList<String>();
+        final List<String> args = new ArrayList<String>();
         args.add("ln");
         args.add("-s");
 

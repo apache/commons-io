@@ -71,7 +71,7 @@ public class OrFileFilter
      * @param filter2  the second filter, must not be null
      * @throws IllegalArgumentException if either filter is null
      */
-    public OrFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+    public OrFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
         if (filter1 == null || filter2 == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
@@ -97,7 +97,7 @@ public class OrFileFilter
     /**
      * {@inheritDoc}
      */
-    public boolean removeFileFilter(IOFileFilter ioFileFilter) {
+    public boolean removeFileFilter(final IOFileFilter ioFileFilter) {
         return this.fileFilters.remove(ioFileFilter);
     }
 
@@ -114,7 +114,7 @@ public class OrFileFilter
      */
     @Override
     public boolean accept(final File file) {
-        for (IOFileFilter fileFilter : fileFilters) {
+        for (final IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file)) {
                 return true;
             }
@@ -127,7 +127,7 @@ public class OrFileFilter
      */
     @Override
     public boolean accept(final File file, final String name) {
-        for (IOFileFilter fileFilter : fileFilters) {
+        for (final IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file, name)) {
                 return true;
             }
@@ -142,7 +142,7 @@ public class OrFileFilter
      */
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
         if (fileFilters != null) {
@@ -150,7 +150,7 @@ public class OrFileFilter
                 if (i > 0) {
                     buffer.append(",");
                 }
-                Object filter = fileFilters.get(i);
+                final Object filter = fileFilters.get(i);
                 buffer.append(filter == null ? "null" : filter.toString());
             }
         }

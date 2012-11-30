@@ -51,7 +51,7 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static Thread start(long timeout) {
+    public static Thread start(final long timeout) {
         return start(Thread.currentThread(), timeout);
     }
 
@@ -64,10 +64,10 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static Thread start(Thread thread, long timeout) {
+    public static Thread start(final Thread thread, final long timeout) {
         Thread monitor = null;
         if (timeout > 0) {
-            ThreadMonitor timout = new ThreadMonitor(thread, timeout);
+            final ThreadMonitor timout = new ThreadMonitor(thread, timeout);
             monitor = new Thread(timout, ThreadMonitor.class.getSimpleName());
             monitor.setDaemon(true);
             monitor.start();
@@ -80,7 +80,7 @@ class ThreadMonitor implements Runnable {
      *
      * @param thread The monitor thread, may be {@code null}
      */
-    public static void stop(Thread thread) {
+    public static void stop(final Thread thread) {
         if (thread != null) {
             thread.interrupt();
         }
@@ -92,7 +92,7 @@ class ThreadMonitor implements Runnable {
      * @param thread The thread to monitor
      * @param timeout The timeout amount in milliseconds
      */
-    private ThreadMonitor(Thread thread, long timeout) {
+    private ThreadMonitor(final Thread thread, final long timeout) {
         this.thread = thread;
         this.timeout = timeout;
     }
@@ -107,7 +107,7 @@ class ThreadMonitor implements Runnable {
         try {
             Thread.sleep(timeout);
             thread.interrupt();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             // timeout not reached
         }
     }

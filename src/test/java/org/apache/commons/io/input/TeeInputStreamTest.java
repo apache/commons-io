@@ -35,7 +35,7 @@ public class TeeInputStreamTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        InputStream input = new ByteArrayInputStream("abc".getBytes(ASCII));
+        final InputStream input = new ByteArrayInputStream("abc".getBytes(ASCII));
         output = new ByteArrayOutputStream();
         tee = new TeeInputStream(input, output);
     }
@@ -58,7 +58,7 @@ public class TeeInputStreamTest extends TestCase {
     }
 
     public void testReadToArray() throws Exception {
-        byte[] buffer = new byte[8];
+        final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer));
         assertEquals('a', buffer[0]);
         assertEquals('b', buffer[1]);
@@ -68,7 +68,7 @@ public class TeeInputStreamTest extends TestCase {
     }
 
     public void testReadToArrayWithOffset() throws Exception {
-        byte[] buffer = new byte[8];
+        final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer, 4, 4));
         assertEquals('a', buffer[4]);
         assertEquals('b', buffer[5]);

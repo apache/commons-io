@@ -55,7 +55,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefix  the prefix to allow, must not be null
      * @throws IllegalArgumentException if the prefix is null
      */
-    public PrefixFileFilter(String prefix) {
+    public PrefixFileFilter(final String prefix) {
         this(prefix, IOCase.SENSITIVE);
     }
 
@@ -68,7 +68,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(String prefix, IOCase caseSensitivity) {
+    public PrefixFileFilter(final String prefix, final IOCase caseSensitivity) {
         if (prefix == null) {
             throw new IllegalArgumentException("The prefix must not be null");
         }
@@ -85,7 +85,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
      */
-    public PrefixFileFilter(String[] prefixes) {
+    public PrefixFileFilter(final String[] prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 
@@ -101,7 +101,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix is null
      * @since 1.4
      */
-    public PrefixFileFilter(String[] prefixes, IOCase caseSensitivity) {
+    public PrefixFileFilter(final String[] prefixes, final IOCase caseSensitivity) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The array of prefixes must not be null");
         }
@@ -117,7 +117,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws IllegalArgumentException if the prefix list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public PrefixFileFilter(List<String> prefixes) {
+    public PrefixFileFilter(final List<String> prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 
@@ -131,7 +131,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @throws ClassCastException if the list does not contain Strings
      * @since 1.4
      */
-    public PrefixFileFilter(List<String> prefixes, IOCase caseSensitivity) {
+    public PrefixFileFilter(final List<String> prefixes, final IOCase caseSensitivity) {
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
@@ -146,9 +146,9 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @return true if the filename starts with one of our prefixes
      */
     @Override
-    public boolean accept(File file) {
-        String name = file.getName();
-        for (String prefix : this.prefixes) {
+    public boolean accept(final File file) {
+        final String name = file.getName();
+        for (final String prefix : this.prefixes) {
             if (caseSensitivity.checkStartsWith(name, prefix)) {
                 return true;
             }
@@ -164,8 +164,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @return true if the filename starts with one of our prefixes
      */
     @Override
-    public boolean accept(File file, String name) {
-        for (String prefix : prefixes) {
+    public boolean accept(final File file, final String name) {
+        for (final String prefix : prefixes) {
             if (caseSensitivity.checkStartsWith(name, prefix)) {
                 return true;
             }
@@ -180,7 +180,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
         if (prefixes != null) {

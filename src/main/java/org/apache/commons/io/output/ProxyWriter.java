@@ -37,7 +37,7 @@ public class ProxyWriter extends FilterWriter {
      * 
      * @param proxy  the Writer to delegate to
      */
-    public ProxyWriter(Writer proxy) {
+    public ProxyWriter(final Writer proxy) {
         super(proxy);
         // the proxy is stored in a protected superclass variable named 'out'
     }
@@ -50,12 +50,12 @@ public class ProxyWriter extends FilterWriter {
      * @since 2.0
      */
     @Override
-    public Writer append(char c) throws IOException {
+    public Writer append(final char c) throws IOException {
         try {
             beforeWrite(1);
             out.append(c);
             afterWrite(1);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
         return this;
@@ -71,12 +71,12 @@ public class ProxyWriter extends FilterWriter {
      * @since 2.0
      */
     @Override
-    public Writer append(CharSequence csq, int start, int end) throws IOException {
+    public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
         try {
             beforeWrite(end - start);
             out.append(csq, start, end);
             afterWrite(end - start);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
         return this;
@@ -90,7 +90,7 @@ public class ProxyWriter extends FilterWriter {
      * @since 2.0
      */
     @Override
-    public Writer append(CharSequence csq) throws IOException {
+    public Writer append(final CharSequence csq) throws IOException {
         try {
             int len = 0;
             if (csq != null) {
@@ -100,7 +100,7 @@ public class ProxyWriter extends FilterWriter {
             beforeWrite(len);
             out.append(csq);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
         return this;
@@ -112,12 +112,12 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(int idx) throws IOException {
+    public void write(final int idx) throws IOException {
         try {
             beforeWrite(1);
             out.write(idx);
             afterWrite(1);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -128,7 +128,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(char[] chr) throws IOException {
+    public void write(final char[] chr) throws IOException {
         try {
             int len = 0;
             if (chr != null) {
@@ -138,7 +138,7 @@ public class ProxyWriter extends FilterWriter {
             beforeWrite(len);
             out.write(chr);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -151,12 +151,12 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(char[] chr, int st, int len) throws IOException {
+    public void write(final char[] chr, final int st, final int len) throws IOException {
         try {
             beforeWrite(len);
             out.write(chr, st, len);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -167,7 +167,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(String str) throws IOException {
+    public void write(final String str) throws IOException {
         try {
             int len = 0;
             if (str != null) {
@@ -177,7 +177,7 @@ public class ProxyWriter extends FilterWriter {
             beforeWrite(len);
             out.write(str);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -190,12 +190,12 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(String str, int st, int len) throws IOException {
+    public void write(final String str, final int st, final int len) throws IOException {
         try {
             beforeWrite(len);
             out.write(str, st, len);
             afterWrite(len);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -208,7 +208,7 @@ public class ProxyWriter extends FilterWriter {
     public void flush() throws IOException {
         try {
             out.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -221,7 +221,7 @@ public class ProxyWriter extends FilterWriter {
     public void close() throws IOException {
         try {
             out.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -239,7 +239,7 @@ public class ProxyWriter extends FilterWriter {
      * @param n number of chars to be written
      * @throws IOException if the pre-processing fails
      */
-    protected void beforeWrite(int n) throws IOException {
+    protected void beforeWrite(final int n) throws IOException {
     }
 
     /**
@@ -256,7 +256,7 @@ public class ProxyWriter extends FilterWriter {
      * @param n number of chars written
      * @throws IOException if the post-processing fails
      */
-    protected void afterWrite(int n) throws IOException {
+    protected void afterWrite(final int n) throws IOException {
     }
 
     /**
@@ -268,7 +268,7 @@ public class ProxyWriter extends FilterWriter {
      * @throws IOException if an I/O error occurs
      * @since 2.0
      */
-    protected void handleIOException(IOException e) throws IOException {
+    protected void handleIOException(final IOException e) throws IOException {
         throw e;
     }
 

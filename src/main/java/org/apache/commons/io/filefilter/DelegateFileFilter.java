@@ -42,7 +42,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * 
      * @param filter  the filter to decorate
      */
-    public DelegateFileFilter(FilenameFilter filter) {
+    public DelegateFileFilter(final FilenameFilter filter) {
         if (filter == null) {
             throw new IllegalArgumentException("The FilenameFilter must not be null");
         }
@@ -55,7 +55,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * 
      * @param filter  the filter to decorate
      */
-    public DelegateFileFilter(FileFilter filter) {
+    public DelegateFileFilter(final FileFilter filter) {
         if (filter == null) {
             throw new IllegalArgumentException("The FileFilter must not be null");
         }
@@ -70,7 +70,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @return true if the filter matches
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         if (fileFilter != null) {
             return fileFilter.accept(file);
         } else {
@@ -86,7 +86,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * @return true if the filter matches
      */
     @Override
-    public boolean accept(File dir, String name) {
+    public boolean accept(final File dir, final String name) {
         if (filenameFilter != null) {
             return filenameFilter.accept(dir, name);
         } else {
@@ -101,7 +101,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public String toString() {
-        String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString(); 
+        final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString(); 
         return super.toString() + "(" + delegate + ")";
     }
     

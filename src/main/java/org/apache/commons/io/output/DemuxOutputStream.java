@@ -36,9 +36,9 @@ public class DemuxOutputStream
      * @param output the stream to bind
      * @return the OutputStream that was previously active
      */
-    public OutputStream bindStream( OutputStream output )
+    public OutputStream bindStream( final OutputStream output )
     {
-        OutputStream stream = m_streams.get();
+        final OutputStream stream = m_streams.get();
         m_streams.set( output );
         return stream;
     }
@@ -52,7 +52,7 @@ public class DemuxOutputStream
     public void close()
         throws IOException
     {
-        OutputStream output = m_streams.get();
+        final OutputStream output = m_streams.get();
         if( null != output )
         {
             output.close();
@@ -68,7 +68,7 @@ public class DemuxOutputStream
     public void flush()
         throws IOException
     {
-        OutputStream output = m_streams.get();
+        final OutputStream output = m_streams.get();
         if( null != output )
         {
             output.flush();
@@ -82,10 +82,10 @@ public class DemuxOutputStream
      * @throws IOException if an error occurs
      */
     @Override
-    public void write( int ch )
+    public void write( final int ch )
         throws IOException
     {
-        OutputStream output = m_streams.get();
+        final OutputStream output = m_streams.get();
         if( null != output )
         {
             output.write( ch );

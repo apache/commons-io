@@ -38,7 +38,7 @@ public class CountingInputStream extends ProxyInputStream {
      *
      * @param in  the InputStream to delegate to
      */
-    public CountingInputStream(InputStream in) {
+    public CountingInputStream(final InputStream in) {
         super(in);
     }
 
@@ -67,7 +67,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 2.0
      */
     @Override
-    protected synchronized void afterRead(int n) {
+    protected synchronized void afterRead(final int n) {
         if (n != -1) {
             this.count += n;
         }
@@ -85,7 +85,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @throws ArithmeticException if the byte count is too large
      */
     public int getCount() {
-        long result = getByteCount();
+        final long result = getByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
         }
@@ -103,7 +103,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @throws ArithmeticException if the byte count is too large
      */
     public int resetCount() {
-        long result = resetByteCount();
+        final long result = resetByteCount();
         if (result > Integer.MAX_VALUE) {
             throw new ArithmeticException("The byte count " + result + " is too large to be converted to an int");
         }
@@ -135,7 +135,7 @@ public class CountingInputStream extends ProxyInputStream {
      * @since 1.3
      */
     public synchronized long resetByteCount() {
-        long tmp = this.count;
+        final long tmp = this.count;
         this.count = 0;
         return tmp;
     }

@@ -29,7 +29,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class BoundedInputStreamTest extends TestCase {
 
-    public BoundedInputStreamTest(String name) {
+    public BoundedInputStreamTest(final String name) {
         super(name);
     }
 
@@ -38,8 +38,8 @@ public class BoundedInputStreamTest extends TestCase {
      */
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded = null;
-        byte[] helloWorld = "Hello World".getBytes();
-        byte[] hello      = "Hello".getBytes();
+        final byte[] helloWorld = "Hello World".getBytes();
+        final byte[] hello      = "Hello".getBytes();
 
         // limit = length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
@@ -69,8 +69,8 @@ public class BoundedInputStreamTest extends TestCase {
     public void testReadArray() throws Exception {
 
         BoundedInputStream bounded = null;
-        byte[] helloWorld = "Hello World".getBytes();
-        byte[] hello      = "Hello".getBytes();
+        final byte[] helloWorld = "Hello World".getBytes();
+        final byte[] hello      = "Hello".getBytes();
 
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld));
         compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
@@ -91,7 +91,7 @@ public class BoundedInputStreamTest extends TestCase {
     /**
      * Compare byte arrays.
      */
-    private void compare(String msg, byte[] expected, byte[] actual) {
+    private void compare(final String msg, final byte[] expected, final byte[] actual) {
         assertEquals(msg + " length", expected.length, actual.length);
         for (int i = 0; i < expected.length; i++) {
             assertEquals(msg + " byte[" + i + "]", expected[i], actual[i]);

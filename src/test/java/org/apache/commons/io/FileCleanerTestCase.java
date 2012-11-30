@@ -30,7 +30,7 @@ public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
         return FileCleaner.getInstance();
     }
 
-    public FileCleanerTestCase(String name) {
+    public FileCleanerTestCase(final String name) {
         super(name);
     }
 }

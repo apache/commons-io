@@ -44,7 +44,7 @@ public class ClosedOutputStream extends OutputStream {
      * @throws IOException always thrown
      */
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         throw new IOException("write(" + b + ") failed: stream is closed");
     }
 

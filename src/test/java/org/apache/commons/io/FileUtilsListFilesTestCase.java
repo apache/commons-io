@@ -30,7 +30,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class FileUtilsListFilesTestCase extends FileBasedTestCase {
 
-    public FileUtilsListFilesTestCase(String name) {
+    public FileUtilsListFilesTestCase(final String name) {
         super(name);
     }
     
@@ -81,20 +81,20 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
      */
     @Override
     protected void tearDown() throws Exception {
-        File dir = getLocalTestDirectory();
+        final File dir = getLocalTestDirectory();
         FileUtils.deleteDirectory(dir);
     }
     
-    private Collection<String> filesToFilenames(Collection<File> files) {
-        Collection<String> filenames = new ArrayList<String>(files.size());
-        for (File file : files) {
+    private Collection<String> filesToFilenames(final Collection<File> files) {
+        final Collection<String> filenames = new ArrayList<String>(files.size());
+        for (final File file : files) {
             filenames.add(file.getName());
         }
         return filenames;
     }
     
-    private Collection<String> filesToFilenames(Iterator<File> files) {
-        Collection<String> filenames = new ArrayList<String>();
+    private Collection<String> filesToFilenames(final Iterator<File> files) {
+        final Collection<String> filenames = new ArrayList<String>();
         while (files.hasNext()) {
             filenames.add(files.next().getName());
         }
@@ -102,7 +102,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
     
     public void testIterateFilesByExtension() throws Exception {
-        String[] extensions = { "xml", "txt" };
+        final String[] extensions = { "xml", "txt" };
 
         Iterator<File> files = FileUtils.iterateFiles(getLocalTestDirectory(), extensions, false);
         Collection<String> filenames = filesToFilenames(files);
@@ -126,7 +126,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
 
     public void testListFilesByExtension() throws Exception {
-        String[] extensions = {"xml", "txt"};
+        final String[] extensions = {"xml", "txt"};
         
         Collection<File> files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
         assertEquals(1, files.size());
@@ -194,7 +194,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         try {
             FileUtils.listFiles(getLocalTestDirectory(), (IOFileFilter)null, (IOFileFilter)null);
             fail("Expected error about null parameter");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
     }

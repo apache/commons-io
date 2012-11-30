@@ -55,7 +55,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      * @return true if the file is a file
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return file.isFile();
     }
 

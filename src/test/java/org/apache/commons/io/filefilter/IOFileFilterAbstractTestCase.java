@@ -81,20 +81,20 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
   
   public File determineWorkingDirectoryPath(final String key, final String defaultPath) {
     // Look for a system property to specify the working directory
-    String workingPathName = System.getProperty(key, defaultPath);
+    final String workingPathName = System.getProperty(key, defaultPath);
     return new File(workingPathName);
   }
 
-  public void resetFalseFilters(TesterFalseFileFilter[] filters) {
-    for (TesterFalseFileFilter filter : filters) {
+  public void resetFalseFilters(final TesterFalseFileFilter[] filters) {
+    for (final TesterFalseFileFilter filter : filters) {
       if(filter != null) {
         filter.reset();
       }
     }
   }
   
-  public void resetTrueFilters(TesterTrueFileFilter[] filters) {
-    for (TesterTrueFileFilter filter : filters) {
+  public void resetTrueFilters(final TesterTrueFileFilter[] filters) {
+    for (final TesterTrueFileFilter filter : filters) {
       if(filter != null) {
         filter.reset();
       }
@@ -106,13 +106,13 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
     private boolean invoked;
     
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
       setInvoked(true);
       return super.accept(file);
     }
     
     @Override
-    public boolean accept(File file, String str) {
+    public boolean accept(final File file, final String str) {
       setInvoked(true);
       return super.accept(file, str);
     }
@@ -121,7 +121,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
       return this.invoked;
     }
 
-    public void setInvoked(boolean invoked) {
+    public void setInvoked(final boolean invoked) {
       this.invoked = invoked;
     }
     
@@ -135,13 +135,13 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
     private boolean invoked;
     
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
       setInvoked(true);
       return super.accept(file);
     }
     
     @Override
-    public boolean accept(File file, String str) {
+    public boolean accept(final File file, final String str) {
       setInvoked(true);
       return super.accept(file, str);
     }
@@ -150,7 +150,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
       return this.invoked;
     }
 
-    public void setInvoked(boolean invoked) {
+    public void setInvoked(final boolean invoked) {
       this.invoked = invoked;
     }
     

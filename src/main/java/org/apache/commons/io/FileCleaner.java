@@ -54,7 +54,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(File, Object)}.
      */
     @Deprecated
-    public static void track(File file, Object marker) {
+    public static void track(final File file, final Object marker) {
         theInstance.track(file, marker);
     }
 
@@ -70,7 +70,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(File, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(File file, Object marker, FileDeleteStrategy deleteStrategy) {
+    public static void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
         theInstance.track(file, marker, deleteStrategy);
     }
 
@@ -85,7 +85,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(String, Object)}.
      */
     @Deprecated
-    public static void track(String path, Object marker) {
+    public static void track(final String path, final Object marker) {
         theInstance.track(path, marker);
     }
 
@@ -101,7 +101,7 @@ public class FileCleaner {
      * @deprecated Use {@link FileCleaningTracker#track(String, Object, FileDeleteStrategy)}.
      */
     @Deprecated
-    public static void track(String path, Object marker, FileDeleteStrategy deleteStrategy) {
+    public static void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         theInstance.track(path, marker, deleteStrategy);
     }
 

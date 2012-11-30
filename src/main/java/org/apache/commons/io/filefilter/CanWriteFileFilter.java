@@ -74,7 +74,7 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
      *  written to, otherwise {@code false}.
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return file.canWrite();
     }
     

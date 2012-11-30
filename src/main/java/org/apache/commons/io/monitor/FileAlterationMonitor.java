@@ -49,7 +49,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @param interval The amount of time in miliseconds to wait between
      * checks of the file system
      */
-    public FileAlterationMonitor(long interval) {
+    public FileAlterationMonitor(final long interval) {
         this.interval = interval;
     }
 
@@ -60,10 +60,10 @@ public final class FileAlterationMonitor implements Runnable {
      * checks of the file system
      * @param observers The set of observers to add to the monitor.
      */
-    public FileAlterationMonitor(long interval, FileAlterationObserver... observers) {
+    public FileAlterationMonitor(final long interval, final FileAlterationObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (FileAlterationObserver observer : observers) {
+            for (final FileAlterationObserver observer : observers) {
                 addObserver(observer);
             }
         }
@@ -83,7 +83,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param threadFactory the thread factory
      */
-    public synchronized void setThreadFactory(ThreadFactory threadFactory) {
+    public synchronized void setThreadFactory(final ThreadFactory threadFactory) {
         this.threadFactory = threadFactory;
     }
 
@@ -129,7 +129,7 @@ public final class FileAlterationMonitor implements Runnable {
         if (running) {
             throw new IllegalStateException("Monitor is already running");
         }
-        for (FileAlterationObserver observer : observers) {
+        for (final FileAlterationObserver observer : observers) {
             observer.initialize();
         }
         running = true;
@@ -158,17 +158,17 @@ public final class FileAlterationMonitor implements Runnable {
      * @throws Exception if an error occurs initializing the observer
      * @since 2.1
      */
-    public synchronized void stop(long stopInterval) throws Exception {
+    public synchronized void stop(final long stopInterval) throws Exception {
         if (running == false) {
             throw new IllegalStateException("Monitor is not running");
         }
         running = false;
         try {
             thread.join(stopInterval);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        for (FileAlterationObserver observer : observers) {
+        for (final FileAlterationObserver observer : observers) {
             observer.destroy();
         }
     }
@@ -178,7 +178,7 @@ public final class FileAlterationMonitor implements Runnable {
      */
     public void run() {
         while (running) {
-            for (FileAlterationObserver observer : observers) {
+            for (final FileAlterationObserver observer : observers) {
                 observer.checkAndNotify();
             }
             if (!running) {

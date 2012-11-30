@@ -53,7 +53,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param pattern regular string expression to match
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(String pattern) {
+    public RegexFileFilter(final String pattern) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -68,7 +68,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(String pattern, IOCase caseSensitivity) {
+    public RegexFileFilter(final String pattern, final IOCase caseSensitivity) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -86,7 +86,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(String pattern, int flags) {
+    public RegexFileFilter(final String pattern, final int flags) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -99,7 +99,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @param pattern regular expression to match
      * @throws IllegalArgumentException if the pattern is null
      */
-    public RegexFileFilter(Pattern pattern) {
+    public RegexFileFilter(final Pattern pattern) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
@@ -115,7 +115,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return true if the filename matches one of the regular expressions
      */
     @Override
-    public boolean accept(File dir, String name) {
+    public boolean accept(final File dir, final String name) {
         return pattern.matcher(name).matches();
     }
 

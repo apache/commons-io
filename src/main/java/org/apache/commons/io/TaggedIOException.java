@@ -61,7 +61,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @return {@code true} if the throwable has the specified tag,
      * otherwise {@code false}
      */
-    public static boolean isTaggedWith(Throwable throwable, Object tag) {
+    public static boolean isTaggedWith(final Throwable throwable, final Object tag) {
         return tag != null
             && throwable instanceof TaggedIOException
             && tag.equals(((TaggedIOException) throwable).tag);
@@ -89,7 +89,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
      */
-    public static void throwCauseIfTaggedWith(Throwable throwable, Object tag)
+    public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag)
             throws IOException {
         if (isTaggedWith(throwable, tag)) {
             throw ((TaggedIOException) throwable).getCause();
@@ -107,7 +107,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @param original the exception to be tagged
      * @param tag tag of this exception
      */
-    public TaggedIOException(IOException original, Serializable tag) {
+    public TaggedIOException(final IOException original, final Serializable tag) {
         super(original.getMessage(), original);
         this.tag = tag;
     }

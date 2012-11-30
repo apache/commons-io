@@ -27,33 +27,33 @@ public class WriterOutputStreamTest extends TestCase {
     private static final String LARGE_TEST_STRING;
     
     static {
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         for (int i=0; i<100; i++) {
             buffer.append(TEST_STRING);
         }
         LARGE_TEST_STRING = buffer.toString();
     }
     
-    private Random random = new Random();
+    private final Random random = new Random();
     
-    private void testWithSingleByteWrite(String testString, String charsetName) throws IOException {
-        byte[] bytes = testString.getBytes(charsetName);
-        StringWriter writer = new StringWriter();
-        WriterOutputStream out = new WriterOutputStream(writer, charsetName);
-        for (byte b : bytes) {
+    private void testWithSingleByteWrite(final String testString, final String charsetName) throws IOException {
+        final byte[] bytes = testString.getBytes(charsetName);
+        final StringWriter writer = new StringWriter();
+        final WriterOutputStream out = new WriterOutputStream(writer, charsetName);
+        for (final byte b : bytes) {
             out.write(b);
         }
         out.close();
         assertEquals(testString, writer.toString());
     }
     
-    private void testWithBufferedWrite(String testString, String charsetName) throws IOException {
-        byte[] expected = testString.getBytes(charsetName);
-        StringWriter writer = new StringWriter();
-        WriterOutputStream out = new WriterOutputStream(writer, charsetName);
+    private void testWithBufferedWrite(final String testString, final String charsetName) throws IOException {
+        final byte[] expected = testString.getBytes(charsetName);
+        final StringWriter writer = new StringWriter();
+        final WriterOutputStream out = new WriterOutputStream(writer, charsetName);
         int offset = 0;
         while (offset < expected.length) {
-            int length = Math.min(random.nextInt(128), expected.length-offset);
+            final int length = Math.min(random.nextInt(128), expected.length-offset);
             out.write(expected, offset, length);
             offset += length;
         }
@@ -103,8 +103,8 @@ public class WriterOutputStreamTest extends TestCase {
 
     
     public void testFlush() throws IOException {
-        StringWriter writer = new StringWriter();
-        WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false);
+        final StringWriter writer = new StringWriter();
+        final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false);
         out.write("abc".getBytes("us-ascii"));
         assertEquals(0, writer.getBuffer().length());
         out.flush();
@@ -112,8 +112,8 @@ public class WriterOutputStreamTest extends TestCase {
     }
     
     public void testWriteImmediately() throws IOException {
-        StringWriter writer = new StringWriter();
-        WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true);
+        final StringWriter writer = new StringWriter();
+        final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true);
         out.write("abc".getBytes("us-ascii"));
         assertEquals("abc", writer.toString());
     }

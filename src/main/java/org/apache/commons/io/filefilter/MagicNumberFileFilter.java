@@ -108,7 +108,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         {@code null}, or contains no bytes.
      */
-    public MagicNumberFileFilter(byte[] magicNumber) {
+    public MagicNumberFileFilter(final byte[] magicNumber) {
         this(magicNumber, 0);
     }
     
@@ -133,7 +133,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @throws IllegalArgumentException if <code>magicNumber</code> is 
      *         {@code null} or the empty String.
      */
-    public MagicNumberFileFilter(String magicNumber) {
+    public MagicNumberFileFilter(final String magicNumber) {
         this(magicNumber, 0);
     }
     
@@ -157,7 +157,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         {@code null} or the empty String, or <code>offset</code> is 
      *         a negative number.
      */
-    public MagicNumberFileFilter(String magicNumber, long offset) {
+    public MagicNumberFileFilter(final String magicNumber, final long offset) {
         if (magicNumber == null) {
             throw new IllegalArgumentException("The magic number cannot be null");
         }
@@ -202,7 +202,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         {@code null}, or contains no bytes, or <code>offset</code> 
      *         is a negative number.
      */
-    public MagicNumberFileFilter(byte[] magicNumber, long offset) {
+    public MagicNumberFileFilter(final byte[] magicNumber, final long offset) {
         if (magicNumber == null) {
             throw new IllegalArgumentException("The magic number cannot be null");
         }
@@ -235,19 +235,19 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      *         at the specified offset, {@code false} otherwise.
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         if (file != null && file.isFile() && file.canRead()) {
             RandomAccessFile randomAccessFile = null;
             try {
-                byte[] fileBytes = new byte[this.magicNumbers.length]; 
+                final byte[] fileBytes = new byte[this.magicNumbers.length]; 
                 randomAccessFile = new RandomAccessFile(file, "r");
                 randomAccessFile.seek(byteOffset);
-                int read = randomAccessFile.read(fileBytes);
+                final int read = randomAccessFile.read(fileBytes);
                 if (read != magicNumbers.length) {
                     return false;
                 }
                 return Arrays.equals(this.magicNumbers, fileBytes);
-            } catch (IOException ioe) {
+            } catch (final IOException ioe) {
                 // Do nothing, fall through and do not accept file
             } finally {
                 IOUtils.closeQuietly(randomAccessFile);
@@ -265,7 +265,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("(");
         builder.append(new String(magicNumbers));// TODO perhaps use hex if value is not printable
         builder.append(",");

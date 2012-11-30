@@ -68,7 +68,7 @@ public class ReversedLinesFileReaderTestParamFile {
     private final String encoding;
     private final int buffSize;
 
-    public ReversedLinesFileReaderTestParamFile(String fileName, String encoding, Integer buffsize) {
+    public ReversedLinesFileReaderTestParamFile(final String fileName, final String encoding, final Integer buffsize) {
         this.fileName = fileName;
         this.encoding = encoding;
         this.buffSize = buffsize == null ? 4096 : buffsize.intValue();
@@ -76,10 +76,10 @@ public class ReversedLinesFileReaderTestParamFile {
 
     @Test
     public void testDataIntegrityWithBufferedReader() throws URISyntaxException, IOException {
-        File testFileIso = new File(this.getClass().getResource("/"+fileName).toURI());
+        final File testFileIso = new File(this.getClass().getResource("/"+fileName).toURI());
         reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, buffSize, encoding);
 
-        Stack<String> lineStack = new Stack<String>();
+        final Stack<String> lineStack = new Stack<String>();
 
         bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(testFileIso), encoding));
         String line = null;
@@ -91,7 +91,7 @@ public class ReversedLinesFileReaderTestParamFile {
 
         // read in reverse order and compare with lines from stack
         while((line = reversedLinesFileReader.readLine())!=null) {
-            String lineFromBufferedReader = lineStack.pop();
+            final String lineFromBufferedReader = lineStack.pop();
             assertEquals(lineFromBufferedReader, line);
         }
 
@@ -101,12 +101,12 @@ public class ReversedLinesFileReaderTestParamFile {
     public void closeReader() {
         try {
             bufferedReader.close();
-        } catch(Exception e) {
+        } catch(final Exception e) {
             // ignore
         }
         try {
             reversedLinesFileReader.close();
-        } catch(Exception e) {
+        } catch(final Exception e) {
             // ignore
         }
     }

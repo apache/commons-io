@@ -33,7 +33,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
      *
      * @param name Name of the test
      */
-    public SizeFileComparatorTest(String name) {
+    public SizeFileComparatorTest(final String name) {
         super(name);
     }
 
@@ -43,11 +43,11 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
         super.setUp();
         comparator = SizeFileComparator.SIZE_COMPARATOR;
         reverse = SizeFileComparator.SIZE_REVERSE;
-        File dir = getTestDirectory();
+        final File dir = getTestDirectory();
         smallerDir = new File(dir, "smallerdir");
         largerDir = new File(dir, "largerdir");
         smallerFile = new File(smallerDir, "smaller.txt");
-        File equalFile = new File(dir, "equal.txt");
+        final File equalFile = new File(dir, "equal.txt");
         largerFile = new File(largerDir, "larger.txt");
         smallerDir.mkdir();
         largerDir.mkdir();
@@ -64,7 +64,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
      * Test a file which doesn't exist.
      */
     public void testNonexistantFile() {
-        File nonexistantFile = new File(new File("."), "nonexistant.txt");
+        final File nonexistantFile = new File(new File("."), "nonexistant.txt");
         assertFalse(nonexistantFile.exists());
         assertTrue("less",  comparator.compare(nonexistantFile, moreFile) < 0);
     }

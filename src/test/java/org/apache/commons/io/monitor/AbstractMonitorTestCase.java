@@ -51,7 +51,7 @@ public abstract class AbstractMonitorTestCase extends TestCase {
      *
      * @param name The name of the test
      */
-    public AbstractMonitorTestCase(String name) {
+    public AbstractMonitorTestCase(final String name) {
         super(name);
     }
 
@@ -64,15 +64,15 @@ public abstract class AbstractMonitorTestCase extends TestCase {
             testDir.mkdir();
         }
 
-        IOFileFilter files = FileFilterUtils.fileFileFilter();
-        IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
-        IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
+        final IOFileFilter files = FileFilterUtils.fileFileFilter();
+        final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
+        final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
         
-        IOFileFilter directories = FileFilterUtils.directoryFileFilter();
-        IOFileFilter visible = HiddenFileFilter.VISIBLE;
-        IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
+        final IOFileFilter directories = FileFilterUtils.directoryFileFilter();
+        final IOFileFilter visible = HiddenFileFilter.VISIBLE;
+        final IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
 
-        IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
+        final IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
         
         createObserver(testDir, filter);
     }
@@ -83,13 +83,13 @@ public abstract class AbstractMonitorTestCase extends TestCase {
      * @param file The directory to observe
      * @param fileFilter The file filter to apply
      */
-    protected void createObserver(File file, FileFilter fileFilter) {
+    protected void createObserver(final File file, final FileFilter fileFilter) {
         observer = new FileAlterationObserver(file, fileFilter);
         observer.addListener(listener);
         observer.addListener(new FileAlterationListenerAdaptor());
         try {
             observer.initialize();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail("Observer init() threw " + e);
         }
     }
@@ -102,14 +102,14 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     /**
      * Check all the Collections are empty
      */
-    protected void checkCollectionsEmpty(String label) {
+    protected void checkCollectionsEmpty(final String label) {
         checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
     }
 
     /**
      * Check all the Collections have the expected sizes.
      */
-    protected void checkCollectionSizes(String label, int dirCreate, int dirChange, int dirDelete, int fileCreate, int fileChange, int fileDelete) {
+    protected void checkCollectionSizes(String label, final int dirCreate, final int dirChange, final int dirDelete, final int fileCreate, final int fileChange, final int fileDelete) {
         label = label + "[" + listener.getCreatedDirectories().size() +
                         " " + listener.getChangedDirectories().size() +
                         " " + listener.getDeletedDirectories().size() +
@@ -132,7 +132,7 @@ public abstract class AbstractMonitorTestCase extends TestCase {
      * @return The file
      */
     protected File touch(File file) {
-        long lastModified = file.exists() ? file.lastModified() : 0;
+        final long lastModified = file.exists() ? file.lastModified() : 0;
         try {
             FileUtils.touch(file);
             file = new File(file.getParent(), file.getName());
@@ -141,7 +141,7 @@ public abstract class AbstractMonitorTestCase extends TestCase {
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail("Touching " + file + ": " + e);
         }
         sleepHandleInterruped(pauseTime);
@@ -151,10 +151,10 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     /**
      * Thread.sleep(timeInMilliseconds) - ignore InterruptedException
      */
-    protected void sleepHandleInterruped(long timeInMilliseconds) {
+    protected void sleepHandleInterruped(final long timeInMilliseconds) {
         try {
             Thread.sleep(timeInMilliseconds);
-        } catch(InterruptedException ie) {
+        } catch(final InterruptedException ie) {
             // ignore
         }
     }

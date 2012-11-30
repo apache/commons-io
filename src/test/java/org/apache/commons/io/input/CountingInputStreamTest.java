@@ -32,27 +32,27 @@ import org.apache.commons.io.output.NullOutputStream;
  */
 public class CountingInputStreamTest extends TestCase {
 
-    public CountingInputStreamTest(String name) {
+    public CountingInputStreamTest(final String name) {
         super(name);
     }
 
     public void testCounting() throws Exception {
-        String text = "A piece of text";
-        byte[] bytes = text.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final String text = "A piece of text";
+        final byte[] bytes = text.getBytes();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
         // have to declare this larger as we're going to read 
         // off the end of the stream and input stream seems 
         // to do bounds checking
-        byte[] result = new byte[21];
+        final byte[] result = new byte[21];
 
-        byte[] ba = new byte[5];
+        final byte[] ba = new byte[5];
         int found = cis.read(ba);
         System.arraycopy(ba, 0, result, 0, 5);
         assertEquals( found, cis.getCount() );
 
-        int value = cis.read();
+        final int value = cis.read();
         found++; 
         result[5] = (byte)value;
         assertEquals( found, cis.getCount() );
@@ -64,7 +64,7 @@ public class CountingInputStreamTest extends TestCase {
         assertEquals( found, cis.getCount() );
 
         // trim to get rid of the 6 empty values
-        String textResult = new String(result).trim();
+        final String textResult = new String(result).trim();
         assertEquals(textResult, text);
     }
 
@@ -73,23 +73,23 @@ public class CountingInputStreamTest extends TestCase {
      * Test for files > 2GB in size - see issue IO-84
      */
     public void testLargeFiles_IO84() throws Exception {
-        long size = (long)Integer.MAX_VALUE + (long)1;
-        NullInputStream mock    = new NullInputStream(size);
-        CountingInputStream cis = new CountingInputStream(mock);
-        OutputStream out        = new NullOutputStream();
+        final long size = (long)Integer.MAX_VALUE + (long)1;
+        final NullInputStream mock    = new NullInputStream(size);
+        final CountingInputStream cis = new CountingInputStream(mock);
+        final OutputStream out        = new NullOutputStream();
 
         // Test integer methods
         IOUtils.copyLarge(cis, out);
         try {
             cis.getCount();
             fail("Expected getCount() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
+        } catch (final ArithmeticException ae) {
             // expected result
         }
         try {
             cis.resetCount();
             fail("Expected resetCount() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
+        } catch (final ArithmeticException ae) {
             // expected result
         }
 
@@ -102,55 +102,55 @@ public class CountingInputStreamTest extends TestCase {
     }
 
     public void testResetting() throws Exception {
-        String text = "A piece of text";
-        byte[] bytes = text.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final String text = "A piece of text";
+        final byte[] bytes = text.getBytes();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        byte[] result = new byte[bytes.length];
+        final byte[] result = new byte[bytes.length];
 
         int found = cis.read(result, 0, 5);
         assertEquals( found, cis.getCount() );
 
-        int count = cis.resetCount();
+        final int count = cis.resetCount();
         found = cis.read(result, 6, 5);
         assertEquals( found, count );
     }
     
     public void testZeroLength1() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        int found = cis.read();
+        final int found = cis.read();
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
     }
 
     public void testZeroLength2() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        byte[] result = new byte[10];
+        final byte[] result = new byte[10];
 
-        int found = cis.read(result);
+        final int found = cis.read(result);
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
     }
 
     public void testZeroLength3() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        byte[] result = new byte[10];
+        final byte[] result = new byte[10];
 
-        int found = cis.read(result, 0, 5);
+        final int found = cis.read(result, 0, 5);
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
     }
 
     public void testEOF1() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
         int found = cis.read();
         assertEquals(0, found);
@@ -164,32 +164,32 @@ public class CountingInputStreamTest extends TestCase {
     }
 
     public void testEOF2() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        byte[] result = new byte[10];
+        final byte[] result = new byte[10];
 
-        int found = cis.read(result);
+        final int found = cis.read(result);
         assertEquals(2, found);
         assertEquals(2, cis.getCount());
     }
 
     public void testEOF3() throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
+        final CountingInputStream cis = new CountingInputStream(bais);
 
-        byte[] result = new byte[10];
+        final byte[] result = new byte[10];
 
-        int found = cis.read(result, 0, 5);
+        final int found = cis.read(result, 0, 5);
         assertEquals(2, found);
         assertEquals(2, cis.getCount());
     }
     
     public void testSkipping() throws IOException {
-        String text = "Hello World!";
-        byte[] bytes = text.getBytes();
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        CountingInputStream cis = new CountingInputStream(bais);
+        final String text = "Hello World!";
+        final byte[] bytes = text.getBytes();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        final CountingInputStream cis = new CountingInputStream(bais);
         
         assertEquals(6,cis.skip(6));
         assertEquals(6,cis.getCount());

@@ -33,7 +33,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    public IOCaseTestCase(String name) {
+    public IOCaseTestCase(final String name) {
         super(name);
     }
 
@@ -54,11 +54,11 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.forName("Blah");
             fail();
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
         try {
             IOCase.forName(null);
             fail();
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
     }
 
     public void test_serialization() throws Exception {
@@ -96,15 +96,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkCompareTo("ABC", null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkCompareTo(null, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkCompareTo(null, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkCompare_case() throws Exception {
@@ -137,15 +137,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkEquals("ABC", null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkEquals(null, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkEquals(null, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkEquals_case() throws Exception {
@@ -174,15 +174,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkStartsWith("ABC", null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkStartsWith(null, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkStartsWith(null, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkStartsWith_case() throws Exception {
@@ -211,15 +211,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkEndsWith("ABC", null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkEndsWith(null, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkEndsWith(null, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkEndsWith_case() throws Exception {
@@ -275,15 +275,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkIndexOf("ABC", 0, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkIndexOf(null, 0, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkIndexOf(null, 0, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkIndexOf_case() throws Exception {
@@ -322,27 +322,27 @@ public class IOCaseTestCase extends FileBasedTestCase {
         try {
             IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkRegionMatches(null, 0, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkRegionMatches(null, 0, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkRegionMatches("ABC", 1, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkRegionMatches(null, 1, "ABC");
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             IOCase.SENSITIVE.checkRegionMatches(null, 1, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
     }
 
     public void test_checkRegionMatches_case() throws Exception {
@@ -357,15 +357,15 @@ public class IOCaseTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    private IOCase serialize(IOCase value) throws Exception {
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(buf);
+    private IOCase serialize(final IOCase value) throws Exception {
+        final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        final ObjectOutputStream out = new ObjectOutputStream(buf);
         out.writeObject(value);
         out.flush();
         out.close();
 
-        ByteArrayInputStream bufin = new ByteArrayInputStream(buf.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bufin);
+        final ByteArrayInputStream bufin = new ByteArrayInputStream(buf.toByteArray());
+        final ObjectInputStream in = new ObjectInputStream(bufin);
         return (IOCase) in.readObject();
     }
 

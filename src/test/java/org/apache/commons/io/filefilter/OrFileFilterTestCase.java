@@ -42,7 +42,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
   
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
-    OrFileFilter filter = new OrFileFilter();
+    final OrFileFilter filter = new OrFileFilter();
     for(int i = 0; i < filters.size(); i++) {
       filter.addFileFilter(filters.get(i));
     }
@@ -115,14 +115,14 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     // test 1 - Test conditional or with all filters returning true
     {
       // test 1 filters
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 1 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 1 false results
-      boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = new boolean[] {false, false, false};
 
       testFilters.add(1, filters);
       testTrueResults.add(1, trueResults);
@@ -134,7 +134,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     // test 2 - Test conditional or with first filter returning false
     {
       // test 2 filters
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
@@ -142,9 +142,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 2 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 2 false results
-      boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = new boolean[] {true, false, false};
 
       testFilters.add(2, filters);
       testTrueResults.add(2, trueResults);
@@ -156,7 +156,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     // test 3 - Test conditional or with second filter returning false
     {
       // test 3 filters
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(falseFilters[1]);
       filters.add(trueFilters[2]);
@@ -164,9 +164,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 3 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 3 false results
-      boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = new boolean[] {false, false, false};
 
       testFilters.add(3, filters);
       testTrueResults.add(3, trueResults);
@@ -178,7 +178,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     // test 4 - Test conditional or with third filter returning false
     {
       // test 4 filters
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(falseFilters[1]);
@@ -186,9 +186,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 4 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 4 false results
-      boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = new boolean[] {false, false, false};
     
       testFilters.add(4, filters);
       testTrueResults.add(4, trueResults);
@@ -200,7 +200,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     // test 5 - Test conditional or with first and third filters returning false
     {
       // test 5 filters
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(trueFilters[1]);
       filters.add(falseFilters[2]);
@@ -208,9 +208,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 5 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 5 false results
-      boolean[] falseResults = new boolean[] {true, false, false};
+      final boolean[] falseResults = new boolean[] {true, false, false};
     
       testFilters.add(5, filters);
       testTrueResults.add(5, trueResults);
@@ -221,7 +221,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     
     // test 6 - Test conditional or with second and third filters returning false
     {
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
@@ -229,9 +229,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(trueFilters[3]);
       filters.add(falseFilters[3]);
       // test 6 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 6 false results
-      boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = new boolean[] {false, false, false};
     
       testFilters.add(6, filters);
       testTrueResults.add(6, trueResults);
@@ -242,7 +242,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     
     // test 7 - Test conditional or with first and second filters returning false
     {
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
       filters.add(trueFilters[1]);
@@ -250,9 +250,9 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       // test 7 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 7 false results
-      boolean[] falseResults = new boolean[] {true, true, false};
+      final boolean[] falseResults = new boolean[] {true, true, false};
     
       testFilters.add(7, filters);
       testTrueResults.add(7, trueResults);
@@ -263,15 +263,15 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     
     // test 8 - Test conditional or with fourth filter returning false
     {
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(trueFilters[1]);
       filters.add(trueFilters[2]);
       filters.add(trueFilters[3]);
       filters.add(falseFilters[1]);
       // test 8 true results
-      boolean[] trueResults = new boolean[] {true, false, false};
+      final boolean[] trueResults = new boolean[] {true, false, false};
       // test 8 false results
-      boolean[] falseResults = new boolean[] {false, false, false};
+      final boolean[] falseResults = new boolean[] {false, false, false};
     
       testFilters.add(8, filters);
       testTrueResults.add(8, trueResults);
@@ -282,14 +282,14 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
 
     // test 9 - Test conditional or with all filters returning false
     {
-      List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+      final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
       filters.add(falseFilters[1]);
       filters.add(falseFilters[2]);
       filters.add(falseFilters[3]);
       // test 9 true results
-      boolean[] trueResults = new boolean[] {false, false, false};
+      final boolean[] trueResults = new boolean[] {false, false, false};
       // test 9 false results
-      boolean[] falseResults = new boolean[] {true, true, true};
+      final boolean[] falseResults = new boolean[] {true, true, true};
     
       testFilters.add(9, filters);
       testTrueResults.add(9, trueResults);

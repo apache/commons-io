@@ -32,20 +32,20 @@ public class ReaderInputStreamTest {
     private static final String LARGE_TEST_STRING;
     
     static {
-        StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder();
         for (int i=0; i<100; i++) {
             buffer.append(TEST_STRING);
         }
         LARGE_TEST_STRING = buffer.toString();
     }
     
-    private Random random = new Random();
+    private final Random random = new Random();
     
-    private void testWithSingleByteRead(String testString, String charsetName) throws IOException {
-        byte[] bytes = testString.getBytes(charsetName);
-        ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
-        for (byte b : bytes) {
-            int read = in.read();
+    private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
+        final byte[] bytes = testString.getBytes(charsetName);
+        final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
+        for (final byte b : bytes) {
+            final int read = in.read();
             assertTrue(read >= 0);
             assertTrue(read <= 255);
             assertEquals(b, (byte)read);
@@ -53,14 +53,14 @@ public class ReaderInputStreamTest {
         assertEquals(-1, in.read());
     }
     
-    private void testWithBufferedRead(String testString, String charsetName) throws IOException {
-        byte[] expected = testString.getBytes(charsetName);
-        ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
-        byte[] buffer = new byte[128];
+    private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
+        final byte[] expected = testString.getBytes(charsetName);
+        final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
+        final byte[] buffer = new byte[128];
         int offset = 0;
         while (true) {
             int bufferOffset = random.nextInt(64);
-            int bufferLength = random.nextInt(64);
+            final int bufferLength = random.nextInt(64);
             int read = in.read(buffer, bufferOffset, bufferLength);
             if (read == -1) {
                 assertEquals(offset, expected.length);
@@ -106,8 +106,8 @@ public class ReaderInputStreamTest {
     @Test
     public void testReadZero() throws Exception {
         final String inStr = "test";
-        ReaderInputStream r = new ReaderInputStream(new StringReader(inStr));
-        byte[] bytes = new byte[30];
+        final ReaderInputStream r = new ReaderInputStream(new StringReader(inStr));
+        final byte[] bytes = new byte[30];
         assertEquals(0, r.read(bytes, 0, 0));
         assertEquals(inStr.length(), r.read(bytes, 0, inStr.length()+1));
         // Should always return 0 for length == 0
@@ -116,8 +116,8 @@ public class ReaderInputStreamTest {
     
     @Test
     public void testReadZeroEmptyString() throws Exception {
-        ReaderInputStream r = new ReaderInputStream(new StringReader(""));
-        byte[] bytes = new byte[30];
+        final ReaderInputStream r = new ReaderInputStream(new StringReader(""));
+        final byte[] bytes = new byte[30];
         // Should always return 0 for length == 0
         assertEquals(0, r.read(bytes, 0, 0));
         assertEquals(-1, r.read(bytes, 0, 1));
@@ -133,10 +133,10 @@ public class ReaderInputStreamTest {
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         // Charset charset = Charset.forName("UTF-8"); // works
-        Charset charset = Charset.forName("ASCII"); // infinite loop
-        ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset);
+        final Charset charset = Charset.forName("ASCII"); // infinite loop
+        final ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset);
         try {
             while (stream.read() != -1) {
             }

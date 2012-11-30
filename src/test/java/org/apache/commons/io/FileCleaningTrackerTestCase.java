@@ -38,7 +38,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     private File testFile;
     private FileCleaningTracker theInstance;
 
-    public FileCleaningTrackerTestCase(String name) {
+    public FileCleaningTrackerTestCase(final String name) {
         super(name);
         testFile = new File(getTestDirectory(), "file-test.txt");
     }
@@ -76,7 +76,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     public void testFileCleanerFile() throws Exception {
-        String path = testFile.getPath();
+        final String path = testFile.getPath();
         
         assertFalse(testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
@@ -159,25 +159,25 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         try {
             theInstance.track((File) null, new Object());
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
         try {
             theInstance.track((File) null, new Object(), FileDeleteStrategy.NORMAL);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
         try {
             theInstance.track((String) null, new Object());
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
         try {
             theInstance.track((String) null, new Object(), FileDeleteStrategy.NORMAL);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
     }
@@ -201,12 +201,12 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertTrue(theInstance.exitWhenFinished);
         assertEquals(null, theInstance.reaper);
         
-        String path = testFile.getPath();
-        Object marker = new Object();
+        final String path = testFile.getPath();
+        final Object marker = new Object();
         try {
             theInstance.track(path, marker);
             fail();
-        } catch (IllegalStateException ex) {
+        } catch (final IllegalStateException ex) {
             // expected
         }
         assertTrue(theInstance.exitWhenFinished);
@@ -214,7 +214,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     public void testFileCleanerExitWhenFinished1() throws Exception {
-        String path = testFile.getPath();
+        final String path = testFile.getPath();
         
         assertEquals("1-testFile exists", false, testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
@@ -245,7 +245,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     public void testFileCleanerExitWhenFinished2() throws Exception {
-        String path = testFile.getPath();
+        final String path = testFile.getPath();
         
         assertFalse(testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
@@ -284,7 +284,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         while(file.exists() && count++ < 40) {
             try {
                 Thread.sleep(500L);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
             }
             file = new File(file.getPath());
         }
@@ -308,7 +308,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
                 while (theInstance.getTrackCount() != 0) {
                     list.add("A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String A Big String " + (i++));
                 }
-            } catch (Throwable ignored) {
+            } catch (final Throwable ignored) {
             }
             list = null;
             System.gc(); 

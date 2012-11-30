@@ -40,7 +40,7 @@ public class BrokenOutputStream extends OutputStream {
      *
      * @param exception the exception to be thrown
      */
-    public BrokenOutputStream(IOException exception) {
+    public BrokenOutputStream(final IOException exception) {
         this.exception = exception;
     }
 
@@ -58,7 +58,7 @@ public class BrokenOutputStream extends OutputStream {
      * @throws IOException always thrown
      */
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         throw exception;
     }
 

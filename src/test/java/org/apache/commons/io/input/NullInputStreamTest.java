@@ -30,7 +30,7 @@ import junit.framework.TestCase;
 public class NullInputStreamTest extends TestCase {
 
     /** Constructor */
-    public NullInputStreamTest(String name) {
+    public NullInputStreamTest(final String name) {
         super(name);
     }
 
@@ -50,8 +50,8 @@ public class NullInputStreamTest extends TestCase {
      * Test <code>available()</code> method.
      */
     public void testRead() throws Exception {
-        int size = 5;
-        InputStream input = new TestNullInputStream(size);
+        final int size = 5;
+        final InputStream input = new TestNullInputStream(size);
         for (int i = 0; i < size; i++) {
             assertEquals("Check Size [" + i + "]", size - i, input.available());
             assertEquals("Check Value [" + i + "]", i, input.read());
@@ -64,9 +64,9 @@ public class NullInputStreamTest extends TestCase {
 
         // Test reading after the end of file
         try {
-            int result = input.read();
+            final int result = input.read();
             fail("Should have thrown an IOException, byte=[" + result + "]");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Read after end of file", e.getMessage());
         }
 
@@ -79,32 +79,32 @@ public class NullInputStreamTest extends TestCase {
      * Test <code>read(byte[])</code> method.
      */
     public void testReadByteArray() throws Exception {
-        byte[] bytes = new byte[10];
-        InputStream input = new TestNullInputStream(15);
+        final byte[] bytes = new byte[10];
+        final InputStream input = new TestNullInputStream(15);
 
         // Read into array
-        int count1 = input.read(bytes);
+        final int count1 = input.read(bytes);
         assertEquals("Read 1", bytes.length, count1);
         for (int i = 0; i < count1; i++) {
             assertEquals("Check Bytes 1", i, bytes[i]);
         }
 
         // Read into array
-        int count2 = input.read(bytes);
+        final int count2 = input.read(bytes);
         assertEquals("Read 2", 5, count2);
         for (int i = 0; i < count2; i++) {
             assertEquals("Check Bytes 2", count1 + i, bytes[i]);
         }
 
         // End of File
-        int count3 = input.read(bytes);
+        final int count3 = input.read(bytes);
         assertEquals("Read 3 (EOF)", -1, count3);
 
         // Test reading after the end of file
         try {
-            int count4 = input.read(bytes);
+            final int count4 = input.read(bytes);
             fail("Should have thrown an IOException, byte=[" + count4 + "]");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Read after end of file", e.getMessage());
         }
 
@@ -112,9 +112,9 @@ public class NullInputStreamTest extends TestCase {
         input.close();
     
         // Read into array using offset & length
-        int offset = 2;
-        int lth    = 4;
-        int count5 = input.read(bytes, offset, lth);
+        final int offset = 2;
+        final int lth    = 4;
+        final int count5 = input.read(bytes, offset, lth);
         assertEquals("Read 5", lth, count5);
         for (int i = offset; i < lth; i++) {
             assertEquals("Check Bytes 2", i, bytes[i]);
@@ -126,13 +126,13 @@ public class NullInputStreamTest extends TestCase {
      * (rather than return -1).
      */
     public void testEOFException() throws Exception {
-        InputStream input = new TestNullInputStream(2, false, true);
+        final InputStream input = new TestNullInputStream(2, false, true);
         assertEquals("Read 1",  0, input.read());
         assertEquals("Read 2",  1, input.read());
         try {
-            int result = input.read();
+            final int result = input.read();
             fail("Should have thrown an EOFException, byte=[" + result + "]");
-        } catch (EOFException e) {
+        } catch (final EOFException e) {
             // expected
         }
     }
@@ -142,8 +142,8 @@ public class NullInputStreamTest extends TestCase {
      */
     public void testMarkAndReset() throws Exception {
         int position = 0;
-        int readlimit = 10;
-        InputStream input = new TestNullInputStream(100, true, false);
+        final int readlimit = 10;
+        final InputStream input = new TestNullInputStream(100, true, false);
         
         assertTrue("Mark Should be Supported", input.markSupported());
 
@@ -151,7 +151,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.reset();
             fail("Read limit exceeded, expected IOException ");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("No Mark IOException message",
                          "No position has been marked",
                          e.getMessage());
@@ -181,7 +181,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.reset();
             fail("Read limit exceeded, expected IOException ");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Read limit IOException message",
                          "Marked position [" + position
                          + "] is no longer valid - passed the read limit ["
@@ -194,20 +194,20 @@ public class NullInputStreamTest extends TestCase {
      * Test <code>mark()</code> not supported.
      */
     public void testMarkNotSupported() throws Exception {
-        InputStream input = new TestNullInputStream(100, false, true);
+        final InputStream input = new TestNullInputStream(100, false, true);
         assertFalse("Mark Should NOT be Supported", input.markSupported());
 
         try {
             input.mark(5);
             fail("mark() should throw UnsupportedOperationException");
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             assertEquals("mark() error message",  "Mark not supported", e.getMessage());
         }
 
         try {
             input.reset();
             fail("reset() should throw UnsupportedOperationException");
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             assertEquals("reset() error message",  "Mark not supported", e.getMessage());
         }
     }
@@ -216,7 +216,7 @@ public class NullInputStreamTest extends TestCase {
      * Test <code>skip()</code> method.
      */
    public void testSkip() throws Exception {
-        InputStream input = new TestNullInputStream(10, true, false);
+        final InputStream input = new TestNullInputStream(10, true, false);
         assertEquals("Read 1", 0, input.read());
         assertEquals("Read 2", 1, input.read());
         assertEquals("Skip 1", 5, input.skip(5));
@@ -226,7 +226,7 @@ public class NullInputStreamTest extends TestCase {
         try {
             input.skip(5); //
             fail("Expected IOException for skipping after end of file");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals("Skip after EOF IOException message",
                     "Skip after end of file",
                     e.getMessage());
@@ -237,10 +237,10 @@ public class NullInputStreamTest extends TestCase {
     // ------------- Test NullInputStream implementation -------------
 
     private static final class TestNullInputStream extends NullInputStream {
-        public TestNullInputStream(int size) {
+        public TestNullInputStream(final int size) {
             super(size);
         }
-        public TestNullInputStream(int size, boolean markSupported, boolean throwEofException) {
+        public TestNullInputStream(final int size, final boolean markSupported, final boolean throwEofException) {
             super(size, markSupported, throwEofException);
         }
         @Override
@@ -248,8 +248,8 @@ public class NullInputStreamTest extends TestCase {
             return (int)getPosition() - 1;
         }
         @Override
-        protected void processBytes(byte[] bytes, int offset, int length) {
-            int startPos = (int)getPosition() - length;
+        protected void processBytes(final byte[] bytes, final int offset, final int length) {
+            final int startPos = (int)getPosition() - length;
             for (int i = offset; i < length; i++) {
                 bytes[i] = (byte)(startPos + i);
             }

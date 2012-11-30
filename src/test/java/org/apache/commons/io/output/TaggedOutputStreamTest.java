@@ -31,8 +31,8 @@ public class TaggedOutputStreamTest extends TestCase {
 
     public void testNormalStream() {
         try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
-            OutputStream stream = new TaggedOutputStream(buffer);
+            final ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
+            final OutputStream stream = new TaggedOutputStream(buffer);
             stream.write('a');
             stream.write(new byte[] { 'b' });
             stream.write(new byte[] { 'c' }, 0, 1);
@@ -42,26 +42,26 @@ public class TaggedOutputStreamTest extends TestCase {
             assertEquals('a', buffer.toByteArray()[0]);
             assertEquals('b', buffer.toByteArray()[1]);
             assertEquals('c', buffer.toByteArray()[2]);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Unexpected exception thrown");
         }
     }
 
     public void testBrokenStream() {
-        IOException exception = new IOException("test exception");
-        TaggedOutputStream stream =
+        final IOException exception = new IOException("test exception");
+        final TaggedOutputStream stream =
             new TaggedOutputStream(new BrokenOutputStream(exception));
 
         // Test the write() method
         try {
             stream.write('x');
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertTrue(stream.isCauseOf(e));
             try {
                 stream.throwIfCauseOf(e);
                 fail("Expected exception not thrown.");
-            } catch (IOException e2) {
+            } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
         }
@@ -70,12 +70,12 @@ public class TaggedOutputStreamTest extends TestCase {
         try {
             stream.flush();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertTrue(stream.isCauseOf(e));
             try {
                 stream.throwIfCauseOf(e);
                 fail("Expected exception not thrown.");
-            } catch (IOException e2) {
+            } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
         }
@@ -84,21 +84,21 @@ public class TaggedOutputStreamTest extends TestCase {
         try {
             stream.close();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertTrue(stream.isCauseOf(e));
             try {
                 stream.throwIfCauseOf(e);
                 fail("Expected exception not thrown.");
-            } catch (IOException e2) {
+            } catch (final IOException e2) {
                 assertEquals(exception, e2);
             }
         }
     }
 
     public void testOtherException() {
-        IOException exception = new IOException("test exception");
-        OutputStream closed = new ClosedOutputStream();
-        TaggedOutputStream stream = new TaggedOutputStream(closed);
+        final IOException exception = new IOException("test exception");
+        final OutputStream closed = new ClosedOutputStream();
+        final TaggedOutputStream stream = new TaggedOutputStream(closed);
 
         assertFalse(stream.isCauseOf(exception));
         assertFalse(stream.isCauseOf(
@@ -106,14 +106,14 @@ public class TaggedOutputStreamTest extends TestCase {
 
         try {
             stream.throwIfCauseOf(exception);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Unexpected exception thrown");
         }
 
         try {
             stream.throwIfCauseOf(
                     new TaggedIOException(exception, UUID.randomUUID()));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             fail("Unexpected exception thrown");
         }
     }

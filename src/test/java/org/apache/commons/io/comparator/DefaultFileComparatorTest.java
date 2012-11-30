@@ -28,7 +28,7 @@ public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
      *
      * @param name Name of the test
      */
-    public DefaultFileComparatorTest(String name) {
+    public DefaultFileComparatorTest(final String name) {
         super(name);
     }
 

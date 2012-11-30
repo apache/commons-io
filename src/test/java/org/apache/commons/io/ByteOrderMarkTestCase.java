@@ -33,7 +33,7 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
     private static final ByteOrderMark TEST_BOM_2 = new ByteOrderMark("test2", 1, 2);
     private static final ByteOrderMark TEST_BOM_3 = new ByteOrderMark("test3", 1, 2, 3);
 
-    public ByteOrderMarkTestCase(String name) {
+    public ByteOrderMarkTestCase(final String name) {
         super(name);
     }
 
@@ -92,7 +92,7 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
 
     /** Test {@link ByteOrderMark#hashCode()} */
     public void testHashCode() {
-        int bomClassHash = ByteOrderMark.class.hashCode();
+        final int bomClassHash = ByteOrderMark.class.hashCode();
         assertEquals("hash test1 ", bomClassHash + 1,  TEST_BOM_1.hashCode());
         assertEquals("hash test2 ", bomClassHash + 3,  TEST_BOM_2.hashCode());
         assertEquals("hash test3 ", bomClassHash + 6,  TEST_BOM_3.hashCode());
@@ -103,25 +103,25 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
         try {
             new ByteOrderMark(null, 1,2,3);
             fail("null charset name, expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
         try {
             new ByteOrderMark("", 1,2,3);
             fail("no charset name, expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
         try {
             new ByteOrderMark("a", (int[])null);
             fail("null bytes, expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
         try {
             new ByteOrderMark("b", new int[0]);
             fail("empty bytes, expected IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // expected
         }
     }

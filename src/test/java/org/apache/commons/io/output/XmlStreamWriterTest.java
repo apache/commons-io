@@ -38,35 +38,35 @@ public class XmlStreamWriterTest extends TestCase {
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
 
-    private static String createXmlContent(String text, String encoding) {
+    private static String createXmlContent(final String text, final String encoding) {
         String xmlDecl = "<?xml version=\"1.0\"?>";
         if (encoding != null) {
             xmlDecl = "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>";
         }
-        String xml = xmlDecl + "\n<text>" + text + "</text>";
+        final String xml = xmlDecl + "\n<text>" + text + "</text>";
         return xml;
     }
 
-    private static void checkXmlContent(String xml, String encoding, String defaultEncoding)
+    private static void checkXmlContent(final String xml, final String encoding, final String defaultEncoding)
             throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncoding);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final XmlStreamWriter writer = new XmlStreamWriter(out, defaultEncoding);
         writer.write(xml);
         writer.close();
-        byte[] xmlContent = out.toByteArray();
+        final byte[] xmlContent = out.toByteArray();
         assertEquals(encoding, writer.getEncoding());
         assertTrue(Arrays.equals(xml.getBytes(encoding), xmlContent));
 
     }
 
-    private static void checkXmlWriter(String text, String encoding)
+    private static void checkXmlWriter(final String text, final String encoding)
             throws IOException {
         checkXmlWriter(text, encoding, null);
     }
 
-    private static void checkXmlWriter(String text, String encoding, String defaultEncoding)
+    private static void checkXmlWriter(final String text, final String encoding, final String defaultEncoding)
             throws IOException {
-        String xml = createXmlContent(text, encoding);
+        final String xml = createXmlContent(text, encoding);
         String effectiveEncoding = encoding;
         if (effectiveEncoding == null) {
             effectiveEncoding = defaultEncoding == null ? "UTF-8" : defaultEncoding;
@@ -75,13 +75,13 @@ public class XmlStreamWriterTest extends TestCase {
     }
 
     public void testNoXmlHeader() throws IOException {
-        String xml = "<text>text with no XML header</text>";
+        final String xml = "<text>text with no XML header</text>";
         checkXmlContent(xml, "UTF-8", null);
     }
 
     public void testEmpty() throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        XmlStreamWriter writer = new XmlStreamWriter(out);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final XmlStreamWriter writer = new XmlStreamWriter(out);
         writer.flush();
         writer.write("");
         writer.flush();

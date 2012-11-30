@@ -92,7 +92,7 @@ public class LineIterator implements Iterator<String> {
         } else {
             try {
                 while (true) {
-                    String line = bufferedReader.readLine();
+                    final String line = bufferedReader.readLine();
                     if (line == null) {
                         finished = true;
                         return false;
@@ -101,7 +101,7 @@ public class LineIterator implements Iterator<String> {
                         return true;
                     }
                 }
-            } catch(IOException ioe) {
+            } catch(final IOException ioe) {
                 close();
                 throw new IllegalStateException(ioe);
             }
@@ -114,7 +114,7 @@ public class LineIterator implements Iterator<String> {
      * @param line  the line that is to be validated
      * @return true if valid, false to remove from the iterator
      */
-    protected boolean isValidLine(String line) {
+    protected boolean isValidLine(final String line) {
         return true;
     }
 
@@ -138,7 +138,7 @@ public class LineIterator implements Iterator<String> {
         if (!hasNext()) {
             throw new NoSuchElementException("No more lines");
         }
-        String currentLine = cachedLine;
+        final String currentLine = cachedLine;
         cachedLine = null;
         return currentLine;        
     }
@@ -171,7 +171,7 @@ public class LineIterator implements Iterator<String> {
      *
      * @param iterator  the iterator to close
      */
-    public static void closeQuietly(LineIterator iterator) {
+    public static void closeQuietly(final LineIterator iterator) {
         if (iterator != null) {
             iterator.close();
         }

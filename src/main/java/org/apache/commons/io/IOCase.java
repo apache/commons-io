@@ -77,7 +77,7 @@ public final class IOCase implements Serializable {
      * @return the IOCase object
      * @throws IllegalArgumentException if the name is invalid
      */
-    public static IOCase forName(String name) {
+    public static IOCase forName(final String name) {
         if (IOCase.SENSITIVE.name.equals(name)){
             return IOCase.SENSITIVE;
         }
@@ -97,7 +97,7 @@ public final class IOCase implements Serializable {
      * @param name  the name
      * @param sensitive  the sensitivity
      */
-    private IOCase(String name, boolean sensitive) {
+    private IOCase(final String name, final boolean sensitive) {
         this.name = name;
         this.sensitive = sensitive;
     }
@@ -143,7 +143,7 @@ public final class IOCase implements Serializable {
      * @return true if equal using the case rules
      * @throws NullPointerException if either string is null
      */
-    public int checkCompareTo(String str1, String str2) {
+    public int checkCompareTo(final String str1, final String str2) {
         if (str1 == null || str2 == null) {
             throw new NullPointerException("The strings must not be null");
         }
@@ -161,7 +161,7 @@ public final class IOCase implements Serializable {
      * @return true if equal using the case rules
      * @throws NullPointerException if either string is null
      */
-    public boolean checkEquals(String str1, String str2) {
+    public boolean checkEquals(final String str1, final String str2) {
         if (str1 == null || str2 == null) {
             throw new NullPointerException("The strings must not be null");
         }
@@ -179,7 +179,7 @@ public final class IOCase implements Serializable {
      * @return true if equal using the case rules
      * @throws NullPointerException if either string is null
      */
-    public boolean checkStartsWith(String str, String start) {
+    public boolean checkStartsWith(final String str, final String start) {
         return str.regionMatches(!sensitive, 0, start, 0, start.length());
     }
 
@@ -194,8 +194,8 @@ public final class IOCase implements Serializable {
      * @return true if equal using the case rules
      * @throws NullPointerException if either string is null
      */
-    public boolean checkEndsWith(String str, String end) {
-        int endLen = end.length();
+    public boolean checkEndsWith(final String str, final String end) {
+        final int endLen = end.length();
         return str.regionMatches(!sensitive, str.length() - endLen, end, 0, endLen);
     }
 
@@ -214,8 +214,8 @@ public final class IOCase implements Serializable {
      * @throws NullPointerException if either string is null
      * @since 2.0
      */
-    public int checkIndexOf(String str, int strStartIndex, String search) {
-        int endIndex = str.length() - search.length();
+    public int checkIndexOf(final String str, final int strStartIndex, final String search) {
+        final int endIndex = str.length() - search.length();
         if (endIndex >= strStartIndex) {
             for (int i = strStartIndex; i <= endIndex; i++) {
                 if (checkRegionMatches(str, i, search)) {
@@ -238,7 +238,7 @@ public final class IOCase implements Serializable {
      * @return true if equal using the case rules
      * @throws NullPointerException if either string is null
      */
-    public boolean checkRegionMatches(String str, int strStartIndex, String search) {
+    public boolean checkRegionMatches(final String str, final int strStartIndex, final String search) {
         return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
     }
 

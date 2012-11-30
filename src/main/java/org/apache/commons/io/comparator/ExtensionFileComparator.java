@@ -87,7 +87,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      *
      * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      */
-    public ExtensionFileComparator(IOCase caseSensitivity) {
+    public ExtensionFileComparator(final IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
@@ -102,9 +102,9 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      * is greater than the second file.
      * 
      */
-    public int compare(File file1, File file2) {
-        String suffix1 = FilenameUtils.getExtension(file1.getName());
-        String suffix2 = FilenameUtils.getExtension(file2.getName());
+    public int compare(final File file1, final File file2) {
+        final String suffix1 = FilenameUtils.getExtension(file1.getName());
+        final String suffix2 = FilenameUtils.getExtension(file2.getName());
         return caseSensitivity.checkCompareTo(suffix1, suffix2);
     }
 

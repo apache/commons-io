@@ -30,10 +30,10 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     private static final int FILE1_SIZE = 1;
     private static final int FILE2_SIZE = 1024 * 4 + 1;
 
-    private File m_testFile1;
-    private File m_testFile2;
+    private final File m_testFile1;
+    private final File m_testFile2;
 
-    public FileUtilsFileNewerTestCase(String name) {
+    public FileUtilsFileNewerTestCase(final String name) {
         super(name);
         
         m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -67,7 +67,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
             throw new IllegalStateException("The m_testFile1 should exist");
         }
 
-        long fileLastModified = m_testFile1.lastModified();
+        final long fileLastModified = m_testFile1.lastModified();
         final long TWO_SECOND = 2000;
 
         testIsFileNewer("two second earlier is not newer" , m_testFile1, fileLastModified + TWO_SECOND, false);
@@ -83,7 +83,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * @see FileUtils#isFileNewer(File, File)
      */
     public void testIsFileNewerImaginaryFile() {
-        File imaginaryFile = new File(getTestDirectory(), "imaginaryFile");
+        final File imaginaryFile = new File(getTestDirectory(), "imaginaryFile");
         if (imaginaryFile.exists()) {
             throw new IllegalStateException("The imaginary File exists");
         }
@@ -113,11 +113,11 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
-    protected void testIsFileNewer(String description, File file, long time, boolean wantedResult)  {
+    protected void testIsFileNewer(final String description, final File file, final long time, final boolean wantedResult)  {
         assertEquals(description + " - time", wantedResult, FileUtils.isFileNewer(file, time));
         assertEquals(description + " - date", wantedResult, FileUtils.isFileNewer(file, new Date(time)));
         
-        File temporaryFile = m_testFile2;
+        final File temporaryFile = m_testFile2;
 
         temporaryFile.setLastModified(time);
         assertEquals("The temporary file hasn't the right last modification date", time, temporaryFile.lastModified());
@@ -133,7 +133,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(null,0);
             fail("File not specified");
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
     }
 
     /**
@@ -145,7 +145,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(m_testFile1, (Date) null);
             fail("Date not specified");
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
     }
 
     /**
@@ -157,6 +157,6 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(m_testFile1, (File) null);
             fail("Reference file not specified");
-        } catch (IllegalArgumentException e) {}
+        } catch (final IllegalArgumentException e) {}
     }
 }

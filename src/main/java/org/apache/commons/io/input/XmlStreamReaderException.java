@@ -56,8 +56,8 @@ public class XmlStreamReaderException extends IOException {
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
      */
-    public XmlStreamReaderException(String msg, String bomEnc,
-            String xmlGuessEnc, String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final String bomEnc,
+            final String xmlGuessEnc, final String xmlEnc) {
         this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc);
     }
 
@@ -74,8 +74,8 @@ public class XmlStreamReaderException extends IOException {
      * @param xmlGuessEnc XML guess encoding.
      * @param xmlEnc XML prolog encoding.
      */
-    public XmlStreamReaderException(String msg, String ctMime, String ctEnc,
-            String bomEnc, String xmlGuessEnc, String xmlEnc) {
+    public XmlStreamReaderException(final String msg, final String ctMime, final String ctEnc,
+            final String bomEnc, final String xmlGuessEnc, final String xmlEnc) {
         super(msg);
         contentTypeMime = ctMime;
         contentTypeEncoding = ctEnc;

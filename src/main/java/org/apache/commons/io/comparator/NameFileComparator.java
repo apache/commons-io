@@ -83,7 +83,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
-    public NameFileComparator(IOCase caseSensitivity) {
+    public NameFileComparator(final IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
@@ -97,7 +97,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      * same and a positive value if the first files name
      * is greater than the second file.
      */
-    public int compare(File file1, File file2) {
+    public int compare(final File file1, final File file2) {
         return caseSensitivity.checkCompareTo(file1.getName(), file2.getName());
     }
 

@@ -73,7 +73,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the file is null
      */
-    public void track(File file, Object marker) {
+    public void track(final File file, final Object marker) {
         track(file, marker, (FileDeleteStrategy) null);
     }
 
@@ -87,7 +87,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the file is null
      */
-    public void track(File file, Object marker, FileDeleteStrategy deleteStrategy) {
+    public void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
         if (file == null) {
             throw new NullPointerException("The file must not be null");
         }
@@ -103,7 +103,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the path is null
      */
-    public void track(String path, Object marker) {
+    public void track(final String path, final Object marker) {
         track(path, marker, (FileDeleteStrategy) null);
     }
 
@@ -117,7 +117,7 @@ public class FileCleaningTracker {
      * @param deleteStrategy  the strategy to delete the file, null means normal
      * @throws NullPointerException if the path is null
      */
-    public void track(String path, Object marker, FileDeleteStrategy deleteStrategy) {
+    public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         if (path == null) {
             throw new NullPointerException("The path must not be null");
         }
@@ -131,7 +131,7 @@ public class FileCleaningTracker {
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
-    private synchronized void addTracker(String path, Object marker, FileDeleteStrategy deleteStrategy) {
+    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         // synchronized block protects reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
@@ -217,13 +217,13 @@ public class FileCleaningTracker {
             while (exitWhenFinished == false || trackers.size() > 0) {
                 try {
                     // Wait for a tracker to remove.
-                    Tracker tracker = (Tracker) q.remove(); // cannot return null
+                    final Tracker tracker = (Tracker) q.remove(); // cannot return null
                     trackers.remove(tracker);
                     if (!tracker.delete()) {
                         deleteFailures.add(tracker.getPath());
                     }
                     tracker.clear();
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     continue;
                 }
             }
@@ -253,7 +253,7 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        Tracker(String path, FileDeleteStrategy deleteStrategy, Object marker, ReferenceQueue<? super Object> queue) {
+        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker, final ReferenceQueue<? super Object> queue) {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;

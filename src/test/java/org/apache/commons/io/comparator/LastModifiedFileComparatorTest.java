@@ -28,7 +28,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
      *
      * @param name Name of the test
      */
-    public LastModifiedFileComparatorTest(String name) {
+    public LastModifiedFileComparatorTest(final String name) {
         super(name);
     }
 
@@ -38,27 +38,27 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         super.setUp();
         comparator = LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
-        File dir = getTestDirectory();
-        File olderFile = new File(dir, "older.txt");
+        final File dir = getTestDirectory();
+        final File olderFile = new File(dir, "older.txt");
         createFile(olderFile, 0);
 
-        File equalFile = new File(dir, "equal.txt");
+        final File equalFile = new File(dir, "equal.txt");
         createFile(equalFile, 0);
         do {
             try { 
                 Thread.sleep(300);
-            } catch(InterruptedException ie) {
+            } catch(final InterruptedException ie) {
                 // ignore
             }
             equalFile.setLastModified(System.currentTimeMillis());
         } while( olderFile.lastModified() == equalFile.lastModified() );
 
-        File newerFile = new File(dir, "newer.txt");
+        final File newerFile = new File(dir, "newer.txt");
         createFile(newerFile, 0);
         do {
             try { 
                 Thread.sleep(300);
-            } catch(InterruptedException ie) {
+            } catch(final InterruptedException ie) {
                 // ignore
             }
             newerFile.setLastModified(System.currentTimeMillis());
