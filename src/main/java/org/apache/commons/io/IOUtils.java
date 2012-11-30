@@ -169,7 +169,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close an <code>Reader</code>.
+     * Closes an <code>Reader</code> unconditionally.
      * <p>
      * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -196,7 +196,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close a <code>Writer</code>.
+     * Closes an <code>Writer</code> unconditionally.
      * <p>
      * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -222,7 +222,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close an <code>InputStream</code>.
+     * Closes an <code>InputStream</code> unconditionally.
      * <p>
      * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -249,7 +249,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close an <code>OutputStream</code>.
+     * Closes an <code>OutputStream</code> unconditionally.
      * <p>
      * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -277,7 +277,7 @@ public class IOUtils {
     }
     
     /**
-     * Unconditionally close a <code>Closeable</code>.
+     * Closes a <code>Closeable</code> unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -310,7 +310,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close a <code>Socket</code>.
+     * Closes a <code>Socket</code> unconditionally.
      * <p>
      * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -343,7 +343,7 @@ public class IOUtils {
     }
 
     /**
-     * Unconditionally close a <code>Selector</code>.
+     * Closes a <code>Selector</code> unconditionally.
      * <p>
      * Equivalent to {@link Selector#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -376,7 +376,7 @@ public class IOUtils {
     }
     
     /**
-     * Unconditionally close a <code>ServerSocket</code>.
+     * Closes a <code>ServerSocket</code> unconditionally.
      * <p>
      * Equivalent to {@link ServerSocket#close()}, except any exceptions will be ignored.
      * This is typically used in finally blocks.
@@ -449,7 +449,7 @@ public class IOUtils {
     // read toByteArray
     //-----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
@@ -466,7 +466,7 @@ public class IOUtils {
     }
 
     /**
-     * Get contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * Gets contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * Use this method instead of <code>toByteArray(InputStream)</code>
      * when <code>InputStream</code> size is known.
      * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
@@ -491,7 +491,7 @@ public class IOUtils {
     }
 
     /** 
-     * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * Use this method instead of <code>toByteArray(InputStream)</code>
      * when <code>InputStream</code> size is known
      * @param input the <code>InputStream</code> to read from
@@ -527,7 +527,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
+     * Gets the contents of a <code>Reader</code> as a <code>byte[]</code>
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -543,7 +543,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
+     * Gets the contents of a <code>Reader</code> as a <code>byte[]</code>
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -563,7 +563,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a <code>byte[]</code>
+     * Gets the contents of a <code>Reader</code> as a <code>byte[]</code>
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -587,7 +587,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>String</code> as a <code>byte[]</code>
+     * Gets the contents of a <code>String</code> as a <code>byte[]</code>
      * using the default character encoding of the platform.
      * <p>
      * This is the same as {@link String#getBytes()}.
@@ -604,7 +604,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>URI</code> as a <code>byte[]</code>.
+     * Gets the contents of a <code>URI</code> as a <code>byte[]</code>.
      * 
      * @param uri
      *            the <code>URI</code> to read
@@ -620,7 +620,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>URL</code> as a <code>byte[]</code>.
+     * Gets the contents of a <code>URL</code> as a <code>byte[]</code>.
      * 
      * @param url
      *            the <code>URL</code> to read
@@ -641,7 +641,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>URLConnection</code> as a <code>byte[]</code>.
+     * Gets the contents of a <code>URLConnection</code> as a <code>byte[]</code>.
      * 
      * @param urlConn
      *            the <code>URLConnection</code> to read
@@ -664,7 +664,7 @@ public class IOUtils {
     // read char[]
     //-----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a character array
+     * Gets the contents of an <code>InputStream</code> as a character array
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -681,7 +681,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a character array
+     * Gets the contents of an <code>InputStream</code> as a character array
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -702,7 +702,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a character array
+     * Gets the contents of an <code>InputStream</code> as a character array
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -726,7 +726,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a character array.
+     * Gets the contents of a <code>Reader</code> as a character array.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
@@ -746,7 +746,7 @@ public class IOUtils {
     // read toString
     //-----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a String
+     * Gets the contents of an <code>InputStream</code> as a String
      * using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -762,7 +762,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a String
+     * Gets the contents of an <code>InputStream</code> as a String
      * using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -782,7 +782,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a String
+     * Gets the contents of an <code>InputStream</code> as a String
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -806,7 +806,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a String.
+     * Gets the contents of a <code>Reader</code> as a String.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
@@ -920,7 +920,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>byte[]</code> as a String
+     * Gets the contents of a <code>byte[]</code> as a String
      * using the default character encoding of the platform.
      * 
      * @param input the byte array to read from
@@ -935,7 +935,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>byte[]</code> as a String
+     * Gets the contents of a <code>byte[]</code> as a String
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -954,7 +954,7 @@ public class IOUtils {
     // readLines
     //-----------------------------------------------------------------------
     /**
-     * Get the contents of an <code>InputStream</code> as a list of Strings,
+     * Gets the contents of an <code>InputStream</code> as a list of Strings,
      * one entry per line, using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -971,7 +971,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a list of Strings,
+     * Gets the contents of an <code>InputStream</code> as a list of Strings,
      * one entry per line, using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -990,7 +990,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of an <code>InputStream</code> as a list of Strings,
+     * Gets the contents of an <code>InputStream</code> as a list of Strings,
      * one entry per line, using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -1014,7 +1014,7 @@ public class IOUtils {
     }
 
     /**
-     * Get the contents of a <code>Reader</code> as a list of Strings,
+     * Gets the contents of a <code>Reader</code> as a list of Strings,
      * one entry per line.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1040,7 +1040,7 @@ public class IOUtils {
     // lineIterator
     //-----------------------------------------------------------------------
     /**
-     * Return an Iterator for the lines in a <code>Reader</code>.
+     * Returns an Iterator for the lines in a <code>Reader</code>.
      * <p>
      * <code>LineIterator</code> holds a reference to the open
      * <code>Reader</code> specified here. When you have finished with the
@@ -1071,7 +1071,7 @@ public class IOUtils {
     }
 
     /**
-     * Return an Iterator for the lines in an <code>InputStream</code>, using
+     * Returns an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
      * <p>
      * <code>LineIterator</code> holds a reference to the open
@@ -1105,7 +1105,7 @@ public class IOUtils {
     }
 
     /**
-     * Return an Iterator for the lines in an <code>InputStream</code>, using
+     * Returns an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
      * <p>
      * <code>LineIterator</code> holds a reference to the open
@@ -1143,7 +1143,7 @@ public class IOUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Convert the specified CharSequence to an input stream, encoded as bytes
+     * Converts the specified CharSequence to an input stream, encoded as bytes
      * using the default character encoding of the platform.
      *
      * @param input the CharSequence to convert
@@ -1155,7 +1155,7 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified CharSequence to an input stream, encoded as bytes
+     * Converts the specified CharSequence to an input stream, encoded as bytes
      * using the specified character encoding.
      *
      * @param input the CharSequence to convert
@@ -1168,7 +1168,7 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified CharSequence to an input stream, encoded as bytes
+     * Converts the specified CharSequence to an input stream, encoded as bytes
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -1189,7 +1189,7 @@ public class IOUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Convert the specified string to an input stream, encoded as bytes
+     * Converts the specified string to an input stream, encoded as bytes
      * using the default character encoding of the platform.
      *
      * @param input the string to convert
@@ -1201,7 +1201,7 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified string to an input stream, encoded as bytes
+     * Converts the specified string to an input stream, encoded as bytes
      * using the specified character encoding.
      *
      * @param input the string to convert
@@ -1214,7 +1214,7 @@ public class IOUtils {
     }
 
     /**
-     * Convert the specified string to an input stream, encoded as bytes
+     * Converts the specified string to an input stream, encoded as bytes
      * using the specified character encoding.
      * <p>
      * Character encoding names can be found at
@@ -1724,7 +1724,7 @@ public class IOUtils {
     // copy from InputStream
     //-----------------------------------------------------------------------
     /**
-     * Copy bytes from an <code>InputStream</code> to an
+     * Copies bytes from an <code>InputStream</code> to an
      * <code>OutputStream</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1751,7 +1751,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code> using an internal buffer of the
+     * Copies bytes from an <code>InputStream</code> to an <code>OutputStream</code> using an internal buffer of the
      * given size.
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
@@ -1775,7 +1775,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
+     * Copies bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1796,7 +1796,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
+     * Copies bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
@@ -1823,7 +1823,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy some or all bytes from a large (over 2GB) <code>InputStream</code> to an
+     * Copies some or all bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input bytes.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1852,7 +1852,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy some or all bytes from a large (over 2GB) <code>InputStream</code> to an
+     * Copies some or all bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input bytes.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
@@ -1903,7 +1903,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to chars on a
+     * Copies bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the default character encoding of the platform.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1923,7 +1923,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to chars on a
+     * Copies bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1944,7 +1944,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy bytes from an <code>InputStream</code> to chars on a
+     * Copies bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the specified character encoding.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1972,7 +1972,7 @@ public class IOUtils {
     // copy from Reader
     //-----------------------------------------------------------------------
     /**
-     * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+     * Copies chars from a <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
@@ -1998,7 +1998,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
+     * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
@@ -2017,7 +2017,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
+     * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedReader</code>.
@@ -2042,7 +2042,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy some or all chars from a large (over 2GB) <code>InputStream</code> to an
+     * Copies some or all chars from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input chars.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -2066,7 +2066,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy some or all chars from a large (over 2GB) <code>InputStream</code> to an
+     * Copies some or all chars from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input chars.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
@@ -2110,7 +2110,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a <code>Reader</code> to bytes on an
+     * Copies chars from a <code>Reader</code> to bytes on an
      * <code>OutputStream</code> using the default character encoding of the
      * platform, and calling flush.
      * <p>
@@ -2134,7 +2134,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a <code>Reader</code> to bytes on an
+     * Copies chars from a <code>Reader</code> to bytes on an
      * <code>OutputStream</code> using the specified character encoding, and
      * calling flush.
      * <p>
@@ -2165,7 +2165,7 @@ public class IOUtils {
     }
 
     /**
-     * Copy chars from a <code>Reader</code> to bytes on an
+     * Copies chars from a <code>Reader</code> to bytes on an
      * <code>OutputStream</code> using the specified character encoding, and
      * calling flush.
      * <p>
@@ -2197,7 +2197,7 @@ public class IOUtils {
     // content equals
     //-----------------------------------------------------------------------
     /**
-     * Compare the contents of two Streams to determine if they are equal or
+     * Compares the contents of two Streams to determine if they are equal or
      * not.
      * <p>
      * This method buffers the input internally using
@@ -2233,7 +2233,7 @@ public class IOUtils {
     }
 
     /**
-     * Compare the contents of two Readers to determine if they are equal or
+     * Compares the contents of two Readers to determine if they are equal or
      * not.
      * <p>
      * This method buffers the input internally using
@@ -2267,7 +2267,7 @@ public class IOUtils {
     }
 
     /**
-     * Compare the contents of two Readers to determine if they are equal or
+     * Compares the contents of two Readers to determine if they are equal or
      * not, ignoring EOL characters.
      * <p>
      * This method buffers the input internally using
@@ -2295,7 +2295,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip bytes from an input byte stream.
+     * Skips bytes from an input byte stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * skip() implementations in subclasses of {@link InputStream}.
@@ -2343,7 +2343,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip bytes from a ReadableByteChannel.
+     * Skips bytes from a ReadableByteChannel.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up.
      *
@@ -2374,7 +2374,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip characters from an input character stream.
+     * Skips characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * skip() implementations in subclasses of {@link Reader}.
@@ -2421,7 +2421,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip the requested number of bytes or fail if there are not enough left.
+     * Skips the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#skip(long)} may
      * not skip as many bytes as requested (most likely because of reaching EOF).
@@ -2451,7 +2451,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip the requested number of bytes or fail if there are not enough left.
+     * Skips the requested number of bytes or fail if there are not enough left.
      *
      * @param input ReadableByteChannel to skip
      * @param toSkip the number of bytes to skip
@@ -2472,7 +2472,7 @@ public class IOUtils {
     }
 
     /**
-     * Skip the requested number of characters or fail if there are not enough left.
+     * Skips the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#skip(long)} may
      * not skip as many characters as requested (most likely because of reaching EOF).
@@ -2500,7 +2500,7 @@ public class IOUtils {
     
 
     /**
-     * Read characters from an input character stream.
+     * Reads characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
@@ -2530,7 +2530,7 @@ public class IOUtils {
     }
 
     /**
-     * Read characters from an input character stream.
+     * Reads characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
@@ -2546,7 +2546,7 @@ public class IOUtils {
     }
 
     /**
-     * Read bytes from an input stream.
+     * Reads bytes from an input stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
@@ -2576,7 +2576,7 @@ public class IOUtils {
     }
     
     /**
-     * Read bytes from an input stream.
+     * Reads bytes from an input stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
@@ -2616,7 +2616,7 @@ public class IOUtils {
     }
 
     /**
-     * Read the requested number of characters or fail if there are not enough left.
+     * Reads the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
@@ -2639,7 +2639,7 @@ public class IOUtils {
     }
 
     /**
-     * Read the requested number of characters or fail if there are not enough left.
+     * Reads the requested number of characters or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
@@ -2657,7 +2657,7 @@ public class IOUtils {
     }
 
     /**
-     * Read the requested number of bytes or fail if there are not enough left.
+     * Reads the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
@@ -2680,7 +2680,7 @@ public class IOUtils {
     }
 
     /**
-     * Read the requested number of bytes or fail if there are not enough left.
+     * Reads the requested number of bytes or fail if there are not enough left.
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
