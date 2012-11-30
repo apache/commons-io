@@ -151,8 +151,9 @@ public class CharSequenceInputStreamTest {
         is.read(data2);
 
         is.close();
-        assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2); // data buffers should
-                                                                                               // be identical
+        
+        // data buffers should be identical
+        assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2); 
     }
 
     @Test
