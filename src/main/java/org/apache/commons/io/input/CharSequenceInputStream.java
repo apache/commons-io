@@ -52,52 +52,52 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructor.
      * 
-     * @param s the input character sequence
+     * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
      */
-    public CharSequenceInputStream(final CharSequence s, final Charset charset, int bufferSize) {
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset, int bufferSize) {
         super();
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
         this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
-        this.cbuf = CharBuffer.wrap(s);
+        this.cbuf = CharBuffer.wrap(cs);
         this.mark = NO_MARK;
     }
 
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}.
      * 
-     * @param s the input character sequence
+     * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
      */
-    public CharSequenceInputStream(final CharSequence s, final String charset, int bufferSize) {
-        this(s, Charset.forName(charset), bufferSize);
+    public CharSequenceInputStream(final CharSequence cs, final String charset, int bufferSize) {
+        this(cs, Charset.forName(charset), bufferSize);
     }
 
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}
      * with a buffer size of 2048.
      * 
-     * @param s the input character sequence
+     * @param cs the input character sequence
      * @param charset the character set name to use
      */
-    public CharSequenceInputStream(final CharSequence s, final Charset charset) {
-        this(s, charset, BUFFER_SIZE);
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
+        this(cs, charset, BUFFER_SIZE);
     }
 
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, String, int)}
      * with a buffer size of 2048.
      * 
-     * @param s the input character sequence
+     * @param cs the input character sequence
      * @param charset the character set name to use
      */
-    public CharSequenceInputStream(final CharSequence s, final String charset) {
-        this(s, charset, BUFFER_SIZE);
+    public CharSequenceInputStream(final CharSequence cs, final String charset) {
+        this(cs, charset, BUFFER_SIZE);
     }
 
     /**
