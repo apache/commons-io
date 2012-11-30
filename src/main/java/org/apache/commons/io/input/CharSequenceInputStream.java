@@ -39,6 +39,8 @@ public class CharSequenceInputStream extends InputStream {
 
     private static final int BUFFER_SIZE = 2048;
     
+    private static final int NO_MARK = -1;
+
     private final CharsetEncoder encoder;
     private final CharBuffer cbuf;
     private final ByteBuffer bbuf;
@@ -60,7 +62,7 @@ public class CharSequenceInputStream extends InputStream {
         this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
         this.cbuf = CharBuffer.wrap(s);
-        this.mark = -1;
+        this.mark = NO_MARK;
     }
 
     /**
@@ -194,9 +196,9 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public synchronized void reset() throws IOException {
-        if (this.mark != -1) {
+        if (this.mark != NO_MARK) {
             this.cbuf.position(this.mark);
-            this.mark = -1;
+            this.mark = NO_MARK;
         }
     }
 
