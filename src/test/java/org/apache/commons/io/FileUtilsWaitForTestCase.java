@@ -30,7 +30,7 @@ public class FileUtilsWaitForTestCase extends FileBasedTestCase {
     // This class has been broken out from FileUtilsTestCase
     // to solve issues as per BZ 38927
 
-    public FileUtilsWaitForTestCase(String name) {
+    public FileUtilsWaitForTestCase(final String name) {
         super(name);
     }
 

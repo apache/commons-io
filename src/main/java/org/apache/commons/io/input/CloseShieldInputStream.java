@@ -36,7 +36,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      *
      * @param in underlying input stream
      */
-    public CloseShieldInputStream(InputStream in) {
+    public CloseShieldInputStream(final InputStream in) {
         super(in);
     }
 

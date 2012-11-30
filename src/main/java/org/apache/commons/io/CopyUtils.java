@@ -131,7 +131,7 @@ public class CopyUtils {
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(byte[] input, OutputStream output)
+    public static void copy(final byte[] input, final OutputStream output)
             throws IOException {
         output.write(input);
     }
@@ -148,9 +148,9 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(byte[] input, Writer output)
+    public static void copy(final byte[] input, final Writer output)
             throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(input);
+        final ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output);
     }
 
@@ -166,11 +166,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            byte[] input,
-            Writer output,
-            String encoding)
+            final byte[] input,
+            final Writer output,
+            final String encoding)
                 throws IOException {
-        ByteArrayInputStream in = new ByteArrayInputStream(input);
+        final ByteArrayInputStream in = new ByteArrayInputStream(input);
         copy(in, output, encoding);
     }
 
@@ -188,10 +188,10 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static int copy(
-            InputStream input,
-            OutputStream output)
+            final InputStream input,
+            final OutputStream output)
                 throws IOException {
-        byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -213,10 +213,10 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static int copy(
-            Reader input,
-            Writer output)
+            final Reader input,
+            final Writer output)
                 throws IOException {
-        char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+        final char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -239,10 +239,10 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            InputStream input,
-            Writer output)
+            final InputStream input,
+            final Writer output)
                 throws IOException {
-        InputStreamReader in = new InputStreamReader(input);
+        final InputStreamReader in = new InputStreamReader(input);
         copy(in, output);
     }
 
@@ -257,11 +257,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            InputStream input,
-            Writer output,
-            String encoding)
+            final InputStream input,
+            final Writer output,
+            final String encoding)
                 throws IOException {
-        InputStreamReader in = new InputStreamReader(input, encoding);
+        final InputStreamReader in = new InputStreamReader(input, encoding);
         copy(in, output);
     }
 
@@ -278,10 +278,10 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            Reader input,
-            OutputStream output)
+            final Reader input,
+            final OutputStream output)
                 throws IOException {
-        OutputStreamWriter out = new OutputStreamWriter(output);
+        final OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
         // have to flush here.
@@ -301,11 +301,11 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static void copy(
-            String input,
-            OutputStream output)
+            final String input,
+            final OutputStream output)
                 throws IOException {
-        StringReader in = new StringReader(input);
-        OutputStreamWriter out = new OutputStreamWriter(output);
+        final StringReader in = new StringReader(input);
+        final OutputStreamWriter out = new OutputStreamWriter(output);
         copy(in, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
         // have to flush here.
@@ -322,7 +322,7 @@ public class CopyUtils {
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(String input, Writer output)
+    public static void copy(final String input, final Writer output)
                 throws IOException {
         output.write(input);
     }

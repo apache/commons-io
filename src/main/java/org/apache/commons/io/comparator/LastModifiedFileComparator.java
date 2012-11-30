@@ -63,8 +63,8 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
      * is greater than the second file.
      * 
      */
-    public int compare(File file1, File file2) {
-        long result = file1.lastModified() - file2.lastModified();
+    public int compare(final File file1, final File file2) {
+        final long result = file1.lastModified() - file2.lastModified();
         if (result < 0) {
             return -1;
         } else if (result > 0) {

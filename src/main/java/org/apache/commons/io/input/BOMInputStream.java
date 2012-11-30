@@ -103,7 +103,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @param delegate
      *            the InputStream to delegate to
      */
-    public BOMInputStream(InputStream delegate) {
+    public BOMInputStream(final InputStream delegate) {
         this(delegate, false, ByteOrderMark.UTF_8);
     }
 
@@ -115,7 +115,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @param include
      *            true to include the UTF-8 BOM or false to exclude it
      */
-    public BOMInputStream(InputStream delegate, boolean include) {
+    public BOMInputStream(final InputStream delegate, final boolean include) {
         this(delegate, include, ByteOrderMark.UTF_8);
     }
 
@@ -127,7 +127,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @param boms
      *            The BOMs to detect and exclude
      */
-    public BOMInputStream(InputStream delegate, ByteOrderMark... boms) {
+    public BOMInputStream(final InputStream delegate, final ByteOrderMark... boms) {
         this(delegate, false, boms);
     }
 
@@ -136,9 +136,9 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = new Comparator<ByteOrderMark>() {
 
-        public int compare(ByteOrderMark bom1, ByteOrderMark bom2) {
-            int len1 = bom1.length();
-            int len2 = bom2.length();
+        public int compare(final ByteOrderMark bom1, final ByteOrderMark bom2) {
+            final int len1 = bom1.length();
+            final int len2 = bom2.length();
             if (len1 > len2) {
                 return -1;
             }
@@ -159,7 +159,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @param boms
      *            The BOMs to detect and optionally exclude
      */
-    public BOMInputStream(InputStream delegate, boolean include, ByteOrderMark... boms) {
+    public BOMInputStream(final InputStream delegate, final boolean include, final ByteOrderMark... boms) {
         super(delegate);
         if (boms == null || boms.length == 0) {
             throw new IllegalArgumentException("No BOMs specified");
@@ -193,7 +193,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @throws IOException
      *             if an error reading the first bytes of the stream occurs
      */
-    public boolean hasBOM(ByteOrderMark bom) throws IOException {
+    public boolean hasBOM(final ByteOrderMark bom) throws IOException {
         if (!boms.contains(bom)) {
             throw new IllegalArgumentException("Stream not configure to detect " + bom);
         }
@@ -269,7 +269,7 @@ public class BOMInputStream extends ProxyInputStream {
      * @return The matched BOM or null if none matched
      */
     private ByteOrderMark find() {
-        for (ByteOrderMark bom : boms) {
+        for (final ByteOrderMark bom : boms) {
             if (matches(bom)) {
                 return bom;
             }
@@ -284,7 +284,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            The BOM
      * @return true if the bytes match the bom, otherwise false
      */
-    private boolean matches(ByteOrderMark bom) {
+    private boolean matches(final ByteOrderMark bom) {
         // if (bom.length() != fbLength) {
         // return false;
         // }
@@ -310,7 +310,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public int read() throws IOException {
-        int b = readFirstBytes();
+        final int b = readFirstBytes();
         return b >= 0 ? b : in.read();
     }
 
@@ -328,7 +328,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
-    public int read(byte[] buf, int off, int len) throws IOException {
+    public int read(final byte[] buf, int off, int len) throws IOException {
         int firstCount = 0;
         int b = 0;
         while (len > 0 && b >= 0) {
@@ -339,7 +339,7 @@ public class BOMInputStream extends ProxyInputStream {
                 firstCount++;
             }
         }
-        int secondCount = in.read(buf, off, len);
+        final int secondCount = in.read(buf, off, len);
         return secondCount < 0 ? firstCount > 0 ? firstCount : -1 : firstCount + secondCount;
     }
 
@@ -353,7 +353,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
-    public int read(byte[] buf) throws IOException {
+    public int read(final byte[] buf) throws IOException {
         return read(buf, 0, buf.length);
     }
 
@@ -364,7 +364,7 @@ public class BOMInputStream extends ProxyInputStream {
      *            read ahead limit
      */
     @Override
-    public synchronized void mark(int readlimit) {
+    public synchronized void mark(final int readlimit) {
         markFbIndex = fbIndex;
         markedAtStart = firstBytes == null;
         in.mark(readlimit);

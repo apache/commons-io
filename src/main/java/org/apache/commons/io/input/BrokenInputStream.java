@@ -40,7 +40,7 @@ public class BrokenInputStream extends InputStream {
      *
      * @param exception the exception to be thrown
      */
-    public BrokenInputStream(IOException exception) {
+    public BrokenInputStream(final IOException exception) {
         this.exception = exception;
     }
 
@@ -81,7 +81,7 @@ public class BrokenInputStream extends InputStream {
      * @throws IOException always thrown
      */
     @Override
-    public long skip(long n) throws IOException {
+    public long skip(final long n) throws IOException {
         throw exception;
     }
 

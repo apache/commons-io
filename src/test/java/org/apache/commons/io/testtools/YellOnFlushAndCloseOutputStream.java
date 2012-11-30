@@ -36,7 +36,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
      * @param yellForFlush True if flush() is forbidden
      * @param yellForClose True if close() is forbidden
      */
-    public YellOnFlushAndCloseOutputStream(OutputStream proxy, boolean yellForFlush, boolean yellForClose) {
+    public YellOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean yellForFlush, final boolean yellForClose) {
         super(proxy);
         this.yellForFlush = yellForFlush;
         this.yellForClose = yellForClose;

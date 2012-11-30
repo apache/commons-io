@@ -31,12 +31,12 @@ import junit.framework.TestCase;
 
 public class NullOutputStreamTest extends TestCase {
 
-    public NullOutputStreamTest(String name) {
+    public NullOutputStreamTest(final String name) {
         super(name);
     }
 
     public void testNull() throws IOException {
-        NullOutputStream nos = new NullOutputStream();
+        final NullOutputStream nos = new NullOutputStream();
         nos.write("string".getBytes());
         nos.write("some string".getBytes(), 3, 5);
         nos.write(1);

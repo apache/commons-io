@@ -57,7 +57,7 @@ public class FileEntry implements Serializable {
      *
      * @param file The file being monitored
      */
-    public FileEntry(File file) {
+    public FileEntry(final File file) {
         this((FileEntry)null, file);
     }
 
@@ -67,7 +67,7 @@ public class FileEntry implements Serializable {
      * @param parent The parent
      * @param file The file being monitored
      */
-    public FileEntry(FileEntry parent, File file) {
+    public FileEntry(final FileEntry parent, final File file) {
         if (file == null) {
             throw new IllegalArgumentException("File is missing");
         }
@@ -90,13 +90,13 @@ public class FileEntry implements Serializable {
      * @param file the file instance to compare to
      * @return {@code true} if the file has changed, otherwise {@code false}
      */
-    public boolean refresh(File file) {
+    public boolean refresh(final File file) {
 
         // cache original values
-        boolean origExists       = exists;
-        long    origLastModified = lastModified;
-        boolean origDirectory    = directory;
-        long    origLength       = length;
+        final boolean origExists       = exists;
+        final long    origLastModified = lastModified;
+        final boolean origDirectory    = directory;
+        final long    origLength       = length;
 
         // refresh the values
         name         = file.getName();
@@ -121,7 +121,7 @@ public class FileEntry implements Serializable {
      * @param file The child file
      * @return a new child instance
      */
-    public FileEntry newChildInstance(File file) {
+    public FileEntry newChildInstance(final File file) {
         return new FileEntry(this, file);
     }
 
@@ -159,7 +159,7 @@ public class FileEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(FileEntry[] children) {
+    public void setChildren(final FileEntry[] children) {
         this.children = children;
     }
 
@@ -186,7 +186,7 @@ public class FileEntry implements Serializable {
      *
      * @param name the file name
      */
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -206,7 +206,7 @@ public class FileEntry implements Serializable {
      *
      * @param lastModified The last modified time
      */
-    public void setLastModified(long lastModified) {
+    public void setLastModified(final long lastModified) {
         this.lastModified = lastModified;
     }
 
@@ -224,7 +224,7 @@ public class FileEntry implements Serializable {
      *
      * @param length the length
      */
-    public void setLength(long length) {
+    public void setLength(final long length) {
         this.length = length;
     }
 
@@ -244,7 +244,7 @@ public class FileEntry implements Serializable {
      *
      * @param exists whether the file exists or not
      */
-    public void setExists(boolean exists) {
+    public void setExists(final boolean exists) {
         this.exists = exists;
     }
 
@@ -262,7 +262,7 @@ public class FileEntry implements Serializable {
      *
      * @param directory whether the file is a directory or not
      */
-    public void setDirectory(boolean directory) {
+    public void setDirectory(final boolean directory) {
         this.directory = directory;
     }
 }

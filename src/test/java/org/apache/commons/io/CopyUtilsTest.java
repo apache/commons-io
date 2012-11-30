@@ -49,9 +49,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
 
-    private byte[] inData = generateTestData(FILE_SIZE);
+    private final byte[] inData = generateTestData(FILE_SIZE);
 
-    public CopyUtilsTest(String testName) {
+    public CopyUtilsTest(final String testName) {
         super(testName);
     }
 
@@ -77,8 +77,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
     
     public void testCopy_byteArrayToOutputStream() throws Exception {
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
         CopyUtils.copy(inData, out);
 
@@ -87,9 +87,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_byteArrayToWriter() throws Exception {
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
         
         CopyUtils.copy(inData, writer);
         writer.flush();
@@ -99,9 +99,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
-        String inDataStr = "data";
-        String charsetName = "UTF-8";
-        StringWriter writer = new StringWriter(); 
+        final String inDataStr = "data";
+        final String charsetName = "UTF-8";
+        final StringWriter writer = new StringWriter(); 
         CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
     }
@@ -110,10 +110,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
 
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        int count = CopyUtils.copy(in, out);
+        final int count = CopyUtils.copy(in, out);
         
         assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
@@ -125,9 +125,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
 
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
         
         CopyUtils.copy(in, writer);
         writer.flush();
@@ -138,9 +138,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_inputStreamToWriterWithEncoding() throws Exception {
-        String inDataStr = "data";
-        String charsetName = "UTF-8";
-        StringWriter writer = new StringWriter();
+        final String inDataStr = "data";
+        final String charsetName = "UTF-8";
+        final StringWriter writer = new StringWriter();
         CopyUtils.copy(new ByteArrayInputStream(inDataStr.getBytes(charsetName)), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
     }
@@ -148,10 +148,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
-        Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
         
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
         CopyUtils.copy(reader, out);
         //Note: this method *does* flush. It is equivalent to:
@@ -168,13 +168,13 @@ public class CopyUtilsTest extends FileBasedTestCase {
     public void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
-        Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
 
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
-        int count = CopyUtils.copy(reader, writer);
+        final int count = CopyUtils.copy(reader, writer);
         writer.flush();
         assertEquals(
             "The number of characters returned by copy is wrong",
@@ -185,10 +185,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_stringToOutputStream() throws Exception {
-        String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, "US-ASCII");
         
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         CopyUtils.copy(str, out);
         //Note: this method *does* flush. It is equivalent to:
@@ -203,11 +203,11 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     public void testCopy_stringToWriter() throws Exception {
-        String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, "US-ASCII");
 
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
         CopyUtils.copy(str, writer);
         writer.flush();

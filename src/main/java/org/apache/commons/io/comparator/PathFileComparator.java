@@ -83,7 +83,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      *
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      */
-    public PathFileComparator(IOCase caseSensitivity) {
+    public PathFileComparator(final IOCase caseSensitivity) {
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
@@ -98,7 +98,7 @@ public class PathFileComparator extends AbstractFileComparator implements Serial
      * is greater than the second file.
      * 
      */
-    public int compare(File file1, File file2) {
+    public int compare(final File file1, final File file2) {
         return caseSensitivity.checkCompareTo(file1.getPath(), file2.getPath());
     }
 

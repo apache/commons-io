@@ -46,7 +46,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @throws StreamCorruptedException if the stream is corrupted
      */
     public ClassLoaderObjectInputStream(
-            ClassLoader classLoader, InputStream inputStream)
+            final ClassLoader classLoader, final InputStream inputStream)
             throws IOException, StreamCorruptedException {
         super(inputStream);
         this.classLoader = classLoader;
@@ -62,10 +62,10 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @throws ClassNotFoundException if the Class cannot be found
      */
     @Override
-    protected Class<?> resolveClass(ObjectStreamClass objectStreamClass)
+    protected Class<?> resolveClass(final ObjectStreamClass objectStreamClass)
             throws IOException, ClassNotFoundException {
         
-        Class<?> clazz = Class.forName(objectStreamClass.getName(), false, classLoader);
+        final Class<?> clazz = Class.forName(objectStreamClass.getName(), false, classLoader);
 
         if (clazz != null) {
             // the classloader knows of the class
@@ -88,15 +88,15 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @since 2.1
      */
     @Override
-    protected Class<?> resolveProxyClass(String[] interfaces) throws IOException,
+    protected Class<?> resolveProxyClass(final String[] interfaces) throws IOException,
             ClassNotFoundException {
-        Class<?>[] interfaceClasses = new Class[interfaces.length];
+        final Class<?>[] interfaceClasses = new Class[interfaces.length];
         for (int i = 0; i < interfaces.length; i++) {
             interfaceClasses[i] = Class.forName(interfaces[i], false, classLoader);
         }
         try {
             return Proxy.getProxyClass(classLoader, interfaceClasses);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return super.resolveProxyClass(interfaces);
         }
     }

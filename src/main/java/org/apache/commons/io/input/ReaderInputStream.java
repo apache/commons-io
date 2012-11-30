@@ -103,7 +103,7 @@ public class ReaderInputStream extends InputStream {
      * @param encoder the charset encoder
      * @since 2.1
      */
-    public ReaderInputStream(Reader reader, CharsetEncoder encoder) {
+    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder) {
         this(reader, encoder, DEFAULT_BUFFER_SIZE);
     }
 
@@ -115,7 +115,7 @@ public class ReaderInputStream extends InputStream {
      * @param bufferSize the size of the input buffer in number of characters
      * @since 2.1
      */
-    public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize) {
+    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder, final int bufferSize) {
         this.reader = reader;
         this.encoder = encoder;
         this.encoderIn = CharBuffer.allocate(bufferSize);
@@ -131,7 +131,7 @@ public class ReaderInputStream extends InputStream {
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
-    public ReaderInputStream(Reader reader, Charset charset, int bufferSize) {
+    public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
         this(reader,
              charset.newEncoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
@@ -146,7 +146,7 @@ public class ReaderInputStream extends InputStream {
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
-    public ReaderInputStream(Reader reader, Charset charset) {
+    public ReaderInputStream(final Reader reader, final Charset charset) {
         this(reader, charset, DEFAULT_BUFFER_SIZE);
     }
 
@@ -157,7 +157,7 @@ public class ReaderInputStream extends InputStream {
      * @param charsetName the name of the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
      */
-    public ReaderInputStream(Reader reader, String charsetName, int bufferSize) {
+    public ReaderInputStream(final Reader reader, final String charsetName, final int bufferSize) {
         this(reader, Charset.forName(charsetName), bufferSize);
     }
 
@@ -168,7 +168,7 @@ public class ReaderInputStream extends InputStream {
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
      */
-    public ReaderInputStream(Reader reader, String charsetName) {
+    public ReaderInputStream(final Reader reader, final String charsetName) {
         this(reader, charsetName, DEFAULT_BUFFER_SIZE);
     }
 
@@ -178,7 +178,7 @@ public class ReaderInputStream extends InputStream {
      * 
      * @param reader the target {@link Reader}
      */
-    public ReaderInputStream(Reader reader) {
+    public ReaderInputStream(final Reader reader) {
         this(reader, Charset.defaultCharset());
     }
 
@@ -191,11 +191,11 @@ public class ReaderInputStream extends InputStream {
     private void fillBuffer() throws IOException {
         if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
             encoderIn.compact();
-            int position = encoderIn.position();
+            final int position = encoderIn.position();
             // We don't use Reader#read(CharBuffer) here because it is more efficient
             // to write directly to the underlying char array (the default implementation
             // copies data to a temporary char array).
-            int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
+            final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
             if (c == -1) {
                 endOfInput = true;
             } else {
@@ -219,7 +219,7 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(final byte[] b, int off, int len) throws IOException {
         if (b == null) {
             throw new NullPointerException("Byte array must not be null");
         }
@@ -233,7 +233,7 @@ public class ReaderInputStream extends InputStream {
         }
         while (len > 0) {
             if (encoderOut.hasRemaining()) {
-                int c = Math.min(encoderOut.remaining(), len);
+                final int c = Math.min(encoderOut.remaining(), len);
                 encoderOut.get(b, off, c);
                 off += c;
                 len -= c;
@@ -257,7 +257,7 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(byte[] b) throws IOException {
+    public int read(final byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 

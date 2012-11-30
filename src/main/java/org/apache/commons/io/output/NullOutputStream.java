@@ -41,7 +41,7 @@ public class NullOutputStream extends OutputStream {
      * @param len The number of bytes to write
      */
     @Override
-    public void write(byte[] b, int off, int len) {
+    public void write(final byte[] b, final int off, final int len) {
         //to /dev/null
     }
 
@@ -50,7 +50,7 @@ public class NullOutputStream extends OutputStream {
      * @param b The byte to write
      */
     @Override
-    public void write(int b) {
+    public void write(final int b) {
         //to /dev/null
     }
 
@@ -60,7 +60,7 @@ public class NullOutputStream extends OutputStream {
      * @throws IOException never
      */
     @Override
-    public void write(byte[] b) throws IOException {
+    public void write(final byte[] b) throws IOException {
         //to /dev/null
     }
 

@@ -41,7 +41,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      *
      * @param input InputStream to read from
      */
-    public SwappedDataInputStream( InputStream input )
+    public SwappedDataInputStream( final InputStream input )
     {
         super( input );
     }
@@ -113,7 +113,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
-    public void readFully( byte[] data )
+    public void readFully( final byte[] data )
         throws IOException, EOFException
     {
         readFully( data, 0, data.length );
@@ -129,15 +129,15 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
-    public void readFully( byte[] data, int offset, int length )
+    public void readFully( final byte[] data, final int offset, final int length )
         throws IOException, EOFException
     {
         int remaining = length;
 
         while( remaining > 0 )
         {
-            int location = offset + length - remaining;
-            int count = read( data, location, remaining );
+            final int location = offset + length - remaining;
+            final int count = read( data, location, remaining );
 
             if( -1 == count )
             {
@@ -241,7 +241,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
-    public int skipBytes( int count )
+    public int skipBytes( final int count )
         throws IOException, EOFException
     {
         return (int)in.skip( count );

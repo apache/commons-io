@@ -33,13 +33,13 @@ import org.apache.commons.io.input.NullInputStream;
 
 public class CountingOutputStreamTest extends TestCase {
 
-    public CountingOutputStreamTest(String name) {
+    public CountingOutputStreamTest(final String name) {
         super(name);
     }
 
     public void testCounting() throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CountingOutputStream cos = new CountingOutputStream(baos);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final CountingOutputStream cos = new CountingOutputStream(baos);
 
         for(int i = 0; i < 20; i++) {
             cos.write(i);
@@ -47,7 +47,7 @@ public class CountingOutputStreamTest extends TestCase {
         assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 0, 20);
         assertEquals("CountingOutputStream.getCount()", cos.getCount(), 20);
 
-        byte[] array = new byte[10];
+        final byte[] array = new byte[10];
         for(int i = 20; i < 30; i++) {
             array[i-20] = (byte)i;
         }
@@ -62,7 +62,7 @@ public class CountingOutputStreamTest extends TestCase {
         assertByteArrayEquals("CountingOutputStream.write(byte[], int, int)", baos.toByteArray(), 0, 35);
         assertEquals("CountingOutputStream.getCount()", cos.getCount(), 35);
 
-        int count = cos.resetCount();
+        final int count = cos.resetCount();
         assertEquals("CountingOutputStream.resetCount()", count, 35);
 
         for(int i = 0; i < 10; i++) {
@@ -77,24 +77,24 @@ public class CountingOutputStreamTest extends TestCase {
      * Test for files > 2GB in size - see issue IO-84
      */
     public void testLargeFiles_IO84() throws Exception {
-        long size = (long)Integer.MAX_VALUE + (long)1;
+        final long size = (long)Integer.MAX_VALUE + (long)1;
 
-        NullInputStream mock     = new NullInputStream(size);
-        OutputStream nos         = new NullOutputStream();
-        CountingOutputStream cos = new CountingOutputStream(nos);
+        final NullInputStream mock     = new NullInputStream(size);
+        final OutputStream nos         = new NullOutputStream();
+        final CountingOutputStream cos = new CountingOutputStream(nos);
 
         // Test integer methods
         IOUtils.copyLarge(mock, cos);
         try {
             cos.getCount();
             fail("Expected getCount() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
+        } catch (final ArithmeticException ae) {
             // expected result
         }
         try {
             cos.resetCount();
             fail("Expected resetCount() to throw an ArithmeticException");
-        } catch (ArithmeticException ae) {
+        } catch (final ArithmeticException ae) {
             // expected result
         }
 
@@ -106,7 +106,7 @@ public class CountingOutputStreamTest extends TestCase {
         assertEquals("resetByteCount()", size, cos.resetByteCount());
     }
 
-    private void assertByteArrayEquals(String msg, byte[] array, int start, int end) {
+    private void assertByteArrayEquals(final String msg, final byte[] array, final int start, final int end) {
         for (int i = start; i < end; i++) {
             assertEquals(msg+": array[" + i + "] mismatch", array[i], i-start);
         }

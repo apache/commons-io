@@ -56,7 +56,7 @@ public class XmlStreamWriter extends Writer {
      *
      * @param out The output stream
      */
-    public XmlStreamWriter(OutputStream out) {
+    public XmlStreamWriter(final OutputStream out) {
         this(out, null);
     }
 
@@ -67,7 +67,7 @@ public class XmlStreamWriter extends Writer {
      * @param out The output stream
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
-    public XmlStreamWriter(OutputStream out, String defaultEncoding) {
+    public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
         this.out = out;
         this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
@@ -80,7 +80,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
-    public XmlStreamWriter(File file) throws FileNotFoundException {
+    public XmlStreamWriter(final File file) throws FileNotFoundException {
         this(file, null);
     }
 
@@ -93,7 +93,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
-    public XmlStreamWriter(File file, String defaultEncoding) throws FileNotFoundException {
+    public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
     }
 
@@ -150,10 +150,10 @@ public class XmlStreamWriter extends Writer {
      * @param len The number of characters to write
      * @throws IOException if an error occurs detecting the encoding
      */
-    private void detectEncoding(char[] cbuf, int off, int len)
+    private void detectEncoding(final char[] cbuf, final int off, final int len)
             throws IOException {
         int size = len;
-        StringBuffer xmlProlog = xmlPrologWriter.getBuffer();
+        final StringBuffer xmlProlog = xmlPrologWriter.getBuffer();
         if (xmlProlog.length() + len > BUFFER_SIZE) {
             size = BUFFER_SIZE - xmlProlog.length();
         }
@@ -163,10 +163,10 @@ public class XmlStreamWriter extends Writer {
         if (xmlProlog.length() >= 5) {
             if (xmlProlog.substring(0, 5).equals("<?xml")) {
                 // try to extract encoding from XML prolog
-                int xmlPrologEnd = xmlProlog.indexOf("?>");
+                final int xmlPrologEnd = xmlProlog.indexOf("?>");
                 if (xmlPrologEnd > 0) {
                     // ok, full XML prolog written: let's extract encoding
-                    Matcher m = ENCODING_PATTERN.matcher(xmlProlog.substring(0,
+                    final Matcher m = ENCODING_PATTERN.matcher(xmlProlog.substring(0,
                             xmlPrologEnd));
                     if (m.find()) {
                         encoding = m.group(1).toUpperCase();
@@ -208,7 +208,7 @@ public class XmlStreamWriter extends Writer {
      * @throws IOException if an error occurs detecting the encoding
      */
     @Override
-    public void write(char[] cbuf, int off, int len) throws IOException {
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
         if (xmlPrologWriter != null) {
             detectEncoding(cbuf, off, len);
         } else {

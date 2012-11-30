@@ -41,7 +41,7 @@ public class TailerTest extends FileBasedTestCase {
 
     private Tailer tailer;
 
-    public TailerTest(String name) {
+    public TailerTest(final String name) {
         super(name);
     }
 
@@ -56,23 +56,23 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     public void testLongFile() throws Exception {
-        long delay = 50;
+        final long delay = 50;
         
-        File file = new File(getTestDirectory(), "testLongFile.txt");
+        final File file = new File(getTestDirectory(), "testLongFile.txt");
         createFile(file, 0);
-        Writer writer = new FileWriter(file, true);
+        final Writer writer = new FileWriter(file, true);
         for (int i = 0; i < 100000; i++) {
             writer.write("LineLineLineLineLineLineLineLineLineLine\n");
         }
         writer.write("SBTOURIST\n");
         IOUtils.closeQuietly(writer);
 
-        TestTailerListener listener = new TestTailerListener();
+        final TestTailerListener listener = new TestTailerListener();
         tailer = new Tailer(file, listener, delay, false);
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
-        Thread thread = new Thread(tailer);
+        final Thread thread = new Thread(tailer);
         thread.start();
 
         List<String> lines = listener.getLines();
@@ -85,16 +85,16 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     public void testBufferBreak() throws Exception {
-        long delay = 50;
+        final long delay = 50;
 
-        File file = new File(getTestDirectory(), "testBufferBreak.txt");
+        final File file = new File(getTestDirectory(), "testBufferBreak.txt");
         createFile(file, 0);
         writeString(file, "SBTOURIST\n");
 
-        TestTailerListener listener = new TestTailerListener();
+        final TestTailerListener listener = new TestTailerListener();
         tailer = new Tailer(file, listener, delay, false, 1);
 
-        Thread thread = new Thread(tailer);
+        final Thread thread = new Thread(tailer);
         thread.start();
 
         List<String> lines = listener.getLines();
@@ -107,7 +107,7 @@ public class TailerTest extends FileBasedTestCase {
 
     public void testTailerEof() throws Exception {
         // Create & start the Tailer
-        long delay = 50;
+        final long delay = 50;
         final File file = new File(getTestDirectory(), "tailer2-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
@@ -116,7 +116,7 @@ public class TailerTest extends FileBasedTestCase {
         thread.start();
 
         // Write some lines to the file
-        FileWriter writer = null;
+        final FileWriter writer = null;
         try {
             writeString(file, "Line");
 
@@ -142,12 +142,12 @@ public class TailerTest extends FileBasedTestCase {
     public void testTailer() throws Exception {
 
         // Create & start the Tailer
-        long delayMillis = 50;
+        final long delayMillis = 50;
         final File file = new File(getTestDirectory(), "tailer1-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
-        String osname = System.getProperty("os.name");
-        boolean isWindows = osname.startsWith("Windows");
+        final String osname = System.getProperty("os.name");
+        final boolean isWindows = osname.startsWith("Windows");
         tailer = new Tailer(file, listener, delayMillis, false, isWindows);
         final Thread thread = new Thread(tailer);
         thread.start();
@@ -179,7 +179,7 @@ public class TailerTest extends FileBasedTestCase {
 
         // Delete & re-create
         file.delete();
-        boolean exists = file.exists();
+        final boolean exists = file.exists();
         assertFalse("File should not exist", exists);
         createFile(file, 0);
         Thread.sleep(testDelayMillis);
@@ -207,7 +207,7 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     @Override
-    protected void createFile(File file, long size)
+    protected void createFile(final File file, final long size)
         throws IOException {
         super.createFile(file, size);
 
@@ -218,11 +218,11 @@ public class TailerTest extends FileBasedTestCase {
             while (reader == null) {
                 try {
                     reader = new RandomAccessFile(file.getPath(), "r");
-                } catch (FileNotFoundException e) {
+                } catch (final FileNotFoundException e) {
                 }
                 try {
                     Thread.sleep(200L);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     // ignore
                 }
             }
@@ -232,11 +232,11 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     /** Append some lines to a file */
-    private void write(File file, String... lines) throws Exception {
+    private void write(final File file, final String... lines) throws Exception {
         FileWriter writer = null;
         try {
             writer = new FileWriter(file, true);
-            for (String line : lines) {
+            for (final String line : lines) {
                 writer.write(line + "\n");
             }
         } finally {
@@ -245,11 +245,11 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     /** Append a string to a file */
-    private void writeString(File file, String ... strings) throws Exception {
+    private void writeString(final File file, final String ... strings) throws Exception {
         FileWriter writer = null;
         try {
             writer = new FileWriter(file, true);
-            for (String string : strings) {
+            for (final String string : strings) {
                 writer.write(string);
             }
         } finally {
@@ -261,8 +261,8 @@ public class TailerTest extends FileBasedTestCase {
         final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
         final TestTailerListener listener = new TestTailerListener();
-        int delay = 100;
-        int idle = 50; // allow time for thread to work
+        final int delay = 100;
+        final int idle = 50; // allow time for thread to work
         tailer = Tailer.create(file, listener, delay, false);
         Thread.sleep(idle);
         tailer.stop();
@@ -284,10 +284,10 @@ public class TailerTest extends FileBasedTestCase {
         assertFalse("nosuchfile should not exist", file.exists());
         final TestTailerListener listener = new TestTailerListener();
         // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
-        int delay = 1000;
-        int idle = 50; // allow time for thread to work
+        final int delay = 1000;
+        final int idle = 50; // allow time for thread to work
         Tailer tailer = new Tailer(file, listener, delay, false, 4096);
-        Thread thread = new Thread(tailer);
+        final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
         Thread.sleep(idle);
@@ -304,11 +304,11 @@ public class TailerTest extends FileBasedTestCase {
     public void testStopWithNoFileUsingExecutor() throws Exception {
         final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
-        TestTailerListener listener = new TestTailerListener();
-        int delay = 100;
-        int idle = 50; // allow time for thread to work
+        final TestTailerListener listener = new TestTailerListener();
+        final int delay = 100;
+        final int idle = 50; // allow time for thread to work
         tailer = new Tailer(file, listener, delay, false);
-        Executor exec = new ScheduledThreadPoolExecutor(1);
+        final Executor exec = new ScheduledThreadPoolExecutor(1);
         exec.execute(tailer);
         Thread.sleep(idle);
         tailer.stop();
@@ -322,7 +322,7 @@ public class TailerTest extends FileBasedTestCase {
 
     public void testIO335() throws Exception { // test CR behaviour
         // Create & start the Tailer
-        long delayMillis = 50;
+        final long delayMillis = 50;
         final File file = new File(getTestDirectory(), "tailer-testio334.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
@@ -334,7 +334,7 @@ public class TailerTest extends FileBasedTestCase {
         writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
         final long testDelayMillis = delayMillis * 10;
         Thread.sleep(testDelayMillis);
-        List<String> lines = listener.getLines();
+        final List<String> lines = listener.getLines();
         assertEquals("line count", 4, lines.size());
         assertEquals("line 1", "CRLF", lines.get(0));
         assertEquals("line 2", "LF", lines.get(1));
@@ -364,7 +364,7 @@ public class TailerTest extends FileBasedTestCase {
 
         volatile int initialised = 0;
 
-        public void handle(String line) {
+        public void handle(final String line) {
             lines.add(line);
         }
 
@@ -376,11 +376,11 @@ public class TailerTest extends FileBasedTestCase {
             lines.clear();
         }
 
-        public void handle(Exception e) {
+        public void handle(final Exception e) {
             exception = e;
         }
 
-        public void init(Tailer tailer) {
+        public void init(final Tailer tailer) {
             initialised++; // not atomic, but OK because only updated here.
         }
 

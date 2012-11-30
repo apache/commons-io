@@ -29,7 +29,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class FileDeleteStrategyTestCase extends FileBasedTestCase {
 
-    public FileDeleteStrategyTestCase(String name) {
+    public FileDeleteStrategyTestCase(final String name) {
         super(name);
     }
 
@@ -45,10 +45,10 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     public void testDeleteNormal() throws Exception {
-        File baseDir = getTestDirectory();
-        File subDir = new File(baseDir, "test");
+        final File baseDir = getTestDirectory();
+        final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
-        File subFile = new File(subDir, "a.txt");
+        final File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
         assertTrue(subDir.exists());
@@ -57,7 +57,7 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         try {
             FileDeleteStrategy.NORMAL.delete(subDir);
             fail();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // expected
         }
         assertTrue(subDir.exists());
@@ -75,10 +75,10 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
     }
 
     public void testDeleteQuietlyNormal() throws Exception {
-        File baseDir = getTestDirectory();
-        File subDir = new File(baseDir, "test");
+        final File baseDir = getTestDirectory();
+        final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
-        File subFile = new File(subDir, "a.txt");
+        final File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
         assertTrue(subDir.exists());
@@ -100,10 +100,10 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
     }
 
     public void testDeleteForce() throws Exception {
-        File baseDir = getTestDirectory();
-        File subDir = new File(baseDir, "test");
+        final File baseDir = getTestDirectory();
+        final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
-        File subFile = new File(subDir, "a.txt");
+        final File subFile = new File(subDir, "a.txt");
         createFile(subFile, 16);
         
         assertTrue(subDir.exists());
@@ -121,7 +121,7 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         try {
             FileDeleteStrategy.NORMAL.delete((File) null);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
         assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly((File) null));

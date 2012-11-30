@@ -70,7 +70,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(String fileName) throws IOException {
+    public LockableFileWriter(final String fileName) throws IOException {
         this(fileName, false, null);
     }
 
@@ -82,7 +82,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(String fileName, boolean append) throws IOException {
+    public LockableFileWriter(final String fileName, final boolean append) throws IOException {
         this(fileName, append, null);
     }
 
@@ -95,7 +95,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(String fileName, boolean append, String lockDir) throws IOException {
+    public LockableFileWriter(final String fileName, final boolean append, final String lockDir) throws IOException {
         this(new File(fileName), append, lockDir);
     }
 
@@ -107,7 +107,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(File file) throws IOException {
+    public LockableFileWriter(final File file) throws IOException {
         this(file, false, null);
     }
 
@@ -119,7 +119,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(File file, boolean append) throws IOException {
+    public LockableFileWriter(final File file, final boolean append) throws IOException {
         this(file, append, null);
     }
 
@@ -132,7 +132,7 @@ public class LockableFileWriter extends Writer {
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      */
-    public LockableFileWriter(File file, boolean append, String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final boolean append, final String lockDir) throws IOException {
         this(file, Charset.defaultCharset(), append, lockDir);
     }
 
@@ -145,7 +145,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, Charset encoding) throws IOException {
+    public LockableFileWriter(final File file, final Charset encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -160,7 +160,7 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(File file, String encoding) throws IOException {
+    public LockableFileWriter(final File file, final String encoding) throws IOException {
         this(file, encoding, false, null);
     }
 
@@ -175,7 +175,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, Charset encoding, boolean append,
+    public LockableFileWriter(File file, final Charset encoding, final boolean append,
             String lockDir) throws IOException {
         super();
         // init file to create/append
@@ -191,7 +191,7 @@ public class LockableFileWriter extends Writer {
         if (lockDir == null) {
             lockDir = System.getProperty("java.io.tmpdir");
         }
-        File lockDirFile = new File(lockDir);
+        final File lockDirFile = new File(lockDir);
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
         lockFile = new File(lockDirFile, file.getName() + LCK);
@@ -216,8 +216,8 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(File file, String encoding, boolean append,
-            String lockDir) throws IOException {
+    public LockableFileWriter(final File file, final String encoding, final boolean append,
+            final String lockDir) throws IOException {
         this(file, Charsets.toCharset(encoding), append, lockDir);
     }
 
@@ -229,7 +229,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if we cannot write to the lock directory
      * @throws IOException if we cannot find the lock file
      */
-    private void testLockDir(File lockDir) throws IOException {
+    private void testLockDir(final File lockDir) throws IOException {
         if (!lockDir.exists()) {
             throw new IOException(
                     "Could not find lockDir: " + lockDir.getAbsolutePath());
@@ -265,14 +265,14 @@ public class LockableFileWriter extends Writer {
      * @return The initialised writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(File file, Charset encoding, boolean append) throws IOException {
-        boolean fileExistedAlready = file.exists();
+    private Writer initWriter(final File file, final Charset encoding, final boolean append) throws IOException {
+        final boolean fileExistedAlready = file.exists();
         OutputStream stream = null;
         Writer writer = null;
         try {
             stream = new FileOutputStream(file.getAbsolutePath(), append);
             writer = new OutputStreamWriter(stream, Charsets.toCharset(encoding));
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
             FileUtils.deleteQuietly(lockFile);
@@ -280,7 +280,7 @@ public class LockableFileWriter extends Writer {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;
-        } catch (RuntimeException ex) {
+        } catch (final RuntimeException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
             FileUtils.deleteQuietly(lockFile);
@@ -314,7 +314,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(int idx) throws IOException {
+    public void write(final int idx) throws IOException {
         out.write(idx);
     }
 
@@ -324,7 +324,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(char[] chr) throws IOException {
+    public void write(final char[] chr) throws IOException {
         out.write(chr);
     }
 
@@ -336,7 +336,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(char[] chr, int st, int end) throws IOException {
+    public void write(final char[] chr, final int st, final int end) throws IOException {
         out.write(chr, st, end);
     }
 
@@ -346,7 +346,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(String str) throws IOException {
+    public void write(final String str) throws IOException {
         out.write(str);
     }
 
@@ -358,7 +358,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(String str, int st, int end) throws IOException {
+    public void write(final String str, final int st, final int end) throws IOException {
         out.write(str, st, end);
     }
 

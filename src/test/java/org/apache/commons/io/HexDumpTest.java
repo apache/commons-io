@@ -35,12 +35,12 @@ public class HexDumpTest extends TestCase {
      * @param name
      */
 
-    public HexDumpTest(String name) {
+    public HexDumpTest(final String name) {
         super(name);
     }
 
-    private char toHex(int n) {
-        char[] hexChars =
+    private char toHex(final int n) {
+        final char[] hexChars =
                 {
                     '0', '1', '2', '3', '4', '5', '6', '7',
                     '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -57,7 +57,7 @@ public class HexDumpTest extends TestCase {
 
     public void testDump()
             throws IOException {
-        byte[] testArray = new byte[256];
+        final byte[] testArray = new byte[256];
 
         for (int j = 0; j < 256; j++) {
             testArray[j] = (byte) j;
@@ -186,7 +186,7 @@ public class HexDumpTest extends TestCase {
             outputArray[offset++] = (byte) '1';
             outputArray[offset++] = (byte) ' ';
             for (int k = 0; k < 16; k++) {
-                int index = 0x81 + (j * 16) + k;
+                final int index = 0x81 + (j * 16) + k;
 
                 if (index < 0x100) {
                     outputArray[offset++] = (byte) toHex(index / 16);
@@ -198,7 +198,7 @@ public class HexDumpTest extends TestCase {
                 outputArray[offset++] = (byte) ' ';
             }
             for (int k = 0; k < 16; k++) {
-                int index = 0x81 + (j * 16) + k;
+                final int index = 0x81 + (j * 16) + k;
 
                 if (index < 0x100) {
                     outputArray[offset++] = (byte) toAscii(index);
@@ -220,7 +220,7 @@ public class HexDumpTest extends TestCase {
             HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(),
                     -1);
             fail("should have caught ArrayIndexOutOfBoundsException on negative index");
-        } catch (ArrayIndexOutOfBoundsException ignored_exception) {
+        } catch (final ArrayIndexOutOfBoundsException ignored_exception) {
 
             // as expected
         }
@@ -230,7 +230,7 @@ public class HexDumpTest extends TestCase {
             HexDump.dump(testArray, 0x10000000, new ByteArrayOutputStream(),
                     testArray.length);
             fail("should have caught ArrayIndexOutOfBoundsException on large index");
-        } catch (ArrayIndexOutOfBoundsException ignored_exception) {
+        } catch (final ArrayIndexOutOfBoundsException ignored_exception) {
 
             // as expected
         }
@@ -239,13 +239,13 @@ public class HexDumpTest extends TestCase {
         try {
             HexDump.dump(testArray, 0x10000000, null, 0);
             fail("should have caught IllegalArgumentException on negative index");
-        } catch (IllegalArgumentException ignored_exception) {
+        } catch (final IllegalArgumentException ignored_exception) {
 
             // as expected
         }
     }
 
-    private char toAscii(int c) {
+    private char toAscii(final int c) {
         char rval = '.';
 
         if ((c >= 32) && (c <= 126)) {

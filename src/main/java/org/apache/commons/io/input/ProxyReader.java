@@ -39,7 +39,7 @@ public abstract class ProxyReader extends FilterReader {
      * 
      * @param proxy  the Reader to delegate to
      */
-    public ProxyReader(Reader proxy) {
+    public ProxyReader(final Reader proxy) {
         super(proxy);
         // the proxy is stored in a protected superclass variable named 'in'
     }
@@ -53,10 +53,10 @@ public abstract class ProxyReader extends FilterReader {
     public int read() throws IOException {
         try {
             beforeRead(1);
-            int c = in.read();
+            final int c = in.read();
             afterRead(c != -1 ? 1 : -1);
             return c;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return -1;
         }
@@ -69,13 +69,13 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(char[] chr) throws IOException {
+    public int read(final char[] chr) throws IOException {
         try {
             beforeRead(chr != null ? chr.length : 0);
-            int n = in.read(chr);
+            final int n = in.read(chr);
             afterRead(n);
             return n;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return -1;
         }
@@ -90,13 +90,13 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(char[] chr, int st, int len) throws IOException {
+    public int read(final char[] chr, final int st, final int len) throws IOException {
         try {
             beforeRead(len);
-            int n = in.read(chr, st, len);
+            final int n = in.read(chr, st, len);
             afterRead(n);
             return n;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return -1;
         }
@@ -110,13 +110,13 @@ public abstract class ProxyReader extends FilterReader {
      * @since 2.0
      */
     @Override
-    public int read(CharBuffer target) throws IOException {
+    public int read(final CharBuffer target) throws IOException {
         try {
             beforeRead(target != null ? target.length() : 0);
-            int n = in.read(target);
+            final int n = in.read(target);
             afterRead(n);
             return n;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return -1;
         }
@@ -129,10 +129,10 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public long skip(long ln) throws IOException {
+    public long skip(final long ln) throws IOException {
         try {
             return in.skip(ln);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return 0;
         }
@@ -147,7 +147,7 @@ public abstract class ProxyReader extends FilterReader {
     public boolean ready() throws IOException {
         try {
             return in.ready();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
             return false;
         }
@@ -161,7 +161,7 @@ public abstract class ProxyReader extends FilterReader {
     public void close() throws IOException {
         try {
             in.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -172,10 +172,10 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public synchronized void mark(int idx) throws IOException {
+    public synchronized void mark(final int idx) throws IOException {
         try {
             in.mark(idx);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -188,7 +188,7 @@ public abstract class ProxyReader extends FilterReader {
     public synchronized void reset() throws IOException {
         try {
             in.reset();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleIOException(e);
         }
     }
@@ -220,7 +220,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param n number of chars that the caller asked to be read
      * @throws IOException if the pre-processing fails
      */
-    protected void beforeRead(int n) throws IOException {
+    protected void beforeRead(final int n) throws IOException {
     }
 
     /**
@@ -240,7 +240,7 @@ public abstract class ProxyReader extends FilterReader {
      * @param n number of chars read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
      */
-    protected void afterRead(int n) throws IOException {
+    protected void afterRead(final int n) throws IOException {
     }
 
     /**
@@ -252,7 +252,7 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if an I/O error occurs
      * @since 2.0
      */
-    protected void handleIOException(IOException e) throws IOException {
+    protected void handleIOException(final IOException e) throws IOException {
         throw e;
     }
 

@@ -36,9 +36,9 @@ public class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public InputStream bindStream( InputStream input )
+    public InputStream bindStream( final InputStream input )
     {
-        InputStream oldValue = m_streams.get();
+        final InputStream oldValue = m_streams.get();
         m_streams.set( input );
         return oldValue;
     }
@@ -52,7 +52,7 @@ public class DemuxInputStream
     public void close()
         throws IOException
     {
-        InputStream input = m_streams.get();
+        final InputStream input = m_streams.get();
         if( null != input )
         {
             input.close();
@@ -69,7 +69,7 @@ public class DemuxInputStream
     public int read()
         throws IOException
     {
-        InputStream input = m_streams.get();
+        final InputStream input = m_streams.get();
         if( null != input )
         {
             return input.read();

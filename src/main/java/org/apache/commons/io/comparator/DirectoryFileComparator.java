@@ -59,7 +59,7 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
      * @return the result of calling file1's
      * {@link File#compareTo(File)} with file2 as the parameter.
      */
-    public int compare(File file1, File file2) {
+    public int compare(final File file1, final File file2) {
         return getType(file1) - getType(file2);
     }
 
@@ -69,7 +69,7 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
      * @param file The file
      * @return 1 for directories and 2 for files
      */
-    private int getType(File file) {
+    private int getType(final File file) {
         if (file.isDirectory()) {
             return 1;
         } else {

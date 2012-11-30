@@ -51,7 +51,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Construct a new test case with the specified name
      * @param name Name of the test
      */
-    public ComparatorAbstractTestCase(String name) {
+    public ComparatorAbstractTestCase(final String name) {
         super(name);
     }
 
@@ -103,7 +103,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test the comparator array sort.
      */
     public void testSortArray() {
-        File[] files = new File[3];
+        final File[] files = new File[3];
         files[0] = equalFile1;
         files[1] = moreFile;
         files[2] = lessFile;
@@ -117,7 +117,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      * Test the comparator array sort.
      */
     public void testSortList() {
-        List<File> files = new ArrayList<File>();
+        final List<File> files = new ArrayList<File>();
         files.add(equalFile1);
         files.add(moreFile);
         files.add(lessFile);

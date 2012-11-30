@@ -76,13 +76,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     /** Delay in milliseconds to make sure test for "last modified date" are accurate */
     //private static final int LAST_MODIFIED_DELAY = 600;
 
-    private File testFile1;
-    private File testFile2;
+    private final File testFile1;
+    private final File testFile2;
 
-    private int testFile1Size;
-    private int testFile2Size;
+    private final int testFile1Size;
+    private final int testFile2Size;
 
-    public FileUtilsTestCase(String name) {
+    public FileUtilsTestCase(final String name) {
         super(name);
 
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -115,16 +115,16 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Tests the {@link FileUtils#getFile(String...)} method.
      */
     public void testGetFile() {
-        File expected_A = new File("src");
-        File expected_B = new File(expected_A, "main");
-        File expected_C = new File(expected_B, "java");
+        final File expected_A = new File("src");
+        final File expected_B = new File(expected_A, "main");
+        final File expected_C = new File(expected_B, "java");
         assertEquals("A", expected_A, FileUtils.getFile("src"));
         assertEquals("B", expected_B, FileUtils.getFile("src", "main"));
         assertEquals("C", expected_C, FileUtils.getFile("src", "main", "java"));
         try {
             FileUtils.getFile((String[])null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
     }
@@ -133,23 +133,23 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Tests the {@link FileUtils#getFile(File, String...)} method.
      */
     public void testGetFile_Parent() {
-        File parent = new File("parent");
-        File expected_A = new File(parent, "src");
-        File expected_B = new File(expected_A, "main");
-        File expected_C = new File(expected_B, "java");
+        final File parent = new File("parent");
+        final File expected_A = new File(parent, "src");
+        final File expected_B = new File(expected_A, "main");
+        final File expected_C = new File(expected_B, "java");
         assertEquals("A", expected_A, FileUtils.getFile(parent, "src"));
         assertEquals("B", expected_B, FileUtils.getFile(parent, "src", "main"));
         assertEquals("C", expected_C, FileUtils.getFile(parent, "src", "main", "java"));
         try {
             FileUtils.getFile(parent, (String[])null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.getFile((File)null, "src");
             fail("Expected NullPointerException");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
     }
@@ -166,7 +166,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Tests the {@link FileUtils#getTempDirectory()} method.
      */
     public void testGetTempDirectory() {
-        File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
+        final File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
         assertEquals(tempDirectory, FileUtils.getTempDirectory());
     }
     
@@ -182,13 +182,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * Tests the {@link FileUtils#getUserDirectory()} method.
      */
     public void testGetUserDirectory() {
-        File userDirectory = new File(System.getProperty("user.home"));
+        final File userDirectory = new File(System.getProperty("user.home"));
         assertEquals(userDirectory, FileUtils.getUserDirectory());
     }
     
     //-----------------------------------------------------------------------
     public void test_openInputStream_exists() throws Exception {
-        File file = new File(getTestDirectory(), "test.txt");
+        final File file = new File(getTestDirectory(), "test.txt");
         createLineBasedFile(file, new String[] {"Hello"});
         FileInputStream in = null;
         try {
@@ -200,13 +200,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void test_openInputStream_existsButIsDirectory() throws Exception {
-        File directory = new File(getTestDirectory(), "subdir");
+        final File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
         FileInputStream in = null;
         try {
             in = FileUtils.openInputStream(directory);
             fail();
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             // expected
         } finally {
             IOUtils.closeQuietly(in);
@@ -214,12 +214,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void test_openInputStream_notExists() throws Exception {
-        File directory = new File(getTestDirectory(), "test.txt");
+        final File directory = new File(getTestDirectory(), "test.txt");
         FileInputStream in = null;
         try {
             in = FileUtils.openInputStream(directory);
             fail();
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             // expected
         } finally {
             IOUtils.closeQuietly(in);
@@ -227,8 +227,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    void openOutputStream_noParent(boolean createFile) throws Exception {
-        File file = new File("test.txt");
+    void openOutputStream_noParent(final boolean createFile) throws Exception {
+        final File file = new File("test.txt");
         assertNull(file.getParentFile());
         try {
             if (createFile) {
@@ -258,7 +258,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
 
     public void test_openOutputStream_exists() throws Exception {
-        File file = new File(getTestDirectory(), "test.txt");
+        final File file = new File(getTestDirectory(), "test.txt");
         createLineBasedFile(file, new String[] {"Hello"});
         FileOutputStream out = null;
         try {
@@ -271,13 +271,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void test_openOutputStream_existsButIsDirectory() throws Exception {
-        File directory = new File(getTestDirectory(), "subdir");
+        final File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
         FileOutputStream out = null;
         try {
             out = FileUtils.openOutputStream(directory);
             fail();
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             // expected
         } finally {
             IOUtils.closeQuietly(out);
@@ -285,7 +285,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void test_openOutputStream_notExists() throws Exception {
-        File file = new File(getTestDirectory(), "a/test.txt");
+        final File file = new File(getTestDirectory(), "a/test.txt");
         FileOutputStream out = null;
         try {
             out = FileUtils.openOutputStream(file);
@@ -298,19 +298,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void test_openOutputStream_notExistsCannotCreate() throws Exception {
         // according to Wikipedia, most filing systems have a 256 limit on filename
-        String longStr =
+        final String longStr =
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
             "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
-        File file = new File(getTestDirectory(), "a/" + longStr + "/test.txt");
+        final File file = new File(getTestDirectory(), "a/" + longStr + "/test.txt");
         FileOutputStream out = null;
         try {
             out = FileUtils.openOutputStream(file);
             fail();
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             // expected
         } finally {
             IOUtils.closeQuietly(out);
@@ -378,14 +378,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     public void testToFile1() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file.txt");
-        File file = FileUtils.toFile(url);
+        final URL url = new URL("file", null, "a/b/c/file.txt");
+        final File file = FileUtils.toFile(url);
         assertTrue(file.toString().indexOf("file.txt") >= 0);
     }
 
     public void testToFile2() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
-        File file = FileUtils.toFile(url);
+        final URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
+        final File file = FileUtils.toFile(url);
         assertTrue(file.toString().indexOf("file name%20.txt") >= 0);
     }
 
@@ -395,20 +395,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToFile4() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
-        File file = FileUtils.toFile(url);
+        final URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
+        final File file = FileUtils.toFile(url);
         assertTrue(file.toString().indexOf("file% %me.txt%") >= 0);
     }
 
     /** IO-252 */
     public void testToFile5() throws Exception {
-        URL url = new URL("file", null, "both%20are%20100%20%25%20true");
-        File file = FileUtils.toFile(url);
+        final URL url = new URL("file", null, "both%20are%20100%20%25%20true");
+        final File file = FileUtils.toFile(url);
         assertEquals("both are 100 % true", file.toString());
     }
     public void testToFileUtf8() throws Exception {
-        URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
-        File file = FileUtils.toFile(url);
+        final URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
+        final File file = FileUtils.toFile(url);
         assertTrue(file.toString().indexOf("\u00E4\u00F6\u00FC\u00DF") >= 0);
     }
 
@@ -442,11 +442,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     // toFiles
 
     public void testToFiles1() throws Exception {
-        URL[] urls = new URL[] {
+        final URL[] urls = new URL[] {
             new URL("file", null, "file1.txt"),
             new URL("file", null, "file2.txt"),
         };
-        File[] files = FileUtils.toFiles(urls);
+        final File[] files = FileUtils.toFiles(urls);
         
         assertEquals(urls.length, files.length);
         assertEquals("File: " + files[0], true, files[0].toString().indexOf("file1.txt") >= 0);
@@ -454,11 +454,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToFiles2() throws Exception {
-        URL[] urls = new URL[] {
+        final URL[] urls = new URL[] {
             new URL("file", null, "file1.txt"),
             null,
         };
-        File[] files = FileUtils.toFiles(urls);
+        final File[] files = FileUtils.toFiles(urls);
         
         assertEquals(urls.length, files.length);
         assertEquals("File: " + files[0], true, files[0].toString().indexOf("file1.txt") >= 0);
@@ -466,39 +466,39 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToFiles3() throws Exception {
-        URL[] urls = null;
-        File[] files = FileUtils.toFiles(urls);
+        final URL[] urls = null;
+        final File[] files = FileUtils.toFiles(urls);
         
         assertEquals(0, files.length);
     }
 
     public void testToFiles3a() throws Exception {
-        URL[] urls = new URL[0]; // empty array
-        File[] files = FileUtils.toFiles(urls);
+        final URL[] urls = new URL[0]; // empty array
+        final File[] files = FileUtils.toFiles(urls);
         
         assertEquals(0, files.length);
     }
 
     public void testToFiles4() throws Exception {
-        URL[] urls = new URL[] {
+        final URL[] urls = new URL[] {
             new URL("file", null, "file1.txt"),
             new URL("http", "jakarta.apache.org", "file1.txt"),
         };
         try {
             FileUtils.toFiles(urls);
             fail();
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
     }
 
     // toURLs
 
     public void testToURLs1() throws Exception {
-        File[] files = new File[] {
+        final File[] files = new File[] {
             new File(getTestDirectory(), "file1.txt"),
             new File(getTestDirectory(), "file2.txt"),
             new File(getTestDirectory(), "test file.txt"),
         };
-        URL[] urls = FileUtils.toURLs(files);
+        final URL[] urls = FileUtils.toURLs(files);
         
         assertEquals(files.length, urls.length);
         assertTrue(urls[0].toExternalForm().startsWith("file:"));
@@ -532,8 +532,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 //    }
 
     public void testToURLs3a() throws Exception {
-        File[] files = new File[0]; // empty array
-        URL[] urls = FileUtils.toURLs(files);
+        final File[] files = new File[0]; // empty array
+        final URL[] urls = FileUtils.toURLs(files);
         
         assertEquals(0, urls.length);
     }
@@ -542,8 +542,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testContentEquals() throws Exception {
         // Non-existent files
-        File file = new File(getTestDirectory(), getName());
-        File file2 = new File(getTestDirectory(), getName() + "2");
+        final File file = new File(getTestDirectory(), getName());
+        final File file2 = new File(getTestDirectory(), getName() + "2");
         // both don't  exist
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));
@@ -554,26 +554,26 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.contentEquals(getTestDirectory(), getTestDirectory());
             fail("Comparing directories should fail with an IOException");
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             //expected
         }
 
         // Different files
-        File objFile1 =
+        final File objFile1 =
             new File(getTestDirectory(), getName() + ".object");
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile(
             getClass().getResource("/java/lang/Object.class"),
             objFile1);
 
-        File objFile1b =
+        final File objFile1b =
             new File(getTestDirectory(), getName() + ".object2");
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile(
             getClass().getResource("/java/lang/Object.class"),
             objFile1b);
 
-        File objFile2 =
+        final File objFile2 =
             new File(getTestDirectory(), getName() + ".collection");
         objFile2.deleteOnExit();
         FileUtils.copyURLToFile(
@@ -597,8 +597,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testContentEqualsIgnoreEOL() throws Exception {
         // Non-existent files
-        File file1 = new File(getTestDirectory(), getName());
-        File file2 = new File(getTestDirectory(), getName() + "2");
+        final File file1 = new File(getTestDirectory(), getName());
+        final File file2 = new File(getTestDirectory(), getName() + "2");
         // both don't  exist
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file1, null));
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
@@ -609,20 +609,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.contentEqualsIgnoreEOL(getTestDirectory(), getTestDirectory(), null);
             fail("Comparing directories should fail with an IOException");
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             //expected
         }
 
         // Different files
-        File tfile1 = new File(getTestDirectory(), getName() + ".txt1");
+        final File tfile1 = new File(getTestDirectory(), getName() + ".txt1");
         tfile1.deleteOnExit();
         FileUtils.write(tfile1,"123\r");
 
-        File tfile2 = new File(getTestDirectory(), getName() + ".txt2");
+        final File tfile2 = new File(getTestDirectory(), getName() + ".txt2");
         tfile1.deleteOnExit();
         FileUtils.write(tfile2,"123\n");
 
-        File tfile3 = new File(getTestDirectory(), getName() + ".collection");
+        final File tfile3 = new File(getTestDirectory(), getName() + ".collection");
         tfile3.deleteOnExit();
         FileUtils.write(tfile3,"123\r\n2");
 
@@ -634,19 +634,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile1, tfile3, null));
         assertFalse(FileUtils.contentEqualsIgnoreEOL(tfile2, tfile3, null));
 
-        URL urlCR = getClass().getResource("FileUtilsTestDataCR.dat");
+        final URL urlCR = getClass().getResource("FileUtilsTestDataCR.dat");
         assertNotNull(urlCR);
-        File cr = new File(urlCR.getPath());
+        final File cr = new File(urlCR.getPath());
         assertTrue(cr.exists());
 
-        URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.dat");
+        final URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.dat");
         assertNotNull(urlCRLF);
-        File crlf = new File(urlCRLF.getPath());
+        final File crlf = new File(urlCRLF.getPath());
         assertTrue(crlf.exists());
 
-        URL urlLF = getClass().getResource("FileUtilsTestDataLF.dat");
+        final URL urlLF = getClass().getResource("FileUtilsTestDataLF.dat");
         assertNotNull(urlLF);
-        File lf = new File(urlLF.getPath());
+        final File lf = new File(urlLF.getPath());
         assertTrue(lf.exists());
 
         assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, cr, null));
@@ -677,15 +677,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testCopyURLToFile() throws Exception {
         // Creates file
-        File file = new File(getTestDirectory(), getName());
+        final File file = new File(getTestDirectory(), getName());
         file.deleteOnExit();
 
         // Loads resource
-        String resourceName = "/java/lang/Object.class";
+        final String resourceName = "/java/lang/Object.class";
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
 
         // Tests that resuorce was copied correctly
-        FileInputStream fis = new FileInputStream(file);
+        final FileInputStream fis = new FileInputStream(file);
         try {
             assertTrue(
                 "Content is not equal.",
@@ -700,15 +700,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     public void testCopyURLToFileWithTimeout() throws Exception {
         // Creates file
-        File file = new File(getTestDirectory(), "testCopyURLToFileWithTimeout");
+        final File file = new File(getTestDirectory(), "testCopyURLToFileWithTimeout");
         file.deleteOnExit();
 
         // Loads resource
-        String resourceName = "/java/lang/Object.class";
+        final String resourceName = "/java/lang/Object.class";
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file, 500, 500);
 
         // Tests that resuorce was copied correctly
-        FileInputStream fis = new FileInputStream(file);
+        final FileInputStream fis = new FileInputStream(file);
         try {
             assertTrue(
                 "Content is not equal.",
@@ -728,7 +728,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.forceMkdir(getTestDirectory());
 
         // Creates test file
-        File testFile = new File(getTestDirectory(), getName());
+        final File testFile = new File(getTestDirectory(), getName());
         testFile.deleteOnExit();
         testFile.createNewFile();
         assertTrue("Test file does not exist.", testFile.exists());
@@ -737,7 +737,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.forceMkdir(testFile);
             fail("Exception expected.");
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
 
         testFile.delete();
 
@@ -749,13 +749,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     // sizeOfDirectory
 
     public void testSizeOfDirectory() throws Exception {
-        File file = new File(getTestDirectory(), getName());
+        final File file = new File(getTestDirectory(), getName());
 
         // Non-existent file
         try {
             FileUtils.sizeOfDirectory(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
 
         // Creates file
         file.createNewFile();
@@ -765,7 +765,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.sizeOfDirectory(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
 
         // Existing directory
         file.delete();
@@ -780,7 +780,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             FileUtils.sizeOfDirectory(file));
     }
 
-    private void createCircularSymLink(File file) throws IOException {
+    private void createCircularSymLink(final File file) throws IOException {
         if(!FilenameUtils.isSystemWindows()) {
             Runtime.getRuntime()
                 .exec("ln -s " + file + "/.. " + file + "/cycle");
@@ -788,20 +788,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             try {
                 Runtime.getRuntime()
                     .exec("mklink /D " + file + "/cycle" + file + "/.. ");
-            } catch(IOException ioe) { // So that tests run in FAT filesystems
+            } catch(final IOException ioe) { // So that tests run in FAT filesystems
               //don't fail
             }
         }
     }
 
     public void testSizeOfDirectoryAsBigInteger() throws Exception {
-        File file = new File(getTestDirectory(), getName());
+        final File file = new File(getTestDirectory(), getName());
 
         // Non-existent file
         try {
             FileUtils.sizeOfDirectoryAsBigInteger(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
         }
 
         // Creates file
@@ -812,7 +812,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.sizeOfDirectoryAsBigInteger(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
         }
 
         // Existing directory
@@ -827,7 +827,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         file.delete();
         file.mkdir();
 
-        File nonEmptyFile = new File(file, "nonEmptyFile" + System.nanoTime());
+        final File nonEmptyFile = new File(file, "nonEmptyFile" + System.nanoTime());
         this.createFile(nonEmptyFile, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
         nonEmptyFile.deleteOnExit();
 
@@ -843,19 +843,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      */
     public void testSizeOf() throws Exception {
-        File file = new File(getTestDirectory(), getName());
+        final File file = new File(getTestDirectory(), getName());
 
         // Null argument
         try {
             FileUtils.sizeOf(null);
             fail("Exception expected.");
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         
         // Non-existent file
         try {
             FileUtils.sizeOf(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
 
         // Creates file
         file.createNewFile();
@@ -881,19 +881,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      */
     public void testSizeOfAsBigInteger() throws Exception {
-        File file = new File(getTestDirectory(), getName());
+        final File file = new File(getTestDirectory(), getName());
 
         // Null argument
         try {
             FileUtils.sizeOfAsBigInteger(null);
             fail("Exception expected.");
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         
         // Non-existent file
         try {
             FileUtils.sizeOfAsBigInteger(file);
             fail("Exception expected.");
-        } catch (IllegalArgumentException ex) {}
+        } catch (final IllegalArgumentException ex) {}
 
         // Creates file
         file.createNewFile();
@@ -916,10 +916,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     
     // isFileNewer / isFileOlder
     public void testIsFileNewerOlder() throws Exception {
-        File reference   = new File(getTestDirectory(), "FileUtils-reference.txt");
-        File oldFile     = new File(getTestDirectory(), "FileUtils-old.txt");
-        File newFile     = new File(getTestDirectory(), "FileUtils-new.txt");
-        File invalidFile = new File(getTestDirectory(), "FileUtils-invalid-file.txt");
+        final File reference   = new File(getTestDirectory(), "FileUtils-reference.txt");
+        final File oldFile     = new File(getTestDirectory(), "FileUtils-old.txt");
+        final File newFile     = new File(getTestDirectory(), "FileUtils-new.txt");
+        final File invalidFile = new File(getTestDirectory(), "FileUtils-invalid-file.txt");
 
         // Create Files
         createFile(oldFile, 0);
@@ -927,19 +927,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         do {
             try {
                 Thread.sleep(1000);
-            } catch(InterruptedException ie) {
+            } catch(final InterruptedException ie) {
                 // ignore
             }
             createFile(reference, 0);
         } while( oldFile.lastModified() == reference.lastModified() );
 
-        Date date = new Date();
-        long now = date.getTime();
+        final Date date = new Date();
+        final long now = date.getTime();
 
         do {
             try {
                 Thread.sleep(1000);
-            } catch(InterruptedException ie) {
+            } catch(final InterruptedException ie) {
                 // ignore
             }
             createFile(newFile, 0);
@@ -957,7 +957,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(newFile, invalidFile);
             fail("Should have cause IllegalArgumentException");
-        } catch (IllegalArgumentException iae){
+        } catch (final IllegalArgumentException iae){
             final String message = iae.getMessage();
             assertTrue("Message should contain: "+invalidFileName+ " but was: "+message,message.contains(invalidFileName));
         }
@@ -973,7 +973,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileOlder(newFile, invalidFile);
             fail("Should have cause IllegalArgumentException");
-        } catch (IllegalArgumentException iae){
+        } catch (final IllegalArgumentException iae){
             final String message = iae.getMessage();
             assertTrue("Message should contain: "+invalidFileName+ " but was: "+message,message.contains(invalidFileName));
         }
@@ -984,7 +984,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(null, now);
             fail("Newer Null, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -992,7 +992,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(oldFile, (File)null);
             fail("Newer Null reference, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -1000,7 +1000,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(oldFile, invalidFile);
             fail("Newer invalid reference, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -1008,7 +1008,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileNewer(oldFile, (Date)null);
             fail("Newer Null date, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
 
@@ -1018,7 +1018,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileOlder(null, now);
             fail("Older Null, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -1026,7 +1026,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileOlder(oldFile, (File)null);
             fail("Older Null reference, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -1034,7 +1034,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileOlder(oldFile, invalidFile);
             fail("Older invalid reference, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
         
@@ -1042,7 +1042,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.isFileOlder(oldFile, (Date)null);
             fail("Older Null date, expected IllegalArgumentExcepion");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected result
         }
 
@@ -1057,7 +1057,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     // copyFile
 
     public void testCopyFile1() throws Exception {
-        File destination = new File(getTestDirectory(), "copy1.txt");
+        final File destination = new File(getTestDirectory(), "copy1.txt");
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if 
@@ -1072,17 +1072,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCopyFileToOutputStream() throws Exception {
-        ByteArrayOutputStream destination = new ByteArrayOutputStream();
+        final ByteArrayOutputStream destination = new ByteArrayOutputStream();
         FileUtils.copyFile(testFile1, destination);
         assertEquals("Check Full copy size", testFile1Size, destination.size());
-        byte[] expected = FileUtils.readFileToByteArray(testFile1);
+        final byte[] expected = FileUtils.readFileToByteArray(testFile1);
         Assert.assertArrayEquals("Check Full copy", expected, destination.toByteArray());
     }
 
     public void IGNOREtestCopyFileLarge() throws Exception {
 
-        File largeFile = new File(getTestDirectory(), "large.txt");
-        File destination = new File(getTestDirectory(), "copylarge.txt");
+        final File largeFile = new File(getTestDirectory(), "large.txt");
+        final File destination = new File(getTestDirectory(), "copylarge.txt");
 
         System.out.println("START:   " + new java.util.Date());
         createFile(largeFile, FileUtils.ONE_GB);
@@ -1095,7 +1095,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCopyFile2() throws Exception {
-        File destination = new File(getTestDirectory(), "copy2.txt");
+        final File destination = new File(getTestDirectory(), "copy2.txt");
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if 
@@ -1110,20 +1110,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
     
     public void testCopyToSelf() throws Exception {
-        File destination = new File(getTestDirectory(), "copy3.txt");
+        final File destination = new File(getTestDirectory(), "copy3.txt");
         //Prepare a test file
         FileUtils.copyFile(testFile1, destination);
         
         try {
             FileUtils.copyFile(destination, destination);
             fail("file copy to self should not be possible");
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             //we want the exception, copy to self should be illegal
         }
     }
 
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
-        File destination = new File(getTestDirectory(), "copy2.txt");
+        final File destination = new File(getTestDirectory(), "copy2.txt");
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if 
@@ -1140,20 +1140,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
-        File srcDir = getTestDirectory();
-        File subDir = new File(srcDir, "sub");
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "sub");
         subDir.mkdir();
-        File subFile = new File(subDir, "A.txt");
+        final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
-        File actualDestDir = new File(destDir, srcDir.getName());
+        final File actualDestDir = new File(destDir, srcDir.getName());
         
         FileUtils.copyDirectoryToDirectory(srcDir, destDir);
         
         assertTrue("Check exists", destDir.exists());
         assertTrue("Check exists", actualDestDir.exists());
-        long srcSize = FileUtils.sizeOfDirectory(srcDir);
+        final long srcSize = FileUtils.sizeOfDirectory(srcDir);
         assertTrue("Size > 0", srcSize > 0);
         assertEquals("Check size", srcSize, FileUtils.sizeOfDirectory(actualDestDir));
         assertTrue(new File(actualDestDir, "sub/A.txt").exists());
@@ -1163,18 +1163,18 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyDirectoryToNonExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
-        File srcDir = getTestDirectory();
-        File subDir = new File(srcDir, "sub");
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "sub");
         subDir.mkdir();
-        File subFile = new File(subDir, "A.txt");
+        final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
         
         FileUtils.copyDirectory(srcDir, destDir);
         
         assertTrue("Check exists", destDir.exists());
-        long sizeOfSrcDirectory = FileUtils.sizeOfDirectory(srcDir);
+        final long sizeOfSrcDirectory = FileUtils.sizeOfDirectory(srcDir);
         assertTrue("Size > 0",sizeOfSrcDirectory > 0);
         assertEquals("Check size", sizeOfSrcDirectory, FileUtils.sizeOfDirectory(destDir));
         assertTrue(new File(destDir, "sub/A.txt").exists());
@@ -1184,34 +1184,34 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testCopyDirectoryToExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
-        File srcDir = getTestDirectory();
-        File subDir = new File(srcDir, "sub");
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "sub");
         subDir.mkdir();
-        File subFile = new File(subDir, "A.txt");
+        final File subFile = new File(subDir, "A.txt");
         FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
-        File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
         FileUtils.deleteDirectory(destDir);
         destDir.mkdirs();
         
         FileUtils.copyDirectory(srcDir, destDir);
         
-        long srcSize = FileUtils.sizeOfDirectory(srcDir);
+        final long srcSize = FileUtils.sizeOfDirectory(srcDir);
         assertTrue("Size > 0",srcSize > 0);
         assertEquals(srcSize, FileUtils.sizeOfDirectory(destDir));
         assertTrue(new File(destDir, "sub/A.txt").exists());
     }
 
     public void testCopyDirectoryFiltered() throws Exception {
-        File grandParentDir = new File(getTestDirectory(), "grandparent");
-        File parentDir      = new File(grandParentDir, "parent");
-        File childDir       = new File(parentDir, "child");
+        final File grandParentDir = new File(getTestDirectory(), "grandparent");
+        final File parentDir      = new File(grandParentDir, "parent");
+        final File childDir       = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        NameFileFilter filter = new NameFileFilter(new String[] {"parent", "child", "file3.txt"});
-        File destDir       = new File(getTestDirectory(), "copydest");
+        final NameFileFilter filter = new NameFileFilter(new String[] {"parent", "child", "file3.txt"});
+        final File destDir       = new File(getTestDirectory(), "copydest");
 
         FileUtils.copyDirectory(grandParentDir, destDir, filter);
-        List<File> files  = LIST_WALKER.list(destDir);
+        final List<File> files  = LIST_WALKER.list(destDir);
         assertEquals(3, files.size());
         assertEquals("parent", files.get(0).getName());
         assertEquals("child", files.get(1).getName());
@@ -1219,9 +1219,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
    }
 
     public void testCopyDirectoryPreserveDates() throws Exception {
-        File source = new File(getTestDirectory(), "source");
-        File sourceDirectory = new File(source, "directory");
-        File sourceFile = new File(sourceDirectory, "hello.txt");
+        final File source = new File(getTestDirectory(), "source");
+        final File sourceDirectory = new File(source, "directory");
+        final File sourceFile = new File(sourceDirectory, "hello.txt");
 
         // Prepare source data
         source.mkdirs();
@@ -1234,9 +1234,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         sourceDirectory.setLastModified(1000000001000L);
         source.setLastModified(1000000000000L);
 
-        File target = new File(getTestDirectory(), "target");
-        File targetDirectory = new File(target, "directory");
-        File targetFile = new File(targetDirectory, "hello.txt");
+        final File target = new File(getTestDirectory(), "target");
+        final File targetDirectory = new File(target, "directory");
+        final File targetFile = new File(targetDirectory, "hello.txt");
 
         // Test with preserveFileDate disabled
         FileUtils.copyDirectory(source, target, false);
@@ -1271,14 +1271,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     /** Test for IO-141 */
     public void testCopyDirectoryToChild() throws Exception {
-        File grandParentDir = new File(getTestDirectory(), "grandparent");
-        File parentDir      = new File(grandParentDir, "parent");
-        File childDir       = new File(parentDir, "child");
+        final File grandParentDir = new File(getTestDirectory(), "grandparent");
+        final File parentDir      = new File(grandParentDir, "parent");
+        final File childDir       = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        long expectedCount = LIST_WALKER.list(grandParentDir).size() +
+        final long expectedCount = LIST_WALKER.list(grandParentDir).size() +
                              LIST_WALKER.list(parentDir).size();
-        long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) +
+        final long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) +
                              FileUtils.sizeOfDirectory(parentDir);
         FileUtils.copyDirectory(parentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
@@ -1289,13 +1289,13 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     /** Test for IO-141 */
     public void testCopyDirectoryToGrandChild() throws Exception {
-        File grandParentDir = new File(getTestDirectory(), "grandparent");
-        File parentDir      = new File(grandParentDir, "parent");
-        File childDir       = new File(parentDir, "child");
+        final File grandParentDir = new File(getTestDirectory(), "grandparent");
+        final File parentDir      = new File(grandParentDir, "parent");
+        final File childDir       = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        long expectedCount = LIST_WALKER.list(grandParentDir).size() * 2;
-        long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) * 2;
+        final long expectedCount = LIST_WALKER.list(grandParentDir).size() * 2;
+        final long expectedSize =  FileUtils.sizeOfDirectory(grandParentDir) * 2;
         FileUtils.copyDirectory(grandParentDir, childDir);
         assertEquals(expectedCount, LIST_WALKER.list(grandParentDir).size());
         assertEquals(expectedSize, FileUtils.sizeOfDirectory(grandParentDir));
@@ -1304,22 +1304,22 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     /** Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
     public void testCopyDirectoryToItself() throws Exception {
-        File dir = new File(getTestDirectory(), "itself");
+        final File dir = new File(getTestDirectory(), "itself");
         dir.mkdirs();
         FileUtils.copyDirectoryToDirectory(dir, dir);
         assertEquals(1, LIST_WALKER.list(dir).size());
     }
 
-    private void createFilesForTestCopyDirectory(File grandParentDir, File parentDir, File childDir) throws Exception {
-        File childDir2 = new File(parentDir, "child2");
-        File grandChildDir = new File(childDir, "grandChild");
-        File grandChild2Dir = new File(childDir2, "grandChild2");
-        File file1 = new File(grandParentDir, "file1.txt");
-        File file2 = new File(parentDir, "file2.txt");
-        File file3 = new File(childDir, "file3.txt");
-        File file4 = new File(childDir2, "file4.txt");
-        File file5 = new File(grandChildDir, "file5.txt");
-        File file6 = new File(grandChild2Dir, "file6.txt");
+    private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws Exception {
+        final File childDir2 = new File(parentDir, "child2");
+        final File grandChildDir = new File(childDir, "grandChild");
+        final File grandChild2Dir = new File(childDir2, "grandChild2");
+        final File file1 = new File(grandParentDir, "file1.txt");
+        final File file2 = new File(parentDir, "file2.txt");
+        final File file3 = new File(childDir, "file3.txt");
+        final File file4 = new File(childDir2, "file4.txt");
+        final File file5 = new File(grandChildDir, "file5.txt");
+        final File file6 = new File(grandChild2Dir, "file6.txt");
         FileUtils.deleteDirectory(grandParentDir);
         grandChildDir.mkdirs();
         grandChild2Dir.mkdirs();
@@ -1335,37 +1335,37 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.copyDirectory(null, null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             FileUtils.copyDirectory(new File("a"), null);
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             FileUtils.copyDirectory(null, new File("a"));
             fail();
-        } catch (NullPointerException ex) {}
+        } catch (final NullPointerException ex) {}
         try {
             FileUtils.copyDirectory(new File("doesnt-exist"), new File("a"));
             fail();
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
         try {
             FileUtils.copyDirectory(testFile1, new File("a"));
             fail();
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
         try {
             FileUtils.copyDirectory(getTestDirectory(), testFile1);
             fail();
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
         try {
             FileUtils.copyDirectory(getTestDirectory(), getTestDirectory());
             fail();
-        } catch (IOException ex) {}
+        } catch (final IOException ex) {}
     }
 
     // forceDelete
 
     public void testForceDeleteAFile1() throws Exception {
-        File destination = new File(getTestDirectory(), "copy1.txt");
+        final File destination = new File(getTestDirectory(), "copy1.txt");
         destination.createNewFile();
         assertTrue("Copy1.txt doesn't exist to delete", destination.exists());
         FileUtils.forceDelete(destination);
@@ -1373,7 +1373,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testForceDeleteAFile2() throws Exception {
-        File destination = new File(getTestDirectory(), "copy2.txt");
+        final File destination = new File(getTestDirectory(), "copy2.txt");
         destination.createNewFile();
         assertTrue("Copy2.txt doesn't exist to delete", destination.exists());
         FileUtils.forceDelete(destination);
@@ -1381,23 +1381,23 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testForceDeleteAFile3() throws Exception {
-        File destination = new File(getTestDirectory(), "no_such_file");
+        final File destination = new File(getTestDirectory(), "no_such_file");
         assertTrue("Check No Exist", !destination.exists());
         try {
             FileUtils.forceDelete(destination);
             fail("Should generate FileNotFoundException");
-        } catch (FileNotFoundException ignored){
+        } catch (final FileNotFoundException ignored){
         }
     }
 
     // copyFileToDirectory
 
     public void testCopyFile1ToDir() throws Exception {
-        File directory = new File(getTestDirectory(), "subdir");
+        final File directory = new File(getTestDirectory(), "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        File destination = new File(directory, testFile1.getName());
+        final File destination = new File(directory, testFile1.getName());
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if 
@@ -1413,17 +1413,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.copyFileToDirectory(destination, directory);
             fail("Should not be able to copy a file into the same directory as itself");    
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             //we want that, cannot copy to the same directory as the original file
         }
     }
 
     public void testCopyFile2ToDir() throws Exception {
-        File directory = new File(getTestDirectory(), "subdir");
+        final File directory = new File(getTestDirectory(), "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        File destination = new File(directory, testFile1.getName());
+        final File destination = new File(directory, testFile1.getName());
         
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if 
@@ -1440,7 +1440,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     // forceDelete
 
     public void testForceDeleteDir() throws Exception {
-        File testDirectory = getTestDirectory();
+        final File testDirectory = getTestDirectory();
         FileUtils.forceDelete(testDirectory.getParentFile());
         assertTrue(
             "Check No Exist",
@@ -1452,53 +1452,53 @@ public class FileUtilsTestCase extends FileBasedTestCase {
      */
     public void testFileUtils() throws Exception {
         // Loads file from classpath
-        File file1 = new File(getTestDirectory(), "test.txt");
-        String filename = file1.getAbsolutePath();
+        final File file1 = new File(getTestDirectory(), "test.txt");
+        final String filename = file1.getAbsolutePath();
         
         //Create test file on-the-fly (used to be in CVS)
-        OutputStream out = new java.io.FileOutputStream(file1);
+        final OutputStream out = new java.io.FileOutputStream(file1);
         try {
             out.write("This is a test".getBytes("UTF-8"));
         } finally {
             out.close();
         }
         
-        File file2 = new File(getTestDirectory(), "test2.txt");
+        final File file2 = new File(getTestDirectory(), "test2.txt");
 
         FileUtils.writeStringToFile(file2, filename, "UTF-8");
         assertTrue(file2.exists());
         assertTrue(file2.length() > 0);
 
-        String file2contents = FileUtils.readFileToString(file2, "UTF-8");
+        final String file2contents = FileUtils.readFileToString(file2, "UTF-8");
         assertTrue(
             "Second file's contents correct",
             filename.equals(file2contents));
 
         assertTrue(file2.delete());
         
-        String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
+        final String contents = FileUtils.readFileToString(new File(filename), "UTF-8");
         assertEquals("FileUtils.fileRead()", "This is a test", contents);
 
     }
 
     public void testTouch() throws IOException {
-        File file = new File(getTestDirectory(), "touch.txt") ;
+        final File file = new File(getTestDirectory(), "touch.txt") ;
         if (file.exists()) {
             file.delete();
         }
         assertTrue("Bad test: test file still exists", !file.exists());
         FileUtils.touch(file);
         assertTrue("FileUtils.touch() created file", file.exists());
-        FileOutputStream out = new FileOutputStream(file) ;
+        final FileOutputStream out = new FileOutputStream(file) ;
         assertEquals("Created empty file.", 0, file.length());
         out.write(0) ;
         out.close();
         assertEquals("Wrote one byte to file", 1, file.length());
-        long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
-        boolean res = file.setLastModified(y2k);  // 0L fails on Win98
+        final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
+        final boolean res = file.setLastModified(y2k);  // 0L fails on Win98
         assertEquals("Bad test: set lastModified failed", true, res);
         assertEquals("Bad test: set lastModified set incorrect value", y2k, file.lastModified());
-        long now = System.currentTimeMillis();
+        final long now = System.currentTimeMillis();
         FileUtils.touch(file) ;
         assertEquals("FileUtils.touch() didn't empty the file.", 1, file.length());
         assertEquals("FileUtils.touch() changed lastModified", false, y2k == file.lastModified());
@@ -1507,31 +1507,31 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testListFiles() throws Exception {
-        File srcDir = getTestDirectory();
-        File subDir = new File(srcDir, "list_test" );
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "list_test" );
         subDir.mkdir();
 
-        File subDir2 = new File(subDir, "subdir" );
+        final File subDir2 = new File(subDir, "subdir" );
         subDir2.mkdir();
 
-        String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
-        int[] fileSizes = {123, 234, 345, 456, 678, 789};
+        final String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
+        final int[] fileSizes = {123, 234, 345, 456, 678, 789};
 
         for (int i = 0; i < fileNames.length; ++i) {
-            File theFile = new File(subDir, fileNames[i]);
+            final File theFile = new File(subDir, fileNames[i]);
             createFile(theFile, fileSizes[i]);
         }
 
-        Collection<File> files = FileUtils.listFiles(subDir,
+        final Collection<File> files = FileUtils.listFiles(subDir,
                                                new WildcardFileFilter("*.*"),
                                                new WildcardFileFilter("*"));
 
-        int count = files.size();
-        Object[] fileObjs = files.toArray();
+        final int count = files.size();
+        final Object[] fileObjs = files.toArray();
 
         assertEquals(fileNames.length, files.size());
 
-        Map<String, String> foundFileNames = new HashMap<String, String>();
+        final Map<String, String> foundFileNames = new HashMap<String, String>();
 
         for (int i = 0; i < count; ++i) {
             boolean found = false;
@@ -1549,21 +1549,21 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
     
     public void testListFilesWithDirs() throws IOException {
-    	File srcDir = getTestDirectory();
+    	final File srcDir = getTestDirectory();
     	
-    	File subDir1 = new File(srcDir, "subdir");
+    	final File subDir1 = new File(srcDir, "subdir");
     	subDir1.mkdir();
     	
-    	File subDir2 = new File(subDir1, "subdir2");
+    	final File subDir2 = new File(subDir1, "subdir2");
     	subDir2.mkdir();
     	
-    	File someFile = new File(subDir2, "a.txt");
+    	final File someFile = new File(subDir2, "a.txt");
     	createFile(someFile, 100);
     	
-    	File subDir3 = new File(subDir2, "subdir3");
+    	final File subDir3 = new File(subDir2, "subdir3");
     	subDir3.mkdir();
     	
-    	Collection<File> files = FileUtils.listFilesAndDirs(subDir1, 
+    	final Collection<File> files = FileUtils.listFilesAndDirs(subDir1, 
     						new WildcardFileFilter("*.*"), new WildcardFileFilter("*"));
     	
     	assertEquals(4, files.size());
@@ -1576,27 +1576,27 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testIterateFiles() throws Exception {
-        File srcDir = getTestDirectory();
-        File subDir = new File(srcDir, "list_test" );
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "list_test" );
         subDir.mkdir();
 
-        String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
-        int[] fileSizes = {123, 234, 345, 456, 678, 789};
+        final String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
+        final int[] fileSizes = {123, 234, 345, 456, 678, 789};
 
         for (int i = 0; i < fileNames.length; ++i) {
-            File theFile = new File(subDir, fileNames[i]);
+            final File theFile = new File(subDir, fileNames[i]);
             createFile(theFile, fileSizes[i]);
         }
 
-        Iterator<File> files = FileUtils.iterateFiles(subDir,
+        final Iterator<File> files = FileUtils.iterateFiles(subDir,
                                                 new WildcardFileFilter("*.*"),
                                                 new WildcardFileFilter("*"));
 
-        Map<String, String> foundFileNames = new HashMap<String, String>();
+        final Map<String, String> foundFileNames = new HashMap<String, String>();
 
         while (files.hasNext()) {
             boolean found = false;
-            String fileName = files.next().getName();
+            final String fileName = files.next().getName();
 
             for (int j = 0; !found && j < fileNames.length; ++j) {
                 if ( fileNames[j].equals(fileName)) {
@@ -1612,29 +1612,29 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
     
     public void testIterateFilesAndDirs() throws IOException {
-    	File srcDir = getTestDirectory();
+    	final File srcDir = getTestDirectory();
     	
-    	File subDir1 = new File(srcDir, "subdir");
+    	final File subDir1 = new File(srcDir, "subdir");
     	subDir1.mkdir();
     	
-    	File subDir2 = new File(subDir1, "subdir2");
+    	final File subDir2 = new File(subDir1, "subdir2");
     	subDir2.mkdir();
     	
-    	File someFile = new File(subDir2, "a.txt");
+    	final File someFile = new File(subDir2, "a.txt");
     	createFile(someFile, 100);
     	
-    	File subDir3 = new File(subDir2, "subdir3");
+    	final File subDir3 = new File(subDir2, "subdir3");
     	subDir3.mkdir();
     	
-    	Collection<File> filesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3);
+    	final Collection<File> filesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3);
     	
     	int filesCount = 0;
-    	Iterator<File> files = FileUtils.iterateFilesAndDirs(subDir1, 
+    	final Iterator<File> files = FileUtils.iterateFilesAndDirs(subDir1, 
                                                 new WildcardFileFilter("*.*"),
                                                 new WildcardFileFilter("*"));
         while (files.hasNext()) {
             filesCount++;
-            File file = files.next();
+            final File file = files.next();
             assertTrue("Should contain the directory/file", filesAndDirs.contains(file));
         }
     	
@@ -1642,36 +1642,36 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
-        File file = new File(getTestDirectory(), "read.obj");
-        FileOutputStream out = new FileOutputStream(file);
-        byte[] text = "Hello /u1234".getBytes();
+        final File file = new File(getTestDirectory(), "read.obj");
+        final FileOutputStream out = new FileOutputStream(file);
+        final byte[] text = "Hello /u1234".getBytes();
         out.write(text);
         out.close();
         
-        String data = FileUtils.readFileToString(file);
+        final String data = FileUtils.readFileToString(file);
         assertEquals("Hello /u1234", data);
     }
 
     public void testReadFileToStringWithEncoding() throws Exception {
-        File file = new File(getTestDirectory(), "read.obj");
-        FileOutputStream out = new FileOutputStream(file);
-        byte[] text = "Hello /u1234".getBytes("UTF8");
+        final File file = new File(getTestDirectory(), "read.obj");
+        final FileOutputStream out = new FileOutputStream(file);
+        final byte[] text = "Hello /u1234".getBytes("UTF8");
         out.write(text);
         out.close();
         
-        String data = FileUtils.readFileToString(file, "UTF8");
+        final String data = FileUtils.readFileToString(file, "UTF8");
         assertEquals("Hello /u1234", data);
     }
 
     public void testReadFileToByteArray() throws Exception {
-        File file = new File(getTestDirectory(), "read.txt");
-        FileOutputStream out = new FileOutputStream(file);
+        final File file = new File(getTestDirectory(), "read.txt");
+        final FileOutputStream out = new FileOutputStream(file);
         out.write(11);
         out.write(21);
         out.write(31);
         out.close();
         
-        byte[] data = FileUtils.readFileToByteArray(file);
+        final byte[] data = FileUtils.readFileToByteArray(file);
         assertEquals(3, data.length);
         assertEquals(11, data[0]);
         assertEquals(21, data[1]);
@@ -1679,12 +1679,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReadLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         try {
-            String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
             createLineBasedFile(file, data);
             
-            List<String> lines = FileUtils.readLines(file, "UTF-8");
+            final List<String> lines = FileUtils.readLines(file, "UTF-8");
             assertEquals(Arrays.asList(data), lines);
         } finally {
             deleteFile(file);
@@ -1692,403 +1692,403 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testWriteStringToFile1() throws Exception {
-        File file = new File(getTestDirectory(), "write.txt");
+        final File file = new File(getTestDirectory(), "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
-        byte[] text = "Hello /u1234".getBytes("UTF8");
+        final byte[] text = "Hello /u1234".getBytes("UTF8");
         assertEqualContent(text, file);
     }
 
     public void testWriteStringToFile2() throws Exception {
-        File file = new File(getTestDirectory(), "write.txt");
+        final File file = new File(getTestDirectory(), "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (String)null);
-        byte[] text = "Hello /u1234".getBytes();
+        final byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
 
     public void testWriteStringToFile3() throws Exception {
-        File file = new File(getTestDirectory(), "write.txt");
+        final File file = new File(getTestDirectory(), "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", (Charset)null);
-        byte[] text = "Hello /u1234".getBytes();
+        final byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
 
     public void testWriteCharSequence1() throws Exception {
-        File file = new File(getTestDirectory(), "write.txt");
+        final File file = new File(getTestDirectory(), "write.txt");
         FileUtils.write(file, "Hello /u1234", "UTF8");
-        byte[] text = "Hello /u1234".getBytes("UTF8");
+        final byte[] text = "Hello /u1234".getBytes("UTF8");
         assertEqualContent(text, file);
     }
 
     public void testWriteCharSequence2() throws Exception {
-        File file = new File(getTestDirectory(), "write.txt");
+        final File file = new File(getTestDirectory(), "write.txt");
         FileUtils.write(file, "Hello /u1234", (String) null);
-        byte[] text = "Hello /u1234".getBytes();
+        final byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
     }
 
     public void testWriteByteArrayToFile() throws Exception {
-        File file = new File(getTestDirectory(), "write.obj");
-        byte[] data = new byte[] {11, 21, 31};
+        final File file = new File(getTestDirectory(), "write.obj");
+        final byte[] data = new byte[] {11, 21, 31};
         FileUtils.writeByteArrayToFile(file, data);
         assertEqualContent(data, file);
     }
 
     public void testWriteByteArrayToFile_WithOffsetAndLength() throws Exception {
-        File file = new File(getTestDirectory(), "write.obj");
-        byte[] data = new byte[] { 11, 21, 32, 41, 51 };
-        byte[] writtenData = new byte[3];
+        final File file = new File(getTestDirectory(), "write.obj");
+        final byte[] data = new byte[] { 11, 21, 32, 41, 51 };
+        final byte[] writtenData = new byte[3];
         System.arraycopy(data, 1, writtenData, 0, 3);
         FileUtils.writeByteArrayToFile(file, data, 1, 3);
         assertEqualContent(writtenData, file);
     }
 
     public void testWriteLines_4arg() throws Exception {
-        Object[] data = new Object[] {
+        final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List<Object> list = Arrays.asList(data);
+        final List<Object> list = Arrays.asList(data);
         
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, "*");
         
-        String expected = "hello*world**this is**some text*";
-        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String expected = "hello*world**this is**some text*";
+        final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
 
     public void testWriteLines_4arg_Writer_nullData() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", (List<?>) null, "*");
         
         assertEquals("Sizes differ", 0, file.length());
     }
 
     public void testWriteLines_4arg_nullSeparator() throws Exception {
-        Object[] data = new Object[] {
+        final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List<Object> list = Arrays.asList(data);
+        final List<Object> list = Arrays.asList(data);
         
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, null);
         
-        String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
+        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
             IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
             IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
-        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
 
     public void testWriteLines_3arg_nullSeparator() throws Exception {
-        Object[] data = new Object[] {
+        final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
-        List<Object> list = Arrays.asList(data);
+        final List<Object> list = Arrays.asList(data);
         
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list);
         
-        String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
+        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
             IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
             IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
-        String actual = FileUtils.readFileToString(file, "US-ASCII");
+        final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
     
     public void testWriteLines_5argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, null, linesToAppend, null, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteLines_5argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, null, linesToAppend, null, false);
 
-        String expected = "my first line"
+        final String expected = "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteLines_4argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, linesToAppend, null, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteLines_4argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, linesToAppend, null, false);
 
-        String expected = "my first line"
+        final String expected = "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
 
     public void testWriteLinesEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, null, linesToAppend, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteLinesEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, null, linesToAppend, false);
 
-        String expected = "my first line"
+        final String expected = "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteLines_3argsWithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, linesToAppend, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteLines_3argsWithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
-        List<String> linesToAppend = Arrays.asList(new String[] {
+        final List<String> linesToAppend = Arrays.asList(new String[] {
                 "my first line", "The second Line" });
         FileUtils.writeLines(file, linesToAppend, false);
 
-        String expected = "my first line"
+        final String expected = "my first line"
                 + IOUtils.LINE_SEPARATOR + "The second Line"
                 + IOUtils.LINE_SEPARATOR ;
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeStringToFile(file, "this is brand new data", (String) null, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteStringToFileWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeStringToFile(file, "this is brand new data", (String) null, false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeStringToFile(file, "this is brand new data", true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
                 + "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteStringToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeStringToFile(file, "this is brand new data", false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
 
     public void testWriteWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.write(file, "this is brand new data", (String) null, true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
             + "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteWithEncoding_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.write(file, "this is brand new data", (String) null, false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWrite_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.write(file, "this is brand new data", true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
             + "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWrite_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.write(file, "this is brand new data", false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteByteArrayToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), true);
 
-        String expected = "This line was there before you..."
+        final String expected = "This line was there before you..."
             + "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteByteArrayToFile_WithAppendOptionFalse_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
         
         FileUtils.writeByteArrayToFile(file, "this is brand new data".getBytes(), false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
     
     public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
-        byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
 
-        String expected = "This line was there before you..." + "this is brand new data";
-        String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        final String expected = "This line was there before you..." + "this is brand new data";
+        final String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     public void testWriteByteArrayToFile_WithOffsetAndLength_WithAppendOptionTrue_ShouldDeletePreviousFileLines() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
-        byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, false);
 
-        String expected = "this is brand new data";
-        String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        final String expected = "this is brand new data";
+        final String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
         assertEquals(expected, actual);
     }
 
     //-----------------------------------------------------------------------
     public void testChecksumCRC32() throws Exception {
         // create a test file
-        String text = "Imagination is more important than knowledge - Einstein";
-        File file = new File(getTestDirectory(), "checksum-test.txt");
+        final String text = "Imagination is more important than knowledge - Einstein";
+        final File file = new File(getTestDirectory(), "checksum-test.txt");
         FileUtils.writeStringToFile(file, text, "US-ASCII");
         
         // compute the expected checksum
-        Checksum expectedChecksum = new CRC32();
+        final Checksum expectedChecksum = new CRC32();
         expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
-        long expectedValue = expectedChecksum.getValue();
+        final long expectedValue = expectedChecksum.getValue();
         
         // compute the checksum of the file
-        long resultValue = FileUtils.checksumCRC32(file);
+        final long resultValue = FileUtils.checksumCRC32(file);
         
         assertEquals(expectedValue, resultValue);
     }
 
     public void testChecksum() throws Exception {
         // create a test file
-        String text = "Imagination is more important than knowledge - Einstein";
-        File file = new File(getTestDirectory(), "checksum-test.txt");
+        final String text = "Imagination is more important than knowledge - Einstein";
+        final File file = new File(getTestDirectory(), "checksum-test.txt");
         FileUtils.writeStringToFile(file, text, "US-ASCII");
         
         // compute the expected checksum
-        Checksum expectedChecksum = new CRC32();
+        final Checksum expectedChecksum = new CRC32();
         expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
-        long expectedValue = expectedChecksum.getValue();
+        final long expectedValue = expectedChecksum.getValue();
         
         // compute the checksum of the file
-        Checksum testChecksum = new CRC32();
-        Checksum resultChecksum = FileUtils.checksum(file, testChecksum);
-        long resultValue = resultChecksum.getValue();
+        final Checksum testChecksum = new CRC32();
+        final Checksum resultChecksum = FileUtils.checksum(file, testChecksum);
+        final long resultValue = resultChecksum.getValue();
         
         assertSame(testChecksum, resultChecksum);
         assertEquals(expectedValue, resultValue);
@@ -2098,20 +2098,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.checksum((File) null, new CRC32());
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
     }
 
     public void testChecksumOnNullChecksum() throws Exception {
         // create a test file
-        String text = "Imagination is more important than knowledge - Einstein";
-        File file = new File(getTestDirectory(), "checksum-test.txt");
+        final String text = "Imagination is more important than knowledge - Einstein";
+        final File file = new File(getTestDirectory(), "checksum-test.txt");
         FileUtils.writeStringToFile(file, text, "US-ASCII");
         try {
             FileUtils.checksum(file, (Checksum) null);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
         }
     }
@@ -2120,33 +2120,33 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.checksum(new File("."), new CRC32());
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
     }
 
     public void testChecksumDouble() throws Exception {
         // create a test file
-        String text1 = "Imagination is more important than knowledge - Einstein";
-        File file1 = new File(getTestDirectory(), "checksum-test.txt");
+        final String text1 = "Imagination is more important than knowledge - Einstein";
+        final File file1 = new File(getTestDirectory(), "checksum-test.txt");
         FileUtils.writeStringToFile(file1, text1, "US-ASCII");
         
         // create a second test file
-        String text2 = "To be or not to be - Shakespeare";
-        File file2 = new File(getTestDirectory(), "checksum-test2.txt");
+        final String text2 = "To be or not to be - Shakespeare";
+        final File file2 = new File(getTestDirectory(), "checksum-test2.txt");
         FileUtils.writeStringToFile(file2, text2, "US-ASCII");
         
         // compute the expected checksum
-        Checksum expectedChecksum = new CRC32();
+        final Checksum expectedChecksum = new CRC32();
         expectedChecksum.update(text1.getBytes("US-ASCII"), 0, text1.length());
         expectedChecksum.update(text2.getBytes("US-ASCII"), 0, text2.length());
-        long expectedValue = expectedChecksum.getValue();
+        final long expectedValue = expectedChecksum.getValue();
         
         // compute the checksum of the file
-        Checksum testChecksum = new CRC32();
+        final Checksum testChecksum = new CRC32();
         FileUtils.checksum(file1, testChecksum);
         FileUtils.checksum(file2, testChecksum);
-        long resultValue = testChecksum.getValue();
+        final long resultValue = testChecksum.getValue();
         
         assertEquals(expectedValue, resultValue);
     }
@@ -2154,14 +2154,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testDeleteQuietlyForNull() {
         try {
             FileUtils.deleteQuietly(null);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             fail(ex.getMessage());
         }
     }
 
     public void testDeleteQuietlyDir() throws IOException {
-        File testDirectory = new File(getTestDirectory(), "testDeleteQuietlyDir");
-        File testFile= new File(testDirectory, "testDeleteQuietlyFile");
+        final File testDirectory = new File(getTestDirectory(), "testDeleteQuietlyDir");
+        final File testFile= new File(testDirectory, "testDeleteQuietlyFile");
         testDirectory.mkdirs();
         createFile(testFile, 0);
 
@@ -2173,7 +2173,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testDeleteQuietlyFile() throws IOException {
-        File testFile= new File(getTestDirectory(), "testDeleteQuietlyFile");
+        final File testFile= new File(getTestDirectory(), "testDeleteQuietlyFile");
         createFile(testFile, 0);
 
         assertTrue(testFile.exists());
@@ -2182,18 +2182,18 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testDeleteQuietlyNonExistent() {
-        File testFile = new File("testDeleteQuietlyNonExistent");
+        final File testFile = new File("testDeleteQuietlyNonExistent");
         assertFalse(testFile.exists());
         
         try {
             FileUtils.deleteQuietly(testFile);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             fail(ex.getMessage());
         }
     }
 
     public void testMoveFile_Rename() throws Exception {
-        File destination = new File( getTestDirectory(), "move1.txt" );
+        final File destination = new File( getTestDirectory(), "move1.txt" );
 
         FileUtils.moveFile( testFile1, destination );
         assertTrue( "Check Exist", destination.exists() );
@@ -2201,12 +2201,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testMoveFile_CopyDelete() throws Exception {
-        File destination = new File( getTestDirectory(), "move2.txt" );
-        File src = new File( testFile1.getAbsolutePath() ) {
+        final File destination = new File( getTestDirectory(), "move2.txt" );
+        final File src = new File( testFile1.getAbsolutePath() ) {
             // Force renameTo to fail, as if destination is on another
             // filesystem
             @Override
-            public boolean renameTo( File f ) {
+            public boolean renameTo( final File f ) {
                 return false;
             }
         };
@@ -2217,12 +2217,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
 
     public void testMoveFile_CopyDelete_Failed() throws Exception {
-        File destination = new File( getTestDirectory(), "move3.txt" );
-        File src = new File( testFile1.getAbsolutePath() ) {
+        final File destination = new File( getTestDirectory(), "move3.txt" );
+        final File src = new File( testFile1.getAbsolutePath() ) {
             // Force renameTo to fail, as if destination is on another
             // filesystem
             @Override
-            public boolean renameTo( File f ) {
+            public boolean renameTo( final File f ) {
                 return false;
             }
 
@@ -2236,7 +2236,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveFile( src, destination );
             fail( "move should have failed as src has not been deleted" );
-        } catch (IOException e) {
+        } catch (final IOException e) {
            // exepected
             assertTrue( "Check Rollback", !destination.exists() );
             assertTrue( "Original exists", src.exists() );
@@ -2246,43 +2246,43 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveFile(null, new File("foo"));
             fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveFile(new File("foo"), null);
             fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveFile(new File("nonexistant"), new File("foo"));
             fail("Expected FileNotFoundException for source");
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             // expected
         }
         try {
             FileUtils.moveFile(getTestDirectory(), new File("foo"));
             fail("Expected IOException when source is a directory");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
-        File testSourceFile = new File(getTestDirectory(), "testMoveFileSource");
-        File testDestFile = new File(getTestDirectory(), "testMoveFileSource");
+        final File testSourceFile = new File(getTestDirectory(), "testMoveFileSource");
+        final File testDestFile = new File(getTestDirectory(), "testMoveFileSource");
         createFile(testSourceFile, 0);
         createFile(testDestFile, 0);
         try {
             FileUtils.moveFile(testSourceFile, testDestFile);
             fail("Expected FileExistsException when dest already exists");
-        } catch (FileExistsException e) {
+        } catch (final FileExistsException e) {
             // expected
         }
 
     }
 
     public void testMoveFileToDirectory() throws Exception {
-        File destDir = new File( getTestDirectory(), "moveFileDestDir");
-        File movedFile = new File(destDir, testFile1.getName());
+        final File destDir = new File( getTestDirectory(), "moveFileDestDir");
+        final File movedFile = new File(destDir, testFile1.getName());
         assertFalse("Check Exist before", destDir.exists());
         assertFalse("Check Exist before", movedFile.exists());
 
@@ -2295,44 +2295,44 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveFileToDirectory(null, new File("foo"), true);
             fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveFileToDirectory(new File("foo"), null, true);
             fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
-        File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
-        File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
+        final File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
+        final File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
         createFile(testFile1, 0);
         createFile(testFile2, 0);
         try {
             FileUtils.moveFileToDirectory(testFile1, testFile2, true);
             fail("Expected IOException when dest not a directory");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
 
-        File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
+        final File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
         try {
             FileUtils.moveFileToDirectory(testFile1, nonexistant, false);
             fail("Expected IOException when dest does not exist and create=false");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
     }
 
 
     public void testMoveDirectory_Rename() throws Exception {
-        File dir = getTestDirectory();
-        File src = new File(dir, "testMoveDirectory1Source");
-        File testDir = new File(src, "foo");
-        File testFile = new File(testDir, "bar");
+        final File dir = getTestDirectory();
+        final File src = new File(dir, "testMoveDirectory1Source");
+        final File testDir = new File(src, "foo");
+        final File testFile = new File(testDir, "bar");
         testDir.mkdirs();
         createFile(testFile, 0);
-        File destination = new File(dir, "testMoveDirectory1Dest");
+        final File destination = new File(dir, "testMoveDirectory1Dest");
         FileUtils.deleteDirectory( destination );
 
         // Move the directory
@@ -2341,28 +2341,28 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // Check results
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Original deleted", ! src.exists() );
-        File movedDir = new File(destination, testDir.getName());
-        File movedFile = new File(movedDir, testFile.getName());
+        final File movedDir = new File(destination, testDir.getName());
+        final File movedFile = new File(movedDir, testFile.getName());
         assertTrue( "Check dir moved", movedDir.exists());
         assertTrue( "Check file moved", movedFile.exists());
     }
 
     public void testMoveDirectory_CopyDelete() throws Exception {
 
-        File dir = getTestDirectory();
-        File src = new File(dir, "testMoveDirectory2Source") {
+        final File dir = getTestDirectory();
+        final File src = new File(dir, "testMoveDirectory2Source") {
 
             // Force renameTo to fail
             @Override
-            public boolean renameTo( File dest ) {
+            public boolean renameTo( final File dest ) {
                 return false;
             }
         };
-        File testDir = new File(src, "foo");
-        File testFile = new File(testDir, "bar");
+        final File testDir = new File(src, "foo");
+        final File testFile = new File(testDir, "bar");
         testDir.mkdirs();
         createFile(testFile, 0);
-        File destination = new File(dir, "testMoveDirectory1Dest");
+        final File destination = new File(dir, "testMoveDirectory1Dest");
         FileUtils.deleteDirectory( destination );
 
         // Move the directory
@@ -2371,8 +2371,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // Check results
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Original deleted", ! src.exists() );
-        File movedDir = new File(destination, testDir.getName());
-        File movedFile = new File(movedDir, testFile.getName());
+        final File movedDir = new File(destination, testDir.getName());
+        final File movedFile = new File(movedDir, testFile.getName());
         assertTrue( "Check dir moved", movedDir.exists());
         assertTrue( "Check file moved", movedFile.exists());
     }
@@ -2381,50 +2381,50 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveDirectory(null, new File("foo"));
             fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveDirectory(new File("foo"), null);
             fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveDirectory(new File("nonexistant"), new File("foo"));
             fail("Expected FileNotFoundException for source");
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             // expected
         }
-        File testFile = new File(getTestDirectory(), "testMoveDirectoryFile");
+        final File testFile = new File(getTestDirectory(), "testMoveDirectoryFile");
         createFile(testFile, 0);
         try {
             FileUtils.moveDirectory(testFile, new File("foo"));
             fail("Expected IOException when source is not a directory");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
-        File testSrcFile = new File(getTestDirectory(), "testMoveDirectorySource");
-        File testDestFile = new File(getTestDirectory(), "testMoveDirectoryDest");
+        final File testSrcFile = new File(getTestDirectory(), "testMoveDirectorySource");
+        final File testDestFile = new File(getTestDirectory(), "testMoveDirectoryDest");
         testSrcFile.mkdir();
         testDestFile.mkdir();
         try {
             FileUtils.moveDirectory(testSrcFile, testDestFile);
             fail("Expected FileExistsException when dest already exists");
-        } catch (FileExistsException e) {
+        } catch (final FileExistsException e) {
             // expected
         }
 
     }
 
     public void testMoveDirectoryToDirectory() throws Exception {
-        File dir = getTestDirectory();
-        File src = new File(dir, "testMoveDirectory1Source");
-        File testChildDir = new File(src, "foo");
-        File testFile = new File(testChildDir, "bar");
+        final File dir = getTestDirectory();
+        final File src = new File(dir, "testMoveDirectory1Source");
+        final File testChildDir = new File(src, "foo");
+        final File testFile = new File(testChildDir, "bar");
         testChildDir.mkdirs();
         createFile(testFile, 0);
-        File destDir = new File(dir, "testMoveDirectory1Dest");
+        final File destDir = new File(dir, "testMoveDirectory1Dest");
         FileUtils.deleteDirectory( destDir );
         assertFalse( "Check Exist before", destDir.exists() );
 
@@ -2434,9 +2434,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // Check results
         assertTrue( "Check Exist after", destDir.exists() );
         assertTrue( "Original deleted", ! src.exists() );
-        File movedDir = new File(destDir, src.getName());
-        File movedChildDir = new File(movedDir, testChildDir.getName());
-        File movedFile = new File(movedChildDir, testFile.getName());
+        final File movedDir = new File(destDir, src.getName());
+        final File movedChildDir = new File(movedDir, testChildDir.getName());
+        final File movedFile = new File(movedChildDir, testFile.getName());
         assertTrue( "Check dir moved", movedDir.exists());
         assertTrue( "Check child dir moved", movedChildDir.exists());
         assertTrue( "Check file moved", movedFile.exists());
@@ -2446,42 +2446,42 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
             fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
             fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
-        File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
-        File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
+        final File testFile1    = new File(getTestDirectory(), "testMoveFileFile1");
+        final File testFile2    = new File(getTestDirectory(), "testMoveFileFile2");
         createFile(testFile1, 0);
         createFile(testFile2, 0);
         try {
             FileUtils.moveDirectoryToDirectory(testFile1, testFile2, true);
             fail("Expected IOException when dest not a directory");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
 
-        File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
+        final File nonexistant = new File(getTestDirectory(), "testMoveFileNonExistant");
         try {
             FileUtils.moveDirectoryToDirectory(testFile1, nonexistant, false);
             fail("Expected IOException when dest does not exist and create=false");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
     }
     public void testMoveToDirectory() throws Exception {
-        File destDir     = new File(getTestDirectory(), "testMoveToDirectoryDestDir");
-        File testDir     = new File(getTestDirectory(), "testMoveToDirectoryTestDir");
-        File testFile    = new File(getTestDirectory(), "testMoveToDirectoryTestFile");
+        final File destDir     = new File(getTestDirectory(), "testMoveToDirectoryDestDir");
+        final File testDir     = new File(getTestDirectory(), "testMoveToDirectoryTestDir");
+        final File testFile    = new File(getTestDirectory(), "testMoveToDirectoryTestFile");
         testDir.mkdirs();
         createFile(testFile, 0);
-        File movedFile = new File(destDir, testFile.getName());
-        File movedDir = new File(destDir, testFile.getName());
+        final File movedFile = new File(destDir, testFile.getName());
+        final File movedDir = new File(destDir, testFile.getName());
         
         assertFalse( "Check File Doesnt exist", movedFile.exists() );
         assertFalse( "Check Dir Doesnt exist", movedDir.exists() );
@@ -2501,44 +2501,44 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         try {
             FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
             fail("Expected NullPointerException when source is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
         try {
             FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
             fail("Expected NullPointerException when destination is null");
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
-        File nonexistant    = new File(getTestDirectory(), "nonexistant");
-        File destDir    = new File(getTestDirectory(), "MoveToDirectoryDestDir");
+        final File nonexistant    = new File(getTestDirectory(), "nonexistant");
+        final File destDir    = new File(getTestDirectory(), "MoveToDirectoryDestDir");
         try {
             FileUtils.moveToDirectory(nonexistant, destDir, true);
             fail("Expected IOException when source does not exist");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
     }
 
     public void testIO300() throws Exception {
         final File testDirectory = getTestDirectory();
-        File src = new File(testDirectory, "dir1");
-        File dest = new File(src,"dir2");
+        final File src = new File(testDirectory, "dir1");
+        final File dest = new File(src,"dir2");
         assertTrue(dest.mkdirs());
         assertTrue(src.exists());
         try {
             FileUtils.moveDirectoryToDirectory(src, dest, false);
             fail("expected IOException");
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             // expected
         }
         assertTrue(src.exists());
     }
 
     public void testIO276() throws Exception {
-        File dir = new File("target", "IO276");
+        final File dir = new File("target", "IO276");
         assertTrue(dir + " should not be present", dir.mkdirs());
-        File file = new File(dir, "IO276.txt");
+        final File file = new File(dir, "IO276.txt");
         assertTrue(file + " should not be present", file.createNewFile());
         FileUtils.forceDeleteOnExit(dir);
         // If this does not work, test will fail next time (assuming target is not cleaned)
@@ -2551,14 +2551,14 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         ListDirectoryWalker() {
             super();
         }
-        List<File> list(File startDirectory) throws IOException {
-            ArrayList<File> files = new ArrayList<File>();
+        List<File> list(final File startDirectory) throws IOException {
+            final ArrayList<File> files = new ArrayList<File>();
             walk(startDirectory, files);
             return files;
         }
 
         @Override
-        protected void handleDirectoryStart(File directory, int depth, Collection<File> results) throws IOException {
+        protected void handleDirectoryStart(final File directory, final int depth, final Collection<File> results) throws IOException {
             // Add all directories except the starting directory
             if (depth > 0) {
                 results.add(directory);
@@ -2566,7 +2566,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         @Override
-        protected void handleFile(File file, int depth, Collection<File> results) throws IOException {
+        protected void handleFile(final File file, final int depth, final Collection<File> results) throws IOException {
             results.add(file);
         }
     }

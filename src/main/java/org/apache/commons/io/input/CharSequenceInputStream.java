@@ -56,7 +56,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
      */
-    public CharSequenceInputStream(final CharSequence cs, final Charset charset, int bufferSize) {
+    public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         super();
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
@@ -74,7 +74,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
      */
-    public CharSequenceInputStream(final CharSequence cs, final String charset, int bufferSize) {
+    public CharSequenceInputStream(final CharSequence cs, final String charset, final int bufferSize) {
         this(cs, Charset.forName(charset), bufferSize);
     }
 
@@ -108,7 +108,7 @@ public class CharSequenceInputStream extends InputStream {
      */
     private void fillBuffer() throws CharacterCodingException {
         this.bbuf.compact();
-        CoderResult result = this.encoder.encode(this.cbuf, this.bbuf, true);
+        final CoderResult result = this.encoder.encode(this.cbuf, this.bbuf, true);
         if (result.isError()) {
             result.throwException();
         }
@@ -116,7 +116,7 @@ public class CharSequenceInputStream extends InputStream {
     }
     
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(final byte[] b, int off, int len) throws IOException {
         if (b == null) {
             throw new NullPointerException("Byte array is null");
         }
@@ -133,7 +133,7 @@ public class CharSequenceInputStream extends InputStream {
         int bytesRead = 0;
         while (len > 0) {
             if (this.bbuf.hasRemaining()) {
-                int chunk = Math.min(this.bbuf.remaining(), len);
+                final int chunk = Math.min(this.bbuf.remaining(), len);
                 this.bbuf.get(b, off, chunk);
                 off += chunk;
                 len -= chunk;
@@ -163,7 +163,7 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte[] b) throws IOException {
+    public int read(final byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
@@ -192,7 +192,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param readlimit max read limit (ignored)
      */
     @Override
-    public synchronized void mark(@SuppressWarnings("unused") int readlimit) {
+    public synchronized void mark(@SuppressWarnings("unused") final int readlimit) {
         this.mark = this.cbuf.position();
     }
 

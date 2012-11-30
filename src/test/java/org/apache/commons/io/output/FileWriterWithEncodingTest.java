@@ -42,25 +42,25 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     private File file2;
     private String textContent;
 
-    public FileWriterWithEncodingTest(String name) {
+    public FileWriterWithEncodingTest(final String name) {
         super(name);
     }
 
     @Override
     public void setUp() {
-        File encodingFinder = new File(getTestDirectory(), "finder.txt");
+        final File encodingFinder = new File(getTestDirectory(), "finder.txt");
         OutputStreamWriter out = null;
         try {
             out = new OutputStreamWriter(new FileOutputStream(encodingFinder));
             defaultEncoding = out.getEncoding();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new RuntimeException(ex.getMessage());
         } finally {
             IOUtils.closeQuietly(out);
         }
         file1 = new File(getTestDirectory(), "testfile1.txt");
         file2 = new File(getTestDirectory(), "testfile2.txt");
-        char[] arr = new char[1024];
+        final char[] arr = new char[1024];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (char) i;
         }
@@ -117,7 +117,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 try {
                     checkFile(file1, file2);
                     fail();
-                } catch (AssertionFailedError ex) {
+                } catch (final AssertionFailedError ex) {
                     // success
                 }
                 
@@ -145,7 +145,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 try {
                     checkFile(file1, file2);
                     fail();
-                } catch (AssertionFailedError ex) {
+                } catch (final AssertionFailedError ex) {
                     // success
                 }
                 
@@ -164,7 +164,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         try {
             writer = new FileWriterWithEncoding(file1, "BAD-ENCODE");
             fail();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // expected
             assertFalse(file1.exists());
         } finally {
@@ -179,7 +179,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         try {
             writer = new FileWriterWithEncoding(getTestDirectory(), defaultEncoding);
             fail();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // expected
             assertFalse(file1.exists());
         } finally {
@@ -194,7 +194,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         try {
             writer = new FileWriterWithEncoding((File) null, defaultEncoding);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
             assertFalse(file1.exists());
         } finally {
@@ -209,7 +209,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         try {
             writer = new FileWriterWithEncoding((String) null, defaultEncoding);
             fail();
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             // expected
             assertFalse(file1.exists());
         } finally {

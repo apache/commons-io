@@ -41,7 +41,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      *
      * @param in underlying input stream
      */
-    public AutoCloseInputStream(InputStream in) {
+    public AutoCloseInputStream(final InputStream in) {
         super(in);
     }
 
@@ -72,7 +72,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @since 2.0
      */
     @Override
-    protected void afterRead(int n) throws IOException {
+    protected void afterRead(final int n) throws IOException {
         if (n == -1) {
             close();
         }

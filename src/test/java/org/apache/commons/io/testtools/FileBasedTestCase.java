@@ -42,7 +42,7 @@ public abstract class FileBasedTestCase extends TestCase {
 
     private static volatile File testDir;
 
-    public FileBasedTestCase(String name) {
+    public FileBasedTestCase(final String name) {
         super(name);
     }
     
@@ -54,13 +54,13 @@ public abstract class FileBasedTestCase extends TestCase {
         return testDir;
     }
     
-    protected void createFile(File file, long size)
+    protected void createFile(final File file, final long size)
             throws IOException {
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file 
                 + " as the parent directory does not exist");
         }
-        BufferedOutputStream output =
+        final BufferedOutputStream output =
             new BufferedOutputStream(new java.io.FileOutputStream(file));
         try {
             generateTestData(output, size);
@@ -69,17 +69,17 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
     
-    protected byte[] generateTestData(long size) {
+    protected byte[] generateTestData(final long size) {
         try {
-            ByteArrayOutputStream baout = new ByteArrayOutputStream();
+            final ByteArrayOutputStream baout = new ByteArrayOutputStream();
             generateTestData(baout, size);
             return baout.toByteArray();
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             throw new RuntimeException("This should never happen: " + ioe.getMessage());
         }
     }
     
-    protected void generateTestData(OutputStream out, long size) 
+    protected void generateTestData(final OutputStream out, final long size) 
                 throws IOException {
         for (int i = 0; i < size; i++) {
             //output.write((byte)'X');
@@ -89,13 +89,13 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void createLineBasedFile(File file, String[] data) throws IOException {
+    protected void createLineBasedFile(final File file, final String[] data) throws IOException {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+        final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         try {
-            for (String element : data) {
+            for (final String element : data) {
                 output.println(element);
             }
         } finally {
@@ -103,8 +103,8 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected File newFile(String filename) throws IOException {
-        File destination = new File( getTestDirectory(), filename );
+    protected File newFile(final String filename) throws IOException {
+        final File destination = new File( getTestDirectory(), filename );
         /*
         assertTrue( filename + "Test output data file shouldn't previously exist",
                     !destination.exists() );
@@ -115,14 +115,14 @@ public abstract class FileBasedTestCase extends TestCase {
         return destination;
     }
 
-    protected void checkFile( File file, File referenceFile )
+    protected void checkFile( final File file, final File referenceFile )
                 throws Exception {
         assertTrue( "Check existence of output file", file.exists() );
         assertEqualContent( referenceFile, file );
     }
 
     /** Assert that the content of two files is the same. */
-    private void assertEqualContent( File f0, File f1 )
+    private void assertEqualContent( final File f0, final File f1 )
         throws IOException
     {
         /* This doesn't work because the filesize isn't updated until the file
@@ -131,12 +131,12 @@ public abstract class FileBasedTestCase extends TestCase {
                     " have differing file sizes (" + f0.length() +
                     " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
         */
-        InputStream is0 = new java.io.FileInputStream( f0 );
+        final InputStream is0 = new java.io.FileInputStream( f0 );
         try {
-            InputStream is1 = new java.io.FileInputStream( f1 );
+            final InputStream is1 = new java.io.FileInputStream( f1 );
             try {
-                byte[] buf0 = new byte[ 1024 ];
-                byte[] buf1 = new byte[ 1024 ];
+                final byte[] buf0 = new byte[ 1024 ];
+                final byte[] buf1 = new byte[ 1024 ];
                 int n0 = 0;
                 int n1 = 0;
 
@@ -160,10 +160,10 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     /** Assert that the content of a file is equal to that in a byte[]. */
-    protected void assertEqualContent(byte[] b0, File file) throws IOException {
-        InputStream is = new java.io.FileInputStream(file);
+    protected void assertEqualContent(final byte[] b0, final File file) throws IOException {
+        final InputStream is = new java.io.FileInputStream(file);
         int count = 0, numRead = 0;
-        byte[] b1 = new byte[b0.length];
+        final byte[] b1 = new byte[b0.length];
         try {
             while (count < b0.length && numRead >= 0) {
                 numRead = is.read(b1, count, b0.length);
@@ -179,10 +179,10 @@ public abstract class FileBasedTestCase extends TestCase {
     }
 
     /** Assert that the content of a file is equal to that in a char[]. */
-    protected void assertEqualContent(char[] c0, File file) throws IOException {
-        Reader ir = new java.io.FileReader(file);
+    protected void assertEqualContent(final char[] c0, final File file) throws IOException {
+        final Reader ir = new java.io.FileReader(file);
         int count = 0, numRead = 0;
-        char[] c1 = new char[c0.length];
+        final char[] c1 = new char[c0.length];
         try {
             while (count < c0.length && numRead >= 0) {
                 numRead = ir.read(c1, count, c0.length);
@@ -197,10 +197,10 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void checkWrite(OutputStream output) throws Exception {
+    protected void checkWrite(final OutputStream output) throws Exception {
         try {
             new java.io.PrintStream(output).write(0);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw new AssertionFailedError(
                 "The copy() method closed the stream "
                     + "when it shouldn't have. "
@@ -208,10 +208,10 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void checkWrite(Writer output) throws Exception {
+    protected void checkWrite(final Writer output) throws Exception {
         try {
             new java.io.PrintWriter(output).write('a');
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw new AssertionFailedError(
                 "The copy() method closed the stream "
                     + "when it shouldn't have. "
@@ -219,7 +219,7 @@ public abstract class FileBasedTestCase extends TestCase {
         }
     }
 
-    protected void deleteFile( File file )
+    protected void deleteFile( final File file )
         throws Exception {
         if (file.exists()) {
             assertTrue("Couldn't delete file: " + file, file.delete());

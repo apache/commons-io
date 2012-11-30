@@ -96,7 +96,7 @@ public class DeferredFileOutputStream
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
      */
-    public DeferredFileOutputStream(int threshold, File outputFile)
+    public DeferredFileOutputStream(final int threshold, final File outputFile)
     {
         this(threshold,  outputFile, null, null, null);
     }
@@ -113,7 +113,7 @@ public class DeferredFileOutputStream
      *
      * @since 1.4
      */
-    public DeferredFileOutputStream(int threshold, String prefix, String suffix, File directory)
+    public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
     {
         this(threshold, null, prefix, suffix, directory);
         if (prefix == null) {
@@ -131,7 +131,7 @@ public class DeferredFileOutputStream
      * @param suffix Suffix to use for the temporary file.
      * @param directory Temporary file directory.
      */
-    private DeferredFileOutputStream(int threshold, File outputFile, String prefix, String suffix, File directory) {
+    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix, final String suffix, final File directory) {
         super(threshold);
         this.outputFile = outputFile;
 
@@ -175,7 +175,7 @@ public class DeferredFileOutputStream
         if (prefix != null) {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
-        FileOutputStream fos = new FileOutputStream(outputFile);
+        final FileOutputStream fos = new FileOutputStream(outputFile);
         memoryOutputStream.writeTo(fos);
         currentOutputStream = fos;
         memoryOutputStream = null;
@@ -256,7 +256,7 @@ public class DeferredFileOutputStream
      * @param out output stream to write to.
      * @exception IOException if this stream is not yet closed or an error occurs.
      */
-    public void writeTo(OutputStream out) throws IOException 
+    public void writeTo(final OutputStream out) throws IOException 
     {
         // we may only need to check if this is closed if we are working with a file
         // but we should force the habit of closing wether we are working with
@@ -272,7 +272,7 @@ public class DeferredFileOutputStream
         }
         else
         {
-            FileInputStream fis = new FileInputStream(outputFile);
+            final FileInputStream fis = new FileInputStream(outputFile);
             try {
                 IOUtils.copy(fis, out);
             } finally {

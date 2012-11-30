@@ -46,7 +46,7 @@ public class NullWriter extends Writer {
      * @since 2.0
      */
     @Override
-    public Writer append(char c) {
+    public Writer append(final char c) {
         //to /dev/null
         return this;
     }
@@ -60,7 +60,7 @@ public class NullWriter extends Writer {
      * @since 2.0
      */
     @Override
-    public Writer append(CharSequence csq, int start, int end) {
+    public Writer append(final CharSequence csq, final int start, final int end) {
         //to /dev/null
         return this;
     }
@@ -72,7 +72,7 @@ public class NullWriter extends Writer {
      * @since 2.0
      */
     @Override
-    public Writer append(CharSequence csq) {
+    public Writer append(final CharSequence csq) {
         //to /dev/null
         return this;
     }
@@ -82,7 +82,7 @@ public class NullWriter extends Writer {
      * @param idx The character to write
      */
     @Override
-    public void write(int idx) {
+    public void write(final int idx) {
         //to /dev/null
     }
 
@@ -91,7 +91,7 @@ public class NullWriter extends Writer {
      * @param chr The characters to write
      */
     @Override
-    public void write(char[] chr) {
+    public void write(final char[] chr) {
         //to /dev/null
     }
 
@@ -102,7 +102,7 @@ public class NullWriter extends Writer {
      * @param end The number of characters to write
      */
     @Override
-    public void write(char[] chr, int st, int end) {
+    public void write(final char[] chr, final int st, final int end) {
         //to /dev/null
     }
 
@@ -111,7 +111,7 @@ public class NullWriter extends Writer {
      * @param str The string to write
      */
     @Override
-    public void write(String str) {
+    public void write(final String str) {
         //to /dev/null
     }
 
@@ -122,7 +122,7 @@ public class NullWriter extends Writer {
      * @param end The number of characters to write
      */
     @Override
-    public void write(String str, int st, int end) {
+    public void write(final String str, final int st, final int end) {
         //to /dev/null
     }
 

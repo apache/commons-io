@@ -59,7 +59,7 @@ public class AutoCloseInputStreamTest extends TestCase {
      * Test the <code>read()</code> method.
      */
     public void testRead() throws IOException {
-        for (byte element : data) {
+        for (final byte element : data) {
             assertEquals("read()", element, stream.read());
             assertFalse("closed", closed);
         }
@@ -71,7 +71,7 @@ public class AutoCloseInputStreamTest extends TestCase {
      * Test the <code>read(b)</code> method.
      */
     public void testReadBuffer() throws IOException {
-        byte[] b = new byte[data.length * 2];
+        final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b)) {
             assertFalse("closed", closed);
@@ -89,7 +89,7 @@ public class AutoCloseInputStreamTest extends TestCase {
      * Test the <code>read(b, off, len)</code> method.
      */
     public void testReadBufferOffsetLength() throws IOException {
-        byte[] b = new byte[data.length * 2];
+        final byte[] b = new byte[data.length * 2];
         int total = 0;
         for (int n = 0; n != -1; n = stream.read(b, total, b.length - total)) {
             assertFalse("closed", closed);

@@ -25,7 +25,7 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    public FilenameUtilsWildcardTestCase(String name) {
+    public FilenameUtilsWildcardTestCase(final String name) {
         super(name);
     }
 
@@ -127,14 +127,14 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertArrayEquals( new String[] { "" }, FilenameUtils.splitOnTokens("") );
     }
 
-    private void assertArrayEquals(Object[] a1, Object[] a2) {
+    private void assertArrayEquals(final Object[] a1, final Object[] a2) {
         assertEquals(a1.length, a2.length);
         for(int i=0; i<a1.length; i++) {
             assertEquals(a1[i], a2[i]);
         }
     }
 
-    private void assertMatch(String text, String wildcard, boolean expected) {
+    private void assertMatch(final String text, final String wildcard, final boolean expected) {
         assertEquals(text + " " + wildcard, expected, FilenameUtils.wildcardMatch(text, wildcard));
     }
 
@@ -213,11 +213,11 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
     }
 
     public void testLocaleIndependence() {
-        Locale orig = Locale.getDefault();
+        final Locale orig = Locale.getDefault();
 
-        Locale[] locales = Locale.getAvailableLocales();
+        final Locale[] locales = Locale.getAvailableLocales();
 
-        String[][] data = {
+        final String[][] data = {
             { "I", "i"},
             { "i", "I"},
             { "i", "\u0130"},
@@ -229,10 +229,10 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
 
         try {
             for (int i = 0; i < data.length; i++) {
-                for (Locale locale : locales) {
+                for (final Locale locale : locales) {
                     Locale.setDefault(locale);
                     assertTrue("Test data corrupt: " + i, data[i][0].equalsIgnoreCase(data[i][1]));
-                    boolean match = FilenameUtils.wildcardMatch(data[i][0], data[i][1], IOCase.INSENSITIVE);
+                    final boolean match = FilenameUtils.wildcardMatch(data[i][0], data[i][1], IOCase.INSENSITIVE);
                     assertTrue(Locale.getDefault().toString() + ": " + i, match);
                 }
             }

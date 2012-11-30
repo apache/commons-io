@@ -75,12 +75,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     private File m_testFile;
 
-    public IOUtilsTestCase(String name) {
+    public IOUtilsTestCase(final String name) {
         super(name);
     }
 
     /** Assert that the contents of two byte arrays are the same. */
-    private void assertEqualContent(byte[] b0, byte[] b1) {
+    private void assertEqualContent(final byte[] b0, final byte[] b1) {
         assertTrue("Content not equal according to java.util.Arrays#equals()", Arrays.equals(b0, b1));
     }
 
@@ -91,7 +91,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             m_testFile = new File(getTestDirectory(), "file2-test.txt");
 
             createFile(m_testFile, FILE_SIZE);
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             throw new RuntimeException("Can't run this test because the environment could not be built: "
                     + ioe.getMessage());
         }
@@ -114,7 +114,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         iarr = null;
         try {
             FileUtils.deleteDirectory(getTestDirectory());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException("Could not clear up " + getTestDirectory() + ": " + e);
         }
     }
@@ -131,14 +131,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         Selector selector = null;
         try {
             selector = Selector.open();
-        } catch (IOException e) {
+        } catch (final IOException e) {
         } finally {
             IOUtils.closeQuietly(selector);
         }
     }
 
     public void testCloseQuietly_SelectorIOException() {
-        Selector selector = new SelectorAdapter() {
+        final Selector selector = new SelectorAdapter() {
             @Override
             public void close() throws IOException {
                 throw new IOException();
@@ -148,7 +148,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCloseQuietly_SelectorNull() {
-        Selector selector = null;
+        final Selector selector = null;
         IOUtils.closeQuietly(selector);
     }
 
@@ -156,7 +156,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         Selector selector = null;
         try {
             selector = Selector.open();
-        } catch (IOException e) {
+        } catch (final IOException e) {
         } finally {
             IOUtils.closeQuietly(selector);
             IOUtils.closeQuietly(selector);
@@ -241,8 +241,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testCopy_ByteArray_OutputStream() throws Exception {
-        File destination = newFile("copy8.txt");
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final File destination = newFile("copy8.txt");
+        final FileInputStream fin = new FileInputStream(m_testFile);
         byte[] in;
         try {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
@@ -251,7 +251,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fin.close();
         }
 
-        FileOutputStream fout = new FileOutputStream(destination);
+        final FileOutputStream fout = new FileOutputStream(destination);
         try {
             CopyUtils.copy(in, fout);
 
@@ -268,8 +268,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testCopy_ByteArray_Writer() throws Exception {
-        File destination = newFile("copy7.txt");
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final File destination = newFile("copy7.txt");
+        final FileInputStream fin = new FileInputStream(m_testFile);
         byte[] in;
         try {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
@@ -278,7 +278,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fin.close();
         }
 
-        FileWriter fout = new FileWriter(destination);
+        final FileWriter fout = new FileWriter(destination);
         try {
             CopyUtils.copy(in, fout);
             fout.flush();
@@ -293,8 +293,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testCopy_String_Writer() throws Exception {
-        File destination = newFile("copy6.txt");
-        FileReader fin = new FileReader(m_testFile);
+        final File destination = newFile("copy6.txt");
+        final FileReader fin = new FileReader(m_testFile);
         String str;
         try {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
@@ -303,7 +303,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fin.close();
         }
 
-        FileWriter fout = new FileWriter(destination);
+        final FileWriter fout = new FileWriter(destination);
         try {
             CopyUtils.copy(str, fout);
             fout.flush();
@@ -327,7 +327,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
-            char[] oarr = os.toCharArray();
+            final char[] oarr = os.toCharArray();
 
             // check that output length is correct
             assertEquals(200, oarr.length);
@@ -352,7 +352,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
-            char[] oarr = os.toCharArray();
+            final char[] oarr = os.toCharArray();
 
             // check that output length is correct
             assertEquals(200, oarr.length);
@@ -377,7 +377,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
-            char[] oarr = os.toCharArray();
+            final char[] oarr = os.toCharArray();
 
             // check that output length is correct
             assertEquals(100, oarr.length);
@@ -402,7 +402,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
-            char[] oarr = os.toCharArray();
+            final char[] oarr = os.toCharArray();
 
             // check that output length is correct
             assertEquals(100, oarr.length);
@@ -428,7 +428,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             // Test our copy method
             IOUtils.copyLarge(is, os, 1000, 100);
             fail("Should have thrown EOFException");
-        } catch (EOFException eofe) {
+        } catch (final EOFException eofe) {
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -446,7 +446,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             // Test our copy method
             // for extra length, it reads till EOF
             assertEquals(200, IOUtils.copyLarge(is, os, 0, 2000));
-            byte[] oarr = os.toByteArray();
+            final byte[] oarr = os.toByteArray();
 
             // check that output length is correct
             assertEquals(200, oarr.length);
@@ -471,7 +471,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
-            byte[] oarr = os.toByteArray();
+            final byte[] oarr = os.toByteArray();
 
             // check that output length is correct
             assertEquals(200, oarr.length);
@@ -496,7 +496,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
-            byte[] oarr = os.toByteArray();
+            final byte[] oarr = os.toByteArray();
 
             // check that output length is correct
             assertEquals(100, oarr.length);
@@ -521,7 +521,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
-            byte[] oarr = os.toByteArray();
+            final byte[] oarr = os.toByteArray();
 
             // check that output length is correct
             assertEquals(100, oarr.length);
@@ -547,7 +547,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             // Test our copy method
             IOUtils.copyLarge(is, os, 1000, 100);
             fail("Should have thrown EOFException");
-        } catch (EOFException eofe) {
+        } catch (final EOFException eofe) {
         } finally {
             IOUtils.closeQuietly(is);
             IOUtils.closeQuietly(os);
@@ -555,9 +555,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testRead_ReadableByteChannel() throws Exception {
-        ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
+        final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
         final FileInputStream fileInputStream = new FileInputStream(m_testFile);
-        FileChannel input = fileInputStream.getChannel();
+        final FileChannel input = fileInputStream.getChannel();
         try {
             assertEquals(FILE_SIZE, IOUtils.read(input, buffer));
             assertEquals(0, IOUtils.read(input, buffer));
@@ -567,7 +567,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             try {
                 IOUtils.readFully(input, buffer);
                 fail("Should have failed with EOFxception");
-            } catch (EOFException expected) {
+            } catch (final EOFException expected) {
                 // expected
             }
         } finally {
@@ -578,13 +578,13 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testReadFully_InputStream_ByteArray() throws Exception {
         final int size = 1027;
 
-        byte[] buffer = new byte[size];
+        final byte[] buffer = new byte[size];
 
-        InputStream input = new ByteArrayInputStream(new byte[size]);
+        final InputStream input = new ByteArrayInputStream(new byte[size]);
         try {
             IOUtils.readFully(input, buffer, 0, -1);
             fail("Should have failed with IllegalArgumentException");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected
         }
         IOUtils.readFully(input, buffer, 0, 0);
@@ -592,7 +592,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             IOUtils.readFully(input, buffer, 0, 2);
             fail("Should have failed with EOFxception");
-        } catch (EOFException expected) {
+        } catch (final EOFException expected) {
             // expected
         }
         IOUtils.closeQuietly(input);
@@ -600,18 +600,18 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReadFully_InputStream_Offset() throws Exception {
-        byte[] bytes = "abcd1234".getBytes("UTF-8");
-        ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        byte[] buffer = "wx00000000".getBytes("UTF-8");
+        final byte[] bytes = "abcd1234".getBytes("UTF-8");
+        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        final byte[] buffer = "wx00000000".getBytes("UTF-8");
         IOUtils.readFully(stream, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, "UTF-8"));
         IOUtils.closeQuietly(stream);
     }
 
     public void testReadFully_ReadableByteChannel() throws Exception {
-        ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
+        final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
         final FileInputStream fileInputStream = new FileInputStream(m_testFile);
-        FileChannel input = fileInputStream.getChannel();
+        final FileChannel input = fileInputStream.getChannel();
         try {
             IOUtils.readFully(input, buffer);
             assertEquals(FILE_SIZE, buffer.position());
@@ -626,7 +626,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             try {
                 IOUtils.readFully(input, buffer);
                 fail("Should have failed with EOFxception");
-            } catch (EOFException expected) {
+            } catch (final EOFException expected) {
                 // expected
             }
         } finally {
@@ -638,43 +638,43 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testReadFully_Reader() throws Exception {
         final int size = 1027;
 
-        char[] buffer = new char[size];
+        final char[] buffer = new char[size];
 
-        Reader input = new CharArrayReader(new char[size]);
+        final Reader input = new CharArrayReader(new char[size]);
         IOUtils.readFully(input, buffer, 0, 0);
         IOUtils.readFully(input, buffer, 0, size - 3);
         try {
             IOUtils.readFully(input, buffer, 0, -1);
             fail("Should have failed with IllegalArgumentException");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected
         }
         try {
             IOUtils.readFully(input, buffer, 0, 5);
             fail("Should have failed with EOFException");
-        } catch (EOFException expected) {
+        } catch (final EOFException expected) {
             // expected
         }
         IOUtils.closeQuietly(input);
     }
 
     public void testReadFully_Reader_Offset() throws Exception {
-        Reader reader = new StringReader("abcd1234");
-        char[] buffer = "wx00000000".toCharArray();
+        final Reader reader = new StringReader("abcd1234");
+        final char[] buffer = "wx00000000".toCharArray();
         IOUtils.readFully(reader, buffer, 2, 8);
         assertEquals("wxabcd1234", new String(buffer));
         IOUtils.closeQuietly(reader);
     }
 
     public void testReadLines_InputStream() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         InputStream in = null;
         try {
-            String[] data = new String[] { "hello", "world", "", "this is", "some text" };
+            final String[] data = new String[] { "hello", "world", "", "this is", "some text" };
             createLineBasedFile(file, data);
 
             in = new FileInputStream(file);
-            List<String> lines = IOUtils.readLines(in);
+            final List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -684,14 +684,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReadLines_InputStream_String() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         InputStream in = null;
         try {
-            String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
+            final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
             createLineBasedFile(file, data);
 
             in = new FileInputStream(file);
-            List<String> lines = IOUtils.readLines(in, "UTF-8");
+            final List<String> lines = IOUtils.readLines(in, "UTF-8");
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -701,14 +701,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testReadLines_Reader() throws Exception {
-        File file = newFile("lines.txt");
+        final File file = newFile("lines.txt");
         Reader in = null;
         try {
-            String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
+            final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
             createLineBasedFile(file, data);
 
             in = new InputStreamReader(new FileInputStream(file));
-            List<String> lines = IOUtils.readLines(in);
+            final List<String> lines = IOUtils.readLines(in);
             assertEquals(Arrays.asList(data), lines);
             assertEquals(-1, in.read());
         } finally {
@@ -718,7 +718,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testSkip_FileReader() throws Exception {
-        FileReader in = new FileReader(m_testFile);
+        final FileReader in = new FileReader(m_testFile);
         try {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
             assertEquals(10, IOUtils.skip(in, 20));
@@ -729,7 +729,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testSkip_InputStream() throws Exception {
-        InputStream in = new FileInputStream(m_testFile);
+        final InputStream in = new FileInputStream(m_testFile);
         try {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(in, FILE_SIZE - 10));
             assertEquals(10, IOUtils.skip(in, 20));
@@ -740,8 +740,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testSkip_ReadableByteChannel() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream(m_testFile);
-        FileChannel fileChannel = fileInputStream.getChannel();
+        final FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        final FileChannel fileChannel = fileInputStream.getChannel();
         try {
             assertEquals(FILE_SIZE - 10, IOUtils.skip(fileChannel, FILE_SIZE - 10));
             assertEquals(10, IOUtils.skip(fileChannel, 20));
@@ -755,11 +755,11 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
 
-        InputStream input = new ByteArrayInputStream(new byte[size]);
+        final InputStream input = new ByteArrayInputStream(new byte[size]);
         try {
             IOUtils.skipFully(input, -1);
             fail("Should have failed with IllegalArgumentException");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected
         }
         IOUtils.skipFully(input, 0);
@@ -767,7 +767,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         try {
             IOUtils.skipFully(input, 2);
             fail("Should have failed with IOException");
-        } catch (IOException expected) {
+        } catch (final IOException expected) {
             // expected
         }
         IOUtils.closeQuietly(input);
@@ -775,13 +775,13 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testSkipFully_ReadableByteChannel() throws Exception {
-        FileInputStream fileInputStream = new FileInputStream(m_testFile);
-        FileChannel fileChannel = fileInputStream.getChannel();
+        final FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        final FileChannel fileChannel = fileInputStream.getChannel();
         try {
             try {
                 IOUtils.skipFully(fileChannel, -1);
                 fail("Should have failed with IllegalArgumentException");
-            } catch (IllegalArgumentException expected) {
+            } catch (final IllegalArgumentException expected) {
                 // expected
             }
             IOUtils.skipFully(fileChannel, 0);
@@ -789,7 +789,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             try {
                 IOUtils.skipFully(fileChannel, 2);
                 fail("Should have failed with IOException");
-            } catch (IOException expected) {
+            } catch (final IOException expected) {
                 // expected
             }
         } finally {
@@ -801,19 +801,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testSkipFully_Reader() throws Exception {
         final int size = 1027;
 
-        Reader input = new CharArrayReader(new char[size]);
+        final Reader input = new CharArrayReader(new char[size]);
         IOUtils.skipFully(input, 0);
         IOUtils.skipFully(input, size - 3);
         try {
             IOUtils.skipFully(input, -1);
             fail("Should have failed with IllegalArgumentException");
-        } catch (IllegalArgumentException expected) {
+        } catch (final IllegalArgumentException expected) {
             // expected
         }
         try {
             IOUtils.skipFully(input, 5);
             fail("Should have failed with IOException");
-        } catch (IOException expected) {
+        } catch (final IOException expected) {
             // expected
         }
         IOUtils.closeQuietly(input);
@@ -822,8 +822,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testStringToOutputStream() throws Exception {
-        File destination = newFile("copy5.txt");
-        FileReader fin = new FileReader(m_testFile);
+        final File destination = newFile("copy5.txt");
+        final FileReader fin = new FileReader(m_testFile);
         String str;
         try {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
@@ -832,7 +832,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fin.close();
         }
 
-        FileOutputStream fout = new FileOutputStream(destination);
+        final FileOutputStream fout = new FileOutputStream(destination);
         try {
             CopyUtils.copy(str, fout);
             // Note: this method *does* flush. It is equivalent to:
@@ -851,10 +851,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToBufferedInputStream_InputStream() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            InputStream in = IOUtils.toBufferedInputStream(fin);
-            byte[] out = IOUtils.toByteArray(in);
+            final InputStream in = IOUtils.toBufferedInputStream(fin);
+            final byte[] out = IOUtils.toByteArray(in);
             assertNotNull(out);
             assertEquals("Not all bytes were read", 0, fin.available());
             assertEquals("Wrong output size", FILE_SIZE, out.length);
@@ -865,9 +865,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            byte[] out = IOUtils.toByteArray(fin);
+            final byte[] out = IOUtils.toByteArray(fin);
             assertNotNull(out);
             assertEquals("Not all bytes were read", 0, fin.available());
             assertEquals("Wrong output size", FILE_SIZE, out.length);
@@ -878,12 +878,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream_NegativeSize() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
             IOUtils.toByteArray(fin, -1);
             fail("IllegalArgumentException excepted");
-        } catch (IllegalArgumentException exc) {
+        } catch (final IllegalArgumentException exc) {
             assertTrue("Exception message does not start with \"Size must be equal or greater than zero\"", exc
                     .getMessage().startsWith("Size must be equal or greater than zero"));
         } finally {
@@ -893,9 +893,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream_Size() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            byte[] out = IOUtils.toByteArray(fin, m_testFile.length());
+            final byte[] out = IOUtils.toByteArray(fin, m_testFile.length());
             assertNotNull(out);
             assertEquals("Not all bytes were read", 0, fin.available());
             assertEquals("Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE, FILE_SIZE, out.length);
@@ -906,12 +906,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream_SizeIllegal() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
             IOUtils.toByteArray(fin, m_testFile.length() + 1);
             fail("IOException excepted");
-        } catch (IOException exc) {
+        } catch (final IOException exc) {
             assertTrue("Exception message does not start with \"Unexpected readed size\"",
                     exc.getMessage().startsWith("Unexpected readed size"));
         } finally {
@@ -921,12 +921,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream_SizeLong() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
             IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1);
             fail("IOException excepted");
-        } catch (IllegalArgumentException exc) {
+        } catch (final IllegalArgumentException exc) {
             assertTrue("Exception message does not start with \"Size cannot be greater than Integer max value\"", exc
                     .getMessage().startsWith("Size cannot be greater than Integer max value"));
         } finally {
@@ -936,10 +936,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_InputStream_SizeZero() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
 
         try {
-            byte[] out = IOUtils.toByteArray(fin, 0);
+            final byte[] out = IOUtils.toByteArray(fin, 0);
             assertNotNull("Out cannot be null", out);
             assertEquals("Out length must be 0", 0, out.length);
         } finally {
@@ -959,12 +959,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testToByteArray_String() throws Exception {
-        FileReader fin = new FileReader(m_testFile);
+        final FileReader fin = new FileReader(m_testFile);
         try {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
-            String str = IOUtils.toString(fin);
+            final String str = IOUtils.toString(fin);
 
-            byte[] out = IOUtils.toByteArray(str);
+            final byte[] out = IOUtils.toByteArray(str);
             assertEqualContent(str.getBytes(), out);
         } finally {
             fin.close();
@@ -972,19 +972,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToByteArray_URI() throws Exception {
-        URI url = m_testFile.toURI();
-        byte[] actual = IOUtils.toByteArray(url);
+        final URI url = m_testFile.toURI();
+        final byte[] actual = IOUtils.toByteArray(url);
         Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
     public void testToByteArray_URL() throws Exception {
-        URL url = m_testFile.toURI().toURL();
-        byte[] actual = IOUtils.toByteArray(url);
+        final URL url = m_testFile.toURI().toURL();
+        final byte[] actual = IOUtils.toByteArray(url);
         Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
     public void testToByteArray_URLConnection() throws Exception {
-        URLConnection urlConn = m_testFile.toURI().toURL().openConnection();
+        final URLConnection urlConn = m_testFile.toURI().toURL().openConnection();
         byte[] actual;
         try {
             actual = IOUtils.toByteArray(urlConn);
@@ -995,9 +995,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToCharArray_InputStream() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            char[] out = IOUtils.toCharArray(fin);
+            final char[] out = IOUtils.toCharArray(fin);
             assertNotNull(out);
             assertEquals("Not all chars were read", 0, fin.available());
             assertEquals("Wrong output size", FILE_SIZE, out.length);
@@ -1008,9 +1008,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToCharArray_InputStream_CharsetName() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            char[] out = IOUtils.toCharArray(fin, "UTF-8");
+            final char[] out = IOUtils.toCharArray(fin, "UTF-8");
             assertNotNull(out);
             assertEquals("Not all chars were read", 0, fin.available());
             assertEquals("Wrong output size", FILE_SIZE, out.length);
@@ -1021,9 +1021,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
     
     public void testToCharArray_Reader() throws Exception {
-        FileReader fr = new FileReader(m_testFile);
+        final FileReader fr = new FileReader(m_testFile);
         try {
-            char[] out = IOUtils.toCharArray(fr);
+            final char[] out = IOUtils.toCharArray(fr);
             assertNotNull(out);
             assertEquals("Wrong output size", FILE_SIZE, out.length);
             assertEqualContent(out, m_testFile);
@@ -1041,7 +1041,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      *             on error
      */
     public void testToInputStream_CharSequence() throws Exception {
-        CharSequence csq = new StringBuilder("Abc123Xyz!");
+        final CharSequence csq = new StringBuilder("Abc123Xyz!");
         InputStream inStream = IOUtils.toInputStream(csq);
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(), bytes);
@@ -1064,7 +1064,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      *             on error
      */
     public void testToInputStream_String() throws Exception {
-        String str = "Abc123Xyz!";
+        final String str = "Abc123Xyz!";
         InputStream inStream = IOUtils.toInputStream(str);
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(), bytes);
@@ -1079,11 +1079,11 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testToString_ByteArray() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            byte[] in = IOUtils.toByteArray(fin);
+            final byte[] in = IOUtils.toByteArray(fin);
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
-            String str = IOUtils.toString(in);
+            final String str = IOUtils.toString(in);
             assertEqualContent(in, str.getBytes());
         } finally {
             fin.close();
@@ -1091,9 +1091,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToString_InputStream() throws Exception {
-        FileInputStream fin = new FileInputStream(m_testFile);
+        final FileInputStream fin = new FileInputStream(m_testFile);
         try {
-            String out = IOUtils.toString(fin);
+            final String out = IOUtils.toString(fin);
             assertNotNull(out);
             assertEquals("Not all bytes were read", 0, fin.available());
             assertEquals("Wrong output size", FILE_SIZE, out.length());
@@ -1103,9 +1103,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToString_Reader() throws Exception {
-        FileReader fin = new FileReader(m_testFile);
+        final FileReader fin = new FileReader(m_testFile);
         try {
-            String out = IOUtils.toString(fin);
+            final String out = IOUtils.toString(fin);
             assertNotNull(out);
             assertEquals("Wrong output size", FILE_SIZE, out.length());
         } finally {
@@ -1114,15 +1114,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToString_URI() throws Exception {
-        URI url = m_testFile.toURI();
-        String out = IOUtils.toString(url);
+        final URI url = m_testFile.toURI();
+        final String out = IOUtils.toString(url);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    private void testToString_URI(String encoding) throws Exception {
-        URI uri = m_testFile.toURI();
-        String out = IOUtils.toString(uri, encoding);
+    private void testToString_URI(final String encoding) throws Exception {
+        final URI uri = m_testFile.toURI();
+        final String out = IOUtils.toString(uri, encoding);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
@@ -1136,15 +1136,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testToString_URL() throws Exception {
-        URL url = m_testFile.toURI().toURL();
-        String out = IOUtils.toString(url);
+        final URL url = m_testFile.toURI().toURL();
+        final String out = IOUtils.toString(url);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }
 
-    private void testToString_URL(String encoding) throws Exception {
-        URL url = m_testFile.toURI().toURL();
-        String out = IOUtils.toString(url, encoding);
+    private void testToString_URL(final String encoding) throws Exception {
+        final URL url = m_testFile.toURI().toURL();
+        final String out = IOUtils.toString(url, encoding);
         assertNotNull(out);
         assertEquals("Wrong output size", FILE_SIZE, out.length());
     }

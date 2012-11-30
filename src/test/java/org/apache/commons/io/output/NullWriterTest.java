@@ -26,13 +26,13 @@ import junit.framework.TestCase;
  */
 public class NullWriterTest extends TestCase {
 
-    public NullWriterTest(String name) {
+    public NullWriterTest(final String name) {
         super(name);
     }
 
     public void testNull() {
-        char[] chars = new char[] {'A', 'B', 'C'};
-        NullWriter writer = new NullWriter();
+        final char[] chars = new char[] {'A', 'B', 'C'};
+        final NullWriter writer = new NullWriter();
         writer.write(1);
         writer.write(chars);
         writer.write(chars, 1, 1);

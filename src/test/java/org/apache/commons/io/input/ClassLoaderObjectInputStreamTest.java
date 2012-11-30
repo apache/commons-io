@@ -30,7 +30,7 @@ import junit.framework.TestCase;
  */
 public class ClassLoaderObjectInputStreamTest extends TestCase {
 
-    public ClassLoaderObjectInputStreamTest(String name) {
+    public ClassLoaderObjectInputStreamTest(final String name) {
         super(name);
     }
 
@@ -42,30 +42,30 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
     
     public void testExpected() throws Exception {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
         oos.writeObject( Boolean.FALSE );
 
-        InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        ClassLoaderObjectInputStream clois = 
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final ClassLoaderObjectInputStream clois = 
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        Boolean result = (Boolean) clois.readObject();
+        final Boolean result = (Boolean) clois.readObject();
 
         assertTrue( !result.booleanValue() );
     }
 
     public void testResolveProxyClass() throws Exception {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject( Boolean.FALSE );
-        InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois = 
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        String[] interfaces = new String[] { Comparable.class.getName() };
-        Class<?> result = clois.resolveProxyClass(interfaces);
+        final String[] interfaces = new String[] { Comparable.class.getName() };
+        final Class<?> result = clois.resolveProxyClass(interfaces);
         assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
     }
     

@@ -34,13 +34,13 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     private static final String SEP = "" + File.separatorChar;
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    private File testFile1;
-    private File testFile2;
+    private final File testFile1;
+    private final File testFile2;
 
-    private int testFile1Size;
-    private int testFile2Size;
+    private final int testFile1Size;
+    private final int testFile2Size;
 
-    public FilenameUtilsTestCase(String name) {
+    public FilenameUtilsTestCase(final String name) {
         super(name);
 
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
@@ -821,19 +821,19 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
             fail("Invalid normalized first file");
-        } catch(NullPointerException e) {
+        } catch(final NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
             fail("Invalid normalized second file");
-        } catch(NullPointerException e) {
+        } catch(final NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
             fail("Invalid normalized both filse");
-        } catch(NullPointerException e) {
+        } catch(final NullPointerException e) {
             // expected result
         }
     }

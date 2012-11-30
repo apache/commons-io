@@ -48,8 +48,8 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @param xmlEnc XML prolog encoding.
      * @param is the unconsumed InputStream.
      */
-    public XmlStreamReaderException(String msg, String bomEnc,
-            String xmlGuessEnc, String xmlEnc, InputStream is) {
+    public XmlStreamReaderException(final String msg, final String bomEnc,
+            final String xmlGuessEnc, final String xmlEnc, final InputStream is) {
         this(msg, null, null, bomEnc, xmlGuessEnc, xmlEnc, is);
     }
 
@@ -67,8 +67,8 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * @param xmlEnc XML prolog encoding.
      * @param is the unconsumed InputStream.
      */
-    public XmlStreamReaderException(String msg, String ctMime, String ctEnc,
-            String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is) {
+    public XmlStreamReaderException(final String msg, final String ctMime, final String ctEnc,
+            final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final InputStream is) {
         super(msg, ctMime, ctEnc, bomEnc, xmlGuessEnc, xmlEnc);
         this.is = is;
     }

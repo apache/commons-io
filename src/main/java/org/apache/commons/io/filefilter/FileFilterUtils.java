@@ -73,15 +73,15 @@ public class FileFilterUtils {
      * 
      * @since 2.0
      */
-    public static File[] filter(IOFileFilter filter, File... files) {
+    public static File[] filter(final IOFileFilter filter, final File... files) {
         if (filter == null) {
             throw new IllegalArgumentException("file filter is null");
         }
         if (files == null) {
             return new File[0];
         }
-        List<File> acceptedFiles = new ArrayList<File>();
-        for (File file : files) {
+        final List<File> acceptedFiles = new ArrayList<File>();
+        for (final File file : files) {
             if (file == null) {
                 throw new IllegalArgumentException("file array contains null");
             }
@@ -118,8 +118,8 @@ public class FileFilterUtils {
      * 
      * @since 2.0
      */
-    public static File[] filter(IOFileFilter filter, Iterable<File> files) {
-        List<File> acceptedFiles = filterList(filter, files);
+    public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
+        final List<File> acceptedFiles = filterList(filter, files);
         return acceptedFiles.toArray(new File[acceptedFiles.size()]);
     }
 
@@ -148,7 +148,7 @@ public class FileFilterUtils {
      *         or <code>files</code> contains a {@code null} value. 
      * @since 2.0
      */
-    public static List<File> filterList(IOFileFilter filter, Iterable<File> files) {
+    public static List<File> filterList(final IOFileFilter filter, final Iterable<File> files) {
         return filter(filter, files, new ArrayList<File>());
     }
 
@@ -177,8 +177,8 @@ public class FileFilterUtils {
      *         or <code>files</code> contains a {@code null} value. 
      * @since 2.0
      */
-    public static List<File> filterList(IOFileFilter filter, File... files) {
-        File[] acceptedFiles = filter(filter, files);
+    public static List<File> filterList(final IOFileFilter filter, final File... files) {
+        final File[] acceptedFiles = filter(filter, files);
         return Arrays.asList(acceptedFiles);
     }
 
@@ -208,8 +208,8 @@ public class FileFilterUtils {
      * 
      * @since 2.0
      */
-    public static Set<File> filterSet(IOFileFilter filter, File... files) {
-        File[] acceptedFiles = filter(filter, files);
+    public static Set<File> filterSet(final IOFileFilter filter, final File... files) {
+        final File[] acceptedFiles = filter(filter, files);
         return new HashSet<File>(Arrays.asList(acceptedFiles));
     }
 
@@ -239,7 +239,7 @@ public class FileFilterUtils {
      * 
      * @since 2.0
      */
-    public static Set<File> filterSet(IOFileFilter filter, Iterable<File> files) {
+    public static Set<File> filterSet(final IOFileFilter filter, final Iterable<File> files) {
         return filter(filter, files, new HashSet<File>());
     }
 
@@ -265,13 +265,13 @@ public class FileFilterUtils {
      * @throws IllegalArgumentException if the filter is {@code null} 
      *         or <code>files</code> contains a {@code null} value. 
      */
-    private static <T extends Collection<File>> T filter(IOFileFilter filter,
-            Iterable<File> files, T acceptedFiles) {
+    private static <T extends Collection<File>> T filter(final IOFileFilter filter,
+            final Iterable<File> files, final T acceptedFiles) {
         if (filter == null) {
             throw new IllegalArgumentException("file filter is null");
         }
         if (files != null) {
-            for (File file : files) {
+            for (final File file : files) {
                 if (file == null) {
                     throw new IllegalArgumentException("file collection contains null");
                 }
@@ -290,7 +290,7 @@ public class FileFilterUtils {
      * @return a prefix checking filter
      * @see PrefixFileFilter
      */
-    public static IOFileFilter prefixFileFilter(String prefix) {
+    public static IOFileFilter prefixFileFilter(final String prefix) {
         return new PrefixFileFilter(prefix);
     }
 
@@ -303,7 +303,7 @@ public class FileFilterUtils {
      * @see PrefixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter prefixFileFilter(String prefix, IOCase caseSensitivity) {
+    public static IOFileFilter prefixFileFilter(final String prefix, final IOCase caseSensitivity) {
         return new PrefixFileFilter(prefix, caseSensitivity);
     }
 
@@ -314,7 +314,7 @@ public class FileFilterUtils {
      * @return a suffix checking filter
      * @see SuffixFileFilter
      */
-    public static IOFileFilter suffixFileFilter(String suffix) {
+    public static IOFileFilter suffixFileFilter(final String suffix) {
         return new SuffixFileFilter(suffix);
     }
 
@@ -327,7 +327,7 @@ public class FileFilterUtils {
      * @see SuffixFileFilter
      * @since 2.0
      */
-    public static IOFileFilter suffixFileFilter(String suffix, IOCase caseSensitivity) {
+    public static IOFileFilter suffixFileFilter(final String suffix, final IOCase caseSensitivity) {
         return new SuffixFileFilter(suffix, caseSensitivity);
     }
 
@@ -338,7 +338,7 @@ public class FileFilterUtils {
      * @return a name checking filter
      * @see NameFileFilter
      */
-    public static IOFileFilter nameFileFilter(String name) {
+    public static IOFileFilter nameFileFilter(final String name) {
         return new NameFileFilter(name);
     }
 
@@ -351,7 +351,7 @@ public class FileFilterUtils {
      * @see NameFileFilter
      * @since 2.0
      */
-    public static IOFileFilter nameFileFilter(String name, IOCase caseSensitivity) {
+    public static IOFileFilter nameFileFilter(final String name, final IOCase caseSensitivity) {
         return new NameFileFilter(name, caseSensitivity);
     }
 
@@ -387,7 +387,7 @@ public class FileFilterUtils {
      * @deprecated use {@link #and(IOFileFilter...)}
      */
     @Deprecated
-    public static IOFileFilter andFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+    public static IOFileFilter andFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
         return new AndFileFilter(filter1, filter2);
     }
 
@@ -402,7 +402,7 @@ public class FileFilterUtils {
      * @deprecated use {@link #or(IOFileFilter...)}
      */
     @Deprecated
-    public static IOFileFilter orFileFilter(IOFileFilter filter1, IOFileFilter filter2) {
+    public static IOFileFilter orFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
         return new OrFileFilter(filter1, filter2);
     }
 
@@ -417,7 +417,7 @@ public class FileFilterUtils {
      * @see AndFileFilter
      * @since 2.0
      */
-    public static IOFileFilter and(IOFileFilter... filters) {
+    public static IOFileFilter and(final IOFileFilter... filters) {
         return new AndFileFilter(toList(filters));
     }
 
@@ -432,7 +432,7 @@ public class FileFilterUtils {
      * @see OrFileFilter
      * @since 2.0
      */
-    public static IOFileFilter or(IOFileFilter... filters) {
+    public static IOFileFilter or(final IOFileFilter... filters) {
         return new OrFileFilter(toList(filters));
     }
 
@@ -445,11 +445,11 @@ public class FileFilterUtils {
      *         null value.
      * @since 2.0
      */
-    public static List<IOFileFilter> toList(IOFileFilter... filters) {
+    public static List<IOFileFilter> toList(final IOFileFilter... filters) {
         if (filters == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        List<IOFileFilter> list = new ArrayList<IOFileFilter>(filters.length);
+        final List<IOFileFilter> list = new ArrayList<IOFileFilter>(filters.length);
         for (int i = 0; i < filters.length; i++) {
             if (filters[i] == null) {
                 throw new IllegalArgumentException("The filter[" + i + "] is null");
@@ -466,7 +466,7 @@ public class FileFilterUtils {
      * @return a filter that NOTs the specified filter
      * @see NotFileFilter
      */
-    public static IOFileFilter notFileFilter(IOFileFilter filter) {
+    public static IOFileFilter notFileFilter(final IOFileFilter filter) {
         return new NotFileFilter(filter);
     }
 
@@ -500,7 +500,7 @@ public class FileFilterUtils {
      * @return a new filter that implements IOFileFilter
      * @see DelegateFileFilter
      */
-    public static IOFileFilter asFileFilter(FileFilter filter) {
+    public static IOFileFilter asFileFilter(final FileFilter filter) {
         return new DelegateFileFilter(filter);
     }
 
@@ -512,7 +512,7 @@ public class FileFilterUtils {
      * @return a new filter that implements IOFileFilter
      * @see DelegateFileFilter
      */
-    public static IOFileFilter asFileFilter(FilenameFilter filter) {
+    public static IOFileFilter asFileFilter(final FilenameFilter filter) {
         return new DelegateFileFilter(filter);
     }
 
@@ -526,7 +526,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(long cutoff) {
+    public static IOFileFilter ageFileFilter(final long cutoff) {
         return new AgeFileFilter(cutoff);
     }
 
@@ -539,7 +539,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(long cutoff, boolean acceptOlder) {
+    public static IOFileFilter ageFileFilter(final long cutoff, final boolean acceptOlder) {
         return new AgeFileFilter(cutoff, acceptOlder);
     }
 
@@ -552,7 +552,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(Date cutoffDate) {
+    public static IOFileFilter ageFileFilter(final Date cutoffDate) {
         return new AgeFileFilter(cutoffDate);
     }
 
@@ -565,7 +565,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(Date cutoffDate, boolean acceptOlder) {
+    public static IOFileFilter ageFileFilter(final Date cutoffDate, final boolean acceptOlder) {
         return new AgeFileFilter(cutoffDate, acceptOlder);
     }
 
@@ -579,7 +579,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(File cutoffReference) {
+    public static IOFileFilter ageFileFilter(final File cutoffReference) {
         return new AgeFileFilter(cutoffReference);
     }
 
@@ -593,7 +593,7 @@ public class FileFilterUtils {
      * @see AgeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter ageFileFilter(File cutoffReference, boolean acceptOlder) {
+    public static IOFileFilter ageFileFilter(final File cutoffReference, final boolean acceptOlder) {
         return new AgeFileFilter(cutoffReference, acceptOlder);
     }
 
@@ -606,7 +606,7 @@ public class FileFilterUtils {
      * @see SizeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter sizeFileFilter(long threshold) {
+    public static IOFileFilter sizeFileFilter(final long threshold) {
         return new SizeFileFilter(threshold);
     }
 
@@ -619,7 +619,7 @@ public class FileFilterUtils {
      * @see SizeFileFilter
      * @since 1.2
      */
-    public static IOFileFilter sizeFileFilter(long threshold, boolean acceptLarger) {
+    public static IOFileFilter sizeFileFilter(final long threshold, final boolean acceptLarger) {
         return new SizeFileFilter(threshold, acceptLarger);
     }
 
@@ -633,9 +633,9 @@ public class FileFilterUtils {
      * @see SizeFileFilter
      * @since 1.3
      */
-    public static IOFileFilter sizeRangeFileFilter(long minSizeInclusive, long maxSizeInclusive ) {
-        IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
-        IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
+    public static IOFileFilter sizeRangeFileFilter(final long minSizeInclusive, final long maxSizeInclusive ) {
+        final IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
+        final IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
         return new AndFileFilter(minimumFilter, maximumFilter);
     }
     
@@ -654,7 +654,7 @@ public class FileFilterUtils {
      * @see MagicNumberFileFilter
      * @since 2.0
      */
-    public static IOFileFilter magicNumberFileFilter(String magicNumber) {
+    public static IOFileFilter magicNumberFileFilter(final String magicNumber) {
         return new MagicNumberFileFilter(magicNumber);
     }
     
@@ -675,7 +675,7 @@ public class FileFilterUtils {
      * @see MagicNumberFileFilter
      * @since 2.0
      */
-    public static IOFileFilter magicNumberFileFilter(String magicNumber, long offset) {
+    public static IOFileFilter magicNumberFileFilter(final String magicNumber, final long offset) {
         return new MagicNumberFileFilter(magicNumber, offset);
     }
     
@@ -694,7 +694,7 @@ public class FileFilterUtils {
      * @see MagicNumberFileFilter
      * @since 2.0
      */
-    public static IOFileFilter magicNumberFileFilter(byte[] magicNumber) {
+    public static IOFileFilter magicNumberFileFilter(final byte[] magicNumber) {
         return new MagicNumberFileFilter(magicNumber);
     }
     
@@ -715,7 +715,7 @@ public class FileFilterUtils {
      * @see MagicNumberFileFilter
      * @since 2.0
      */
-    public static IOFileFilter magicNumberFileFilter(byte[] magicNumber, long offset) {
+    public static IOFileFilter magicNumberFileFilter(final byte[] magicNumber, final long offset) {
         return new MagicNumberFileFilter(magicNumber, offset);
     }
 
@@ -737,7 +737,7 @@ public class FileFilterUtils {
      * @return the decorated filter, never null
      * @since 1.1 (method existed but had bug in 1.0)
      */
-    public static IOFileFilter makeCVSAware(IOFileFilter filter) {
+    public static IOFileFilter makeCVSAware(final IOFileFilter filter) {
         if (filter == null) {
             return cvsFilter;
         } else {
@@ -754,7 +754,7 @@ public class FileFilterUtils {
      * @return the decorated filter, never null
      * @since 1.1
      */
-    public static IOFileFilter makeSVNAware(IOFileFilter filter) {
+    public static IOFileFilter makeSVNAware(final IOFileFilter filter) {
         if (filter == null) {
             return svnFilter;
         } else {
@@ -771,7 +771,7 @@ public class FileFilterUtils {
      * @see DirectoryFileFilter#DIRECTORY
      * @since 1.3
      */
-    public static IOFileFilter makeDirectoryOnly(IOFileFilter filter) {
+    public static IOFileFilter makeDirectoryOnly(final IOFileFilter filter) {
         if (filter == null) {
             return DirectoryFileFilter.DIRECTORY;
         }
@@ -786,7 +786,7 @@ public class FileFilterUtils {
      * @see FileFileFilter#FILE
      * @since 1.3
      */
-    public static IOFileFilter makeFileOnly(IOFileFilter filter) {
+    public static IOFileFilter makeFileOnly(final IOFileFilter filter) {
         if (filter == null) {
             return FileFileFilter.FILE;
         }

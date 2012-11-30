@@ -40,7 +40,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      *
      * @param clearOnStart true if clear() should be called by onStart().
      */
-    public CollectionFileListener(boolean clearOnStart) {
+    public CollectionFileListener(final boolean clearOnStart) {
         this.clearOnStart = clearOnStart;
     }
 

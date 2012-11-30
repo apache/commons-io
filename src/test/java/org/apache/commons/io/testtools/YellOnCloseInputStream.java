@@ -31,7 +31,7 @@ public class YellOnCloseInputStream extends ProxyInputStream {
     /**
      * @param proxy InputStream to delegate to.
      */
-    public YellOnCloseInputStream(InputStream proxy) {
+    public YellOnCloseInputStream(final InputStream proxy) {
         super(proxy);
     }
 

@@ -66,7 +66,7 @@ public class ByteOrderMark implements Serializable {
      * @throws IllegalArgumentException if the bytes are null or zero
      * length
      */
-    public ByteOrderMark(String charsetName, int... bytes) {
+    public ByteOrderMark(final String charsetName, final int... bytes) {
         if (charsetName == null || charsetName.length() == 0) {
             throw new IllegalArgumentException("No charsetName specified");
         }
@@ -102,7 +102,7 @@ public class ByteOrderMark implements Serializable {
      * @param pos The position
      * @return The specified byte
      */
-    public int get(int pos) {
+    public int get(final int pos) {
         return bytes[pos];
     }
 
@@ -112,7 +112,7 @@ public class ByteOrderMark implements Serializable {
      * @return a copy of the BOM's bytes
      */
     public byte[] getBytes() {
-        byte[] copy = new byte[bytes.length];
+        final byte[] copy = new byte[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
             copy[i] = (byte)bytes[i];
         }
@@ -127,11 +127,11 @@ public class ByteOrderMark implements Serializable {
      * false
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof ByteOrderMark)) {
             return false;
         }
-        ByteOrderMark bom = (ByteOrderMark)obj;
+        final ByteOrderMark bom = (ByteOrderMark)obj;
         if (bytes.length != bom.length()) {
             return false;
         }
@@ -152,7 +152,7 @@ public class ByteOrderMark implements Serializable {
     @Override
     public int hashCode() {
         int hashCode = getClass().hashCode();
-        for (int b : bytes) {
+        for (final int b : bytes) {
             hashCode += b;
         }
         return hashCode;
@@ -165,7 +165,7 @@ public class ByteOrderMark implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(getClass().getSimpleName());
         builder.append('[');
         builder.append(charsetName);

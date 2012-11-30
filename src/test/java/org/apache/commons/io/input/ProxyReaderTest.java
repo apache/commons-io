@@ -29,24 +29,24 @@ import junit.framework.TestCase;
  */
 public class ProxyReaderTest extends TestCase {
 
-    public ProxyReaderTest(String name) {
+    public ProxyReaderTest(final String name) {
         super(name);
     }
 
     /** Test writing Null Char Array */
     public void testNullCharArray() {
 
-        ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
+        final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
 
         try {
             proxy.read((char[])null);
-        } catch(Exception e) {
+        } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }
 
         try {
             proxy.read((char[])null, 0, 0);
-        } catch(Exception e) {
+        } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }
     }
@@ -54,33 +54,33 @@ public class ProxyReaderTest extends TestCase {
     /** Test writing Null CharBuffer */
     public void testNullCharBuffer() {
 
-        ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
+        final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
 
         try {
             proxy.read((CharBuffer)null);
-        } catch(Exception e) {
+        } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }
     }
 
     /** ProxyReader implementation */
     private static class ProxyReaderImpl extends ProxyReader {
-        ProxyReaderImpl(Reader proxy) {
+        ProxyReaderImpl(final Reader proxy) {
             super(proxy);
         }
     }
 
     /** Custom NullReader implementation */
     private static class CustomNullReader extends NullReader {
-        CustomNullReader(int len) {
+        CustomNullReader(final int len) {
             super(len);
         }
         @Override
-        public int read(char[] chars) throws IOException {
+        public int read(final char[] chars) throws IOException {
             return chars == null ? 0 : super.read(chars);
         }
         @Override
-        public int read(CharBuffer target) throws IOException {
+        public int read(final CharBuffer target) throws IOException {
             return target == null ? 0 : super.read(target);
         }
     }

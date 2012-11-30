@@ -61,7 +61,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param wildcard  the wildcard to match
      * @throws IllegalArgumentException if the pattern is null
      */
-    public WildcardFilter(String wildcard) {
+    public WildcardFilter(final String wildcard) {
         if (wildcard == null) {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
@@ -74,7 +74,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFilter(String[] wildcards) {
+    public WildcardFilter(final String[] wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
         }
@@ -89,7 +89,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
      */
-    public WildcardFilter(List<String> wildcards) {
+    public WildcardFilter(final List<String> wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
@@ -105,12 +105,12 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @return true if the filename matches one of the wildcards
      */
     @Override
-    public boolean accept(File dir, String name) {
+    public boolean accept(final File dir, final String name) {
         if (dir != null && new File(dir, name).isDirectory()) {
             return false;
         }
 
-        for (String wildcard : wildcards) {
+        for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(name, wildcard)) {
                 return true;
             }
@@ -126,12 +126,12 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @return true if the filename matches one of the wildcards
      */
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         if (file.isDirectory()) {
             return false;
         }
 
-        for (String wildcard : wildcards) {
+        for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
                 return true;
             }

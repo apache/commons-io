@@ -29,7 +29,7 @@ public class TailerListenerAdapter implements TailerListener {
      * giving the listener a method of stopping the tailer.
      * @param tailer the tailer.
      */
-    public void init(Tailer tailer) {
+    public void init(final Tailer tailer) {
     }
 
     /**
@@ -51,14 +51,14 @@ public class TailerListenerAdapter implements TailerListener {
      * Handles a line from a Tailer.
      * @param line the line.
      */
-    public void handle(String line) {
+    public void handle(final String line) {
     }
 
     /**
      * Handles an Exception .
      * @param ex the exception.
      */
-    public void handle(Exception ex) {
+    public void handle(final Exception ex) {
     }
 
 }

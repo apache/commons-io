@@ -73,7 +73,7 @@ public class Charsets {
      */
     public static SortedMap<String, Charset> requiredCharsets() {
         // maybe cache?
-        TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
+        final TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
         m.put(ISO_8859_1.name(), ISO_8859_1);
         m.put(US_ASCII.name(), US_ASCII);
         m.put(UTF_16.name(), UTF_16);
@@ -90,7 +90,7 @@ public class Charsets {
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
      */
-    public static Charset toCharset(Charset charset) {
+    public static Charset toCharset(final Charset charset) {
         return charset == null ? Charset.defaultCharset() : charset;
     }
 
@@ -103,7 +103,7 @@ public class Charsets {
      * @throws UnsupportedCharsetException
      *             If the named charset is unavailable
      */
-    public static Charset toCharset(String charset) {
+    public static Charset toCharset(final String charset) {
         return charset == null ? Charset.defaultCharset() : Charset.forName(charset);
     }
 

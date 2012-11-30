@@ -62,7 +62,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, String encoding) throws IOException {
+    public FileWriterWithEncoding(final String filename, final String encoding) throws IOException {
         this(new File(filename), encoding, false);
     }
 
@@ -75,7 +75,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, String encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final String encoding, final boolean append) throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -87,7 +87,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, Charset encoding) throws IOException {
+    public FileWriterWithEncoding(final String filename, final Charset encoding) throws IOException {
         this(new File(filename), encoding, false);
     }
 
@@ -100,7 +100,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, Charset encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final Charset encoding, final boolean append) throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -112,7 +112,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, CharsetEncoder encoding) throws IOException {
+    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding) throws IOException {
         this(new File(filename), encoding, false);
     }
 
@@ -125,7 +125,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(String filename, CharsetEncoder encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding, final boolean append) throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -137,7 +137,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, String encoding) throws IOException {
+    public FileWriterWithEncoding(final File file, final String encoding) throws IOException {
         this(file, encoding, false);
     }
 
@@ -150,7 +150,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, String encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final String encoding, final boolean append) throws IOException {
         super();
         this.out = initWriter(file, encoding, append);
     }
@@ -163,7 +163,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, Charset encoding) throws IOException {
+    public FileWriterWithEncoding(final File file, final Charset encoding) throws IOException {
         this(file, encoding, false);
     }
 
@@ -176,7 +176,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, Charset encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
         super();
         this.out = initWriter(file, encoding, append);
     }
@@ -189,7 +189,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, CharsetEncoder encoding) throws IOException {
+    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding) throws IOException {
         this(file, encoding, false);
     }
 
@@ -202,7 +202,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(File file, CharsetEncoder encoding, boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding, final boolean append) throws IOException {
         super();
         this.out = initWriter(file, encoding, append);
     }
@@ -219,14 +219,14 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException if an error occurs
      */
-     private static Writer initWriter(File file, Object encoding, boolean append) throws IOException {
+     private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
         if (file == null) {
             throw new NullPointerException("File is missing");
         }
         if (encoding == null) {
             throw new NullPointerException("Encoding is missing");
         }
-        boolean fileExistedAlready = file.exists();
+        final boolean fileExistedAlready = file.exists();
         OutputStream stream = null;
         Writer writer = null;
         try {
@@ -238,14 +238,14 @@ public class FileWriterWithEncoding extends Writer {
             } else {
                 writer = new OutputStreamWriter(stream, (String)encoding);
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
             if (fileExistedAlready == false) {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;
-        } catch (RuntimeException ex) {
+        } catch (final RuntimeException ex) {
             IOUtils.closeQuietly(writer);
             IOUtils.closeQuietly(stream);
             if (fileExistedAlready == false) {
@@ -263,7 +263,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an I/O error occurs
      */
      @Override
-    public void write(int idx) throws IOException {
+    public void write(final int idx) throws IOException {
         out.write(idx);
     }
 
@@ -273,7 +273,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an I/O error occurs
      */
      @Override
-    public void write(char[] chr) throws IOException {
+    public void write(final char[] chr) throws IOException {
         out.write(chr);
     }
 
@@ -285,7 +285,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an I/O error occurs
      */
      @Override
-    public void write(char[] chr, int st, int end) throws IOException {
+    public void write(final char[] chr, final int st, final int end) throws IOException {
         out.write(chr, st, end);
     }
 
@@ -295,7 +295,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an I/O error occurs
      */
      @Override
-    public void write(String str) throws IOException {
+    public void write(final String str) throws IOException {
         out.write(str);
     }
 
@@ -307,7 +307,7 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an I/O error occurs
      */
      @Override
-    public void write(String str, int st, int end) throws IOException {
+    public void write(final String str, final int st, final int end) throws IOException {
         out.write(str, st, end);
     }
 

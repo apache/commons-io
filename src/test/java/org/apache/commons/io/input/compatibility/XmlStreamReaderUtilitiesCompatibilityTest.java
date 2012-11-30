@@ -27,15 +27,15 @@ import org.apache.commons.io.input.XmlStreamReaderUtilitiesTest;
 public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUtilitiesTest {
 
     @Override
-    protected String calculateRawEncoding(String bomEnc, String xmlGuessEnc, String xmlEnc,
-            String defaultEncoding) throws IOException {
-        MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
+    protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
+            final String defaultEncoding) throws IOException {
+        final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
         return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc, null);
     }
     @Override
-    protected String calculateHttpEncoding(String httpContentType, String bomEnc, String xmlGuessEnc,
-            String xmlEnc, boolean lenient, String defaultEncoding) throws IOException {
-        MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
+    protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
+            final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
+        final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
         return mock.calculateHttpEncoding(
                 XmlStreamReader.getContentTypeMime(httpContentType),
                 XmlStreamReader.getContentTypeEncoding(httpContentType),
@@ -44,7 +44,7 @@ public class XmlStreamReaderUtilitiesCompatibilityTest extends XmlStreamReaderUt
 
     /** Mock {@link XmlStreamReader} implementation */
     private static class MockXmlStreamReader extends XmlStreamReader {
-        MockXmlStreamReader(String defaultEncoding) throws IOException {
+        MockXmlStreamReader(final String defaultEncoding) throws IOException {
             super(new ByteArrayInputStream("".getBytes()), null, true, defaultEncoding);
         }
     }

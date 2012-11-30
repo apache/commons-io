@@ -131,7 +131,7 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param directoryName the name of the directory to observe
      */
-    public FileAlterationObserver(String directoryName) {
+    public FileAlterationObserver(final String directoryName) {
         this(new File(directoryName));
     }
 
@@ -141,7 +141,7 @@ public class FileAlterationObserver implements Serializable {
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileAlterationObserver(String directoryName, FileFilter fileFilter) {
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
         this(new File(directoryName), fileFilter);
     }
 
@@ -153,7 +153,7 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(String directoryName, FileFilter fileFilter, IOCase caseSensitivity) {
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase caseSensitivity) {
         this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
@@ -162,7 +162,7 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param directory the directory to observe
      */
-    public FileAlterationObserver(File directory) {
+    public FileAlterationObserver(final File directory) {
         this(directory, (FileFilter)null);
     }
 
@@ -172,7 +172,7 @@ public class FileAlterationObserver implements Serializable {
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
      */
-    public FileAlterationObserver(File directory, FileFilter fileFilter) {
+    public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
         this(directory, fileFilter, (IOCase)null);
     }
 
@@ -184,7 +184,7 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(File directory, FileFilter fileFilter, IOCase caseSensitivity) {
+    public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase caseSensitivity) {
         this(new FileEntry(directory), fileFilter, caseSensitivity);
     }
 
@@ -196,7 +196,7 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FileAlterationObserver(FileEntry rootEntry, FileFilter fileFilter, IOCase caseSensitivity) {
+    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -272,8 +272,8 @@ public class FileAlterationObserver implements Serializable {
      */
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
-        File[] files = listFiles(rootEntry.getFile());
-        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
+        final File[] files = listFiles(rootEntry.getFile());
+        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(rootEntry, files[i]);
         }
@@ -294,12 +294,12 @@ public class FileAlterationObserver implements Serializable {
     public void checkAndNotify() {
 
         /* fire onStart() */
-        for (FileAlterationListener listener : listeners) {
+        for (final FileAlterationListener listener : listeners) {
             listener.onStart(this);
         }
 
         /* fire directory/file events */
-        File rootFile = rootEntry.getFile();
+        final File rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
             checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
         } else if (rootEntry.isExists()) {
@@ -309,7 +309,7 @@ public class FileAlterationObserver implements Serializable {
         }
 
         /* fire onStop() */
-        for (FileAlterationListener listener : listeners) {
+        for (final FileAlterationListener listener : listeners) {
             listener.onStop(this);
         }
     }
@@ -321,10 +321,10 @@ public class FileAlterationObserver implements Serializable {
      * @param previous The original list of files
      * @param files  The current list of files
      */
-    private void checkAndNotify(FileEntry parent, FileEntry[] previous, File[] files) {
+    private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {
         int c = 0;
-        FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
-        for (FileEntry entry : previous) {
+        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
+        for (final FileEntry entry : previous) {
             while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
                 current[c] = createFileEntry(parent, files[c]);
                 doCreate(current[c]);
@@ -354,11 +354,11 @@ public class FileAlterationObserver implements Serializable {
      * @param file The file to create an entry for
      * @return A new file entry
      */
-    private FileEntry createFileEntry(FileEntry parent, File file) {
-        FileEntry entry = parent.newChildInstance(file);
+    private FileEntry createFileEntry(final FileEntry parent, final File file) {
+        final FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
-        File[] files = listFiles(file);
-        FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
+        final File[] files = listFiles(file);
+        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(entry, files[i]);
         }
@@ -371,16 +371,16 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param entry The file entry
      */
-    private void doCreate(FileEntry entry) {
-        for (FileAlterationListener listener : listeners) {
+    private void doCreate(final FileEntry entry) {
+        for (final FileAlterationListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryCreate(entry.getFile());
             } else {
                 listener.onFileCreate(entry.getFile());
             }
         }
-        FileEntry[] children = entry.getChildren();
-        for (FileEntry aChildren : children) {
+        final FileEntry[] children = entry.getChildren();
+        for (final FileEntry aChildren : children) {
             doCreate(aChildren);
         }
     }
@@ -391,9 +391,9 @@ public class FileAlterationObserver implements Serializable {
      * @param entry The previous file system entry
      * @param file The current file
      */
-    private void doMatch(FileEntry entry, File file) {
+    private void doMatch(final FileEntry entry, final File file) {
         if (entry.refresh(file)) {
-            for (FileAlterationListener listener : listeners) {
+            for (final FileAlterationListener listener : listeners) {
                 if (entry.isDirectory()) {
                     listener.onDirectoryChange(file);
                 } else {
@@ -408,8 +408,8 @@ public class FileAlterationObserver implements Serializable {
      *
      * @param entry The file entry
      */
-    private void doDelete(FileEntry entry) {
-        for (FileAlterationListener listener : listeners) {
+    private void doDelete(final FileEntry entry) {
+        for (final FileAlterationListener listener : listeners) {
             if (entry.isDirectory()) {
                 listener.onDirectoryDelete(entry.getFile());
             } else {
@@ -425,7 +425,7 @@ public class FileAlterationObserver implements Serializable {
      * @return the directory contents or a zero length array if
      * the empty or the file is not a directory
      */
-    private File[] listFiles(File file) {
+    private File[] listFiles(final File file) {
         File[] children = null;
         if (file.isDirectory()) {
             children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
@@ -446,7 +446,7 @@ public class FileAlterationObserver implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(getClass().getSimpleName());
         builder.append("[file='");
         builder.append(getDirectory().getPath());

@@ -55,7 +55,7 @@ public class SelectorAdapter extends Selector {
     }
 
     @Override
-    public int select(long timeout) throws IOException {
+    public int select(final long timeout) throws IOException {
         return 0;
     }
 

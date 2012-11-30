@@ -40,21 +40,21 @@ public class BrokenInputStreamTest extends TestCase {
         try {
             stream.read();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
 
         try {
             stream.read(new byte[1]);
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
 
         try {
             stream.read(new byte[1], 0, 1);
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
     }
@@ -63,7 +63,7 @@ public class BrokenInputStreamTest extends TestCase {
         try {
             stream.available();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
     }
@@ -72,7 +72,7 @@ public class BrokenInputStreamTest extends TestCase {
         try {
             stream.skip(1);
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
     }
@@ -81,7 +81,7 @@ public class BrokenInputStreamTest extends TestCase {
         try {
             stream.reset();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
     }
@@ -90,7 +90,7 @@ public class BrokenInputStreamTest extends TestCase {
         try {
             stream.close();
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             assertEquals(exception, e);
         }
     }

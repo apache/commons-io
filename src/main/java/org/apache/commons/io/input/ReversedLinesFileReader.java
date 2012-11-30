@@ -94,9 +94,9 @@ public class ReversedLinesFileReader implements Closeable {
         currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
 
         // --- check & prepare encoding ---
-        Charset charset = Charsets.toCharset(encoding);
-        CharsetEncoder charsetEncoder = charset.newEncoder();
-        float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
+        final Charset charset = Charsets.toCharset(encoding);
+        final CharsetEncoder charsetEncoder = charset.newEncoder();
+        final float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
         if(maxBytesPerChar==1f) {
             // all one byte encodings are no problem
             byteDecrement = 1;
@@ -199,7 +199,7 @@ public class ReversedLinesFileReader implements Closeable {
          */
         private FilePart(final long no, final int length, final byte[] leftOverOfLastFilePart) throws IOException {
             this.no = no;
-            int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
+            final int dataLength = length + (leftOverOfLastFilePart != null ? leftOverOfLastFilePart.length : 0);
             this.data = new byte[dataLength];
             final long off = (no - 1) * blockSize;
 
@@ -255,7 +255,7 @@ public class ReversedLinesFileReader implements Closeable {
             String line = null;
             int newLineMatchByteCount;
 
-            boolean isLastFilePart = no == 1;
+            final boolean isLastFilePart = no == 1;
 
             int i = currentLastBytePos;
             while (i > -1) {
@@ -270,12 +270,12 @@ public class ReversedLinesFileReader implements Closeable {
                 // --- check for newline ---
                 if ((newLineMatchByteCount = getNewLineMatchByteCount(data, i)) > 0 /* found newline */) {
                     final int lineStart = i + 1;
-                    int lineLengthBytes = currentLastBytePos - lineStart + 1;
+                    final int lineLengthBytes = currentLastBytePos - lineStart + 1;
 
                     if (lineLengthBytes < 0) {
                         throw new IllegalStateException("Unexpected negative line length="+lineLengthBytes);
                     }
-                    byte[] lineData = new byte[lineLengthBytes];
+                    final byte[] lineData = new byte[lineLengthBytes];
                     System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
 
                     line = new String(lineData, encoding);
@@ -308,7 +308,7 @@ public class ReversedLinesFileReader implements Closeable {
          * Creates the buffer containing any left over bytes.
          */
         private void createLeftOver() {
-            int lineLengthBytes = currentLastBytePos + 1;
+            final int lineLengthBytes = currentLastBytePos + 1;
             if (lineLengthBytes > 0) {
                 // create left over for next block
                 leftOver = new byte[lineLengthBytes];
@@ -326,11 +326,11 @@ public class ReversedLinesFileReader implements Closeable {
          * @param i start offset in buffer
          * @return length of newline sequence or 0 if none found
          */
-        private int getNewLineMatchByteCount(byte[] data, int i) {
-            for (byte[] newLineSequence : newLineSequences) {
+        private int getNewLineMatchByteCount(final byte[] data, final int i) {
+            for (final byte[] newLineSequence : newLineSequences) {
                 boolean match = true;
                 for (int j = newLineSequence.length - 1; j >= 0; j--) {
-                    int k = i + j - (newLineSequence.length - 1);
+                    final int k = i + j - (newLineSequence.length - 1);
                     match &= k >= 0 && data[k] == newLineSequence[j];
                 }
                 if (match) {

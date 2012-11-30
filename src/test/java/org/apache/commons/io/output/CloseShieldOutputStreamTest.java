@@ -53,7 +53,7 @@ public class CloseShieldOutputStreamTest extends TestCase {
         try {
             shielded.write('x');
             fail("write(b)");
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // expected
         }
         original.write('y');
