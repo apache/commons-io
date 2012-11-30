@@ -127,18 +127,18 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testIO_356() throws Exception {
-        testIO_356(10, 10); // OK
-        testIO_356(10, 20); // OK
-        testIO_356(10, 13); // fails
-        for (int bs = 1; bs <= 10; bs++) {
-            for (int ds = 1; ds <= 20; ds++) {
-                testIO_356(bs, ds);
+        testIO_356(10, 10, "UTF-8"); // OK
+        testIO_356(10, 20, "UTF-8"); // OK
+        testIO_356(10, 13, "UTF-8"); // fails
+        for (int bufferSize = 1; bufferSize <= 10; bufferSize++) {
+            for (int dataSize = 1; dataSize <= 20; dataSize++) {
+                testIO_356(bufferSize, dataSize, "UTF-8");
             }
         }
     }
 
-    private void testIO_356(int bufferSize, int dataSize) throws Exception {
-        CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, "UTF-8", bufferSize);
+    private void testIO_356(int bufferSize, int dataSize, String csName) throws Exception {
+        CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize);
 
         is.mark(dataSize);
 
@@ -155,7 +155,10 @@ public class CharSequenceInputStreamTest {
         is.close();
         
         // data buffers should be identical
-        assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2); 
+        assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2);
+        
+        //
+        
     }
 
     @Test
