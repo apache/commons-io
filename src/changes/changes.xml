@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="201?-??-??" description="New features and bug fixes.">    
+      <action issue="IO-359" dev="ggregory" type="add" due-to="yukoba">
+        Add IOUtils.skip and skipFully(ReadableByteChannel, long).
+      </action>            
       <action issue="IO-358" dev="ggregory" type="add" due-to="yukoba">
         Add IOUtils.read and readFully(ReadableByteChannel, ByteBuffer buffer).
       </action>            

@@ -2343,6 +2343,37 @@ public class IOUtils {
     }
 
     /**
+     * Skip bytes from a ReadableByteChannel.
+     * This implementation guarantees that it will read as many bytes
+     * as possible before giving up.
+     *
+     * @param input ReadableByteChannel to skip
+     * @param toSkip number of bytes to skip.
+     * @return number of bytes actually skipped.
+     *
+     * @throws IOException if there is a problem reading the ReadableByteChannel
+     * @throws IllegalArgumentException if toSkip is negative
+     * @since 2.5
+     */
+    public static long skip(ReadableByteChannel input, long toSkip) throws IOException {
+        if (toSkip < 0) {
+            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
+        }
+        ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BUFFER_SIZE));
+        long remain = toSkip;
+        while (remain > 0) {
+            skipByteBuffer.position(0);
+            skipByteBuffer.limit((int) Math.min(remain, SKIP_BUFFER_SIZE));
+            int n = input.read(skipByteBuffer);
+            if (n == EOF) {
+                break;
+            }
+            remain -= n;
+        }
+        return toSkip - remain;
+    }
+
+    /**
      * Skip characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
@@ -2410,6 +2441,27 @@ public class IOUtils {
      * @since 2.0
      */
     public static void skipFully(InputStream input, long toSkip) throws IOException {
+        if (toSkip < 0) {
+            throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
+        }
+        long skipped = skip(input, toSkip);
+        if (skipped != toSkip) {
+            throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
+        }
+    }
+
+    /**
+     * Skip the requested number of bytes or fail if there are not enough left.
+     *
+     * @param input ReadableByteChannel to skip
+     * @param toSkip the number of bytes to skip
+     *
+     * @throws IOException if there is a problem reading the ReadableByteChannel
+     * @throws IllegalArgumentException if toSkip is negative
+     * @throws EOFException if the number of bytes skipped was incorrect
+     * @since 2.5
+     */
+    public static void skipFully(ReadableByteChannel input, long toSkip) throws IOException {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
         }
