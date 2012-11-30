@@ -739,6 +739,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testSkip_ReadableByteChannel() throws Exception {
+        FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        FileChannel fileChannel = fileInputStream.getChannel();
+        try {
+            assertEquals(FILE_SIZE - 10, IOUtils.skip(fileChannel, FILE_SIZE - 10));
+            assertEquals(10, IOUtils.skip(fileChannel, 20));
+            assertEquals(0, IOUtils.skip(fileChannel, 10));
+        } finally {
+            IOUtils.closeQuietly(fileChannel);
+            IOUtils.closeQuietly(fileInputStream);
+        }
+    }
+
     public void testSkipFully_InputStream() throws Exception {
         final int size = 1027;
 
@@ -759,6 +772,30 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
         IOUtils.closeQuietly(input);
 
+    }
+
+    public void testSkipFully_ReadableByteChannel() throws Exception {
+        FileInputStream fileInputStream = new FileInputStream(m_testFile);
+        FileChannel fileChannel = fileInputStream.getChannel();
+        try {
+            try {
+                IOUtils.skipFully(fileChannel, -1);
+                fail("Should have failed with IllegalArgumentException");
+            } catch (IllegalArgumentException expected) {
+                // expected
+            }
+            IOUtils.skipFully(fileChannel, 0);
+            IOUtils.skipFully(fileChannel, FILE_SIZE - 1);
+            try {
+                IOUtils.skipFully(fileChannel, 2);
+                fail("Should have failed with IOException");
+            } catch (IOException expected) {
+                // expected
+            }
+        } finally {
+            IOUtils.closeQuietly(fileChannel);
+            IOUtils.closeQuietly(fileInputStream);
+        }
     }
 
     public void testSkipFully_Reader() throws Exception {
