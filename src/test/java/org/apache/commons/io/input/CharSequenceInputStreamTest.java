@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -105,13 +106,6 @@ public class CharSequenceInputStreamTest {
         testBufferedRead(TEST_STRING, "UTF-8");
     }
 
-    @Test
-    public void testCharsetMismatchInfiniteLoop_RequiredCharsets() throws IOException {
-        for (String csName : getRequiredCharsetNames()) {
-            testCharsetMismatchInfiniteLoop(csName);
-        }
-    }
-
     private void testCharsetMismatchInfiniteLoop(String csName) throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
@@ -126,19 +120,19 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    public void testIO_356() throws Exception {
-        testIO_356(10, 10, "UTF-8"); // OK
-        testIO_356(10, 20, "UTF-8"); // OK
-        testIO_356(10, 13, "UTF-8"); // fails
-        for (int bufferSize = 1; bufferSize <= 10; bufferSize++) {
-            for (int dataSize = 1; dataSize <= 20; dataSize++) {
-                testIO_356(bufferSize, dataSize, "UTF-8");
-            }
+    public void testCharsetMismatchInfiniteLoop_RequiredCharsets() throws IOException {
+        for (String csName : getRequiredCharsetNames()) {
+            testCharsetMismatchInfiniteLoop(csName);
         }
     }
 
-    private void testIO_356(int bufferSize, int dataSize, String csName) throws Exception {
+    private void testIO_356(int bufferSize, int dataSize, int readFirst, String csName) throws Exception {
         CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize);
+
+        for (int i = 0; i < readFirst; i++) {
+            int ch = is.read();
+            assertFalse(ch == -1);
+        }
 
         is.mark(dataSize);
 
@@ -153,12 +147,71 @@ public class CharSequenceInputStreamTest {
         assertEquals(dataSize, readCount2);
 
         is.close();
-        
+
         // data buffers should be identical
         assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2);
-        
-        //
-        
+    }
+
+    @Test
+    @Ignore
+    // fails for a different reason than IO-356
+    public void testIO_356_B10_D10_S0_UTF16() throws Exception {
+        testIO_356(10, 10, 0, "UTF-16");
+    }
+
+    @Test
+    public void testIO_356_B10_D10_S0_UTF8() throws Exception {
+        testIO_356(10, 10, 0, "UTF-8");
+    }
+
+    @Test
+    @Ignore
+    public void testIO_356_B10_D10_S1_UTF8() throws Exception {
+        testIO_356(10, 10, 1, "UTF-8");
+    }
+
+    @Test
+    @Ignore
+    public void testIO_356_B10_D10_S2_UTF8() throws Exception {
+        testIO_356(10, 10, 2, "UTF-8");
+    }
+
+    @Test
+    @Ignore
+    public void testIO_356_B10_D13_S0_UTF8() throws Exception {
+        testIO_356(10, 13, 0, "UTF-8");
+    }
+
+    @Test
+    @Ignore
+    public void testIO_356_B10_D13_S1_UTF8() throws Exception {
+        testIO_356(10, 13, 1, "UTF-8");
+    }
+
+    @Test
+    public void testIO_356_B10_D20_S0_UTF8() throws Exception {
+        testIO_356(10, 20, 0, "UTF-8");
+    }
+
+    private void testIO_356_Loop(String csName) throws Exception {
+        for (int bufferSize = 1; bufferSize <= 10; bufferSize++) {
+            for (int dataSize = 1; dataSize <= 20; dataSize++) {
+                testIO_356(bufferSize, dataSize, 0, csName);
+            }
+        }
+    }
+
+    @Test
+    @Ignore
+    // Infinite loop
+    public void testIO_356_Loop_UTF16() throws Exception {
+        testIO_356_Loop("UTF-16");
+    }
+
+    @Test
+    @Ignore
+    public void testIO_356_Loop_UTF8() throws Exception {
+        testIO_356_Loop("UTF-8");
     }
 
     @Test
