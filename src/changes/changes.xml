@@ -57,7 +57,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add IOUtils.read and readFully(ReadableByteChannel, ByteBuffer buffer).
       </action>            
       <action issue="IO-357" dev="ggregory" type="fix" due-to="mortenh">
-        [Tailer] InterruptedException while the thead is sleeping is silently ignored
+        [Tailer] InterruptedException while the thread is sleeping is silently ignored
       </action>            
       <action issue="IO-353" dev="ggregory" type="add" due-to="ggregory">
         Add API IOUtils.copy(InputStream, OutputStream, int)
