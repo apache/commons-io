@@ -196,7 +196,7 @@ public class TailerTest extends FileBasedTestCase {
         tailer.stop();
         tailer=null;
         thread.interrupt();
-        Thread.sleep(testDelayMillis);
+        Thread.sleep(testDelayMillis * 4);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
         assertNotNull("Missing InterruptedException", listener.exception);
