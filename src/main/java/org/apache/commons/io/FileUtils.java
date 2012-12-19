@@ -2421,6 +2421,26 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Makes any necessary but nonexistent parent directories for a given File. If the parent directory cannot be
+     * created then an IOException is thrown.
+     * 
+     * @param file
+     *            file with parent to create, must not be {@code null}
+     * @throws NullPointerException
+     *             if the file is {@code null}
+     * @throws IOException
+     *             if the parent directory cannot be created
+     * @since 2.5
+     */
+    public static void forceMkdirParent(final File file) throws IOException {
+        final File parent = file.getParentFile();
+        if (parent == null) {
+            return;
+        }
+        forceMkdir(parent);
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Returns the size of the specified file or directory. If the provided 
