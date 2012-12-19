@@ -746,6 +746,29 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Directory was not created.", testFile.exists());
     }
 
+    public void testForceMkdirParent() throws Exception {
+        // Tests with existing directory
+        assertTrue(getTestDirectory().exists());
+        final File testParentDir = new File(getTestDirectory(), "testForceMkdirParent");
+        try {
+            testParentDir.delete();
+            assertFalse(testParentDir.exists());
+            final File testFile = new File(testParentDir, "test.txt");
+            assertFalse(testParentDir.exists());
+            assertFalse(testFile.exists());
+            // Create
+            FileUtils.forceMkdirParent(testFile);
+            assertTrue(testParentDir.exists());
+            assertFalse(testFile.exists());
+            // Again
+            FileUtils.forceMkdirParent(testFile);
+            assertTrue(testParentDir.exists());
+            assertFalse(testFile.exists());
+        } finally {
+            testParentDir.delete();
+        }
+    }
+
     // sizeOfDirectory
 
     public void testSizeOfDirectory() throws Exception {
