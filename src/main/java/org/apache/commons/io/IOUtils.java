@@ -2212,6 +2212,9 @@ public class IOUtils {
      */
     public static boolean contentEquals(InputStream input1, InputStream input2)
             throws IOException {
+        if (input1 == input2) {
+            return true;
+        }
         if (!(input1 instanceof BufferedInputStream)) {
             input1 = new BufferedInputStream(input1);
         }
@@ -2249,7 +2252,10 @@ public class IOUtils {
      */
     public static boolean contentEquals(Reader input1, Reader input2)
             throws IOException {
-        
+        if (input1 == input2) {
+            return true;
+        }
+
         input1 = toBufferedReader(input1);
         input2 = toBufferedReader(input2);
 
@@ -2282,6 +2288,9 @@ public class IOUtils {
      */
     public static boolean contentEqualsIgnoreEOL(final Reader input1, final Reader input2)
             throws IOException {
+        if (input1 == input2) {
+            return true;
+        }
         final BufferedReader br1 = toBufferedReader(input1);
         final BufferedReader br2 = toBufferedReader(input2);
 

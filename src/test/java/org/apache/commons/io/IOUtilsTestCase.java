@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -205,7 +206,36 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testContentEquals_InputStream_InputStream() throws Exception {
+        {
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(Charsets.UTF_8));
+            assertTrue(IOUtils.contentEquals(input1, input1));
+        }
+        {
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8));
+            assertTrue(IOUtils.contentEquals(input1, input1));
+        }
+        assertTrue(IOUtils
+                .contentEquals(new ByteArrayInputStream("".getBytes(Charsets.UTF_8)), new ByteArrayInputStream("".getBytes(Charsets.UTF_8))));
+        assertTrue(IOUtils.contentEquals(new BufferedInputStream(new ByteArrayInputStream("".getBytes(Charsets.UTF_8))), new BufferedInputStream(
+                new ByteArrayInputStream("".getBytes(Charsets.UTF_8)))));
+        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8)),
+                new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8))));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABCD".getBytes(Charsets.UTF_8)),
+                new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8))));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8)),
+                new ByteArrayInputStream("ABCD".getBytes(Charsets.UTF_8))));
+    }
+
     public void testContentEquals_Reader_Reader() throws Exception {
+        {
+            final StringReader input1 = new StringReader("");
+            assertTrue(IOUtils.contentEquals(input1, input1));
+        }
+        {
+            final StringReader input1 = new StringReader("ABC");
+            assertTrue(IOUtils.contentEquals(input1, input1));
+        }
         assertTrue(IOUtils.contentEquals(new StringReader(""), new StringReader("")));
         assertTrue(IOUtils.contentEquals(new BufferedReader(new StringReader("")), new BufferedReader(new StringReader(""))));
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
@@ -214,6 +244,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testContentEqualsIgnoreEOL() throws Exception {
+        {
+            final Reader input1 = new CharArrayReader("".toCharArray());
+            assertTrue(IOUtils.contentEqualsIgnoreEOL(input1, input1));
+        }
+        {
+            final Reader input1 =  new CharArrayReader("321\r\n".toCharArray());
+            assertTrue(IOUtils.contentEqualsIgnoreEOL(input1, input1));
+        }
+
         Reader r1;
         Reader r2;
 
