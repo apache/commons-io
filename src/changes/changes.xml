@@ -46,7 +46,10 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="201?-??-??" description="New features and bug fixes.">    
+    <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-362" dev="ggregory" type="fix" due-to="mmadson, ggregory">
+        IOUtils.contentEquals* methods returns false if input1 == input2, should return true.
+      </action>            
       <action issue="IO-361" dev="ggregory" type="add">
         Add API FileUtils.forceMkdirsParent().
       </action>            
