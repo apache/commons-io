@@ -20,7 +20,7 @@ package org.apache.commons.io;
 import java.nio.charset.Charset;
 import java.util.SortedMap;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
