@@ -132,6 +132,7 @@ public class NullReaderTest extends TestCase {
         } catch (final EOFException e) {
             // expected
         }
+        reader.close();
     }
 
     /**
@@ -185,6 +186,7 @@ public class NullReaderTest extends TestCase {
                          + readlimit + "]",
                          e.getMessage());
         }
+        reader.close();
     }
 
     /**
@@ -207,6 +209,7 @@ public class NullReaderTest extends TestCase {
         } catch (final UnsupportedOperationException e) {
             assertEquals("reset() error message",  "Mark not supported", e.getMessage());
         }
+        reader.close();
     }
 
     /**
@@ -228,6 +231,7 @@ public class NullReaderTest extends TestCase {
                     "Skip after end of file",
                     e.getMessage());
         }
+        reader.close();
     }
 
 

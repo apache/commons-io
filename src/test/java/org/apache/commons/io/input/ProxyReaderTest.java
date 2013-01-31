@@ -34,7 +34,7 @@ public class ProxyReaderTest extends TestCase {
     }
 
     /** Test writing Null Char Array */
-    public void testNullCharArray() {
+    public void testNullCharArray() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
 
@@ -49,10 +49,11 @@ public class ProxyReaderTest extends TestCase {
         } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }
+        proxy.close();
     }
 
     /** Test writing Null CharBuffer */
-    public void testNullCharBuffer() {
+    public void testNullCharBuffer() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
 
@@ -61,6 +62,7 @@ public class ProxyReaderTest extends TestCase {
         } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }
+        proxy.close();
     }
 
     /** ProxyReader implementation */
