@@ -42,6 +42,7 @@ public class StringBuilderWriterTest extends TestCase {
         final Writer writer = new StringBuilderWriter(100);
         writer.append("Foo");
         assertEquals("Foo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link StringBuilderWriter} constructor. */
@@ -51,6 +52,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.append("Bar");
         assertEquals("FooBar", writer.toString());
         assertSame(builder, writer.getBuilder());
+        writer.close();
     }
 
     /** Test {@link StringBuilderWriter} constructor. */
@@ -58,6 +60,7 @@ public class StringBuilderWriterTest extends TestCase {
         final Writer writer = new StringBuilderWriter((StringBuilder)null);
         writer.append("Foo");
         assertEquals("Foo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#append(char)}. */
@@ -65,6 +68,7 @@ public class StringBuilderWriterTest extends TestCase {
         final Writer writer = new StringBuilderWriter();
         writer.append('F').append('o').append('o');
         assertEquals("Foo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#append(CharSequence)}. */
@@ -72,6 +76,7 @@ public class StringBuilderWriterTest extends TestCase {
         final Writer writer = new StringBuilderWriter();
         writer.append("Foo").append("Bar");
         assertEquals("FooBar", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#append(CharSequence, int, int)}. */
@@ -79,6 +84,7 @@ public class StringBuilderWriterTest extends TestCase {
         final Writer writer = new StringBuilderWriter();
         writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
         assertEquals("BarFoo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#close()}. */
@@ -103,6 +109,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("Fo", writer.toString());
         writer.write('o');
         assertEquals("Foo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#write(char[])}. */
@@ -112,6 +119,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("Foo", writer.toString());
         writer.write(new char[] {'B', 'a', 'r'});
         assertEquals("FooBar", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#write(char[], int, int)}. */
@@ -121,6 +129,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("Bar", writer.toString());
         writer.write(FOOBAR_CHARS, 0, 3);
         assertEquals("BarFoo", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#write(String)}. */
@@ -130,6 +139,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("Foo", writer.toString());
         writer.write("Bar");
         assertEquals("FooBar", writer.toString());
+        writer.close();
     }
 
     /** Test {@link Writer#write(String, int, int)}. */
@@ -139,6 +149,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("Bar", writer.toString());
         writer.write("FooBar", 0, 3);
         assertEquals("BarFoo", writer.toString());
+        writer.close();
     }
 
 }

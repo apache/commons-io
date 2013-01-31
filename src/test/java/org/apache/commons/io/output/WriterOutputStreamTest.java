@@ -109,6 +109,7 @@ public class WriterOutputStreamTest extends TestCase {
         assertEquals(0, writer.getBuffer().length());
         out.flush();
         assertEquals("abc", writer.toString());
+        out.close();
     }
     
     public void testWriteImmediately() throws IOException {
@@ -116,5 +117,6 @@ public class WriterOutputStreamTest extends TestCase {
         final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true);
         out.write("abc".getBytes("us-ascii"));
         assertEquals("abc", writer.toString());
+        out.close();
     }
 }

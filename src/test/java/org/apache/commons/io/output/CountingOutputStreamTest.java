@@ -71,6 +71,7 @@ public class CountingOutputStreamTest extends TestCase {
         assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
         assertEquals("CountingOutputStream.getCount()", cos.getCount(), 10);
 
+        cos.close();
     }
 
     /**
