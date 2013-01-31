@@ -91,7 +91,7 @@ public class BrokenInputStream extends InputStream {
      * @throws IOException always thrown
      */
     @Override
-    public void reset() throws IOException {
+    public synchronized void reset() throws IOException {
         throw exception;
     }
 
