@@ -135,6 +135,7 @@ public class NullInputStreamTest extends TestCase {
         } catch (final EOFException e) {
             // expected
         }
+        input.close();
     }
 
     /**
@@ -188,6 +189,7 @@ public class NullInputStreamTest extends TestCase {
                          + readlimit + "]",
                          e.getMessage());
         }
+        input.close();
     }
 
     /**
@@ -210,6 +212,7 @@ public class NullInputStreamTest extends TestCase {
         } catch (final UnsupportedOperationException e) {
             assertEquals("reset() error message",  "Mark not supported", e.getMessage());
         }
+        input.close();
     }
 
     /**
@@ -231,6 +234,7 @@ public class NullInputStreamTest extends TestCase {
                     "Skip after end of file",
                     e.getMessage());
         }
+        input.close();
     }
 
 

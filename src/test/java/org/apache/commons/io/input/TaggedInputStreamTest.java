@@ -109,7 +109,7 @@ public class TaggedInputStreamTest extends TestCase {
         }
     }
 
-    public void testOtherException() {
+    public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         final InputStream closed = new ClosedInputStream();
         final TaggedInputStream stream = new TaggedInputStream(closed);
@@ -130,6 +130,7 @@ public class TaggedInputStreamTest extends TestCase {
         } catch (final IOException e) {
             fail("Unexpected exception thrown");
         }
+        stream.close();
     }
 
 }

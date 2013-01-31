@@ -51,6 +51,7 @@ public class ReaderInputStreamTest {
             assertEquals(b, (byte)read);
         }
         assertEquals(-1, in.read());
+        in.close();
     }
     
     private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
@@ -76,6 +77,7 @@ public class ReaderInputStreamTest {
                 }
             }
         }
+        in.close();
     }
     
     @Test
@@ -112,6 +114,7 @@ public class ReaderInputStreamTest {
         assertEquals(inStr.length(), r.read(bytes, 0, inStr.length()+1));
         // Should always return 0 for length == 0
         assertEquals(0, r.read(bytes, 0, 0));
+        r.close();
     }
     
     @Test
@@ -123,6 +126,7 @@ public class ReaderInputStreamTest {
         assertEquals(-1, r.read(bytes, 0, 1));
         assertEquals(0, r.read(bytes, 0, 0));
         assertEquals(-1, r.read(bytes, 0, 1));
+        r.close();
     }
     
     /**

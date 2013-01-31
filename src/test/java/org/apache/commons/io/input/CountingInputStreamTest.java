@@ -66,6 +66,7 @@ public class CountingInputStreamTest extends TestCase {
         // trim to get rid of the 6 empty values
         final String textResult = new String(result).trim();
         assertEquals(textResult, text);
+        cis.close();
     }
 
 
@@ -115,6 +116,7 @@ public class CountingInputStreamTest extends TestCase {
         final int count = cis.resetCount();
         found = cis.read(result, 6, 5);
         assertEquals( found, count );
+        cis.close();
     }
     
     public void testZeroLength1() throws Exception {
@@ -124,6 +126,7 @@ public class CountingInputStreamTest extends TestCase {
         final int found = cis.read();
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
+        cis.close();
     }
 
     public void testZeroLength2() throws Exception {
@@ -135,6 +138,7 @@ public class CountingInputStreamTest extends TestCase {
         final int found = cis.read(result);
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
+        cis.close();
     }
 
     public void testZeroLength3() throws Exception {
@@ -146,6 +150,7 @@ public class CountingInputStreamTest extends TestCase {
         final int found = cis.read(result, 0, 5);
         assertEquals(-1, found);
         assertEquals(0, cis.getCount());
+        cis.close();
     }
 
     public void testEOF1() throws Exception {
@@ -161,6 +166,7 @@ public class CountingInputStreamTest extends TestCase {
         found = cis.read();
         assertEquals(-1, found);
         assertEquals(2, cis.getCount());
+        cis.close();
     }
 
     public void testEOF2() throws Exception {
@@ -172,6 +178,7 @@ public class CountingInputStreamTest extends TestCase {
         final int found = cis.read(result);
         assertEquals(2, found);
         assertEquals(2, cis.getCount());
+        cis.close();
     }
 
     public void testEOF3() throws Exception {
@@ -183,6 +190,7 @@ public class CountingInputStreamTest extends TestCase {
         final int found = cis.read(result, 0, 5);
         assertEquals(2, found);
         assertEquals(2, cis.getCount());
+        cis.close();
     }
     
     public void testSkipping() throws IOException {
@@ -198,6 +206,7 @@ public class CountingInputStreamTest extends TestCase {
         
         assertEquals("World!",new String(result));
         assertEquals(12,cis.getCount());
+        cis.close();
     }
 
 }

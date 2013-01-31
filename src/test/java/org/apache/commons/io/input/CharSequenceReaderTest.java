@@ -43,9 +43,10 @@ public class CharSequenceReaderTest {
 
     /** Test {@link Reader#markSupported()}. */
     @Test
-    public void testMarkSupported() {
+    public void testMarkSupported() throws Exception {
         final Reader reader = new CharSequenceReader("FooBar");
         assertTrue(reader.markSupported());
+        reader.close();
     }
 
     /** Test {@link Reader#mark(int)}. */
@@ -88,6 +89,7 @@ public class CharSequenceReaderTest {
         assertEquals('o', reader.read());
         assertEquals(-1, reader.read());
         assertEquals(-1, reader.read());
+        reader.close();
     }
 
     /** Test {@link Reader#read(char[])}. */
@@ -104,6 +106,7 @@ public class CharSequenceReaderTest {
         assertEquals(1, reader.read(chars));
         checkArray(new char[] {'r', NONE, NONE}, chars);
         assertEquals(-1, reader.read(chars));
+        reader.close();
     }
 
     /** Test {@link Reader#read(char[], int, int)}. */
@@ -116,6 +119,7 @@ public class CharSequenceReaderTest {
         assertEquals(3, reader.read(chars, 0, 3));
         checkArray(new char[] {'B', 'a', 'r', 'F', 'o', 'o', NONE}, chars);
         assertEquals(-1, reader.read(chars));
+        reader.close();
     }
 
     private void checkRead(final Reader reader, final String expected) throws IOException {
