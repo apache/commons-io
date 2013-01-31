@@ -186,7 +186,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testCloseQuietly_SocketIOException() {
         IOUtils.closeQuietly(new Socket() {            
             @Override
-            public void close() throws IOException {
+            public synchronized void close() throws IOException {
                 throw new IOException();
             }
         });
