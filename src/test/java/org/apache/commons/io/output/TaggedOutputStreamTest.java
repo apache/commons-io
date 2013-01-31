@@ -95,7 +95,7 @@ public class TaggedOutputStreamTest extends TestCase {
         }
     }
 
-    public void testOtherException() {
+    public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         final OutputStream closed = new ClosedOutputStream();
         final TaggedOutputStream stream = new TaggedOutputStream(closed);
@@ -116,6 +116,7 @@ public class TaggedOutputStreamTest extends TestCase {
         } catch (final IOException e) {
             fail("Unexpected exception thrown");
         }
+        stream.close();
     }
 
 }
