@@ -53,6 +53,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         final Boolean result = (Boolean) clois.readObject();
 
         assertTrue( !result.booleanValue() );
+        clois.close();
     }
 
     public void testResolveProxyClass() throws Exception {
@@ -67,6 +68,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         final String[] interfaces = new String[] { Comparable.class.getName() };
         final Class<?> result = clois.resolveProxyClass(interfaces);
         assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
+        clois.close();
     }
     
 }

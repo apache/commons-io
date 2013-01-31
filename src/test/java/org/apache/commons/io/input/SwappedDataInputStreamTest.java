@@ -71,6 +71,7 @@ public class SwappedDataInputStreamTest extends TestCase {
         assertEquals( false, sdis.readBoolean() );
         assertEquals( true, sdis.readBoolean() );
         assertEquals( true, sdis.readBoolean() );
+        sdis.close();
     }
 
     public void testReadByte() throws IOException {
