@@ -195,6 +195,7 @@ public class BOMInputStreamTest {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
         assertEquals(7, in.available());
+        in.close();
     }
 
     @Test
@@ -202,6 +203,7 @@ public class BOMInputStreamTest {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
         assertEquals(4, in.available());
+        in.close();
     }
 
     @Test
@@ -220,6 +222,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
         final byte[] buf = new byte[1024];
         assertEquals(-1, in.read(buf));
+        in.close();
     }
 
     @Test
@@ -228,6 +231,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
         final byte[] buf = new byte[1024];
         assertEquals(-1, in.read(buf));
+        in.close();
     }
 
     @Test
@@ -241,6 +245,7 @@ public class BOMInputStreamTest {
         assertEquals('B', in.read());
         assertEquals('C', in.read());
         assertEquals(-1, in.read());
+        in.close();
     }
 
     @Test
@@ -257,6 +262,7 @@ public class BOMInputStreamTest {
         assertEquals('B', in.read());
         assertEquals('C', in.read());
         assertEquals(-1, in.read());
+        in.close();
     }
 
     @Test
@@ -265,6 +271,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
         final byte[] buf = new byte[1024];
         assertData(data, buf, in.read(buf));
+        in.close();
     }
 
     @Test
@@ -273,6 +280,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
         final byte[] buf = new byte[1024];
         assertData(data, buf, in.read(buf));
+        in.close();
     }
 
     @Test
@@ -281,6 +289,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
         final byte[] buf = new byte[1024];
         assertData(data, buf, in.read(buf));
+        in.close();
     }
 
     @Test
@@ -291,6 +300,7 @@ public class BOMInputStreamTest {
         assertEquals(0xAB, in.read());
         assertEquals(0xCD, in.read());
         assertEquals(-1, in.read());
+        in.close();
     }
 
     @Test
@@ -306,6 +316,7 @@ public class BOMInputStreamTest {
         in.read();
         in.reset();
         assertEquals('B', in.read());
+        in.close();
     }
 
     @Test
@@ -321,6 +332,7 @@ public class BOMInputStreamTest {
         in.read();
         in.reset();
         assertEquals('B', in.read());
+        in.close();
     }
 
     @Test
@@ -335,6 +347,7 @@ public class BOMInputStreamTest {
         in.read();
         in.reset();
         assertEquals('A', in.read());
+        in.close();
     }
 
     @Test
@@ -349,6 +362,7 @@ public class BOMInputStreamTest {
         in.read();
         in.reset();
         assertEquals('A', in.read());
+        in.close();
     }
 
     @Test
@@ -376,6 +390,7 @@ public class BOMInputStreamTest {
         assertFalse("hasBOM()", in.hasBOM());
         assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
         assertNull("getBOM", in.getBOM());
+        in.close();
     }
 
     @Test
@@ -388,6 +403,7 @@ public class BOMInputStreamTest {
         assertFalse("hasBOM()", in.hasBOM());
         assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
         assertNull("getBOM", in.getBOM());
+        in.close();
     }
 
     @Test
@@ -414,6 +430,7 @@ public class BOMInputStreamTest {
         assertTrue("hasBOM()", in.hasBOM());
         assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
         assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+        in.close();
     }
 
     @Test
@@ -436,6 +453,7 @@ public class BOMInputStreamTest {
         } catch (final IllegalArgumentException e) {
             // expected - not configured for UTF-16LE
         }
+        in.close();
     }
 
     @Test
@@ -458,6 +476,7 @@ public class BOMInputStreamTest {
         } catch (final IllegalArgumentException e) {
             // expected - not configured for UTF-16BE
         }
+        in.close();
     }
 
     @Test
@@ -487,6 +506,7 @@ public class BOMInputStreamTest {
         } catch (final IllegalArgumentException e) {
             // expected - not configured for UTF-32LE
         }
+        in.close();
     }
 
     @Test
@@ -516,6 +536,7 @@ public class BOMInputStreamTest {
         } catch (final IllegalArgumentException e) {
             // expected - not configured for UTF-32BE
         }
+        in.close();
     }
 
     @Test
@@ -535,6 +556,7 @@ public class BOMInputStreamTest {
         } catch (final IllegalArgumentException e) {
             // expected - not configured for UTF-16BE
         }
+        in.close();
     }
 
     @Test
@@ -550,6 +572,7 @@ public class BOMInputStreamTest {
         assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
         assertFalse("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
         assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+        in.close();
     }
 
     @Test
@@ -563,6 +586,7 @@ public class BOMInputStreamTest {
         assertFalse("hasBOM()", in.hasBOM());
         assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
         assertNull("getBOM", in.getBOM());
+        in.close();
     }
 
     @Test
@@ -647,6 +671,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
         in.skip(2L);
         assertEquals('C', in.read());
+        in.close();
     }
 
     @Test
@@ -655,6 +680,7 @@ public class BOMInputStreamTest {
         final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
         in.skip(2L);
         assertEquals('C', in.read());
+        in.close();
     }
 
     @Test
@@ -664,6 +690,7 @@ public class BOMInputStreamTest {
         final byte[] buf = new byte[1024];
         assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
         assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
+        in.close();
     }
 
     @Test
@@ -673,6 +700,7 @@ public class BOMInputStreamTest {
         final byte[] buf = new byte[1024];
         assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
         assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
+        in.close();
     }
 
     @Test
