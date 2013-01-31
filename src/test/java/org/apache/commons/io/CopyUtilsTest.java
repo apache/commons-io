@@ -106,6 +106,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertEquals(inDataStr, writer.toString());
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -121,6 +122,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertEquals(inData.length, count);
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -145,6 +147,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertEquals(inDataStr, writer.toString());
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -165,6 +168,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);

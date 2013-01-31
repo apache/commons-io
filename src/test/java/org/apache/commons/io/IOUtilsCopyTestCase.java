@@ -71,6 +71,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -104,6 +105,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         testCopy_inputStreamToOutputStreamWithBufferSize(16384);
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     private void testCopy_inputStreamToOutputStreamWithBufferSize(final int bufferSize) throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -154,6 +156,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -190,6 +193,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToWriter_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -226,6 +230,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_inputStreamToWriter_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -244,6 +249,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -273,6 +279,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -284,6 +291,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -310,6 +318,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream_Encoding_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -320,6 +329,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -337,6 +347,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -364,6 +375,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("resource") // 'in' is deliberately not closed
     public void testCopy_readerToWriter_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
