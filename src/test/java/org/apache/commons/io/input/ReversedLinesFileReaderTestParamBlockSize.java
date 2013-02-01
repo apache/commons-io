@@ -161,13 +161,13 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     @Test(expected=UnsupportedEncodingException.class)
     public void testUnsupportedEncodingUTF16() throws URISyntaxException, IOException {
         final File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-        new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, "UTF-16");
+        new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, "UTF-16").close();
     }
 
     @Test(expected=UnsupportedEncodingException.class)
     public void testUnsupportedEncodingBig5() throws URISyntaxException, IOException {
         final File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-        new ReversedLinesFileReader(testFileEncodingBig5, testParamBlockSize, "Big5");
+        new ReversedLinesFileReader(testFileEncodingBig5, testParamBlockSize, "Big5").close();
     }
 
     private void assertFileWithShrinkingTestLines(final ReversedLinesFileReader reversedLinesFileReader) throws IOException {

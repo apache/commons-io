@@ -140,8 +140,11 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         
         //Make sure that empty ByteArrayOutputStreams really don't create garbage
         //on toByteArray()
-        assertSame(new ByteArrayOutputStream().toByteArray(),
-            new ByteArrayOutputStream().toByteArray());
+        final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+        assertSame(baos1.toByteArray(), baos2.toByteArray());
+        baos1.close();
+        baos2.close();
     }
 }
 

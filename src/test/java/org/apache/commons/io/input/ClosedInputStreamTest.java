@@ -26,8 +26,10 @@ public class ClosedInputStreamTest extends TestCase {
     /**
      * Test the <code>read()</code> method.
      */
-    public void testRead() {
-        assertEquals("read()", -1, new ClosedInputStream().read());
+    public void testRead() throws Exception {
+        final ClosedInputStream cis = new ClosedInputStream();
+        assertEquals("read()", -1, cis.read());
+        cis.close();
     }
 
 }
