@@ -103,6 +103,7 @@ public class XmlStreamReaderUtilitiesTest {
         checkAppXml(true,  "application/xml-external-parsed-entity");
     }
     
+    @SuppressWarnings("boxing")
     private void checkAppXml(final boolean expected, final String mime) {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isAppXml(mime));
     }
@@ -121,6 +122,7 @@ public class XmlStreamReaderUtilitiesTest {
         checkTextXml(false, "application/atom+xml");
     }
     
+    @SuppressWarnings("boxing")
     private void checkTextXml(final boolean expected, final String mime) {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isTextXml(mime));
     }
