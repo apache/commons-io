@@ -39,8 +39,10 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = new CompositeFileComparator(SizeFileComparator.SIZE_COMPARATOR,
-                                                 ExtensionFileComparator.EXTENSION_COMPARATOR);
+        comparator = new CompositeFileComparator(
+                new AbstractFileComparator[] {
+                    SizeFileComparator.SIZE_COMPARATOR,
+                    ExtensionFileComparator.EXTENSION_COMPARATOR});
         reverse = new ReverseComparator(comparator);
         final File dir = getTestDirectory();
         lessFile   = new File(dir, "xyz.txt");
