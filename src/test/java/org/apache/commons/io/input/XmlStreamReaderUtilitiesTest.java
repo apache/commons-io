@@ -223,7 +223,9 @@ public class XmlStreamReaderUtilitiesTest {
     protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
             final String defaultEncoding) throws IOException {
         final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
-        return mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
+        final String enc = mock.calculateRawEncoding(bomEnc, xmlGuessEnc, xmlEnc);
+        mock.close();
+        return enc;
     }
     
     private void checkRawError(final String msgSuffix,
@@ -306,7 +308,9 @@ public class XmlStreamReaderUtilitiesTest {
     protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
             final String xmlEnc, final boolean lenient, final String defaultEncoding) throws IOException {
         final MockXmlStreamReader mock = new MockXmlStreamReader(defaultEncoding);
-        return mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
+        final String enc = mock.calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
+        mock.close();
+        return enc;
     }
     
     private void checkHttpError(final String msgSuffix, final boolean lenient, final String httpContentType,

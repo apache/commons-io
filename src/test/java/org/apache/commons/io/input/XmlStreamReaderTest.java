@@ -46,22 +46,27 @@ public class XmlStreamReaderTest {
         InputStream is = getXmlStream("no-bom", XML1, encoding, encoding);
         XmlStreamReader xmlReader = new XmlStreamReader(is, false);
         assertEquals(xmlReader.getEncoding(), "UTF-8");
+        xmlReader.close();
 
         is = getXmlStream("no-bom", XML2, encoding, encoding);
         xmlReader = new XmlStreamReader(is);
         assertEquals(xmlReader.getEncoding(), "UTF-8");
+        xmlReader.close();
 
         is = getXmlStream("no-bom", XML3, encoding, encoding);
         xmlReader = new XmlStreamReader(is);
         assertEquals(xmlReader.getEncoding(), encoding);
+        xmlReader.close();
 
         is = getXmlStream("no-bom", XML4, encoding, encoding);
         xmlReader = new XmlStreamReader(is);
         assertEquals(xmlReader.getEncoding(), encoding);
+        xmlReader.close();
 
         is = getXmlStream("no-bom", XML5, encoding, encoding);
         xmlReader = new XmlStreamReader(is);
         assertEquals(xmlReader.getEncoding(), encoding);
+        xmlReader.close();
     }
 
     protected void _testRawNoBomInvalid(final String encoding) throws Exception {
@@ -124,19 +129,24 @@ public class XmlStreamReaderTest {
             assertEquals(xmlReader.getEncoding()
                     .substring(0, encoding.length()), encoding);
         }
+        xmlReader.close();
     }
 
     protected void _testRawBomInvalid(final String bomEnc, final String streamEnc,
             final String prologEnc) throws Exception {
         final InputStream is = getXmlStream(bomEnc, XML3, streamEnc, prologEnc);
+        XmlStreamReader xmlReader = null;
         try {
-            final XmlStreamReader xmlReader = new XmlStreamReader(is, false);
+            xmlReader = new XmlStreamReader(is, false);
             final String foundEnc = xmlReader.getEncoding();
             fail("Expected IOException for BOM " + bomEnc + ", streamEnc "
                     + streamEnc + " and prologEnc " + prologEnc + ": found "
                     + foundEnc);
         } catch (final IOException ex) {
             assertTrue(ex.getMessage().indexOf("Invalid encoding,") > -1);
+        }
+        if (xmlReader != null) {
+            xmlReader.close();
         }
     }
 
@@ -306,6 +316,7 @@ public class XmlStreamReaderTest {
             assertEquals(xmlReader.getEncoding().substring(0,
                     streamEnc.length()), streamEnc);
         }
+        xmlReader.close();
     }
 
     public void _testHttpValid(final String cT, final String bomEnc, final String streamEnc,
@@ -322,6 +333,7 @@ public class XmlStreamReaderTest {
             assertEquals(xmlReader.getEncoding().substring(0,
                     streamEnc.length()), streamEnc);
         }
+        xmlReader.close();
     }
 
     protected void _testHttpInvalid(final String cT, final String bomEnc, final String streamEnc,
@@ -344,6 +356,7 @@ public class XmlStreamReaderTest {
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         final XmlStreamReader xmlReader = new XmlStreamReader(is, cT, true);
         assertEquals(xmlReader.getEncoding(), shouldbe);
+        xmlReader.close();
     }
 
     private static final String ENCODING_ATTRIBUTE_XML = "<?xml version=\"1.0\" ?> \n"
@@ -359,6 +372,7 @@ public class XmlStreamReaderTest {
                 .getBytes("UTF-8"));
         final XmlStreamReader xmlReader = new XmlStreamReader(is, "", true);
         assertEquals(xmlReader.getEncoding(), "UTF-8");
+        xmlReader.close();
     }
 
     // XML Stream generator
