@@ -54,7 +54,7 @@ Commons IO 2.4 is the latest version and requires a minimum of JDK 1.6 -
 </p> 
 <p>
 View the <a href="upgradeto2_4.html">Release Notes</a> and
-<a href="api-release/index.html">JavaDoc API documents</a>
+<a href="javadocs/api-release/index.html">JavaDoc API documents</a>
 </p> 
 </subsection>
 
@@ -65,7 +65,7 @@ Commons IO 2.2 requires a minimum of JDK 1.5 -
 </p> 
 <p>
 View the <a href="upgradeto2_2.html">Release Notes</a> and
-<a href="api-release/index.html">JavaDoc API documents</a>
+<a href="javadocs/api-2.2/index.html">JavaDoc API documents</a>
 </p> 
 </subsection>
 
