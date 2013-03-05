@@ -29,17 +29,17 @@ Commons IO is a library of utilities to assist with developing IO functionality.
 <p>
 There are six main areas included:
 <ul>
-<li><a href="api-release/index.html?org/apache/commons/io/package-summary.html">Utility classes</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/package-summary.html">Utility classes</a>
    - with static methods to perform common tasks</li>
-<li><a href="api-release/index.html?org/apache/commons/io/input/package-summary.html">Input</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/input/package-summary.html">Input</a>
    - useful Input Stream and Reader implementations</li>
-<li><a href="api-release/index.html?org/apache/commons/io/output/package-summary.html">Output</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/output/package-summary.html">Output</a>
    - useful Output Stream and Writer implementations</li>
-<li><a href="api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">Filters</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">Filters</a>
    - various implementations of file filters</li>
-<li><a href="api-release/index.html?org/apache/commons/io/comparator/package-summary.html">Comparators</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/comparator/package-summary.html">Comparators</a>
    - various implementations of <code>java.util.Comparator</code> for files</li>
-<li><a href="api-release/index.html?org/apache/commons/io/monitor/package-summary.html">File Monitor</a>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/monitor/package-summary.html">File Monitor</a>
    - a component for monitoring file system events</li>
 </ul>
 </p>

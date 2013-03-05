@@ -42,7 +42,7 @@ limitations under the License.
     <section name="Utility classes">
         <subsection name="IOUtils">
             <p>
-                <a href="api-release/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
+                <a href="javadocs/api-release/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
                 contains utility methods dealing with reading, writing and copying.
                 The methods work on InputStream, OutputStream, Reader and Writer.
             </p>

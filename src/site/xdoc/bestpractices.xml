@@ -49,7 +49,7 @@ limitations under the License.
         <p>
             <i>
             Version 1.1 of commons-io now includes a dedicated filename
-            handling class - <a href="api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>.
+            handling class - <a href="javadocs/api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>.
             This does handle many of these filename issues, however we still
             recommend, wherever possible, that you use java.io.File objects.
             </i>
