@@ -83,8 +83,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Construct a new case-sensitive wildcard filter for an array of wildcards.
      * <p>
-     * The array is not cloned, so could be changed after constructing the
-     * instance. This would be inadvisable however.
      *
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
