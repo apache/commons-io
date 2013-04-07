@@ -32,7 +32,7 @@ import org.apache.commons.io.IOCase;
  * The wildcard matcher uses the characters '?' and '*' to represent a
  * single or multiple wildcard characters.
  * This is the same as often found on Dos/Unix command lines.
- * The extension check is case-sensitive by .
+ * The check is case-sensitive by default.
  * See {@link FilenameUtils#wildcardMatchOnSystem} for more information.
  * <p>
  * For example:
