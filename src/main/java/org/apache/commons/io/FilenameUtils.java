@@ -1375,6 +1375,7 @@ public class FilenameUtils {
         final char[] array = text.toCharArray();
         final ArrayList<String> list = new ArrayList<String>();
         final StringBuilder buffer = new StringBuilder();
+        char prevChar = 0;
         for (int i = 0; i < array.length; i++) {
             final char ch = array[i];
             if (ch == '?' || ch == '*') {
@@ -1384,13 +1385,13 @@ public class FilenameUtils {
                 }
                 if (ch == '?') {
                     list.add("?");
-                } else if (list.isEmpty() || // ch == '*' here; check if previous char was '*'
-                        i > 0 && list.get(list.size() - 1).equals("*") == false) {
+                } else if (prevChar != '*' ) {// ch == '*' here; check if previous char was '*'
                     list.add("*");
                 }
             } else {
                 buffer.append(ch);
             }
+            prevChar = ch;
         }
         if (buffer.length() != 0) {
             list.add(buffer.toString());
