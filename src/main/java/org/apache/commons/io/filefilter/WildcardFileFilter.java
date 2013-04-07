@@ -62,7 +62,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern is null
      */
     public WildcardFileFilter(final String wildcard) {
-        this(wildcard, null);
+        this(wildcard, IOCase.SENSITIVE);
     }
 
     /**
@@ -88,7 +88,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws IllegalArgumentException if the pattern array is null
      */
     public WildcardFileFilter(final String[] wildcards) {
-        this(wildcards, null);
+        this(wildcards, IOCase.SENSITIVE);
     }
 
     /**
@@ -116,7 +116,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @throws ClassCastException if the list does not contain Strings
      */
     public WildcardFileFilter(final List<String> wildcards) {
-        this(wildcards, null);
+        this(wildcards, IOCase.SENSITIVE);
     }
 
     /**
