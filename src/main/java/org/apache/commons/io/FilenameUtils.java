@@ -1376,19 +1376,20 @@ public class FilenameUtils {
         final ArrayList<String> list = new ArrayList<String>();
         final StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
-            if (array[i] == '?' || array[i] == '*') {
+            final char ch = array[i];
+            if (ch == '?' || ch == '*') {
                 if (buffer.length() != 0) {
                     list.add(buffer.toString());
                     buffer.setLength(0);
                 }
-                if (array[i] == '?') {
+                if (ch == '?') {
                     list.add("?");
-                } else if (list.isEmpty() ||
+                } else if (list.isEmpty() || // ch == '*' here; check if previous char was '*'
                         i > 0 && list.get(list.size() - 1).equals("*") == false) {
                     list.add("*");
                 }
             } else {
-                buffer.append(array[i]);
+                buffer.append(ch);
             }
         }
         if (buffer.length() != 0) {
