@@ -47,7 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
-      <action issue="IO-374" dev="sebb" type="fix">
+      <action issue="IO-375" dev="sebb" type="update">
+        FilenameUtils.splitOnTokens(String text) check for '**' could be simplified 
+      </action>            
+      <action issue="IO-374" dev="sebb" type="update">
         WildcardFileFilter ctors should not use null to mean IOCase.SENSITIVE when delegating to other ctors
       </action>            
       <action issue="IO-362" dev="ggregory" type="fix" due-to="mmadson, ggregory">

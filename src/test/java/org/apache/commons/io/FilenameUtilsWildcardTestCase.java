@@ -123,6 +123,7 @@ public class FilenameUtilsWildcardTestCase extends TestCase {
         assertArrayEquals( new String[] { "*" }, FilenameUtils.splitOnTokens("****") );
         assertArrayEquals( new String[] { "*", "?", "?", "*" }, FilenameUtils.splitOnTokens("*??*") );
         assertArrayEquals( new String[] { "*", "?", "*", "?", "*" }, FilenameUtils.splitOnTokens("*?**?*") );
+        assertArrayEquals( new String[] { "*", "?", "*", "?", "*" }, FilenameUtils.splitOnTokens("*?***?*") );
         assertArrayEquals( new String[] { "h", "?", "?", "*" }, FilenameUtils.splitOnTokens("h??*") );
         assertArrayEquals( new String[] { "" }, FilenameUtils.splitOnTokens("") );
     }
