@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import junit.framework.TestCase;
 
@@ -40,23 +41,93 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
      */
 
     
-    public void testExpected() throws Exception {
+    public void xtestExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-        oos.writeObject( Boolean.FALSE );
+        final Object input = Boolean.FALSE;
+        oos.writeObject( input );
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois = 
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final Boolean result = (Boolean) clois.readObject();
+        final Object result = clois.readObject();
 
-        assertTrue( !result.booleanValue() );
+        assertEquals(input, result );
         clois.close();
     }
 
-    public void testResolveProxyClass() throws Exception {
+    public void xtestLong() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        final Object input = Long.valueOf(123);
+        oos.writeObject(input);
+
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final Object result = clois.readObject();
+
+        assertEquals(input, result);
+        clois.close();
+    }
+
+    public void xtestPrimitiveLong() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        final long input = 12345L;
+        oos.writeLong(input);
+        oos.close();
+
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final long result = clois.readLong();
+
+        assertEquals(input, result);
+        clois.close();
+    }
+
+    private static class Test implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private int i;
+
+        Test(int i) {
+            this.i = i;
+        }
+        @Override
+        public boolean equals(Object other) {
+            return other instanceof Test & (this.i == ((Test)other).i);
+        }
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+    }
+    public void testString() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        final Object input = new Test(123);
+        oos.writeObject(input);
+        oos.close();
+
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final Object result = clois.readObject();
+
+        assertEquals(input, result);
+        clois.close();
+    }
+
+    public void xtestResolveProxyClass() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
