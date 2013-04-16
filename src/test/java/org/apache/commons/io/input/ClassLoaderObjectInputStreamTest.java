@@ -41,7 +41,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
      */
 
     
-    public void xtestExpected() throws Exception {
+    public void testExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -58,7 +58,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
-    public void xtestLong() throws Exception {
+    public void testLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -75,7 +75,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
-    public void xtestPrimitiveLong() throws Exception {
+    public void testPrimitiveLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -127,7 +127,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
-    public void xtestResolveProxyClass() throws Exception {
+    public void testResolveProxyClass() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
