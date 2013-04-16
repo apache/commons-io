@@ -47,6 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-323" dev="sebb" type="fix">
+        What should happen in FileUtils.sizeOf[Directory] when an overflow takes place?
+        Added Javadoc. 
+      </action>            
       <action issue="IO-372" dev="sebb" type="fix">
         FileUtils.moveDirectory can produce misleading error message on failiure 
       </action>            

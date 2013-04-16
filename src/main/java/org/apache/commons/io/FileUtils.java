@@ -2448,7 +2448,11 @@ public class FileUtils {
      * If the argument is a directory, then the size of the directory is
      * calculated recursively. If a directory or subdirectory is security 
      * restricted, its size will not be included.
-     * 
+     * <p>
+     * Note that overflow is not detected, and the return value may be negative if
+     * overflow occurs. See {@link #sizeOfAsBigInteger(File)} for an alternative
+     * method that does not overflow.
+     *
      * @param file the regular file or directory to return the size 
      *        of (must not be {@code null}).
      * 
@@ -2510,6 +2514,11 @@ public class FileUtils {
 
     /**
      * Counts the size of a directory recursively (sum of the length of all files).
+     * <p>
+     * Note that overflow is not detected, and the return value may be negative if
+     * overflow occurs. See {@link #sizeOfDirectoryAsBigInteger(File)} for an alternative
+     * method that does not overflow.
+     *
      * 
      * @param directory
      *            directory to inspect, must not be {@code null}
