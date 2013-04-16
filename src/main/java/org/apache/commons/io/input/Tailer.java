@@ -239,11 +239,7 @@ public class Tailer implements Runnable {
      * @return The new tailer
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufSize) {
-        final Tailer tailer = new Tailer(file, listener, delayMillis, end, bufSize);
-        final Thread thread = new Thread(tailer);
-        thread.setDaemon(true);
-        thread.start();
-        return tailer;
+        return create(file, listener, delayMillis, end, false, bufSize);
     }
 
     /**
