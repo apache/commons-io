@@ -2803,7 +2803,7 @@ public class FileUtils {
         }
         final boolean rename = srcDir.renameTo(destDir);
         if (!rename) {
-            if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
+            if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath() + File.pathSeparator)) {
                 throw new IOException("Cannot move directory: "+srcDir+" to a subdirectory of itself: "+destDir);
             }
             copyDirectory( srcDir, destDir );
