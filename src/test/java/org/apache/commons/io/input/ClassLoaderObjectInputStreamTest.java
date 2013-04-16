@@ -109,7 +109,8 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
             return super.hashCode();
         }
     }
-    public void testString() throws Exception {
+
+    public void testObject() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
