@@ -51,7 +51,7 @@ The <action> type attribute can be add,update,fix,remove.
          A constant for holding the BOM character (U+FEFF)
       </action>            
       <action issue="IO-314" dev="sebb" type="fix">
-        Deprecate and then remove all methods that use the default encoding
+        Deprecate all methods that use the default encoding
       </action>            
       <action issue="IO-338" dev="sebb" type="fix">
         When a file is rotated, finish reading previous file prior to starting new one
