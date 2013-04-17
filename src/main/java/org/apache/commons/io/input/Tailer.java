@@ -16,10 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -444,11 +446,11 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessFile reader) throws IOException {
-        final StringBuilder sb = new StringBuilder();
-
+        // Make explicit that the default charset is being used here
+        Charset cset = Charset.defaultCharset();
+        ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64);
         long pos = reader.getFilePointer();
         long rePos = pos; // position to re-read
-
         int num;
         boolean seenCR = false;
         while (getRun() && ((num = reader.read(inbuf)) != -1)) {
@@ -457,30 +459,29 @@ public class Tailer implements Runnable {
                 switch (ch) {
                 case '\n':
                     seenCR = false; // swallow CR before LF
-                    listener.handle(sb.toString());
-                    sb.setLength(0);
+                    listener.handle(new String(lineBuf.toByteArray(), cset));
+                    lineBuf.reset();
                     rePos = pos + i + 1;
                     break;
                 case '\r':
                     if (seenCR) {
-                        sb.append('\r');
+                        lineBuf.write('\r');
                     }
                     seenCR = true;
                     break;
                 default:
                     if (seenCR) {
                         seenCR = false; // swallow final CR
-                        listener.handle(sb.toString());
-                        sb.setLength(0);
+                        listener.handle(new String(lineBuf.toByteArray(), cset));
+                        lineBuf.reset(); 
                         rePos = pos + i + 1;
                     }
-                    sb.append((char) ch); // add character, not its ascii value
+                    lineBuf.write(ch);
                 }
             }
-
             pos = reader.getFilePointer();
         }
-
+        IOUtils.closeQuietly(lineBuf); // not strictly necessary
         reader.seek(rePos); // Ensure we can re-read if necessary
         return rePos;
     }

@@ -16,10 +16,13 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -103,6 +106,42 @@ public class TailerTest extends FileBasedTestCase {
         }
 
         listener.clear();
+    }
+
+    public void testMultiByteBreak() throws Exception {
+        final long delay = 50;
+        final File origin = new File(this.getClass().getResource("/test-file-utf8.bin").toURI());
+        final File file = new File(getTestDirectory(), "testMultiByteBreak.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        final String osname = System.getProperty("os.name");
+        final boolean isWindows = osname.startsWith("Windows");
+        tailer = new Tailer(file, listener, delay, false, isWindows);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+		
+        
+        BufferedReader reader = null;
+        try{
+        	List<String> lines = new ArrayList<String>();
+        	reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin)));
+        	String line = null;
+        	while((line = reader.readLine()) != null){
+        		write(file, line);
+        		lines.add(line);
+        	}
+
+           final long testDelayMillis = delay * 10;
+           Thread.sleep(testDelayMillis);
+           List<String> tailerlines = listener.getLines();
+           assertEquals("line count",lines.size(),tailerlines.size());
+           for(int i = 0,len = lines.size();i<len;i++){
+        	   assertEquals("line "+i, lines.get(i), tailerlines.get(i));
+           }
+        }finally{
+        	tailer.stop();
+        	IOUtils.closeQuietly(reader);
+        }
     }
 
     public void testTailerEof() throws Exception {
