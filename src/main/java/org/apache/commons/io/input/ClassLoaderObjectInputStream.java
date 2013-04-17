@@ -65,14 +65,11 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
     protected Class<?> resolveClass(final ObjectStreamClass objectStreamClass)
             throws IOException, ClassNotFoundException {
         
-        final Class<?> clazz = Class.forName(objectStreamClass.getName(), false, classLoader);
-
-        if (clazz != null) {
-            // the classloader knows of the class
-            return clazz;
-        } else {
-            // classloader knows not of class, let the super classloader do it
-            return super.resolveClass(objectStreamClass);
+        try {
+            return Class.forName(objectStreamClass.getName(), false, classLoader);
+        } catch (ClassNotFoundException cnfe) {
+            // delegate to super class loader which can resolve primitives
+            return super.resolveClass(objectStreamClass);            
         }
     }
 
