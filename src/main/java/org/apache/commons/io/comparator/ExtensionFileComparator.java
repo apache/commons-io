@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Comparator;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -53,24 +54,24 @@ import org.apache.commons.io.IOCase;
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final ExtensionFileComparator EXTENSION_COMPARATOR = new ExtensionFileComparator();
+    public static final Comparator<File> EXTENSION_COMPARATOR = new ExtensionFileComparator();
 
     /** Reverse case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final ReverseComparator EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
+    public static final Comparator<File> EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
 
     /** Case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final ExtensionFileComparator EXTENSION_INSENSITIVE_COMPARATOR
+    public static final Comparator<File> EXTENSION_INSENSITIVE_COMPARATOR
                                                 = new ExtensionFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final ReverseComparator EXTENSION_INSENSITIVE_REVERSE
+    public static final Comparator<File> EXTENSION_INSENSITIVE_REVERSE
                                                 = new ReverseComparator(EXTENSION_INSENSITIVE_COMPARATOR);
 
     /** System sensitive extension comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final ExtensionFileComparator EXTENSION_SYSTEM_COMPARATOR = new ExtensionFileComparator(IOCase.SYSTEM);
+    public static final Comparator<File> EXTENSION_SYSTEM_COMPARATOR = new ExtensionFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final ReverseComparator EXTENSION_SYSTEM_REVERSE = new ReverseComparator(EXTENSION_SYSTEM_COMPARATOR);
+    public static final Comparator<File> EXTENSION_SYSTEM_REVERSE = new ReverseComparator(EXTENSION_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;

@@ -37,7 +37,7 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
+        comparator = (AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
         reverse = NameFileComparator.NAME_REVERSE;
         equalFile1 = new File("a/foo.txt");
         equalFile2 = new File("b/foo.txt");

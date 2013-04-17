@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Comparator;
 
 import org.apache.commons.io.FileUtils;
 
@@ -51,22 +52,22 @@ import org.apache.commons.io.FileUtils;
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Size comparator instance - directories are treated as zero size */
-    public static final SizeFileComparator SIZE_COMPARATOR = new SizeFileComparator();
+    public static final Comparator<File> SIZE_COMPARATOR = new SizeFileComparator();
 
     /** Reverse size comparator instance - directories are treated as zero size */
-    public static final ReverseComparator SIZE_REVERSE = new ReverseComparator(SIZE_COMPARATOR);
+    public static final Comparator<File> SIZE_REVERSE = new ReverseComparator(SIZE_COMPARATOR);
 
     /**
      * Size comparator instance which sums the size of a directory's contents
      * using {@link FileUtils#sizeOfDirectory(File)}
      */
-    public static final SizeFileComparator SIZE_SUMDIR_COMPARATOR = new SizeFileComparator(true);
+    public static final Comparator<File> SIZE_SUMDIR_COMPARATOR = new SizeFileComparator(true);
 
     /**
      * Reverse size comparator instance which sums the size of a directory's contents
      * using {@link FileUtils#sizeOfDirectory(File)}
      */
-    public static final ReverseComparator SIZE_SUMDIR_REVERSE = new ReverseComparator(SIZE_SUMDIR_COMPARATOR);
+    public static final Comparator<File> SIZE_SUMDIR_REVERSE = new ReverseComparator(SIZE_SUMDIR_COMPARATOR);
 
     /** Whether the sum of the directory's contents should be calculated. */
     private final boolean sumDirectoryContents;
