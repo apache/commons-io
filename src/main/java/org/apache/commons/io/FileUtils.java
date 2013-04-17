@@ -2974,7 +2974,10 @@ public class FileUtils {
      * <p>
      * <b>Note:</b> the current implementation always returns {@code false} if the system
      * is detected as Windows using {@link FilenameUtils#isSystemWindows()}
-     * 
+     * <p>
+     * For code that runs on Java 1.7 or later, use the following method instead:
+     * <br>
+     * {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
      * @param file the file to check
      * @return true if the file is a Symbolic Link
      * @throws IOException if an IO error occurs while checking the file
