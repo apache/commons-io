@@ -600,7 +600,8 @@ public class IOUtils {
      */
     @Deprecated
     public static byte[] toByteArray(final String input) throws IOException {
-        return input.getBytes();
+        // make explicit the use of the default charset
+        return input.getBytes(Charset.defaultCharset());
     }
 
     /**
@@ -931,7 +932,8 @@ public class IOUtils {
      */
     @Deprecated
     public static String toString(final byte[] input) throws IOException {
-        return new String(input);
+        // make explicit the use of the default charset
+        return new String(input, Charset.defaultCharset());
     }
 
     /**

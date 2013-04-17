@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * Dumps data in hexadecimal format.
@@ -107,7 +108,8 @@ public class HexDump {
                 }
             }
             buffer.append(EOL);
-            stream.write(buffer.toString().getBytes());
+            // make explicit the dependency on the default encoding
+            stream.write(buffer.toString().getBytes(Charset.defaultCharset()));
             stream.flush();
             buffer.setLength(0);
             display_offset += chars_read;
