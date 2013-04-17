@@ -17,6 +17,10 @@
 package org.apache.commons.io.output;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
 
 import junit.framework.TestCase;
 
@@ -90,6 +94,67 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         final byte[] buf = actual.toByteArray();
         final byte[] refbuf = expected.toByteArray();
         checkByteArrays(buf, refbuf);
+    }
+
+    public void testToInputStream() throws IOException {
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
+
+        //Write 8224 bytes
+        writeData(baout, ref, 32);
+        for(int i=0;i<128;i++) {
+            writeData(baout, ref, 64);
+        }
+
+        //Get data before more writes
+        InputStream in = baout.toInputStream();
+        byte refData[] = ref.toByteArray();
+
+        //Write some more data
+        writeData(baout, ref, new int[] { 2, 4, 8, 16 });
+
+        //Check original data
+        byte baoutData[] = IOUtils.toByteArray(in);
+        assertEquals(8224, baoutData.length);
+        checkByteArrays(refData, baoutData);
+
+        //Check all data written
+        baoutData = IOUtils.toByteArray(baout.toInputStream());
+        refData = ref.toByteArray();
+        assertEquals(8254, baoutData.length);
+        checkByteArrays(refData, baoutData);
+    }
+
+    public void testToInputStreamWithReset() throws IOException {
+        //Make sure reset() do not destroy InputStream returned from toInputStream()
+        ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
+
+        //Write 8224 bytes
+        writeData(baout, ref, 32);
+        for(int i=0;i<128;i++) {
+            writeData(baout, ref, 64);
+        }
+
+        //Get data before reset
+        InputStream in = baout.toInputStream();
+        byte refData[] = ref.toByteArray();
+
+        //Reset and write some new data
+        baout.reset();
+        ref.reset();
+        writeData(baout, ref, new int[] { 2, 4, 8, 16 });
+
+        //Check original data
+        byte baoutData[] = IOUtils.toByteArray(in);
+        assertEquals(8224, baoutData.length);
+        checkByteArrays(refData, baoutData);
+
+        //Check new data written after reset
+        baoutData = IOUtils.toByteArray(baout.toInputStream());
+        refData = ref.toByteArray();
+        assertEquals(30, baoutData.length);
+        checkByteArrays(refData, baoutData);
     }
               
     public void testStream() throws Exception {
