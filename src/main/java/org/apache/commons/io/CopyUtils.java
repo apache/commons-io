@@ -25,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * This class provides static utility methods for buffered
@@ -147,7 +148,9 @@ public class CopyUtils {
      * @param input the byte array to read from
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated use {@link #copy(byte[], Writer, String)} instead
      */
+    @Deprecated
     public static void copy(final byte[] input, final Writer output)
             throws IOException {
         final ByteArrayInputStream in = new ByteArrayInputStream(input);
@@ -237,12 +240,15 @@ public class CopyUtils {
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated use {@link #copy(InputStream, Writer, String)} instead
      */
+    @Deprecated
     public static void copy(
             final InputStream input,
             final Writer output)
                 throws IOException {
-        final InputStreamReader in = new InputStreamReader(input);
+        // make explicit the dependency on the default encoding
+        final InputStreamReader in = new InputStreamReader(input, Charset.defaultCharset());
         copy(in, output);
     }
 
@@ -273,15 +279,39 @@ public class CopyUtils {
     /**
      * Serialize chars from a <code>Reader</code> to bytes on an
      * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
+     * Uses the default platform encoding.
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated use {@link #copy(Reader, OutputStream, String)} instead
      */
+    @Deprecated
     public static void copy(
             final Reader input,
             final OutputStream output)
                 throws IOException {
-        final OutputStreamWriter out = new OutputStreamWriter(output);
+        // make explicit the dependency on the default encoding
+        final OutputStreamWriter out = new OutputStreamWriter(output, Charset.defaultCharset());
+        copy(input, out);
+        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
+        // have to flush here.
+        out.flush();
+    }
+
+    /**
+     * Serialize chars from a <code>Reader</code> to bytes on an
+     * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>OutputStream</code> to write to
+     * @throws IOException In case of an I/O problem
+     * @since 2.5
+     */
+    public static void copy(
+            final Reader input,
+            final OutputStream output,
+            final String encoding)
+                throws IOException {
+        final OutputStreamWriter out = new OutputStreamWriter(output, encoding);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
         // have to flush here.
@@ -296,16 +326,42 @@ public class CopyUtils {
      * Serialize chars from a <code>String</code> to bytes on an
      * <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
+     * Uses the platform default encoding.
      * @param input the <code>String</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
+     * @deprecated use {@link #copy(String, OutputStream, String)} instead
      */
+    @Deprecated
     public static void copy(
             final String input,
             final OutputStream output)
                 throws IOException {
         final StringReader in = new StringReader(input);
-        final OutputStreamWriter out = new OutputStreamWriter(output);
+        // make explicit the dependency on the default encoding
+        final OutputStreamWriter out = new OutputStreamWriter(output, Charset.defaultCharset());
+        copy(in, out);
+        // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
+        // have to flush here.
+        out.flush();
+    }
+
+    /**
+     * Serialize chars from a <code>String</code> to bytes on an
+     * <code>OutputStream</code>, and
+     * flush the <code>OutputStream</code>.
+     * @param input the <code>String</code> to read from
+     * @param output the <code>OutputStream</code> to write to
+     * @throws IOException In case of an I/O problem
+     * @since 2.5
+     */
+    public static void copy(
+            final String input,
+            final OutputStream output,
+            final String encoding)
+                throws IOException {
+        final StringReader in = new StringReader(input);
+        final OutputStreamWriter out = new OutputStreamWriter(output, encoding);
         copy(in, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
         // have to flush here.
