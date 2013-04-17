@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -336,13 +337,15 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the curent contents of this byte stream as a string.
+     * Gets the curent contents of this byte stream as a string
+     * using the platform default charset.
      * @return the contents of the byte array as a String
      * @see java.io.ByteArrayOutputStream#toString()
      */
     @Override
     public String toString() {
-        return new String(toByteArray());
+        // make explicit the use of the default charset
+        return new String(toByteArray(), Charset.defaultCharset());
     }
 
     /**
