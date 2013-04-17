@@ -33,14 +33,14 @@ import org.apache.commons.io.FileUtils;
  * {@link #SIZE_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       SizeFileComparator.SIZE_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #SIZE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       SizeFileComparator.SIZE_REVERSE.sort(array);
+ *       ((AbstractFileComparator) SizeFileComparator.SIZE_REVERSE).sort(array);
  * </pre>
  * <p>
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless

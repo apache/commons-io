@@ -35,14 +35,14 @@ import org.apache.commons.io.IOCase;
  * {@link #NAME_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       NameFileComparator.NAME_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) NameFileComparator.NAME_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file name sort using the
  * {@link #NAME_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       NameFileComparator.NAME_INSENSITIVE_REVERSE.sort(array);
+ *       ((AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_REVERSE).sort(array);
  * </pre>
  * <p>
  *

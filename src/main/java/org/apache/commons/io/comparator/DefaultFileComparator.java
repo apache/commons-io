@@ -30,14 +30,14 @@ import java.util.Comparator;
  * {@link #DEFAULT_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       DefaultFileComparator.DEFAULT_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #DEFAULT_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       DefaultFileComparator.DEFAULT_REVERSE.sort(array);
+ *       ((AbstractFileComparator) DefaultFileComparator.DEFAULT_REVERSE).sort(array);
  * </pre>
  * <p>
  *

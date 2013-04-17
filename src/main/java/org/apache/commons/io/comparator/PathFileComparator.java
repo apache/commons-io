@@ -35,14 +35,14 @@ import org.apache.commons.io.IOCase;
  * {@link #PATH_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       PathFileComparator.PATH_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) PathFileComparator.PATH_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file path sort using the
  * {@link #PATH_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       PathFileComparator.PATH_INSENSITIVE_REVERSE.sort(array);
+ *       ((AbstractFileComparator) PathFileComparator.PATH_INSENSITIVE_REVERSE).sort(array);
  * </pre>
  * <p>
  *

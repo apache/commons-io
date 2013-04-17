@@ -29,14 +29,14 @@ import java.util.Comparator;
  * {@link #DIRECTORY_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       DirectoryFileComparator.DIRECTORY_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files/directories using the
  * {@link #DIRECTORY_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       DirectoryFileComparator.DIRECTORY_REVERSE.sort(array);
+ *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_REVERSE).sort(array);
  * </pre>
  * <p>
  *
