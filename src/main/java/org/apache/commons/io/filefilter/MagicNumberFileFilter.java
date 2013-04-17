@@ -180,12 +180,6 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * to look for that magic number.
      * </p>
      * 
-     * <p>
-     * It is important to note that <em>the array is not cloned</em> and that
-     * any changes to the magic number array after construction will affect the
-     * behavior of this file filter.
-     * </p>
-     * 
      * <code><pre>
      * MagicNumberFileFilter tarFileFilter =
      *     MagicNumberFileFilter(new byte[] {0x75, 0x73, 0x74, 0x61, 0x72}, 257); 
