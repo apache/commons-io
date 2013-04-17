@@ -93,16 +93,27 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
+    private static enum E{A, B, C}
+
     private static class Test implements Serializable {
         private static final long serialVersionUID = 1L;
         private int i;
 
+        private E e;
+
         Test(int i) {
             this.i = i;
+            this.e = E.A;
         }
         @Override
         public boolean equals(Object other) {
-            return other instanceof Test & (this.i == ((Test)other).i);
+            if (other instanceof Test) {
+                Test tother = (Test) other;
+                return (this.i == tother.i)
+                        & (this.e == tother.e);
+            } else {
+                return false;
+            }
         }
         @Override
         public int hashCode() {
