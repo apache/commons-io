@@ -53,6 +53,13 @@ public class ByteOrderMark implements Serializable {
      */
     public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFF, 0xFE, 0x00, 0x00);
     
+    /**
+     * Unicode BOM character; external form depends on the encoding. 
+     * @see <a href="http://unicode.org/faq/utf_bom.html#BOM">Byte Order Mark (BOM) FAQ</a>
+     * @since 2.5
+     */
+    public static final char UTF_BOM = '\uFEFF';
+
     private final String charsetName;
     private final int[] bytes;
 
