@@ -36,7 +36,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
+        comparator = (AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
         final File dir = getTestDirectory();
         final File olderFile = new File(dir, "older.txt");

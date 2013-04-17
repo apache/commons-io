@@ -36,7 +36,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = DirectoryFileComparator.DIRECTORY_COMPARATOR;
+        comparator = (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR;
         reverse = DirectoryFileComparator.DIRECTORY_REVERSE;
         final File currentDir = new File(".");
         equalFile1 = new File(currentDir, "src");

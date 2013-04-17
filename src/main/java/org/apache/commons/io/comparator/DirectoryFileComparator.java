@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Compare two files using the {@link File#isDirectory()} method.
@@ -44,12 +45,11 @@ import java.io.Serializable;
  */
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {
 
-
-	/** Singleton default comparator instance */
-    public static final DirectoryFileComparator DIRECTORY_COMPARATOR = new DirectoryFileComparator();
+    /** Singleton default comparator instance */
+    public static final Comparator<File> DIRECTORY_COMPARATOR = new DirectoryFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final ReverseComparator DIRECTORY_REVERSE = new ReverseComparator(DIRECTORY_COMPARATOR);
+    public static final Comparator<File> DIRECTORY_REVERSE = new ReverseComparator(DIRECTORY_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#isDirectory()} method.

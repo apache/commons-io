@@ -41,7 +41,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        comparator = SizeFileComparator.SIZE_COMPARATOR;
+        comparator = (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR;
         reverse = SizeFileComparator.SIZE_REVERSE;
         final File dir = getTestDirectory();
         smallerDir = new File(dir, "smallerdir");

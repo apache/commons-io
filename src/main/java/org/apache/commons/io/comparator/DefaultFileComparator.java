@@ -18,6 +18,7 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Compare two files using the <b>default</b> {@link File#compareTo(File)} method.
@@ -45,11 +46,11 @@ import java.io.Serializable;
  */
 public class DefaultFileComparator extends AbstractFileComparator implements Serializable {
 
-	/** Singleton default comparator instance */
-    public static final DefaultFileComparator DEFAULT_COMPARATOR = new DefaultFileComparator();
+    /** Singleton default comparator instance */
+    public static final Comparator<File> DEFAULT_COMPARATOR = new DefaultFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final ReverseComparator DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
+    public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#compareTo(File)} method.
