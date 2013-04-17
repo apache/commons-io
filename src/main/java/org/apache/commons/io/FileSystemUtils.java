@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -483,7 +484,8 @@ public class FileSystemUtils {
             in = proc.getInputStream();
             out = proc.getOutputStream();
             err = proc.getErrorStream();
-            inr = new BufferedReader(new InputStreamReader(in));
+            // default charset is most likely appropriate here
+            inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));
             String line = inr.readLine();
             while (line != null && lines.size() < max) {
                 line = line.toLowerCase(Locale.ENGLISH).trim();

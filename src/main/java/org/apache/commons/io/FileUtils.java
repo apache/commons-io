@@ -808,8 +808,9 @@ public class FileUtils {
         Reader input2 = null;
         try {
             if (charsetName == null) {
-                input1 = new InputStreamReader(new FileInputStream(file1));
-                input2 = new InputStreamReader(new FileInputStream(file2));
+                // N.B. make explicit the use of the default charset
+                input1 = new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset());
+                input2 = new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset());
             } else {
                 input1 = new InputStreamReader(new FileInputStream(file1), charsetName);
                 input2 = new InputStreamReader(new FileInputStream(file2), charsetName);
