@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
@@ -168,7 +169,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
         
-        this.magicNumbers = magicNumber.getBytes(); // uses the platform default charset
+        this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default charset
         this.byteOffset = offset;
     }
     
@@ -267,7 +268,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
     public String toString() {
         final StringBuilder builder = new StringBuilder(super.toString());
         builder.append("(");
-        builder.append(new String(magicNumbers));// TODO perhaps use hex if value is not printable
+        builder.append(new String(magicNumbers, Charset.defaultCharset()));// TODO perhaps use hex if value is not printable
         builder.append(",");
         builder.append(this.byteOffset);
         builder.append(")");
