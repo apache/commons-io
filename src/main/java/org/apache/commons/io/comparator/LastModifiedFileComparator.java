@@ -31,14 +31,14 @@ import java.util.Comparator;
  * {@link #LASTMODIFIED_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       LastModifiedFileComparator.LASTMODIFIED_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #LASTMODIFIED_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       LastModifiedFileComparator.LASTMODIFIED_REVERSE.sort(array);
+ *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_REVERSE).sort(array);
  * </pre>
  * <p>
  *

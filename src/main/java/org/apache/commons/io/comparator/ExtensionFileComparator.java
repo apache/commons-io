@@ -37,14 +37,14 @@ import org.apache.commons.io.IOCase;
  * {@link #EXTENSION_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       ExtensionFileComparator.EXTENSION_COMPARATOR.sort(list);
+ *       ((AbstractFileComparator) ExtensionFileComparator.EXTENSION_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of a <i>reverse case-insensitive</i> file extension sort using the
  * {@link #EXTENSION_INSENSITIVE_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       ExtensionFileComparator.EXTENSION_INSENSITIVE_REVERSE.sort(array);
+ *       ((AbstractFileComparator) ExtensionFileComparator.EXTENSION_INSENSITIVE_REVERSE).sort(array);
  * </pre>
  * <p>
  *

@@ -33,8 +33,8 @@ import java.util.List;
  * <pre>
  *       CompositeFileComparator comparator =
  *                       new CompositeFileComparator(
- *                                   DirectoryFileComparator.DIRECTORY_COMPARATOR,
- *                                   NameFileComparator.NAME_COMPARATOR);
+ *                                 (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR,
+ *                                 (AbstractFileComparator) NameFileComparator.NAME_COMPARATOR);
  *       List&lt;File&gt; list = ...
  *       comparator.sort(list);
  * </pre>
