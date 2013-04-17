@@ -67,6 +67,8 @@ public class ByteArrayOutputStream extends OutputStream {
     private byte[] currentBuffer;
     /** The total count of bytes written. */
     private int count;
+    /** Flag to indicate if the buffers can be reused after reset */
+    private boolean reuseBuffers = true;
 
     /**
      * Creates a new byte array output stream. The buffer capacity is 
@@ -230,7 +232,16 @@ public class ByteArrayOutputStream extends OutputStream {
         count = 0;
         filledBufferSum = 0;
         currentBufferIndex = 0;
-        currentBuffer = buffers.get(currentBufferIndex);
+        if (reuseBuffers) {
+            currentBuffer = buffers.get(currentBufferIndex);
+        } else {
+            //Throw away old buffers
+            currentBuffer = null;
+            int size = buffers.get(0).length;
+            buffers.clear();
+            needNewBuffer(size);
+            reuseBuffers = true;
+        }
     }
 
     /**
@@ -280,7 +291,7 @@ public class ByteArrayOutputStream extends OutputStream {
         @SuppressWarnings("resource")
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         output.write(input);
-        return output.toBufferedInputStream();
+        return output.toInputStream();
     }
 
     /**
@@ -291,9 +302,9 @@ public class ByteArrayOutputStream extends OutputStream {
      * @return the current contents of this output stream.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      * @see #reset()
-     * @since 2.0
+     * @since 2.5
      */
-    private InputStream toBufferedInputStream() {
+    public synchronized InputStream toInputStream() {
         int remaining = count;
         if (remaining == 0) {
             return new ClosedInputStream();
@@ -307,6 +318,7 @@ public class ByteArrayOutputStream extends OutputStream {
                 break;
             }
         }
+        reuseBuffers = false;
         return new SequenceInputStream(Collections.enumeration(list));
     }
 
