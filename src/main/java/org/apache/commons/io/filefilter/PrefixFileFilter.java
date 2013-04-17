@@ -92,9 +92,6 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Prefix file filter for any of an array of prefixes
      * specifying case-sensitivity.
-     * <p>
-     * The array is not cloned, so could be changed after constructing the
-     * instance. This would be inadvisable however.
      * 
      * @param prefixes  the prefixes to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
