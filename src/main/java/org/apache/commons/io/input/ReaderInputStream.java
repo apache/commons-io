@@ -177,7 +177,9 @@ public class ReaderInputStream extends InputStream {
      * with a default input buffer size of 1024 characters.
      * 
      * @param reader the target {@link Reader}
+     * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
      */
+    @Deprecated
     public ReaderInputStream(final Reader reader) {
         this(reader, Charset.defaultCharset());
     }

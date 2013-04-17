@@ -537,7 +537,9 @@ public class IOUtils {
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
+     * @deprecated 2.5 use {@link #toByteArray(Reader, Charset)} instead
      */
+    @Deprecated
     public static byte[] toByteArray(final Reader input) throws IOException {
         return toByteArray(input, Charset.defaultCharset());
     }
@@ -596,7 +598,7 @@ public class IOUtils {
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs (never occurs)
-     * @deprecated Use {@link String#getBytes()}
+     * @deprecated 2.5 Use {@link String#getBytes()} instead
      */
     @Deprecated
     public static byte[] toByteArray(final String input) throws IOException {
@@ -676,7 +678,9 @@ public class IOUtils {
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #toCharArray(InputStream, Charset)} instead
      */
+    @Deprecated
     public static char[] toCharArray(final InputStream is) throws IOException {
         return toCharArray(is, Charset.defaultCharset());
     }
@@ -757,7 +761,9 @@ public class IOUtils {
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
+     * @deprecated 2.5 use {@link #toString(InputStream, Charset)} instead
      */
+    @Deprecated
     public static String toString(final InputStream input) throws IOException {
         return toString(input, Charset.defaultCharset());
     }
@@ -831,7 +837,9 @@ public class IOUtils {
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
      * @since 2.1
+     * @deprecated 2.5 use {@link #toString(URI, Charset)} instead
      */
+    @Deprecated
     public static String toString(final URI uri) throws IOException {
         return toString(uri, Charset.defaultCharset());
     }
@@ -877,7 +885,9 @@ public class IOUtils {
      * @return The contents of the URL as a String.
      * @throws IOException if an I/O exception occurs.
      * @since 2.1
+     * @deprecated 2.5 use {@link #toString(URL, Charset)} instead
      */
+    @Deprecated
     public static String toString(final URL url) throws IOException {
         return toString(url, Charset.defaultCharset());
     }
@@ -928,7 +938,7 @@ public class IOUtils {
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs (never occurs)
-     * @deprecated Use {@link String#String(byte[])}
+     * @deprecated 2.5 Use {@link String#String(byte[])} instead
      */
     @Deprecated
     public static String toString(final byte[] input) throws IOException {
@@ -967,7 +977,9 @@ public class IOUtils {
      * @throws NullPointerException if the input is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #readLines(InputStream, Charset)} instead
      */
+    @Deprecated
     public static List<String> readLines(final InputStream input) throws IOException {
         return readLines(input, Charset.defaultCharset());
     }
@@ -1151,7 +1163,9 @@ public class IOUtils {
      * @param input the CharSequence to convert
      * @return an input stream
      * @since 2.0
+     * @deprecated 2.5 use {@link #toInputStream(CharSequence, Charset)} instead
      */
+    @Deprecated
     public static InputStream toInputStream(final CharSequence input) {
         return toInputStream(input, Charset.defaultCharset());
     }
@@ -1197,7 +1211,9 @@ public class IOUtils {
      * @param input the string to convert
      * @return an input stream
      * @since 1.1
+     * @deprecated 2.5 use {@link #toInputStream(String, Charset)} instead
      */
+    @Deprecated
     public static InputStream toInputStream(final String input) {
         return toInputStream(input, Charset.defaultCharset());
     }
@@ -1267,7 +1283,9 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #write(byte[], Writer, Charset)} instead
      */
+    @Deprecated
     public static void write(final byte[] data, final Writer output) throws IOException {
         write(data, output, Charset.defaultCharset());
     }
@@ -1348,7 +1366,9 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #write(char[], OutputStream, Charset)} instead
      */
+    @Deprecated
     public static void write(final char[] data, final OutputStream output)
             throws IOException {
         write(data, output, Charset.defaultCharset());
@@ -1430,7 +1450,9 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since 2.0
+     * @deprecated 2.5 use {@link #write(CharSequence, OutputStream, Charset)} instead
      */
+    @Deprecated
     public static void write(final CharSequence data, final OutputStream output)
             throws IOException {
         write(data, output, Charset.defaultCharset());
@@ -1507,7 +1529,9 @@ public class IOUtils {
      * @throws NullPointerException if output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #write(String, OutputStream, Charset)} instead
      */
+    @Deprecated
     public static void write(final String data, final OutputStream output)
             throws IOException {
         write(data, output, Charset.defaultCharset());
@@ -1636,7 +1660,9 @@ public class IOUtils {
      * @throws NullPointerException if the output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #writeLines(Collection, String, OutputStream, Charset)} instead
      */
+    @Deprecated
     public static void writeLines(final Collection<?> lines, final String lineEnding,
             final OutputStream output) throws IOException {
         writeLines(lines, lineEnding, output, Charset.defaultCharset());
@@ -1918,7 +1944,9 @@ public class IOUtils {
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #copy(InputStream, Writer, Charset)} instead
      */
+    @Deprecated
     public static void copy(final InputStream input, final Writer output)
             throws IOException {
         copy(input, output, Charset.defaultCharset());
@@ -2129,7 +2157,9 @@ public class IOUtils {
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @since 1.1
+     * @deprecated 2.5 use {@link #copy(Reader, OutputStream, Charset)} instead
      */
+    @Deprecated
     public static void copy(final Reader input, final OutputStream output)
             throws IOException {
         copy(input, output, Charset.defaultCharset());
