@@ -131,7 +131,9 @@ public class LockableFileWriter extends Writer {
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
+     * @deprecated 2.5 use {@link #LockableFileWriter(File, Charset, boolean, String)} instead
      */
+    @Deprecated
     public LockableFileWriter(final File file, final boolean append, final String lockDir) throws IOException {
         this(file, Charset.defaultCharset(), append, lockDir);
     }

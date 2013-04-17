@@ -58,9 +58,25 @@ public class ReversedLinesFileReader implements Closeable {
      * @param file
      *            the file to be read
      * @throws IOException  if an I/O error occurs
+     * @deprecated 2.5 use {@link #ReversedLinesFileReader(File, Charset)} instead
      */
+    @Deprecated
     public ReversedLinesFileReader(final File file) throws IOException {
-        this(file, 4096, Charset.defaultCharset().toString());
+        this(file, 4096, Charset.defaultCharset());
+    }
+
+    /**
+     * Creates a ReversedLinesFileReader with default block size of 4KB and the
+     * specified encoding.
+     *
+     * @param file
+     *            the file to be read
+     * @param charset the encoding to use
+     * @throws IOException  if an I/O error occurs
+     * @since 2.5
+     */
+    public ReversedLinesFileReader(final File file, final Charset charset) throws IOException {
+        this(file, 4096, charset);
     }
 
     /**

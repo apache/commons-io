@@ -1744,7 +1744,9 @@ public class FileUtils {
      * @return the file contents, never {@code null}
      * @throws IOException in case of an I/O error
      * @since 1.3.1
+     * @deprecated 2.5 use {@link #readFileToString(File, Charset)} instead
      */
+    @Deprecated
     public static String readFileToString(final File file) throws IOException {
         return readFileToString(file, Charset.defaultCharset());
     }
@@ -1815,7 +1817,9 @@ public class FileUtils {
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws IOException in case of an I/O error
      * @since 1.3
+     * @deprecated 2.5 use {@link #readLines(File, Charset)} instead
      */
+    @Deprecated
     public static List<String> readLines(final File file) throws IOException {
         return readLines(file, Charset.defaultCharset());
     }
@@ -1958,7 +1962,9 @@ public class FileUtils {
      * @param file  the file to write
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
+     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset)} instead
      */
+    @Deprecated
     public static void writeStringToFile(final File file, final String data) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), false);
     }
@@ -1972,7 +1978,9 @@ public class FileUtils {
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
+     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset, boolean)} instead
      */
+    @Deprecated
     public static void writeStringToFile(final File file, final String data, final boolean append) throws IOException {
         writeStringToFile(file, data, Charset.defaultCharset(), append);
     }
@@ -1984,7 +1992,9 @@ public class FileUtils {
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
      * @since 2.0
+     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset)} instead
      */
+    @Deprecated
     public static void write(final File file, final CharSequence data) throws IOException {
         write(file, data, Charset.defaultCharset(), false);
     }
@@ -1998,7 +2008,9 @@ public class FileUtils {
      * end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
+     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset, boolean)} instead
      */
+    @Deprecated
     public static void write(final File file, final CharSequence data, final boolean append) throws IOException {
         write(file, data, Charset.defaultCharset(), append);
     }

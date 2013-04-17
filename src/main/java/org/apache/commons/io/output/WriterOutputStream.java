@@ -192,7 +192,9 @@ public class WriterOutputStream extends OutputStream {
      * be flushed when it overflows or when {@link #flush()} or {@link #close()} is called.
      * 
      * @param writer the target {@link Writer}
+     * @deprecated 2.5 use {@link #WriterOutputStream(Writer, Charset)} instead
      */
+    @Deprecated
     public WriterOutputStream(final Writer writer) {
         this(writer, Charset.defaultCharset(), DEFAULT_BUFFER_SIZE, false);
     }
