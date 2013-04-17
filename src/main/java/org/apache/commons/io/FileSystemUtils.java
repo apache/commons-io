@@ -457,7 +457,7 @@ public class FileSystemUtils {
      * @param max The maximum limit for the lines returned
      * @param timeout The timout amount in milliseconds or no timeout if the value
      *  is zero or less
-     * @return the parsed data
+     * @return the lines returned by the command, converted to lower-case
      * @throws IOException if an error occurs
      */
     List<String> performCommand(final String[] cmdAttribs, final int max, final long timeout) throws IOException {
@@ -467,7 +467,7 @@ public class FileSystemUtils {
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
         // however, its still not perfect as the JDK support is so poor
-        // (see commond-exec or ant for a better multi-threaded multi-os solution)
+        // (see commons-exec or Ant for a better multi-threaded multi-os solution)
         
         final List<String> lines = new ArrayList<String>(20);
         Process proc = null;
