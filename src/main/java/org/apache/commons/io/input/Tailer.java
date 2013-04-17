@@ -379,6 +379,13 @@ public class Tailer implements Runnable {
                         // Ensure that the old file is closed iff we re-open it successfully
                         final RandomAccessFile save = reader;
                         reader = new RandomAccessFile(file, RAF_MODE);
+                        // At this point, we're sure that the old file is rotated
+                        // Finish scanning the old file and then we'll start with the new one
+                        try {
+                            readLines(save);
+                        }  catch (IOException ioe) {
+                            listener.handle(ioe);
+                        }
                         position = 0;
                         // close old file explicitly rather than relying on GC picking up previous RAF
                         IOUtils.closeQuietly(save);

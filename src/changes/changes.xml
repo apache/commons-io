@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-338" dev="sebb" type="fix">
+        When a file is rotated, finish reading previous file prior to starting new one
+      </action>            
       <action issue="IO-354" dev="sebb" type="fix">
         Commons IO Tailer does not respect UTF-8 Charset.
       </action>            
