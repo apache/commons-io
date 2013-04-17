@@ -88,9 +88,6 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new name file filter for an array of names specifying case-sensitivity.
-     * <p>
-     * The array is not cloned, so could be changed after constructing the
-     * instance. This would be inadvisable however.
      * 
      * @param names  the names to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
