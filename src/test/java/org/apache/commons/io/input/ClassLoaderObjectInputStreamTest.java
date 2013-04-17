@@ -99,21 +99,31 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         private static final long serialVersionUID = 1L;
         private int i;
 
+        private Object o;
+
         private E e;
 
-        Test(int i) {
+        Test(int i, Object o) {
             this.i = i;
             this.e = E.A;
+            this.o = o;
         }
         @Override
         public boolean equals(Object other) {
             if (other instanceof Test) {
                 Test tother = (Test) other;
                 return (this.i == tother.i)
-                        & (this.e == tother.e);
+                        & (this.e == tother.e)
+                        & equalObject(tother.o);
             } else {
                 return false;
             }
+        }
+        private boolean equalObject(Object other) {
+            if (this.o == null) {
+                return other == null;
+            }
+            return o.equals(other);
         }
         @Override
         public int hashCode() {
@@ -121,12 +131,30 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         }
     }
 
-    public void testObject() throws Exception {
+    public void testObject1() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-        final Object input = new Test(123);
+        final Object input = new Test(123, null);
+        oos.writeObject(input);
+        oos.close();
+
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        final ClassLoaderObjectInputStream clois = 
+            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final Object result = clois.readObject();
+
+        assertEquals(input, result);
+        clois.close();
+    }
+
+    public void testObject2() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        final Object input = new Test(123, Integer.valueOf(0));
         oos.writeObject(input);
         oos.close();
 
