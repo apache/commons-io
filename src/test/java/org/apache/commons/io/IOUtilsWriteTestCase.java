@@ -32,6 +32,7 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
  * @version $Id$
  * @see IOUtils
  */
+@SuppressWarnings("deprecation") // includes tests for deprecated methods
 public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     private static final int FILE_SIZE = 1024 * 4 + 1;

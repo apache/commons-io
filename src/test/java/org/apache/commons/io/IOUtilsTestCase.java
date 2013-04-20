@@ -705,6 +705,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.closeQuietly(reader);
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testReadLines_InputStream() throws Exception {
         final File file = newFile("lines.txt");
         InputStream in = null;
@@ -986,6 +987,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testToByteArray_Reader() throws IOException {
         final String charsetName = "UTF-8";
         final byte[] expecteds = charsetName.getBytes(charsetName);
@@ -1033,6 +1035,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         Assert.assertEquals(FILE_SIZE, actual.length);
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testToCharArray_InputStream() throws Exception {
         final FileInputStream fin = new FileInputStream(m_testFile);
         try {
@@ -1079,9 +1082,11 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      *             on error
      */
+    @SuppressWarnings("javadoc") // deliberately testing deprecated method
     public void testToInputStream_CharSequence() throws Exception {
         final CharSequence csq = new StringBuilder("Abc123Xyz!");
-        InputStream inStream = IOUtils.toInputStream(csq);
+        @SuppressWarnings("deprecation")
+        InputStream inStream = IOUtils.toInputStream(csq); // deliberately testing deprecated method
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(csq.toString().getBytes(), bytes);
         inStream = IOUtils.toInputStream(csq, (String) null);
@@ -1102,8 +1107,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
      * @throws Exception
      *             on error
      */
+    @SuppressWarnings("javadoc") // deliberately testing deprecated method
     public void testToInputStream_String() throws Exception {
         final String str = "Abc123Xyz!";
+        @SuppressWarnings("deprecation") // deliberately testing deprecated method
         InputStream inStream = IOUtils.toInputStream(str);
         byte[] bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes(), bytes);
@@ -1129,6 +1136,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testToString_InputStream() throws Exception {
         final FileInputStream fin = new FileInputStream(m_testFile);
         try {
@@ -1152,6 +1160,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testToString_URI() throws Exception {
         final URI url = m_testFile.toURI();
         final String out = IOUtils.toString(url);
@@ -1174,6 +1183,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         testToString_URI(null);
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testToString_URL() throws Exception {
         final URL url = m_testFile.toURI().toURL();
         final String out = IOUtils.toString(url);
