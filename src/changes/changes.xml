@@ -47,6 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-330" dev="sebb" type="add">
+         IOUtils#toBufferedOutputStream/toBufferedWriter to conditionally wrap the output
+         Added asBufferedInputStream, asBufferedOutputStream, asBufferedReader, asBufferedWriter 
+      </action>
       <action issue="IO-346" dev="sebb" type="add">
          Add ByteArrayOutputStream.toInputStream()
       </action>

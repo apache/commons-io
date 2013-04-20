@@ -17,7 +17,9 @@
 package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.CharArrayWriter;
 import java.io.Closeable;
@@ -434,16 +436,82 @@ public class IOUtils {
     }
 
     /**
-     * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a toBufferedReader for the given
+     * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
      * 
      * @param reader
-     *            the reader to wrap or return
+     *            the reader to wrap or return (not null)
      * @return the given reader or a new {@link BufferedReader} for the given reader
      * @since 2.2
+     * @see #asBufferedReader(Reader)
+     * @throws NullPointerException if the input parameter is null
      */
     public static BufferedReader toBufferedReader(final Reader reader) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+    }
+    
+    /**
+     * Returns the given reader if it is already a {@link BufferedReader}, otherwise creates a BufferedReader from the given
+     * reader.
+     * 
+     * @param reader
+     *            the reader to wrap or return (not null)
+     * @return the given reader or a new {@link BufferedReader} for the given reader
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedReader asBufferedReader(final Reader reader) {
+        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+    }
+    
+    /**
+     * Returns the given Writer if it is already a {@link BufferedWriter}, otherwise creates a BufferedWriter from the given
+     * Writer.
+     * 
+     * @param writer
+     *            the Writer to wrap or return (not null)
+     * @return the given Writer or a new {@link BufferedWriter} for the given Writer
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedWriter asBufferedWriter(final Writer writer) {
+        return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer);
+    }
+    
+    /**
+     * Returns the given OutputStream if it is already a {@link BufferedOutputStream}, otherwise creates a BufferedOutputStream from the given
+     * OutputStream.
+     * 
+     * @param outputStream
+     *            the OutputStream to wrap or return (not null)
+     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedOutputStream asBufferedOutputStream(final OutputStream outputStream) {
+        // reject null early on rather than waiting for IO operation to fail
+        if (outputStream == null) { // not checked by BufferedOutputStream
+            throw new NullPointerException();
+        }
+        return outputStream instanceof BufferedOutputStream ? (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
+    }
+    
+    /**
+     * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a BufferedInputStream from the given
+     * InputStream.
+     * 
+     * @param inputStream
+     *            the InputStream to wrap or return (not null)
+     * @return the given InputStream or a new {@link BufferedInputStream} for the given InputStream
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedInputStream asBufferedInputStream(final InputStream inputStream) {
+        // reject null early on rather than waiting for IO operation to fail
+        if (inputStream == null) { // not checked by BufferedInputStream
+            throw new NullPointerException();
+        }
+        return inputStream instanceof BufferedInputStream ? (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
     
     // read toByteArray
