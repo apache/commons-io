@@ -1963,13 +1963,13 @@ public class IOUtils {
      *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>Writer</code> to write to
-     * @param encoding  the encoding to use, null means platform default
+     * @param inputEncoding  the encoding to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final InputStream input, final Writer output, final Charset encoding) throws IOException {
-        final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(encoding));
+    public static void copy(final InputStream input, final Writer output, final Charset inputEncoding) throws IOException {
+        final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(inputEncoding));
         copy(in, output);
     }
 
@@ -1987,7 +1987,7 @@ public class IOUtils {
      *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>Writer</code> to write to
-     * @param encoding  the encoding to use, null means platform default
+     * @param inputEncoding  the encoding to use for the InputStream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @throws UnsupportedCharsetException
@@ -1995,8 +1995,8 @@ public class IOUtils {
      *             supported.
      * @since 1.1
      */
-    public static void copy(final InputStream input, final Writer output, final String encoding) throws IOException {
-        copy(input, output, Charsets.toCharset(encoding));
+    public static void copy(final InputStream input, final Writer output, final String inputEncoding) throws IOException {
+        copy(input, output, Charsets.toCharset(inputEncoding));
     }
 
     // copy from Reader
@@ -2183,13 +2183,13 @@ public class IOUtils {
      *
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
+     * @param outputEncoding  the encoding to use for the OutputStream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final Reader input, final OutputStream output, final Charset encoding) throws IOException {
-        final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(encoding));
+    public static void copy(final Reader input, final OutputStream output, final Charset outputEncoding) throws IOException {
+        final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(outputEncoding));
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter,
         // we have to flush here.
@@ -2214,7 +2214,7 @@ public class IOUtils {
      *
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>OutputStream</code> to write to
-     * @param encoding  the encoding to use, null means platform default
+     * @param outputEncoding  the encoding to use for the OutputStream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException if an I/O error occurs
      * @throws UnsupportedCharsetException
@@ -2222,8 +2222,8 @@ public class IOUtils {
      *             supported.
      * @since 1.1
      */
-    public static void copy(final Reader input, final OutputStream output, final String encoding) throws IOException {
-        copy(input, output, Charsets.toCharset(encoding));
+    public static void copy(final Reader input, final OutputStream output, final String outputEncoding) throws IOException {
+        copy(input, output, Charsets.toCharset(outputEncoding));
     }
 
     // content equals
