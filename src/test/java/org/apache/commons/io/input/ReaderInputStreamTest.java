@@ -105,6 +105,7 @@ public class ReaderInputStreamTest {
         testWithSingleByteRead(TEST_STRING, "UTF-16");
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void testReadZero() throws Exception {
         final String inStr = "test";
@@ -117,6 +118,7 @@ public class ReaderInputStreamTest {
         r.close();
     }
     
+    @SuppressWarnings("deprecation")
     @Test
     public void testReadZeroEmptyString() throws Exception {
         final ReaderInputStream r = new ReaderInputStream(new StringReader(""));

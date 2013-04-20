@@ -156,7 +156,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     public void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -165,7 +165,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
         
-        IOUtils.copy(in, writer);
+        IOUtils.copy(in, writer); // deliberately testing deprecated method
         out.off();
         writer.flush();
 
@@ -174,6 +174,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testCopy_inputStreamToWriter_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -184,10 +185,11 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
+    @SuppressWarnings("deprecation") // deliberately testing deprecated method
     public void testCopy_inputStreamToWriter_nullOut() throws Exception {
         final InputStream in = new ByteArrayInputStream(inData);
         try {
-            IOUtils.copy(in, (Writer) null);
+            IOUtils.copy(in, (Writer) null); // deliberately testing deprecated method
             fail();
         } catch (final NullPointerException ex) {}
     }
@@ -249,7 +251,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -258,7 +260,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         
-        IOUtils.copy(reader, out);
+        IOUtils.copy(reader, out); // deliberately testing deprecated method
         //Note: this method *does* flush. It is equivalent to:
         //  OutputStreamWriter _out = new OutputStreamWriter(fout);
         //  IOUtils.copy( fin, _out, 4096 ); // copy( Reader, Writer, int );
@@ -270,7 +272,8 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-    public void testCopy_readerToOutputStream_nullIn() throws Exception {
+    @SuppressWarnings("deprecation")
+    public void testCopy_readerToOutputStream_nullIn() throws Exception { // deliberately testing deprecated method
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         try {
@@ -279,13 +282,13 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
-    @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     public void testCopy_readerToOutputStream_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         try {
-            IOUtils.copy(reader, (OutputStream) null);
+            IOUtils.copy(reader, (OutputStream) null); // deliberately testing deprecated method
             fail();
         } catch (final NullPointerException ex) {}
     }
