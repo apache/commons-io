@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.UnsupportedCharsetException;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
@@ -108,13 +109,13 @@ public class LockableFileWriterTest extends FileBasedTestCase {
         LockableFileWriter lfw2 = null;
         try {
             // open a valid locakable writer
-            lfw1 = new LockableFileWriter(file, true, altLockDir.getAbsolutePath());
+            lfw1 = new LockableFileWriter(file, "UTF-8" ,true, altLockDir.getAbsolutePath());
             assertTrue(file.exists());
             assertTrue(altLockFile.exists());
             
             // try to open a second writer
             try {
-                lfw2 = new LockableFileWriter(file, true, altLockDir.getAbsolutePath());
+                lfw2 = new LockableFileWriter(file, Charsets.UTF_8, true, altLockDir.getAbsolutePath());
                 fail("Somehow able to open a locked file. ");
             } catch(final IOException ioe) {
                 final String msg = ioe.getMessage();

@@ -210,7 +210,7 @@ public class TailerTest extends FileBasedTestCase {
         listener.clear();
 
         // Check file does actually have all the lines
-        lines = FileUtils.readLines(file);
+        lines = FileUtils.readLines(file, "UTF-8");
         assertEquals("3 line count", 3, lines.size());
         assertEquals("3 line 1", "Line one", lines.get(0));
         assertEquals("3 line 2", "Line two", lines.get(1));
