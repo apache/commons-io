@@ -17,7 +17,9 @@
 package org.apache.commons.io;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayReader;
@@ -32,8 +34,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -1204,5 +1208,87 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     public void testToString_URL_CharsetNameNull() throws Exception {
         testToString_URL(null);
+    }
+    
+    public void testAsBufferedNull() {
+        try {
+            IOUtils.asBufferedInputStream(null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.asBufferedOutputStream(null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.asBufferedReader(null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.asBufferedWriter(null);
+            fail("Expected NullPointerException");
+        } catch (NullPointerException npe) {
+            // expected
+        }
+    }
+
+    public void testAsBufferedInputStream() {
+        InputStream is = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        };
+        final BufferedInputStream bis = IOUtils.asBufferedInputStream(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.asBufferedInputStream(bis));
+    }
+
+    public void testAsBufferedOutputStream() {
+        OutputStream is = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException { }
+        };
+        final BufferedOutputStream bis = IOUtils.asBufferedOutputStream(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.asBufferedOutputStream(bis));
+    }
+
+    public void testAsBufferedReader() {
+        Reader is = new Reader() {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                return 0;
+            }
+            @Override
+            public void close() throws IOException { }
+        };
+        final BufferedReader bis = IOUtils.asBufferedReader(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.asBufferedReader(bis));
+    }
+
+    public void testAsBufferedWriter() {
+        Writer is = new Writer() {
+            @Override
+            public void write(int b) throws IOException { }
+
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException { }
+
+            @Override
+            public void flush() throws IOException { }
+
+            @Override
+            public void close() throws IOException { }
+        };
+        final BufferedWriter bis = IOUtils.asBufferedWriter(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.asBufferedWriter(bis));
     }
 }
