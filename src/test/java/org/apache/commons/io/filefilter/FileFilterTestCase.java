@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
@@ -962,7 +963,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         generateTestData(classFileAStream, 32);
         classFileAStream.close();
         
-        FileUtils.write(xmlFileB, xmlFileContent);
+        FileUtils.write(xmlFileB, xmlFileContent, Charsets.UTF_8);
         FileUtils.touch(emptyFile);
         
         IOFileFilter filter = new MagicNumberFileFilter(classFileMagicNumber);
@@ -1029,7 +1030,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         generateTestData(classFileAStream, 32);
         classFileAStream.close();
         
-        FileUtils.write(xmlFileB, xmlFileContent);
+        FileUtils.write(xmlFileB, xmlFileContent, Charsets.UTF_8);
         
         IOFileFilter filter = new MagicNumberFileFilter(xmlMagicNumber);
         
@@ -1055,7 +1056,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         
         final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
         generateTestData(tarFileAStream, tarMagicNumberOffset);
-        IOUtils.write(tarMagicNumber, tarFileAStream);
+        IOUtils.write(tarMagicNumber, tarFileAStream, Charsets.UTF_8);
         tarFileAStream.close();
 
         createFile(randomFileB, 2 * tarMagicNumberOffset);
