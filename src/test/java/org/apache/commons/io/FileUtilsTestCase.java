@@ -49,6 +49,7 @@ import org.junit.Assert;
  * @version $Id$
  * @see FileUtils
  */
+@SuppressWarnings("deprecation") // unit tests include tests of many deprecated methods
 public class FileUtilsTestCase extends FileBasedTestCase {
 
     // Test data
