@@ -375,4 +375,17 @@ public class ByteArrayOutputStream extends OutputStream {
         return new String(toByteArray(), enc);
     }
 
+    /**
+     * Gets the curent contents of this byte stream as a string
+     * using the specified encoding.
+     *
+     * @param charset  the character encoding
+     * @return the string converted from the byte array
+     * @see java.io.ByteArrayOutputStream#toString(String)
+     * @since 2.5
+     */
+    public String toString(final Charset charset) {
+        return new String(toByteArray(), charset);
+    }
+
 }
