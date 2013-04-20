@@ -55,7 +55,7 @@ public class DemuxTestCase {
             m_outputMap.get( threadName );
         assertNotNull( "getOutput()", output );
 
-        return output.toString();
+        return output.toString(Charsets.UTF_8);
     }
 
     private String getInput( final String threadName )
