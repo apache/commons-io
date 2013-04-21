@@ -55,12 +55,18 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
         super();
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);
+        // Ensure that buffer is long enough to hold a complete character
+        final float maxBytesPerChar = encoder.maxBytesPerChar();
+        if (bufferSize < maxBytesPerChar) {
+            throw new IllegalArgumentException("Buffer size " + bufferSize + " is less than maxBytesPerChar " + maxBytesPerChar);
+        }
         this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
         this.cbuf = CharBuffer.wrap(cs);
@@ -73,6 +79,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final String charset, final int bufferSize) {
         this(cs, Charset.forName(charset), bufferSize);
@@ -84,6 +91,7 @@ public class CharSequenceInputStream extends InputStream {
      * 
      * @param cs the input character sequence
      * @param charset the character set name to use
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset) {
         this(cs, charset, BUFFER_SIZE);
@@ -95,6 +103,7 @@ public class CharSequenceInputStream extends InputStream {
      * 
      * @param cs the input character sequence
      * @param charset the character set name to use
+     * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final String charset) {
         this(cs, charset, BUFFER_SIZE);
@@ -112,9 +121,6 @@ public class CharSequenceInputStream extends InputStream {
         if (result.isError()) {
             result.throwException();
         }
-//        if (result.isUnderflow()) {
-//            result.throwException();
-//        }
         this.bbuf.flip();
     }
     
