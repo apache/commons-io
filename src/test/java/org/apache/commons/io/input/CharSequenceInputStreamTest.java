@@ -287,7 +287,7 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-    public void testReadZero(final String csName) throws Exception {
+    private void testReadZero(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
             final byte[] bytes = new byte[30];
@@ -349,7 +349,7 @@ public class CharSequenceInputStreamTest {
     }
 
     // This is broken for charsets that don't map each char to a byte
-    public void testSkip(final String csName) throws Exception {
+    private void testSkip(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
             assertEquals(1, r.skip(1));
