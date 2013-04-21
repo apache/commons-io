@@ -197,8 +197,8 @@ public class CharSequenceInputStreamTest {
         testIO_356(10, 20, 0, "UTF-8");
     }
 
-    private void testIO_356_Loop(final String csName) throws Exception {
-        for (int bufferSize = 1; bufferSize <= 10; bufferSize++) {
+    private void testIO_356_Loop(final String csName, final int maxBytesPerChar) throws Exception {
+        for (int bufferSize = maxBytesPerChar; bufferSize <= 10; bufferSize++) {
             for (int dataSize = 1; dataSize <= 20; dataSize++) {
                 testIO_356(bufferSize, dataSize, 0, csName);
             }
@@ -206,16 +206,13 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
-    // Infinite loop
     public void testIO_356_Loop_UTF16() throws Exception {
-        testIO_356_Loop("UTF-16");
+        testIO_356_Loop("UTF-16", 4);
     }
 
     @Test
-    @Ignore
     public void testIO_356_Loop_UTF8() throws Exception {
-        testIO_356_Loop("UTF-8");
+        testIO_356_Loop("UTF-8", 4);
     }
 
     @Test
