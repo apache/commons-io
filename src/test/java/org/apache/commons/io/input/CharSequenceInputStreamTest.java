@@ -347,6 +347,7 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(TEST_STRING, "UTF-8");
     }
 
+    // This is broken for charsets that don't map each char to a byte
     public void testSkip(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
@@ -361,7 +362,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
+    @Ignore // test is broken for charsets that generate multiple bytes per char.
     public void testSkip_RequiredCharsets() throws Exception {
         for (final String csName : getRequiredCharsetNames()) {
             testSkip(csName);
