@@ -112,6 +112,9 @@ public class CharSequenceInputStream extends InputStream {
         if (result.isError()) {
             result.throwException();
         }
+//        if (result.isUnderflow()) {
+//            result.throwException();
+//        }
         this.bbuf.flip();
     }
     
@@ -192,7 +195,7 @@ public class CharSequenceInputStream extends InputStream {
      * @param readlimit max read limit (ignored)
      */
     @Override
-    public synchronized void mark(@SuppressWarnings("unused") final int readlimit) {
+    public synchronized void mark(final int readlimit) {
         this.mark = this.cbuf.position();
     }
 
