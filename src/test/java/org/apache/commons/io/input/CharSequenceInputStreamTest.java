@@ -130,6 +130,9 @@ public class CharSequenceInputStreamTest {
         }
     }
 
+    // Test is broken if readFirst > 0
+    // This is because the initial read fills the buffer from the CharSequence
+    // so data1 gets the first buffer full; data2 will get the next buffer full
     private void testIO_356(final int bufferSize, final int dataSize, final int readFirst, final String csName) throws Exception {
         final CharSequenceInputStream is = new CharSequenceInputStream(ALPHABET, csName, bufferSize);
 
@@ -179,7 +182,6 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
     public void testIO_356_B10_D13_S0_UTF8() throws Exception {
         testIO_356(10, 13, 0, "UTF-8");
     }
