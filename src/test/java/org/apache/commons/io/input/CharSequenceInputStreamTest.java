@@ -157,8 +157,6 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
-    // fails for a different reason than IO-356
     public void testIO_356_B10_D10_S0_UTF16() throws Exception {
         testIO_356(10, 10, 0, "UTF-16");
     }
