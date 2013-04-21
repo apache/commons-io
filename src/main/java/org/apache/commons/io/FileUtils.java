@@ -574,7 +574,8 @@ public class FileUtils {
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
      * <p>
-     * The resulting collection includes the subdirectories themselves.
+     * The resulting collection includes the starting directory and 
+     * any subdirectories that match the directory filter.
      * <p>
      * @see org.apache.commons.io.FileUtils#listFiles  
      *
