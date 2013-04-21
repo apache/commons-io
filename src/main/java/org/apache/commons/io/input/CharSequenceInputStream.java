@@ -210,6 +210,8 @@ public class CharSequenceInputStream extends InputStream {
         if (this.mark != NO_MARK) {
             this.cbuf.position(this.mark);
             this.mark = NO_MARK;
+            this.bbuf.limit(0);
+            this.encoder.reset();
         }
     }
 
