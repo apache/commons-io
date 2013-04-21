@@ -350,8 +350,8 @@ public class CharSequenceInputStreamTest {
     public void testSkip(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
-            r.skip(1);
-            r.skip(2);
+            assertEquals(1, r.skip(1));
+            assertEquals(2, r.skip(2));
             assertEquals(csName, 't', r.read());
             r.skip(100);
             assertEquals(csName, -1, r.read());
