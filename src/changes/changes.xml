@@ -47,6 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-328" dev="sebb" type="update">
+        FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
+        Javadoc: clarify that original dir is included in the results
+      </action>            
       <action issue="IO-330" dev="sebb" type="add">
          IOUtils#toBufferedOutputStream/toBufferedWriter to conditionally wrap the output
          Added asBufferedInputStream, asBufferedOutputStream, asBufferedReader, asBufferedWriter 
