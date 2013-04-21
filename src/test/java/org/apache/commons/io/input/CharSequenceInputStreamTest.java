@@ -81,16 +81,13 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-    /**
-     * Fails with java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder(Unknown Source).
-     * Probably not a good idea to use {@link Charset#availableCharsets()} because any encoding can fail for any
-     * reason.
-     */
     @Test
-    @Ignore
     public void testBufferedRead_AvailableCharset() throws IOException {
         for (final String csName : Charset.availableCharsets().keySet()) {
-            testBufferedRead(TEST_STRING, csName);
+            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder. 
+            if (Charset.forName(csName).canEncode()) {
+                testBufferedRead(TEST_STRING, csName);
+            }
         }
     }
 
