@@ -170,13 +170,13 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
+    @Ignore // test is broken
     public void testIO_356_B10_D10_S1_UTF8() throws Exception {
         testIO_356(10, 10, 1, "UTF-8");
     }
 
     @Test
-    @Ignore
+    @Ignore // test is broken
     public void testIO_356_B10_D10_S2_UTF8() throws Exception {
         testIO_356(10, 10, 2, "UTF-8");
     }
@@ -187,7 +187,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
+    @Ignore // test is broken
     public void testIO_356_B10_D13_S1_UTF8() throws Exception {
         testIO_356(10, 13, 1, "UTF-8");
     }
