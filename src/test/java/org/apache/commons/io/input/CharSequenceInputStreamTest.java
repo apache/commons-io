@@ -239,6 +239,7 @@ public class CharSequenceInputStreamTest {
         testSingleByteRead(LARGE_TEST_STRING, "UTF-8");
     }
 
+    // This test is broken for charsets that don't create a single byte for each char
     private void testMarkReset(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
@@ -259,7 +260,7 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore
+    @Ignore // Test broken for charsets that create multiple bytes for a single char
     public void testMarkReset_RequiredCharsets() throws Exception {
         for (final String csName : getRequiredCharsetNames()) {
             testMarkReset(csName);
