@@ -379,4 +379,50 @@ public class CharSequenceInputStreamTest {
     public void testSkip_UTF8() throws Exception {
         testSkip("UTF-8");
     }
+    
+    private int checkAvail(InputStream is, int min) throws Exception {
+        int available = is.available();
+        assertTrue("avail should be >= " + min + ", but was " + available, available >= min);
+        return available;
+    }
+
+    private void testAvailableSkip(final String csName) throws Exception {
+        final String input = "test";
+        final InputStream r = new CharSequenceInputStream(input, csName);
+        try {
+            int available = checkAvail(r, input.length());
+            assertEquals(available - 1, r.skip(available-1)); // skip all but one
+            available = checkAvail(r, 1);
+            assertEquals(1, r.skip(1));
+            available = checkAvail(r, 0);
+        } finally {
+            r.close();
+        }
+    }
+
+    private void testAvailableRead(final String csName) throws Exception {
+        final String input = "test";
+        final InputStream r = new CharSequenceInputStream(input, csName);
+        try {
+            int available = checkAvail(r, input.length());
+            byte buff[] = new byte[available];
+            assertEquals(available - 1, r.skip(available-1)); // skip all but one
+            available = checkAvail(r, 1);
+            buff = new byte[available];
+            assertEquals(available, r.read(buff, 0, available));
+        } finally {
+            r.close();
+        }
+    }
+
+    @Test
+    public void testAvailable() throws Exception {
+        for (final String csName : Charset.availableCharsets().keySet()) {
+            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder. 
+            if (Charset.forName(csName).canEncode()) {
+                testAvailableSkip(csName);
+                testAvailableRead(csName);
+            }
+        }
+    }
 }

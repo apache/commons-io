@@ -47,6 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-379" dev="sebb" type="add">
+         CharSequenceInputStream - add tests for available()
+         Fix code so it really does reflect a minimum available.
+      </action>
       <action issue="IO-328" dev="sebb" type="update">
         getPrefixLength returns null if filename has leading slashes
         Javadoc: add examples to show correct behaviour; add unit tests
