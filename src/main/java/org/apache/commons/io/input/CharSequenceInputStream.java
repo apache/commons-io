@@ -178,7 +178,7 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public long skip(long n) throws IOException {
-        int skipped = 0;
+        long skipped = 0;
         while (n > 0 && this.cbuf.hasRemaining()) {
             this.cbuf.get();
             n--;
