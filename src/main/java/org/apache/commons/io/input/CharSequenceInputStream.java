@@ -187,9 +187,19 @@ public class CharSequenceInputStream extends InputStream {
         return skipped;
     }
 
+    /**
+     * Return an estimate of the number of bytes remaining in the byte stream.
+     * @return the count of bytes that can be read without blocking (or returning EOF).
+     *
+     * @throws IOException if an error occurs (probably not possible)
+     */
     @Override
     public int available() throws IOException {
-        return this.cbuf.remaining();
+        // The cached entries are in bbuf; since encoding always creates at least one byte
+        // per character, we can add the two to get a better estimate (e.g. if bbuf is empty)
+        // Note that the previous implementation (2.4) could return zero even though there were
+        // encoded bytes still available.
+        return this.bbuf.remaining() + this.cbuf.remaining();
     }
 
     @Override
