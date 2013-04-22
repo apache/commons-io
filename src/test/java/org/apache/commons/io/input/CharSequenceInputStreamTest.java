@@ -418,8 +418,18 @@ public class CharSequenceInputStreamTest {
     @Test
     public void testAvailable() throws Exception {
         for (final String csName : Charset.availableCharsets().keySet()) {
-            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder. 
-            if (Charset.forName(csName).canEncode()) {
+            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
+            // also try and avoid the following Effor on Continuum 
+//            java.lang.UnsupportedOperationException: null
+//            at java.nio.CharBuffer.array(CharBuffer.java:940)
+//            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)
+//            at java.nio.charset.CharsetEncoder.encode(CharsetEncoder.java:544)
+//            at org.apache.commons.io.input.CharSequenceInputStream.fillBuffer(CharSequenceInputStream.java:120)
+//            at org.apache.commons.io.input.CharSequenceInputStream.read(CharSequenceInputStream.java:151)
+//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
+//            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
+
+            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName)) {
                 testAvailableSkip(csName);
                 testAvailableRead(csName);
             }
