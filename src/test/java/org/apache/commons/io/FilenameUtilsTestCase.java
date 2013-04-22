@@ -503,7 +503,11 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(1, FilenameUtils.getPrefixLength("\\a\\b\\c.txt"));
         assertEquals(2, FilenameUtils.getPrefixLength("~\\a\\b\\c.txt"));
         assertEquals(6, FilenameUtils.getPrefixLength("~user\\a\\b\\c.txt"));
-    }
+
+        assertEquals(9, FilenameUtils.getPrefixLength("//server/a/b/c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\\\a\\b\\c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("///a/b/c.txt"));
+}
     
     public void testIndexOfLastSeparator() {
         assertEquals(-1, FilenameUtils.indexOfLastSeparator(null));

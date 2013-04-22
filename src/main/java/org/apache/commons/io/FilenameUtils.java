@@ -603,6 +603,7 @@ public class FilenameUtils {
      * C:a\b\c.txt         --> "C:"        --> drive relative
      * C:\a\b\c.txt        --> "C:\"       --> absolute
      * \\server\a\b\c.txt  --> "\\server\" --> UNC
+     * \\\a\b\c.txt        -->  error, length = -1
      *
      * Unix:
      * a/b/c.txt           --> ""          --> relative
@@ -611,10 +612,16 @@ public class FilenameUtils {
      * ~                   --> "~/"        --> current user (slash added)
      * ~user/a/b/c.txt     --> "~user/"    --> named user
      * ~user               --> "~user/"    --> named user (slash added)
+     * //server/a/b/c.txt  --> "//server/"
+     * ///a/b/c.txt        --> error, length = -1
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * ie. both Unix and Windows prefixes are matched regardless.
+     *
+     * Note that a leading // (or \\) is used to indicate a UNC name on Windows.
+     * These must be followed by a server name, so double-slashes are not collapsed
+     * to a single slash at the start of the filename.
      *
      * @param filename  the filename to find the prefix in, null returns -1
      * @return the length of the prefix, -1 if invalid or null
