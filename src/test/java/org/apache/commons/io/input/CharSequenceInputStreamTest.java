@@ -243,7 +243,7 @@ public class CharSequenceInputStreamTest {
     private void testMarkReset(final String csName) throws Exception {
         final InputStream r = new CharSequenceInputStream("test", csName);
         try {
-            r.skip(2);
+            assertEquals(2, r.skip(2));
             r.mark(0);
             assertEquals(csName, 's', r.read());
             assertEquals(csName, 't', r.read());
