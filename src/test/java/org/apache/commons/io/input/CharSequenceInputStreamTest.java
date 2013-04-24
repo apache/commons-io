@@ -81,7 +81,7 @@ public class CharSequenceInputStreamTest {
         }
     }
 
-    @Ignore //    Unfortunately checking canEncode does not seem to work for all charsets:
+//    Unfortunately checking canEncode does not seem to work for all charsets:
 //    testBufferedRead_AvailableCharset(org.apache.commons.io.input.CharSequenceInputStreamTest)  Time elapsed: 0.682 sec  <<< ERROR!
 //    java.lang.UnsupportedOperationException: null
 //        at java.nio.CharBuffer.array(CharBuffer.java:940)
@@ -92,7 +92,7 @@ public class CharSequenceInputStreamTest {
     public void testBufferedRead_AvailableCharset() throws IOException {
         for (final String csName : Charset.availableCharsets().keySet()) {
             // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder. 
-            if (Charset.forName(csName).canEncode()) {
+            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName)) {
                 testBufferedRead(TEST_STRING, csName);
             }
         }
@@ -170,13 +170,11 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore // test is broken
     public void testIO_356_B10_D10_S1_UTF8() throws Exception {
         testIO_356(10, 10, 1, "UTF-8");
     }
 
     @Test
-    @Ignore // test is broken
     public void testIO_356_B10_D10_S2_UTF8() throws Exception {
         testIO_356(10, 10, 2, "UTF-8");
     }
@@ -187,7 +185,6 @@ public class CharSequenceInputStreamTest {
     }
 
     @Test
-    @Ignore // test is broken
     public void testIO_356_B10_D13_S1_UTF8() throws Exception {
         testIO_356(10, 13, 1, "UTF-8");
     }
