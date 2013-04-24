@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ import java.nio.charset.CodingErrorAction;
 public class CharSequenceInputStream extends InputStream {
 
     private static final int BUFFER_SIZE = 2048;
-    
+
     private static final int EOS = -1;
 
     private static final int NO_MARK = -1;
@@ -50,10 +50,10 @@ public class CharSequenceInputStream extends InputStream {
 
     private int mark_cbuf; // position in cbuf
     private int mark_bbuf; // position in bbuf
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
@@ -78,7 +78,7 @@ public class CharSequenceInputStream extends InputStream {
 
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}.
-     * 
+     *
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @param bufferSize the buffer size to use.
@@ -91,7 +91,7 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}
      * with a buffer size of 2048.
-     * 
+     *
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
@@ -103,7 +103,7 @@ public class CharSequenceInputStream extends InputStream {
     /**
      * Constructor, calls {@link #CharSequenceInputStream(CharSequence, String, int)}
      * with a buffer size of 2048.
-     * 
+     *
      * @param cs the input character sequence
      * @param charset the character set name to use
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
@@ -114,7 +114,7 @@ public class CharSequenceInputStream extends InputStream {
 
     /**
      * Fills the byte output buffer from the input char buffer.
-     * 
+     *
      * @throws CharacterCodingException
      *             an error encoding data
      */
@@ -126,7 +126,7 @@ public class CharSequenceInputStream extends InputStream {
         }
         this.bbuf.flip();
     }
-    
+
     @Override
     public int read(final byte[] b, int off, int len) throws IOException {
         if (b == null) {
@@ -254,7 +254,7 @@ public class CharSequenceInputStream extends InputStream {
             if (this.cbuf.position() != this.mark_cbuf) {
                 throw new IllegalStateException("Unexpected CharBuffer postion: actual="+cbuf.position() + " expected=" + this.mark_cbuf);
             }
-            this.bbuf.position(this.mark_bbuf);                
+            this.bbuf.position(this.mark_bbuf);
             this.mark_cbuf = NO_MARK;
             this.mark_bbuf = NO_MARK;
         }
@@ -264,5 +264,5 @@ public class CharSequenceInputStream extends InputStream {
     public boolean markSupported() {
         return true;
     }
-    
+
 }

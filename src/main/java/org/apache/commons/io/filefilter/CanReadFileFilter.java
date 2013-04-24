@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * This filter accepts <code>File</code>s that can be read.
  * <p>
- * Example, showing how to print out a list of the 
+ * Example, showing how to print out a list of the
  * current directory's <i>readable</i> files:
  *
  * <pre>
@@ -34,7 +34,7 @@ import java.io.Serializable;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the 
+ * Example, showing how to print out a list of the
  * current directory's <i>un-readable</i> files:
  *
  * <pre>
@@ -46,7 +46,7 @@ import java.io.Serializable;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the 
+ * Example, showing how to print out a list of the
  * current directory's <i>read-only</i> files:
  *
  * <pre>
@@ -61,26 +61,26 @@ import java.io.Serializable;
  * @version $Id$
  */
 public class CanReadFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** Singleton instance of <i>readable</i> filter */
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();
 
     /** Singleton instance of not <i>readable</i> filter */
     public static final IOFileFilter CANNOT_READ = new NotFileFilter(CAN_READ);
-    
+
     /** Singleton instance of <i>read-only</i> filter */
     public static final IOFileFilter READ_ONLY = new AndFileFilter(CAN_READ,
                                                 CanWriteFileFilter.CANNOT_WRITE);
-    
+
     /**
      * Restrictive consructor.
      */
     protected CanReadFileFilter() {
     }
-    
+
     /**
      * Checks to see if the file can be read.
-     * 
+     *
      * @param file  the File to check.
      * @return {@code true} if the file can be
      *  read, otherwise {@code false}.
@@ -89,5 +89,5 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     public boolean accept(final File file) {
         return file.canRead();
     }
-    
+
 }

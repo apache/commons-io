@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,13 +27,13 @@ import java.io.Serializable;
  * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */
 public class NotFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** The filter */
     private final IOFileFilter filter;
 
     /**
      * Constructs a new file filter that NOTs the result of another filter.
-     * 
+     *
      * @param filter  the filter, must not be null
      * @throws IllegalArgumentException if the filter is null
      */
@@ -46,7 +46,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Returns the logical NOT of the underlying filter's return value for the same File.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filter returns false
      */
@@ -54,10 +54,10 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     public boolean accept(final File file) {
         return ! filter.accept(file);
     }
-    
+
     /**
      * Returns the logical NOT of the underlying filter's return value for the same arguments.
-     * 
+     *
      * @param file  the File directory
      * @param name  the filename
      * @return true if the filter returns false
@@ -76,5 +76,5 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     public String toString() {
         return super.toString() + "(" + filter.toString()  + ")";
     }
-    
+
 }

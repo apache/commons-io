@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import java.io.Serializable;
  * If the <code>File</code> is a directory it checks that
  * it contains no files.
  * <p>
- * Example, showing how to print out a list of the 
+ * Example, showing how to print out a list of the
  * current directory's empty files/directories:
  *
  * <pre>
@@ -37,7 +37,7 @@ import java.io.Serializable;
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the 
+ * Example, showing how to print out a list of the
  * current directory's non-empty files/directories:
  *
  * <pre>
@@ -52,22 +52,22 @@ import java.io.Serializable;
  * @version $Id$
  */
 public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** Singleton instance of <i>empty</i> filter */
     public static final IOFileFilter EMPTY = new EmptyFileFilter();
-    
+
     /** Singleton instance of <i>not-empty</i> filter */
     public static final IOFileFilter NOT_EMPTY = new NotFileFilter(EMPTY);
-    
+
     /**
      * Restrictive consructor.
      */
     protected EmptyFileFilter() {
     }
-    
+
     /**
      * Checks to see if the file is empty.
-     * 
+     *
      * @param file  the file or directory to check
      * @return {@code true} if the file or directory
      *  is <i>empty</i>, otherwise {@code false}.
@@ -81,5 +81,5 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
             return file.length() == 0;
         }
     }
-    
+
 }

@@ -91,15 +91,15 @@ public class XmlStreamReader extends Reader {
         ByteOrderMark.UTF_32BE,
         ByteOrderMark.UTF_32LE
     };
-    
+
     // UTF_16LE and UTF_32LE have the same two starting BOM bytes.
     private static final ByteOrderMark[] XML_GUESS_BYTES = new ByteOrderMark[] {
         new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D),
         new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F),
         new ByteOrderMark(UTF_16LE, 0x3C, 0x00, 0x3F, 0x00),
-        new ByteOrderMark(UTF_32BE, 0x00, 0x00, 0x00, 0x3C, 
+        new ByteOrderMark(UTF_32BE, 0x00, 0x00, 0x00, 0x3C,
                 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00, 0x6D),
-        new ByteOrderMark(UTF_32LE, 0x3C, 0x00, 0x00, 0x00, 
+        new ByteOrderMark(UTF_32LE, 0x3C, 0x00, 0x00, 0x00,
                 0x3F, 0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00, 0x6D, 0x00, 0x00, 0x00),
         new ByteOrderMark(EBCDIC,   0x4C, 0x6F, 0xA7, 0x94)
     };
@@ -751,14 +751,14 @@ public class XmlStreamReader extends Reader {
 
     /**
      * Indicates if the MIME type belongs to the APPLICATION XML family.
-     * 
+     *
      * @param mime The mime type
      * @return true if the mime type belongs to the APPLICATION XML family,
      * otherwise false
      */
     static boolean isAppXml(final String mime) {
         return mime != null &&
-               (mime.equals("application/xml") || 
+               (mime.equals("application/xml") ||
                 mime.equals("application/xml-dtd") ||
                 mime.equals("application/xml-external-parsed-entity") ||
                mime.startsWith("application/") && mime.endsWith("+xml"));
@@ -766,7 +766,7 @@ public class XmlStreamReader extends Reader {
 
     /**
      * Indicates if the MIME type belongs to the TEXT XML family.
-     * 
+     *
      * @param mime The mime type
      * @return true if the mime type belongs to the TEXT XML family,
      * otherwise false

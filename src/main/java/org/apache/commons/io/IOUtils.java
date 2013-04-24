@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -115,7 +115,7 @@ public class IOUtils {
      * The system line separator string.
      */
     public static final String LINE_SEPARATOR;
-    
+
     static {
         // avoid security issues
         final StringBuilderWriter buf = new StringBuilderWriter(4);
@@ -126,7 +126,7 @@ public class IOUtils {
     }
 
     /**
-     * The default buffer size ({@value}) to use for 
+     * The default buffer size ({@value}) to use for
      * {@link #copyLarge(InputStream, OutputStream)}
      * and
      * {@link #copyLarge(Reader, Writer)}
@@ -137,7 +137,7 @@ public class IOUtils {
      * The default buffer size to use for the skip() methods.
      */
     private static final int SKIP_BUFFER_SIZE = 2048;
-    
+
     // Allocated in the relevant skip method if necessary.
     /*
      * N.B. no need to synchronize these because:
@@ -157,10 +157,10 @@ public class IOUtils {
     }
 
     //-----------------------------------------------------------------------
-    
+
     /**
      * Closes a URLConnection.
-     * 
+     *
      * @param conn the connection to close.
      * @since 2.4
      */
@@ -190,7 +190,7 @@ public class IOUtils {
      *       IOUtils.closeQuietly(in);
      *   }
      * </pre>
-     * 
+     *
      * @param input  the Reader to close, may be null or already closed
      */
     public static void closeQuietly(final Reader input) {
@@ -277,7 +277,7 @@ public class IOUtils {
     public static void closeQuietly(final OutputStream output) {
         closeQuietly((Closeable)output);
     }
-    
+
     /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
@@ -356,7 +356,7 @@ public class IOUtils {
      *   try {
      *       selector = Selector.open();
      *       // process socket
-     *       
+     *
      *   } catch (Exception e) {
      *       // error handling
      *   } finally {
@@ -376,7 +376,7 @@ public class IOUtils {
             }
         }
     }
-    
+
     /**
      * Closes a <code>ServerSocket</code> unconditionally.
      * <p>
@@ -425,7 +425,7 @@ public class IOUtils {
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
@@ -438,7 +438,7 @@ public class IOUtils {
     /**
      * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
-     * 
+     *
      * @param reader
      *            the reader to wrap or return (not null)
      * @return the given reader or a new {@link BufferedReader} for the given reader
@@ -449,11 +449,11 @@ public class IOUtils {
     public static BufferedReader toBufferedReader(final Reader reader) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
     }
-    
+
     /**
      * Returns the given reader if it is already a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
-     * 
+     *
      * @param reader
      *            the reader to wrap or return (not null)
      * @return the given reader or a new {@link BufferedReader} for the given reader
@@ -463,11 +463,11 @@ public class IOUtils {
     public static BufferedReader asBufferedReader(final Reader reader) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
     }
-    
+
     /**
      * Returns the given Writer if it is already a {@link BufferedWriter}, otherwise creates a BufferedWriter from the given
      * Writer.
-     * 
+     *
      * @param writer
      *            the Writer to wrap or return (not null)
      * @return the given Writer or a new {@link BufferedWriter} for the given Writer
@@ -477,11 +477,11 @@ public class IOUtils {
     public static BufferedWriter asBufferedWriter(final Writer writer) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer);
     }
-    
+
     /**
      * Returns the given OutputStream if it is already a {@link BufferedOutputStream}, otherwise creates a BufferedOutputStream from the given
      * OutputStream.
-     * 
+     *
      * @param outputStream
      *            the OutputStream to wrap or return (not null)
      * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
@@ -495,11 +495,11 @@ public class IOUtils {
         }
         return outputStream instanceof BufferedOutputStream ? (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
-    
+
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a BufferedInputStream from the given
      * InputStream.
-     * 
+     *
      * @param inputStream
      *            the InputStream to wrap or return (not null)
      * @return the given InputStream or a new {@link BufferedInputStream} for the given InputStream
@@ -513,7 +513,7 @@ public class IOUtils {
         }
         return inputStream instanceof BufferedInputStream ? (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
-    
+
     // read toByteArray
     //-----------------------------------------------------------------------
     /**
@@ -521,7 +521,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @return the requested byte array
      * @throws NullPointerException if the input is null
@@ -540,7 +540,7 @@ public class IOUtils {
      * <b>NOTE:</b> the method checks that the length can safely be cast to an int without truncation
      * before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into the byte array.
      * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
-     * 
+     *
      * @param input the <code>InputStream</code> to read from
      * @param size the size of <code>InputStream</code>
      * @return the requested byte array
@@ -558,7 +558,7 @@ public class IOUtils {
       return toByteArray(input, (int) size);
     }
 
-    /** 
+    /**
      * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * Use this method instead of <code>toByteArray(InputStream)</code>
      * when <code>InputStream</code> size is known
@@ -600,7 +600,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @return the requested byte array
      * @throws NullPointerException if the input is null
@@ -618,7 +618,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested byte array
@@ -641,7 +641,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested byte array
@@ -661,7 +661,7 @@ public class IOUtils {
      * using the default character encoding of the platform.
      * <p>
      * This is the same as {@link String#getBytes()}.
-     * 
+     *
      * @param input  the <code>String</code> to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
@@ -676,7 +676,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a <code>URI</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param uri
      *            the <code>URI</code> to read
      * @return the requested byte array
@@ -692,7 +692,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a <code>URL</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param url
      *            the <code>URL</code> to read
      * @return the requested byte array
@@ -713,7 +713,7 @@ public class IOUtils {
 
     /**
      * Gets the contents of a <code>URLConnection</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param urlConn
      *            the <code>URLConnection</code> to read
      * @return the requested byte array
@@ -740,7 +740,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param is  the <code>InputStream</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
@@ -759,7 +759,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param is  the <code>InputStream</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested character array
@@ -783,7 +783,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param is  the <code>InputStream</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested character array
@@ -803,7 +803,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
@@ -824,7 +824,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -865,7 +865,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested String
@@ -885,7 +885,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -899,7 +899,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URI.
-     * 
+     *
      * @param uri
      *            The URI source.
      * @return The contents of the URL as a String.
@@ -914,7 +914,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URI.
-     * 
+     *
      * @param uri
      *            The URI source.
      * @param encoding
@@ -929,7 +929,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URI.
-     * 
+     *
      * @param uri
      *            The URI source.
      * @param encoding
@@ -947,7 +947,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URL.
-     * 
+     *
      * @param url
      *            The URL source.
      * @return The contents of the URL as a String.
@@ -962,7 +962,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URL.
-     * 
+     *
      * @param url
      *            The URL source.
      * @param encoding
@@ -982,7 +982,7 @@ public class IOUtils {
 
     /**
      * Gets the contents at the given URL.
-     * 
+     *
      * @param url
      *            The URL source.
      * @param encoding
@@ -1001,7 +1001,7 @@ public class IOUtils {
     /**
      * Gets the contents of a <code>byte[]</code> as a String
      * using the default character encoding of the platform.
-     * 
+     *
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
@@ -1020,7 +1020,7 @@ public class IOUtils {
      * <p>
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
-     * 
+     *
      * @param input the byte array to read from
      * @param encoding  the encoding to use, null means platform default
      * @return the requested String
@@ -1324,7 +1324,7 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Writes bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
-     * 
+     *
      * @param data  the byte array to write, do not modify during output,
      * null ignored
      * @param output  the <code>OutputStream</code> to write to
@@ -1344,7 +1344,7 @@ public class IOUtils {
      * using the default character encoding of the platform.
      * <p>
      * This method uses {@link String#String(byte[])}.
-     * 
+     *
      * @param data  the byte array to write, do not modify during output,
      * null ignored
      * @param output  the <code>Writer</code> to write to
@@ -1363,7 +1363,7 @@ public class IOUtils {
      * using the specified character encoding.
      * <p>
      * This method uses {@link String#String(byte[], String)}.
-     * 
+     *
      * @param data  the byte array to write, do not modify during output,
      * null ignored
      * @param output  the <code>Writer</code> to write to
@@ -1386,7 +1386,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#String(byte[], String)}.
-     * 
+     *
      * @param data  the byte array to write, do not modify during output,
      * null ignored
      * @param output  the <code>Writer</code> to write to
@@ -1407,7 +1407,7 @@ public class IOUtils {
     /**
      * Writes chars from a <code>char[]</code> to a <code>Writer</code>
      * using the default character encoding of the platform.
-     * 
+     *
      * @param data  the char array to write, do not modify during output,
      * null ignored
      * @param output  the <code>Writer</code> to write to
@@ -1427,7 +1427,7 @@ public class IOUtils {
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes()}.
-     * 
+     *
      * @param data  the char array to write, do not modify during output,
      * null ignored
      * @param output  the <code>OutputStream</code> to write to
@@ -1448,7 +1448,7 @@ public class IOUtils {
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the char array to write, do not modify during output,
      * null ignored
      * @param output  the <code>OutputStream</code> to write to
@@ -1472,7 +1472,7 @@ public class IOUtils {
      * <p>
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the char array to write, do not modify during output,
      * null ignored
      * @param output  the <code>OutputStream</code> to write to
@@ -1493,7 +1493,7 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Writes chars from a <code>CharSequence</code> to a <code>Writer</code>.
-     * 
+     *
      * @param data  the <code>CharSequence</code> to write, null ignored
      * @param output  the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
@@ -1512,7 +1512,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
-     * 
+     *
      * @param data  the <code>CharSequence</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
@@ -1531,7 +1531,7 @@ public class IOUtils {
      * <code>OutputStream</code> using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the <code>CharSequence</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1553,7 +1553,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the <code>CharSequence</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1572,7 +1572,7 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Writes chars from a <code>String</code> to a <code>Writer</code>.
-     * 
+     *
      * @param data  the <code>String</code> to write, null ignored
      * @param output  the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
@@ -1591,7 +1591,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
-     * 
+     *
      * @param data  the <code>String</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
@@ -1610,7 +1610,7 @@ public class IOUtils {
      * <code>OutputStream</code> using the specified character encoding.
      * <p>
      * This method uses {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the <code>String</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1632,7 +1632,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the <code>String</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1652,7 +1652,7 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Writes chars from a <code>StringBuffer</code> to a <code>Writer</code>.
-     * 
+     *
      * @param data  the <code>StringBuffer</code> to write, null ignored
      * @param output  the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
@@ -1674,7 +1674,7 @@ public class IOUtils {
      * platform.
      * <p>
      * This method uses {@link String#getBytes()}.
-     * 
+     *
      * @param data  the <code>StringBuffer</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
@@ -1696,7 +1696,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      * <p>
      * This method uses {@link String#getBytes(String)}.
-     * 
+     *
      * @param data  the <code>StringBuffer</code> to write, null ignored
      * @param output  the <code>OutputStream</code> to write to
      * @param encoding  the encoding to use, null means platform default
@@ -1830,7 +1830,7 @@ public class IOUtils {
      * <code>-1</code> after the copy has completed since the correct
      * number of bytes cannot be returned as an int. For large streams
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE
@@ -1852,7 +1852,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * <p>
-     * 
+     *
      * @param input
      *            the <code>InputStream</code> to read from
      * @param output
@@ -1878,7 +1878,7 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @return the number of bytes copied
@@ -1898,7 +1898,7 @@ public class IOUtils {
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedInputStream</code>.
      * <p>
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @param buffer the buffer to use for the copy
@@ -1931,7 +1931,7 @@ public class IOUtils {
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @param inputOffset : number of bytes to skip from input before copying
@@ -1959,7 +1959,7 @@ public class IOUtils {
      * This means that the method may be considerably less efficient than using the actual skip implementation,
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
-     * 
+     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @param inputOffset : number of bytes to skip from input before copying
@@ -1972,7 +1972,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(final InputStream input, final OutputStream output, 
+    public static long copyLarge(final InputStream input, final OutputStream output,
             final long inputOffset, final long length, final byte[] buffer)  throws IOException {
         if (inputOffset > 0) {
             skipFully(input, inputOffset);
@@ -2147,7 +2147,7 @@ public class IOUtils {
      * <code>BufferedReader</code>.
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>Writer</code> to write to
      * @param inputOffset : number of chars to skip from input before copying
@@ -2170,7 +2170,7 @@ public class IOUtils {
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedReader</code>.
      * <p>
-     * 
+     *
      * @param input  the <code>Reader</code> to read from
      * @param output  the <code>Writer</code> to write to
      * @param inputOffset : number of chars to skip from input before copying
@@ -2415,14 +2415,14 @@ public class IOUtils {
      * this is done to guarantee that the correct number of bytes are skipped.
      * </p>
      *
-     *   
+     *
      * @param input byte stream to skip
      * @param toSkip number of bytes to skip.
      * @return number of bytes actually skipped.
-     * 
+     *
      * @see InputStream#skip(long)
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @since 2.0
@@ -2497,10 +2497,10 @@ public class IOUtils {
      * @param input character stream to skip
      * @param toSkip number of characters to skip.
      * @return number of characters actually skipped.
-     * 
+     *
      * @see Reader#skip(long)
      * @see <a href="https://issues.apache.org/jira/browse/IO-203">IO-203 - Add skipFully() method for InputStreams</a>
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @since 2.0
@@ -2539,14 +2539,14 @@ public class IOUtils {
      * This means that the method may be considerably less efficient than using the actual skip implementation,
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
-     * 
+     *
      * @param input stream to skip
      * @param toSkip the number of bytes to skip
      * @see InputStream#skip(long)
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
-     * @throws EOFException if the number of bytes skipped was incorrect 
+     * @throws EOFException if the number of bytes skipped was incorrect
      * @since 2.0
      */
     public static void skipFully(final InputStream input, final long toSkip) throws IOException {
@@ -2590,11 +2590,11 @@ public class IOUtils {
      * This means that the method may be considerably less efficient than using the actual skip implementation,
      * this is done to guarantee that the correct number of characters are skipped.
      * </p>
-     * 
+     *
      * @param input stream to skip
      * @param toSkip the number of characters to skip
      * @see Reader#skip(long)
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if toSkip is negative
      * @throws EOFException if the number of characters skipped was incorrect
@@ -2606,14 +2606,14 @@ public class IOUtils {
             throw new EOFException("Chars to skip: " + toSkip + " actual: " + skipped);
         }
     }
-    
+
 
     /**
      * Reads characters from an input character stream.
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
@@ -2643,7 +2643,7 @@ public class IOUtils {
      * This implementation guarantees that it will read as many characters
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link Reader}.
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @return actual length read; may be less than requested if EOF was reached
@@ -2659,7 +2659,7 @@ public class IOUtils {
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
@@ -2683,13 +2683,13 @@ public class IOUtils {
         }
         return length - remaining;
     }
-    
+
     /**
      * Reads bytes from an input stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
      * subclasses of {@link InputStream}.
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @return actual length read; may be less than requested if EOF was reached
@@ -2729,12 +2729,12 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of characters read was incorrect
@@ -2752,10 +2752,10 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link Reader#read(char[], int, int)} may
      * not read as many characters as requested (most likely because of reaching EOF).
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of characters read was incorrect
@@ -2770,12 +2770,12 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
      * @param length length to read, must be >= 0
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect
@@ -2793,10 +2793,10 @@ public class IOUtils {
      * <p>
      * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
-     * 
+     *
      * @param input where to read input from
      * @param buffer destination
-     * 
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect

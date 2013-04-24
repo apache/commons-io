@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,14 +31,14 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * This class operates with a {@link FileFilter} and maximum depth to
  * limit the files and direcories visited.
- * Commons IO supplies many common filter implementations in the 
+ * Commons IO supplies many common filter implementations in the
  * <a href="filefilter/package-summary.html"> filefilter</a> package.
  * <p>
  * The following sections describe:
  *   <ul>
  *      <li><a href="#example">1. Example Implementation</a> - example
  *          <code>FileCleaner</code> implementation.</li>
- *      <li><a href="#filter">2. Filter Example</a> - using 
+ *      <li><a href="#filter">2. Filter Example</a> - using
  *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
  *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
  *          behaviour.</li>
@@ -104,20 +104,20 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      super(filter, -1);
  *    }
  *  }
- *  
+ *
  *  // Build up the filters and create the walker
  *    // Create a filter for Non-hidden directories
- *    IOFileFilter fooDirFilter = 
+ *    IOFileFilter fooDirFilter =
  *        FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
  *                                      HiddenFileFilter.VISIBLE);
  *
  *    // Create a filter for Files ending in ".txt"
- *    IOFileFilter fooFileFilter = 
+ *    IOFileFilter fooFileFilter =
  *        FileFilterUtils.andFileFilter(FileFilterUtils.fileFileFilter,
  *                                      FileFilterUtils.suffixFileFilter(".txt"));
  *
  *    // Combine the directory and file filters using an OR condition
- *    java.io.FileFilter fooFilter = 
+ *    java.io.FileFilter fooFilter =
  *        FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
  *
  *    // Use the filter to construct a DirectoryWalker implementation
@@ -138,7 +138,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      super(dirFilter, fileFilter, -1);
  *    }
  *  }
- *  
+ *
  *  // Use the filters to construct the walker
  *  FooDirectoryWalker walker = new FooDirectoryWalker(
  *    HiddenFileFilter.VISIBLE,
@@ -174,7 +174,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <ul>
  *    <li><a href="#external">3.1 External / Mult-threaded</a> - cancellation being
  *        decided/initiated by an external process.</li>
- *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated 
+ *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated
  *        from within a DirectoryWalker implementation.</li>
  * </ul>
  * <p>
@@ -218,7 +218,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * This shows an example of how internal cancellation processing could be implemented.
  * <b>Note</b> the decision logic and throwing a {@link CancelException} could be implemented
- * in any of the <i>lifecycle</i> methods. 
+ * in any of the <i>lifecycle</i> methods.
  *
  * <pre>
  *  public class BarDirectoryWalker extends DirectoryWalker {
@@ -384,7 +384,7 @@ public abstract class DirectoryWalker<T> {
      * automatically by the walk of the tree. However, sometimes a single method,
      * typically {@link #handleFile}, may take a long time to run. In that case,
      * you may wish to check for cancellation by calling this method.
-     * 
+     *
      * @param file  the current file being processed
      * @param depth  the current file level (starting directory = 0)
      * @param results  the collection of result objects, may be updated
@@ -447,7 +447,7 @@ public abstract class DirectoryWalker<T> {
      * @param startDirectory  the directory that the walk started from
      * @param results  the collection of result objects, may be updated
      * @param cancel  the exception throw to cancel further processing
-     * containing details at the point of cancellation. 
+     * containing details at the point of cancellation.
      * @throws IOException if an I/O Error occurs
      */
     protected void handleCancelled(final File startDirectory, final Collection<T> results,
@@ -583,7 +583,7 @@ public abstract class DirectoryWalker<T> {
 
         /** Serialization id. */
         private static final long serialVersionUID = 1347339620135041008L;
-        
+
         /** The file being processed when the exception was thrown. */
         private final File file;
         /** The file depth when the exception was thrown. */

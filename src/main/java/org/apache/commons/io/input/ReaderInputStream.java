@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -69,9 +69,9 @@ import java.nio.charset.CodingErrorAction;
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
  * <p>
  * Instances of {@link ReaderInputStream} are not thread safe.
- * 
+ *
  * @see org.apache.commons.io.output.WriterOutputStream
- * 
+ *
  * @since 2.0
  */
 public class ReaderInputStream extends InputStream {
@@ -98,7 +98,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream}.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
      * @since 2.1
@@ -109,7 +109,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream}.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param encoder the charset encoder
      * @param bufferSize the size of the input buffer in number of characters
@@ -126,7 +126,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream}.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
@@ -142,7 +142,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
      * 1024 characters.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
      */
@@ -152,7 +152,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream}.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
      * @param bufferSize the size of the input buffer in number of characters
@@ -164,7 +164,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
      * 1024 characters.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
      */
@@ -175,7 +175,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Construct a new {@link ReaderInputStream} that uses the default character encoding
      * with a default input buffer size of 1024 characters.
-     * 
+     *
      * @param reader the target {@link Reader}
      * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
      */
@@ -186,7 +186,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Fills the internal char buffer from the reader.
-     * 
+     *
      * @throws IOException
      *             If an I/O error occurs
      */
@@ -209,10 +209,10 @@ public class ReaderInputStream extends InputStream {
         lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);
         encoderOut.flip();
     }
-    
+
     /**
      * Read the specified number of bytes into an array.
-     * 
+     *
      * @param b the byte array to read into
      * @param off the offset to start reading bytes into
      * @param len the number of bytes to read
@@ -252,7 +252,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Read the specified number of bytes into an array.
-     * 
+     *
      * @param b the byte array to read into
      * @return the number of bytes read or <code>-1</code>
      *         if the end of the stream has been reached
