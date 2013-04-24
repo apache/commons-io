@@ -79,7 +79,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
         observer = new FileAlterationObserver(file);
         assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
                 observer.toString());
-  
+
         observer = new FileAlterationObserver(file, CanReadFileFilter.CAN_READ);
         assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', CanReadFileFilter, listeners=0]",
                 observer.toString());
@@ -105,7 +105,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
             final File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
             File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
             final File testDirBFile1 = touch(new File(testDirB, "B-file1.java"));
- 
+
             checkAndNotify();
             checkCollectionSizes("B", 3, 0, 0, 4, 0, 0);
             assertTrue("B testDirA",   listener.getCreatedDirectories().contains(testDirA));
@@ -136,7 +136,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
             assertFalse("E testDirAFile2", listener.getDeletedFiles().contains(testDirAFile2));
             assertTrue("E testDirAFile3", listener.getDeletedFiles().contains(testDirAFile3));
             assertTrue("E testDirAFile4", listener.getDeletedFiles().contains(testDirAFile4));
-            
+
             testDir.mkdir();
             checkAndNotify();
             checkCollectionsEmpty("F");
@@ -165,7 +165,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
             File testDirAFile3 =       new File(testDirA, "A-file3.java");
             final File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
             File testDirAFile5 =       new File(testDirA, "A-file5.java");
- 
+
             checkAndNotify();
             checkCollectionSizes("B", 1, 0, 0, 2, 0, 0);
             assertFalse("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
@@ -227,7 +227,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
             File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
             final File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
             File testDirAFile5 = touch(new File(testDirA, "A-file5.java"));
- 
+
             checkAndNotify();
             checkCollectionSizes("B", 1, 0, 0, 5, 0, 0);
             assertTrue("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));

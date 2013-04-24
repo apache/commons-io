@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import junit.framework.TestCase;
 public class ByteArrayOutputStreamTestCase extends TestCase {
 
     private static final byte[] DATA;
-    
+
     static {
         DATA = new byte[64];
         for (byte i = 0; i < 64; i++) {
@@ -42,7 +42,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         super(name);
     }
 
-    private int writeData(final ByteArrayOutputStream baout, 
+    private int writeData(final ByteArrayOutputStream baout,
                 final java.io.ByteArrayOutputStream ref,
                 final int count) {
         if (count > DATA.length) {
@@ -58,9 +58,9 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
             return count;
         }
     }
-    
-    private int writeData(final ByteArrayOutputStream baout, 
-                final java.io.ByteArrayOutputStream ref, 
+
+    private int writeData(final ByteArrayOutputStream baout,
+                final java.io.ByteArrayOutputStream ref,
                 final int[] instructions) {
         int written = 0;
         for (final int instruction : instructions) {
@@ -156,15 +156,15 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         assertEquals(30, baoutData.length);
         checkByteArrays(refData, baoutData);
     }
-              
+
     public void testStream() throws Exception {
         int written;
-        
+
         //The ByteArrayOutputStream is initialized with 32 bytes to match
         //the original more closely for this test.
         final ByteArrayOutputStream baout = new ByteArrayOutputStream(32);
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
-        
+
         //First three writes
         written = writeData(baout, ref, new int[] {4, 10, 22});
         assertEquals(36, written);
@@ -175,10 +175,10 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         assertEquals(32, written);
         checkStreams(baout, ref);
 
-        //Now reset the streams        
+        //Now reset the streams
         baout.reset();
         ref.reset();
-        
+
         //Test again to see if reset() had any bad effects
         written = writeData(baout, ref, new int[] {5, 47, 33, 60, 1, 0, 8});
         assertEquals(155, written);
@@ -190,19 +190,19 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         assertEquals(155, written);
         checkStreams(baout, ref);
 
-        //Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream 
+        //Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
         //and vice-versa to test the writeTo() method.
         final ByteArrayOutputStream baout1 = new ByteArrayOutputStream(32);
         ref.writeTo(baout1);
         final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
         baout.writeTo(ref1);
         checkStreams(baout1, ref1);
-        
+
         //Testing toString(String)
         final String baoutString = baout.toString("ASCII");
         final String refString = ref.toString("ASCII");
         assertEquals("ASCII decoded String must be equal", refString, baoutString);
-        
+
         //Make sure that empty ByteArrayOutputStreams really don't create garbage
         //on toByteArray()
         final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();

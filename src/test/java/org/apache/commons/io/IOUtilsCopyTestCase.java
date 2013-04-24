@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * JUnit tests for IOUtils copy methods.
- * 
+ *
  * @version $Id$
  * @see IOUtils
  */
@@ -80,7 +80,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         final int count = IOUtils.copy(in, out);
-        
+
         assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
@@ -114,7 +114,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         final long count = IOUtils.copy(in, out, bufferSize);
-        
+
         assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
@@ -164,7 +164,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.copy(in, writer); // deliberately testing deprecated method
         out.off();
         writer.flush();
@@ -203,7 +203,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.copy(in, writer, "UTF8");
         out.off();
         writer.flush();
@@ -240,7 +240,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.copy(in, writer, (String) null);
         out.off();
         writer.flush();
@@ -256,10 +256,10 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.copy(reader, out); // deliberately testing deprecated method
         //Note: this method *does* flush. It is equivalent to:
         //  OutputStreamWriter _out = new OutputStreamWriter(fout);
@@ -299,14 +299,14 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         IOUtils.copy(reader, out, "UTF16");
         // note: this method *does* flush.
         // note: we don't flush here; this IOUtils method does it for us
-        
+
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
         assertTrue("Content differs", Arrays.equals(inData, bytes));
@@ -337,7 +337,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 

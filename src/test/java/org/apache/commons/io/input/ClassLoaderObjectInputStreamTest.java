@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
      * we would probably need to create a transient Class Loader. -TO
      */
 
-    
+
     public void testExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -50,7 +50,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.writeObject( input );
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
@@ -67,7 +67,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
@@ -85,7 +85,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final long result = clois.readLong();
 
@@ -141,7 +141,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
@@ -159,7 +159,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
@@ -174,12 +174,12 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         oos.writeObject( Boolean.FALSE );
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-        final ClassLoaderObjectInputStream clois = 
+        final ClassLoaderObjectInputStream clois =
             new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final String[] interfaces = new String[] { Comparable.class.getName() };
         final Class<?> result = clois.resolveProxyClass(interfaces);
         assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
         clois.close();
     }
-    
+
 }

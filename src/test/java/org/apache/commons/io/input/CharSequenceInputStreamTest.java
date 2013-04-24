@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -91,7 +91,7 @@ public class CharSequenceInputStreamTest {
     @Test
     public void testBufferedRead_AvailableCharset() throws IOException {
         for (final String csName : Charset.availableCharsets().keySet()) {
-            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder. 
+            // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
             if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName)) {
                 testBufferedRead(TEST_STRING, csName);
             }
@@ -376,7 +376,7 @@ public class CharSequenceInputStreamTest {
     public void testSkip_UTF8() throws Exception {
         testSkip("UTF-8");
     }
-    
+
     private int checkAvail(InputStream is, int min) throws Exception {
         int available = is.available();
         assertTrue("avail should be >= " + min + ", but was " + available, available >= min);
@@ -416,7 +416,7 @@ public class CharSequenceInputStreamTest {
     public void testAvailable() throws Exception {
         for (final String csName : Charset.availableCharsets().keySet()) {
             // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            // also try and avoid the following Effor on Continuum 
+            // also try and avoid the following Effor on Continuum
 //            java.lang.UnsupportedOperationException: null
 //            at java.nio.CharBuffer.array(CharBuffer.java:940)
 //            at sun.nio.cs.ext.COMPOUND_TEXT_Encoder.encodeLoop(COMPOUND_TEXT_Encoder.java:75)

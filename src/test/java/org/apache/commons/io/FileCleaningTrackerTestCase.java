@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +54,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
-        
+
         // reset file cleaner class, so as not to break other tests
 
         /**
@@ -70,29 +70,29 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             theInstance.exitWhenFinished = false;
             theInstance.reaper = null;
         }
-        
+
         theInstance = null;
     }
 
     //-----------------------------------------------------------------------
     public void testFileCleanerFile() throws Exception {
         final String path = testFile.getPath();
-        
+
         assertFalse(testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
         assertTrue(testFile.exists());
-        
+
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(path, r);
         assertEquals(1, theInstance.getTrackCount());
-        
+
         r.close();
         testFile = null;
         r = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
-        
+
         assertEquals(0, theInstance.getTrackCount());
         assertEquals(showFailures(), false, new File(path).exists());
     }
@@ -101,12 +101,12 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
-        
+
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(getTestDirectory(), obj);
         assertEquals(1, theInstance.getTrackCount());
-        
+
         obj = null;
 
         waitUntilTrackCount();
@@ -120,16 +120,16 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
-        
+
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(getTestDirectory(), obj, (FileDeleteStrategy) null);
         assertEquals(1, theInstance.getTrackCount());
-        
+
         obj = null;
 
         waitUntilTrackCount();
-        
+
         assertEquals(0, theInstance.getTrackCount());
         assertTrue(testFile.exists());  // not deleted, as dir not empty
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
@@ -139,17 +139,17 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
-        
+
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(getTestDirectory(), obj, FileDeleteStrategy.FORCE);
         assertEquals(1, theInstance.getTrackCount());
-        
+
         obj = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(testFile.getParentFile());
-        
+
         assertEquals(0, theInstance.getTrackCount());
         assertEquals(showFailures(), false, new File(testFile.getPath()).exists());
         assertEquals(showFailures(), false, testFile.getParentFile().exists());
@@ -187,9 +187,9 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         theInstance.exitWhenFinished();
         assertTrue(theInstance.exitWhenFinished);
         assertEquals(null, theInstance.reaper);
-        
+
         waitUntilTrackCount();
-        
+
         assertEquals(0, theInstance.getTrackCount());
         assertTrue(theInstance.exitWhenFinished);
         assertEquals(null, theInstance.reaper);
@@ -200,7 +200,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         theInstance.exitWhenFinished();
         assertTrue(theInstance.exitWhenFinished);
         assertEquals(null, theInstance.reaper);
-        
+
         final String path = testFile.getPath();
         final Object marker = new Object();
         try {
@@ -215,29 +215,29 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     public void testFileCleanerExitWhenFinished1() throws Exception {
         final String path = testFile.getPath();
-        
+
         assertEquals("1-testFile exists", false, testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
         assertEquals("2-testFile exists", true, testFile.exists());
-        
+
         assertEquals("3-Track Count", 0, theInstance.getTrackCount());
         theInstance.track(path, r);
         assertEquals("4-Track Count", 1, theInstance.getTrackCount());
         assertEquals("5-exitWhenFinished", false, theInstance.exitWhenFinished);
         assertEquals("6-reaper.isAlive", true, theInstance.reaper.isAlive());
-        
+
         assertEquals("7-exitWhenFinished", false, theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
         assertEquals("8-exitWhenFinished", true, theInstance.exitWhenFinished);
         assertEquals("9-reaper.isAlive", true, theInstance.reaper.isAlive());
-        
+
         r.close();
         testFile = null;
         r = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
-        
+
         assertEquals("10-Track Count", 0, theInstance.getTrackCount());
         assertEquals("11-testFile exists " + showFailures(), false, new File(path).exists());
         assertEquals("12-exitWhenFinished", true, theInstance.exitWhenFinished);
@@ -246,29 +246,29 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     public void testFileCleanerExitWhenFinished2() throws Exception {
         final String path = testFile.getPath();
-        
+
         assertFalse(testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
         assertTrue(testFile.exists());
-        
+
         assertEquals(0, theInstance.getTrackCount());
         theInstance.track(path, r);
         assertEquals(1, theInstance.getTrackCount());
         assertFalse(theInstance.exitWhenFinished);
         assertTrue(theInstance.reaper.isAlive());
-        
+
         r.close();
         testFile = null;
         r = null;
 
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
-        
+
         assertEquals(0, theInstance.getTrackCount());
         assertEquals(showFailures(), false, new File(path).exists());
         assertFalse(theInstance.exitWhenFinished);
         assertTrue(theInstance.reaper.isAlive());
-        
+
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
         for (int i = 0; i < 20 && theInstance.reaper.isAlive(); i++) {
@@ -298,7 +298,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     private void waitUntilTrackCount() throws Exception {
-        System.gc(); 
+        System.gc();
         Thread.sleep(500);
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
@@ -311,12 +311,12 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             } catch (final Throwable ignored) {
             }
             list = null;
-            System.gc(); 
+            System.gc();
             Thread.sleep(1000);
         }
         if (theInstance.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the testcase with less memory (-Xmx)");
         }
-        
+
     }
 }

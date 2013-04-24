@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -125,7 +125,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCloseQuietly_CloseableIOException() {
-        IOUtils.closeQuietly(new Closeable() {            
+        IOUtils.closeQuietly(new Closeable() {
             public void close() throws IOException {
                 throw new IOException();
             }
@@ -174,7 +174,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCloseQuietly_ServerSocketIOException() throws IOException {
-        IOUtils.closeQuietly(new ServerSocket() {            
+        IOUtils.closeQuietly(new ServerSocket() {
             @Override
             public void close() throws IOException {
                 throw new IOException();
@@ -188,7 +188,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     public void testCloseQuietly_SocketIOException() {
-        IOUtils.closeQuietly(new Socket() {            
+        IOUtils.closeQuietly(new Socket() {
             @Override
             public synchronized void close() throws IOException {
                 throw new IOException();
@@ -307,7 +307,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
         deleteFile(destination);
     }
-    
+
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testCopy_ByteArray_Writer() throws Exception {
@@ -1065,7 +1065,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fin.close();
         }
     }
-    
+
     public void testToCharArray_Reader() throws Exception {
         final FileReader fr = new FileReader(m_testFile);
         try {
@@ -1077,12 +1077,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             fr.close();
         }
     }
-    
+
     /**
      * Test for {@link IOUtils#toInputStream(CharSequence)} and {@link IOUtils#toInputStream(CharSequence, String)}.
      * Note, this test utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
-     * 
+     *
      * @throws Exception
      *             on error
      */
@@ -1102,12 +1102,12 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     // Tests from IO-305
-    
+
     /**
      * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}. Note, this test
      * utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
      * {@link #testToByteArray_InputStream()} to ensure this method functions correctly.
-     * 
+     *
      * @throws Exception
      *             on error
      */
@@ -1125,7 +1125,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         bytes = IOUtils.toByteArray(inStream);
         assertEqualContent(str.getBytes("UTF-8"), bytes);
     }
-    
+
     @SuppressWarnings("deprecation")
     // testing deprecated method
     public void testToString_ByteArray() throws Exception {
@@ -1209,7 +1209,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     public void testToString_URL_CharsetNameNull() throws Exception {
         testToString_URL(null);
     }
-    
+
     public void testAsBufferedNull() {
         try {
             IOUtils.asBufferedInputStream(null);

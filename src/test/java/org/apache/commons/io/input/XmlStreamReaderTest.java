@@ -208,7 +208,7 @@ public class XmlStreamReaderTest {
         _testHttpInvalid("application/xml;charset=UTF-16BE", "UTF-16BE-bom", "UTF-16BE", null);
         _testHttpInvalid("application/xml;charset=UTF-16BE", "UTF-16BE-bom", "UTF-16BE", "UTF-16");
         _testHttpInvalid("application/xml;charset=UTF-16BE", "UTF-16BE-bom", "UTF-16BE", "UTF-16BE");
-        
+
         _testHttpInvalid("application/xml;charset=UTF-32BE", "UTF-32BE-bom", "UTF-32BE", null);
         _testHttpInvalid("application/xml;charset=UTF-32BE", "UTF-32BE-bom", "UTF-32BE", "UTF-32");
         _testHttpInvalid("application/xml;charset=UTF-32BE", "UTF-32BE-bom", "UTF-32BE", "UTF-32BE");
@@ -278,7 +278,7 @@ public class XmlStreamReaderTest {
         _testHttpLenient("text/html;charset=UTF-16BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
         _testHttpLenient("text/html;charset=UTF-32BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
     }
-    
+
     @Test
     public void testRawContent() throws Exception {
         final String encoding = "UTF-8";

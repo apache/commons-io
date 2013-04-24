@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -86,8 +86,8 @@ public class EndianUtilsTest extends TestCase {
     }
 
     /**
-     * Tests all swapXxxx methods for symmetry when going from one endian 
-     * to another and back again. 
+     * Tests all swapXxxx methods for symmetry when going from one endian
+     * to another and back again.
      */
     public void testSymmetry() {
         assertEquals( (short) 0x0102, EndianUtils.swapShort( EndianUtils.swapShort( (short) 0x0102 ) ) );
@@ -283,7 +283,7 @@ public class EndianUtilsTest extends TestCase {
     public void testUnsignedOverrun() throws Exception {
         final byte[] target = new byte[] { 0, 0, 0, (byte)0x80 };
         final long expected = 0x80000000L;
-    
+
         long actual = EndianUtils.readSwappedUnsignedInteger(target, 0);
         assertEquals("readSwappedUnsignedInteger(byte[], int) was incorrect", expected, actual);
 

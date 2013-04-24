@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import org.junit.Test;
 public class ReaderInputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
-    
+
     static {
         final StringBuilder buffer = new StringBuilder();
         for (int i=0; i<100; i++) {
@@ -38,9 +38,9 @@ public class ReaderInputStreamTest {
         }
         LARGE_TEST_STRING = buffer.toString();
     }
-    
+
     private final Random random = new Random();
-    
+
     private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
         final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
@@ -53,7 +53,7 @@ public class ReaderInputStreamTest {
         assertEquals(-1, in.read());
         in.close();
     }
-    
+
     private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
         final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
@@ -79,32 +79,32 @@ public class ReaderInputStreamTest {
         }
         in.close();
     }
-    
+
     @Test
     public void testUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, "UTF-8");
     }
-    
+
     @Test
     public void testLargeUTF8WithSingleByteRead() throws IOException {
         testWithSingleByteRead(LARGE_TEST_STRING, "UTF-8");
     }
-    
+
     @Test
     public void testUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(TEST_STRING, "UTF-8");
     }
-    
+
     @Test
     public void testLargeUTF8WithBufferedRead() throws IOException {
         testWithBufferedRead(LARGE_TEST_STRING, "UTF-8");
     }
-    
+
     @Test
     public void testUTF16WithSingleByteRead() throws IOException {
         testWithSingleByteRead(TEST_STRING, "UTF-16");
     }
-    
+
     @SuppressWarnings("deprecation")
     @Test
     public void testReadZero() throws Exception {
@@ -117,7 +117,7 @@ public class ReaderInputStreamTest {
         assertEquals(0, r.read(bytes, 0, 0));
         r.close();
     }
-    
+
     @SuppressWarnings("deprecation")
     @Test
     public void testReadZeroEmptyString() throws Exception {
@@ -130,10 +130,10 @@ public class ReaderInputStreamTest {
         assertEquals(-1, r.read(bytes, 0, 1));
         r.close();
     }
-    
+
     /**
      * Tests https://issues.apache.org/jira/browse/IO-277
-     * 
+     *
      * @throws IOException
      */
     @Test
