@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.InvalidMarkException;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -47,7 +48,8 @@ public class CharSequenceInputStream extends InputStream {
     private final CharBuffer cbuf;
     private final ByteBuffer bbuf;
 
-    private int mark;
+    private int mark_cbuf; // position in cbuf
+    private int mark_bbuf; // position in bbuf
     
     /**
      * Constructor.
@@ -70,7 +72,8 @@ public class CharSequenceInputStream extends InputStream {
         this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
         this.cbuf = CharBuffer.wrap(cs);
-        this.mark = NO_MARK;
+        this.mark_cbuf = NO_MARK;
+        this.mark_bbuf = NO_MARK;
     }
 
     /**
@@ -178,9 +181,12 @@ public class CharSequenceInputStream extends InputStream {
 
     @Override
     public long skip(long n) throws IOException {
+        /*
+         * This could be made more efficient by using position to skip within the current buffer.
+         */
         long skipped = 0;
-        while (n > 0 && this.cbuf.hasRemaining()) {
-            this.cbuf.get();
+        while (n > 0 && available() > 0) {
+            this.read();
             n--;
             skipped++;
         }
@@ -212,16 +218,45 @@ public class CharSequenceInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readlimit) {
-        this.mark = this.cbuf.position();
+        this.mark_cbuf = this.cbuf.position();
+        this.mark_bbuf = this.bbuf.position();
+        this.cbuf.mark();
+        this.bbuf.mark();
+        // It would be nice to be able to use mark & reset on the cbuf and bbuf;
+        // however the bbuf is re-used so that won't work
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        if (this.mark != NO_MARK) {
-            this.cbuf.position(this.mark);
-            this.mark = NO_MARK;
-            this.bbuf.limit(0);
-            this.encoder.reset();
+        /*
+         * This is not the most efficient implementation, as it re-encodes from the beginning.
+         *
+         * Since the bbuf is re-used, in general it's necessary to re-encode the data.
+         *
+         * It should be possible to apply some optimisations however:
+         * + use mark/reset on the cbuf and bbuf. This would only work if the buffer had not been (re)filled since the mark.
+         * The code would have to catch InvalidMarkException - does not seem possible to check if mark is valid otherwise.
+         * + Try saving the state of the cbuf before each fillBuffer; it might be possible to restart from there.
+         */
+        if (this.mark_cbuf != NO_MARK) {
+            // if cbuf is at 0, we have not started reading anything, so skip re-encoding
+            if (this.cbuf.position() != 0) {
+                this.encoder.reset();
+                this.cbuf.rewind();
+                this.bbuf.rewind();
+                this.bbuf.limit(0); // rewind does not clear the buffer
+                while(this.cbuf.position() < this.mark_cbuf) {
+                    this.bbuf.rewind(); // empty the buffer (we only refill when empty during normal processing)
+                    this.bbuf.limit(0);
+                    fillBuffer();
+                }
+            }
+            if (this.cbuf.position() != this.mark_cbuf) {
+                throw new IllegalStateException("Unexpected CharBuffer postion: actual="+cbuf.position() + " expected=" + this.mark_cbuf);
+            }
+            this.bbuf.position(this.mark_bbuf);                
+            this.mark_cbuf = NO_MARK;
+            this.mark_bbuf = NO_MARK;
         }
     }
 
