@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -121,7 +121,7 @@ public class FileSystemUtils {
      * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
      * Note that some OS's are NOT currently supported, including OS/390,
-     * OpenVMS. 
+     * OpenVMS.
      * <pre>
      * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -214,7 +214,7 @@ public class FileSystemUtils {
      * @since 2.0
      */
     public static long freeSpaceKb() throws IOException {
-        return freeSpaceKb(-1); 
+        return freeSpaceKb(-1);
     }
 
     /**
@@ -232,9 +232,9 @@ public class FileSystemUtils {
      * @since 2.0
      */
     public static long freeSpaceKb(final long timeout) throws IOException {
-        return freeSpaceKb(new File(".").getAbsolutePath(), timeout); 
+        return freeSpaceKb(new File(".").getAbsolutePath(), timeout);
     }
-    
+
     //-----------------------------------------------------------------------
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
@@ -290,13 +290,13 @@ public class FileSystemUtils {
         if (path.length() > 0 && path.charAt(0) != '"') {
             path = "\"" + path + "\"";
         }
-        
+
         // build and run the 'dir' command
         final String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /a /-c " + path};
-        
+
         // read in the output of the command to an ArrayList
         final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
-        
+
         // now iterate over the lines we just read and find the LAST
         // non-empty line (the free space bytes should be in the last element
         // of the ArrayList anyway, but this will ensure it works even if it's
@@ -354,7 +354,7 @@ public class FileSystemUtils {
                     "Command line 'dir /-c' did not return valid info " +
                     "for path '" + path + "'");
         }
-        
+
         // remove commas and dots in the bytes count
         final StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));
         for (int k = 0; k < buf.length(); k++) {
@@ -390,9 +390,9 @@ public class FileSystemUtils {
         if (posix) {
             flags += "P";
         }
-        final String[] cmdAttribs = 
+        final String[] cmdAttribs =
             flags.length() > 1 ? new String[] {DF, flags, path} : new String[] {DF, path};
-        
+
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         final List<String> lines = performCommand(cmdAttribs, 3, timeout);
         if (lines.size() < 2) {
@@ -402,7 +402,7 @@ public class FileSystemUtils {
                     "for path '" + path + "'- response was " + lines);
         }
         final String line2 = lines.get(1); // the line we're interested in
-        
+
         // Now, we tokenize the string. The fourth element is what we want.
         StringTokenizer tok = new StringTokenizer(line2, " ");
         if (tok.countTokens() < 4) {
@@ -427,7 +427,7 @@ public class FileSystemUtils {
     //-----------------------------------------------------------------------
     /**
      * Parses the bytes from a string.
-     * 
+     *
      * @param freeSpace  the free space string
      * @param path  the path
      * @return the number of bytes
@@ -442,7 +442,7 @@ public class FileSystemUtils {
                         "for path '" + path + "'- check path is valid");
             }
             return bytes;
-            
+
         } catch (final NumberFormatException ex) {
             throw new IOExceptionWithCause(
                     "Command line '" + DF + "' did not return numeric data as expected " +
@@ -469,7 +469,7 @@ public class FileSystemUtils {
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
         // however, its still not perfect as the JDK support is so poor
         // (see commons-exec or Ant for a better multi-threaded multi-os solution)
-        
+
         final List<String> lines = new ArrayList<String>(20);
         Process proc = null;
         InputStream in = null;
@@ -492,7 +492,7 @@ public class FileSystemUtils {
                 lines.add(line);
                 line = inr.readLine();
             }
-            
+
             proc.waitFor();
 
             ThreadMonitor.stop(monitor);
@@ -510,7 +510,7 @@ public class FileSystemUtils {
                         "for command " + Arrays.asList(cmdAttribs));
             }
             return lines;
-            
+
         } catch (final InterruptedException ex) {
             throw new IOExceptionWithCause(
                     "Command line threw an InterruptedException " +

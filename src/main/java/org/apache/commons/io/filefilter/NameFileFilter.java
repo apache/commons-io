@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.apache.commons.io.IOCase;
 /**
  * Filters filenames for a certain name.
  * <p>
- * For example, to print all files and directories in the 
+ * For example, to print all files and directories in the
  * current directory whose name is <code>Test</code>:
  *
  * <pre>
@@ -42,7 +42,7 @@ import org.apache.commons.io.IOCase;
  * @see FileFilterUtils#nameFileFilter(String, IOCase)
  */
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** The filenames to search for */
     private final String[] names;
     /** Whether the comparison is case sensitive. */
@@ -50,7 +50,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new case-sensitive name file filter for a single name.
-     * 
+     *
      * @param name  the name to allow, must not be null
      * @throws IllegalArgumentException if the name is null
      */
@@ -78,7 +78,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
@@ -88,7 +88,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new name file filter for an array of names specifying case-sensitivity.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the names array is null
@@ -104,7 +104,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new case-sensitive name file filter for a list of names.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the name list is null
      * @throws ClassCastException if the list does not contain Strings
@@ -115,7 +115,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new name file filter for a list of names specifying case-sensitivity.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the name list is null
@@ -132,7 +132,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     //-----------------------------------------------------------------------
     /**
      * Checks to see if the filename matches.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filename matches
      */
@@ -149,7 +149,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the filename matches.
-     * 
+     *
      * @param dir  the File directory (ignored)
      * @param name  the filename
      * @return true if the filename matches

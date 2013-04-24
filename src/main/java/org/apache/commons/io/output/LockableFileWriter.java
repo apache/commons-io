@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * <b>N.B.</b> the lock file is deleted when {@link #close()} is called
  * - or if the main file cannot be opened initially.
- * In the (unlikely) event that the lockfile cannot be deleted, 
+ * In the (unlikely) event that the lockfile cannot be deleted,
  * this is not reported, and subsequent requests using
  * the same lockfile will fail.
  * <p>
@@ -188,7 +188,7 @@ public class LockableFileWriter extends Writer {
         if (file.isDirectory()) {
             throw new IOException("File specified is a directory");
         }
-        
+
         // init lock file
         if (lockDir == null) {
             lockDir = System.getProperty("java.io.tmpdir");
@@ -197,10 +197,10 @@ public class LockableFileWriter extends Writer {
         FileUtils.forceMkdir(lockDirFile);
         testLockDir(lockDirFile);
         lockFile = new File(lockDirFile, file.getName() + LCK);
-        
+
         // check if locked
         createLock();
-        
+
         // init wrapped writer
         out = initWriter(file, encoding, append);
     }
