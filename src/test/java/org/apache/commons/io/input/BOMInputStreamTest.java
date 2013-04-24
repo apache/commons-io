@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -562,7 +562,7 @@ public class BOMInputStreamTest {
     @Test
     public void testReadWithMultipleBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), 
+        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true),
                                             ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_8);
         assertEquals('A', in.read());
         assertEquals('B', in.read());
@@ -656,7 +656,7 @@ public class BOMInputStreamTest {
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, false)));
         parseXml(createUtf32BeDataStream(data, false));
     }
-    
+
     @Test
     public void testReadXmlWithoutBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ public abstract class FileBasedTestCase extends TestCase {
     public FileBasedTestCase(final String name) {
         super(name);
     }
-    
+
     public static File getTestDirectory() {
         if (testDir == null) {
             testDir = new File("test/io/").getAbsoluteFile();
@@ -53,11 +53,11 @@ public abstract class FileBasedTestCase extends TestCase {
         testDir.mkdirs();
         return testDir;
     }
-    
+
     protected void createFile(final File file, final long size)
             throws IOException {
         if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file 
+            throw new IOException("Cannot create file " + file
                 + " as the parent directory does not exist");
         }
         final BufferedOutputStream output =
@@ -68,7 +68,7 @@ public abstract class FileBasedTestCase extends TestCase {
             IOUtils.closeQuietly(output);
         }
     }
-    
+
     protected byte[] generateTestData(final long size) {
         try {
             final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -78,8 +78,8 @@ public abstract class FileBasedTestCase extends TestCase {
             throw new RuntimeException("This should never happen: " + ioe.getMessage());
         }
     }
-    
-    protected void generateTestData(final OutputStream out, final long size) 
+
+    protected void generateTestData(final OutputStream out, final long size)
                 throws IOException {
         for (int i = 0; i < size; i++) {
             //output.write((byte)'X');
@@ -225,6 +225,6 @@ public abstract class FileBasedTestCase extends TestCase {
             assertTrue("Couldn't delete file: " + file, file.delete());
         }
     }
-    
+
 
 }

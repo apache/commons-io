@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,14 +83,14 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
             fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
             assertTrue(file1.exists());
             assertTrue(file2.exists());
-            
+
             fw1.write(textContent);
             fw2.write(textContent);
-            
+
             fw1.flush();
             fw2.flush();
             checkFile(file1, file2);
-            
+
         } finally {
             IOUtils.closeQuietly(fw1);
             IOUtils.closeQuietly(fw2);
@@ -108,10 +108,10 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
                 assertTrue(file1.exists());
                 assertTrue(file2.exists());
-                
+
                 fw1.write(textContent);
                 fw2.write(textContent);
-                
+
                 fw1.flush();
                 fw2.flush();
                 try {
@@ -120,7 +120,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 } catch (final AssertionFailedError ex) {
                     // success
                 }
-                
+
             } finally {
                 IOUtils.closeQuietly(fw1);
                 IOUtils.closeQuietly(fw2);
@@ -136,10 +136,10 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
                 assertTrue(file1.exists());
                 assertTrue(file2.exists());
-                
+
                 fw1.write(textContent);
                 fw2.write(textContent);
-                
+
                 fw1.flush();
                 fw2.flush();
                 try {
@@ -148,7 +148,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
                 } catch (final AssertionFailedError ex) {
                     // success
                 }
-                
+
             } finally {
                 IOUtils.closeQuietly(fw1);
                 IOUtils.closeQuietly(fw2);

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,11 +33,11 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     public FileUtilsListFilesTestCase(final String name) {
         super(name);
     }
-    
+
     private File getLocalTestDirectory() {
         return new File(getTestDirectory(), "list-files");
     }
-    
+
     /**
      * @see junit.framework.TestCase#setUp()
      */
@@ -52,21 +52,21 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         FileUtils.touch(file);
         file = new File(dir, "README");
         FileUtils.touch(file);
-        
+
         dir = new File(dir, "subdir1");
         dir.mkdirs();
         file = new File(dir, "dummy-build.xml");
         FileUtils.touch(file);
         file = new File(dir, "dummy-readme.txt");
         FileUtils.touch(file);
-        
+
         dir = new File(dir, "subsubdir1");
         dir.mkdirs();
         file = new File(dir, "dummy-file.txt");
         FileUtils.touch(file);
         file = new File(dir, "dummy-index.html");
         FileUtils.touch(file);
-        
+
         dir = dir.getParentFile();
         dir = new File(dir, "CVS");
         dir.mkdirs();
@@ -84,7 +84,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         final File dir = getLocalTestDirectory();
         FileUtils.deleteDirectory(dir);
     }
-    
+
     private Collection<String> filesToFilenames(final Collection<File> files) {
         final Collection<String> filenames = new ArrayList<String>(files.size());
         for (final File file : files) {
@@ -92,7 +92,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         }
         return filenames;
     }
-    
+
     private Collection<String> filesToFilenames(final Iterator<File> files) {
         final Collection<String> filenames = new ArrayList<String>();
         while (files.hasNext()) {
@@ -100,7 +100,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         }
         return filenames;
     }
-    
+
     public void testIterateFilesByExtension() throws Exception {
         final String[] extensions = { "xml", "txt" };
 
@@ -127,26 +127,26 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
 
     public void testListFilesByExtension() throws Exception {
         final String[] extensions = {"xml", "txt"};
-        
+
         Collection<File> files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
         assertEquals(1, files.size());
         Collection<String> filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
         assertFalse(filenames.contains("README"));
         assertFalse(filenames.contains("dummy-file.txt"));
-        
+
         files = FileUtils.listFiles(getLocalTestDirectory(), extensions, true);
         filenames = filesToFilenames(files);
         assertEquals(4, filenames.size());
         assertTrue(filenames.contains("dummy-file.txt"));
         assertFalse(filenames.contains("dummy-index.html"));
-        
+
         files = FileUtils.listFiles(getLocalTestDirectory(), null, false);
         assertEquals(2, files.size());
         filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
         assertTrue(filenames.contains("README"));
-        assertFalse(filenames.contains("dummy-file.txt"));        
+        assertFalse(filenames.contains("dummy-file.txt"));
     }
 
     public void testListFiles() throws Exception {
@@ -154,7 +154,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         Collection<String> filenames;
         IOFileFilter fileFilter;
         IOFileFilter dirFilter;
-        
+
         //First, find non-recursively
         fileFilter = FileFilterUtils.trueFileFilter();
         files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, (IOFileFilter)null);
@@ -162,7 +162,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
         assertFalse("'dummy-index.html' shouldn't be found", filenames.contains("dummy-index.html"));
         assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
-        
+
         //Second, find recursively
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter("CVS"));
@@ -171,7 +171,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
         assertTrue("'dummy-index.html' is missing", filenames.contains("dummy-index.html"));
         assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
-        
+
         //Do the same as above but now with the filter coming from FileFilterUtils
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.makeCVSAware(null);

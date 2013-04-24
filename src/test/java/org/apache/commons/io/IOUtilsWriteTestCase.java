@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * JUnit tests for IOUtils write methods.
- * 
+ *
  * @version $Id$
  * @see IOUtils
  */
@@ -64,7 +64,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write(inData, out);
         out.off();
         out.flush();
@@ -76,7 +76,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_byteArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((byte[]) null, out);
         out.off();
         out.flush();
@@ -97,7 +97,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write(inData, writer);
         out.off();
         writer.flush();
@@ -111,7 +111,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write((byte[]) null, writer);
         out.off();
         writer.flush();
@@ -132,7 +132,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write(inData, writer, "UTF8");
         out.off();
         writer.flush();
@@ -147,7 +147,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write((byte[]) null, writer, "UTF8");
         out.off();
         writer.flush();
@@ -167,25 +167,25 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write(inData, writer, (String) null);
         out.off();
         writer.flush();
-        
+
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
     //-----------------------------------------------------------------------
     public void testWrite_charSequenceToOutputStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write(csq, out);
         out.off();
         out.flush();
-        
+
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
@@ -193,7 +193,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((CharSequence) null, out);
         out.off();
         out.flush();
@@ -212,14 +212,14 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
         IOUtils.write(csq, out, "UTF16");
         out.off();
         out.flush();
-        
+
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
         assertTrue("Content differs", Arrays.equals(inData, bytes));
@@ -228,7 +228,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_charSequenceToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((CharSequence) null, out);
         out.off();
         out.flush();
@@ -246,7 +246,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -280,7 +280,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write((CharSequence) null, writer);
         out.off();
         writer.flush();
@@ -298,14 +298,14 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testWrite_stringToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write(str, out);
         out.off();
         out.flush();
-        
+
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
@@ -313,7 +313,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_stringToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((String) null, out);
         out.off();
         out.flush();
@@ -332,14 +332,14 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testWrite_stringToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
         IOUtils.write(str, out, "UTF16");
         out.off();
         out.flush();
-        
+
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
         assertTrue("Content differs", Arrays.equals(inData, bytes));
@@ -348,7 +348,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_stringToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((String) null, out);
         out.off();
         out.flush();
@@ -366,7 +366,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWrite_stringToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -400,7 +400,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write((String) null, writer);
         out.off();
         writer.flush();
@@ -419,7 +419,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testWrite_charArrayToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -434,7 +434,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_charArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((char[]) null, out);
         out.off();
         out.flush();
@@ -453,14 +453,14 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     //-----------------------------------------------------------------------
     public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
         IOUtils.write(str.toCharArray(), out, "UTF16");
         out.off();
         out.flush();
-        
+
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
         assertTrue("Content differs", Arrays.equals(inData, bytes));
@@ -469,7 +469,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        
+
         IOUtils.write((char[]) null, out);
         out.off();
         out.flush();
@@ -487,7 +487,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
 
@@ -521,7 +521,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.write((char[]) null, writer);
         out.off();
         writer.flush();
@@ -542,15 +542,15 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines(list, "*", out);
-        
+
         out.off();
         out.flush();
-        
+
         final String expected = "hello*world**this is**some text*";
         final String actual = baout.toString();
         assertEquals(expected, actual);
@@ -559,25 +559,25 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_OutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines((List<?>) null, "*", out);
         out.off();
         out.flush();
-        
+
         assertEquals("Sizes differ", 0, baout.size());
     }
 
     public void testWriteLines_OutputStream_nullSeparator() throws Exception {
         final Object[] data = new Object[] {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-            
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines(list, (String) null, out);
         out.off();
         out.flush();
-        
+
         final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
         final String actual = baout.toString();
         assertEquals(expected, actual);
@@ -597,15 +597,15 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final Object[] data = new Object[] {
             "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines(list, "*", out, "UTF-8");
-        
+
         out.off();
         out.flush();
-        
+
         final String expected = "hello\u8364*world**this is**some text*";
         final String actual = baout.toString("UTF-8");
         assertEquals(expected, actual);
@@ -614,25 +614,25 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     public void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines((List<?>) null, "*", out, "US-ASCII");
         out.off();
         out.flush();
-        
+
         assertEquals("Sizes differ", 0, baout.size());
     }
 
     public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
         final Object[] data = new Object[] {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-            
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines(list, (String) null, out, "US-ASCII");
         out.off();
         out.flush();
-        
+
         final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
         final String actual = baout.toString();
         assertEquals(expected, actual);
@@ -651,15 +651,15 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         IOUtils.writeLines(list, "*", out, (String) null);
-        
+
         out.off();
         out.flush();
-        
+
         final String expected = "hello*world**this is**some text*";
         final String actual = baout.toString();
         assertEquals(expected, actual);
@@ -670,17 +670,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final Object[] data = new Object[] {
             "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.writeLines(list, "*", writer);
-        
+
         out.off();
         writer.flush();
-        
+
         final String expected = "hello*world**this is**some text*";
         final String actual = baout.toString();
         assertEquals(expected, actual);
@@ -691,27 +691,27 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.writeLines((List<?>) null, "*", writer);
         out.off();
         writer.flush();
-        
+
         assertEquals("Sizes differ", 0, baout.size());
     }
 
     public void testWriteLines_Writer_nullSeparator() throws Exception {
         final Object[] data = new Object[] {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
-            
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
-        
+
         IOUtils.writeLines(list, (String) null, writer);
         out.off();
         writer.flush();
-        
+
         final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
         final String actual = baout.toString();
         assertEquals(expected, actual);

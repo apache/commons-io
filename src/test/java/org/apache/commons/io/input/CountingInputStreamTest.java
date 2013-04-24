@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,8 +42,8 @@ public class CountingInputStreamTest extends TestCase {
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final CountingInputStream cis = new CountingInputStream(bais);
 
-        // have to declare this larger as we're going to read 
-        // off the end of the stream and input stream seems 
+        // have to declare this larger as we're going to read
+        // off the end of the stream and input stream seems
         // to do bounds checking
         final byte[] result = new byte[21];
 
@@ -53,7 +53,7 @@ public class CountingInputStreamTest extends TestCase {
         assertEquals( found, cis.getCount() );
 
         final int value = cis.read();
-        found++; 
+        found++;
         result[5] = (byte)value;
         assertEquals( found, cis.getCount() );
 
@@ -118,7 +118,7 @@ public class CountingInputStreamTest extends TestCase {
         assertEquals( found, count );
         cis.close();
     }
-    
+
     public void testZeroLength1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -192,18 +192,18 @@ public class CountingInputStreamTest extends TestCase {
         assertEquals(2, cis.getCount());
         cis.close();
     }
-    
+
     public void testSkipping() throws IOException {
         final String text = "Hello World!";
         final byte[] bytes = text.getBytes();
         final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         final CountingInputStream cis = new CountingInputStream(bais);
-        
+
         assertEquals(6,cis.skip(6));
         assertEquals(6,cis.getCount());
         final byte[] result = new byte[6];
         cis.read(result);
-        
+
         assertEquals("World!",new String(result));
         assertEquals(12,cis.getCount());
         cis.close();

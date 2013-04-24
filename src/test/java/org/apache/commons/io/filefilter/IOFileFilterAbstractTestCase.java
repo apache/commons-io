@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,7 @@ import java.io.File;
 import junit.framework.TestCase;
 
 public abstract class IOFileFilterAbstractTestCase extends TestCase {
-  
+
   /**
    * Constructs a new instance of
    * <code>IOFileFilterAbstractTestCase</code>.
@@ -29,7 +29,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
   public IOFileFilterAbstractTestCase(final String name) {
     super(name);
   }
-  
+
   public boolean assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
   throws Exception {
     assertEquals(
@@ -59,7 +59,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
         assertEquals(
       "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
       expected, filter.accept(file.getParentFile(), file.getName()));
-    } 
+    }
     else if (file == null) {
         assertEquals(
       "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
@@ -72,13 +72,13 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
       assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i-1], filters[i].isInvoked());
     }
   }
-  
+
   public void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
     for(int i = 1; i < filters.length; i++) {
       assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i-1], filters[i].isInvoked());
     }
   }
-  
+
   public File determineWorkingDirectoryPath(final String key, final String defaultPath) {
     // Look for a system property to specify the working directory
     final String workingPathName = System.getProperty(key, defaultPath);
@@ -92,7 +92,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
       }
     }
   }
-  
+
   public void resetTrueFilters(final TesterTrueFileFilter[] filters) {
     for (final TesterTrueFileFilter filter : filters) {
       if(filter != null) {
@@ -100,23 +100,23 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
       }
     }
   }
-  
+
   class TesterTrueFileFilter extends TrueFileFilter {
 
     private boolean invoked;
-    
+
     @Override
     public boolean accept(final File file) {
       setInvoked(true);
       return super.accept(file);
     }
-    
+
     @Override
     public boolean accept(final File file, final String str) {
       setInvoked(true);
       return super.accept(file, str);
     }
-    
+
     public boolean isInvoked() {
       return this.invoked;
     }
@@ -124,28 +124,28 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
     public void setInvoked(final boolean invoked) {
       this.invoked = invoked;
     }
-    
+
     public void reset() {
       setInvoked(false);
     }
   }
-  
+
   class TesterFalseFileFilter extends FalseFileFilter {
-    
+
     private boolean invoked;
-    
+
     @Override
     public boolean accept(final File file) {
       setInvoked(true);
       return super.accept(file);
     }
-    
+
     @Override
     public boolean accept(final File file, final String str) {
       setInvoked(true);
       return super.accept(file, str);
     }
-    
+
     public boolean isInvoked() {
       return this.invoked;
     }
@@ -153,7 +153,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
     public void setInvoked(final boolean invoked) {
       this.invoked = invoked;
     }
-    
+
     public void reset() {
       setInvoked(false);
     }

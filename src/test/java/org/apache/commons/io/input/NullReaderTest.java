@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -107,7 +107,7 @@ public class NullReaderTest extends TestCase {
 
         // reset by closing
         reader.close();
-    
+
         // Read into array using offset & length
         final int offset = 2;
         final int lth    = 4;
@@ -142,7 +142,7 @@ public class NullReaderTest extends TestCase {
         int position = 0;
         final int readlimit = 10;
         final Reader reader = new TestNullReader(100, true, false);
-        
+
         assertTrue("Mark Should be Supported", reader.markSupported());
 
         // No Mark
@@ -255,6 +255,6 @@ public class NullReaderTest extends TestCase {
                 chars[i] = (char)(startPos + i);
             }
         }
-        
+
     }
 }

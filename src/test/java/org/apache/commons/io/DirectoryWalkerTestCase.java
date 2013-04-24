@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,7 +62,7 @@ public class DirectoryWalkerTestCase {
     private static final File nullStream    = new File(outputDir, "NullOutputStream.java");
     private static final File[] ioFiles     = new File[] {filenameUtils, ioUtils};
     private static final File[] outputFiles = new File[] {proxyWriter, nullStream};
-    
+
     // Filters
     private static final IOFileFilter dirsFilter        = createNameFilter(dirs);
     private static final IOFileFilter iofilesFilter     = createNameFilter(ioFiles);
@@ -203,7 +203,7 @@ public class DirectoryWalkerTestCase {
         final List<File> results = new TestFileFinder(null, -1).find(invalidDir);
         assertEquals("Result Size", 1, results.size());
         assertTrue("Current Dir", results.contains(invalidDir));
- 
+
         try {
             new TestFileFinder(null, -1).find(null);
             fail("Null start directory didn't throw Exception");
@@ -338,7 +338,7 @@ public class DirectoryWalkerTestCase {
         } catch(final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
-        
+
         // Cancel on a directory
         try {
             cancelName = "commons";
@@ -351,7 +351,7 @@ public class DirectoryWalkerTestCase {
         } catch(final IOException ex) {
             fail("IOException: " + cancelName + " " + ex);
         }
-        
+
         // Suppress CancelException (use same file name as preceding test)
         try {
             walker = new TestMultiThreadCancelWalker(cancelName, true);

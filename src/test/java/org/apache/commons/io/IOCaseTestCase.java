@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -92,7 +92,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertTrue(IOCase.SENSITIVE.checkCompareTo("DEF", "ABC") > 0);
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("", ""));
-        
+
         try {
             IOCase.SENSITIVE.checkCompareTo("ABC", null);
             fail();
@@ -111,7 +111,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertEquals(0, IOCase.SENSITIVE.checkCompareTo("ABC", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkCompareTo("ABC", "abc") < 0);
         assertTrue(IOCase.SENSITIVE.checkCompareTo("abc", "ABC") > 0);
-        
+
         assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("ABC", "ABC"));
         assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("ABC", "abc"));
         assertEquals(0, IOCase.INSENSITIVE.checkCompareTo("abc", "ABC"));
@@ -133,7 +133,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "ABCD"));
         assertFalse(IOCase.SENSITIVE.checkEquals("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEquals("", ""));
-        
+
         try {
             IOCase.SENSITIVE.checkEquals("ABC", null);
             fail();
@@ -151,10 +151,10 @@ public class IOCaseTestCase extends FileBasedTestCase {
     public void test_checkEquals_case() throws Exception {
         assertTrue(IOCase.SENSITIVE.checkEquals("ABC", "ABC"));
         assertFalse(IOCase.SENSITIVE.checkEquals("ABC", "Abc"));
-        
+
         assertTrue(IOCase.INSENSITIVE.checkEquals("ABC", "ABC"));
         assertTrue(IOCase.INSENSITIVE.checkEquals("ABC", "Abc"));
-        
+
         assertTrue(IOCase.SYSTEM.checkEquals("ABC", "ABC"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEquals("ABC", "Abc"));
     }
@@ -170,7 +170,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "ABCD"));
         assertFalse(IOCase.SENSITIVE.checkStartsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("", ""));
-        
+
         try {
             IOCase.SENSITIVE.checkStartsWith("ABC", null);
             fail();
@@ -188,10 +188,10 @@ public class IOCaseTestCase extends FileBasedTestCase {
     public void test_checkStartsWith_case() throws Exception {
         assertTrue(IOCase.SENSITIVE.checkStartsWith("ABC", "AB"));
         assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", "Ab"));
-        
+
         assertTrue(IOCase.INSENSITIVE.checkStartsWith("ABC", "AB"));
         assertTrue(IOCase.INSENSITIVE.checkStartsWith("ABC", "Ab"));
-        
+
         assertTrue(IOCase.SYSTEM.checkStartsWith("ABC", "AB"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkStartsWith("ABC", "Ab"));
     }
@@ -207,7 +207,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "ABCD"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEndsWith("", ""));
-        
+
         try {
             IOCase.SENSITIVE.checkEndsWith("ABC", null);
             fail();
@@ -225,10 +225,10 @@ public class IOCaseTestCase extends FileBasedTestCase {
     public void test_checkEndsWith_case() throws Exception {
         assertTrue(IOCase.SENSITIVE.checkEndsWith("ABC", "BC"));
         assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", "Bc"));
-        
+
         assertTrue(IOCase.INSENSITIVE.checkEndsWith("ABC", "BC"));
         assertTrue(IOCase.INSENSITIVE.checkEndsWith("ABC", "Bc"));
-        
+
         assertTrue(IOCase.SYSTEM.checkEndsWith("ABC", "BC"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkEndsWith("ABC", "Bc"));
     }
@@ -289,10 +289,10 @@ public class IOCaseTestCase extends FileBasedTestCase {
     public void test_checkIndexOf_case() throws Exception {
         assertEquals(1,  IOCase.SENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(-1, IOCase.SENSITIVE.checkIndexOf("ABC", 0, "Bc"));
-        
+
         assertEquals(1, IOCase.INSENSITIVE.checkIndexOf("ABC", 0, "BC"));
         assertEquals(1, IOCase.INSENSITIVE.checkIndexOf("ABC", 0, "Bc"));
-        
+
         assertEquals(1, IOCase.SYSTEM.checkIndexOf("ABC", 0, "BC"));
         assertEquals(WINDOWS ? 1 : -1, IOCase.SYSTEM.checkIndexOf("ABC", 0, "Bc"));
     }
@@ -308,7 +308,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "ABCD"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 0, "ABC"));
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("", 0, ""));
-        
+
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, ""));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "A"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "AB"));
@@ -318,7 +318,7 @@ public class IOCaseTestCase extends FileBasedTestCase {
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 1, "ABCD"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, "ABC"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("", 1, ""));
-        
+
         try {
             IOCase.SENSITIVE.checkRegionMatches("ABC", 0, null);
             fail();
@@ -348,10 +348,10 @@ public class IOCaseTestCase extends FileBasedTestCase {
     public void test_checkRegionMatches_case() throws Exception {
         assertTrue(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "AB"));
         assertFalse(IOCase.SENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
-        
+
         assertTrue(IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "AB"));
         assertTrue(IOCase.INSENSITIVE.checkRegionMatches("ABC", 0, "Ab"));
-        
+
         assertTrue(IOCase.SYSTEM.checkRegionMatches("ABC", 0, "AB"));
         assertEquals(WINDOWS, IOCase.SYSTEM.checkRegionMatches("ABC", 0, "Ab"));
     }

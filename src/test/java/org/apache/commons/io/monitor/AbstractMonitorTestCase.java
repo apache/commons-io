@@ -67,19 +67,19 @@ public abstract class AbstractMonitorTestCase extends TestCase {
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
         final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
-        
+
         final IOFileFilter directories = FileFilterUtils.directoryFileFilter();
         final IOFileFilter visible = HiddenFileFilter.VISIBLE;
         final IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
 
         final IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
-        
+
         createObserver(testDir, filter);
     }
 
     /**
      * Create a {@link FileAlterationObserver}.
-     * 
+     *
      * @param file The directory to observe
      * @param fileFilter The file filter to apply
      */

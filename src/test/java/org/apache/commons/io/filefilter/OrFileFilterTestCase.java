@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,26 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
-  
+
   private static final String DEFAULT_WORKING_PATH = "./OrFileFilterTestCase/";
   private static final String WORKING_PATH_NAME_PROPERTY_KEY = OrFileFilterTestCase.class.getName() + ".workingDirectory";
-  
+
   private List<List<IOFileFilter>> testFilters;
   private List<boolean[]> testTrueResults;
   private List<boolean[]> testFalseResults;
   private List<Boolean> testFileResults;
   private List<Boolean> testFilenameResults;
-  
+
   public OrFileFilterTestCase(final String name) {
     super(name);
   }
-  
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
     this.setUpTestFilters();
   }
-  
+
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     final OrFileFilter filter = new OrFileFilter();
@@ -48,52 +48,52 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     }
     return filter;
   }
-  
+
   @Override
   protected IOFileFilter buildFilterUsingConstructor(final List<IOFileFilter> filters) {
     return new OrFileFilter(filters);
   }
-  
+
   @Override
   protected ConditionalFileFilter getConditionalFileFilter() {
     return new OrFileFilter();
   }
-  
+
   @Override
   protected String getDefaultWorkingPath() {
     return DEFAULT_WORKING_PATH;
   }
-  
+
   @Override
   protected List<boolean[]> getFalseResults() {
     return this.testFalseResults;
   }
-  
+
   @Override
   protected List<Boolean> getFileResults() {
     return this.testFileResults;
   }
-  
+
   @Override
   protected List<Boolean> getFilenameResults() {
     return this.testFilenameResults;
   }
-  
+
   @Override
   protected List<List<IOFileFilter>>  getTestFilters() {
     return this.testFilters;
   }
-  
+
   @Override
   protected List<boolean[]> getTrueResults() {
     return this.testTrueResults;
   }
-  
+
   @Override
   protected String getWorkingPathNamePropertyKey() {
     return WORKING_PATH_NAME_PROPERTY_KEY;
   }
-  
+
   private void setUpTestFilters() {
     // filters
     //tests
@@ -111,7 +111,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       testFileResults.add(0, null);
       testFilenameResults.add(0, null);
     }
-      
+
     // test 1 - Test conditional or with all filters returning true
     {
       // test 1 filters
@@ -152,7 +152,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       testFileResults.add(2, Boolean.TRUE);
       testFilenameResults.add(2, Boolean.TRUE);
     }
-    
+
     // test 3 - Test conditional or with second filter returning false
     {
       // test 3 filters
@@ -174,7 +174,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       testFileResults.add(3, Boolean.TRUE);
       testFilenameResults.add(3, Boolean.TRUE);
     }
-    
+
     // test 4 - Test conditional or with third filter returning false
     {
       // test 4 filters
@@ -189,7 +189,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {true, false, false};
       // test 4 false results
       final boolean[] falseResults = new boolean[] {false, false, false};
-    
+
       testFilters.add(4, filters);
       testTrueResults.add(4, trueResults);
       testFalseResults.add(4, falseResults);
@@ -211,14 +211,14 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {true, false, false};
       // test 5 false results
       final boolean[] falseResults = new boolean[] {true, false, false};
-    
+
       testFilters.add(5, filters);
       testTrueResults.add(5, trueResults);
       testFalseResults.add(5, falseResults);
       testFileResults.add(5, Boolean.TRUE);
       testFilenameResults.add(5, Boolean.TRUE);
     }
-    
+
     // test 6 - Test conditional or with second and third filters returning false
     {
       final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
@@ -232,14 +232,14 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {true, false, false};
       // test 6 false results
       final boolean[] falseResults = new boolean[] {false, false, false};
-    
+
       testFilters.add(6, filters);
       testTrueResults.add(6, trueResults);
       testFalseResults.add(6, falseResults);
       testFileResults.add(6, Boolean.TRUE);
       testFilenameResults.add(6, Boolean.TRUE);
     }
-    
+
     // test 7 - Test conditional or with first and second filters returning false
     {
       final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
@@ -253,14 +253,14 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {true, false, false};
       // test 7 false results
       final boolean[] falseResults = new boolean[] {true, true, false};
-    
+
       testFilters.add(7, filters);
       testTrueResults.add(7, trueResults);
       testFalseResults.add(7, falseResults);
       testFileResults.add(7, Boolean.TRUE);
       testFilenameResults.add(7, Boolean.TRUE);
     }
-    
+
     // test 8 - Test conditional or with fourth filter returning false
     {
       final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
@@ -272,7 +272,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {true, false, false};
       // test 8 false results
       final boolean[] falseResults = new boolean[] {false, false, false};
-    
+
       testFilters.add(8, filters);
       testTrueResults.add(8, trueResults);
       testFalseResults.add(8, falseResults);
@@ -290,7 +290,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
       final boolean[] trueResults = new boolean[] {false, false, false};
       // test 9 false results
       final boolean[] falseResults = new boolean[] {true, true, true};
-    
+
       testFilters.add(9, filters);
       testTrueResults.add(9, trueResults);
       testFalseResults.add(9, falseResults);

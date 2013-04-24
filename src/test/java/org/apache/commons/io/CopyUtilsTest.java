@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
  * JUnit tests for CopyUtils.
- * 
+ *
  * @version $Id$
  * @see CopyUtils
  */
@@ -75,11 +75,11 @@ public class CopyUtilsTest extends FileBasedTestCase {
         new CopyUtils();
         // Nothing to assert, the constructor is public and does not blow up.
     }
-    
+
     public void testCopy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         CopyUtils.copy(inData, out);
 
         assertEquals("Sizes differ", inData.length, baout.size());
@@ -90,7 +90,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
-        
+
         CopyUtils.copy(inData, writer);
         writer.flush();
 
@@ -101,7 +101,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
         final String charsetName = "UTF-8";
-        final StringWriter writer = new StringWriter(); 
+        final StringWriter writer = new StringWriter();
         CopyUtils.copy(inDataStr.getBytes(charsetName), writer, charsetName);
         assertEquals(inDataStr, writer.toString());
     }
@@ -115,7 +115,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
         final int count = CopyUtils.copy(in, out);
-        
+
         assertEquals("Not all bytes were read", 0, in.available());
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
@@ -130,7 +130,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
-        
+
         CopyUtils.copy(in, writer);
         writer.flush();
 
@@ -152,10 +152,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
-        
+
         CopyUtils.copy(reader, out);
         //Note: this method *does* flush. It is equivalent to:
         //  OutputStreamWriter _out = new OutputStreamWriter(fout);
@@ -190,7 +190,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
 
     public void testCopy_stringToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
-        
+
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
