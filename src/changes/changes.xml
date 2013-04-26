@@ -47,6 +47,10 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-279" dev="sebb" type="fix">
+        Tailer erroneously considers file as new.
+        Fix to use file.lastModified() rather than System.currentTimeMillis()
+      </action>            
       <action issue="IO-356" dev="sebb" type="fix">
          CharSequenceInputStream#reset() behaves incorrectly in case when buffer size is not dividable by data size.
          Fix code so skip relates to the encoded bytes; reset now re-encodes the data up to the point of the mark
