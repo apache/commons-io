@@ -363,7 +363,7 @@ public class Tailer implements Runnable {
                 } else {
                     // The current position in the file
                     position = end ? file.length() : 0;
-                    last = System.currentTimeMillis();
+                    last = file.lastModified();
                     reader.seek(position);
                 }
             }
@@ -400,7 +400,7 @@ public class Tailer implements Runnable {
                     if (length > position) {
                         // The file has more content than it did last time
                         position = readLines(reader);
-                        last = System.currentTimeMillis();
+                        last = file.lastModified();
                     } else if (newer) {
                         /*
                          * This can happen if the file is truncated or overwritten with the exact same length of
@@ -411,7 +411,7 @@ public class Tailer implements Runnable {
 
                         // Now we can read new lines
                         position = readLines(reader);
-                        last = System.currentTimeMillis();
+                        last = file.lastModified();
                     }
                 }
                 if (reOpen) {
