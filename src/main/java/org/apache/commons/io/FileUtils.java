@@ -1497,8 +1497,9 @@ public class FileUtils {
      * <code>destination</code>. The directories up to <code>destination</code>
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
+     * The {@code source} stream is closed.
      *
-     * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}
+     * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}, will be closed
      * @param destination  the non-directory <code>File</code> to write bytes to
      *  (possibly overwriting), must not be {@code null}
      * @throws IOException if <code>destination</code> is a directory
