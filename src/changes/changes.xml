@@ -47,7 +47,11 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
-      <action issue="IO-380" dev="sebb" type="fix">
+      <action issue="IO-381" dev="ggregory" type="add">
+        Add FileUtils.copyInputStreamToFile API with option to leave the source open.
+        See copyInputStreamToFile(final InputStream source, final File destination, boolean closeSource)
+      </action>            
+      <action issue="IO-380" dev="sebb" type="fix" due-to="claudio_ch">
         FileUtils.copyInputStreamToFile should document it closes the input source
       </action>            
       <action issue="IO-279" dev="sebb" type="fix">

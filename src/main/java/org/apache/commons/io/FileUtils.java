@@ -1459,8 +1459,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
-        final InputStream input = source.openStream();
-        copyInputStreamToFile(input, destination);
+        copyInputStreamToFile(source.openStream(), destination);
     }
 
     /**
@@ -1488,8 +1487,7 @@ public class FileUtils {
         final URLConnection connection = source.openConnection();
         connection.setConnectTimeout(connectionTimeout);
         connection.setReadTimeout(readTimeout);
-        final InputStream input = connection.getInputStream();
-        copyInputStreamToFile(input, destination);
+        copyInputStreamToFile(connection.getInputStream(), destination);
     }
 
     /**
@@ -1509,6 +1507,27 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
+        copyInputStreamToFile(source, destination, true);
+    }
+
+    /**
+     * Copies bytes from an {@link InputStream} <code>source</code> to a file
+     * <code>destination</code>. The directories up to <code>destination</code>
+     * will be created if they don't already exist. <code>destination</code>
+     * will be overwritten if it already exists.
+     *
+     * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}, will be closed
+     * @param destination  the non-directory <code>File</code> to write bytes to
+     *  (possibly overwriting), must not be {@code null}
+     * @param closeSource If true, closes the <code>source</code>
+     * @throws IOException if <code>destination</code> is a directory
+     * @throws IOException if <code>destination</code> cannot be written
+     * @throws IOException if <code>destination</code> needs creating but can't be
+     * @throws IOException if an IO error occurs during copying
+     * @since 2.5
+     */
+    public static void copyInputStreamToFile(final InputStream source, final File destination, boolean closeSource) 
+            throws IOException {
         try {
             final FileOutputStream output = openOutputStream(destination);
             try {
@@ -1518,7 +1537,9 @@ public class FileUtils {
                 IOUtils.closeQuietly(output);
             }
         } finally {
-            IOUtils.closeQuietly(source);
+            if (closeSource) {
+                IOUtils.closeQuietly(source);
+            }
         }
     }
 
