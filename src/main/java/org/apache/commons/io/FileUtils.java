@@ -1507,7 +1507,11 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
-        copyInputStreamToFile(source, destination, true);
+        try {
+            copyToFile(source, destination);
+        } finally {
+            IOUtils.closeQuietly(source);
+        }
     }
 
     /**
@@ -1515,31 +1519,24 @@ public class FileUtils {
      * <code>destination</code>. The directories up to <code>destination</code>
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
+     * The {@code source} stream is closed.
      *
      * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}
      * @param destination  the non-directory <code>File</code> to write bytes to
      *  (possibly overwriting), must not be {@code null}
-     * @param closeSource If true, closes the <code>source</code>
      * @throws IOException if <code>destination</code> is a directory
      * @throws IOException if <code>destination</code> cannot be written
      * @throws IOException if <code>destination</code> needs creating but can't be
      * @throws IOException if an IO error occurs during copying
      * @since 2.5
      */
-    public static void copyInputStreamToFile(final InputStream source, final File destination, boolean closeSource) 
-            throws IOException {
+    public static void copyToFile(final InputStream source, final File destination) throws IOException {
+        final FileOutputStream output = openOutputStream(destination);
         try {
-            final FileOutputStream output = openOutputStream(destination);
-            try {
-                IOUtils.copy(source, output);
-                output.close(); // don't swallow close Exception if copy completes normally
-            } finally {
-                IOUtils.closeQuietly(output);
-            }
+            IOUtils.copy(source, output);
+            output.close(); // don't swallow close Exception if copy completes normally
         } finally {
-            if (closeSource) {
-                IOUtils.closeQuietly(source);
-            }
+            IOUtils.closeQuietly(output);
         }
     }
 
