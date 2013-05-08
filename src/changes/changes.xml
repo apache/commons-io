@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-380" dev="sebb" type="fix">
+        FileUtils.copyInputStreamToFile should document it closes the input source
+      </action>            
       <action issue="IO-279" dev="sebb" type="fix">
         Tailer erroneously considers file as new.
         Fix to use file.lastModified() rather than System.currentTimeMillis()
