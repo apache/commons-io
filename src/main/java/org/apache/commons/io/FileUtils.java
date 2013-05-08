@@ -1516,7 +1516,7 @@ public class FileUtils {
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
      *
-     * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}, will be closed
+     * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}
      * @param destination  the non-directory <code>File</code> to write bytes to
      *  (possibly overwriting), must not be {@code null}
      * @param closeSource If true, closes the <code>source</code>
