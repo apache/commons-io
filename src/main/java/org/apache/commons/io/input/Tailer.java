@@ -105,6 +105,7 @@ import org.apache.commons.io.IOUtils;
  * </pre>
  * <p>If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.</p>
  *
+ * <p>The file is read using the default charset; this can be overriden if necessary</p>
  * @see TailerListener
  * @see TailerListenerAdapter
  * @version $Id$
@@ -119,6 +120,9 @@ public class Tailer implements Runnable {
 
     private static final int DEFAULT_BUFSIZE = 4096;
 
+    // The default charset used for reading files
+    private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
+
     /**
      * Buffer on top of RandomAccessFile.
      */
@@ -128,6 +132,11 @@ public class Tailer implements Runnable {
      * The file which will be tailed.
      */
     private final File file;
+
+    /**
+     * The character set that will be used to read the file.
+     */
+    private final Charset cset;
 
     /**
      * The amount of time to wait for the file to be updated.
@@ -218,6 +227,23 @@ public class Tailer implements Runnable {
      * @param bufSize Buffer size
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen, final int bufSize) {
+        this(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
+    }
+
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     * @param file the file to follow.
+     * @param cset the Charset to be used for reading the file
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks
+     * @param bufSize Buffer size
+     * @deprecated
+     */
+    @Deprecated
+    public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen
+            , final int bufSize) {
         this.file = file;
         this.delayMillis = delayMillis;
         this.end = end;
@@ -228,6 +254,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
+        this.cset = cset; 
     }
 
     /**
@@ -257,7 +284,24 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
             final int bufSize) {
-        final Tailer tailer = new Tailer(file, listener, delayMillis, end, reOpen, bufSize);
+        return create(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
+    }
+
+    /**
+     * Creates and starts a Tailer for the given file.
+     *
+     * @param file the file to follow.
+     * @param charset the character set to use for reading the file
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen whether to close/reopen the file between chunks
+     * @param bufSize buffer size.
+     * @return The new tailer
+     */
+    public static Tailer create(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen
+            ,final int bufSize) {
+        final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);
         final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
@@ -453,8 +497,6 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessFile reader) throws IOException {
-        // Make explicit that the default charset is being used here
-        Charset cset = Charset.defaultCharset();
         ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64);
         long pos = reader.getFilePointer();
         long rePos = pos; // position to re-read
