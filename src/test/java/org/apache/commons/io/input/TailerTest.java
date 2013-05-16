@@ -20,9 +20,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -122,15 +124,20 @@ public class TailerTest extends FileBasedTestCase {
         final Thread thread = new Thread(tailer);
         thread.start();
 
+        // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
+        final Charset charsetUTF8 = Charset.forName("UTF-8");
+        Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
         BufferedReader reader = null;
         try{
             List<String> lines = new ArrayList<String>();
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin)));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8));
             String line = null;
             while((line = reader.readLine()) != null){
-                write(file, line);
+                out.write(line);
+                out.write("\n");
                 lines.add(line);
             }
+            out.close(); // ensure data is written
 
            final long testDelayMillis = delay * 10;
            Thread.sleep(testDelayMillis);
@@ -148,6 +155,7 @@ public class TailerTest extends FileBasedTestCase {
         }finally{
             tailer.stop();
             IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(out);
         }
     }
 
