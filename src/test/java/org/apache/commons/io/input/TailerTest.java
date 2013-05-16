@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,6 +110,7 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     public void testMultiByteBreak() throws Exception {
+        System.out.println("testMultiByteBreak() Default charset: "+Charset.defaultCharset().displayName());
         final long delay = 50;
         final File origin = new File(this.getClass().getResource("/test-file-utf8.bin").toURI());
         final File file = new File(getTestDirectory(), "testMultiByteBreak.txt");
@@ -135,7 +137,13 @@ public class TailerTest extends FileBasedTestCase {
            List<String> tailerlines = listener.getLines();
            assertEquals("line count",lines.size(),tailerlines.size());
            for(int i = 0,len = lines.size();i<len;i++){
-               assertEquals("line "+i, lines.get(i), tailerlines.get(i));
+               final String expected = lines.get(i);
+               final String actual = tailerlines.get(i);
+               if (!expected.equals(actual)) {
+                   fail("Line: " + i 
+                           + "\nExp: (" + expected.length() + ") " + expected 
+                           + "\nAct: (" + actual.length() + ") "+ actual);
+               }
            }
         }finally{
             tailer.stop();
