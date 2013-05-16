@@ -116,7 +116,7 @@ public class ReversedLinesFileReader implements Closeable {
         if (maxBytesPerChar == 1f) {
             // all one byte encodings are no problem
             byteDecrement = 1;
-        } else if (charset == Charset.forName("UTF-8")) {
+        } else if (charset == Charsets.UTF_8) {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
@@ -124,11 +124,11 @@ public class ReversedLinesFileReader implements Closeable {
             // Same as for UTF-8
             // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
             byteDecrement = 1;
-        } else if (charset == Charset.forName("UTF-16BE") || charset == Charset.forName("UTF-16LE")) {
+        } else if (charset == Charsets.UTF_16BE || charset == Charsets.UTF_16LE) {
             // UTF-16 new line sequences are not allowed as second tuple of four byte sequences,
             // however byte order has to be specified
             byteDecrement = 2;
-        } else if (charset == Charset.forName("UTF-16")) {
+        } else if (charset == Charsets.UTF_16) {
             throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
         } else {
             throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to submit a patch)");

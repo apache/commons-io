@@ -174,11 +174,6 @@ public class FileUtils {
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
-    /**
-     * The UTF-8 character set, used to decode octets in URLs.
-     */
-    private static final Charset UTF8 = Charset.forName("UTF-8");
-
     //-----------------------------------------------------------------------
     /**
      * Construct a file from the set of name elements.
@@ -884,7 +879,7 @@ public class FileUtils {
                     } finally {
                         if (bytes.position() > 0) {
                             bytes.flip();
-                            buffer.append(UTF8.decode(bytes).toString());
+                            buffer.append(Charsets.UTF_8.decode(bytes).toString());
                             bytes.clear();
                         }
                     }
