@@ -295,6 +295,24 @@ file comparators, endian transformation classes, and much more.
           </ignorePathsToDelete>
         </configuration>
       </plugin>
+      <!-- Configure RAT for CLI invocation: mvn apache-rat:rat -->
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <!-- Must agree with report section RAT config -->
+        <configuration>
+          <excludes>
+            <exclude>src/test/resources/**/*.bin</exclude>
+            <exclude>test/**</exclude>
+
+            <!-- The next 3 excludes can be dropped when using CP30 -->
+            <exclude>site-content/**</exclude>
+            <exclude>.pmd</exclude>
+            <exclude>src/site/resources/download_*.cgi</exclude>
+
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -322,10 +340,17 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
+        <!-- Must agree with build section RAT config -->
         <configuration>
           <excludes>
             <exclude>src/test/resources/**/*.bin</exclude>
+            <exclude>test/**</exclude>
+
+            <!-- The next 3 excludes can be dropped when using CP30 -->
+            <exclude>site-content/**</exclude>
             <exclude>.pmd</exclude>
+            <exclude>src/site/resources/download_*.cgi</exclude>
+
           </excludes>
         </configuration>
       </plugin>
