@@ -34,17 +34,17 @@ import java.io.Serializable;
  * @version $Id$
  * @since 1.3
  */
-public final class IOCase implements Serializable {
+public enum IOCase implements Serializable {
 
     /**
      * The constant for case sensitive regardless of operating system.
      */
-    public static final IOCase SENSITIVE = new IOCase("Sensitive", true);
+    SENSITIVE ("Sensitive", true),
 
     /**
      * The constant for case insensitive regardless of operating system.
      */
-    public static final IOCase INSENSITIVE = new IOCase("Insensitive", false);
+    INSENSITIVE ("Insensitive", false),
 
     /**
      * The constant for case sensitivity determined by the current operating system.
@@ -58,7 +58,7 @@ public final class IOCase implements Serializable {
      * If you derialize this constant of Windows, and deserialize on Unix, or vice
      * versa, then the value of the case-sensitivity flag will change.
      */
-    public static final IOCase SYSTEM = new IOCase("System", !FilenameUtils.isSystemWindows());
+    SYSTEM ("System", !FilenameUtils.isSystemWindows());
 
     /** Serialization version. */
     private static final long serialVersionUID = -6343169151696340687L;
@@ -78,14 +78,12 @@ public final class IOCase implements Serializable {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static IOCase forName(final String name) {
-        if (IOCase.SENSITIVE.name.equals(name)){
-            return IOCase.SENSITIVE;
-        }
-        if (IOCase.INSENSITIVE.name.equals(name)){
-            return IOCase.INSENSITIVE;
-        }
-        if (IOCase.SYSTEM.name.equals(name)){
-            return IOCase.SYSTEM;
+        for (IOCase ioCase : IOCase.values())
+        {
+            if (ioCase.getName().equals(name))
+            {
+                return ioCase;
+            }
         }
         throw new IllegalArgumentException("Invalid IOCase name: " + name);
     }
