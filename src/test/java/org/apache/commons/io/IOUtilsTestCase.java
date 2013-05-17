@@ -1212,25 +1212,25 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     public void testAsBufferedNull() {
         try {
-            IOUtils.asBufferedInputStream(null);
+            IOUtils.buffer((InputStream) null);
             fail("Expected NullPointerException");
         } catch (NullPointerException npe) {
             // expected
         }
         try {
-            IOUtils.asBufferedOutputStream(null);
+            IOUtils.buffer((OutputStream) null);
             fail("Expected NullPointerException");
         } catch (NullPointerException npe) {
             // expected
         }
         try {
-            IOUtils.asBufferedReader(null);
+            IOUtils.buffer((Reader) null);
             fail("Expected NullPointerException");
         } catch (NullPointerException npe) {
             // expected
         }
         try {
-            IOUtils.asBufferedWriter(null);
+            IOUtils.buffer((Writer) null);
             fail("Expected NullPointerException");
         } catch (NullPointerException npe) {
             // expected
@@ -1244,9 +1244,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
                 return 0;
             }
         };
-        final BufferedInputStream bis = IOUtils.asBufferedInputStream(is);
+        final BufferedInputStream bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
-        assertSame(bis, IOUtils.asBufferedInputStream(bis));
+        assertSame(bis, IOUtils.buffer(bis));
     }
 
     public void testAsBufferedOutputStream() {
@@ -1254,9 +1254,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             @Override
             public void write(int b) throws IOException { }
         };
-        final BufferedOutputStream bis = IOUtils.asBufferedOutputStream(is);
+        final BufferedOutputStream bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
-        assertSame(bis, IOUtils.asBufferedOutputStream(bis));
+        assertSame(bis, IOUtils.buffer(bis));
     }
 
     public void testAsBufferedReader() {
@@ -1268,9 +1268,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             @Override
             public void close() throws IOException { }
         };
-        final BufferedReader bis = IOUtils.asBufferedReader(is);
+        final BufferedReader bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
-        assertSame(bis, IOUtils.asBufferedReader(bis));
+        assertSame(bis, IOUtils.buffer(bis));
     }
 
     public void testAsBufferedWriter() {
@@ -1287,8 +1287,8 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             @Override
             public void close() throws IOException { }
         };
-        final BufferedWriter bis = IOUtils.asBufferedWriter(is);
+        final BufferedWriter bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
-        assertSame(bis, IOUtils.asBufferedWriter(bis));
+        assertSame(bis, IOUtils.buffer(bis));
     }
 }

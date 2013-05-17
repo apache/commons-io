@@ -443,7 +443,7 @@ public class IOUtils {
      *            the reader to wrap or return (not null)
      * @return the given reader or a new {@link BufferedReader} for the given reader
      * @since 2.2
-     * @see #asBufferedReader(Reader)
+     * @see #buffer(Reader)
      * @throws NullPointerException if the input parameter is null
      */
     public static BufferedReader toBufferedReader(final Reader reader) {
@@ -460,7 +460,7 @@ public class IOUtils {
      * @since 2.5
      * @throws NullPointerException if the input parameter is null
      */
-    public static BufferedReader asBufferedReader(final Reader reader) {
+    public static BufferedReader buffer(final Reader reader) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
     }
 
@@ -474,7 +474,7 @@ public class IOUtils {
      * @since 2.5
      * @throws NullPointerException if the input parameter is null
      */
-    public static BufferedWriter asBufferedWriter(final Writer writer) {
+    public static BufferedWriter buffer(final Writer writer) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer);
     }
 
@@ -488,7 +488,7 @@ public class IOUtils {
      * @since 2.5
      * @throws NullPointerException if the input parameter is null
      */
-    public static BufferedOutputStream asBufferedOutputStream(final OutputStream outputStream) {
+    public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         if (outputStream == null) { // not checked by BufferedOutputStream
             throw new NullPointerException();
@@ -506,7 +506,7 @@ public class IOUtils {
      * @since 2.5
      * @throws NullPointerException if the input parameter is null
      */
-    public static BufferedInputStream asBufferedInputStream(final InputStream inputStream) {
+    public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         if (inputStream == null) { // not checked by BufferedInputStream
             throw new NullPointerException();
