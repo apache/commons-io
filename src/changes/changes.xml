@@ -47,6 +47,14 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-233" dev="sebb" type="add">
+         Add Methods for Buffering Streams/Writers To IOUtils
+         Added overloaded buffer() methods - see also IO-330
+      </action>
+      <action issue="IO-330" dev="sebb" type="add">
+         IOUtils#toBufferedOutputStream/toBufferedWriter to conditionally wrap the output
+         Added overloaded buffer() methods - see also IO-233 
+      </action>
       <action issue="IO-381" dev="ggregory" type="add">
         Add FileUtils.copyInputStreamToFile API with option to leave the source open.
         See copyInputStreamToFile(final InputStream source, final File destination, boolean closeSource)
@@ -74,10 +82,6 @@ The <action> type attribute can be add,update,fix,remove.
         FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
         Javadoc: clarify that original dir is included in the results
       </action>            
-      <action issue="IO-330" dev="sebb" type="add">
-         IOUtils#toBufferedOutputStream/toBufferedWriter to conditionally wrap the output
-         Added asBufferedInputStream, asBufferedOutputStream, asBufferedReader, asBufferedWriter 
-      </action>
       <action issue="IO-346" dev="sebb" type="add">
          Add ByteArrayOutputStream.toInputStream()
       </action>
