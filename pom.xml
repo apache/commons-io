@@ -251,6 +251,8 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.export>
 
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
+    <!-- Suppress JaCoCo -->
+    <jacoco.skip>true</jacoco.skip>
   </properties>
 
   <build>
