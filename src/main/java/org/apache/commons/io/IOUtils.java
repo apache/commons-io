@@ -1406,7 +1406,6 @@ public class IOUtils {
     //-----------------------------------------------------------------------
     /**
      * Writes chars from a <code>char[]</code> to a <code>Writer</code>
-     * using the default character encoding of the platform.
      *
      * @param data  the char array to write, do not modify during output,
      * null ignored
