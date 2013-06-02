@@ -996,6 +996,7 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @throws IOException if the output file length is not the same as the input file length after the copy completes
      * @see #copyFile(File, File, boolean)
      * @since 1.3
      */
@@ -1029,7 +1030,9 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @throws IOException if the output file length is not the same as the input file length after the copy completes
      * @see #copyFileToDirectory(File, File)
+     * @see #copyFile(File, File, boolean)
      */
     public static void copyFile(final File srcFile, final File destFile) throws IOException {
         copyFile(srcFile, destFile, true);
@@ -1057,7 +1060,9 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
+     * @throws IOException if the output file length is not the same as the input file length after the copy completes
      * @see #copyFileToDirectory(File, File, boolean)
+     * @see #doCopyFile(File, File, boolean)
      */
     public static void copyFile(final File srcFile, final File destFile,
             final boolean preserveFileDate) throws IOException {
@@ -1116,11 +1121,15 @@ public class FileUtils {
 
     /**
      * Internal copy file method.
+     * This caches the original file length, and throws an IOException 
+     * if the output file length is different from the current input file length.
+     * So it may fail if the file changes size. 
      *
      * @param srcFile  the validated source file, must not be {@code null}
      * @param destFile  the validated destination file, must not be {@code null}
      * @param preserveFileDate  whether to preserve the file date
      * @throws IOException if an error occurs
+     * @throws IOException if the output file length is not the same as the input file length after the copy completes
      */
     private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
@@ -1150,9 +1159,11 @@ public class FileUtils {
             IOUtils.closeQuietly(fis);
         }
 
-        if (srcFile.length() != destFile.length()) {
+        final long srcLen = srcFile.length();
+        final long dstLen = destFile.length();
+        if (srcLen != dstLen) {
             throw new IOException("Failed to copy full contents from '" +
-                    srcFile + "' to '" + destFile + "'");
+                    srcFile + "' to '" + destFile + "' Expected length: " + srcLen +" Actual: " + dstLen);
         }
         if (preserveFileDate) {
             destFile.setLastModified(srcFile.lastModified());
