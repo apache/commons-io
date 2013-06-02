@@ -2568,6 +2568,32 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // If this does not work, test will fail next time (assuming target is not cleaned)
     }
 
+    // Test helper class to pretend a file is shorter than it is
+    private static class ShorterFile extends File {
+        public ShorterFile(String pathname) {
+            super(pathname);
+        }
+        @Override
+        public long length() {
+            return super.length() - 1;
+        }    
+    }
+
+    // This test relies on FileUtils.copyFile using File.length to check the output size
+    public void testIncorrectOutputSize() throws Exception {
+        File inFile = new File("pom.xml");
+        File outFile = new ShorterFile("target/pom.tmp"); // it will report a shorter file
+        try {
+            FileUtils.copyFile(inFile, outFile);
+            fail("Expected IOException");
+        } catch (Exception e) {
+            final String msg = e.toString();
+            assertTrue(msg, msg.contains("Failed to copy full contents"));
+        } finally {
+            outFile.delete(); // tidy up
+        }
+    }
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
