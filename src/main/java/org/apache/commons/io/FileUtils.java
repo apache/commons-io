@@ -1123,13 +1123,16 @@ public class FileUtils {
      * Internal copy file method.
      * This caches the original file length, and throws an IOException 
      * if the output file length is different from the current input file length.
-     * So it may fail if the file changes size. 
+     * So it may fail if the file changes size.
+     * It may also fail with "IllegalArgumentException: Negative size" if the input file is truncated part way
+     * through copying the data and the new file size is less than the current position.
      *
      * @param srcFile  the validated source file, must not be {@code null}
      * @param destFile  the validated destination file, must not be {@code null}
      * @param preserveFileDate  whether to preserve the file date
      * @throws IOException if an error occurs
      * @throws IOException if the output file length is not the same as the input file length after the copy completes
+     * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the position
      */
     private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
