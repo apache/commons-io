@@ -251,8 +251,6 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.export>
 
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <!-- Suppress JaCoCo -->
-    <jacoco.skip>true</jacoco.skip>
   </properties>
 
   <build>
@@ -320,7 +318,6 @@ file comparators, endian transformation classes, and much more.
 
   <reporting>
     <plugins>
-      <!-- JaCoCo is useless but it is defined in commons-parent-29 -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
