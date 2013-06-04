@@ -1340,6 +1340,32 @@ public class IOUtils {
     }
 
     /**
+     * Writes bytes from a <code>byte[]</code> to an <code>OutputStream</code> using chunked writes.
+     * This is intended for writing very large byte arrays which might otherwise cause excessive
+     * memory usage if the native code has to allocate a copy.
+     *
+     * @param data  the byte array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.5
+     */
+    public static void writeChunked(final byte[] data, final OutputStream output)
+            throws IOException {
+        if (data != null) {
+            int bytes = data.length;
+            int offset = 0;
+            while(bytes > 0) {
+                int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
+                output.write(data, offset, chunk);
+                bytes -= chunk;
+                offset += chunk;
+            }
+        }
+    }
+
+    /**
      * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
      * using the default character encoding of the platform.
      * <p>
@@ -1417,6 +1443,31 @@ public class IOUtils {
     public static void write(final char[] data, final Writer output) throws IOException {
         if (data != null) {
             output.write(data);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>char[]</code> to a <code>Writer</code> using chunked writes.
+     * This is intended for writing very large byte arrays which might otherwise cause excessive
+     * memory usage if the native code has to allocate a copy.
+     *
+     * @param data  the char array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.5
+     */
+    public static void writeChunked(final char[] data, final Writer output) throws IOException {
+        if (data != null) {
+            int bytes = data.length;
+            int offset = 0;
+            while(bytes > 0) {
+                int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
+                output.write(data, offset, chunk);
+                bytes -= chunk;
+                offset += chunk;
+            }
         }
     }
 
@@ -2825,4 +2876,5 @@ public class IOUtils {
             throw new EOFException("Length to read: " + expected + " actual: " + actual);
         }
     }
+    
 }
