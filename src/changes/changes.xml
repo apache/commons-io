@@ -47,6 +47,11 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-382" dev="sebb" type="add">
+         Chunked IO for large arrays.
+         Added writeChunked(byte[], OutputStream) and writeChunked(char[] Writer)
+         Added ChunkedOutputStream, ChunkedWriter
+      </action>
       <action issue="IO-385" dev="sebb" type="fix">
          FileUtils.doCopyFile can potentially loop for ever
          Exit loop if no data to copy
