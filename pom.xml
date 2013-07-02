@@ -224,8 +224,8 @@ file comparators, endian transformation classes, and much more.
   </dependencies>
 
   <properties>
-    <maven.compile.source>1.6</maven.compile.source>
-    <maven.compile.target>1.6</maven.compile.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.release.version>2.5</commons.release.version>
