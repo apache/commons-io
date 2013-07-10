@@ -2519,7 +2519,7 @@ public class FileUtils {
         }
 
         if (file.isDirectory()) {
-            return sizeOfDirectory(file);
+            return sizeOfDirectory0(file); // private method; expects directory
         } else {
             return file.length();
         }
@@ -2566,7 +2566,6 @@ public class FileUtils {
      * overflow occurs. See {@link #sizeOfDirectoryAsBigInteger(File)} for an alternative
      * method that does not overflow.
      *
-     *
      * @param directory
      *            directory to inspect, must not be {@code null}
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
@@ -2576,7 +2575,11 @@ public class FileUtils {
      */
     public static long sizeOfDirectory(final File directory) {
         checkDirectory(directory);
+        return sizeOfDirectory0(directory);
+    }
 
+    // Private method, must be invoked will a directory parameter
+    private static long sizeOfDirectory0(final File directory) {
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
             return 0L;
@@ -2586,7 +2589,7 @@ public class FileUtils {
         for (final File file : files) {
             try {
                 if (!isSymlink(file)) {
-                    size += sizeOf(file);
+                    size += sizeOf0(file); // internal method
                     if (size < 0) {
                         break;
                     }
@@ -2597,6 +2600,15 @@ public class FileUtils {
         }
 
         return size;
+    }
+
+    // Internal method - does not check existence
+    private static long sizeOf0(File file) {
+        if (file.isDirectory()) {
+            return sizeOfDirectory0(file);
+        } else {
+            return file.length(); // will be 0 if file does not exist
+        }
     }
 
     /**
