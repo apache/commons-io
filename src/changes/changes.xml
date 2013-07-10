@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+      <action issue="IO-389" dev="sebb" type="fix" due-to="Austin Doupnik">
+         FileUtils.sizeOfDirectory can throw IllegalArgumentException
+      </action>
       <action issue="IO-390" dev="sebb" type="fix">
          FileUtils.sizeOfDirectoryAsBigInteger can overflow.
          Ensure that recursive calls all use BigInteger
