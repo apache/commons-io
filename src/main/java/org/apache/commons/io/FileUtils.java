@@ -2552,7 +2552,7 @@ public class FileUtils {
         }
 
         if (file.isDirectory()) {
-            return sizeOfDirectoryAsBigInteger(file);
+            return sizeOfDirectoryBig0(file); // internal method
         } else {
             return BigInteger.valueOf(file.length());
         }
@@ -2611,17 +2611,21 @@ public class FileUtils {
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
         checkDirectory(directory);
+        return sizeOfDirectoryBig0(directory);
+    }
 
+    // Must be called with a directory
+    private static BigInteger sizeOfDirectoryBig0(final File directory) {
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
             return BigInteger.ZERO;
         }
-        BigInteger size = BigInteger.ZERO;
+        BigInteger size =  BigInteger.ZERO;
 
         for (final File file : files) {
             try {
                 if (!isSymlink(file)) {
-                    size = size.add(BigInteger.valueOf(sizeOf(file)));
+                    size = size.add(sizeOBig0(file));
                 }
             } catch (final IOException ioe) {
                 // Ignore exceptions caught when asking if a File is a symlink.
@@ -2629,6 +2633,15 @@ public class FileUtils {
         }
 
         return size;
+    }
+
+    // internal method; if file does not exist will return 0
+    private static BigInteger sizeOBig0(final File fileOrDir) {
+        if (fileOrDir.isDirectory()) {
+            return sizeOfDirectoryBig0(fileOrDir);
+        } else {
+            return BigInteger.valueOf(fileOrDir.length());
+        }
     }
 
     /**

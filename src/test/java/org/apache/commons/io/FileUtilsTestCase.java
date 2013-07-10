@@ -862,6 +862,16 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         file.delete();
     }
 
+    // Compare sizes of a directory tree using long and BigInteger methods
+    public void testCompareSizeOf() {
+        final File start = new File("src/test/java");
+        final long sizeLong1 = FileUtils.sizeOf(start);
+        final BigInteger sizeBig = FileUtils.sizeOfAsBigInteger(start);
+        final long sizeLong2 = FileUtils.sizeOf(start);
+        assertEquals("Size should not change",sizeLong1, sizeLong2);
+        assertEquals("longSize should equal BigSize",sizeLong1, sizeBig.longValue());
+    }
+
     /**
      * Tests the {@link FileUtils#sizeOf(File)} method.
      * @throws Exception
