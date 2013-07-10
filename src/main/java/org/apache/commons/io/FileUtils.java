@@ -2637,7 +2637,7 @@ public class FileUtils {
         for (final File file : files) {
             try {
                 if (!isSymlink(file)) {
-                    size = size.add(sizeOBig0(file));
+                    size = size.add(sizeOfBig0(file));
                 }
             } catch (final IOException ioe) {
                 // Ignore exceptions caught when asking if a File is a symlink.
@@ -2648,7 +2648,7 @@ public class FileUtils {
     }
 
     // internal method; if file does not exist will return 0
-    private static BigInteger sizeOBig0(final File fileOrDir) {
+    private static BigInteger sizeOfBig0(final File fileOrDir) {
         if (fileOrDir.isDirectory()) {
             return sizeOfDirectoryBig0(fileOrDir);
         } else {
