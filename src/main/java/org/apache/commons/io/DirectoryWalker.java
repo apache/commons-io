@@ -511,7 +511,7 @@ public abstract class DirectoryWalker<T> {
      *
      * @param directory  the current directory being processed
      * @param depth  the current directory level (starting directory = 0)
-     * @param files the files (possibly filtered) in the directory
+     * @param files the files (possibly filtered) in the directory, may be {@code null}
      * @return the filtered list of files
      * @throws IOException if an I/O Error occurs
      * @since 2.0
