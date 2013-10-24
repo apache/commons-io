@@ -426,7 +426,7 @@ public class CharSequenceInputStreamTest {
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
 
-            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName)) {
+            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName) && ! "x-COMPOUND_TEXT".equalsIgnoreCase(csName)) {
                 testAvailableSkip(csName);
                 testAvailableRead(csName);
             }
