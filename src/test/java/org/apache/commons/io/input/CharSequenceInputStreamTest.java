@@ -92,7 +92,7 @@ public class CharSequenceInputStreamTest {
     public void testBufferedRead_AvailableCharset() throws IOException {
         for (final String csName : Charset.availableCharsets().keySet()) {
             // prevent java.lang.UnsupportedOperationException at sun.nio.cs.ext.ISO2022_CN.newEncoder.
-            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName)) {
+            if (isAvailabilityTestableForCharset(csName)) {
                 testBufferedRead(TEST_STRING, csName);
             }
         }
@@ -426,10 +426,14 @@ public class CharSequenceInputStreamTest {
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
 
-            if (Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName) && ! "x-COMPOUND_TEXT".equalsIgnoreCase(csName)) {
+            if (isAvailabilityTestableForCharset(csName)) {
                 testAvailableSkip(csName);
                 testAvailableRead(csName);
             }
         }
+    }
+
+    private boolean isAvailabilityTestableForCharset(final String csName) {
+        return Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName) && ! "x-COMPOUND_TEXT".equalsIgnoreCase(csName);
     }
 }
