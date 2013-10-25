@@ -436,6 +436,32 @@ public class IOUtils {
     }
 
     /**
+     * Fetches entire contents of an <code>InputStream</code> and represent
+     * same data as result InputStream.
+     * <p>
+     * This method is useful where,
+     * <ul>
+     * <li>Source InputStream is slow.</li>
+     * <li>It has network resources associated, so we cannot keep it open for
+     * long time.</li>
+     * <li>It has network timeout associated.</li>
+     * </ul>
+     * It can be used in favor of {@link #toByteArray(InputStream)}, since it
+     * avoids unnecessary allocation and copy of byte[].<br>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedInputStream</code>.
+     *
+     * @param input Stream to be fully buffered.
+     * @param size the initial buffer size
+     * @return A fully buffered stream.
+     * @throws IOException if an I/O error occurs
+     * @since 2.5
+     */
+    public static InputStream toBufferedInputStream(final InputStream input, int size) throws IOException {
+        return ByteArrayOutputStream.toBufferedInputStream(input, size);
+    }
+
+    /**
      * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
      * reader.
      *
@@ -448,6 +474,22 @@ public class IOUtils {
      */
     public static BufferedReader toBufferedReader(final Reader reader) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+    }
+
+    /**
+     * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a BufferedReader from the given
+     * reader.
+     *
+     * @param reader
+     *            the reader to wrap or return (not null)
+     * @param size the buffer size, if a new BufferedReader is created.
+     * @return the given reader or a new {@link BufferedReader} for the given reader
+     * @since 2.5
+     * @see #buffer(Reader)
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedReader toBufferedReader(final Reader reader, int size) {
+        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader, size);
     }
 
     /**
@@ -465,6 +507,21 @@ public class IOUtils {
     }
 
     /**
+     * Returns the given reader if it is already a {@link BufferedReader}, otherwise creates a BufferedReader from the given
+     * reader.
+     *
+     * @param reader
+     *            the reader to wrap or return (not null)
+     * @param size the buffer size, if a new BufferedReader is created.
+     * @return the given reader or a new {@link BufferedReader} for the given reader
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedReader buffer(final Reader reader, int size) {
+        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader, size);
+    }
+
+    /**
      * Returns the given Writer if it is already a {@link BufferedWriter}, otherwise creates a BufferedWriter from the given
      * Writer.
      *
@@ -476,6 +533,21 @@ public class IOUtils {
      */
     public static BufferedWriter buffer(final Writer writer) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer);
+    }
+
+    /**
+     * Returns the given Writer if it is already a {@link BufferedWriter}, otherwise creates a BufferedWriter from the given
+     * Writer.
+     *
+     * @param writer
+     *            the Writer to wrap or return (not null)
+     * @param size the buffer size, if a new BufferedWriter is created.
+     * @return the given Writer or a new {@link BufferedWriter} for the given Writer
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedWriter buffer(final Writer writer, int size) {
+        return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer, size);
     }
 
     /**
@@ -497,6 +569,25 @@ public class IOUtils {
     }
 
     /**
+     * Returns the given OutputStream if it is already a {@link BufferedOutputStream}, otherwise creates a BufferedOutputStream from the given
+     * OutputStream.
+     *
+     * @param outputStream
+     *            the OutputStream to wrap or return (not null)
+     * @param size the buffer size, if a new BufferedOutputStream is created.
+     * @return the given OutputStream or a new {@link BufferedOutputStream} for the given OutputStream
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedOutputStream buffer(final OutputStream outputStream, int size) {
+        // reject null early on rather than waiting for IO operation to fail
+        if (outputStream == null) { // not checked by BufferedOutputStream
+            throw new NullPointerException();
+        }
+        return outputStream instanceof BufferedOutputStream ? (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
+    }
+
+    /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a BufferedInputStream from the given
      * InputStream.
      *
@@ -512,6 +603,25 @@ public class IOUtils {
             throw new NullPointerException();
         }
         return inputStream instanceof BufferedInputStream ? (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
+    }
+
+    /**
+     * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a BufferedInputStream from the given
+     * InputStream.
+     *
+     * @param inputStream
+     *            the InputStream to wrap or return (not null)
+     * @param size the buffer size, if a new BufferedInputStream is created.
+     * @return the given InputStream or a new {@link BufferedInputStream} for the given InputStream
+     * @since 2.5
+     * @throws NullPointerException if the input parameter is null
+     */
+    public static BufferedInputStream buffer(final InputStream inputStream, int size) {
+        // reject null early on rather than waiting for IO operation to fail
+        if (inputStream == null) { // not checked by BufferedInputStream
+            throw new NullPointerException();
+        }
+        return inputStream instanceof BufferedInputStream ? (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
 
     // read toByteArray

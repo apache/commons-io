@@ -908,6 +908,20 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testToBufferedInputStreamWithBufferSize_InputStream() throws Exception {
+        final FileInputStream fin = new FileInputStream(m_testFile);
+        try {
+            final InputStream in = IOUtils.toBufferedInputStream(fin, 2048);
+            final byte[] out = IOUtils.toByteArray(in);
+            assertNotNull(out);
+            assertEquals("Not all bytes were read", 0, fin.available());
+            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEqualContent(out, m_testFile);
+        } finally {
+            fin.close();
+        }
+    }
+
     public void testToByteArray_InputStream() throws Exception {
         final FileInputStream fin = new FileInputStream(m_testFile);
         try {
@@ -1249,6 +1263,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertSame(bis, IOUtils.buffer(bis));
     }
 
+    public void testAsBufferedInputStreamWithBufferSize() {
+        InputStream is = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        };
+        final BufferedInputStream bis = IOUtils.buffer(is, 2048);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+        assertSame(bis, IOUtils.buffer(bis, 1024));
+    }
+
     public void testAsBufferedOutputStream() {
         OutputStream is = new OutputStream() {
             @Override
@@ -1257,6 +1284,17 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         final BufferedOutputStream bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
         assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    public void testAsBufferedOutputStreamWithBufferSize() {
+        OutputStream os = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException { }
+        };
+        final BufferedOutputStream bos = IOUtils.buffer(os, 2048);
+        assertNotSame(os, bos);
+        assertSame(bos, IOUtils.buffer(bos));
+        assertSame(bos, IOUtils.buffer(bos, 1024));
     }
 
     public void testAsBufferedReader() {
@@ -1271,6 +1309,21 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         final BufferedReader bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
         assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    public void testAsBufferedReaderWithBufferSize() {
+        Reader r = new Reader() {
+            @Override
+            public int read(char[] cbuf, int off, int len) throws IOException {
+                return 0;
+            }
+            @Override
+            public void close() throws IOException { }
+        };
+        final BufferedReader br = IOUtils.buffer(r, 2048);
+        assertNotSame(r, br);
+        assertSame(br, IOUtils.buffer(br));
+        assertSame(br, IOUtils.buffer(br, 1024));
     }
 
     public void testAsBufferedWriter() {
@@ -1290,5 +1343,25 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         final BufferedWriter bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
         assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    public void testAsBufferedWriterWithBufferSize() {
+        Writer w = new Writer() {
+            @Override
+            public void write(int b) throws IOException { }
+
+            @Override
+            public void write(char[] cbuf, int off, int len) throws IOException { }
+
+            @Override
+            public void flush() throws IOException { }
+
+            @Override
+            public void close() throws IOException { }
+        };
+        final BufferedWriter bw = IOUtils.buffer(w, 2024);
+        assertNotSame(w, bw);
+        assertSame(bw, IOUtils.buffer(bw));
+        assertSame(bw, IOUtils.buffer(bw, 1024));
     }
 }
