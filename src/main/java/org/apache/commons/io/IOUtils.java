@@ -2978,6 +2978,8 @@ public class IOUtils {
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect
+     *
+     * @since 2.5
      */
     public static byte[] readFully(final InputStream input, final int length) throws IOException {
         final byte[] buffer = new byte[length];
