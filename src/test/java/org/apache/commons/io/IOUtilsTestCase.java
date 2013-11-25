@@ -642,6 +642,17 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     }
 
+    public void testReadFully_InputStream__ReturnByteArray() throws Exception {
+        final byte[] bytes = "abcd1234".getBytes("UTF-8");
+        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+        
+        final byte[] result = IOUtils.readFully(stream, bytes.length);
+        
+        IOUtils.closeQuietly(stream);
+        
+        assertEqualContent(result, bytes);
+    }
+
     public void testReadFully_InputStream_Offset() throws Exception {
         final byte[] bytes = "abcd1234".getBytes("UTF-8");
         final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);

@@ -2969,6 +2969,25 @@ public class IOUtils {
     /**
      * Reads the requested number of bytes or fail if there are not enough left.
      * <p>
+     * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
+     * not read as many bytes as requested (most likely because of reaching EOF).
+     *
+     * @param input where to read input from
+     * @param length length to read, must be >= 0
+     *
+     * @throws IOException if there is a problem reading the file
+     * @throws IllegalArgumentException if length is negative
+     * @throws EOFException if the number of bytes read was incorrect
+     */
+    public static byte[] readFully(final InputStream input, final int length) throws IOException {
+        final byte[] buffer = new byte[length];
+        readFully(input, buffer, 0, buffer.length);
+        return buffer;
+    }
+
+    /**
+     * Reads the requested number of bytes or fail if there are not enough left.
+     * <p>
      * This allows for the possibility that {@link ReadableByteChannel#read(ByteBuffer)} may
      * not read as many bytes as requested (most likely because of reaching EOF).
      *
