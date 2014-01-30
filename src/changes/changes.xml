@@ -46,7 +46,10 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="2014-??-??" description="New features and bug fixes.">    
+    <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+      <action issue="IO-422" dev="ggregory" type="update">
+         Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets
+      </action>
       <action issue="IO-410" dev="sebb" type="add" due-to="BELUGA BEHR">
          Readfully() That Returns A Byte Array
       </action>

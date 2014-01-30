@@ -73,6 +73,7 @@ public class Charsets {
      */
     public static SortedMap<String, Charset> requiredCharsets() {
         // maybe cache?
+        // TODO Re-implement on Java 7 to use java.nio.charset.StandardCharsets
         final TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
         m.put(ISO_8859_1.name(), ISO_8859_1);
         m.put(US_ASCII.name(), US_ASCII);
@@ -114,7 +115,9 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
 
     /**
@@ -126,7 +129,9 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset US_ASCII = Charset.forName("US-ASCII");
 
     /**
@@ -139,7 +144,9 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset UTF_16 = Charset.forName("UTF-16");
 
     /**
@@ -151,7 +158,9 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset UTF_16BE = Charset.forName("UTF-16BE");
 
     /**
@@ -163,7 +172,9 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset UTF_16LE = Charset.forName("UTF-16LE");
 
     /**
@@ -175,6 +186,8 @@ public class Charsets {
      * </p>
      * 
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
+     * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
+    @Deprecated
     public static final Charset UTF_8 = Charset.forName("UTF-8");
 }
