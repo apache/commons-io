@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="2013-??-??" description="New features and bug fixes.">    
+    <release version="2.5" date="2014-??-??" description="New features and bug fixes.">    
       <action issue="IO-410" dev="sebb" type="add" due-to="BELUGA BEHR">
          Readfully() That Returns A Byte Array
       </action>
