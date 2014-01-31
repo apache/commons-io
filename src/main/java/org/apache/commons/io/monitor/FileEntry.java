@@ -31,10 +31,12 @@ import java.io.Serializable;
  * </ul>
  * 
  * <h3>Custom Implementations</h3>
+ * <p>
  * If the state of additional {@link File} attributes is required then create a custom
  * {@link FileEntry} with properties for those attributes. Override the
  * {@link #newChildInstance(File)} to return a new instance of the appropriate type.
  * You may also want to override the {@link #refresh(File)} method.
+ * </p>
  * @see FileAlterationObserver
  * @since 2.0
  */
