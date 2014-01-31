@@ -28,7 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
- * <p>
+ * 
  * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation
@@ -46,7 +46,9 @@ import org.apache.commons.io.IOUtils;
  *
  * <h2>2. Using a Tailer</h2>
  *
+ * <p>
  * You can create and use a Tailer in one of three ways:
+ * </p>
  * <ul>
  *   <li>Using one of the static helper methods:
  *     <ul>
@@ -59,7 +61,9 @@ import org.apache.commons.io.IOUtils;
  *   <li>Using an {@link Thread}</li>
  * </ul>
  *
+ * <p>
  * An example of each of these is shown below.
+ * </p>
  *
  * <h3>2.1 Using the static helper method</h3>
  *
