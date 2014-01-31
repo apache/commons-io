@@ -34,17 +34,17 @@ import java.util.TreeMap;
  * </p>
  * 
  * <ul>
- * <li><code>US-ASCII</code><br/>
+ * <li><code>US-ASCII</code><br>
  * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
- * <li><code>ISO-8859-1</code><br/>
+ * <li><code>ISO-8859-1</code><br>
  * ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.</li>
- * <li><code>UTF-8</code><br/>
+ * <li><code>UTF-8</code><br>
  * Eight-bit Unicode Transformation Format.</li>
- * <li><code>UTF-16BE</code><br/>
+ * <li><code>UTF-16BE</code><br>
  * Sixteen-bit Unicode Transformation Format, big-endian byte order.</li>
- * <li><code>UTF-16LE</code><br/>
+ * <li><code>UTF-16LE</code><br>
  * Sixteen-bit Unicode Transformation Format, little-endian byte order.</li>
- * <li><code>UTF-16</code><br/>
+ * <li><code>UTF-16</code><br>
  * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
  * accepted on input, big-endian used on output.)</li>
  * </ul>
@@ -109,7 +109,7 @@ public class Charsets {
     }
 
     /**
-     * CharEncodingISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1. </p>
+     * CharEncodingISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1.
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>

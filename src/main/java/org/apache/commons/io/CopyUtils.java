@@ -49,7 +49,7 @@ import java.nio.charset.Charset;
  * to be selected (otherwise the platform default is used). We would like to
  * encourage you to always specify the encoding because relying on the platform
  * default can lead to unexpected results.
- * <p
+ * <p>
  * We don't provide special variants for the <code>copy</code> methods that
  * let you specify the buffer size because in modern VMs the impact on speed
  * seems to be minimal. We're using a default buffer size of 4 KB.

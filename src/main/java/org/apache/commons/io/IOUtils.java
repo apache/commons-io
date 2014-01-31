@@ -2777,7 +2777,7 @@ public class IOUtils {
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
-     * @param length length to read, must be >= 0
+     * @param length length to read, must be &gt;= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
      * @since 2.2
@@ -2823,7 +2823,7 @@ public class IOUtils {
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
-     * @param length length to read, must be >= 0
+     * @param length length to read, must be &gt;= 0
      * @return actual length read; may be less than requested if EOF was reached
      * @throws IOException if a read error occurs
      * @since 2.2
@@ -2893,7 +2893,7 @@ public class IOUtils {
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
-     * @param length length to read, must be >= 0
+     * @param length length to read, must be &gt;= 0
      *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
@@ -2934,7 +2934,7 @@ public class IOUtils {
      * @param input where to read input from
      * @param buffer destination
      * @param offset initial offset into buffer
-     * @param length length to read, must be >= 0
+     * @param length length to read, must be &gt;= 0
      *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
@@ -2973,7 +2973,7 @@ public class IOUtils {
      * not read as many bytes as requested (most likely because of reaching EOF).
      *
      * @param input where to read input from
-     * @param length length to read, must be >= 0
+     * @param length length to read, must be &gt;= 0
      *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative

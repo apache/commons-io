@@ -29,7 +29,7 @@ import org.apache.commons.io.IOUtils;
 /**
  * Simple implementation of the unix "tail -f" functionality.
  * <p>
- * <h2>1. Create a TailerListener implementation</h3>
+ * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation
  * ({@link TailerListenerAdapter} is provided for convenience so that you don't have to
@@ -92,13 +92,13 @@ import org.apache.commons.io.IOUtils;
  *      thread.setDaemon(true); // optional
  *      thread.start();</pre>
  *
- * <h2>3. Stopping a Tailer</h3>
+ * <h2>3. Stopping a Tailer</h2>
  * <p>Remember to stop the tailer when you have done with it:</p>
  * <pre>
  *      tailer.stop();
  * </pre>
  *
- * <h2>4. Interrupting a Tailer</h3>
+ * <h2>4. Interrupting a Tailer</h2>
  * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.</p>
  * <pre>
  *      thread.interrupt();

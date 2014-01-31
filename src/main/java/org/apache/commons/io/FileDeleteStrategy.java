@@ -139,7 +139,7 @@ public class FileDeleteStrategy {
         /**
          * Deletes the file object.
          * <p>
-         * This implementation uses <code>FileUtils.forceDelete() <code>
+         * This implementation uses <code>FileUtils.forceDelete()</code>
          * if the file exists.
          *
          * @param fileToDelete  the file to delete, not null
