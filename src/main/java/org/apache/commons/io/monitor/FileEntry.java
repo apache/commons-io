@@ -20,8 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 
 /**
- * {@link FileEntry} represents the state of a file or directory, capturing
- * the following {@link File} attributes at a point in time.
+ * The state of a file or directory, capturing the following {@link File} attributes at a point in time.
  * <ul>
  *   <li>File Name (see {@link File#getName()})</li>
  *   <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
@@ -30,7 +29,7 @@ import java.io.Serializable;
  *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
- * <p>
+ * 
  * <h3>Custom Implementations</h3>
  * If the state of additional {@link File} attributes is required then create a custom
  * {@link FileEntry} with properties for those attributes. Override the
