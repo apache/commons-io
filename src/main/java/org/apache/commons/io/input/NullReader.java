@@ -50,7 +50,7 @@ import java.io.Reader;
  *          return ... // return required value here
  *      }
  *      protected void processChars(char[] chars, int offset, int length) {
- *          for (int i = offset; i < length; i++) {
+ *          for (int i = offset; i &lt; length; i++) {
  *              chars[i] = ... // set array value here
  *          }
  *      }

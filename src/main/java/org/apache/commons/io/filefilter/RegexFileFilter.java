@@ -24,17 +24,17 @@ import org.apache.commons.io.IOCase;
 
 /**
  * Filters files using supplied regular expression(s).
- * <p/>
+ * <p>
  * See java.util.regex.Pattern for regex matching rules
- * <p/>
+ * </p>
  *
- * <p/>
+ * <p>
  * e.g.
  * <pre>
  * File dir = new File(".");
  * FileFilter fileFilter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
  * File[] files = dir.listFiles(fileFilter);
- * for (int i = 0; i < files.length; i++) {
+ * for (int i = 0; i &lt; files.length; i++) {
  *   System.out.println(files[i]);
  * }
  * </pre>

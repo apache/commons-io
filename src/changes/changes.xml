@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+      <action issue="IO-424" dev="ggregory" type="fix" due-to="Ville Skyttä">
+         Javadoc fixes, mostly to appease 1.8.0
+      </action>
       <action issue="IO-422" dev="ggregory" type="update">
          Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets
       </action>

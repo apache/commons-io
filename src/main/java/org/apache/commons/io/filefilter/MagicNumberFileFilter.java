@@ -33,7 +33,7 @@ import org.apache.commons.io.IOUtils;
  * <code>0xCAFEBABE</code>.
  * </p>
  *
- * <code><pre>
+ * <pre>
  * File dir = new File(".");
  * MagicNumberFileFilter javaClassFileFilter =
  *     MagicNumberFileFilter(new byte[] {(byte) 0xCA, (byte) 0xFE,
@@ -42,7 +42,7 @@ import org.apache.commons.io.IOUtils;
  * for (String javaClassFile : javaClassFiles) {
  *     System.out.println(javaClassFile);
  * }
- * </pre></code>
+ * </pre>
  *
  * <p>
  * Sometimes, such as in the case of TAR files, the
@@ -50,7 +50,7 @@ import org.apache.commons.io.IOUtils;
  * case of TAR archive files, this offset is 257 bytes.
  * </p>
  *
- * <code><pre>
+ * <pre>
  * File dir = new File(".");
  * MagicNumberFileFilter tarFileFilter =
  *     MagicNumberFileFilter("ustar", 257);
@@ -58,7 +58,8 @@ import org.apache.commons.io.IOUtils;
  * for (String tarFile : tarFiles) {
  *     System.out.println(tarFile);
  * }
- * </pre></code>
+ * </pre>
+ *
  * @since 2.0
  * @see FileFilterUtils#magicNumberFileFilter(byte[])
  * @see FileFilterUtils#magicNumberFileFilter(String)
@@ -98,11 +99,11 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * behavior of this file filter.
      * </p>
      *
-     * <code><pre>
+     * <pre>
      * MagicNumberFileFilter javaClassFileFilter =
      *     MagicNumberFileFilter(new byte[] {(byte) 0xCA, (byte) 0xFE,
      *       (byte) 0xBA, (byte) 0xBE});
-     * </pre></code>
+     * </pre>
      *
      * @param magicNumber the magic number to look for in the file.
      *
@@ -145,10 +146,10 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * to look for that magic number.
      * </p>
      *
-     * <code><pre>
+     * <pre>
      * MagicNumberFileFilter tarFileFilter =
      *     MagicNumberFileFilter("ustar", 257);
-     * </pre></code>
+     * </pre>
      *
      * @param magicNumber the magic number to look for in the file.
      *        The string is converted to bytes using the platform default charset.
@@ -180,15 +181,15 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * to look for that magic number.
      * </p>
      *
-     * <code><pre>
+     * <pre>
      * MagicNumberFileFilter tarFileFilter =
      *     MagicNumberFileFilter(new byte[] {0x75, 0x73, 0x74, 0x61, 0x72}, 257);
-     * </pre></code>
+     * </pre>
      *
-     * <code><pre>
+     * <pre>
      * MagicNumberFileFilter javaClassFileFilter =
      *     MagicNumberFileFilter(new byte[] {0xCA, 0xFE, 0xBA, 0xBE}, 0);
-     * </pre></code>
+     * </pre>
      *
      * @param magicNumber the magic number to look for in the file.
      * @param offset the byte offset in the file to start comparing bytes.

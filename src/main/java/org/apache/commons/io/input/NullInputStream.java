@@ -50,7 +50,7 @@ import java.io.InputStream;
  *          return ... // return required value here
  *      }
  *      protected void processBytes(byte[] bytes, int offset, int length) {
- *          for (int i = offset; i < length; i++) {
+ *          for (int i = offset; i &lt; length; i++) {
  *              bytes[i] = ... // set array value here
  *          }
  *      }
