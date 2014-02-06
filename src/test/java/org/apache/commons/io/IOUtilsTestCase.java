@@ -124,6 +124,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    public void testCloseQuietly_AllCloseableIOException() {
+        final Closeable closeable = new Closeable() {
+            public void close() throws IOException {
+                throw new IOException();
+            }
+        };
+        IOUtils.closeQuietly(closeable, null, closeable);
+    }
+
     public void testCloseQuietly_CloseableIOException() {
         IOUtils.closeQuietly(new Closeable() {
             public void close() throws IOException {
@@ -614,8 +623,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
                 // expected
             }
         } finally {
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(fileInputStream);
+            IOUtils.closeQuietly(input, fileInputStream);
         }}
 
     public void testReadFully_InputStream_ByteArray() throws Exception {
@@ -684,8 +692,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
                 // expected
             }
         } finally {
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(fileInputStream);
+            IOUtils.closeQuietly(input, fileInputStream);
         }
     }
 
@@ -802,8 +809,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             assertEquals(10, IOUtils.skip(fileChannel, 20));
             assertEquals(0, IOUtils.skip(fileChannel, 10));
         } finally {
-            IOUtils.closeQuietly(fileChannel);
-            IOUtils.closeQuietly(fileInputStream);
+            IOUtils.closeQuietly(fileChannel, fileInputStream);
         }
     }
 
@@ -848,8 +854,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
                 // expected
             }
         } finally {
-            IOUtils.closeQuietly(fileChannel);
-            IOUtils.closeQuietly(fileInputStream);
+            IOUtils.closeQuietly(fileChannel, fileInputStream);
         }
     }
 

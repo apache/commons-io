@@ -1161,10 +1161,7 @@ public class FileUtils {
                 pos += bytesCopied;
             }
         } finally {
-            IOUtils.closeQuietly(output);
-            IOUtils.closeQuietly(fos);
-            IOUtils.closeQuietly(input);
-            IOUtils.closeQuietly(fis);
+            IOUtils.closeQuietly(output, fos, input, fis);
         }
 
         final long srcLen = srcFile.length(); // TODO See IO-386
