@@ -123,6 +123,8 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         refData = ref.toByteArray();
         assertEquals(8254, baoutData.length);
         checkByteArrays(refData, baoutData);
+        baout.close();
+        in.close();
     }
 
     public void testToInputStreamWithReset() throws IOException {
@@ -155,6 +157,8 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         refData = ref.toByteArray();
         assertEquals(30, baoutData.length);
         checkByteArrays(refData, baoutData);
+        baout.close();
+        in.close();
     }
 
     public void testStream() throws Exception {
@@ -210,6 +214,8 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         assertSame(baos1.toByteArray(), baos2.toByteArray());
         baos1.close();
         baos2.close();
+        baout.close();
+        baout1.close();
     }
 }
 
