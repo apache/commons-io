@@ -180,6 +180,8 @@ public class BOMInputStreamTest {
         this.readFile(bomInputStream);
         bomInputStream.reset();
         this.readFile(bomInputStream);
+        inputStream.close();
+        bomInputStream.close();
     }
 
     private void readFile(final BOMInputStream bomInputStream) throws Exception {
@@ -214,6 +216,7 @@ public class BOMInputStreamTest {
 
         in.close();
         del.assertCloseCalled();
+        del.close();
     }
 
     @Test
