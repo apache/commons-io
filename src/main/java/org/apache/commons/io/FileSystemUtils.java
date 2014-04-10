@@ -371,7 +371,7 @@ public class FileSystemUtils {
      *
      * @param path  the path to get free space for
      * @param kb  whether to normalize to kilobytes
-     * @param posix  whether to use the posix standard format flag
+     * @param posix  whether to use the POSIX standard format flag
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the volume
