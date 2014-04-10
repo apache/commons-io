@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -54,11 +56,11 @@ public abstract class ProxyReader extends FilterReader {
         try {
             beforeRead(1);
             final int c = in.read();
-            afterRead(c != -1 ? 1 : -1);
+            afterRead(c != EOF ? 1 : EOF);
             return c;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
@@ -77,7 +79,7 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
@@ -98,7 +100,7 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
@@ -118,14 +120,14 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
     /**
      * Invokes the delegate's <code>skip(long)</code> method.
      * @param ln the number of bytes to skip
-     * @return the number of bytes to skipped or -1 if the end of stream
+     * @return the number of bytes to skipped or EOF if the end of stream
      * @throws IOException if an I/O error occurs
      */
     @Override

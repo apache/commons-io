@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -73,7 +75,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      */
     @Override
     protected void afterRead(final int n) throws IOException {
-        if (n == -1) {
+        if (n == EOF) {
             close();
         }
     }

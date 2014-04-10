@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -479,7 +481,7 @@ public class EndianUtils {
     {
         final int value = input.read();
 
-        if( -1 == value ) {
+        if( EOF == value ) {
             throw new EOFException( "Unexpected EOF reached" );
         }
 

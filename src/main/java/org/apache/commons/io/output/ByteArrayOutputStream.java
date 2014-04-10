@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -191,7 +193,7 @@ public class ByteArrayOutputStream extends OutputStream {
         int readCount = 0;
         int inBufferPos = count - filledBufferSum;
         int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);
-        while (n != -1) {
+        while (n != EOF) {
             readCount += n;
             inBufferPos += n;
             count += n;

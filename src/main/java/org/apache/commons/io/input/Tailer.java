@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -504,7 +506,7 @@ public class Tailer implements Runnable {
         long rePos = pos; // position to re-read
         int num;
         boolean seenCR = false;
-        while (getRun() && ((num = reader.read(inbuf)) != -1)) {
+        while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
             for (int i = 0; i < num; i++) {
                 final byte ch = inbuf[i];
                 switch (ch) {
