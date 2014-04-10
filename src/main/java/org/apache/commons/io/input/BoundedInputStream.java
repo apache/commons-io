@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,8 +36,6 @@ import java.io.InputStream;
  * @since 2.0
  */
 public class BoundedInputStream extends InputStream {
-
-    private static final int EOF = -1;
 
     /** the wrapped input stream */
     private final InputStream in;
