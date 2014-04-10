@@ -1156,7 +1156,7 @@ public class FilenameUtils {
         if (filename == null) {
             return false;
         }
-        if (extension == null || extension.length() == 0) {
+        if (extension == null || extension.isEmpty()) {
             return indexOfExtension(filename) == NOT_FOUND;
         }
         final String fileExt = getExtension(filename);

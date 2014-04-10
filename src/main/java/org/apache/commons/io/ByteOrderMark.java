@@ -74,7 +74,7 @@ public class ByteOrderMark implements Serializable {
      * length
      */
     public ByteOrderMark(final String charsetName, final int... bytes) {
-        if (charsetName == null || charsetName.length() == 0) {
+        if (charsetName == null || charsetName.isEmpty()) {
             throw new IllegalArgumentException("No charsetName specified");
         }
         if (bytes == null || bytes.length == 0) {
