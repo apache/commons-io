@@ -35,6 +35,8 @@ import java.io.InputStream;
  */
 public class BoundedInputStream extends InputStream {
 
+    private static final int EOF = -1;
+
     /** the wrapped input stream */
     private final InputStream in;
 
@@ -45,7 +47,7 @@ public class BoundedInputStream extends InputStream {
     private long pos = 0;
 
     /** the marked position */
-    private long mark = -1;
+    private long mark = EOF;
 
     /** flag if close shoud be propagated */
     private boolean propagateClose = true;
@@ -71,7 +73,7 @@ public class BoundedInputStream extends InputStream {
      * @param in The wrapped input stream
      */
     public BoundedInputStream(final InputStream in) {
-        this(in, -1);
+        this(in, EOF);
     }
 
     /**
@@ -84,7 +86,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         if (max >= 0 && pos >= max) {
-            return -1;
+            return EOF;
         }
         final int result = in.read();
         pos++;
@@ -115,13 +117,13 @@ public class BoundedInputStream extends InputStream {
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
         if (max>=0 && pos>=max) {
-            return -1;
+            return EOF;
         }
         final long maxRead = max>=0 ? Math.min(len, max-pos) : len;
         final int bytesRead = in.read(b, off, (int)maxRead);
 
-        if (bytesRead==-1) {
-            return -1;
+        if (bytesRead==EOF) {
+            return EOF;
         }
 
         pos+=bytesRead;
