@@ -185,6 +185,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-345" dev="ggregory" type="add" due-to="mkresse">
         Supply a hook method allowing Tailer actively determining stop condition.
       </action>            
+      <action issue="IO-436" dev="ggregory" type="fix" due-to="christoph.schneegans">
+        Improper JavaDoc comment for FilenameUtils.indexOfExtension.
+      </action>            
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.4" date="2012-06-12" description="New features and bug fixes.">
