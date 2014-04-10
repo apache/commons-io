@@ -38,7 +38,7 @@ public class ThreadMonitorTestCase extends TestCase {
             ThreadMonitor.stop(monitor);
             fail("Expected InterruptedException");
         } catch (final InterruptedException e) {
-            // expected result - timout
+            // expected result - timeout
         }
     }
 
