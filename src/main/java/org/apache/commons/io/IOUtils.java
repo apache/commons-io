@@ -90,7 +90,11 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
-    private static final int EOF = -1;
+    /**
+     * Represents the end-of-file (or stream).
+     */
+    public static final int EOF = -1;
+    
     /**
      * The Unix directory separator character.
      */
