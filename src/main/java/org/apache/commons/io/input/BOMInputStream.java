@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -85,7 +87,6 @@ import org.apache.commons.io.ByteOrderMark;
  * @since 2.0
  */
 public class BOMInputStream extends ProxyInputStream {
-    private static final int EOF = -1;
     private final boolean include;
     /**
      * BOMs are sorted from longest to shortest.
