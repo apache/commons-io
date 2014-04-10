@@ -189,7 +189,7 @@ public class FileSystemUtils {
      * the exact result from df -k and as much other detail as possible, thanks.
      *
      * @param path  the path to get free space for, not null, not empty on Unix
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalArgumentException if the path is invalid
@@ -224,7 +224,7 @@ public class FileSystemUtils {
      * <pre>
      * freeSpaceKb(new File(".").getAbsolutePath())
      * </pre>
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalStateException if an error occurred in initialisation
@@ -249,7 +249,7 @@ public class FileSystemUtils {
      * @param path  the path to get free space for, not null, not empty on Unix
      * @param os  the operating system code
      * @param kb  whether to normalize to kilobytes
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
@@ -280,7 +280,7 @@ public class FileSystemUtils {
      * Find free space on the Windows platform using the 'dir' command.
      *
      * @param path  the path to get free space for, including the colon
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
@@ -372,7 +372,7 @@ public class FileSystemUtils {
      * @param path  the path to get free space for
      * @param kb  whether to normalize to kilobytes
      * @param posix  whether to use the posix standard format flag
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
@@ -456,7 +456,7 @@ public class FileSystemUtils {
      *
      * @param cmdAttribs  the command line parameters
      * @param max The maximum limit for the lines returned
-     * @param timeout The timout amount in milliseconds or no timeout if the value
+     * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the lines returned by the command, converted to lower-case
      * @throws IOException if an error occurs
