@@ -378,7 +378,7 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout) throws IOException {
-        if (path.length() == 0) {
+        if (path.isEmpty()) {
             throw new IllegalArgumentException("Path must not be empty");
         }
 

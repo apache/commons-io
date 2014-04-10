@@ -163,7 +163,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
         if (magicNumber == null) {
             throw new IllegalArgumentException("The magic number cannot be null");
         }
-        if (magicNumber.length() == 0) {
+        if (magicNumber.isEmpty()) {
             throw new IllegalArgumentException("The magic number must contain at least one byte");
         }
         if (offset < 0) {
