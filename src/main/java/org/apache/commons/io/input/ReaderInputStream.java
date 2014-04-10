@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -198,7 +200,7 @@ public class ReaderInputStream extends InputStream {
             // to write directly to the underlying char array (the default implementation
             // copies data to a temporary char array).
             final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
-            if (c == -1) {
+            if (c == EOF) {
                 endOfInput = true;
             } else {
                 encoderIn.position(position+c);
@@ -247,7 +249,7 @@ public class ReaderInputStream extends InputStream {
                 }
             }
         }
-        return read == 0 && endOfInput ? -1 : read;
+        return read == 0 && endOfInput ? EOF : read;
     }
 
     /**
@@ -278,7 +280,7 @@ public class ReaderInputStream extends InputStream {
             } else {
                 fillBuffer();
                 if (endOfInput && !encoderOut.hasRemaining()) {
-                    return -1;
+                    return EOF;
                 }
             }
         }

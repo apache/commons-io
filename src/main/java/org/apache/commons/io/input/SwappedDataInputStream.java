@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.DataInput;
 import java.io.EOFException;
 import java.io.IOException;
@@ -139,7 +141,7 @@ public class SwappedDataInputStream extends ProxyInputStream
             final int location = offset + length - remaining;
             final int count = read( data, location, remaining );
 
-            if( -1 == count )
+            if (EOF == count)
             {
                 throw new EOFException();
             }

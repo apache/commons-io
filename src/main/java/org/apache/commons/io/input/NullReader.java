@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
@@ -315,7 +317,7 @@ public class NullReader extends Reader {
         if (throwEofException) {
             throw new EOFException();
         }
-        return -1;
+        return EOF;
     }
 
 }

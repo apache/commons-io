@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -332,7 +334,7 @@ public class NullInputStream extends InputStream {
         if (throwEofException) {
             throw new EOFException();
         }
-        return -1;
+        return EOF;
     }
 
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -68,7 +70,7 @@ public class CountingInputStream extends ProxyInputStream {
      */
     @Override
     protected synchronized void afterRead(final int n) {
-        if (n != -1) {
+        if (n != EOF) {
             this.count += n;
         }
     }

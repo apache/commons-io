@@ -17,6 +17,8 @@
 
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -38,8 +40,6 @@ import java.nio.charset.CodingErrorAction;
 public class CharSequenceInputStream extends InputStream {
 
     private static final int BUFFER_SIZE = 2048;
-
-    private static final int EOS = -1;
 
     private static final int NO_MARK = -1;
 
@@ -139,7 +139,7 @@ public class CharSequenceInputStream extends InputStream {
             return 0; // must return 0 for zero length read
         }
         if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
-            return EOS;
+            return EOF;
         }
         int bytesRead = 0;
         while (len > 0) {
@@ -156,7 +156,7 @@ public class CharSequenceInputStream extends InputStream {
                 }
             }
         }
-        return bytesRead == 0 && !this.cbuf.hasRemaining() ? EOS : bytesRead;
+        return bytesRead == 0 && !this.cbuf.hasRemaining() ? EOF : bytesRead;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class CharSequenceInputStream extends InputStream {
             } else {
                 fillBuffer();
                 if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
-                    return EOS;
+                    return EOF;
                 }
             }
         }

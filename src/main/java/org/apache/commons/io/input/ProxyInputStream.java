@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,18 +58,18 @@ public abstract class ProxyInputStream extends FilterInputStream {
         try {
             beforeRead(1);
             final int b = in.read();
-            afterRead(b != -1 ? 1 : -1);
+            afterRead(b != EOF ? 1 : EOF);
             return b;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
     /**
      * Invokes the delegate's <code>read(byte[])</code> method.
      * @param bts the buffer to read the bytes into
-     * @return the number of bytes read or -1 if the end of stream
+     * @return the number of bytes read or EOF if the end of stream
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -79,7 +81,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 
@@ -100,7 +102,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return -1;
+            return EOF;
         }
     }
 

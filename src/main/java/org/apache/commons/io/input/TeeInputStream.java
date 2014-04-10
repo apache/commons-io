@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -106,7 +108,7 @@ public class TeeInputStream extends ProxyInputStream {
     @Override
     public int read() throws IOException {
         final int ch = super.read();
-        if (ch != -1) {
+        if (ch != EOF) {
             branch.write(ch);
         }
         return ch;
@@ -142,7 +144,7 @@ public class TeeInputStream extends ProxyInputStream {
     @Override
     public int read(final byte[] bts) throws IOException {
         final int n = super.read(bts);
-        if (n != -1) {
+        if (n != EOF) {
             branch.write(bts, 0, n);
         }
         return n;

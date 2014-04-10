@@ -16,10 +16,12 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.InputStream;
 
 /**
- * Closed input stream. This stream returns -1 to all attempts to read
+ * Closed input stream. This stream returns EOF to all attempts to read
  * something from the stream.
  * <p>
  * Typically uses of this class include testing for corner cases in methods
@@ -43,7 +45,7 @@ public class ClosedInputStream extends InputStream {
      */
     @Override
     public int read() {
-        return -1;
+        return EOF;
     }
 
 }
