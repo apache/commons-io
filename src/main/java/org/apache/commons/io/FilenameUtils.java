@@ -82,6 +82,8 @@ import java.util.Stack;
  */
 public class FilenameUtils {
 
+    private static final int NOT_FOUND = -1;
+
     /**
      * The extension separator character.
      * @since 1.4
@@ -551,7 +553,7 @@ public class FilenameUtils {
      * @return the updated path
      */
     public static String separatorsToUnix(final String path) {
-        if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
+        if (path == null || path.indexOf(WINDOWS_SEPARATOR) == NOT_FOUND) {
             return path;
         }
         return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
@@ -564,7 +566,7 @@ public class FilenameUtils {
      * @return the updated path
      */
     public static String separatorsToWindows(final String path) {
-        if (path == null || path.indexOf(UNIX_SEPARATOR) == -1) {
+        if (path == null || path.indexOf(UNIX_SEPARATOR) == NOT_FOUND) {
             return path;
         }
         return path.replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR);
@@ -628,7 +630,7 @@ public class FilenameUtils {
      */
     public static int getPrefixLength(final String filename) {
         if (filename == null) {
-            return -1;
+            return NOT_FOUND;
         }
         final int len = filename.length();
         if (len == 0) {
@@ -636,7 +638,7 @@ public class FilenameUtils {
         }
         char ch0 = filename.charAt(0);
         if (ch0 == ':') {
-            return -1;
+            return NOT_FOUND;
         }
         if (len == 1) {
             if (ch0 == '~') {
@@ -647,11 +649,11 @@ public class FilenameUtils {
             if (ch0 == '~') {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
                 int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
-                if (posUnix == -1 && posWin == -1) {
+                if (posUnix == NOT_FOUND && posWin == NOT_FOUND) {
                     return len + 1;  // return a length greater than the input
                 }
-                posUnix = posUnix == -1 ? posWin : posUnix;
-                posWin = posWin == -1 ? posUnix : posWin;
+                posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+                posWin = posWin == NOT_FOUND ? posUnix : posWin;
                 return Math.min(posUnix, posWin) + 1;
             }
             final char ch1 = filename.charAt(1);
@@ -663,16 +665,16 @@ public class FilenameUtils {
                     }
                     return 3;
                 }
-                return -1;
+                return NOT_FOUND;
 
             } else if (isSeparator(ch0) && isSeparator(ch1)) {
                 int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
                 int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
-                if (posUnix == -1 && posWin == -1 || posUnix == 2 || posWin == 2) {
-                    return -1;
+                if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
+                    return NOT_FOUND;
                 }
-                posUnix = posUnix == -1 ? posWin : posUnix;
-                posWin = posWin == -1 ? posUnix : posWin;
+                posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+                posWin = posWin == NOT_FOUND ? posUnix : posWin;
                 return Math.min(posUnix, posWin) + 1;
             } else {
                 return isSeparator(ch0) ? 1 : 0;
@@ -694,7 +696,7 @@ public class FilenameUtils {
      */
     public static int indexOfLastSeparator(final String filename) {
         if (filename == null) {
-            return -1;
+            return NOT_FOUND;
         }
         final int lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR);
         final int lastWindowsPos = filename.lastIndexOf(WINDOWS_SEPARATOR);
@@ -717,11 +719,11 @@ public class FilenameUtils {
      */
     public static int indexOfExtension(final String filename) {
         if (filename == null) {
-            return -1;
+            return NOT_FOUND;
         }
         final int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
         final int lastSeparator = indexOfLastSeparator(filename);
-        return lastSeparator > extensionPos ? -1 : extensionPos;
+        return lastSeparator > extensionPos ? NOT_FOUND : extensionPos;
     }
 
     //-----------------------------------------------------------------------
@@ -1005,7 +1007,7 @@ public class FilenameUtils {
             return null;
         }
         final int index = indexOfExtension(filename);
-        if (index == -1) {
+        if (index == NOT_FOUND) {
             return "";
         } else {
             return filename.substring(index + 1);
@@ -1035,7 +1037,7 @@ public class FilenameUtils {
             return null;
         }
         final int index = indexOfExtension(filename);
-        if (index == -1) {
+        if (index == NOT_FOUND) {
             return filename;
         } else {
             return filename.substring(0, index);
@@ -1155,7 +1157,7 @@ public class FilenameUtils {
             return false;
         }
         if (extension == null || extension.length() == 0) {
-            return indexOfExtension(filename) == -1;
+            return indexOfExtension(filename) == NOT_FOUND;
         }
         final String fileExt = getExtension(filename);
         return fileExt.equals(extension);
@@ -1177,7 +1179,7 @@ public class FilenameUtils {
             return false;
         }
         if (extensions == null || extensions.length == 0) {
-            return indexOfExtension(filename) == -1;
+            return indexOfExtension(filename) == NOT_FOUND;
         }
         final String fileExt = getExtension(filename);
         for (final String extension : extensions) {
@@ -1204,7 +1206,7 @@ public class FilenameUtils {
             return false;
         }
         if (extensions == null || extensions.isEmpty()) {
-            return indexOfExtension(filename) == -1;
+            return indexOfExtension(filename) == NOT_FOUND;
         }
         final String fileExt = getExtension(filename);
         for (final String extension : extensions) {
@@ -1330,7 +1332,7 @@ public class FilenameUtils {
                     if (anyChars) {
                         // any chars then try to locate text token
                         textIdx = caseSensitivity.checkIndexOf(filename, textIdx, wcs[wcsIdx]);
-                        if (textIdx == -1) {
+                        if (textIdx == NOT_FOUND) {
                             // token not found
                             break;
                         }
@@ -1376,7 +1378,7 @@ public class FilenameUtils {
         // used by wildcardMatch
         // package level so a unit test may run on this
 
-        if (text.indexOf('?') == -1 && text.indexOf('*') == -1) {
+        if (text.indexOf('?') == NOT_FOUND && text.indexOf('*') == NOT_FOUND) {
             return new String[] { text };
         }
 
