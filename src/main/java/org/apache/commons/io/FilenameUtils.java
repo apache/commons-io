@@ -704,15 +704,16 @@ public class FilenameUtils {
     /**
      * Returns the index of the last extension separator character, which is a dot.
      * <p>
-     * This method also checks that there is no directory separator after the last dot.
-     * To do this it uses {@link #indexOfLastSeparator(String)} which will
-     * handle a file in either Unix or Windows format.
+     * This method also checks that there is no directory separator after the last dot. To do this it uses
+     * {@link #indexOfLastSeparator(String)} which will handle a file in either Unix or Windows format.
+     * </p>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
-     *
-     * @param filename  the filename to find the last path separator in, null returns -1
-     * @return the index of the last separator character, or -1 if there
-     * is no such character
+     * </p>
+     * 
+     * @param filename
+     *            the filename to find the last extension separator in, null returns -1
+     * @return the index of the last extension separator character, or -1 if there is no such character
      */
     public static int indexOfExtension(final String filename) {
         if (filename == null) {
