@@ -331,8 +331,16 @@ public class IOUtils {
     /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
-     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
-     * finally blocks.
+     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
+     * <p>
+     * This is typically used in finally blocks to ensure that the closeable is closed
+     * even if an Exception was thrown before the normal close statement was reached.
+     * <br>
+     * <b>It should not be used to replace the close statement(s)
+     * which should be present for the non-exceptional case.</b>
+     * <br>
+     * It is only intended to simplify tidying up where normal processing has already failed
+     * and reporting close failure as well is not necessary or useful.
      * <p>
      * Example code:
      * 
@@ -340,29 +348,29 @@ public class IOUtils {
      * Closeable closeable = null;
      * try {
      *     closeable = new FileReader(&quot;foo.txt&quot;);
-     *     // process closeable
-     *     closeable.close();
+     *     // processing using the closeable; may throw an Exception
+     *     closeable.close(); // Normal close - exceptions not ignored
      * } catch (Exception e) {
      *     // error handling
      * } finally {
-     *     IOUtils.closeQuietly(closeable);
+     *     <b>IOUtils.closeQuietly(closeable); // In case normal close was skipped due to Exception</b>
      * }
      * </pre>
      * 
      * Closing all streams:
-     * 
+     * <br>TODO - fix this example, it is wrong; ought not to ignore Exceptions here
      * <pre>
      * try {
      *     return IOUtils.copy(inputStream, outputStream);
      * } finally {
-     *     IOUtils.closeQuietly(inputStream);
-     *     IOUtils.closeQuietly(outputStream);
+     *     IOUtils.closeQuietly(inputStream, outputStream);
      * }
      * </pre>
      * 
      * @param closeables
      *            the objects to close, may be null or already closed
      * @since 2.5
+     * @see #closeQuietly(Closeable)
      */
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables == null) {
