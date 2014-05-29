@@ -55,7 +55,8 @@ public class ChunkedOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Creates a new stream that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
+     * Creates a new stream that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}.
+     * 
      * @param stream the stream to wrap
      */
     public ChunkedOutputStream(final OutputStream stream) {
