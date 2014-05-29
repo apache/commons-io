@@ -63,7 +63,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
     }
 
     /**
-     * writes the data buffer in chunks to the underlying stream
+     * Writes the data buffer in chunks to the underlying stream
      */
     @Override
     public void write(byte[] data, int srcOffset, int length) throws IOException {
