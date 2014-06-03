@@ -258,7 +258,7 @@ public class FileSystemUtils {
      */
     long freeSpaceOS(final String path, final int os, final boolean kb, final long timeout) throws IOException {
         if (path == null) {
-            throw new IllegalArgumentException("Path must not be empty");
+            throw new IllegalArgumentException("Path must not be null");
         }
         switch (os) {
             case WINDOWS:
