@@ -200,6 +200,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @throws IOException if the pre-processing fails
      */
     protected void beforeRead(final int n) throws IOException {
+        // no-op
     }
 
     /**
@@ -220,6 +221,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @throws IOException if the post-processing fails
      */
     protected void afterRead(final int n) throws IOException {
+        // no-op
     }
 
     /**
