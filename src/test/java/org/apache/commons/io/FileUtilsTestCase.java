@@ -2185,6 +2185,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals(expectedValue, resultValue);
     }
 
+    public void testDeleteDirectoryWithNonDirectory() throws Exception {
+        try {
+            FileUtils.deleteDirectory(testFile1);
+            fail();
+        } catch (final IllegalArgumentException ex) {
+            // expected
+        }
+    }
+
     public void testDeleteQuietlyForNull() {
         try {
             FileUtils.deleteQuietly(null);

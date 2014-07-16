@@ -47,6 +47,11 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+      <action issue="IO-435" dev="tn" type="fix" due-to="Dominik Stadler">
+         Document that FileUtils.deleteDirectory, directoryContains and cleanDirectory
+         may throw an IllegalArgumentException in case the passed directory does not
+         exist or is not a directory. 
+      </action>
       <action issue="IO-426" dev="ggregory" type="add">
          Add API IOUtils.closeQuietly(Closeable...)
       </action>
