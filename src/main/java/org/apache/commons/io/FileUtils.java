@@ -1557,6 +1557,7 @@ public class FileUtils {
      *
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
+     * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
      */
     public static void deleteDirectory(final File directory) throws IOException {
         if (!directory.exists()) {
@@ -1628,6 +1629,8 @@ public class FileUtils {
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
      * @throws IOException
      *             if an IO error occurs while checking the files.
+     * @throws IllegalArgumentException
+     *             if {@code directory} is null or not a directory.
      * @since 2.2
      * @see FilenameUtils#directoryContains(String, String)
      */
@@ -1662,6 +1665,7 @@ public class FileUtils {
      *
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
+     * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
      */
     public static void cleanDirectory(final File directory) throws IOException {
         if (!directory.exists()) {
