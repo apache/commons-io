@@ -44,8 +44,8 @@ import java.nio.charset.CodingErrorAction;
  * in a {@link java.io.BufferedReader}.
  * <p>
  * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader};
- * in the following example, reading from <tt>in2</tt> would return the same byte
- * sequence as reading from <tt>in</tt> (provided that the initial byte sequence is legal
+ * in the following example, reading from {@code in2} would return the same byte
+ * sequence as reading from {@code in} (provided that the initial byte sequence is legal
  * with respect to the charset encoding):
  * <pre>
  * InputStream in = ...

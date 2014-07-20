@@ -45,8 +45,8 @@ import java.nio.charset.CodingErrorAction;
  * of the {@link WriterOutputStream}.
  * <p>
  * {@link WriterOutputStream} implements the inverse transformation of {@link java.io.OutputStreamWriter};
- * in the following example, writing to <tt>out2</tt> would have the same result as writing to
- * <tt>out</tt> directly (provided that the byte sequence is legal with respect to the
+ * in the following example, writing to {@code out2} would have the same result as writing to
+ * {@code out} directly (provided that the byte sequence is legal with respect to the
  * charset encoding):
  * <pre>
  * OutputStream out = ...
@@ -110,9 +110,9 @@ public class WriterOutputStream extends OutputStream {
      * @param writer the target {@link Writer}
      * @param decoder the charset decoder
      * @param bufferSize the size of the output buffer in number of characters
-     * @param writeImmediately If <tt>true</tt> the output buffer will be flushed after each
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each
      *                         write operation, i.e. all available data will be written to the
-     *                         underlying {@link Writer} immediately. If <tt>false</tt>, the
+     *                         underlying {@link Writer} immediately. If {@code false}, the
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      * @since 2.1
@@ -130,9 +130,9 @@ public class WriterOutputStream extends OutputStream {
      * @param writer the target {@link Writer}
      * @param charset the charset encoding
      * @param bufferSize the size of the output buffer in number of characters
-     * @param writeImmediately If <tt>true</tt> the output buffer will be flushed after each
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each
      *                         write operation, i.e. all available data will be written to the
-     *                         underlying {@link Writer} immediately. If <tt>false</tt>, the
+     *                         underlying {@link Writer} immediately. If {@code false}, the
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
@@ -164,9 +164,9 @@ public class WriterOutputStream extends OutputStream {
      * @param writer the target {@link Writer}
      * @param charsetName the name of the charset encoding
      * @param bufferSize the size of the output buffer in number of characters
-     * @param writeImmediately If <tt>true</tt> the output buffer will be flushed after each
+     * @param writeImmediately If {@code true} the output buffer will be flushed after each
      *                         write operation, i.e. all available data will be written to the
-     *                         underlying {@link Writer} immediately. If <tt>false</tt>, the
+     *                         underlying {@link Writer} immediately. If {@code false}, the
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
