@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+      <action issue="IO-451" dev="sebb" type="fix" due-to="David Standish">
+         ant test fails - resources missing from test classpath
+      </action>
       <action issue="IO-435" dev="tn" type="fix" due-to="Dominik Stadler">
          Document that FileUtils.deleteDirectory, directoryContains and cleanDirectory
          may throw an IllegalArgumentException in case the passed directory does not

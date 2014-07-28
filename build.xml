@@ -63,6 +63,9 @@
   <!-- The base directory for unit test sources -->
   <property name="test.home"               value="src/test/java"/>
 
+  <!-- The base directory for unit test resources -->
+  <property name="test.resources.home"               value="src/test/resources"/>
+
   <!-- Download lib dir -->
   <property name="download.lib.dir"        value="lib"/>
 
@@ -115,6 +118,7 @@
   <path id="test.classpath">
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${build.home}/test-classes"/>
+    <pathelement location="${build.home}/test-resources"/>
     <pathelement location="${junit.jar}"/>
     <path refid="downloaded.lib.classpath"/>
   </path>
@@ -177,6 +181,9 @@
              includeantruntime="false">
           <classpath refid="test.classpath"/>
       </javac>
+      <copy todir="${build.home}/test-resources">
+        <fileset dir="${test.resources.home}"/>
+      </copy>
     </target>
 
   <target name="test"  depends="compile.tests"
