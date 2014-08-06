@@ -1507,6 +1507,7 @@ public class FileUtils {
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
      * The {@code source} stream is closed.
+     * See {@link #copyToFile(InputStream, File)} for a method that does not close the input stream.
      *
      * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}, will be closed
      * @param destination  the non-directory <code>File</code> to write bytes to
@@ -1531,6 +1532,7 @@ public class FileUtils {
      * will be created if they don't already exist. <code>destination</code>
      * will be overwritten if it already exists.
      * The {@code source} stream is left open, e.g. for use with {@link java.util.zip.ZipInputStream ZipInputStream}.
+     * See {@link #copyInputStreamToFile(InputStream, File)} for a method that closes the input stream.
      *
      * @param source  the <code>InputStream</code> to copy bytes from, must not be {@code null}
      * @param destination  the non-directory <code>File</code> to write bytes to
