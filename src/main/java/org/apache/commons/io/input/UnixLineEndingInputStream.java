@@ -24,87 +24,87 @@ import java.io.InputStream;
 
 /**
  * A filtering input stream that ensures the content will have unix-style line endings, LF.
+ *
  * @since 2.5
  */
-public class UnixLineEndingInputStream
-		extends InputStream {
+public class UnixLineEndingInputStream extends InputStream {
 
-	private boolean slashNSeen = false;
+    private boolean slashNSeen = false;
 
-	private boolean eofSeen = false;
+    private boolean eofSeen = false;
 
-	private final InputStream target;
+    private final InputStream target;
 
-	private final boolean ensureLineFeedAtEndOfFile;
+    private final boolean ensureLineFeedAtEndOfFile;
 
-	/**
-	 * Create an input stream that filters another stream
-	 *
-	 * @param in                        The input stream to wrap
-	 * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
-	 */
-	public UnixLineEndingInputStream(InputStream in, boolean ensureLineFeedAtEndOfFile) {
-		this.target = in;
-		this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
-	}
+    /**
+     * Create an input stream that filters another stream
+     *
+     * @param in                        The input stream to wrap
+     * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
+     */
+    public UnixLineEndingInputStream( InputStream in, boolean ensureLineFeedAtEndOfFile ) {
+        this.target = in;
+        this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
+    }
 
-	private int readWithUpdate() throws IOException {
-		final int target = this.target.read();
-		eofSeen = target == -1;
-		if (eofSeen) {
-			return target;
-		}
-		slashNSeen = target == '\n';
-		return target;
-	}
+    private int readWithUpdate() throws IOException {
+        final int target = this.target.read();
+        eofSeen = target == -1;
+        if ( eofSeen ) {
+            return target;
+        }
+        slashNSeen = target == '\n';
+        return target;
+    }
 
-	/**
-	 * @inheritDoc
-	 */
+    /**
+     * @inheritDoc
+     */
 
-	@Override public int read()
-			throws IOException {
-		if (eofSeen) {
-			return eofGame();
-		} else {
-			int target = readWithUpdate();
-			if (eofSeen) {
-				return eofGame();
-			}
-			if (target == '\r') {
-				target = readWithUpdate();
-			}
-			return target;
-		}
-	}
+    @Override
+    public int read() throws IOException {
+        if ( eofSeen ) {
+            return eofGame();
+        }
+        else {
+            int target = readWithUpdate();
+            if ( eofSeen ) {
+                return eofGame();
+            }
+            if ( target == '\r' ) {
+                target = readWithUpdate();
+            }
+            return target;
+        }
+    }
 
-	private int eofGame() {
-		if (!ensureLineFeedAtEndOfFile) {
-			return -1;
-		}
-		if (!slashNSeen) {
-			slashNSeen = true;
-			return '\n';
-		} else {
-			return -1;
-		}
-	}
+    private int eofGame() {
+        if ( !ensureLineFeedAtEndOfFile ) {
+            return -1;
+        }
+        if ( !slashNSeen ) {
+            slashNSeen = true;
+            return '\n';
+        } else {
+            return -1;
+        }
+    }
 
-	/**
-	 * Closes the stream. Also closes the underlying stream.
-	 */
-	@Override
-	public void close()
-			throws IOException {
-		super.close();
-		target.close();
-	}
+    /**
+     * Closes the stream. Also closes the underlying stream.
+     */
+    @Override
+    public void close() throws IOException {
+        super.close();
+        target.close();
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	@Override
-	public synchronized void mark(int readlimit) {
-		throw new UnsupportedOperationException("Mark notsupported");
-	}
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public synchronized void mark( int readlimit ) {
+        throw new UnsupportedOperationException( "Mark notsupported" );
+    }
 }

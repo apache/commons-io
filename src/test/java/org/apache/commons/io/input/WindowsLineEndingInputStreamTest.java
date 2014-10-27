@@ -18,61 +18,61 @@ package org.apache.commons.io.input;
  * under the License.
  */
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class WindowsLineEndingInputStreamTest {
-	@Test
-	public void simpleString() throws Exception {
-		assertEquals("abc\r\n", roundtrip("abc"));
-	}
+    @Test
+    public void simpleString() throws Exception {
+        assertEquals( "abc\r\n", roundtrip( "abc" ) );
+    }
 
-	@Test
-	public void inTheMiddleOfTheLine() throws Exception {
-		assertEquals("a\r\nbc\r\n", roundtrip("a\r\nbc"));
-	}
+    @Test
+    public void inTheMiddleOfTheLine() throws Exception {
+        assertEquals( "a\r\nbc\r\n", roundtrip( "a\r\nbc" ) );
+    }
 
-	@Test
-	public void multipleBlankLines() throws Exception {
-		assertEquals("a\r\n\r\nbc\r\n", roundtrip("a\r\n\r\nbc"));
-	}
+    @Test
+    public void multipleBlankLines() throws Exception {
+        assertEquals( "a\r\n\r\nbc\r\n", roundtrip( "a\r\n\r\nbc" ) );
+    }
 
-	@Test
-	public void twoLinesAtEnd() throws Exception {
-		assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n"));
-	}
+    @Test
+    public void twoLinesAtEnd() throws Exception {
+        assertEquals( "a\r\n\r\n", roundtrip( "a\r\n\r\n" ) );
+    }
 
-	@Test
-	public void linuxLinefeeds() throws Exception {
-		final String roundtrip = roundtrip("ab\nc", false);
-		assertEquals("ab\r\nc", roundtrip);
-	}
+    @Test
+    public void linuxLinefeeds() throws Exception {
+        final String roundtrip = roundtrip( "ab\nc", false );
+        assertEquals( "ab\r\nc", roundtrip );
+    }
 
 
-	@Test
-	public void malformed() throws Exception {
-		assertEquals("a\rbc", roundtrip("a\rbc", false));
-	}
+    @Test
+    public void malformed() throws Exception {
+        assertEquals( "a\rbc", roundtrip( "a\rbc", false ) );
+    }
 
-	@Test
-	public void retainLineFeed() throws Exception {
-		assertEquals("a\r\n\r\n", roundtrip("a\r\n\r\n", false));
-		assertEquals("a", roundtrip("a", false));
-	}
+    @Test
+    public void retainLineFeed() throws Exception {
+        assertEquals( "a\r\n\r\n", roundtrip( "a\r\n\r\n", false ) );
+        assertEquals( "a", roundtrip( "a", false ) );
+    }
 
-	private String roundtrip(String msg) throws IOException {
-		return roundtrip(msg, true);
-	}
+    private String roundtrip( String msg ) throws IOException {
+        return roundtrip( msg, true );
+    }
 
-	private String roundtrip(String msg, boolean ensure) throws IOException {
-		ByteArrayInputStream baos = new ByteArrayInputStream(msg.getBytes("UTF-8"));
-		WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream(baos, ensure);
-		byte[] buf = new byte[100];
-		final int read = lf.read(buf);
-		return new String(buf, 0, read, "UTF-8");
-	}
+    private String roundtrip( String msg, boolean ensure ) throws IOException {
+        ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes( "UTF-8" ) );
+        WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream( baos, ensure );
+        byte[] buf = new byte[100];
+        final int read = lf.read( buf );
+        return new String( buf, 0, read, "UTF-8" );
+    }
 }
