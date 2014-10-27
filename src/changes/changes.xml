@@ -47,6 +47,11 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+      <action issue="IO-457" dev="olamy" type="add" due-to="Kristian Rosenvold">
+        Add a BoundedReader, a wrapper that can be used to constrain access
+        to an underlying stream when used with mark/reset -
+        to avoid overflowing the mark limit of the underlying buffer.
+      </action>
       <action issue="IO-453" dev="sebb" type="fix" due-to="Steven Christou">
          Regression in FileUtils.readFileToString from 2.0.1
       </action>
