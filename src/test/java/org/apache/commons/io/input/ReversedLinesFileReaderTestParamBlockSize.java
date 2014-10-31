@@ -40,7 +40,8 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     private static final String ISO_8859_1 = "ISO-8859-1";
 
     @SuppressWarnings("boxing")
-    @Parameters // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
+    // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
+    @Parameters(name = "BlockSize={0}") 
     public static Collection<Integer[]> blockSizes() {
             return Arrays.asList(new Integer[][] { {1}, {3}, {8}, {256}, {4096} });
     }
