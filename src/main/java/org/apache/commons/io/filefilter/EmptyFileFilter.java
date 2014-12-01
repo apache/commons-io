@@ -53,6 +53,8 @@ import java.io.Serializable;
  */
 public class EmptyFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = 3631422087512832211L;
+
     /** Singleton instance of <i>empty</i> filter */
     public static final IOFileFilter EMPTY = new EmptyFileFilter();
 

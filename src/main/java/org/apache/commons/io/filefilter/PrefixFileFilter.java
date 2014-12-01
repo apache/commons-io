@@ -43,6 +43,8 @@ import org.apache.commons.io.IOCase;
  */
 public class PrefixFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = 8533897440809599867L;
+
     /** The filename prefixes to search for */
     private final String[] prefixes;
 

@@ -54,6 +54,8 @@ import java.io.Serializable;
  */
 public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = 5132005214688990379L;
+
     /** Singleton instance of <i>writable</i> filter */
     public static final IOFileFilter CAN_WRITE = new CanWriteFileFilter();
 

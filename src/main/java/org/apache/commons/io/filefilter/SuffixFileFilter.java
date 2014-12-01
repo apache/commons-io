@@ -44,6 +44,8 @@ import org.apache.commons.io.IOCase;
  */
 public class SuffixFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = -3389157631240246157L;
+
     /** The filename suffixes to search for */
     private final String[] suffixes;
 

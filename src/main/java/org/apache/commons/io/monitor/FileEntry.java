@@ -42,6 +42,8 @@ import java.io.Serializable;
  */
 public class FileEntry implements Serializable {
 
+    private static final long serialVersionUID = -2505664948818681153L;
+
     static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
     private final FileEntry parent;

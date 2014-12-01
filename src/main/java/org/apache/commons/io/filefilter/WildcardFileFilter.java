@@ -50,6 +50,7 @@ import org.apache.commons.io.IOCase;
  */
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = -7426486598995782105L;
     /** The wildcards that will be used to match filenames. */
     private final String[] wildcards;
     /** Whether the comparison is case sensitive. */

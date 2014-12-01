@@ -103,6 +103,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
 
   class TesterTrueFileFilter extends TrueFileFilter {
 
+    private static final long serialVersionUID = 1828930358172422914L;
     private boolean invoked;
 
     @Override
@@ -132,6 +133,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
 
   class TesterFalseFileFilter extends FalseFileFilter {
 
+    private static final long serialVersionUID = -3603047664010401872L;
     private boolean invoked;
 
     @Override

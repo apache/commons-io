@@ -32,6 +32,7 @@ import java.io.Serializable;
  */
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = -8723373124984771318L;
     /** The Filename filter */
     private final FilenameFilter filenameFilter;
     /** The File filter */

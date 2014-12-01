@@ -51,6 +51,8 @@ import org.apache.commons.io.IOCase;
  */
 public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final long serialVersionUID = 8397947749814525798L;
+
     /** Case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> NAME_COMPARATOR = new NameFileComparator();
 

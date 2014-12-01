@@ -53,6 +53,8 @@ import org.apache.commons.io.IOCase;
  */
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final long serialVersionUID = 1928235200184222815L;
+
     /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> EXTENSION_COMPARATOR = new ExtensionFileComparator();
 

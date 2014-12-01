@@ -32,6 +32,7 @@ import java.io.Serializable;
  */
 public class CharSequenceReader extends Reader implements Serializable {
 
+    private static final long serialVersionUID = 3724187752191401220L;
     private final CharSequence charSequence;
     private int idx;
     private int mark;

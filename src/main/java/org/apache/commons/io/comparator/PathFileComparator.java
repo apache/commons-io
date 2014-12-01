@@ -51,6 +51,8 @@ import org.apache.commons.io.IOCase;
  */
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final long serialVersionUID = 6527501707585768673L;
+
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> PATH_COMPARATOR = new PathFileComparator();
 
