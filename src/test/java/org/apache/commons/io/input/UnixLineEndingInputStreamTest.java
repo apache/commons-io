@@ -66,6 +66,7 @@ public class UnixLineEndingInputStreamTest
         UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
         byte[] buf = new byte[100];
         final int read = lf.read( buf );
+        lf.close();
         return new String( buf, 0, read, "UTF-8" );
     }
 

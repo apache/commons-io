@@ -42,6 +42,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -50,6 +51,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -66,6 +68,7 @@ public class BoundedReaderTest
         assertEquals( '1', cbuf[1] );
         assertEquals( '2', cbuf[2] );
         assertEquals( 'X', cbuf[3] );
+        mr.close();
     }
 
     @Test
@@ -81,6 +84,7 @@ public class BoundedReaderTest
         assertEquals( '0', cbuf[1] );
         assertEquals( '1', cbuf[2] );
         assertEquals( 'X', cbuf[3] );
+        mr.close();
     }
 
     @Test
@@ -95,6 +99,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
 
@@ -106,6 +111,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -116,6 +122,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -130,6 +137,7 @@ public class BoundedReaderTest
         mr.mark( 1 );
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -144,6 +152,7 @@ public class BoundedReaderTest
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
@@ -152,6 +161,7 @@ public class BoundedReaderTest
         mr.skip( 2 );
         mr.read();
         assertEquals( -1, mr.read() );
+        mr.close();
     }
 
     @Test
