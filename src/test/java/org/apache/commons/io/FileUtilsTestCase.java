@@ -2246,6 +2246,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveFile_CopyDelete() throws Exception {
         final File destination = new File( getTestDirectory(), "move2.txt" );
         final File src = new File( testFile1.getAbsolutePath() ) {
+            private static final long serialVersionUID = 1L;
+
             // Force renameTo to fail, as if destination is on another
             // filesystem
             @Override
@@ -2262,6 +2264,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void testMoveFile_CopyDelete_Failed() throws Exception {
         final File destination = new File( getTestDirectory(), "move3.txt" );
         final File src = new File( testFile1.getAbsolutePath() ) {
+            private static final long serialVersionUID = 1L;
+
             // Force renameTo to fail, as if destination is on another
             // filesystem
             @Override
@@ -2394,6 +2398,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         final File dir = getTestDirectory();
         final File src = new File(dir, "testMoveDirectory2Source") {
+            private static final long serialVersionUID = 1L;
 
             // Force renameTo to fail
             @Override
@@ -2589,6 +2594,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
     // Test helper class to pretend a file is shorter than it is
     private static class ShorterFile extends File {
+        private static final long serialVersionUID = 1L;
         public ShorterFile(String pathname) {
             super(pathname);
         }
