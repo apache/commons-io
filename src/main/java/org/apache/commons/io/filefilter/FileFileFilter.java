@@ -39,6 +39,7 @@ import java.io.Serializable;
  */
 public class FileFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = 5345244090827540862L;
     /** Singleton instance of file filter */
     public static final IOFileFilter FILE = new FileFileFilter();
 

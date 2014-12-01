@@ -51,6 +51,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final long serialVersionUID = -1201561106411416190L;
+
     /** Size comparator instance - directories are treated as zero size */
     public static final Comparator<File> SIZE_COMPARATOR = new SizeFileComparator();
 

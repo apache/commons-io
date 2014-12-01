@@ -27,6 +27,7 @@ import java.util.Collection;
  */
 public class CollectionFileListener implements FileAlterationListener, Serializable {
 
+    private static final long serialVersionUID = 939724715678693963L;
     private final boolean clearOnStart;
     private final Collection<File> createdFiles = new ArrayList<File>();
     private final Collection<File> changedFiles = new ArrayList<File>();

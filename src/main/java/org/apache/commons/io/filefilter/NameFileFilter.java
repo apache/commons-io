@@ -43,6 +43,7 @@ import org.apache.commons.io.IOCase;
  */
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
+    private static final long serialVersionUID = 176844364689077340L;
     /** The filenames to search for */
     private final String[] names;
     /** Whether the comparison is case sensitive. */

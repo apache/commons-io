@@ -28,6 +28,7 @@ import java.io.Serializable;
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
 
+    private static final long serialVersionUID = 8782512160909720199L;
     /**
      * Singleton instance of true filter.
      * @since 1.3
