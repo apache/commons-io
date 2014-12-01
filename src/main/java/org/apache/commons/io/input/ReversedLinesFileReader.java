@@ -92,6 +92,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException  if an I/O error occurs
      * @since 2.3
      */
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public ReversedLinesFileReader(final File file, final int blockSize, final Charset encoding) throws IOException {
         this.blockSize = blockSize;
         this.encoding = encoding;

@@ -49,6 +49,7 @@ public class DemuxTestCase {
     private final HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<String, ByteArrayOutputStream>();
     private final HashMap<String, Thread> m_threadMap = new HashMap<String, Thread>();
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     private String getOutput( final String threadName )
     {
         final ByteArrayOutputStream output =

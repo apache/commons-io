@@ -104,6 +104,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testAlternateLockDir() throws IOException {
         LockableFileWriter lfw1 = null;
         LockableFileWriter lfw2 = null;
