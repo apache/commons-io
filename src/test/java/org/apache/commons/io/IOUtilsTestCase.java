@@ -219,6 +219,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testContentEquals_InputStream_InputStream() throws Exception {
         {
             final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(Charsets.UTF_8));

@@ -112,6 +112,7 @@ public class TailerTest extends FileBasedTestCase {
         listener.clear();
     }
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testMultiByteBreak() throws Exception {
         System.out.println("testMultiByteBreak() Default charset: "+Charset.defaultCharset().displayName());
         final long delay = 50;

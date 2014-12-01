@@ -858,6 +858,7 @@ public class FileUtils {
      * @return The decoded URL or {@code null} if the input was
      *         {@code null}.
      */
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     static String decodeUrl(final String url) {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {

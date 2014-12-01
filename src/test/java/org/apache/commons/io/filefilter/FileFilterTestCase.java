@@ -946,6 +946,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testMagicNumberFileFilterBytes() throws Exception {
         final byte[] classFileMagicNumber =
             new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
@@ -1013,6 +1014,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, dir, false);
     }
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testMagicNumberFileFilterString() throws Exception {
         final byte[] classFileMagicNumber =
             new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
@@ -1045,6 +1047,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, dir, false);
     }
 
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testMagicNumberFileFilterStringOffset() throws Exception {
         final String tarMagicNumber = "ustar";
         final long tarMagicNumberOffset = 257;
