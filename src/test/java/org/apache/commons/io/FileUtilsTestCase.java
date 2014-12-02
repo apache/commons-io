@@ -2601,7 +2601,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         @Override
         public long length() {
             return super.length() - 1;
-        }    
+        }
     }
 
     // This test relies on FileUtils.copyFile using File.length to check the output size

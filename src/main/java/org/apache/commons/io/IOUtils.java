@@ -94,7 +94,7 @@ public class IOUtils {
      * Represents the end-of-file (or stream).
      */
     public static final int EOF = -1;
-    
+
     /**
      * The Unix directory separator character.
      */
@@ -289,7 +289,7 @@ public class IOUtils {
      * finally blocks.
      * <p>
      * Example code:
-     * 
+     *
      * <pre>
      * Closeable closeable = null;
      * try {
@@ -302,9 +302,9 @@ public class IOUtils {
      *     IOUtils.closeQuietly(closeable);
      * }
      * </pre>
-     * 
+     *
      * Closing all streams:
-     * 
+     *
      * <pre>
      * try {
      *     return IOUtils.copy(inputStream, outputStream);
@@ -313,7 +313,7 @@ public class IOUtils {
      *     IOUtils.closeQuietly(outputStream);
      * }
      * </pre>
-     * 
+     *
      * @param closeable
      *            the objects to close, may be null or already closed
      * @since 2.0
@@ -343,7 +343,7 @@ public class IOUtils {
      * and reporting close failure as well is not necessary or useful.
      * <p>
      * Example code:
-     * 
+     *
      * <pre>
      * Closeable closeable = null;
      * try {
@@ -356,7 +356,7 @@ public class IOUtils {
      *     <b>IOUtils.closeQuietly(closeable); // In case normal close was skipped due to Exception</b>
      * }
      * </pre>
-     * 
+     *
      * Closing all streams:
      * <br>TODO - fix this example, it is wrong; ought not to ignore Exceptions here
      * <pre>
@@ -366,7 +366,7 @@ public class IOUtils {
      *     IOUtils.closeQuietly(inputStream, outputStream);
      * }
      * </pre>
-     * 
+     *
      * @param closeables
      *            the objects to close, may be null or already closed
      * @since 2.5
@@ -3077,5 +3077,5 @@ public class IOUtils {
             throw new EOFException("Length to read: " + expected + " actual: " + actual);
         }
     }
-    
+
 }
