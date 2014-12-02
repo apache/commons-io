@@ -26,7 +26,7 @@ import java.io.Serializable;
  *
  * @since 2.0
  */
-public class TaggedIOException extends IOExceptionWithCause {
+public class TaggedIOException extends IOException {
 
     /**
      * Generated serial version UID.

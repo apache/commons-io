@@ -17,6 +17,8 @@
 
 package org.apache.commons.io;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 /**
@@ -31,7 +33,7 @@ public class IOExceptionWithCauseTestCase extends TestCase {
      */
     public void testIOExceptionStringThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
-        final IOExceptionWithCause exception = new IOExceptionWithCause("message", cause);
+        final IOException exception = new IOException("message", cause);
         this.validate(exception, cause, "message");
     }
 
@@ -40,7 +42,7 @@ public class IOExceptionWithCauseTestCase extends TestCase {
      */
     public void testIOExceptionThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
-        final IOExceptionWithCause exception = new IOExceptionWithCause(cause);
+        final IOException exception = new IOException(cause);
         this.validate(exception, cause, "java.lang.IllegalArgumentException: cause");
     }
 
