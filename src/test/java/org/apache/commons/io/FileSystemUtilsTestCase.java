@@ -40,14 +40,6 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         super(name);
     }
 
-    @Override
-    protected void setUp() throws Exception {
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-    }
-
     //-----------------------------------------------------------------------
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
