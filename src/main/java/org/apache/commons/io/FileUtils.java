@@ -185,7 +185,7 @@ public class FileUtils {
      */
     public static File getFile(final File directory, final String... names) {
         if (directory == null) {
-            throw new NullPointerException("directorydirectory must not be null");
+            throw new NullPointerException("directory must not be null");
         }
         if (names == null) {
             throw new NullPointerException("names must not be null");
