@@ -16,30 +16,11 @@
  */
 package org.apache.commons.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.CharArrayWriter;
-import java.io.Closeable;
-import java.io.EOFException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.StringBuilderWriter;
+
+import java.io.*;
+import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
@@ -48,9 +29,6 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.output.StringBuilderWriter;
 
 /**
  * General IO stream manipulation utilities.
@@ -141,17 +119,6 @@ public class IOUtils {
      * The default buffer size to use for the skip() methods.
      */
     private static final int SKIP_BUFFER_SIZE = 2048;
-
-    // Allocated in the relevant skip method if necessary.
-    /*
-     * N.B. no need to synchronize these because:
-     * - we don't care if the buffer is created multiple times (the data is ignored)
-     * - we always use the same size buffer, so if it it is recreated it will still be OK
-     * (if the buffer size were variable, we would need to synch. to ensure some other thread
-     * did not create a smaller one)
-     */
-    private static char[] SKIP_CHAR_BUFFER;
-    private static byte[] SKIP_BYTE_BUFFER;
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -2097,7 +2064,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static long copy(final InputStream input, final OutputStream output, final int bufferSize) throws IOException {
-        return copyLarge(input, output, new byte[bufferSize]);
+        return copyLarge(input, output, ThreadLocalByteArray.ofSize(bufferSize));
     }
 
     /**
@@ -2174,7 +2141,9 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset, final long length)
             throws IOException {
-        return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);
+        byte[] buffer = ThreadLocalByteArray.ofSize(DEFAULT_BUFFER_SIZE);
+
+        return copyLarge(input, output, inputOffset, length, buffer);
     }
 
     /**
@@ -2661,18 +2630,13 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        /*
-         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
-         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
-         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
-         */
-        if (SKIP_BYTE_BUFFER == null) {
-            SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
-        }
+
+        byte[] byteBuffer = ThreadLocalByteArray.ofSize(SKIP_BUFFER_SIZE);
+
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(byteBuffer, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
             }
@@ -2698,7 +2662,9 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BUFFER_SIZE));
+
+        final ByteBuffer skipByteBuffer = ByteBuffer.wrap(ThreadLocalByteArray.ofSize(SKIP_BUFFER_SIZE));
+
         long remain = toSkip;
         while (remain > 0) {
             skipByteBuffer.position(0);
@@ -2739,18 +2705,13 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        /*
-         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
-         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
-         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
-         */
-        if (SKIP_CHAR_BUFFER == null) {
-            SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];
-        }
+
+        char[] charBuffer = ThreadLocalCharArray.ofSize(SKIP_BUFFER_SIZE).get();
+
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(charBuffer, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
             if (n < 0) { // EOF
                 break;
             }
