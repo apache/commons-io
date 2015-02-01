@@ -2706,7 +2706,7 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
 
-        char[] charBuffer = ThreadLocalCharArray.ofSize(SKIP_BUFFER_SIZE).get();
+        char[] charBuffer = ThreadLocalCharArray.ofSize(SKIP_BUFFER_SIZE);
 
         long remain = toSkip;
         while (remain > 0) {

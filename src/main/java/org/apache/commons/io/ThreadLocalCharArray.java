@@ -17,7 +17,7 @@ public final class ThreadLocalCharArray extends ThreadLocal<char[]>{
         return new char[bufferSize];
     }
 
-    public static ThreadLocalCharArray ofSize(int bufferSize){
+    public static char[] ofSize(int bufferSize){
         ThreadLocalCharArray instanceForBufferSize = instancesByBufferSize.get(bufferSize);
 
         if(instanceForBufferSize == null){
@@ -26,6 +26,6 @@ public final class ThreadLocalCharArray extends ThreadLocal<char[]>{
             instancesByBufferSize.put(bufferSize, instanceForBufferSize);
         }
 
-        return instanceForBufferSize;
+        return instanceForBufferSize.get();
     }
 }

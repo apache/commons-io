@@ -219,7 +219,7 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = ThreadLocalCharArray.ofSize(DEFAULT_BUFFER_SIZE).get();
+        final char[] buffer = ThreadLocalCharArray.ofSize(DEFAULT_BUFFER_SIZE);
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
