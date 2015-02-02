@@ -16,41 +16,17 @@
  */
 package org.apache.commons.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.CharArrayReader;
-import java.io.CharArrayWriter;
-import java.io.Closeable;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.*;
+import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.Assert;
 
 /**
  * This is used to test IOUtils for correctness. The following checks are performed:
@@ -293,29 +269,41 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @SuppressWarnings("deprecation")
     // testing deprecated method
+    @Test
     public void testCopy_ByteArray_OutputStream() throws Exception {
-        final File destination = newFile("copy8.txt");
-        final FileInputStream fin = new FileInputStream(m_testFile);
-        byte[] in;
-        try {
-            // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
-            in = IOUtils.toByteArray(fin);
-        } finally {
-            fin.close();
+
+        long start = System.currentTimeMillis();
+
+        for(int i = 0; i < 1000; i++) {
+            final File destination = newFile("copy8.txt");
+            final FileInputStream fin = new FileInputStream(m_testFile);
+            byte[] in;
+            try {
+                // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
+                in = IOUtils.toByteArray(fin);
+            } finally {
+                fin.close();
+            }
+
+            final FileOutputStream fout = new FileOutputStream(destination);
+            try {
+                CopyUtils.copy(in, fout);
+
+                fout.flush();
+
+                checkFile(destination, m_testFile);
+                checkWrite(fout);
+            } finally {
+                fout.close();
+            }
+            deleteFile(destination);
         }
 
-        final FileOutputStream fout = new FileOutputStream(destination);
-        try {
-            CopyUtils.copy(in, fout);
+        long end = System.currentTimeMillis();
 
-            fout.flush();
+        long duration = end - start;
 
-            checkFile(destination, m_testFile);
-            checkWrite(fout);
-        } finally {
-            fout.close();
-        }
-        deleteFile(destination);
+        System.err.println("took " + duration + " ms");
     }
 
     @SuppressWarnings("deprecation")

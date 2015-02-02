@@ -16,14 +16,15 @@
  */
 package org.apache.commons.io.filefilter;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadLocalByteArray;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * <p>
@@ -235,7 +236,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
         if (file != null && file.isFile() && file.canRead()) {
             RandomAccessFile randomAccessFile = null;
             try {
-                final byte[] fileBytes = new byte[this.magicNumbers.length];
+                final byte[] fileBytes = ThreadLocalByteArray.ofSize(this.magicNumbers.length);
                 randomAccessFile = new RandomAccessFile(file, "r");
                 randomAccessFile.seek(byteOffset);
                 final int read = randomAccessFile.read(fileBytes);

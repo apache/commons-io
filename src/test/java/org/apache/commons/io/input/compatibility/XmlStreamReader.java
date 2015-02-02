@@ -16,23 +16,16 @@
  */
 package org.apache.commons.io.input.compatibility;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
+import org.apache.commons.io.ThreadLocalByteArray;
+import org.apache.commons.io.output.XmlStreamWriter;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.output.XmlStreamWriter;
 
 /**
  * Character stream that handles all the necessary Voodo to figure out the
@@ -663,7 +656,7 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
-            final byte[] bytes = new byte[BUFFER_SIZE];
+            final byte[] bytes = ThreadLocalByteArray.ofSize(BUFFER_SIZE);
             is.mark(BUFFER_SIZE);
             int offset = 0;
             int max = BUFFER_SIZE;

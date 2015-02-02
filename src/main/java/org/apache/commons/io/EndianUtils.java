@@ -16,12 +16,12 @@
  */
 package org.apache.commons.io;
 
-import static org.apache.commons.io.IOUtils.EOF;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import static org.apache.commons.io.IOUtils.EOF;
 
 /**
  * Utility code for dealing with different endian systems.
@@ -411,7 +411,7 @@ public class EndianUtils {
     public static long readSwappedLong(final InputStream input)
         throws IOException
     {
-        final byte[] bytes = new byte[8];
+        final byte[] bytes = ThreadLocalByteArray.ofSize(8);
         for ( int i=0; i<8; i++ ) {
             bytes[i] = (byte) read( input );
         }
