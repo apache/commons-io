@@ -28,8 +28,8 @@ public final class ThreadLocalCharArray extends ThreadLocal<char[]>{
     }
 
     /**
-     * returns a char[] of specified length, to use for buffering instead of allocating memory via new char[]. 
-     * please not that the content of the returned char-array is not guaranteed to be all-zero, it may 
+     * Returns a char[] of specified length, to use for buffering instead of allocating memory via new char[].
+     * Please not that the content of the returned char-array is not guaranteed to be all-zero, it may
      * contain arbitrary data. It is enshured however, that the char-array returned is threadlocal and cannot be accessed by 
      * another thread as long as it is used method internal. 
      * @param bufferSize the size of the array to be returned, must be larger than zero
