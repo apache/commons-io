@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io.filefilter;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.ThreadLocalByteArray;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadLocalByteArray;
 
 /**
  * <p>
