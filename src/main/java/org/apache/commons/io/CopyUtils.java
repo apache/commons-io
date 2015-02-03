@@ -196,7 +196,7 @@ public class CopyUtils {
                 throws IOException {
         final byte[] buffer = ThreadLocalByteArray.ofSize(DEFAULT_BUFFER_SIZE);
         int count = 0;
-        int n;
+        int n = 0;
         while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
