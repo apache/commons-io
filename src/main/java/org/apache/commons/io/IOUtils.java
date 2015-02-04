@@ -16,6 +16,9 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.StringBuilderWriter;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -48,9 +51,6 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.output.StringBuilderWriter;
 
 /**
  * General IO stream manipulation utilities.
@@ -2086,7 +2086,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static long copy(final InputStream input, final OutputStream output, final int bufferSize) throws IOException {
-        return copyLarge(input, output, ThreadLocalByteArray.ofSize(bufferSize));
+        return copyLarge(input, output, new byte[bufferSize]);
     }
 
     /**
@@ -2163,9 +2163,7 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset, final long length)
             throws IOException {
-        byte[] buffer = ThreadLocalByteArray.ofSize(DEFAULT_BUFFER_SIZE);
-
-        return copyLarge(input, output, inputOffset, length, buffer);
+        return copyLarge(input, output, inputOffset, length, ByteArrayThreadLocal.getThreadLocalByteArray());
     }
 
     /**
@@ -2653,12 +2651,12 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
 
-        byte[] byteBuffer = ThreadLocalByteArray.ofSize(SKIP_BUFFER_SIZE);
+        byte[] byteBuffer = ByteArrayThreadLocal.getThreadLocalByteArray();
 
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(byteBuffer, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(byteBuffer, 0, (int) Math.min(remain, ByteArrayThreadLocal.BUFFER_ARRAY_SIZE));
             if (n < 0) { // EOF
                 break;
             }
@@ -2685,12 +2683,12 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
 
-        final ByteBuffer skipByteBuffer = ByteBuffer.wrap(ThreadLocalByteArray.ofSize(SKIP_BUFFER_SIZE));
+        final ByteBuffer skipByteBuffer = ByteBuffer.wrap(ByteArrayThreadLocal.getThreadLocalByteArray());
 
         long remain = toSkip;
         while (remain > 0) {
             skipByteBuffer.position(0);
-            skipByteBuffer.limit((int) Math.min(remain, SKIP_BUFFER_SIZE));
+            skipByteBuffer.limit((int) Math.min(remain, ByteArrayThreadLocal.BUFFER_ARRAY_SIZE));
             final int n = input.read(skipByteBuffer);
             if (n == EOF) {
                 break;
@@ -2728,12 +2726,12 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
 
-        char[] charBuffer = ThreadLocalCharArray.ofSize(SKIP_BUFFER_SIZE);
+        char[] charBuffer = CharArrayThreadLocal.getThreadLocalCharArray();
 
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(charBuffer, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(charBuffer, 0, (int) Math.min(remain, CharArrayThreadLocal.BUFFER_ARRAY_SIZE));
             if (n < 0) { // EOF
                 break;
             }

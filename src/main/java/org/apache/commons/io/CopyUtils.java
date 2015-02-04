@@ -194,7 +194,7 @@ public class CopyUtils {
             final InputStream input,
             final OutputStream output)
                 throws IOException {
-        final byte[] buffer = ThreadLocalByteArray.ofSize(DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = ByteArrayThreadLocal.getThreadLocalByteArray();
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
@@ -219,7 +219,7 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = ThreadLocalCharArray.ofSize(DEFAULT_BUFFER_SIZE);
+        final char[] buffer = CharArrayThreadLocal.getThreadLocalCharArray();
         int count = 0;
         int n = 0;
         while (-1 != (n = input.read(buffer))) {
