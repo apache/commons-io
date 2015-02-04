@@ -16,9 +16,6 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.output.StringBuilderWriter;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -51,6 +48,9 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.StringBuilderWriter;
 
 /**
  * General IO stream manipulation utilities.
@@ -2107,7 +2107,7 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output)
             throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
+        return copyLarge(input, output, ByteArrayThreadLocal.getThreadLocalByteArray());
     }
 
     /**

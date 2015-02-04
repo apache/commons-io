@@ -25,7 +25,7 @@ final class ByteArrayThreadLocal extends ThreadLocal<byte[]>{
 
     /**
      * Returns a byte-array of {@link #BUFFER_ARRAY_SIZE}-length, to use for buffering instead of allocating memory via new byte[].
-     * Please not that the content of the returned byte-array is not guaranteed to be all-zero, it may
+     * Please note that the content of the returned byte-array is not guaranteed to be all-zero, it may
      * contain arbitrary data. It is enshured however, that the char-array returned is thread-local and cannot be accessed by
      * another thread as long as it is used method internal.
      * @since 2.5
