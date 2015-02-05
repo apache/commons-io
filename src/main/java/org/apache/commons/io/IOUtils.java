@@ -144,7 +144,10 @@ public class IOUtils {
 
     // Allocated in the relevant skip method if necessary.
     /*
-     * N.B. no need to synchronize these because:
+     * These buffers are static and are shared between threads.
+     * This is possible because the buffers are write-only - the contents are never read.
+     *
+     * N.B. there is no need to synchronize when creating these because:
      * - we don't care if the buffer is created multiple times (the data is ignored)
      * - we always use the same size buffer, so if it it is recreated it will still be OK
      * (if the buffer size were variable, we would need to synch. to ensure some other thread
