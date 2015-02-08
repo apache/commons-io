@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference;
  */
 final class ByteArrayThreadLocal extends ThreadLocal<WeakReference<byte[]>>{
 
-    public static final int BUFFER_ARRAY_SIZE = 2048;
+    public static final int BUFFER_ARRAY_SIZE = 4096;
     private static final ByteArrayThreadLocal INSTANCE = new ByteArrayThreadLocal();
 
     private ByteArrayThreadLocal(){
