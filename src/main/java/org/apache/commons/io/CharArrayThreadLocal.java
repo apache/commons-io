@@ -1,5 +1,7 @@
 package org.apache.commons.io;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Provider for thread-local char-arrays.
  * <p>
@@ -10,7 +12,7 @@ package org.apache.commons.io;
  * <p>
  * @version $Id$
  */
-final class CharArrayThreadLocal extends ThreadLocal<char[]>{
+final class CharArrayThreadLocal extends ThreadLocal<WeakReference<char[]>>{
 
     public static final int BUFFER_ARRAY_SIZE = 2048;
     private static final CharArrayThreadLocal INSTANCE = new CharArrayThreadLocal();
@@ -19,8 +21,8 @@ final class CharArrayThreadLocal extends ThreadLocal<char[]>{
     }
 
     @Override
-    protected char[] initialValue() {
-        return new char[BUFFER_ARRAY_SIZE];
+    protected WeakReference<char[]> initialValue() {
+        return new WeakReference<char[]>(new char[BUFFER_ARRAY_SIZE]);
     }
 
     /**
@@ -31,6 +33,15 @@ final class CharArrayThreadLocal extends ThreadLocal<char[]>{
      * @since 2.5
      */
     public static char[] getThreadLocalCharArray(){
-        return INSTANCE.get();
+        WeakReference<char[]> weakReference = INSTANCE.get();
+
+        char[] buffer = weakReference.get();
+
+        if(buffer != null){
+            return buffer;
+        } else {
+            INSTANCE.remove();
+            return getThreadLocalCharArray();
+        }
     }
 }

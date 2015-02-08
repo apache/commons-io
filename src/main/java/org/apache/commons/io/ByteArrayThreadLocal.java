@@ -1,5 +1,7 @@
 package org.apache.commons.io;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Provider for thread-local byte-arrays.
  * <p>
@@ -10,17 +12,17 @@ package org.apache.commons.io;
  * <p>
  * @version $Id$
  */
-final class ByteArrayThreadLocal extends ThreadLocal<byte[]>{
+final class ByteArrayThreadLocal extends ThreadLocal<WeakReference<byte[]>>{
 
-    public static final int BUFFER_ARRAY_SIZE = 4096;
+    public static final int BUFFER_ARRAY_SIZE = 2048;
     private static final ByteArrayThreadLocal INSTANCE = new ByteArrayThreadLocal();
 
     private ByteArrayThreadLocal(){
     }
 
     @Override
-    protected byte[] initialValue() {
-        return new byte[BUFFER_ARRAY_SIZE];
+    protected WeakReference<byte[]> initialValue() {
+        return new WeakReference<byte[]>(new byte[BUFFER_ARRAY_SIZE]);
     }
 
     /**
@@ -31,6 +33,15 @@ final class ByteArrayThreadLocal extends ThreadLocal<byte[]>{
      * @since 2.5
      */
     public static byte[] getThreadLocalByteArray(){
-        return INSTANCE.get();
+        WeakReference<byte[]> weakReference = INSTANCE.get();
+
+        byte[] buffer = weakReference.get();
+
+        if(buffer != null){
+            return buffer;
+        } else {
+            INSTANCE.remove();
+            return getThreadLocalByteArray();
+        }
     }
 }
