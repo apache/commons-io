@@ -361,7 +361,7 @@ public class IOUtils {
      * </pre>
      *
      * Closing all streams:
-     * <br>TODO - fix this example, it is wrong; ought not to ignore Exceptions here
+     * <br>
      * <pre>
      * try {
      *     return IOUtils.copy(inputStream, outputStream);
