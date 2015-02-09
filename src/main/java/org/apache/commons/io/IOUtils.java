@@ -76,6 +76,20 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * or <code>BufferedReader</code>. The default buffer size of 4K has been shown
  * to be efficient in tests.
  * <p>
+ * The various copy methods all delegate the actual copying to one of the following methods:
+ * <ul>
+ * <li>{@link #copyLarge(InputStream, OutputStream, byte[])}</li>
+ * <li>{@link #copyLarge(InputStream, OutputStream, long, long, byte[])}</li>
+ * <li>{@link #copyLarge(Reader, Writer, char[])}</li>
+ * <li>{@link #copyLarge(Reader, Writer, long, long, char[])}</li>
+ * </ul>
+ * For example, {@link #copy(InputStream, OutputStream)} calls {@link #copyLarge(InputStream, OutputStream)}
+ * which calls {@link #copy(InputStream, OutputStream, int)} which creates the buffer and calls
+ * {@link #copyLarge(InputStream, OutputStream, byte[])}.
+ * <p>
+ * Applications can re-use buffers by using the underlying methods directly.
+ * This may improve performance for applications that need to do a lot of copying.
+ * <p>
  * Wherever possible, the methods in this class do <em>not</em> flush or close
  * the stream. This is to avoid making non-portable assumptions about the
  * streams' origin and further use. Thus the caller is still responsible for
@@ -2085,7 +2099,6 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * <p>
-     *
      * @param input
      *            the <code>InputStream</code> to read from
      * @param output
@@ -2131,7 +2144,6 @@ public class IOUtils {
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedInputStream</code>.
      * <p>
-     *
      * @param input  the <code>InputStream</code> to read from
      * @param output  the <code>OutputStream</code> to write to
      * @param buffer the buffer to use for the copy
