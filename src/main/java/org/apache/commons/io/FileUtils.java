@@ -486,6 +486,42 @@ public class FileUtils {
         }
     }
 
+    /** @see #listFiles(String[])  */
+    public static Collection<File> listFiles(String extension) {
+        return listFiles(new String[]{extension});
+    }
+
+    /** @see #listFiles(String[], String)  */
+    public static Collection<File> listFiles(String[] extensions) {
+        return listFiles(extensions, "/");
+    }
+
+    public static Collection<File> listFiles(String extension, String classpathRoot) {
+        return listFiles(new String[]{extension}, classpathRoot);
+    }
+
+    /** @see #listFiles(String[], String, Class) */
+    public static Collection<File> listFiles(String[] extensions, String classpathRoot) {
+        return listFiles(extensions, classpathRoot, ClassLoader.getSystemClassLoader().getClass());
+    }
+
+    /**
+     * Get files from classpath.
+     * @param extensions - pass "properties" for getting all the *.properties in the classpath, such as in the resources.
+     * @param classpathRoot - pass "/" for everything in your classpath, or "/com/mycompany/module/pkg", for everything under com.mycompany.module.pkg.
+     * @param clazz - can pass this.
+     * @return the collection of matching files.
+     */
+    public static Collection<File> listFiles(String[] extensions, String classpathRoot, Class clazz) {
+        URL resource = clazz.getResource(classpathRoot);
+        File directory = new File(resource.getFile());
+        return FileUtils.listFiles(
+                directory,
+                extensions,
+                true
+        );
+    }
+
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
