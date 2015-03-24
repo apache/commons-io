@@ -277,11 +277,10 @@ public class ReaderInputStream extends InputStream {
         for (;;) {
             if (encoderOut.hasRemaining()) {
                 return encoderOut.get() & 0xFF;
-            } else {
-                fillBuffer();
-                if (endOfInput && !encoderOut.hasRemaining()) {
-                    return EOF;
-                }
+            }
+            fillBuffer();
+            if (endOfInput && !encoderOut.hasRemaining()) {
+                return EOF;
             }
         }
     }
