@@ -29,6 +29,8 @@ public class UnixLineEndingInputStream extends InputStream {
 
     private boolean slashNSeen = false;
 
+    private boolean slashRSeen = false;
+
     private boolean eofSeen = false;
 
     private final InputStream target;
@@ -53,6 +55,7 @@ public class UnixLineEndingInputStream extends InputStream {
             return target;
         }
         slashNSeen = target == '\n';
+        slashRSeen = target == '\r';
         return target;
     }
 
@@ -62,23 +65,30 @@ public class UnixLineEndingInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
+        boolean previousWasSlashR = slashRSeen;
         if ( eofSeen ) {
-            return eofGame();
+            return eofGame(previousWasSlashR);
         }
         else {
             int target = readWithUpdate();
             if ( eofSeen ) {
-                return eofGame();
+                return eofGame(previousWasSlashR);
             }
-            if ( target == '\r' ) {
-                target = readWithUpdate();
+            if (slashRSeen)
+            {
+                return '\n';
             }
+
+            if ( previousWasSlashR && slashNSeen){
+                return read();
+            }
+
             return target;
         }
     }
 
-    private int eofGame() {
-        if ( !ensureLineFeedAtEndOfFile ) {
+    private int eofGame(boolean previousWasSlashR) {
+        if ( previousWasSlashR || !ensureLineFeedAtEndOfFile ) {
             return -1;
         }
         if ( !slashNSeen ) {
