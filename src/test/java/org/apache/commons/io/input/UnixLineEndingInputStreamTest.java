@@ -47,9 +47,24 @@ public class UnixLineEndingInputStreamTest
     }
 
     @Test
-    public void malformed() throws Exception {
-        assertEquals( "abc", roundtrip( "a\rbc", false ) );
+    public void crOnlyEnsureAtEof()
+        throws Exception
+    {
+        assertEquals( "a\nb\n", roundtrip( "a\rb" ) );
     }
+
+    @Test
+    public void crOnlyNotAtEof()
+        throws Exception
+    {
+        assertEquals( "a\nb", roundtrip( "a\rb", false ) );
+    }
+
+    @Test
+    public void crAtEnd() throws Exception {
+        assertEquals( "a\n", roundtrip( "a\r" ) );
+    }
+
 
     @Test
     public void retainLineFeed() throws Exception {
