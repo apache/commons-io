@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * This class is typically used in cases where an output stream needs to be
  * passed to a component that wants to explicitly close the stream even if
  * other components would still use the stream for output.
- *
+ * </p>
  * @version $Id$
  * @since 1.4
  */
