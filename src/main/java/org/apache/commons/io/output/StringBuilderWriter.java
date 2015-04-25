@@ -104,6 +104,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      */
     @Override
     public void close() {
+        // no-op
     }
 
     /**
@@ -111,6 +112,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
      */
     @Override
     public void flush() {
+        // no-op
     }
 
 
