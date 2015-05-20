@@ -131,10 +131,8 @@ public class ReaderInputStreamTest {
         r.close();
     }
 
-    /**
+    /*
      * Tests https://issues.apache.org/jira/browse/IO-277
-     *
-     * @throws IOException
      */
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {

@@ -58,8 +58,13 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     /**
      * Creates a test file with a specified number of lines.
+     *
+     * @param file target file
+     * @param lineCount number of lines to create
+     *
+     * @throws IOException If an I/O error occurs
      */
-    private List<String> createLinesFile(final File file, final int lineCount) throws Exception {
+    private List<String> createLinesFile(final File file, final int lineCount) throws IOException {
         final List<String> lines = createStringLines(lineCount);
         FileUtils.writeLines(file, lines);
         return lines;
@@ -67,8 +72,14 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     /**
      * Creates a test file with a specified number of lines.
+     *
+     * @param file target file
+     * @param encoding the encoding to use while writing the lines
+     * @param lineCount number of lines to create
+     *
+     * @throws IOException If an I/O error occurs
      */
-    private List<String> createLinesFile(final File file, final String encoding, final int lineCount) throws Exception {
+    private List<String> createLinesFile(final File file, final String encoding, final int lineCount) throws IOException {
         final List<String> lines = createStringLines(lineCount);
         FileUtils.writeLines(file, encoding, lines);
         return lines;
@@ -77,7 +88,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     /**
      * Creates String data lines.
      *
-     * @param lineCount
+     * @param lineCount number of lines to create
      * @return a new lines list.
      */
     private List<String> createStringLines(final int lineCount) {
@@ -88,7 +99,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         return lines;
     }
 
-    /** @see junit.framework.TestCase#setUp() */
     @Override
     @Before
     protected void setUp() throws Exception {
@@ -100,7 +110,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     }
 
-    /** @see junit.framework.TestCase#tearDown() */
     @Override
     @After
     protected void tearDown() throws Exception {
@@ -108,9 +117,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     }
 
     // -----------------------------------------------------------------------
-    /**
-     * Test constructor.
-     */
+
     @Test
     public void testConstructor() throws Exception {
         try {
@@ -121,41 +128,26 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Test a file with no lines.
-     */
     @Test
     public void testZeroLines() throws Exception {
         doTestFileWithSpecifiedLines(0);
     }
 
-    /**
-     * Test a file with 1 line.
-     */
     @Test
     public void testOneLines() throws Exception {
         doTestFileWithSpecifiedLines(1);
     }
 
-    /**
-     * Test a file with 2 lines.
-     */
     @Test
     public void testTwoLines() throws Exception {
         doTestFileWithSpecifiedLines(2);
     }
 
-    /**
-     * Test a file with 3 lines.
-     */
     @Test
     public void testThreeLines() throws Exception {
         doTestFileWithSpecifiedLines(3);
     }
 
-    /**
-     * Test a missing File.
-     */
     @Test
     public void testMissingFile() throws Exception {
         final File testFile = new File(getTestDirectory(), "dummy-missing-file.txt");
@@ -171,9 +163,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Test a file with a Valid encoding.
-     */
     @Test
     public void testValidEncoding() throws Exception {
         final String encoding = "UTF-8";
@@ -194,9 +183,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Test a file with an Invalid encoding.
-     */
     @Test
     public void testInvalidEncoding() throws Exception {
         final String encoding = "XXXXXXXX";
@@ -215,9 +201,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Test the iterator using only the nextLine() method.
-     */
     @Test
     public void testNextLineOnlyDefaultEncoding() throws Exception {
         final File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
@@ -227,9 +210,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         assertLines(lines, iterator);
     }
 
-    /**
-     * Test the iterator using only the nextLine() method.
-     */
     @Test
     public void testNextLineOnlyNullEncoding() throws Exception {
         final String encoding = null;
@@ -241,9 +221,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         assertLines(lines, iterator);
     }
 
-    /**
-     * Test the iterator using only the nextLine() method.
-     */
     @Test
     public void testNextLineOnlyUtf8Encoding() throws Exception {
         final String encoding = "UTF-8";
@@ -255,9 +232,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         assertLines(lines, iterator);
     }
 
-    /**
-     * Test the iterator using only the next() method.
-     */
     @Test
     public void testNextOnly() throws Exception {
         final String encoding = null;
@@ -277,9 +251,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Tests hasNext when it throws an exception.
-     */
     @Test
     public void testNextWithException() throws Exception {
         final Reader reader = new BufferedReader(new StringReader("")) {
@@ -296,9 +267,6 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Test closing the iterator before all the file has been processed.
-     */
     @Test
     public void testCloseEarly() throws Exception {
         final String encoding = "UTF-8";
@@ -349,8 +317,12 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     /**
      * Utility method to create and test a file with a specified number of lines.
+     *
+     * @param lineCount the lines to create in the test file
+     *
+     * @throws IOException If an I/O error occurs while creating the file 
      */
-    private void doTestFileWithSpecifiedLines(final int lineCount) throws Exception {
+    private void doTestFileWithSpecifiedLines(final int lineCount) throws IOException {
         final String encoding = "UTF-8";
 
         final String fileName = "LineIterator-" + lineCount + "-test.txt";

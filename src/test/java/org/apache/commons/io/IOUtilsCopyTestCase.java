@@ -137,7 +137,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
-    /**
+    /*
      * Test Copying file > 2GB  - see issue# IO-84
      */
     public void testCopy_inputStreamToOutputStream_IO84() throws Exception {
@@ -389,7 +389,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
         } catch (final NullPointerException ex) {}
     }
 
-    /**
+    /*
      * Test Copying file > 2GB  - see issue# IO-84
      */
     public void testCopy_readerToWriter_IO84() throws Exception {

@@ -1118,7 +1118,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         }
 }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
      * that tests that the method properly filters files from the list.
      */
@@ -1134,7 +1134,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(fileA, filtered[0]);
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the list.
      */
@@ -1151,7 +1151,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(fileA, filtered[0]);
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filter(IOFileFilter, File...)}
      * that tests {@code null} parameters and {@code null} elements
      * in the provided list.
@@ -1178,7 +1178,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(0, filtered.length);
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterList(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the list.
      */
@@ -1195,7 +1195,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFalse(filteredList.contains(fileB));
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterList(IOFileFilter, File...)}
      * that tests that the method properly filters files from the list.
      */
@@ -1211,7 +1211,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFalse(filteredList.contains(fileB));
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterList(IOFileFilter, java.lang.Iterable)}
      * that tests {@code null} parameters and {@code null} elements
      * in the provided list.
@@ -1236,7 +1236,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertEquals(0, filteredList.size());
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, java.lang.Iterable)}
      * that tests that the method properly filters files from the set.
      */
@@ -1253,7 +1253,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFalse(filteredSet.contains(fileB));
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, File...)}
      * that tests that the method properly filters files from the set.
      */
@@ -1269,7 +1269,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFalse(filteredSet.contains(fileB));
     }
 
-    /**
+    /*
      * Test method for {@link FileFilterUtils#filterSet(IOFileFilter, java.lang.Iterable)}
      * that tests {@code null} parameters and {@code null} elements
      * in the provided set.

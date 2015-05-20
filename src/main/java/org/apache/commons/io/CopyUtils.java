@@ -303,6 +303,9 @@ public class CopyUtils {
      * <code>OutputStream</code>, and flush the <code>OutputStream</code>.
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
+     * @param encoding The name of a supported character encoding. See the
+     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      * @since 2.5
      */
@@ -352,6 +355,9 @@ public class CopyUtils {
      * flush the <code>OutputStream</code>.
      * @param input the <code>String</code> to read from
      * @param output the <code>OutputStream</code> to write to
+     * @param encoding The name of a supported character encoding. See the
+     * <a href="http://www.iana.org/assignments/character-sets">IANA
+     * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      * @since 2.5
      */

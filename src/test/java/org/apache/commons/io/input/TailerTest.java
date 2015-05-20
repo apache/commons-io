@@ -330,10 +330,8 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
     }
 
-    /**
+    /*
      * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
-     *
-     * @throws Exception
      */
     public void testInterrupt() throws Exception {
         final File file = new File(getTestDirectory(), "nosuchfile");

@@ -44,9 +44,6 @@ public class CloseShieldOutputStreamTest extends TestCase {
         closed = false;
     }
 
-    /**
-     * Test the <code>close()</code> method.
-     */
     public void testClose() throws IOException {
         shielded.close();
         assertFalse("closed", closed);

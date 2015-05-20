@@ -147,7 +147,7 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
 
     /**
      * Test to demonstrate a file which does not exist returns false
-     * @throws IOException
+     * @throws IOException If an I/O error occurs
      */
     @Test
     public void testFileDoesNotExistBug() throws IOException {

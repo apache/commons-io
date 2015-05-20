@@ -70,18 +70,15 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
-    /** Construct the TestCase using the name */
     public DirectoryWalkerTestCaseJava4(final String name) {
         super(name);
     }
 
-    /** Set Up */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
 
-    /** Tear Down */
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();

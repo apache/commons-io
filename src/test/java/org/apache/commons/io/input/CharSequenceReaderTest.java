@@ -32,7 +32,6 @@ import org.junit.Test;
 public class CharSequenceReaderTest {
     private static final char NONE = (new char[1])[0];
 
-    /** Test {@link Reader#close()}. */
     @Test
     public void testClose() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -41,7 +40,6 @@ public class CharSequenceReaderTest {
         checkRead(reader, "Foo");
     }
 
-    /** Test {@link Reader#markSupported()}. */
     @Test
     public void testMarkSupported() throws Exception {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -49,7 +47,6 @@ public class CharSequenceReaderTest {
         reader.close();
     }
 
-    /** Test {@link Reader#mark(int)}. */
     @Test
     public void testMark() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -64,7 +61,6 @@ public class CharSequenceReaderTest {
         checkRead(reader, "Foo");
     }
 
-    /** Test {@link Reader#skip(long)}. */
     @Test
     public void testSkip() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -80,7 +76,6 @@ public class CharSequenceReaderTest {
         assertEquals(-1, reader.read());
     }
 
-    /** Test {@link Reader#read()}. */
     @Test
     public void testRead() throws IOException {
         final Reader reader = new CharSequenceReader("Foo");
@@ -92,7 +87,6 @@ public class CharSequenceReaderTest {
         reader.close();
     }
 
-    /** Test {@link Reader#read(char[])}. */
     @Test
     public void testReadCharArray() throws IOException {
         final Reader reader = new CharSequenceReader("FooBar");
@@ -109,7 +103,6 @@ public class CharSequenceReaderTest {
         reader.close();
     }
 
-    /** Test {@link Reader#read(char[], int, int)}. */
     @Test
     public void testReadCharArrayPortion() throws IOException {
         final char[] chars = new char[10];
@@ -128,6 +121,7 @@ public class CharSequenceReaderTest {
                     expected.charAt(i), (char)reader.read());
         }
     }
+
     private void checkArray(final char[] expected, final char[] actual) {
         for (int i = 0; i < expected.length; i++) {
             assertEquals("Compare[" +i + "]", expected[i], actual[i]);

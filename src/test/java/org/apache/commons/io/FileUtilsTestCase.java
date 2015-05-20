@@ -93,7 +93,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         testFile2Size = (int)testFile2.length();
     }
 
-    /** @see junit.framework.TestCase#setUp() */
     @Override
     protected void setUp() throws Exception {
         getTestDirectory().mkdirs();
@@ -105,16 +104,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         createFile(testFile2, testFile2Size);
     }
 
-    /** @see junit.framework.TestCase#tearDown() */
     @Override
     protected void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Tests the {@link FileUtils#getFile(String...)} method.
-     */
     public void testGetFile() {
         final File expected_A = new File("src");
         final File expected_B = new File(expected_A, "main");
@@ -130,9 +125,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Tests the {@link FileUtils#getFile(File, String...)} method.
-     */
     public void testGetFile_Parent() {
         final File parent = new File("parent");
         final File expected_A = new File(parent, "src");
@@ -155,33 +147,21 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    /**
-     * Tests the {@link FileUtils#getTempDirectoryPath()} method.
-     */
     public void testGetTempDirectoryPath() {
         assertEquals(System.getProperty("java.io.tmpdir"),
             FileUtils.getTempDirectoryPath());
     }
 
-    /**
-     * Tests the {@link FileUtils#getTempDirectory()} method.
-     */
     public void testGetTempDirectory() {
         final File tempDirectory = new File(System.getProperty("java.io.tmpdir"));
         assertEquals(tempDirectory, FileUtils.getTempDirectory());
     }
 
-    /**
-     * Tests the {@link FileUtils#getUserDirectoryPath()} method.
-     */
     public void testGetUserDirectoryPath() {
         assertEquals(System.getProperty("user.home"),
             FileUtils.getUserDirectoryPath());
     }
 
-    /**
-     * Tests the {@link FileUtils#getUserDirectory()} method.
-     */
     public void testGetUserDirectory() {
         final File userDirectory = new File(System.getProperty("user.home"));
         assertEquals(userDirectory, FileUtils.getUserDirectory());
@@ -401,7 +381,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue(file.toString().indexOf("file% %me.txt%") >= 0);
     }
 
-    /** IO-252 */
+    /* IO-252 */
     public void testToFile5() throws Exception {
         final URL url = new URL("file", null, "both%20are%20100%20%25%20true");
         final File file = FileUtils.toFile(url);
@@ -872,10 +852,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertEquals("longSize should equal BigSize",sizeLong1, sizeBig.longValue());
     }
 
-    /**
-     * Tests the {@link FileUtils#sizeOf(File)} method.
-     * @throws Exception
-     */
     public void testSizeOf() throws Exception {
         final File file = new File(getTestDirectory(), getName());
 
@@ -910,10 +886,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             FileUtils.sizeOf(getTestDirectory()));
     }
 
-    /**
-     * Tests the {@link FileUtils#sizeOf(File)} method.
-     * @throws Exception
-     */
     public void testSizeOfAsBigInteger() throws Exception {
         final File file = new File(getTestDirectory(), getName());
 
@@ -1081,12 +1053,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
     }
-
-//    // TODO Remove after debugging
-//    private void log(Object obj) {
-//        System.out.println(
-//            FileUtilsTestCase.class +" " + getName() + " " + obj);
-//    }
 
     // copyFile
 
@@ -1303,7 +1269,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.deleteDirectory(target);
     }
 
-    /** Test for IO-141 */
+    /* Test for IO-141 */
     public void testCopyDirectoryToChild() throws Exception {
         final File grandParentDir = new File(getTestDirectory(), "grandparent");
         final File parentDir      = new File(grandParentDir, "parent");
@@ -1321,7 +1287,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Size > 0", expectedSize > 0);
     }
 
-    /** Test for IO-141 */
+    /* Test for IO-141 */
     public void testCopyDirectoryToGrandChild() throws Exception {
         final File grandParentDir = new File(getTestDirectory(), "grandparent");
         final File parentDir      = new File(grandParentDir, "parent");
@@ -1336,7 +1302,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Size > 0",expectedSize > 0);
     }
 
-    /** Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
+    /* Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops */
     public void testCopyDirectoryToItself() throws Exception {
         final File dir = new File(getTestDirectory(), "itself");
         dir.mkdirs();
@@ -1481,7 +1447,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             !testDirectory.getParentFile().exists());
     }
 
-    /**
+    /*
      *  Test the FileUtils implementation.
      */
     public void testFileUtils() throws Exception {

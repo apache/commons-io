@@ -33,7 +33,6 @@ public class ProxyReaderTest extends TestCase {
         super(name);
     }
 
-    /** Test writing Null Char Array */
     public void testNullCharArray() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
@@ -52,7 +51,6 @@ public class ProxyReaderTest extends TestCase {
         proxy.close();
     }
 
-    /** Test writing Null CharBuffer */
     public void testNullCharBuffer() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));

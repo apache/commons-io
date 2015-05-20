@@ -3060,6 +3060,8 @@ public class IOUtils {
      * @param input where to read input from
      * @param length length to read, must be &gt;= 0
      *
+     * @return the bytes read from input
+     *
      * @throws IOException if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException if the number of bytes read was incorrect

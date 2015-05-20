@@ -25,10 +25,12 @@ import java.io.Reader;
  * A reader that imposes a limit to the number of characters that can be read from
  * an underlying reader, returning eof when this limit is reached -regardless of state of
  * underlying reader.
- * <p/>
+ *
+ * <p>
  * One use case is to avoid overrunning the readAheadLimit supplied to
  * java.io.Reader#mark(int), since reading too many characters removes the
  * ability to do a successful reset.
+ * </p>
  *
  * @since 2.5
  */
@@ -63,7 +65,7 @@ public class BoundedReader
     /**
      * Closes the target
      *
-     * @throws IOException
+     * @throws IOException If an I/O error occurs while calling the underlying reader's close method
      */
     @Override
     public void close() throws IOException {
@@ -73,7 +75,7 @@ public class BoundedReader
     /**
      * Resets the target to the latest mark, @see java.io.Reader#reset()
      *
-     * @throws IOException
+     * @throws IOException If an I/O error occurs while calling the underlying reader's reset method
      */
     @Override
     public void reset() throws IOException {
@@ -90,6 +92,8 @@ public class BoundedReader
      *                       maxCharsFromTargetReader. There is no way to pass
      *                       past maxCharsFromTargetReader, even if this value is
      *                       greater.
+     *
+     * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
      */
     @Override
     public void mark( int readAheadLimit ) throws IOException {
@@ -104,7 +108,7 @@ public class BoundedReader
      * Reads a single character, @see java.io.Reader#read()
      *
      * @return -1 on eof or the character read
-     * @throws IOException If an I/O error occurs
+     * @throws IOException If an I/O error occurs while calling the underlying reader's read method
      */
     @Override
     public int read() throws IOException {
@@ -127,7 +131,7 @@ public class BoundedReader
      * @param off  The offset
      * @param len  The number of chars to read
      * @return the number of chars read
-     * @throws IOException
+     * @throws IOException If an I/O error occurs while calling the underlying reader's read method
      */
     @Override
     public int read( char[] cbuf, int off, int len ) throws IOException {

@@ -47,7 +47,6 @@ public class XmlStreamReaderUtilitiesTest {
     private static String APPXML_UTF32LE = "application/xml;charset=UTF-32LE";
     private static String TXTXML = "text/xml";
 
-    /** Test for {@link XmlStreamReader#getContentTypeEncoding(String)}. */
     @Test
     public void testContentTypeEncoding() {
         checkContentTypeEncoding(null, null);
@@ -71,7 +70,6 @@ public class XmlStreamReaderUtilitiesTest {
         assertEquals("ContentTypeEncoding=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeEncoding(httpContentType));
     }
 
-    /** Test for {@link XmlStreamReader#getContentTypeEncoding(String)}. */
     @Test
     public void testContentTypeMime() {
         checkContentTypeMime(null, null);
@@ -86,7 +84,6 @@ public class XmlStreamReaderUtilitiesTest {
         assertEquals("ContentTypeMime=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeMime(httpContentType));
     }
 
-    /** Test for {@link XmlStreamReader#isAppXml(String)}. */
     @Test
     public void testAppXml() {
         checkAppXml(false, null);
@@ -108,7 +105,6 @@ public class XmlStreamReaderUtilitiesTest {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isAppXml(mime));
     }
 
-    /** Test for {@link XmlStreamReader#isTextXml(String)}. */
     @Test
     public void testTextXml() {
         checkTextXml(false, null);
@@ -127,7 +123,6 @@ public class XmlStreamReaderUtilitiesTest {
         assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isTextXml(mime));
     }
 
-    /** No BOM calculateRawEncoding() Test */
     @Test
     public void testCalculateRawEncodingNoBOM() throws IOException {
         // No BOM        Expected    BOM         Guess       XML         Default
@@ -146,7 +141,6 @@ public class XmlStreamReaderUtilitiesTest {
         checkRawEncoding("UTF-16LE", null,       "UTF-16LE", "UTF-16",   null);
     }
 
-    /** BOM calculateRawEncoding() Test */
     @Test
     public void testCalculateRawEncodingStandard() throws IOException {
         // Standard BOM Checks           BOM         Other       Default
@@ -155,7 +149,6 @@ public class XmlStreamReaderUtilitiesTest {
         testCalculateRawEncodingStandard("UTF-16LE", "UTF-8",    "UTF-16BE");
     }
 
-    /** BOM calculateRawEncoding() Test */
     @Test
     //@Ignore
     public void testCalculateRawEncodingStandardUtf32() throws IOException {
@@ -178,7 +171,6 @@ public class XmlStreamReaderUtilitiesTest {
 
     }
 
-    /** Additional UTF-16 calculateRawEncoding() Test */
     @Test
     public void testCalculateRawEncodingAdditonalUTF16() throws IOException {
         //                           BOM         Guess       XML         Default
@@ -194,7 +186,6 @@ public class XmlStreamReaderUtilitiesTest {
         checkRawError(RAWMGS1,       "UTF-16LE", "UTF-16LE", "UTF-16BE", null);
     }
 
-    /** Additional UTF-32 calculateRawEncoding() Test */
     @Test
     public void testCalculateRawEncodingAdditonalUTF32() throws IOException {
         //                           BOM         Guess       XML         Default
@@ -248,7 +239,6 @@ public class XmlStreamReaderUtilitiesTest {
         }
     }
 
-    /** Test calculate HTTP Encoding */
     @Test
     public void testCalculateHttpEncoding() throws IOException {
         // No BOM        Expected     Lenient cType           BOM         Guess       XML         Default
@@ -274,9 +264,7 @@ public class XmlStreamReaderUtilitiesTest {
         checkHttpEncoding("UTF-8",    false,  APPXML_UTF8,    "UTF-16BE", "UTF-16BE", "UTF-16BE", "UTF-16BE");
     }
 
-    /** Test calculate HTTP Encoding */
     @Test
-    //@Ignore
     public void testCalculateHttpEncodingUtf32() throws IOException {
         // No BOM        Expected     Lenient cType           BOM         Guess       XML         Default
         checkHttpEncoding("UTF-32LE", true,   null,           null,       null,       "UTF-32LE", null);

@@ -60,9 +60,8 @@ public class UnixLineEndingInputStream extends InputStream {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-
     @Override
     public int read() throws IOException {
         boolean previousWasSlashR = slashRSeen;
@@ -109,7 +108,7 @@ public class UnixLineEndingInputStream extends InputStream {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public synchronized void mark( int readlimit ) {
