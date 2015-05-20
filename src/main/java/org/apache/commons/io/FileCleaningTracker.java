@@ -37,7 +37,7 @@ import java.util.List;
  * example), you should consider stopping the background thread if it is no
  * longer needed. This is done by invoking the method
  * {@link #exitWhenFinished}, typically in
- * {@link javax.servlet.ServletContextListener#contextDestroyed} or similar.
+ * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  *
  * @version $Id$
  */
@@ -183,7 +183,7 @@ public class FileCleaningTracker {
      * <p>
      * This method allows the thread to be terminated. Simply call this method
      * in the resource cleanup code, such as 
-     * {@link javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)}.
+     * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * Once called, no new objects can be tracked by the file cleaner.
      */
     public synchronized void exitWhenFinished() {

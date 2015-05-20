@@ -101,6 +101,8 @@ public abstract class AbstractMonitorTestCase extends TestCase {
 
     /**
      * Check all the Collections are empty
+     *
+     * @param label the label to use for this check
      */
     protected void checkCollectionsEmpty(final String label) {
         checkCollectionSizes("EMPTY-" + label, 0, 0, 0, 0, 0, 0);
@@ -108,8 +110,22 @@ public abstract class AbstractMonitorTestCase extends TestCase {
 
     /**
      * Check all the Collections have the expected sizes.
+     *
+     * @param label the label to use for this check
+     * @param dirCreate expected number of dirs created
+     * @param dirChange expected number of dirs changed
+     * @param dirDelete expected number of dirs deleted
+     * @param fileCreate expected number of files created
+     * @param fileChange expected number of files changed
+     * @param fileDelete expected number of files deleted
      */
-    protected void checkCollectionSizes(String label, final int dirCreate, final int dirChange, final int dirDelete, final int fileCreate, final int fileChange, final int fileDelete) {
+    protected void checkCollectionSizes(String label, 
+                                        final int dirCreate, 
+                                        final int dirChange, 
+                                        final int dirDelete, 
+                                        final int fileCreate, 
+                                        final int fileChange, 
+                                        final int fileDelete) {
         label = label + "[" + listener.getCreatedDirectories().size() +
                         " " + listener.getChangedDirectories().size() +
                         " " + listener.getDeletedDirectories().size() +
@@ -150,6 +166,8 @@ public abstract class AbstractMonitorTestCase extends TestCase {
 
     /**
      * Thread.sleep(timeInMilliseconds) - ignore InterruptedException
+     * 
+     * @param timeInMilliseconds the time to sleep
      */
     protected void sleepHandleInterruped(final long timeInMilliseconds) {
         try {

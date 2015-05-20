@@ -23,9 +23,6 @@ import junit.framework.TestCase;
  */
 public class ClosedInputStreamTest extends TestCase {
 
-    /**
-     * Test the <code>read()</code> method.
-     */
     public void testRead() throws Exception {
         final ClosedInputStream cis = new ClosedInputStream();
         assertEquals("read()", -1, cis.read());

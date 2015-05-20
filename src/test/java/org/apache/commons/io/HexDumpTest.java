@@ -26,14 +26,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 /**
  * @version $Id$
  */
-
 public class HexDumpTest extends TestCase {
-
-    /**
-     * Creates new HexDumpTest
-     *
-     * @param name
-     */
 
     public HexDumpTest(final String name) {
         super(name);
@@ -48,12 +41,6 @@ public class HexDumpTest extends TestCase {
 
         return hexChars[n % 16];
     }
-
-    /**
-     * test dump method
-     *
-     * @exception IOException
-     */
 
     public void testDump()
             throws IOException {

@@ -70,7 +70,7 @@ public class CountingInputStreamTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test for files > 2GB in size - see issue IO-84
      */
     public void testLargeFiles_IO84() throws Exception {

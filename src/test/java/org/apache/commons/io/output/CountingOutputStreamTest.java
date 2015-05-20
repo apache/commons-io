@@ -74,7 +74,7 @@ public class CountingOutputStreamTest extends TestCase {
         cos.close();
     }
 
-    /**
+    /*
      * Test for files > 2GB in size - see issue IO-84
      */
     public void testLargeFiles_IO84() throws Exception {

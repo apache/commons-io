@@ -59,7 +59,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public int read() throws IOException {
@@ -112,7 +112,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public synchronized void mark( int readlimit ) {

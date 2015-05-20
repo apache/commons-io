@@ -24,7 +24,7 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
- * & FileUtils.isSymlink(File file)
+ * &amp; FileUtils.isSymlink(File file)
  */
 public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 

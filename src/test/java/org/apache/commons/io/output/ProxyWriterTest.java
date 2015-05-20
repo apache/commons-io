@@ -29,7 +29,6 @@ public class ProxyWriterTest extends TestCase {
         super(name);
     }
 
-    /** Test Appending a CharSequence */
     public void testAppendCharSequence() throws Exception {
         final StringBuilderWriter writer = new StringBuilderWriter();
         final ProxyWriter proxy = new ProxyWriter(writer);
@@ -42,7 +41,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test Writing a String */
     public void testWriteString() throws Exception {
         final StringBuilderWriter writer = new StringBuilderWriter();
         final ProxyWriter proxy = new ProxyWriter(writer);
@@ -55,7 +53,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test Writing a Partial String */
     public void testWriteStringPartial() throws Exception {
         final StringBuilderWriter writer = new StringBuilderWriter();
         final ProxyWriter proxy = new ProxyWriter(writer);
@@ -68,7 +65,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test Writing a Char array */
     public void testWriteCharArray() throws Exception {
         final StringBuilderWriter writer = new StringBuilderWriter();
         final ProxyWriter proxy = new ProxyWriter(writer);
@@ -81,7 +77,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test Writing a Partial Char array */
     public void testWriteCharArrayPartial() throws Exception {
         final StringBuilderWriter writer = new StringBuilderWriter();
         final ProxyWriter proxy = new ProxyWriter(writer);
@@ -94,7 +89,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test writing Null String */
     public void testNullString() throws Exception {
 
         final ProxyWriter proxy = new ProxyWriter(new NullWriter());
@@ -113,7 +107,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test writing Null Char array */
     public void testNullCharArray() throws Exception {
 
         final ProxyWriter proxy = new ProxyWriter(new NullWriter());
@@ -132,7 +125,6 @@ public class ProxyWriterTest extends TestCase {
         proxy.close();
     }
 
-    /** Test appending Null CharSequence */
     public void testNullCharSequencec() throws Exception {
 
         final ProxyWriter proxy = new ProxyWriter(new NullWriter());

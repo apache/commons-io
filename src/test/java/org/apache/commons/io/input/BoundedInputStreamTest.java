@@ -33,9 +33,6 @@ public class BoundedInputStreamTest extends TestCase {
         super(name);
     }
 
-    /**
-     * Test {@link BoundedInputStream#read()}.
-     */
     public void testReadSingle() throws Exception {
         BoundedInputStream bounded = null;
         final byte[] helloWorld = "Hello World".getBytes();
@@ -63,9 +60,6 @@ public class BoundedInputStreamTest extends TestCase {
         assertEquals("limit < length end", -1, bounded.read());
     }
 
-    /**
-     * Test {@link BoundedInputStream#read(byte[], int, int)}.
-     */
     public void testReadArray() throws Exception {
 
         BoundedInputStream bounded = null;
@@ -88,9 +82,6 @@ public class BoundedInputStreamTest extends TestCase {
         compare("limit < length", hello, IOUtils.toByteArray(bounded));
     }
 
-    /**
-     * Compare byte arrays.
-     */
     private void compare(final String msg, final byte[] expected, final byte[] actual) {
         assertEquals(msg + " length", expected.length, actual.length);
         for (int i = 0; i < expected.length; i++) {

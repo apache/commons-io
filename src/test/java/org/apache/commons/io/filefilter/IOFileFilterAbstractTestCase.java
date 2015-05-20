@@ -22,10 +22,6 @@ import junit.framework.TestCase;
 
 public abstract class IOFileFilterAbstractTestCase extends TestCase {
 
-  /**
-   * Constructs a new instance of
-   * <code>IOFileFilterAbstractTestCase</code>.
-   */
   public IOFileFilterAbstractTestCase(final String name) {
     super(name);
   }
