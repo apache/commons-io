@@ -75,9 +75,9 @@ public abstract class ConditionalFileFilterAbstractTestCase
     filters.add(new TesterTrueFileFilter());
     filters.add(new TesterTrueFileFilter());
     filters.add(new TesterTrueFileFilter());
-    for(int i = 0; i < filters.size(); i++) {
-      fileFilter.removeFileFilter(filters.get(i));
-      assertTrue("file filter removed", !fileFilter.getFileFilters().contains(filters.get(i)));
+    for (TesterTrueFileFilter filter : filters) {
+      fileFilter.removeFileFilter(filter);
+      assertTrue("file filter removed", !fileFilter.getFileFilters().contains(filter));
     }
     assertEquals("file filters count", 0, fileFilter.getFileFilters().size());
   }
