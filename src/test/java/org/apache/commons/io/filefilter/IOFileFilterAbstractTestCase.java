@@ -26,21 +26,19 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
         super(name);
     }
 
-    public boolean assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
+    public void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         assertEquals(
                 "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
                 expected, filter.accept(file));
-        return true; // return is irrelevant
     }
 
-    public boolean assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
+    public void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         // Assumes file has parent and is not passed as null
         assertEquals(
                 "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
                 expected, filter.accept(file.getParentFile(), file.getName()));
-        return true; // return is irrelevant
     }
 
     public void assertFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
