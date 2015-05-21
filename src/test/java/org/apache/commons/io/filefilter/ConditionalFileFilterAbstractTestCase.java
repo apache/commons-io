@@ -38,7 +38,7 @@ public abstract class ConditionalFileFilterAbstractTestCase
 
   @Override
   public void setUp() throws Exception {
-    this.workingPath = this.determineWorkingDirectoryPath(this.getWorkingPathNamePropertyKey(), this.getDefaultWorkingPath());
+    this.workingPath = determineWorkingDirectoryPath(this.getWorkingPathNamePropertyKey(), this.getDefaultWorkingPath());
     this.file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
     this.trueFilters = new TesterTrueFileFilter[4];
     this.falseFilters = new TesterFalseFileFilter[4];
@@ -107,18 +107,18 @@ public abstract class ConditionalFileFilterAbstractTestCase
       final IOFileFilter filter = this.buildFilterUsingConstructor(filters);
 
       // Test as a file filter
-      this.resetTrueFilters(this.trueFilters);
-      this.resetFalseFilters(this.falseFilters);
-      this.assertFileFiltering(i, filter, this.file, fileResults);
-      this.assertTrueFiltersInvoked(i, trueFilters, trueResults);
-      this.assertFalseFiltersInvoked(i, falseFilters, falseResults);
+      resetTrueFilters(this.trueFilters);
+      resetFalseFilters(this.falseFilters);
+      assertFileFiltering(i, filter, this.file, fileResults);
+      assertTrueFiltersInvoked(i, trueFilters, trueResults);
+      assertFalseFiltersInvoked(i, falseFilters, falseResults);
 
       // Test as a filename filter
-      this.resetTrueFilters(this.trueFilters);
-      this.resetFalseFilters(this.falseFilters);
-      this.assertFilenameFiltering(i, filter, this.file, filenameResults);
-      this.assertTrueFiltersInvoked(i, trueFilters, trueResults);
-      this.assertFalseFiltersInvoked(i, falseFilters, falseResults);
+      resetTrueFilters(this.trueFilters);
+      resetFalseFilters(this.falseFilters);
+      assertFilenameFiltering(i, filter, this.file, filenameResults);
+      assertTrueFiltersInvoked(i, trueFilters, trueResults);
+      assertFalseFiltersInvoked(i, falseFilters, falseResults);
     }
   }
 
@@ -140,18 +140,18 @@ public abstract class ConditionalFileFilterAbstractTestCase
       final IOFileFilter filter = this.buildFilterUsingAdd(filters);
 
       // Test as a file filter
-      this.resetTrueFilters(this.trueFilters);
-      this.resetFalseFilters(this.falseFilters);
-      this.assertFileFiltering(i, filter, this.file, fileResults);
-      this.assertTrueFiltersInvoked(i, trueFilters, trueResults);
-      this.assertFalseFiltersInvoked(i, falseFilters, falseResults);
+      resetTrueFilters(this.trueFilters);
+      resetFalseFilters(this.falseFilters);
+      assertFileFiltering(i, filter, this.file, fileResults);
+      assertTrueFiltersInvoked(i, trueFilters, trueResults);
+      assertFalseFiltersInvoked(i, falseFilters, falseResults);
 
       // Test as a filename filter
-      this.resetTrueFilters(this.trueFilters);
-      this.resetFalseFilters(this.falseFilters);
-      this.assertFilenameFiltering(i, filter, this.file, filenameResults);
-      this.assertTrueFiltersInvoked(i, trueFilters, trueResults);
-      this.assertFalseFiltersInvoked(i, falseFilters, falseResults);
+      resetTrueFilters(this.trueFilters);
+      resetFalseFilters(this.falseFilters);
+      assertFilenameFiltering(i, filter, this.file, filenameResults);
+      assertTrueFiltersInvoked(i, trueFilters, trueResults);
+      assertFalseFiltersInvoked(i, falseFilters, falseResults);
     }
   }
 

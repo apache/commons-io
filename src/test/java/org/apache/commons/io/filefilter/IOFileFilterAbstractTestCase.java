@@ -26,14 +26,14 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
         super(name);
     }
 
-    public void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
+    public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         assertEquals(
                 "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
                 expected, filter.accept(file));
     }
 
-    public void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
+    public static void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         // Assumes file has parent and is not passed as null
         assertEquals(
@@ -41,7 +41,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
                 expected, filter.accept(file.getParentFile(), file.getName()));
     }
 
-    public void assertFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
+    public static void assertFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
@@ -60,25 +60,25 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
         }
     }
 
-    public void assertTrueFiltersInvoked(final int testNumber, final TesterTrueFileFilter[] filters, final boolean[] invoked) {
+    public static void assertTrueFiltersInvoked(final int testNumber, final TesterTrueFileFilter[] filters, final boolean[] invoked) {
         for (int i = 1; i < filters.length; i++) {
             assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i - 1], filters[i].isInvoked());
         }
     }
 
-    public void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
+    public static void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
         for (int i = 1; i < filters.length; i++) {
             assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i - 1], filters[i].isInvoked());
         }
     }
 
-    public File determineWorkingDirectoryPath(final String key, final String defaultPath) {
+    public static File determineWorkingDirectoryPath(final String key, final String defaultPath) {
         // Look for a system property to specify the working directory
         final String workingPathName = System.getProperty(key, defaultPath);
         return new File(workingPathName);
     }
 
-    public void resetFalseFilters(final TesterFalseFileFilter[] filters) {
+    public static void resetFalseFilters(final TesterFalseFileFilter[] filters) {
         for (final TesterFalseFileFilter filter : filters) {
             if (filter != null) {
                 filter.reset();
@@ -86,7 +86,7 @@ public abstract class IOFileFilterAbstractTestCase extends TestCase {
         }
     }
 
-    public void resetTrueFilters(final TesterTrueFileFilter[] filters) {
+    public static void resetTrueFilters(final TesterTrueFileFilter[] filters) {
         for (final TesterTrueFileFilter filter : filters) {
             if (filter != null) {
                 filter.reset();
