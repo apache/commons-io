@@ -339,7 +339,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.5.5</version>
+        <version>${commons.findbugs.version}</version>
         <configuration>
           <threshold>Normal</threshold>
           <effort>Default</effort>
