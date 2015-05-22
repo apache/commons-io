@@ -26,7 +26,8 @@ import java.io.Serializable;
  *
  * @since 2.0
  */
-public class TaggedIOException extends IOException {
+@SuppressWarnings("deprecation") // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility 
+public class TaggedIOException extends IOExceptionWithCause {
 
     /**
      * Generated serial version UID.
