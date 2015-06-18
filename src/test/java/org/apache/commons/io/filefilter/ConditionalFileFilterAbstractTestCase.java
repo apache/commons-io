@@ -99,8 +99,8 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
             final List<IOFileFilter> filters = testFilters.get(i);
             final boolean[] trueResults = testTrueResults.get(i);
             final boolean[] falseResults = testFalseResults.get(i);
-            final boolean fileResults = testFileResults.get(i).booleanValue();
-            final boolean filenameResults = testFilenameResults.get(i).booleanValue();
+            final boolean fileResults = testFileResults.get(i);
+            final boolean filenameResults = testFilenameResults.get(i);
 
             // Test conditional AND filter created by passing filters to the constructor
             final IOFileFilter filter = this.buildFilterUsingConstructor(filters);
@@ -132,8 +132,8 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
             final List<IOFileFilter> filters = testFilters.get(i);
             final boolean[] trueResults = testTrueResults.get(i);
             final boolean[] falseResults = testFalseResults.get(i);
-            final boolean fileResults = testFileResults.get(i).booleanValue();
-            final boolean filenameResults = testFilenameResults.get(i).booleanValue();
+            final boolean fileResults = testFileResults.get(i);
+            final boolean filenameResults = testFilenameResults.get(i);
 
             // Test conditional AND filter created by passing filters to the constructor
             final IOFileFilter filter = this.buildFilterUsingAdd(filters);

@@ -74,7 +74,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the file is null
      */
     public void track(final File file, final Object marker) {
-        track(file, marker, (FileDeleteStrategy) null);
+        track(file, marker, null);
     }
 
     /**
@@ -104,7 +104,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the path is null
      */
     public void track(final String path, final Object marker) {
-        track(path, marker, (FileDeleteStrategy) null);
+        track(path, marker, null);
     }
 
     /**

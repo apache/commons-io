@@ -164,7 +164,7 @@ public class FileAlterationObserver implements Serializable {
      * @param directory the directory to observe
      */
     public FileAlterationObserver(final File directory) {
-        this(directory, (FileFilter)null);
+        this(directory, null);
     }
 
     /**
@@ -174,7 +174,7 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      */
     public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
-        this(directory, fileFilter, (IOCase)null);
+        this(directory, fileFilter, null);
     }
 
     /**

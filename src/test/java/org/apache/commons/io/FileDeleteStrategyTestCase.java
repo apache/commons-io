@@ -119,12 +119,12 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
 
     public void testDeleteNull() throws Exception {
         try {
-            FileDeleteStrategy.NORMAL.delete((File) null);
+            FileDeleteStrategy.NORMAL.delete(null);
             fail();
         } catch (final NullPointerException ex) {
             // expected
         }
-        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly((File) null));
+        assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(null));
     }
 
     public void testToString() {

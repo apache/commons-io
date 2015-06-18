@@ -50,7 +50,7 @@ public class StringBuilderWriterTest extends TestCase {
     }
 
     public void testAppendConstructNull() throws IOException {
-        final Writer writer = new StringBuilderWriter((StringBuilder)null);
+        final Writer writer = new StringBuilderWriter(null);
         writer.append("Foo");
         assertEquals("Foo", writer.toString());
         writer.close();

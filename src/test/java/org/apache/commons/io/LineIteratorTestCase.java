@@ -121,7 +121,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
     @Test
     public void testConstructor() throws Exception {
         try {
-            new LineIterator((Reader) null);
+            new LineIterator(null);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected

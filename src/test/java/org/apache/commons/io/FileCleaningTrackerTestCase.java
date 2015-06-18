@@ -123,7 +123,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(getTestDirectory(), obj, (FileDeleteStrategy) null);
+        theInstance.track(getTestDirectory(), obj, null);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;

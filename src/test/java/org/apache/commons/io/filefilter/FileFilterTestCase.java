@@ -102,7 +102,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertTrue( filter.accept( testFile.getParentFile(), testFile.getName() ) );
         assertTrue( !filter.accept( fredFile.getParentFile(), fredFile.getName() ) );
 
-        final List<String> prefixes = Arrays.asList( new String[] { "ood", "red" } );
+        final List<String> prefixes = Arrays.asList("ood", "red");
         final IOFileFilter listFilter = new SuffixFileFilter( prefixes );
 
         assertTrue( !listFilter.accept( testFile.getParentFile(), testFile.getName() ) );
@@ -140,7 +140,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("test"), true);
         assertFiltering(filter, new File("TEST"), true);
 
-        final List<String> suffixes = Arrays.asList( new String[] { "tes", "est" } );
+        final List<String> suffixes = Arrays.asList("tes", "est");
         filter = new SuffixFileFilter(suffixes, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("bar.tes"), true);
         assertFiltering(filter, new File("bar.est"), true);
@@ -172,7 +172,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("TEST"), true);
 
         try {
-            FileFilterUtils.suffixFileFilter((String) null, IOCase.INSENSITIVE);
+            FileFilterUtils.suffixFileFilter(null, IOCase.INSENSITIVE);
             fail();
         } catch (final IllegalArgumentException ex) {
         }
@@ -234,7 +234,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertTrue( filter.accept( testFile.getParentFile(), testFile.getName() ) );
         assertTrue( !filter.accept( fredFile.getParentFile(), fredFile.getName() ) );
 
-        final List<String> prefixes = Arrays.asList( new String[] { "foo", "fre" } );
+        final List<String> prefixes = Arrays.asList("foo", "fre");
         final IOFileFilter listFilter = new PrefixFileFilter( prefixes );
 
         assertTrue( !listFilter.accept( testFile.getParentFile(), testFile.getName() ) );
@@ -274,7 +274,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("FOO.test2"), false); //case-sensitive
         assertFiltering(filter, new File("BAR.test2"), true);  //case-sensitive
 
-        final List<String> prefixes = Arrays.asList( new String[] { "foo", "bar" } );
+        final List<String> prefixes = Arrays.asList("foo", "bar");
         filter = new PrefixFileFilter(prefixes, IOCase.INSENSITIVE);
         assertFiltering(filter, new File("foo.test3"), true);
         assertFiltering(filter, new File("bar.test3"), true);
@@ -307,7 +307,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("BAR.test2"), true);  //case-sensitive
 
         try {
-            FileFilterUtils.prefixFileFilter((String) null, IOCase.INSENSITIVE);
+            FileFilterUtils.prefixFileFilter(null, IOCase.INSENSITIVE);
             fail();
         } catch (final IllegalArgumentException ex) {
         }
@@ -337,7 +337,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("FOO"), WINDOWS);
         assertFiltering(filter, new File("BAR"), WINDOWS);
 
-        filter = new NameFileFilter(new String[] { "foo", "bar" }, (IOCase) null);
+        filter = new NameFileFilter(new String[]{"foo", "bar"}, null);
         assertFiltering(filter, new File("foo"), true);
         assertFiltering(filter, new File("bar"), true);
         assertFiltering(filter, new File("FOO"), false);
@@ -453,7 +453,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         } catch (final IllegalArgumentException ex) {
         }
 
-        final AndFileFilter f = new AndFileFilter((List<IOFileFilter>) null);
+        final AndFileFilter f = new AndFileFilter(null);
         assertTrue(f.getFileFilters().isEmpty());
 
         assertNotNull(f.toString()); // TODO better tests
@@ -492,7 +492,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         } catch (final IllegalArgumentException ex) {
         }
 
-        final OrFileFilter f = new OrFileFilter((List<IOFileFilter>) null);
+        final OrFileFilter f = new OrFileFilter(null);
         assertTrue(f.getFileFilters().isEmpty());
     }
     public void testFileFilterUtils_and() throws Exception {
@@ -517,7 +517,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     @SuppressWarnings("deprecation")
     public void testDeprecatedWildcard() throws Exception {
         IOFileFilter filter = new WildcardFilter("*.txt");
-        final List<String> patternList = Arrays.asList( new String[] { "*.txt", "*.xml", "*.gif" } );
+        final List<String> patternList = Arrays.asList("*.txt", "*.xml", "*.gif");
         final IOFileFilter listFilter = new WildcardFilter( patternList );
         final File txtFile = new File( "test.txt" );
         final File bmpFile = new File( "test.bmp" );
@@ -593,7 +593,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), WINDOWS);
 
-        filter = new WildcardFileFilter("*.txt", (IOCase) null);
+        filter = new WildcardFileFilter("*.txt", null);
         assertFiltering(filter, new File("log.txt"), true);
         assertFiltering(filter, new File("log.TXT"), false);
 
@@ -614,11 +614,11 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), WINDOWS);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"}, (IOCase) null);
+        filter = new WildcardFileFilter(new String[]{"*.java", "*.class"}, null);
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.JAVA"), false);
 
-        final List<String> patternList = Arrays.asList( new String[] { "*.txt", "*.xml", "*.gif" } );
+        final List<String> patternList = Arrays.asList("*.txt", "*.xml", "*.gif");
         final IOFileFilter listFilter = new WildcardFileFilter( patternList );
         assertFiltering(listFilter, new File("Test.txt"), true);
         assertFiltering(listFilter, new File("Test.xml"), true);
@@ -1226,7 +1226,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterList(filter, Arrays.<File>asList((File) null));
+            FileFilterUtils.filterList(filter, Arrays.asList((File) null));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for list containing null
@@ -1284,7 +1284,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterSet(filter, new HashSet<File>(Arrays.<File>asList((File) null)));
+            FileFilterUtils.filterSet(filter, new HashSet<File>(Arrays.asList((File) null)));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for set containing null

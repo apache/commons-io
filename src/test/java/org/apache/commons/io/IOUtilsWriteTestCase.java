@@ -148,7 +148,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
 
-        IOUtils.write((byte[]) null, writer, "UTF8");
+        IOUtils.write(null, writer, "UTF8");
         out.off();
         writer.flush();
 
@@ -157,7 +157,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
 
     public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
         try {
-            IOUtils.write(inData, (Writer) null, "UTF8");
+            IOUtils.write(inData, null, "UTF8");
             fail();
         } catch (final NullPointerException ex) {}
     }
@@ -560,7 +560,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines((List<?>) null, "*", out);
+        IOUtils.writeLines(null, "*", out);
         out.off();
         out.flush();
 
@@ -574,7 +574,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines(list, (String) null, out);
+        IOUtils.writeLines(list, null, out);
         out.off();
         out.flush();
 
@@ -615,7 +615,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines((List<?>) null, "*", out, "US-ASCII");
+        IOUtils.writeLines(null, "*", out, "US-ASCII");
         out.off();
         out.flush();
 
@@ -629,7 +629,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
-        IOUtils.writeLines(list, (String) null, out, "US-ASCII");
+        IOUtils.writeLines(list, null, out, "US-ASCII");
         out.off();
         out.flush();
 
@@ -642,7 +642,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final Object[] data = new Object[] {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
-            IOUtils.writeLines(list, "*", (OutputStream) null, "US-ASCII");
+            IOUtils.writeLines(list, "*", null, "US-ASCII");
             fail();
         } catch (final NullPointerException ex) {}
     }
@@ -692,7 +692,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
 
-        IOUtils.writeLines((List<?>) null, "*", writer);
+        IOUtils.writeLines(null, "*", writer);
         out.off();
         writer.flush();
 
@@ -708,7 +708,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
 
-        IOUtils.writeLines(list, (String) null, writer);
+        IOUtils.writeLines(list, null, writer);
         out.off();
         writer.flush();
 
