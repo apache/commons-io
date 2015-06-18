@@ -43,8 +43,8 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     final AndFileFilter filter = new AndFileFilter();
-    for(int i = 0; i < filters.size(); i++) {
-      filter.addFileFilter(filters.get(i));
+    for (IOFileFilter filter1 : filters) {
+      filter.addFileFilter(filter1);
     }
     return filter;
   }

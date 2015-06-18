@@ -94,14 +94,14 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         }
 
         try {
-            new RegexFileFilter((String)null, Pattern.CASE_INSENSITIVE);
+            new RegexFileFilter(null, Pattern.CASE_INSENSITIVE);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected
         }
 
         try {
-            new RegexFileFilter((String)null, IOCase.INSENSITIVE);
+            new RegexFileFilter(null, IOCase.INSENSITIVE);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected

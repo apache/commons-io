@@ -16,9 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -73,7 +71,7 @@ public class XmlStreamReaderTest {
             new XmlStreamReader(is, false);
             fail("It should have failed");
         } catch (final IOException ex) {
-            assertTrue(ex.getMessage().indexOf("Invalid encoding,") > -1);
+            assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
     }
 
@@ -131,7 +129,7 @@ public class XmlStreamReaderTest {
     }
 
     protected void _testRawBomInvalid(final String bomEnc, final String streamEnc,
-            final String prologEnc) throws Exception {
+                                      final String prologEnc) throws Exception {
         final InputStream is = getXmlStream(bomEnc, XML3, streamEnc, prologEnc);
         XmlStreamReader xmlReader = null;
         try {
@@ -141,7 +139,7 @@ public class XmlStreamReaderTest {
                     + streamEnc + " and prologEnc " + prologEnc + ": found "
                     + foundEnc);
         } catch (final IOException ex) {
-            assertTrue(ex.getMessage().indexOf("Invalid encoding,") > -1);
+            assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
         if (xmlReader != null) {
             xmlReader.close();
@@ -184,7 +182,7 @@ public class XmlStreamReaderTest {
         _testRawBomInvalid("UTF-32BE-bom", "UTF-32BE", "UTF-32LE");
         _testRawBomInvalid("UTF-32LE-bom", "UTF-32LE", "UTF-32BE");
         _testRawBomInvalid("UTF-32LE-bom", "UTF-32LE", "UTF-8");
-}
+    }
 
 
     @Test
@@ -298,7 +296,7 @@ public class XmlStreamReaderTest {
     }
 
     public void _testAlternateDefaultEncoding(final String cT, final String bomEnc,
-            final String streamEnc, final String prologEnc, final String alternateEnc)
+                                              final String streamEnc, final String prologEnc, final String alternateEnc)
             throws Exception {
         final InputStream is = getXmlStream(bomEnc, prologEnc == null ? XML1
                 : XML3, streamEnc, prologEnc);
@@ -318,7 +316,7 @@ public class XmlStreamReaderTest {
     }
 
     public void _testHttpValid(final String cT, final String bomEnc, final String streamEnc,
-            final String prologEnc) throws Exception {
+                               final String prologEnc) throws Exception {
         final InputStream is = getXmlStream(bomEnc,
                 prologEnc == null ? XML1 : XML3, streamEnc, prologEnc);
         final XmlStreamReader xmlReader = new XmlStreamReader(is, cT, false);
@@ -335,7 +333,7 @@ public class XmlStreamReaderTest {
     }
 
     protected void _testHttpInvalid(final String cT, final String bomEnc, final String streamEnc,
-            final String prologEnc) throws Exception {
+                                    final String prologEnc) throws Exception {
         final InputStream is = getXmlStream(bomEnc,
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         try {
@@ -344,12 +342,12 @@ public class XmlStreamReaderTest {
                     + bomEnc + ", streamEnc " + streamEnc + " and prologEnc "
                     + prologEnc);
         } catch (final IOException ex) {
-            assertTrue(ex.getMessage().indexOf("Invalid encoding,") > -1);
+            assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
     }
 
     protected void _testHttpLenient(final String cT, final String bomEnc, final String streamEnc,
-            final String prologEnc, final String shouldbe) throws Exception {
+                                    final String prologEnc, final String shouldbe) throws Exception {
         final InputStream is = getXmlStream(bomEnc,
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         final XmlStreamReader xmlReader = new XmlStreamReader(is, cT, true);
@@ -376,11 +374,11 @@ public class XmlStreamReaderTest {
     // XML Stream generator
 
     private static final int[] NO_BOM_BYTES = {};
-    private static final int[] UTF_16BE_BOM_BYTES = { 0xFE, 0xFF };
-    private static final int[] UTF_16LE_BOM_BYTES = { 0xFF, 0XFE };
-    private static final int[] UTF_32BE_BOM_BYTES = { 0x00, 0x00, 0xFE, 0xFF };
-    private static final int[] UTF_32LE_BOM_BYTES = { 0xFF, 0XFE, 0x00, 0x00 };
-    private static final int[] UTF_8_BOM_BYTES = { 0xEF, 0xBB, 0xBF };
+    private static final int[] UTF_16BE_BOM_BYTES = {0xFE, 0xFF};
+    private static final int[] UTF_16LE_BOM_BYTES = {0xFF, 0XFE};
+    private static final int[] UTF_32BE_BOM_BYTES = {0x00, 0x00, 0xFE, 0xFF};
+    private static final int[] UTF_32LE_BOM_BYTES = {0xFF, 0XFE, 0x00, 0x00};
+    private static final int[] UTF_8_BOM_BYTES = {0xEF, 0xBB, 0xBF};
 
     private static final Map<String, int[]> BOMs = new HashMap<String, int[]>();
 
@@ -408,7 +406,7 @@ public class XmlStreamReaderTest {
     private static final MessageFormat INFO = new MessageFormat(
             "\nBOM : {0}\nDoc : {1}\nStream Enc : {2}\nProlog Enc : {3}\n");
 
-    private static final Map<String,MessageFormat> XMLs = new HashMap<String,MessageFormat>();
+    private static final Map<String, MessageFormat> XMLs = new HashMap<String, MessageFormat>();
 
     static {
         XMLs.put(XML1, XML);
@@ -419,16 +417,15 @@ public class XmlStreamReaderTest {
     }
 
     /**
-     *
-     * @param bomType no-bom, UTF-16BE-bom, UTF-16LE-bom, UTF-8-bom
-     * @param xmlType xml, xml-prolog, xml-prolog-charset
+     * @param bomType   no-bom, UTF-16BE-bom, UTF-16LE-bom, UTF-8-bom
+     * @param xmlType   xml, xml-prolog, xml-prolog-charset
      * @param streamEnc encoding of the stream
      * @param prologEnc encoding of the prolog
      * @return XML stream
      * @throws IOException If an I/O error occurs
      */
     protected InputStream getXmlStream(final String bomType, final String xmlType,
-            final String streamEnc, final String prologEnc) throws IOException {
+                                       final String streamEnc, final String prologEnc) throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
         int[] bom = BOMs.get(bomType);
         if (bom == null) {
@@ -456,10 +453,10 @@ public class XmlStreamReaderTest {
      * Create the XML.
      */
     private String getXML(final String bomType, final String xmlType,
-            final String streamEnc, final String prologEnc) {
+                          final String streamEnc, final String prologEnc) {
         final MessageFormat xml = XMLs.get(xmlType);
-        final String info = INFO.format(new Object[] { bomType, xmlType, prologEnc });
-        final String xmlDoc = xml.format(new Object[] { streamEnc, prologEnc, info });
+        final String info = INFO.format(new Object[]{bomType, xmlType, prologEnc});
+        final String xmlDoc = xml.format(new Object[]{streamEnc, prologEnc, info});
         return xmlDoc;
     }
 }

@@ -61,7 +61,7 @@ public class FileEntry implements Serializable {
      * @param file The file being monitored
      */
     public FileEntry(final File file) {
-        this((FileEntry)null, file);
+        this(null, file);
     }
 
     /**
@@ -104,7 +104,7 @@ public class FileEntry implements Serializable {
         // refresh the values
         name         = file.getName();
         exists       = file.exists();
-        directory    = exists ? file.isDirectory() : false;
+        directory    = exists && file.isDirectory();
         lastModified = exists ? file.lastModified() : 0;
         length       = exists && !directory ? file.length() : 0;
 

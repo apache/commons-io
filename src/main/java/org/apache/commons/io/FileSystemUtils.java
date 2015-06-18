@@ -75,23 +75,23 @@ public class FileSystemUtils {
             }
             osName = osName.toLowerCase(Locale.ENGLISH);
             // match
-            if (osName.indexOf("windows") != -1) {
+            if (osName.contains("windows")) {
                 os = WINDOWS;
-            } else if (osName.indexOf("linux") != -1 ||
-                osName.indexOf("mpe/ix") != -1 ||
-                osName.indexOf("freebsd") != -1 ||
-                osName.indexOf("irix") != -1 ||
-                osName.indexOf("digital unix") != -1 ||
-                osName.indexOf("unix") != -1 ||
-                osName.indexOf("mac os x") != -1) {
+            } else if (osName.contains("linux") ||
+                    osName.contains("mpe/ix") ||
+                    osName.contains("freebsd") ||
+                    osName.contains("irix") ||
+                    osName.contains("digital unix") ||
+                    osName.contains("unix") ||
+                    osName.contains("mac os x")) {
                 os = UNIX;
-            } else if (osName.indexOf("sun os") != -1 ||
-                osName.indexOf("sunos") != -1 ||
-                osName.indexOf("solaris") != -1) {
+            } else if (osName.contains("sun os") ||
+                    osName.contains("sunos") ||
+                    osName.contains("solaris")) {
                 os = POSIX_UNIX;
                 dfPath = "/usr/xpg4/bin/df";
-            } else if (osName.indexOf("hp-ux") != -1 ||
-                osName.indexOf("aix") != -1) {
+            } else if (osName.contains("hp-ux") ||
+                    osName.contains("aix")) {
                 os = POSIX_UNIX;
             } else {
                 os = OTHER;

@@ -16,10 +16,7 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -28,12 +25,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.junit.Assert;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.OrFileFilter;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -151,7 +147,7 @@ public class DirectoryWalkerTestCase {
      */
     @Test
     public void testFilterDirAndFile2() {
-        final List<File> results = new TestFileFinder((IOFileFilter) null, (IOFileFilter) null, -1).find(javaDir);
+        final List<File> results = new TestFileFinder(null, null, -1).find(javaDir);
         assertTrue("[DirAndFile2] Result Size", results.size() > 1 + dirs.length + ioFiles.length);
         assertTrue("[DirAndFile2] Start Dir", results.contains(javaDir));
         checkContainsFiles("[DirAndFile2] Dir", dirs, results);
@@ -163,7 +159,7 @@ public class DirectoryWalkerTestCase {
      */
     @Test
     public void testFilterDirAndFile3() {
-        final List<File> results = new TestFileFinder(dirsFilter, (IOFileFilter) null, -1).find(javaDir);
+        final List<File> results = new TestFileFinder(dirsFilter, null, -1).find(javaDir);
         final List<File> resultDirs = directoriesOnly(results);
         assertEquals("[DirAndFile3] Result Size", 1 + dirs.length, resultDirs.size());
         assertTrue("[DirAndFile3] Start Dir", results.contains(javaDir));
@@ -175,7 +171,7 @@ public class DirectoryWalkerTestCase {
      */
     @Test
     public void testFilterDirAndFile4() {
-        final List<File> results = new TestFileFinder((IOFileFilter) null, iofilesFilter, -1).find(javaDir);
+        final List<File> results = new TestFileFinder(null, iofilesFilter, -1).find(javaDir);
         final List<File> resultFiles = filesOnly(results);
         assertEquals("[DirAndFile4] Result Size", ioFiles.length, resultFiles.size());
         assertTrue("[DirAndFile4] Start Dir", results.contains(javaDir));

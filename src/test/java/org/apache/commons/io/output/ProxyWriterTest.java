@@ -130,7 +130,7 @@ public class ProxyWriterTest extends TestCase {
         final ProxyWriter proxy = new ProxyWriter(new NullWriter());
 
         try {
-            proxy.append((String)null);
+            proxy.append(null);
         } catch(final Exception e) {
             fail("Appending null CharSequence threw " + e);
         }

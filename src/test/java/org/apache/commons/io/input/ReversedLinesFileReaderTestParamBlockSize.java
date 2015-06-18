@@ -16,9 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,16 +39,16 @@ public class ReversedLinesFileReaderTestParamBlockSize {
 
     @SuppressWarnings("boxing")
     // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
-    @Parameters(name = "BlockSize={0}") 
+    @Parameters(name = "BlockSize={0}")
     public static Collection<Integer[]> blockSizes() {
-            return Arrays.asList(new Integer[][] { {1}, {3}, {8}, {256}, {4096} });
+        return Arrays.asList(new Integer[][]{{1}, {3}, {8}, {256}, {4096}});
     }
 
     private ReversedLinesFileReader reversedLinesFileReader;
     private final int testParamBlockSize;
 
     public ReversedLinesFileReaderTestParamBlockSize(final Integer testWithBlockSize) {
-        testParamBlockSize = testWithBlockSize.intValue();
+        testParamBlockSize = testWithBlockSize;
     }
 
     // Strings are escaped in constants to avoid java source encoding issues (source file enc is UTF-8):
@@ -63,12 +61,11 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     private static final String TEST_LINE_SHIFT_JIS2 = "Kanji letters: \u660E\u8F38\u5B50\u4EAC";
 
 
-
     @After
     public void closeReader() {
         try {
             reversedLinesFileReader.close();
-        } catch(final Exception e) {
+        } catch (final Exception e) {
             // ignore
         }
     }
@@ -86,6 +83,7 @@ public class ReversedLinesFileReaderTestParamBlockSize {
         reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, testParamBlockSize, UTF_8);
         assertFileWithShrinkingTestLines(reversedLinesFileReader);
     }
+
     @Test
     public void testUTF8FileCRBreaks() throws URISyntaxException, IOException {
         final File testFileIso = new File(this.getClass().getResource("/test-file-utf8-cr-only.bin").toURI());
@@ -151,21 +149,21 @@ public class ReversedLinesFileReaderTestParamBlockSize {
         final File testFileIso = new File(this.getClass().getResource("/test-file-iso8859-1-shortlines-win-linebr.bin").toURI());
         reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, testParamBlockSize, ISO_8859_1);
 
-        for(int i=3;i>0;i--) {
-            for(int j=1;j<=3;j++) {
+        for (int i = 3; i > 0; i--) {
+            for (int j = 1; j <= 3; j++) {
                 assertEqualsAndNoLineBreaks("", reversedLinesFileReader.readLine());
             }
-            assertEqualsAndNoLineBreaks(""+i, reversedLinesFileReader.readLine());
+            assertEqualsAndNoLineBreaks("" + i, reversedLinesFileReader.readLine());
         }
     }
 
-    @Test(expected=UnsupportedEncodingException.class)
+    @Test(expected = UnsupportedEncodingException.class)
     public void testUnsupportedEncodingUTF16() throws URISyntaxException, IOException {
         final File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
         new ReversedLinesFileReader(testFileEmpty, testParamBlockSize, "UTF-16").close();
     }
 
-    @Test(expected=UnsupportedEncodingException.class)
+    @Test(expected = UnsupportedEncodingException.class)
     public void testUnsupportedEncodingBig5() throws URISyntaxException, IOException {
         final File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
         new ReversedLinesFileReader(testFileEncodingBig5, testParamBlockSize, "Big5").close();
@@ -176,17 +174,18 @@ public class ReversedLinesFileReaderTestParamBlockSize {
         int lineCount = 0;
         while ((line = reversedLinesFileReader.readLine()) != null) {
             lineCount++;
-            assertEqualsAndNoLineBreaks("Line "+lineCount+" is not matching", TEST_LINE.substring(0, lineCount), line);
+            assertEqualsAndNoLineBreaks("Line " + lineCount + " is not matching", TEST_LINE.substring(0, lineCount), line);
         }
     }
 
     static void assertEqualsAndNoLineBreaks(final String msg, final String expected, final String actual) {
-        if(actual!=null) {
-            assertFalse("Line contains \\n: line="+actual, actual.contains("\n"));
-            assertFalse("Line contains \\r: line="+actual, actual.contains("\r"));
+        if (actual != null) {
+            assertFalse("Line contains \\n: line=" + actual, actual.contains("\n"));
+            assertFalse("Line contains \\r: line=" + actual, actual.contains("\r"));
         }
         assertEquals(msg, expected, actual);
     }
+
     static void assertEqualsAndNoLineBreaks(final String expected, final String actual) {
         assertEqualsAndNoLineBreaks(null, expected, actual);
     }

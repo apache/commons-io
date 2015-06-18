@@ -119,7 +119,7 @@ public class ByteOrderMarkTestCase extends FileBasedTestCase {
             // expected
         }
         try {
-            new ByteOrderMark("b", new int[0]);
+            new ByteOrderMark("b");
             fail("empty bytes, expected IllegalArgumentException");
         } catch (final IllegalArgumentException e) {
             // expected

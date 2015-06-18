@@ -44,7 +44,7 @@ public class ProxyReaderTest extends TestCase {
         }
 
         try {
-            proxy.read((char[])null, 0, 0);
+            proxy.read(null, 0, 0);
         } catch(final Exception e) {
             fail("Writing null String threw " + e);
         }

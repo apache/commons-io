@@ -47,14 +47,14 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
         final Object input = Boolean.FALSE;
-        oos.writeObject( input );
+        oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
-        assertEquals(input, result );
+        assertEquals(input, result);
         clois.close();
     }
 
@@ -63,12 +63,12 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-        final Object input = Long.valueOf(123);
+        final Object input = (long) 123;
         oos.writeObject(input);
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
         assertEquals(input, result);
@@ -86,14 +86,14 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final long result = clois.readLong();
 
         assertEquals(input, result);
         clois.close();
     }
 
-    private static enum E{A, B, C}
+    private static enum E {A, B, C}
 
     private static class Test implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -108,6 +108,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
             this.e = E.A;
             this.o = o;
         }
+
         @Override
         public boolean equals(Object other) {
             if (other instanceof Test) {
@@ -119,12 +120,14 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
                 return false;
             }
         }
+
         private boolean equalObject(Object other) {
             if (this.o == null) {
                 return other == null;
             }
             return o.equals(other);
         }
+
         @Override
         public int hashCode() {
             return super.hashCode();
@@ -142,7 +145,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
         assertEquals(input, result);
@@ -154,13 +157,13 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-        final Object input = new Test(123, Integer.valueOf(0));
+        final Object input = new Test(123, 0);
         oos.writeObject(input);
         oos.close();
 
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
         final Object result = clois.readObject();
 
         assertEquals(input, result);
@@ -171,12 +174,12 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject( Boolean.FALSE );
+        oos.writeObject(Boolean.FALSE);
         final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
         final ClassLoaderObjectInputStream clois =
-            new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
-        final String[] interfaces = new String[] { Comparable.class.getName() };
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final String[] interfaces = new String[]{Comparable.class.getName()};
         final Class<?> result = clois.resolveProxyClass(interfaces);
         assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
         clois.close();
