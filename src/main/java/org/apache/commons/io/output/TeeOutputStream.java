@@ -29,7 +29,7 @@ import java.io.OutputStream;
 public class TeeOutputStream extends ProxyOutputStream {
 
     /** the second OutputStream to write to */
-    protected OutputStream branch;
+    protected OutputStream branch; //TODO consider making this private
 
     /**
      * Constructs a TeeOutputStream.
