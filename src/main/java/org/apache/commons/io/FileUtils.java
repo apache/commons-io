@@ -1065,15 +1065,7 @@ public class FileUtils {
      */
     public static void copyFile(final File srcFile, final File destFile,
                                 final boolean preserveFileDate) throws IOException {
-        if (srcFile == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destFile == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (srcFile.exists() == false) {
-            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
-        }
+        checkFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' exists but is a directory");
         }
@@ -1366,16 +1358,8 @@ public class FileUtils {
      */
     public static void copyDirectory(final File srcDir, final File destDir,
                                      final FileFilter filter, final boolean preserveFileDate) throws IOException {
-        if (srcDir == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (srcDir.exists() == false) {
-            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
-        }
-        if (srcDir.isDirectory() == false) {
+        checkFileRequirements(srcDir, destDir);
+        if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
         }
         if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
@@ -1395,6 +1379,18 @@ public class FileUtils {
             }
         }
         doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList);
+    }
+
+    private static void checkFileRequirements(File srcDir, File destDir) throws FileNotFoundException {
+        if (srcDir == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (destDir == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (srcDir.exists() == false) {
+            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
+        }
     }
 
     /**
@@ -1661,6 +1657,23 @@ public class FileUtils {
      * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
      */
     public static void cleanDirectory(final File directory) throws IOException {
+        final File[] files = verifiedListFiles(directory);
+
+        IOException exception = null;
+        for (final File file : files) {
+            try {
+                forceDelete(file);
+            } catch (final IOException ioe) {
+                exception = ioe;
+            }
+        }
+
+        if (null != exception) {
+            throw exception;
+        }
+    }
+
+    private static File[] verifiedListFiles(File directory) throws IOException {
         if (!directory.exists()) {
             final String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
@@ -1675,19 +1688,7 @@ public class FileUtils {
         if (files == null) {  // null if security restricted
             throw new IOException("Failed to list contents of " + directory);
         }
-
-        IOException exception = null;
-        for (final File file : files) {
-            try {
-                forceDelete(file);
-            } catch (final IOException ioe) {
-                exception = ioe;
-            }
-        }
-
-        if (null != exception) {
-            throw exception;
-        }
+        return files;
     }
 
     //-----------------------------------------------------------------------
@@ -2389,20 +2390,7 @@ public class FileUtils {
      * @throws IOException          in case cleaning is unsuccessful
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
-        if (!directory.exists()) {
-            final String message = directory + " does not exist";
-            throw new IllegalArgumentException(message);
-        }
-
-        if (!directory.isDirectory()) {
-            final String message = directory + " is not a directory";
-            throw new IllegalArgumentException(message);
-        }
-
-        final File[] files = directory.listFiles();
-        if (files == null) {  // null if security restricted
-            throw new IOException("Failed to list contents of " + directory);
-        }
+        final File[] files = verifiedListFiles(directory);
 
         IOException exception = null;
         for (final File file : files) {
