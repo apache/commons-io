@@ -203,6 +203,25 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.isSymlink(randomFile));
     }
 
+    public void testIdentifiesBrokenSymlinkFile() throws Exception {
+        if (System.getProperty("os.name").startsWith("Win")) {
+            // cant create symlinks in windows.
+            return;
+        }
+
+        final File noexistFile = new File(top, "noexist");
+        final File symlinkFile = new File(top, "fakeinner");
+        final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
+        final File noexistParentFile = new File("noexist", "file");
+
+        setupSymlink(noexistFile, symlinkFile);
+
+        assertTrue(FileUtils.isSymlink(symlinkFile));
+        assertFalse(FileUtils.isSymlink(noexistFile));
+        assertFalse(FileUtils.isSymlink(noexistParentFile));
+        assertFalse(FileUtils.isSymlink(badSymlinkInPathFile));
+    }
+
     public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
