@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import junit.framework.TestCase;
-import org.apache.commons.io.input.BrokenInputStream;
 
 /**
  * JUnit Test Case for {@link BrokenOutputStream}.
@@ -75,20 +74,6 @@ public class BrokenOutputStreamTest extends TestCase {
             fail("Expected exception not thrown.");
         } catch (final IOException e) {
             assertEquals(exception, e);
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void testSelfSupressed(){
-        BrokenOutputStream bos = new BrokenOutputStream();
-        try {
-            bos.write(123);
-        } catch (IOException e) {
-            try {
-                bos.close();
-            } catch (IOException e1) {
-                e1.addSuppressed( e); // Simulates try-with resources since we're not jdk7 yet
-            }
         }
     }
 
