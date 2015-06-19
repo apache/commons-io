@@ -17,6 +17,8 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
 
@@ -50,6 +52,25 @@ public class FileUtilsWaitForTestCase extends FileBasedTestCase {
     public void testWaitFor() {
         FileUtils.waitFor(new File(""), -1);
         FileUtils.waitFor(new File(""), 2);
+    }
+
+    public void testWaitForInterrupted() throws InterruptedException {
+        final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
+        final CountDownLatch started = new CountDownLatch(1);
+        Runnable thread = new Runnable() {
+            @Override
+            public void run() {
+                started.countDown();
+                FileUtils.waitFor(new File(""), 2);
+                wasInterrupted.set( Thread.currentThread().isInterrupted());
+            }
+        };
+        Thread thread1 = new Thread(thread);
+        thread1.start();
+        started.await();
+        thread1.interrupt();
+        thread1.join();
+        assertTrue( wasInterrupted.get() );
     }
 
 }
