@@ -102,7 +102,7 @@ public class BrokenInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-        throw exception;
+        throw new IOException(exception.getMessage());
     }
 
 }

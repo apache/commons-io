@@ -95,4 +95,18 @@ public class BrokenInputStreamTest extends TestCase {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void testSelfSupressed(){
+        BrokenInputStream bis = new BrokenInputStream();
+        try {
+            bis.read();
+        } catch (IOException e) {
+            try {
+                bis.close();
+            } catch (IOException e1) {
+                e1.addSuppressed( e); // Simulates try-with resources since we're not jdk7 yet
+            }
+        }
+    }
+
 }

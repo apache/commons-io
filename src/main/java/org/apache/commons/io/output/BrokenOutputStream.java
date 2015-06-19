@@ -79,7 +79,7 @@ public class BrokenOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        throw exception;
+        throw new IOException(exception.getMessage());
     }
 
 }
