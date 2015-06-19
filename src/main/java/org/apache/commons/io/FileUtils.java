@@ -1706,19 +1706,26 @@ public class FileUtils {
     public static boolean waitFor(final File file, final int seconds) {
         int timeout = 0;
         int tick = 0;
-        while (!file.exists()) {
-            if (tick++ >= 10) {
-                tick = 0;
-                if (timeout++ > seconds) {
-                    return false;
+        boolean wasInterrupted = false;
+        try {
+            while (!file.exists()) {
+                if (tick++ >= 10) {
+                    tick = 0;
+                    if (timeout++ > seconds) {
+                        return false;
+                    }
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (final InterruptedException ignore) {
+                    wasInterrupted = true;
+                } catch (final Exception ex) {
+                    break;
                 }
             }
-            try {
-                Thread.sleep(100);
-            } catch (final InterruptedException ignore) {
-                // ignore exception
-            } catch (final Exception ex) {
-                break;
+        } finally {
+            if (wasInterrupted) {
+                Thread.currentThread().interrupt();
             }
         }
         return true;
