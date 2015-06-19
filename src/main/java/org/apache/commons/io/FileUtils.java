@@ -3009,8 +3009,10 @@ public class FileUtils {
      * Will not return true if there is a Symbolic Link anywhere in the path,
      * only if the specific file is.
      * <p/>
-     * <b>Note:</b> the current implementation always returns {@code false} if the system
-     * is detected as Windows using {@link FilenameUtils#isSystemWindows()}
+     * When using jdk1.7, this method delegates to {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
+     *
+     * <b>Note:</b> the current implementation always returns {@code false} if running on
+     * jkd1.6 and the system is detected as Windows using {@link FilenameUtils#isSystemWindows()}
      * <p/>
      * For code that runs on Java 1.7 or later, use the following method instead:
      * <br>
@@ -3021,6 +3023,11 @@ public class FileUtils {
      * @since 2.0
      */
     public static boolean isSymlink(final File file) throws IOException {
+        if ( Java7Support.isAtLeastJava7() )
+        {
+            return Java7Support.isSymLink( file );
+        }
+
         if (file == null) {
             throw new NullPointerException("File must not be null");
         }
@@ -3036,10 +3043,41 @@ public class FileUtils {
         }
 
         if (fileInCanonicalDir.getCanonicalFile().equals(fileInCanonicalDir.getAbsoluteFile())) {
-            return false;
+            return isBrokenSymlink(file);
         } else {
             return true;
         }
     }
 
+    /**
+     * Determines if the specified file is possibly a broken symbolic link.
+     *
+     * @param file the file to check
+
+     * @return true if the file is a Symbolic Link
+     * @throws IOException if an IO error occurs while checking the file
+     */
+    private static boolean isBrokenSymlink(final File file) throws IOException {
+        // if file exists then if it is a symlink it's not broken
+        if (file.exists()) {
+            return false;
+        }
+        // a broken symlink will show up in the list of files of its parent directory
+        final File canon = file.getCanonicalFile();
+        File parentDir = canon.getParentFile();
+        if (parentDir == null || !parentDir.exists()) {
+            return false;
+        }
+
+        // is it worthwhile to create a FileFilterUtil method for this?
+        // is it worthwhile to create an "identity"  IOFileFilter for this?
+        File[] fileInDir = parentDir.listFiles(
+                new FileFilter() {
+                    public boolean accept(File aFile) {
+                        return aFile.equals(canon);
+                    }
+                }
+        );
+        return fileInDir.length > 0;
+    }
 }
