@@ -138,6 +138,12 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
     }
 
     @Test
+    public void testIO466() throws IOException {
+            File fooFile = new File(directory1.getParent(), "directory1.txt");
+            assertFalse(FileUtils.directoryContains(directory1, fooFile));
+    }
+
+    @Test
     public void testFileDoesNotExist() throws IOException {
         assertFalse(FileUtils.directoryContains(top, null));
         final File file = new File("DOESNOTEXIST");
