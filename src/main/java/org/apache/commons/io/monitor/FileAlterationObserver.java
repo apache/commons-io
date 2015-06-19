@@ -273,11 +273,7 @@ public class FileAlterationObserver implements Serializable {
      */
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
-        final File[] files = listFiles(rootEntry.getFile());
-        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
-        for (int i = 0; i < files.length; i++) {
-            children[i] = createFileEntry(rootEntry, files[i]);
-        }
+        final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);
         rootEntry.setChildren(children);
     }
 
@@ -358,13 +354,18 @@ public class FileAlterationObserver implements Serializable {
     private FileEntry createFileEntry(final FileEntry parent, final File file) {
         final FileEntry entry = parent.newChildInstance(file);
         entry.refresh(file);
+        final FileEntry[] children = doListFiles(file, entry);
+        entry.setChildren(children);
+        return entry;
+    }
+
+    private FileEntry[] doListFiles(File file, FileEntry entry) {
         final File[] files = listFiles(file);
         final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(entry, files[i]);
         }
-        entry.setChildren(children);
-        return entry;
+        return children;
     }
 
     /**

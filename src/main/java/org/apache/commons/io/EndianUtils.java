@@ -218,17 +218,9 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedLong(final byte[] data, final int offset) {
-        final long low = 
-            ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
-            ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 3 ] & 0xff ) << 24 );
-        final long high = 
-            ( ( data[ offset + 4 ] & 0xff ) << 0 ) +
-            ( ( data[ offset + 5 ] & 0xff ) << 8 ) +
-            ( ( data[ offset + 6 ] & 0xff ) << 16 ) +
-            ( ( data[ offset + 7 ] & 0xff ) << 24 );
-        return (high << 32) + (0xffffffffL & low); 
+        final long low = readSwappedInteger(data, offset);
+        final long high = readSwappedInteger(data, offset + 4);
+        return (high << 32) + (0xffffffffL & low);
     }
 
     /**
