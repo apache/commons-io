@@ -42,11 +42,11 @@ public class BoundedReader
 
     private final Reader target;
 
-    int charsRead = 0;
+    private int charsRead = 0;
 
-    int markedAt = INVALID;
+    private int markedAt = INVALID;
 
-    int readAheadLimit; // Internally, this value will never exceed the allowed size
+    private int readAheadLimit; // Internally, this value will never exceed the allowed size
 
     private final int maxCharsFromTargetReader;
 
