@@ -235,6 +235,19 @@ public abstract class ThresholdingOutputStream
         this.written = 0;
     }
 
+    /**
+     * Sets the byteCount to count.  Usefull for re-opening an output stream
+     * that been previously written to.
+     *
+     * @param count The number of bytes that have already been written to the
+     * output stream
+     *
+     */
+    protected void setByteCount(final long count) {
+        this.written = count;
+    }
+
+
     // ------------------------------------------------------- Abstract methods
 
 
