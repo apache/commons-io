@@ -45,23 +45,23 @@ public class FileCleaningTracker {
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    private ReferenceQueue<Object> q = new ReferenceQueue<Object>();
+    ReferenceQueue<Object> q = new ReferenceQueue<Object>();
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    private final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
+    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
     /**
      * Collection of File paths that failed to delete.
      */
-    private final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<String>());
+    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<String>());
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
-    private volatile boolean exitWhenFinished = false;
+    volatile boolean exitWhenFinished = false;
     /**
      * The thread that will clean up registered files.
      */
-    private Thread reaper;
+    Thread reaper;
 
     //-----------------------------------------------------------------------
     /**
