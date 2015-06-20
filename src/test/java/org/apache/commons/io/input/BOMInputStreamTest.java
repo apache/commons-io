@@ -16,21 +16,14 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
@@ -40,6 +33,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Test case for {@link BOMInputStream}.
@@ -384,6 +380,31 @@ public class BOMInputStreamTest {
             // expected
         }
     }
+
+    private static InputStream createInputStream(boolean addBOM) {
+        ByteBuffer bb = ByteBuffer.allocate(64);
+        if (addBOM) {
+            // UTF-8 BOM
+            bb.put(new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF});
+        }
+        bb.put((byte) 0x31);
+        bb.put((byte) 0x32);
+        bb.put((byte) 0x33);
+        return new ByteArrayInputStream(bb.array());
+    }
+
+    @Test
+    public void lengthWithNoBOM() throws IOException {
+        BOMInputStream is1 = new BOMInputStream(createInputStream(true));
+        assertEquals(2, is1.skip(2));
+        assertEquals((byte) 0x33, is1.read());
+
+        BOMInputStream is2 = new BOMInputStream(createInputStream(false));
+        assertEquals(2, is2.skip(2)); // fails here - skip returns 0
+        assertEquals((byte) 0x33, is2.read());
+    }
+
+
 
     @Test
     public void testReadEmpty() throws Exception {
