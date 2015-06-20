@@ -381,28 +381,7 @@ public class BOMInputStreamTest {
         }
     }
 
-    private static InputStream createInputStream(boolean addBOM) {
-        ByteBuffer bb = ByteBuffer.allocate(64);
-        if (addBOM) {
-            // UTF-8 BOM
-            bb.put(new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF});
-        }
-        bb.put((byte) 0x31);
-        bb.put((byte) 0x32);
-        bb.put((byte) 0x33);
-        return new ByteArrayInputStream(bb.array());
-    }
 
-    @Test
-    public void lengthWithNoBOM() throws IOException {
-        BOMInputStream is1 = new BOMInputStream(createInputStream(true));
-        assertEquals(2, is1.skip(2));
-        assertEquals((byte) 0x33, is1.read());
-
-        BOMInputStream is2 = new BOMInputStream(createInputStream(false));
-        assertEquals(2, is2.skip(2)); // fails here - skip returns 0
-        assertEquals((byte) 0x33, is2.read());
-    }
 
 
 
@@ -711,6 +690,23 @@ public class BOMInputStreamTest {
         in.skip(2L);
         assertEquals('C', in.read());
         in.close();
+    }
+
+
+    @Test
+    public void skipReturnValueWithBom() throws IOException {
+        byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
+        BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true));
+        assertEquals(2, is1.skip(2));
+        assertEquals((byte) 0x33, is1.read());
+    }
+
+    @Test
+    public void skipReturnValueWithoutBom() throws IOException {
+        byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
+        BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false));
+        assertEquals(2, is2.skip(2)); // IO-428
+        assertEquals((byte) 0x33, is2.read());
     }
 
     @Test
