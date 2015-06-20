@@ -399,9 +399,10 @@ public class BOMInputStream extends ProxyInputStream {
      */
     @Override
     public long skip(long n) throws IOException {
-        while (n > 0 && readFirstBytes() >= 0) {
-            n--;
+        int skipped = 0;
+        while ((n > skipped) && (readFirstBytes() >= 0)) {
+            skipped++;
         }
-        return in.skip(n);
+        return in.skip(n - skipped) + skipped;
     }
 }
