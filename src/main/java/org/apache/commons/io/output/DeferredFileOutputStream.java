@@ -131,7 +131,8 @@ public class DeferredFileOutputStream
      * @param suffix Suffix to use for the temporary file.
      * @param directory Temporary file directory.
      */
-    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix, final String suffix, final File directory) {
+    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
+                                     final String suffix, final File directory) {
         super(threshold);
         this.outputFile = outputFile;
 
@@ -176,7 +177,12 @@ public class DeferredFileOutputStream
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
         final FileOutputStream fos = new FileOutputStream(outputFile);
-        memoryOutputStream.writeTo(fos);
+        try {
+            memoryOutputStream.writeTo(fos);
+        } catch (IOException e){
+            fos.close();
+            throw e;
+        }
         currentOutputStream = fos;
         memoryOutputStream = null;
     }

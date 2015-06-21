@@ -27,14 +27,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -642,7 +640,8 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 2.2
      */
-    public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+    public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
+                                                     final IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -777,7 +776,8 @@ public class FileUtils {
      * @see IOUtils#contentEqualsIgnoreEOL(Reader, Reader)
      * @since 2.2
      */
-    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final String charsetName) throws IOException {
+    public static boolean contentEqualsIgnoreEOL(final File file1, final File file2, final String charsetName)
+            throws IOException {
         final boolean file1Exists = file1.exists();
         if (file1Exists != file2.exists()) {
             return false;
@@ -995,11 +995,13 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy completes
+     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * completes
      * @see #copyFile(File, File, boolean)
      * @since 1.3
      */
-    public static void copyFileToDirectory(final File srcFile, final File destDir, final boolean preserveFileDate) throws IOException {
+    public static void copyFileToDirectory(final File srcFile, final File destDir, final boolean preserveFileDate)
+            throws IOException {
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
@@ -1029,7 +1031,8 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy completes
+     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * completes
      * @see #copyFileToDirectory(File, File)
      * @see #copyFile(File, File, boolean)
      */
@@ -1059,7 +1062,8 @@ public class FileUtils {
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy completes
+     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * completes
      * @see #copyFileToDirectory(File, File, boolean)
      * @see #doCopyFile(File, File, boolean)
      */
@@ -1118,10 +1122,13 @@ public class FileUtils {
      * @param destFile         the validated destination file, must not be {@code null}
      * @param preserveFileDate whether to preserve the file date
      * @throws IOException              if an error occurs
-     * @throws IOException              if the output file length is not the same as the input file length after the copy completes
-     * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the position
+     * @throws IOException              if the output file length is not the same as the input file length after the
+     * copy completes
+     * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
+     * position
      */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate) throws IOException {
+    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+            throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
@@ -1381,15 +1388,21 @@ public class FileUtils {
         doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList);
     }
 
-    private static void checkFileRequirements(File srcDir, File destDir) throws FileNotFoundException {
-        if (srcDir == null) {
+    /**
+     * checks requirements for file copy
+     * @param src the source file
+     * @param dest the destination
+     * @throws FileNotFoundException if the destination does not exist
+     */
+    private static void checkFileRequirements(File src, File dest) throws FileNotFoundException {
+        if (src == null) {
             throw new NullPointerException("Source must not be null");
         }
-        if (destDir == null) {
+        if (dest == null) {
             throw new NullPointerException("Destination must not be null");
         }
-        if (srcDir.exists() == false) {
-            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
+        if (!src.exists()) {
+            throw new FileNotFoundException("Source '" + src + "' does not exist");
         }
     }
 
@@ -1405,7 +1418,8 @@ public class FileUtils {
      * @since 1.1
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
-                                        final boolean preserveFileDate, final List<String> exclusionList) throws IOException {
+                                        final boolean preserveFileDate, final List<String> exclusionList)
+            throws IOException {
         // recurse
         final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
         if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
@@ -1673,6 +1687,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Lists files in a directory, asserting that the supplied directory satisfies exists and is a directory
+     * @param directory The directory to list
+     * @return The files in the directory, never null.
+     * @throws IOException if an I/O error occurs
+     */
     private static File[] verifiedListFiles(File directory) throws IOException {
         if (!directory.exists()) {
             final String message = directory + " does not exist";
@@ -1759,8 +1779,8 @@ public class FileUtils {
      * @param encoding the encoding to use, {@code null} means platform default
      * @return the file contents, never {@code null}
      * @throws IOException                 in case of an I/O error
-     * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
-     *                                     supported.
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
+     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 2.3
      */
     public static String readFileToString(final File file, final String encoding) throws IOException {
@@ -1829,8 +1849,8 @@ public class FileUtils {
      * @param encoding the encoding to use, {@code null} means platform default
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws IOException                 in case of an I/O error
-     * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
-     *                                     supported.
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
+     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
     public static List<String> readLines(final File file, final String encoding) throws IOException {
@@ -1925,7 +1945,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.4
      */
-    public static void writeStringToFile(final File file, final String data, final Charset encoding) throws IOException {
+    public static void writeStringToFile(final File file, final String data, final Charset encoding)
+            throws IOException {
         writeStringToFile(file, data, encoding, false);
     }
 
@@ -1956,7 +1977,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(final File file, final String data, final Charset encoding, final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final String data, final Charset encoding, final boolean
+            append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -1976,11 +1998,12 @@ public class FileUtils {
      * @param append   if {@code true}, then the String will be added to the
      *                 end of the file rather than overwriting
      * @throws IOException                 in case of an I/O error
-     * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
-     *                                     supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
+     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeStringToFile(final File file, final String data, final String encoding, final boolean append) throws IOException {
+    public static void writeStringToFile(final File file, final String data, final String encoding,
+                                         final boolean append) throws IOException {
         writeStringToFile(file, data, Charsets.toCharset(encoding), append);
     }
 
@@ -2081,7 +2104,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void write(final File file, final CharSequence data, final Charset encoding, final boolean append) throws IOException {
+    public static void write(final File file, final CharSequence data, final Charset encoding, final boolean append)
+            throws IOException {
         final String str = data == null ? null : data.toString();
         writeStringToFile(file, str, encoding, append);
     }
@@ -2095,11 +2119,12 @@ public class FileUtils {
      * @param append   if {@code true}, then the data will be added to the
      *                 end of the file rather than overwriting
      * @throws IOException                 in case of an I/O error
-     * @throws UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
-     *                                     supported by the VM
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
+     * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void write(final File file, final CharSequence data, final String encoding, final boolean append) throws IOException {
+    public static void write(final File file, final CharSequence data, final String encoding, final boolean append)
+            throws IOException {
         write(file, data, Charsets.toCharset(encoding), append);
     }
 
@@ -2128,7 +2153,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final boolean append) throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final boolean append)
+            throws IOException {
         writeByteArrayToFile(file, data, 0, data.length, append);
     }
 
@@ -2144,7 +2170,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.5
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len) throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len)
+            throws IOException {
         writeByteArrayToFile(file, data, off, len, false);
     }
 
@@ -2162,7 +2189,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.5
      */
-    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len, final boolean append) throws IOException {
+    public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
+                                            final boolean append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -2188,7 +2216,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final String encoding, final Collection<?> lines) throws IOException {
+    public static void writeLines(final File file, final String encoding, final Collection<?> lines)
+            throws IOException {
         writeLines(file, encoding, lines, null, false);
     }
 
@@ -2206,7 +2235,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final String encoding, final Collection<?> lines, final boolean append) throws IOException {
+    public static void writeLines(final File file, final String encoding, final Collection<?> lines,
+                                  final boolean append) throws IOException {
         writeLines(file, encoding, lines, null, append);
     }
 
@@ -2256,8 +2286,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(final File file, final String encoding, final Collection<?> lines, final String lineEnding)
-            throws IOException {
+    public static void writeLines(final File file, final String encoding, final Collection<?> lines,
+                                  final String lineEnding) throws IOException {
         writeLines(file, encoding, lines, lineEnding, false);
     }
 
@@ -2276,8 +2306,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(final File file, final String encoding, final Collection<?> lines, final String lineEnding, final boolean append)
-            throws IOException {
+    public static void writeLines(final File file, final String encoding, final Collection<?> lines,
+                                  final String lineEnding, final boolean append) throws IOException {
         FileOutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -2301,7 +2331,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding) throws IOException {
+    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding)
+            throws IOException {
         writeLines(file, null, lines, lineEnding, false);
     }
 
@@ -2318,8 +2349,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding, final boolean append)
-            throws IOException {
+    public static void writeLines(final File file, final Collection<?> lines, final String lineEnding,
+                                  final boolean append) throws IOException {
         writeLines(file, null, lines, lineEnding, append);
     }
 
@@ -2553,6 +2584,12 @@ public class FileUtils {
     }
 
     // Private method, must be invoked will a directory parameter
+
+    /**
+     * the size of a director
+     * @param directory the directory to check
+     * @return the size
+     */
     private static long sizeOfDirectory0(final File directory) {
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
@@ -2577,6 +2614,12 @@ public class FileUtils {
     }
 
     // Internal method - does not check existence
+
+    /**
+     * the size of a file
+     * @param file the file to check
+     * @return the size of the fil
+     */
     private static long sizeOf0(File file) {
         if (file.isDirectory()) {
             return sizeOfDirectory0(file);
@@ -2599,6 +2642,13 @@ public class FileUtils {
     }
 
     // Must be called with a directory
+
+    /**
+     * Finds the size of a directory
+     *
+     * @param directory The directory
+     * @return the size
+     */
     private static BigInteger sizeOfDirectoryBig0(final File directory) {
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
@@ -2620,6 +2670,12 @@ public class FileUtils {
     }
 
     // internal method; if file does not exist will return 0
+
+    /**
+     * Returns the sid of a file
+     * @param fileOrDir The file
+     * @return the size
+     */
     private static BigInteger sizeOfBig0(final File fileOrDir) {
         if (fileOrDir.isDirectory()) {
             return sizeOfDirectoryBig0(fileOrDir);
@@ -2881,7 +2937,8 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs moving the file
      * @since 1.4
      */
-    public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir) throws IOException {
+    public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
+            throws IOException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
         }
@@ -2958,7 +3015,8 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs moving the file
      * @since 1.4
      */
-    public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir) throws IOException {
+    public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir)
+            throws IOException {
         if (srcFile == null) {
             throw new NullPointerException("Source must not be null");
         }
@@ -2993,7 +3051,8 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs moving the file
      * @since 1.4
      */
-    public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir) throws IOException {
+    public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir)
+            throws IOException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
         }

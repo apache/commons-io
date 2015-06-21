@@ -64,6 +64,11 @@ public class ChunkedWriter extends FilterWriter {
 
     /**
      * writes the data buffer in chunks to the underlying writer
+     * @param data The data
+     * @param srcOffset the offset
+     * @param length the number of bytes to write
+     *
+     * @throws IOException upon error
      */
     @Override
     public void write(char[] data, int srcOffset, int length) throws IOException {

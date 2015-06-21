@@ -377,7 +377,8 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout) throws IOException {
+    long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout)
+            throws IOException {
         if (path.isEmpty()) {
             throw new IllegalArgumentException("Path must not be empty");
         }

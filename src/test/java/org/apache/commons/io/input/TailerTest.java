@@ -262,6 +262,34 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
     }
 
+    public void testTailerEndOfFileReached() throws Exception {
+        // Create & start the Tailer
+        final long delayMillis = 50;
+        final long testDelayMillis = delayMillis * 10;
+        final File file = new File(getTestDirectory(), "tailer1-test.txt");
+        createFile(file, 0);
+        final TestTailerListener listener = new TestTailerListener();
+        final String osname = System.getProperty("os.name");
+        final boolean isWindows = osname.startsWith("Windows");
+        tailer = new Tailer(file, listener, delayMillis, false, isWindows);
+        final Thread thread = new Thread(tailer);
+        thread.start();
+
+        // write a few lines
+        write(file, "line1", "line2", "line3");
+        Thread.sleep(testDelayMillis);
+
+        // write a few lines
+        write(file, "line4", "line5", "line6");
+        Thread.sleep(testDelayMillis);
+
+        // write a few lines
+        write(file, "line7", "line8", "line9");
+        Thread.sleep(testDelayMillis);
+
+        assertEquals("end of file reached 3 times", 3, listener.reachedEndOfFile);
+    }
+
     @Override
     protected void createFile(final File file, final long size)
         throws IOException {
@@ -328,6 +356,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
+        assertEquals("end of file never reached", 0, listener.reachedEndOfFile);
     }
 
     /*
@@ -353,6 +382,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1, listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0, listener.rotated);
+        assertEquals("end of file never reached", 0, listener.reachedEndOfFile);
     }
 
     public void testStopWithNoFileUsingExecutor() throws Exception {
@@ -372,6 +402,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
         assertEquals("fileRotated should be not be called", 0 , listener.rotated);
+        assertEquals("end of file never reached", 0, listener.reachedEndOfFile);
     }
 
     public void testIO335() throws Exception { // test CR behaviour
@@ -418,6 +449,8 @@ public class TailerTest extends FileBasedTestCase {
 
         volatile int initialised = 0;
 
+        volatile int reachedEndOfFile = 0;
+
         public void handle(final String line) {
             lines.add(line);
         }
@@ -444,6 +477,10 @@ public class TailerTest extends FileBasedTestCase {
 
         public void fileRotated() {
             rotated++; // not atomic, but OK because only updated here.
+        }
+
+        public void endOfFileReached() {
+            reachedEndOfFile++; // not atomic, but OK because only updated here.
         }
     }
 }

@@ -212,7 +212,8 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final boolean lenient, final String defaultEncoding) throws IOException {
+    public XmlStreamReader(final InputStream is, final boolean lenient, final String defaultEncoding)
+            throws IOException {
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);

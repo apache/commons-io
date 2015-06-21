@@ -390,7 +390,8 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
-    protected final void checkIfCancelled(final File file, final int depth, final Collection<T> results) throws IOException {
+    protected final void checkIfCancelled(final File file, final int depth, final Collection<T> results) throws
+            IOException {
         if (handleIsCancelled(file, depth, results)) {
             throw new CancelException(file, depth);
         }
@@ -485,7 +486,8 @@ public abstract class DirectoryWalker<T> {
      * @return true to process this directory, false to skip this directory
      * @throws IOException if an I/O Error occurs
      */
-    protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws IOException {
+    protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
         // do nothing - overridable by subclass
         return true;  // process directory
     }
@@ -500,7 +502,8 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
-    protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws IOException {
+    protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
         // do nothing - overridable by subclass
     }
 
@@ -516,7 +519,8 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws IOException {
+    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+            IOException {
         return files;
     }
 
@@ -544,7 +548,8 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
-    protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws IOException  {
+    protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
         // do nothing - overridable by subclass
     }
 
@@ -558,7 +563,8 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
-    protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws IOException {
+    protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws
+            IOException {
         // do nothing - overridable by subclass
     }
 

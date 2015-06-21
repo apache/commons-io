@@ -48,6 +48,11 @@ public class UnixLineEndingInputStream extends InputStream {
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
 
+    /**
+     * Reads the next item from the target, updating internal flags in the process
+     * @return the next int read from the target stream
+     * @throws IOException upon error
+     */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
         eofSeen = target == -1;
@@ -86,6 +91,11 @@ public class UnixLineEndingInputStream extends InputStream {
         }
     }
 
+    /**
+     * Handles the eof-handling at the end of the stream
+     * @param previousWasSlashR Indicates if the last seen was a \r
+     * @return The next char to output to the stream
+     */
     private int eofGame(boolean previousWasSlashR) {
         if ( previousWasSlashR || !ensureLineFeedAtEndOfFile ) {
             return -1;
@@ -100,6 +110,7 @@ public class UnixLineEndingInputStream extends InputStream {
 
     /**
      * Closes the stream. Also closes the underlying stream.
+     * @throws IOException upon error
      */
     @Override
     public void close() throws IOException {

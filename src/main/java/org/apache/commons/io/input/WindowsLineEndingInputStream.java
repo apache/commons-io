@@ -21,6 +21,8 @@ import java.io.InputStream;
 
 /**
  * A filtering input stream that ensures the content will have windows line endings, CRLF.
+ *
+ * @since 2.5
  */
 public class WindowsLineEndingInputStream  extends InputStream {
 
@@ -47,6 +49,11 @@ public class WindowsLineEndingInputStream  extends InputStream {
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
 
+    /**
+     * Reads the next item from the target, updating internal flags in the process
+     * @return the next int read from the target stream
+     * @throws IOException upon error
+     */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
         eofSeen = target == -1;
@@ -85,6 +92,11 @@ public class WindowsLineEndingInputStream  extends InputStream {
         }
     }
 
+    /**
+     * Handles the eof-handling at the end of the stream
+     * @return The next char to output to the stream
+     */
+
     private int eofGame() {
         if ( !ensureLineFeedAtEndOfFile ) {
             return -1;
@@ -104,6 +116,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
 
     /**
      * Closes the stream. Also closes the underlying stream.
+     * @throws IOException upon error
      */
     @Override
     public void close() throws IOException {

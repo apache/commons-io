@@ -117,7 +117,8 @@ public class WriterOutputStream extends OutputStream {
      *                         {@link #flush()} or {@link #close()} is called.
      * @since 2.1
      */
-    public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize, final boolean writeImmediately) {
+    public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize,
+                              final boolean writeImmediately) {
         this.writer = writer;
         this.decoder = decoder;
         this.writeImmediately = writeImmediately;
@@ -136,7 +137,8 @@ public class WriterOutputStream extends OutputStream {
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
-    public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize, final boolean writeImmediately) {
+    public WriterOutputStream(final Writer writer, final Charset charset, final int bufferSize,
+                              final boolean writeImmediately) {
         this(writer,
              charset.newDecoder()
                     .onMalformedInput(CodingErrorAction.REPLACE)
@@ -170,7 +172,8 @@ public class WriterOutputStream extends OutputStream {
      *                         output buffer will only be flushed when it overflows or when
      *                         {@link #flush()} or {@link #close()} is called.
      */
-    public WriterOutputStream(final Writer writer, final String charsetName, final int bufferSize, final boolean writeImmediately) {
+    public WriterOutputStream(final Writer writer, final String charsetName, final int bufferSize,
+                              final boolean writeImmediately) {
         this(writer, Charset.forName(charsetName), bufferSize, writeImmediately);
     }
 

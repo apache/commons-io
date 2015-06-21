@@ -154,7 +154,8 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter, final IOCase caseSensitivity) {
+    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter,
+                                  final IOCase caseSensitivity) {
         this(new File(directoryName), fileFilter, caseSensitivity);
     }
 
@@ -197,7 +198,8 @@ public class FileAlterationObserver implements Serializable {
      * @param fileFilter The file filter or null if none
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
-    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter, final IOCase caseSensitivity) {
+    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter,
+                                     final IOCase caseSensitivity) {
         if (rootEntry == null) {
             throw new IllegalArgumentException("Root entry is missing");
         }
@@ -359,6 +361,12 @@ public class FileAlterationObserver implements Serializable {
         return entry;
     }
 
+    /**
+     * List the files
+     * @param file The file to list files for
+     * @param entry the parent entry
+     * @return The child files
+     */
     private FileEntry[] doListFiles(File file, FileEntry entry) {
         final File[] files = listFiles(file);
         final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;

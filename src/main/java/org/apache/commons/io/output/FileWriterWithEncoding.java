@@ -75,7 +75,8 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final String encoding, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final String encoding, final boolean append)
+            throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -100,7 +101,8 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final Charset encoding, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final Charset encoding, final boolean append)
+            throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -125,7 +127,8 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding, final boolean append)
+            throws IOException {
         this(new File(filename), encoding, append);
     }
 
@@ -202,7 +205,8 @@ public class FileWriterWithEncoding extends Writer {
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding, final boolean append) throws IOException {
+    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding, final boolean append)
+            throws IOException {
         super();
         this.out = initWriter(file, encoding, append);
     }

@@ -23,7 +23,6 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.UnsupportedCharsetException;
 
 import org.apache.commons.io.Charsets;
 
@@ -121,7 +120,8 @@ public class ReversedLinesFileReader implements Closeable {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
-        } else if(charset == Charset.forName("Shift_JIS") || // Same as for UTF-8 http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+        } else if(charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
+                                      // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
                 charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
                 charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
                 charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
@@ -132,9 +132,11 @@ public class ReversedLinesFileReader implements Closeable {
             // however byte order has to be specified
             byteDecrement = 2;
         } else if (charset == Charsets.UTF_16) {
-            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or UTF-16LE)");
+            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " +
+                    "UTF-16LE)");
         } else {
-            throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to submit a patch)");
+            throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to " +
+                    "submit a patch)");
         }
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
         newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
@@ -153,9 +155,8 @@ public class ReversedLinesFileReader implements Closeable {
      * @param encoding
      *            the encoding of the file
      * @throws IOException  if an I/O error occurs
-     * @throws UnsupportedCharsetException
-     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
-     *             supported.
+     * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
+     * version 2.2 if the encoding is not supported.
      */
     public ReversedLinesFileReader(final File file, final int blockSize, final String encoding) throws IOException {
         this(file, blockSize, Charsets.toCharset(encoding));

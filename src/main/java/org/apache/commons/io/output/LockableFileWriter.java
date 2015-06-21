@@ -21,10 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -158,8 +156,8 @@ public class LockableFileWriter extends Writer {
      * @param encoding  the encoding to use, null means platform default
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedCharsetException
-     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     * @throws java.nio.charset.UnsupportedCharsetException
+     *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
     public LockableFileWriter(final File file, final String encoding) throws IOException {
@@ -214,8 +212,8 @@ public class LockableFileWriter extends Writer {
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
-     * @throws UnsupportedCharsetException
-     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     * @throws java.nio.charset.UnsupportedCharsetException
+     *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
     public LockableFileWriter(final File file, final String encoding, final boolean append,
