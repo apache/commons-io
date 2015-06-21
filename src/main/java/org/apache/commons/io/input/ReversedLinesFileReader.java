@@ -121,9 +121,11 @@ public class ReversedLinesFileReader implements Closeable {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
-        } else if (charset == Charset.forName("Shift_JIS")) {
-            // Same as for UTF-8
-            // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+        } else if(charset == Charset.forName("Shift_JIS") || // Same as for UTF-8 http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+                charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
+                charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
+                charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
+                charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
             byteDecrement = 1;
         } else if (charset == Charsets.UTF_16BE || charset == Charsets.UTF_16LE) {
             // UTF-16 new line sequences are not allowed as second tuple of four byte sequences,
