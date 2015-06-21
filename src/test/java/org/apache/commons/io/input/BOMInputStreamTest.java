@@ -699,6 +699,7 @@ public class BOMInputStreamTest {
         BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true));
         assertEquals(2, is1.skip(2));
         assertEquals((byte) 0x33, is1.read());
+        is1.close();
     }
 
     @Test
@@ -707,6 +708,7 @@ public class BOMInputStreamTest {
         BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false));
         assertEquals(2, is2.skip(2)); // IO-428
         assertEquals((byte) 0x33, is2.read());
+        is2.close();
     }
 
     @Test

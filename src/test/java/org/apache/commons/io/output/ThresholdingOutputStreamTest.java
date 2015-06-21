@@ -47,5 +47,6 @@ public class ThresholdingOutputStreamTest {
         assertFalse( reached.get());
         tos.write(12);
         assertTrue(reached.get());
+        tos.close();
     }
 }
