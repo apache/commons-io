@@ -66,7 +66,8 @@ public class CharSequenceInputStream extends InputStream {
         // Ensure that buffer is long enough to hold a complete character
         final float maxBytesPerChar = encoder.maxBytesPerChar();
         if (bufferSize < maxBytesPerChar) {
-            throw new IllegalArgumentException("Buffer size " + bufferSize + " is less than maxBytesPerChar " + maxBytesPerChar);
+            throw new IllegalArgumentException("Buffer size " + bufferSize + " is less than maxBytesPerChar " +
+                    maxBytesPerChar);
         }
         this.bbuf = ByteBuffer.allocate(bufferSize);
         this.bbuf.flip();
@@ -233,9 +234,10 @@ public class CharSequenceInputStream extends InputStream {
          * Since the bbuf is re-used, in general it's necessary to re-encode the data.
          *
          * It should be possible to apply some optimisations however:
-         * + use mark/reset on the cbuf and bbuf. This would only work if the buffer had not been (re)filled since the mark.
-         * The code would have to catch InvalidMarkException - does not seem possible to check if mark is valid otherwise.
-         * + Try saving the state of the cbuf before each fillBuffer; it might be possible to restart from there.
+         * + use mark/reset on the cbuf and bbuf. This would only work if the buffer had not been (re)filled since
+         * the mark. The code would have to catch InvalidMarkException - does not seem possible to check if mark is
+         * valid otherwise. + Try saving the state of the cbuf before each fillBuffer; it might be possible to
+         * restart from there.
          */
         if (this.mark_cbuf != NO_MARK) {
             // if cbuf is at 0, we have not started reading anything, so skip re-encoding
@@ -251,7 +253,8 @@ public class CharSequenceInputStream extends InputStream {
                 }
             }
             if (this.cbuf.position() != this.mark_cbuf) {
-                throw new IllegalStateException("Unexpected CharBuffer postion: actual="+cbuf.position() + " expected=" + this.mark_cbuf);
+                throw new IllegalStateException("Unexpected CharBuffer postion: actual=" + cbuf.position() + " " +
+                        "expected=" + this.mark_cbuf);
             }
             this.bbuf.position(this.mark_bbuf);
             this.mark_cbuf = NO_MARK;

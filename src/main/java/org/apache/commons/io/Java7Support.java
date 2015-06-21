@@ -78,6 +78,11 @@ class Java7Support {
         IS_JAVA7 = isJava7x;
     }
 
+    /**
+     * Invokes java7 isSymbolicLink
+     * @param file The file to check
+     * @return true if the file is a symbolic link
+     */
     public static boolean isSymLink(File file) {
         try {
             Object path = toPath.invoke(file);
@@ -90,6 +95,12 @@ class Java7Support {
         }
     }
 
+    /**
+     * Reads the target of a symbolic link
+     * @param symlink The symlink to read
+     * @return The location the symlink is pointing to
+     * @throws IOException Upon failure
+     */
 
     public static File readSymbolicLink(File symlink)
             throws IOException {
@@ -105,7 +116,13 @@ class Java7Support {
     }
 
 
-    public static boolean exists(File file)
+    /**
+     * Indicates if a symlunk target exists
+     * @param file The symlink file
+     * @return true if the target exists
+     * @throws IOException upon error
+     */
+    private static boolean exists(File file)
             throws IOException {
         try {
             Object path = toPath.invoke(file);
@@ -119,6 +136,13 @@ class Java7Support {
 
     }
 
+    /**
+     * Creates a symbolic link
+     * @param symlink The symlink to create
+     * @param target Where it should point
+     * @return The newly created symlink
+     * @throws IOException upon error
+     */
     public static File createSymbolicLink(File symlink, File target)
             throws IOException {
         try {
@@ -141,7 +165,7 @@ class Java7Support {
      * Performs a nio delete
      *
      * @param file the file to delete
-     * @throws IOException
+     * @throws IOException Upon error
      */
     public static void delete(File file)
             throws IOException {
@@ -155,6 +179,10 @@ class Java7Support {
         }
     }
 
+    /**
+     * Indicates if the current vm has java7 lubrary support
+     * @return true if java7 library support
+     */
     public static boolean isAtLeastJava7() {
         return IS_JAVA7;
     }

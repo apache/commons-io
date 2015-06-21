@@ -207,7 +207,8 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      */
-    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
+    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
+                  final boolean reOpen) {
         this(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
     }
 
@@ -219,7 +220,8 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufSize) {
+    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
+                  final int bufSize) {
         this(file, listener, delayMillis, end, false, bufSize);
     }
 
@@ -232,7 +234,8 @@ public class Tailer implements Runnable {
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen, final int bufSize) {
+    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
+                  final boolean reOpen, final int bufSize) {
         this(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
     }
 
@@ -246,7 +249,8 @@ public class Tailer implements Runnable {
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen
+    public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis,
+                  final boolean end, final boolean reOpen
             , final int bufSize) {
         this.file = file;
         this.delayMillis = delayMillis;
@@ -271,7 +275,8 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final int bufSize) {
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end, final int bufSize) {
         return create(file, listener, delayMillis, end, false, bufSize);
     }
 
@@ -286,7 +291,8 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen,
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end, final boolean reOpen,
             final int bufSize) {
         return create(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
     }
@@ -303,7 +309,8 @@ public class Tailer implements Runnable {
      * @param bufSize buffer size.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final Charset charset, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen
+    public static Tailer create(final File file, final Charset charset, final TailerListener listener,
+                                final long delayMillis, final boolean end, final boolean reOpen
             ,final int bufSize) {
         final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);
         final Thread thread = new Thread(tailer);
@@ -321,7 +328,8 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @return The new tailer
      */
-    public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end) {
         return create(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
     }
 
@@ -335,7 +343,8 @@ public class Tailer implements Runnable {
      * @param reOpen whether to close/reopen the file between chunks
      * @return The new tailer
      */
-    public static Tailer create(final File file, final TailerListener listener, final long delayMillis, final boolean end, final boolean reOpen) {
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end, final boolean reOpen) {
         return create(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
     }
 
@@ -481,6 +490,10 @@ public class Tailer implements Runnable {
         }
     }
 
+    /**
+     * Stops the tailer with an exception
+     * @param e The exception to send to listener
+     */
     private void stop(final Exception e) {
         listener.handle(e);
         stop();
@@ -536,6 +549,9 @@ public class Tailer implements Runnable {
         }
         IOUtils.closeQuietly(lineBuf); // not strictly necessary
         reader.seek(rePos); // Ensure we can re-read if necessary
+
+        listener.endOfFileReached();
+
         return rePos;
     }
 

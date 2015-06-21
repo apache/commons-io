@@ -42,7 +42,7 @@ import java.util.List;
  * @version $Id$
  */
 public class FileCleaningTracker {
-    
+
     // Note: fields are package protected to allow use by test cases
 
     /**
@@ -129,12 +129,13 @@ public class FileCleaningTracker {
 
     /**
      * Adds a tracker to the list of trackers.
-     * 
+     *
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
      */
-    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
+    private synchronized void addTracker(final String path, final Object marker, final FileDeleteStrategy
+            deleteStrategy) {
         // synchronized block protects reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
@@ -185,7 +186,7 @@ public class FileCleaningTracker {
      * posing a memory leak.
      * <p>
      * This method allows the thread to be terminated. Simply call this method
-     * in the resource cleanup code, such as 
+     * in the resource cleanup code, such as
      * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)}.
      * Once called, no new objects can be tracked by the file cleaner.
      */
@@ -257,7 +258,8 @@ public class FileCleaningTracker {
          * @param marker  the marker object used to track the file, not null
          * @param queue  the queue on to which the tracker will be pushed, not null
          */
-        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker, final ReferenceQueue<? super Object> queue) {
+        Tracker(final String path, final FileDeleteStrategy deleteStrategy, final Object marker,
+                final ReferenceQueue<? super Object> queue) {
             super(marker, queue);
             this.path = path;
             this.deleteStrategy = deleteStrategy == null ? FileDeleteStrategy.NORMAL : deleteStrategy;

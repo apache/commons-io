@@ -61,4 +61,9 @@ public class TailerListenerAdapter implements TailerListener {
     public void handle(final Exception ex) {
     }
 
+    /**
+     * Called each time the Tailer reaches the end of the file.
+     */
+    public void endOfFileReached() {
+    }
 }

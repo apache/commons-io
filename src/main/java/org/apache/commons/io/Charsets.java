@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -101,7 +100,7 @@ public class Charsets {
      * @param charset
      *            The name of the requested charset, may be null.
      * @return a Charset for the named charset
-     * @throws UnsupportedCharsetException
+     * @throws java.nio.charset.UnsupportedCharsetException
      *             If the named charset is unavailable
      */
     public static Charset toCharset(final String charset) {
