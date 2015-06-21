@@ -81,7 +81,8 @@ class Java7Support {
     public static boolean isSymLink(File file) {
         try {
             Object path = toPath.invoke(file);
-            return (Boolean) isSymbolicLink.invoke(null, path);
+            Boolean result = (Boolean) isSymbolicLink.invoke(null, path);
+            return result.booleanValue();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -108,8 +109,8 @@ class Java7Support {
             throws IOException {
         try {
             Object path = toPath.invoke(file);
-            final Object invoke = exists.invoke(null, path, emptyLinkOpts);
-            return (Boolean) invoke;
+            final Boolean result = (Boolean) exists.invoke(null, path, emptyLinkOpts);
+            return result.booleanValue();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
