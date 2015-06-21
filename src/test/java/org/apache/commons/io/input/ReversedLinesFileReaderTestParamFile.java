@@ -57,6 +57,10 @@ public class ReversedLinesFileReaderTestParamFile {
                 {"test-file-utf8-win-linebr.bin", "UTF-8", 3},
                 {"test-file-utf8-win-linebr.bin", "UTF-8", 4},
                 {"test-file-utf8.bin", "UTF-8", null},
+                {"test-file-windows-31j.bin", "windows-31j", null},
+                {"test-file-gbk.bin", "gbk", null},
+                {"test-file-x-windows-949.bin", "x-windows-949", null},
+                {"test-file-x-windows-950.bin", "x-windows-950", null},
         });
     }
 

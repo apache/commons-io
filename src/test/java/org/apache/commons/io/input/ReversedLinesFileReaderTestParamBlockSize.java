@@ -59,6 +59,18 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     private static final String TEST_LINE_SHIFT_JIS1 = "Hiragana letters: \u3041\u3042\u3043\u3044\u3045";
     // Kanji letters: æ˜Žè¼¸å­�äº¬
     private static final String TEST_LINE_SHIFT_JIS2 = "Kanji letters: \u660E\u8F38\u5B50\u4EAC";
+    // windows-31j characters
+    private static final String TEST_LINE_WINDOWS_31J_1 = "\u3041\u3042\u3043\u3044\u3045";
+    private static final String TEST_LINE_WINDOWS_31J_2 = "\u660E\u8F38\u5B50\u4EAC";
+    // gbk characters (Simplified Chinese)
+    private static final String TEST_LINE_GBK_1 = "\u660E\u8F38\u5B50\u4EAC";
+    private static final String TEST_LINE_GBK_2 = "\u7B80\u4F53\u4E2D\u6587";
+    // x-windows-949 characters (Korean)
+    private static final String TEST_LINE_X_WINDOWS_949_1 = "\uD55C\uAD6D\uC5B4";
+    private static final String TEST_LINE_X_WINDOWS_949_2 = "\uB300\uD55C\uBBFC\uAD6D";
+    // x-windows-950 characters (Traditional Chinese)
+    private static final String TEST_LINE_X_WINDOWS_950_1 = "\u660E\u8F38\u5B50\u4EAC";
+    private static final String TEST_LINE_X_WINDOWS_950_2 = "\u7E41\u9AD4\u4E2D\u6587";
 
 
     @After
@@ -125,6 +137,38 @@ public class ReversedLinesFileReaderTestParamBlockSize {
         reversedLinesFileReader = new ReversedLinesFileReader(testFileShiftJIS, testParamBlockSize, "Shift_JIS");
         assertEqualsAndNoLineBreaks(TEST_LINE_SHIFT_JIS2, reversedLinesFileReader.readLine());
         assertEqualsAndNoLineBreaks(TEST_LINE_SHIFT_JIS1, reversedLinesFileReader.readLine());
+    }
+
+    @Test
+    public void testWindows31jFile() throws URISyntaxException, IOException {
+        final File testFileWindows31J = new File(this.getClass().getResource("/test-file-windows-31j.bin").toURI());
+        reversedLinesFileReader = new ReversedLinesFileReader(testFileWindows31J, testParamBlockSize, "windows-31j");
+        assertEqualsAndNoLineBreaks(TEST_LINE_WINDOWS_31J_2, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks(TEST_LINE_WINDOWS_31J_1, reversedLinesFileReader.readLine());
+    }
+
+    @Test
+    public void testGBK() throws URISyntaxException, IOException {
+        final File testFileGBK = new File(this.getClass().getResource("/test-file-gbk.bin").toURI());
+        reversedLinesFileReader = new ReversedLinesFileReader(testFileGBK, testParamBlockSize, "GBK");
+        assertEqualsAndNoLineBreaks(TEST_LINE_GBK_2, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks(TEST_LINE_GBK_1, reversedLinesFileReader.readLine());
+    }
+
+    @Test
+    public void testxWindows949File() throws URISyntaxException, IOException {
+        final File testFilexWindows949 = new File(this.getClass().getResource("/test-file-x-windows-949.bin").toURI());
+        reversedLinesFileReader = new ReversedLinesFileReader(testFilexWindows949, testParamBlockSize, "x-windows-949");
+        assertEqualsAndNoLineBreaks(TEST_LINE_X_WINDOWS_949_2, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks(TEST_LINE_X_WINDOWS_949_1, reversedLinesFileReader.readLine());
+    }
+
+    @Test
+    public void testxWindows950File() throws URISyntaxException, IOException {
+        final File testFilexWindows950 = new File(this.getClass().getResource("/test-file-x-windows-950.bin").toURI());
+        reversedLinesFileReader = new ReversedLinesFileReader(testFilexWindows950, testParamBlockSize, "x-windows-950");
+        assertEqualsAndNoLineBreaks(TEST_LINE_X_WINDOWS_950_2, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks(TEST_LINE_X_WINDOWS_950_1, reversedLinesFileReader.readLine());
     }
 
     @Test // this test is run 3x for same block size as we want to test with 10
