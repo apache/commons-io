@@ -42,6 +42,9 @@ import java.util.List;
  * @version $Id$
  */
 public class FileCleaningTracker {
+    
+    // Note: fields are package protected to allow use by test cases
+
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
