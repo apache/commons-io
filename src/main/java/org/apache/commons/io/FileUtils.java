@@ -1724,19 +1724,16 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}
      */
     public static boolean waitFor(final File file, final int seconds) {
-        int timeout = 0;
-        int tick = 0;
+        long finishAt = System.currentTimeMillis() + (seconds * 1000);
         boolean wasInterrupted = false;
         try {
             while (!file.exists()) {
-                if (tick++ >= 10) {
-                    tick = 0;
-                    if (timeout++ > seconds) {
-                        return false;
-                    }
+                long remaining = finishAt -  System.currentTimeMillis();
+                if (remaining < 0){
+                    return false;
                 }
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(Math.min(100, remaining));
                 } catch (final InterruptedException ignore) {
                     wasInterrupted = true;
                 } catch (final Exception ex) {
