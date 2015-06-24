@@ -265,6 +265,9 @@ file comparators, endian transformation classes, and much more.
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <classpathDependencyExcludes>
+            <classpathDependencyExclude>xerces:xercesImpl</classpathDependencyExclude>
+          </classpathDependencyExcludes>
           <forkMode>pertest</forkMode>
           <!-- limit memory size see IO-161 -->
           <argLine>-Xmx25M</argLine>
