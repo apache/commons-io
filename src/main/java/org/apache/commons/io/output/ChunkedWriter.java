@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * OutputStream which breaks larger output blocks into chunks.
+ * Writer which breaks larger output blocks into chunks.
  * Native code may need to copy the input array; if the write buffer
  * is very large this can cause OOME.
  *
