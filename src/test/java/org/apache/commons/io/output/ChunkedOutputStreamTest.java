@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
@@ -30,13 +31,7 @@ public class ChunkedOutputStreamTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream() {
-            @Override
-            public void write(byte[] b, int off, int len) {
-                numWrites.incrementAndGet();
-                super.write(b, off, len);
-            }
-        };
+        ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
         ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10);
         chunked.write("0123456789012345678901234567891".getBytes());
         assertEquals(4, numWrites.get());
@@ -46,4 +41,25 @@ public class ChunkedOutputStreamTest {
     public void negative_chunksize_not_permitted() {
         new ChunkedOutputStream(new ByteArrayOutputStream(), 0);
     }
+
+    @Test
+    public void defaultConstructor() throws IOException {
+        final AtomicInteger numWrites = new AtomicInteger();
+        ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
+        ChunkedOutputStream chunked = new ChunkedOutputStream(baos);
+        chunked.write(new byte[1024 * 4 + 1]);
+        assertEquals(2, numWrites.get());
+    }
+
+    private ByteArrayOutputStream getByteArrayOutputStream(final AtomicInteger numWrites) {
+        return new ByteArrayOutputStream() {
+            @Override
+            public void write(byte[] b, int off, int len) {
+                numWrites.incrementAndGet();
+                super.write(b, off, len);
+            }
+        };
+    }
+
+
 }
