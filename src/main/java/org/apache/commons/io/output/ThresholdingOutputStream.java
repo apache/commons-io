@@ -242,6 +242,7 @@ public abstract class ThresholdingOutputStream
      * @param count The number of bytes that have already been written to the
      * output stream
      *
+     * @since 2.5
      */
     protected void setByteCount(final long count) {
         this.written = count;
