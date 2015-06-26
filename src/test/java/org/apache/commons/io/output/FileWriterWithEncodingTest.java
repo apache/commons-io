@@ -170,8 +170,8 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
 
         fw1.write(textContent);
         fw2.write(textContent);
-        fw1.write(42);
-        fw2.write(42);
+        fw1.write(65);
+        fw2.write(65);
         fw1.write(anotherTestContent);
         fw2.write(anotherTestContent);
         fw1.write(anotherTestContent, 1, 2);
