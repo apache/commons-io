@@ -62,8 +62,9 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
         file1 = new File(getTestDirectory(), "testfile1.txt");
         file2 = new File(getTestDirectory(), "testfile2.txt");
         final char[] arr = new char[1024];
+        final char[] chars = "ABCEDEFGHIJKLMNOPQabcdefgihklmnopq".toCharArray();
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = (char) i;
+            arr[i] = chars[i % chars.length];
         }
         textContent = new String(arr);
     }
