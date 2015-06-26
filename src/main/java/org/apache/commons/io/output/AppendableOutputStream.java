@@ -26,6 +26,7 @@ import java.io.OutputStream;
  * For example, can be used with any {@link java.io.Writer} or a {@link java.lang.StringBuilder}
  * or {@link java.lang.StringBuffer}.
  *
+ * @since 2.5
  * @see java.lang.Appendable
  * @version $Id$
  */
