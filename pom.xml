@@ -164,6 +164,12 @@ file comparators, endian transformation classes, and much more.
       <url>http://www.garygregory.com</url>
       <timezone>-5</timezone>
     </developer>
+    <developer>
+      <name>Kristian Rosenvold</name>
+      <id>krosenvold</id>
+      <email>krosenvold@apache.org</email>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
 
   <contributors>
