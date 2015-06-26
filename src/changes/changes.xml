@@ -46,11 +46,32 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="2014-??-??" description="New features and bug fixes.">
+    <release version="2.5" date="2015-??-??" description="New features and bug fixes.">
+      <action issue="IO-481" dev="krosenvold" type="fix">
+        Changed/Corrected algorithm for waitFor
+      </action>
+      <action issue="IO-471" dev="krosenvold" type="add" due-to="Leandro Reis">
+        Support for additional encodings in ReversedLinesFileReader
+      </action>
+      <action issue="IO-428" dev="krosenvold" type="fix" due-to="Stefan Gmeiner">
+        BOMInputStream.skip returns wrong count if stream contains no BOM
+      </action>
+      <action issue="IO-425" dev="krosenvold" type="add" due-to="Craig Swank">
+        Setter method for threshold on ThresholdingOutputStream
+      </action>
+      <action issue="IO-488" dev="krosenvold" type="fix" due-to="Björn Buchner">
+        FileUtils.waitFor(...) swallows thread interrupted status
+      </action>
+      <action issue="IO-452" dev="krosenvold" type="fix" due-to="David Standish">
+        Support for symlinks with missing target. Added support for JDK7 symlink features when present
+      </action>
+      <action issue="IO-466" dev="krosenvold" type="update">
+        Added testcase to show this was fixed with IO-423
+      </action>
       <action issue="IO-479" dev="sebb" type="update" due-to="Zhouce Chen">
         Correct exception message in FileUtils.getFile(File, String...)
       </action>
-      <action issue="IO-402" dev="britter" type="add" due-to="Niall Pemberton">
+      <action issue="IO-406" dev="britter" type="add" due-to="Niall Pemberton">
         Introduce new class AppendableOutputStream
       </action>
       <action issue="IO-465" dev="britter" type="update" due-to="based2">
