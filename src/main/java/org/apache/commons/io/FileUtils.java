@@ -3141,6 +3141,6 @@ public class FileUtils {
                     }
                 }
         );
-        return fileInDir.length > 0;
+        return fileInDir != null && fileInDir.length > 0;
     }
 }
