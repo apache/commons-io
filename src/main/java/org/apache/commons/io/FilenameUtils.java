@@ -757,7 +757,7 @@ public class FilenameUtils {
      * ie. both Unix and Windows prefixes are matched regardless.
      *
      * @param filename  the filename to query, null returns null
-     * @return the prefix of the file, null if invalid
+     * @return the prefix of the file, null if invalid. Null bytes inside string will be removed
      */
     public static String getPrefix(final String filename) {
         if (filename == null) {
@@ -768,9 +768,9 @@ public class FilenameUtils {
             return null;
         }
         if (len > filename.length()) {
-            return filename + UNIX_SEPARATOR;  // we know this only happens for unix
+            return filterNullBytes(filename + UNIX_SEPARATOR);  // we know this only happens for unix
         }
-        return filename.substring(0, len);
+        return filterNullBytes(filename.substring(0, len));
     }
 
     /**
@@ -793,7 +793,8 @@ public class FilenameUtils {
      * See {@link #getFullPath(String)} for the method that retains the prefix.
      *
      * @param filename  the filename to query, null returns null
-     * @return the path of the file, an empty string if none exists, null if invalid
+     * @return the path of the file, an empty string if none exists, null if invalid.
+     * Null bytes inside string will be removed
      */
     public static String getPath(final String filename) {
         return doGetPath(filename, 1);
@@ -820,7 +821,8 @@ public class FilenameUtils {
      * See {@link #getFullPathNoEndSeparator(String)} for the method that retains the prefix.
      *
      * @param filename  the filename to query, null returns null
-     * @return the path of the file, an empty string if none exists, null if invalid
+     * @return the path of the file, an empty string if none exists, null if invalid.
+     * Null bytes inside string will be removed
      */
     public static String getPathNoEndSeparator(final String filename) {
         return doGetPath(filename, 0);
@@ -831,7 +833,7 @@ public class FilenameUtils {
      *
      * @param filename  the filename
      * @param separatorAdd  0 to omit the end separator, 1 to return it
-     * @return the path
+     * @return the path. Null bytes inside string will be removed
      */
     private static String doGetPath(final String filename, final int separatorAdd) {
         if (filename == null) {
@@ -846,7 +848,7 @@ public class FilenameUtils {
         if (prefix >= filename.length() || index < 0 || prefix >= endIndex) {
             return "";
         }
-        return filename.substring(prefix, endIndex);
+        return filterNullBytes(filename.substring(prefix, endIndex));
     }
 
     /**
