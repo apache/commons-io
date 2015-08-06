@@ -216,6 +216,8 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(null, FilenameUtils.normalize("//server/../a"));
         assertEquals(null, FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
+        assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
+        assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\u0000a\\b/c.txt"));
     }
 
     public void testNormalizeUnixWin() throws Exception {
@@ -730,6 +732,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("c", FilenameUtils.getName("a/b/c"));
         assertEquals("", FilenameUtils.getName("a/b/c/"));
         assertEquals("c", FilenameUtils.getName("a\\b\\c"));
+        assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
     }
 
     public void testGetBaseName() {
@@ -740,6 +743,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("", FilenameUtils.getBaseName("a/b/c/"));
         assertEquals("c", FilenameUtils.getBaseName("a\\b\\c"));
         assertEquals("file.txt", FilenameUtils.getBaseName("file.txt.bak"));
+        assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
     }
 
     public void testGetExtension() {
@@ -880,6 +884,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "rtf"));
 
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
+    }
+
+    public void testIsExtension_injection() {
+        try {
+            FilenameUtils.isExtension("a.b\\fi\u0000le.txt", "TXT");
+            fail("Should throw IAE");
+        } catch (IllegalArgumentException ignore) {
+        }
     }
 
     public void testIsExtensionArray() {
