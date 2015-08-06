@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2015-??-??" description="New features and bug fixes.">
+      <action issue="IO-484" dev="krosenvold" type="fix" due-to="Philippe Arteau">
+        FilenameUtils should handle embedded null bytes
+      </action>
       <action issue="IO-481" dev="krosenvold" type="fix">
         Changed/Corrected algorithm for waitFor
       </action>
