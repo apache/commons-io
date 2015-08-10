@@ -27,13 +27,18 @@ public class ClosedOutputStreamTest extends TestCase {
 
     /**
      * Test the <code>write(b)</code> method.
+     * @throws Exception 
      */
-    public void testRead() {
+    public void testRead() throws Exception {
+        ClosedOutputStream cos = null;
         try {
-            new ClosedOutputStream().write('x');
+            cos = new ClosedOutputStream();
+            cos.write('x');
             fail("write(b)");
         } catch (final IOException e) {
             // expected
+        } finally {
+            cos.close();
         }
     }
 

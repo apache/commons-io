@@ -367,13 +367,13 @@ public class BOMInputStreamTest {
     public void testNoBoms() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
         try {
-            new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null);
+            (new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null)).close();;
             fail("Null BOMs, expected IllegalArgumentException");
         } catch (final IllegalArgumentException e) {
             // expected
         }
         try {
-            new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0]);
+            (new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0])).close();;
             fail("Null BOMs, expected IllegalArgumentException");
         } catch (final IllegalArgumentException e) {
             // expected

@@ -324,15 +324,16 @@ public class DeferredFileOutputStreamTest extends TestCase
 
     /**
      * Test specifying a temporary file and the threshold is reached.
+     * @throws Exception 
      */
-    public void testTempFileError() {
+    public void testTempFileError() throws Exception {
 
         final String prefix = null;
         final String suffix = ".out";
         final File tempDir  = new File(".");
         try
         {
-            new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+            (new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir)).close();
             fail("Expected IllegalArgumentException ");
         }
         catch (final IllegalArgumentException e) {
