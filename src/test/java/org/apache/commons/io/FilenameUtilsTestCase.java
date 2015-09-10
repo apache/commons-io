@@ -216,8 +216,18 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(null, FilenameUtils.normalize("//server/../a"));
         assertEquals(null, FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
-        assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
-        assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\u0000a\\b/c.txt"));
+    }
+
+    public void testNormalize_with_nullbytes() throws Exception {
+        try {
+            assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
+        } catch (IllegalArgumentException ignore) {
+        }
+
+        try {
+            assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\u0000a\\b/c.txt"));
+        } catch (IllegalArgumentException ignore) {
+        }
     }
 
     public void testNormalizeUnixWin() throws Exception {
@@ -565,7 +575,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("\\", FilenameUtils.getPrefix("\\a\\b\\c.txt"));
         assertEquals("~\\", FilenameUtils.getPrefix("~\\a\\b\\c.txt"));
         assertEquals("~user\\", FilenameUtils.getPrefix("~user\\a\\b\\c.txt"));
-        assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
+    }
+
+    public void testGetPrefix_with_nullbyte() {
+        try {
+            assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
+        } catch (IllegalArgumentException ignore) {
+
+        }
     }
 
     public void testGetPath() {
@@ -602,8 +619,17 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a/b/", FilenameUtils.getPath("//server/a/b/c.txt"));
         assertEquals("a/b/", FilenameUtils.getPath("~/a/b/c.txt"));
         assertEquals("a/b/", FilenameUtils.getPath("~user/a/b/c.txt"));
-        assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
     }
+
+    public void testGetPath_with_nullbyte() {
+        try {
+            assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
+        } catch (IllegalArgumentException ignore) {
+
+        }
+        ;
+    }
+
 
     public void testGetPathNoEndSeparator() {
         assertEquals(null, FilenameUtils.getPath(null));
@@ -639,7 +665,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("//server/a/b/c.txt"));
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~/a/b/c.txt"));
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a/b/c.txt"));
-        assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
+    }
+
+    public void testGetPathNoEndSeparator_with_null_byte() {
+        try {
+            assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
+        } catch (IllegalArgumentException ignore) {
+
+        }
     }
 
     public void testGetFullPath() {
@@ -735,7 +768,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("c", FilenameUtils.getName("a/b/c"));
         assertEquals("", FilenameUtils.getName("a/b/c/"));
         assertEquals("c", FilenameUtils.getName("a\\b\\c"));
-        assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
+    }
+
+    public void testInjectionFailure() {
+        try {
+            assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
+        } catch (IllegalArgumentException ignore) {
+
+        }
     }
 
     public void testGetBaseName() {
@@ -746,7 +786,14 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("", FilenameUtils.getBaseName("a/b/c/"));
         assertEquals("c", FilenameUtils.getBaseName("a\\b\\c"));
         assertEquals("file.txt", FilenameUtils.getBaseName("file.txt.bak"));
-        assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
+    }
+
+    public void testGetBaseName_with_nullByte() {
+        try {
+            assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
+        } catch (IllegalArgumentException ignore) {
+
+        }
     }
 
     public void testGetExtension() {
