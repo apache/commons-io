@@ -104,6 +104,7 @@ public class IOUtils {
 
     /**
      * Represents the end-of-file (or stream).
+     * @since 2.5 (made public)
      */
     public static final int EOF = -1;
 

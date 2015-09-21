@@ -63,6 +63,7 @@ public class TailerListenerAdapter implements TailerListener {
 
     /**
      * Called each time the Tailer reaches the end of the file.
+     * @since 2.5
      */
     public void endOfFileReached() {
     }
