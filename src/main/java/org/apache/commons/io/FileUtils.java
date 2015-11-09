@@ -1813,7 +1813,7 @@ public class FileUtils {
         InputStream in = null;
         try {
             in = openInputStream(file);
-            return IOUtils.toByteArray(in); // Do NOT use file.length() - see NET-453
+            return IOUtils.toByteArray(in); // Do NOT use file.length() - see IO-453
         } finally {
             IOUtils.closeQuietly(in);
         }
