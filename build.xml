@@ -55,7 +55,7 @@
   <property name="component.title"         value="Commons IO"/>
 
   <!-- The current version number of this component -->
-  <property name="component.version"       value="2.2-SNAPSHOT"/>
+  <property name="component.version"       value="2.5-SNAPSHOT"/>
 
   <!-- The base directory for component sources -->
   <property name="source.home"             value="src/main/java"/>
@@ -87,10 +87,10 @@
 <!-- ========== Compiler Defaults ========================================= -->
 
   <!-- compiler source JDK version -->
-  <property name="compile.source"          value="1.5"/>
+  <property name="compile.source"          value="1.6"/>
 
   <!-- compiler target JDK version -->
-  <property name="compile.target"          value="1.5"/>
+  <property name="compile.target"          value="1.6"/>
 
   <!-- Should Java compilations set the 'debug' compiler option? -->
   <property name="compile.debug"           value="true"/>
