@@ -63,6 +63,12 @@ public class TailerListenerAdapter implements TailerListener {
 
     /**
      * Called each time the Tailer reaches the end of the file.
+     *
+     * <b>Note:</b> this is called from the tailer thread.
+     *
+     * Note: a future version of commons-io will pull this method up to the TailerListener interface,
+     * for now clients must subclass this class to use this feature.
+     *
      * @since 2.5
      */
     public void endOfFileReached() {
