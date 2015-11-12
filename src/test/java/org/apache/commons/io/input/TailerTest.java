@@ -436,7 +436,7 @@ public class TailerTest extends FileBasedTestCase {
     /**
      * Test {@link TailerListener} implementation.
      */
-    private static class TestTailerListener implements TailerListener {
+    private static class TestTailerListener extends TailerListenerAdapter {
 
         // Must be synchronised because it is written by one thread and read by another
         private final List<String> lines = Collections.synchronizedList(new ArrayList<String>());
