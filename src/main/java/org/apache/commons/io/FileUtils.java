@@ -1282,7 +1282,7 @@ public class FileUtils {
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
-     * <p>
+     * </p>
      * <h3>Example: Copy directories only</h3>
      * <pre>
      *  // only copy the directory structure
@@ -1332,7 +1332,7 @@ public class FileUtils {
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
-     * <p>
+     * </p>
      * <h3>Example: Copy directories only</h3>
      * <pre>
      *  // only copy the directory structure
