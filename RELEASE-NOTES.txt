@@ -28,8 +28,8 @@ o IO-457:  Add a BoundedReader, a wrapper that can be used to constrain access
         to an underlying stream when used with mark/reset -
         to avoid overflowing the mark limit of the underlying buffer. Thanks to Kristian Rosenvold. 
 o IO-426:  Add API IOUtils.closeQuietly(Closeable...) 
-o IO-410:  Readfully() That Returns A Byte Array Thanks to BELUGA BEHR. 
-o IO-395:  Overload IOUtils buffer methods to accept buffer size Thanks to BELUGA BEHR. 
+o IO-410:  Readfully() That Returns A Byte Array Thanks to Beluga Behr. 
+o IO-395:  Overload IOUtils buffer methods to accept buffer size Thanks to Beluga Behr. 
 o IO-382:  Chunked IO for large arrays.
          Added writeChunked(byte[], OutputStream) and writeChunked(char[] Writer)
          Added ChunkedOutputStream, ChunkedWriter 
