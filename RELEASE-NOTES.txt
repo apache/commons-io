@@ -20,6 +20,7 @@ New features and bug fixes.
 Changes in this version include:
 
 New features:
+o IO-487:  Add ValidatingObjectInputStream for controlled deserialization 
 o IO-471:  Support for additional encodings in ReversedLinesFileReader Thanks to Leandro Reis. 
 o IO-425:  Setter method for threshold on ThresholdingOutputStream Thanks to Craig Swank. 
 o IO-406:  Introduce new class AppendableOutputStream Thanks to Niall Pemberton. 
