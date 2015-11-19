@@ -18,6 +18,8 @@
  */
 package org.apache.commons.io.serialization;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -83,6 +85,18 @@ public class ValidatingObjectInputStreamTest {
     public void noAccept() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream)));
+    }
+
+    @Test
+    public void exceptionIncludesClassName() throws Exception {
+        try {
+            assertSerialization(
+                    willClose(new ValidatingObjectInputStream(testStream)));
+            fail("Expected an InvalidClassException");
+        } catch(InvalidClassException ice) {
+            final String name = OurTestClass.class.getName();
+            assertTrue("Expecting message to contain " + name, ice.getMessage().contains(name));
+        }
     }
 
     @Test
