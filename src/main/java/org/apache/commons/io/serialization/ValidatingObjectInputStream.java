@@ -93,7 +93,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @throws InvalidClassException
      */
     protected void invalidClassNameFound(String className) throws InvalidClassException{
-        throw new InvalidClassException("Class name not accepted");
+        throw new InvalidClassException("Class name not accepted: " + className);
     }
 
     @Override
