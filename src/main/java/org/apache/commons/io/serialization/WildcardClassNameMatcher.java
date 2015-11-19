@@ -20,15 +20,21 @@ package org.apache.commons.io.serialization;
 
 import org.apache.commons.io.FilenameUtils;
 
-/** {@link ClassNameMatcher} that uses simplified regular expressions
- *  provided by {@link FilenameUtils#wildcardMatch} */  
+/**
+ * A {@link ClassNameMatcher} that uses simplified regular expressions
+ *  provided by {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
+ * <p>
+ * This object is immutable and thread-safe.
+ * </p>
+ */  
 final class WildcardClassNameMatcher implements ClassNameMatcher {
 
     private final String pattern;
 
     /**
      * Constructs an object based on the specified simplified regular expression.
-     * @param regex a {@link FilenameUtils#wildcardMatch} pattern.
+     * 
+     * @param pattern a {@link FilenameUtils#wildcardMatch} pattern.
      */
     public WildcardClassNameMatcher(String pattern) {
         this.pattern = pattern;

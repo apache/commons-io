@@ -23,7 +23,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/** {@link ClassNameMatcher} that matches on full class names */  
+/**
+ * A {@link ClassNameMatcher} that matches on full class names.
+ * <p>
+ * This object is immutable and thread-safe.
+ * </p>
+ */
 final class FullClassNameMatcher implements ClassNameMatcher {
 
     private final Set<String> classesSet;
