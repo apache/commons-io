@@ -55,22 +55,36 @@ public class MoreComplexObjectTest extends ClosingBase {
         assertEquals("Expecting same data after deserializing", original.toString(), copy.toString());
     }
     
-    /** Having to specify all the MoreComplexObject member classes like
-     *  this is a bit painful - we might need a utility that analyzes the
-     *  class members and accepts their classes. On the other hand this gives
-     *  a precise view of what's accepted (assuming we trust java.lang.*).
+    /** Trusting java.lang.* and the array variants of that means we have
+     *  to define a number of accept classes explicitly. Quite safe but
+     *  might become a bit verbose.
      */
     @Test
-    public void specifyAllAccepts() throws IOException, ClassNotFoundException {
+    public void trustJavaLang() throws IOException, ClassNotFoundException {
         assertSerialization(willClose(
                 new ValidatingObjectInputStream(inputStream)
-                .accept(MoreComplexObject.class, ArrayList.class, Integer[].class, Random.class)
-                .accept("java.lang.*")
+                .accept(MoreComplexObject.class, ArrayList.class, Random.class)
+                .accept("java.lang.*","[Ljava.lang.*")
         ));
     }
     
-    /** An alternative is to accept everything but reject specific classes.
-     *  That's not as safe as it's hard to get an exhaustive blacklist.
+    /** Trusting java.* is probably reasonable and avoids having to be too
+     *  detailed in the accepts.
+     */
+    @Test
+    public void trustJavaIncludingArrays() throws IOException, ClassNotFoundException {
+        assertSerialization(willClose(
+                new ValidatingObjectInputStream(inputStream)
+                .accept(MoreComplexObject.class)
+                .accept("java.*","[Ljava.*")
+        ));
+    }
+    
+    /** Here we accept everything but reject specific classes, using a pure
+     *  blacklist mode.
+     *  
+     *  That's not as safe as it's hard to get an exhaustive blacklist, but
+     *  might be ok in controlled environments.
      */
     @Test
     public void useBlacklist() throws IOException, ClassNotFoundException {
