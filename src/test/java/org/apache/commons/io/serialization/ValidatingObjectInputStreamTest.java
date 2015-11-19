@@ -18,29 +18,24 @@
  */
 package org.apache.commons.io.serialization;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ValidatingObjectInputStreamTest {
-    private List<Closeable> toClose;
+public class ValidatingObjectInputStreamTest extends ClosingBase {
     private OurTestClass testObject;
     private InputStream testStream;
 
@@ -51,29 +46,13 @@ public class ValidatingObjectInputStreamTest {
         }
     };
 
-    private <T extends Closeable> T willClose(T t) {
-        toClose.add(t);
-        return t;
-    }
-
     @Before
     public void setup() throws IOException {
-        toClose = new ArrayList<Closeable>();
         testObject = new OurTestClass(UUID.randomUUID().toString());
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
         oos.writeObject(testObject);
         testStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
-    }
-
-    @After
-    public void cleanup() {
-        for (Closeable c : toClose) {
-            try {
-                c.close();
-            } catch (IOException ignored) {
-            }
-        }
     }
 
     private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
