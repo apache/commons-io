@@ -36,7 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ValidatingObjectInputStreamTest extends ClosingBase {
-    private OurTestClass testObject;
+    private MockSerializedClass testObject;
     private InputStream testStream;
 
     static private final ClassNameMatcher ALWAYS_TRUE = new ClassNameMatcher() {
@@ -48,7 +48,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
 
     @Before
     public void setup() throws IOException {
-        testObject = new OurTestClass(UUID.randomUUID().toString());
+        testObject = new MockSerializedClass(UUID.randomUUID().toString());
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
         oos.writeObject(testObject);
@@ -56,7 +56,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     }
 
     private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        final OurTestClass result = (OurTestClass) (ois.readObject());
+        final MockSerializedClass result = (MockSerializedClass) (ois.readObject());
         assertEquals(testObject, result);
     }
 
@@ -73,7 +73,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
                     willClose(new ValidatingObjectInputStream(testStream)));
             fail("Expected an InvalidClassException");
         } catch(InvalidClassException ice) {
-            final String name = OurTestClass.class.getName();
+            final String name = MockSerializedClass.class.getName();
             assertTrue("Expecting message to contain " + name, ice.getMessage().contains(name));
         }
     }
@@ -90,7 +90,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void rejectCustomMatcher() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class)
+                .accept(MockSerializedClass.class)
                 .reject(ALWAYS_TRUE)
         );
     }
@@ -99,7 +99,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void acceptPattern() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(Pattern.compile(".*OurTestClass.*"))
+                .accept(Pattern.compile(".*MockSerializedClass.*"))
         );
     }
 
@@ -107,7 +107,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void rejectPattern() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class)
+                .accept(MockSerializedClass.class)
                 .reject(Pattern.compile("org.*"))
         );
     }
@@ -124,7 +124,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void rejectWildcard() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class)
+                .accept(MockSerializedClass.class)
                 .reject("org.*")
         );
     }
@@ -141,7 +141,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void ourTestClassOnlyAccepted() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class)
+                .accept(MockSerializedClass.class)
         );
     }
 
@@ -149,7 +149,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void ourTestClassAcceptedFirst() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class, Integer.class)
+                .accept(MockSerializedClass.class, Integer.class)
         );
     }
 
@@ -157,7 +157,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void ourTestClassAcceptedSecond() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(Integer.class, OurTestClass.class)
+                .accept(Integer.class, MockSerializedClass.class)
         );
     }
 
@@ -165,7 +165,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void ourTestClassAcceptedFirstWildcard() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept("*OurTestClass","*Integer")
+                .accept("*MockSerializedClass","*Integer")
         );
     }
 
@@ -173,7 +173,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void ourTestClassAcceptedSecondWildcard() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept("*Integer","*OurTestClass")
+                .accept("*Integer","*MockSerializedClass")
         );
     }
 
@@ -182,7 +182,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
                 .accept(Long.class)
-                .reject(OurTestClass.class, Integer.class)
+                .reject(MockSerializedClass.class, Integer.class)
         );
     }
     
@@ -190,8 +190,8 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     public void rejectPrecedence() throws Exception {
         assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
-                .accept(OurTestClass.class)
-                .reject(OurTestClass.class, Integer.class)
+                .accept(MockSerializedClass.class)
+                .reject(MockSerializedClass.class, Integer.class)
         );
     }
     

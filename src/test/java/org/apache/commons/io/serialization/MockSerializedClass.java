@@ -20,12 +20,12 @@ package org.apache.commons.io.serialization;
 
 import java.io.Serializable;
 
-public class OurTestClass implements Serializable {
+public class MockSerializedClass implements Serializable {
     private static final long serialVersionUID = 2139985988735372175L;
     
     private final String str;
     
-    OurTestClass(String str) {
+    MockSerializedClass(String str) {
         this.str = str;
     }
 
@@ -36,9 +36,9 @@ public class OurTestClass implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof OurTestClass)) {
+        if(!(obj instanceof MockSerializedClass)) {
             return false;
         }
-        return str.equals(((OurTestClass)obj).str);
+        return str.equals(((MockSerializedClass)obj).str);
     }
 }
