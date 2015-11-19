@@ -29,32 +29,61 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
-/** Test deserializing our {@link MoreComplexObject} to verify
- *  which settings it requires, as the object uses a number
- *  of primitive and java.* member objects.
+/** This is more an example than a test - deserialize our {@link MoreComplexObject} 
+ *  to verify which settings it requires, as the object uses a number of primitive 
+ *  and java.* member objects.
  */
 public class MoreComplexObjectTest extends ClosingBase {
     
-    @Test
-    public void serializeAndCheck() throws IOException, ClassNotFoundException {
-        final MoreComplexObject original = new MoreComplexObject();
+    private InputStream inputStream;
+    private MoreComplexObject original;
+    
+    @Before
+    public void setup() throws IOException {
+        original = new MoreComplexObject();
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
         oos.writeObject(original);
-        
-        final InputStream is = willClose(new ByteArrayInputStream(bos.toByteArray()));
-        
-        // Having to specify all the MoreComplexObject member classes like
-        // this is a bit painful - we might create a utility that analyzes the
-        // class members and accepts their classes
-        final ObjectInputStream ois = willClose(
-                new ValidatingObjectInputStream(is)
-                .accept(MoreComplexObject.class, ArrayList.class, Integer[].class, Random.class)
-                .accept("java.lang.*")
-        );
+        inputStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
+    }
+    
+    private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
         assertEquals("Expecting same data after deserializing", original.toString(), copy.toString());
+    }
+    
+    /** Having to specify all the MoreComplexObject member classes like
+     *  this is a bit painful - we might need a utility that analyzes the
+     *  class members and accepts their classes. On the other hand this gives
+     *  a precise view of what's accepted (assuming we trust java.lang.*).
+     */
+    @Test
+    public void specifyAllAccepts() throws IOException, ClassNotFoundException {
+        assertSerialization(willClose(
+                new ValidatingObjectInputStream(inputStream)
+                .accept(MoreComplexObject.class, ArrayList.class, Integer[].class, Random.class)
+                .accept("java.lang.*")
+        ));
+    }
+    
+    /** An alternative is to accept everything but reject specific classes.
+     *  That's not as safe as it's hard to get an exhaustive blacklist.
+     */
+    @Test
+    public void useBlacklist() throws IOException, ClassNotFoundException {
+        final String [] blacklist = {
+                "org.apache.commons.collections.functors.InvokerTransformer",
+                "org.codehaus.groovy.runtime.ConvertedClosure",
+                "org.codehaus.groovy.runtime.MethodClosure",
+                "org.springframework.beans.factory.ObjectFactory"
+        };
+        assertSerialization(willClose(
+                new ValidatingObjectInputStream(inputStream)
+                .accept("*")
+                .reject(blacklist)
+        ));
     }
 }
