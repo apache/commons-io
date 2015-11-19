@@ -18,12 +18,16 @@
  */
 package org.apache.commons.io.serialization;
 
-/** Match a Class name */
+/**
+ * An object that matches a Class name to a condition.
+ */
 public interface ClassNameMatcher {
 
-    /** True if the supplied class names matches. 
+    /**
+     * Returns <code>true</code> if the supplied class name matches this object's condition. 
+     * 
      * @param className fully qualified class name
-     * @return true if the class name matches this object's condition
+     * @return <code>true</code> if the class name matches this object's condition
      */
     boolean matches(String className);
 }

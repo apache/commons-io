@@ -20,7 +20,12 @@ package org.apache.commons.io.serialization;
 
 import java.util.regex.Pattern;
 
-/** {@link ClassNameMatcher} that uses regular expressions */  
+/**
+ * A {@link ClassNameMatcher} that uses regular expressions.
+ * <p>
+ * This object is immutable and thread-safe.
+ * </p>
+ */
 final class RegexpClassNameMatcher implements ClassNameMatcher {
 
     private final Pattern pattern; // Class is thread-safe
@@ -38,9 +43,10 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
      * Constructs an object based on the specified pattern.
      * 
      * @param pattern a pattern for evaluating acceptable class names
+     * @throws IllegalArgumentException if <code>pattern</code> is null
      */
     public RegexpClassNameMatcher(Pattern pattern) {
-        if(pattern == null) {
+        if (pattern == null) {
             throw new IllegalArgumentException("Null pattern");
         }
         this.pattern = pattern;
