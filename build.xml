@@ -37,7 +37,7 @@
   <property name="repository"              value="${user.home}/.m2/repository"/>
 
   <!-- The directories corresponding to your necessary dependencies -->
-  <property name="junit.version"           value="4.10"/>
+  <property name="junit.version"           value="4.12"/>
   <property name="junit.home"              value="${repository}/junit/junit/${junit.version}"/>
   <property name="junit.jar"               value="${junit.home}/junit-${junit.version}.jar"/>
 
@@ -55,7 +55,7 @@
   <property name="component.title"         value="Commons IO"/>
 
   <!-- The current version number of this component -->
-  <property name="component.version"       value="2.2-SNAPSHOT"/>
+  <property name="component.version"       value="2.5-SNAPSHOT"/>
 
   <!-- The base directory for component sources -->
   <property name="source.home"             value="src/main/java"/>
@@ -87,10 +87,10 @@
 <!-- ========== Compiler Defaults ========================================= -->
 
   <!-- compiler source JDK version -->
-  <property name="compile.source"          value="1.5"/>
+  <property name="compile.source"          value="1.6"/>
 
   <!-- compiler target JDK version -->
-  <property name="compile.target"          value="1.5"/>
+  <property name="compile.target"          value="1.6"/>
 
   <!-- Should Java compilations set the 'debug' compiler option? -->
   <property name="compile.debug"           value="true"/>
@@ -109,6 +109,7 @@
   <!-- Construct compile classpath -->
   <path id="downloaded.lib.classpath">
     <pathelement location="${download.lib.dir}/junit-${junit.version}.jar"/>
+    <pathelement location="${download.lib.dir}/hamcrest-core-1.3.jar"/>
   </path>
 
 <!-- ========== Test Execution Defaults =================================== -->
@@ -335,7 +336,7 @@
 
     <target name="check-availability">
         <echo message="doing check-availability..." />
-        <available file="${junit.jar}" property="junit.found"/>
+        <available file="${download.lib.dir}/junit-${junit.version}.jar" property="junit.found"/>
     </target>
 
     <target name="download-junit" unless="junit.found">
@@ -345,6 +346,9 @@
         <get dest="${download.lib.dir}"
             usetimestamp="true" ignoreerrors="true"
             src="http://repo1.maven.org/maven2/junit/junit/${junit.version}/junit-${junit.version}.jar"/>
+        <get dest="${download.lib.dir}"
+            usetimestamp="true" ignoreerrors="true"
+            src="https://hamcrest.googlecode.com/files/hamcrest-core-1.3.jar"/>
     </target>
 
 </project>

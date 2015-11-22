@@ -64,10 +64,4 @@ public interface TailerListener {
      */
     void handle(Exception ex);
 
-    /**
-     * Called each time the Tailer reaches the end of the file.
-     * <p>
-     * <b>Note:</b> this is called from the tailer thread.
-     */
-    void endOfFileReached();
 }

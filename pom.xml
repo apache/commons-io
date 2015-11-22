@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>38</version>
+    <version>39</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -49,9 +49,9 @@ file comparators, endian transformation classes, and much more.
   </distributionManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5</developerConnection>
-    <url>http://svn.apache.org/viewvc/commons/proper/io/tags/commons-io-2.5</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5-RC1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5-RC1</developerConnection>
+    <url>http://svn.apache.org/viewvc/commons/proper/io/tags/commons-io-2.5-RC1</url>
   </scm>
 
   <developers>
@@ -240,8 +240,6 @@ file comparators, endian transformation classes, and much more.
     <commons.rc.version>RC1</commons.rc.version>
     <commons.release.version>2.5</commons.release.version>
     <commons.release.desc>(requires JDK 1.6+)</commons.release.desc>
-    <commons.release.2.version>2.2</commons.release.2.version>
-    <commons.release.2.desc>(requires JDK 1.5+)</commons.release.2.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
     <commons.osgi.export>

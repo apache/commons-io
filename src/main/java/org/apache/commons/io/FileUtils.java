@@ -1282,7 +1282,7 @@ public class FileUtils {
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
-     * <p>
+     * </p>
      * <h3>Example: Copy directories only</h3>
      * <pre>
      *  // only copy the directory structure
@@ -1332,7 +1332,7 @@ public class FileUtils {
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
-     * <p>
+     * </p>
      * <h3>Example: Copy directories only</h3>
      * <pre>
      *  // only copy the directory structure
@@ -1813,7 +1813,7 @@ public class FileUtils {
         InputStream in = null;
         try {
             in = openInputStream(file);
-            return IOUtils.toByteArray(in); // Do NOT use file.length() - see NET-453
+            return IOUtils.toByteArray(in); // Do NOT use file.length() - see IO-453
         } finally {
             IOUtils.closeQuietly(in);
         }

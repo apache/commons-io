@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.5" date="2015-??-??" description="New features and bug fixes.">
+      <action issue="IO-487" dev="bdelacretaz" type="add">
+        Add ValidatingObjectInputStream for controlled deserialization
+      </action>
       <action issue="IO-446" dev="krosenvold" type="fix" due-to="Jeffrey Barrus">
         adds an endOfFileReached method to the TailerListener
       </action>
@@ -114,10 +117,10 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-422" dev="ggregory" type="update">
          Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets
       </action>
-      <action issue="IO-410" dev="sebb" type="add" due-to="BELUGA BEHR">
+      <action issue="IO-410" dev="sebb" type="add" due-to="Beluga Behr">
          Readfully() That Returns A Byte Array
       </action>
-      <action issue="IO-395" dev="brentworden" type="add" due-to="BELUGA BEHR">
+      <action issue="IO-395" dev="brentworden" type="add" due-to="Beluga Behr">
          Overload IOUtils buffer methods to accept buffer size
       </action>
       <action issue="IO-389" dev="sebb" type="fix" due-to="Austin Doupnik">
