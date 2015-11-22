@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="2015-??-??" description="New features and bug fixes.">
+    <release version="2.5" date="2015-11-23" description="New features and bug fixes.">
       <action issue="IO-487" dev="bdelacretaz" type="add">
         Add ValidatingObjectInputStream for controlled deserialization
       </action>
