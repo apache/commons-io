@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.6-SNAPSHOT</version>
+  <version>2.5</version>
   <name>Apache Commons IO</name>
 
   <inceptionYear>2002</inceptionYear>
@@ -49,9 +49,9 @@ file comparators, endian transformation classes, and much more.
   </distributionManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/io/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/trunk</developerConnection>
-    <url>http://svn.apache.org/viewvc/commons/proper/io/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5-RC1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/io/tags/commons-io-2.5-RC1</developerConnection>
+    <url>http://svn.apache.org/viewvc/commons/proper/io/tags/commons-io-2.5-RC1</url>
   </scm>
 
   <developers>
