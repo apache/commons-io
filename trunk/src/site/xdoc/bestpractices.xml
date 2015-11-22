@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Best practices</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+  <body>
+
+    <section name="Best practices">
+        <p>
+            This document presents a number of 'best practices' in the IO area.
+        </p>
+    </section>
+
+    <section name="java.io.File">
+    
+        <p>
+            Often, you have to deal with files and filenames. There are many
+            things that can go wrong:
+        </p>
+        <ul>
+            <li>A class works in Unix but doesn't on Windows (or vice versa)</li>
+            <li>Invalid filenames due to double or missing path separators</li>
+            <li>UNC filenames (on Windows) don't work with my home-grown filename utility function</li>
+            <li>etc. etc.</li>
+        </ul>
+        <p>
+            These are good reasons not to work with filenames as Strings.
+            Using java.io.File instead handles many of the above cases nicely.
+            Thus, our best practice recommendation is to use java.io.File
+            instead of String for filenames to avoid platform dependencies.
+        </p>
+        <p>
+            <i>
+            Version 1.1 of commons-io now includes a dedicated filename
+            handling class - <a href="javadocs/api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>.
+            This does handle many of these filename issues, however we still
+            recommend, wherever possible, that you use java.io.File objects.
+            </i>
+        </p>
+        <p>
+            Let's look at an example.
+        </p>
+        <source>
+ public static String getExtension(String filename) {
+   int index = filename.lastIndexOf('.');
+   if (index == -1) {
+     return "";
+   } else {
+     return filename.substring(index + 1);
+   }
+ }</source>
+        <p>
+            Easy enough? Right, but what happens if someone passes in a full path 
+            instead of only a filename? Consider the following, perfectly legal path:
+            "C:\Temp\documentation.new\README".
+            The method as defined above would return "new\README" - definitely
+            not what you wanted.
+        </p>
+        <p>
+            Please use java.io.File for filenames instead of Strings.
+            The functionality that the class provides is well tested.
+            In FileUtils you will find other useful utility functions
+            around java.io.File.
+        </p>
+        <p>
+            Instead of:
+        </p>
+        <source>
+ String tmpdir = "/var/tmp";
+ String tmpfile = tmpdir + System.getProperty("file.separator") + "test.tmp";
+ InputStream in = new java.io.FileInputStream(tmpfile);</source>
+        <p>
+            ...write:
+        </p>
+        <source>
+ File tmpdir = new File("/var/tmp");
+ File tmpfile = new File(tmpdir, "test.tmp");
+ InputStream in = new java.io.FileInputStream(tmpfile);</source>
+
+    </section>
+    
+    <section name="Buffering streams">
+        <p>
+            IO performance depends a lot from the buffering strategy. Usually, it's 
+            quite fast to read packets with the size of 512 or 1024 bytes because
+            these sizes match well with the packet sizes used on harddisks in 
+            file systems or file system caches. But as soon as you have to read only 
+            a few bytes and that many times performance drops significantly.
+        </p>
+        <p>
+            Make sure you're properly buffering streams when reading or writing 
+            streams, especially when working with files. Just decorate your 
+            FileInputStream with a BufferedInputStream:
+        </p>
+        <source>
+ InputStream in = new java.io.FileInputStream(myfile);
+ try {
+   in = new java.io.BufferedInputStream(in);
+   
+   in.read(.....
+ } finally {
+   IOUtils.closeQuietly(in);
+ }</source>
+        <p>
+            Pay attention that you're not buffering an already buffered stream. Some
+            components like XML parsers may do their own buffering so decorating
+            the InputStream you pass to the XML parser does nothing but slowing down
+            your code. If you use our CopyUtils or IOUtils you don't need to 
+            additionally buffer the streams you use as the code in there already
+            buffers the copy process. Always check the Javadocs for information. 
+            Another case where buffering is unnecessary is when you write to a 
+            ByteArrayOutputStream since you're writing to memory only.
+        </p>
+    </section>
+
+  </body>
+
+</document>

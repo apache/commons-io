@@ -1,0 +1,355 @@
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+   
+         http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project name="Commons IO" default="jar" basedir=".">
+
+
+<!--
+        "IO" component of the Apache Commons Subproject
+        $Id$
+-->
+
+
+<!-- ========== Initialize Properties ===================================== -->
+
+
+  <property file="project.properties"/>              <!-- Project local   -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+
+
+<!-- ========== External Dependencies ===================================== -->
+
+  <!-- Repository base path -->
+  <property name="repository"              value="${user.home}/.m2/repository"/>
+
+  <!-- The directories corresponding to your necessary dependencies -->
+  <property name="junit.version"           value="4.12"/>
+  <property name="junit.home"              value="${repository}/junit/junit/${junit.version}"/>
+  <property name="junit.jar"               value="${junit.home}/junit-${junit.version}.jar"/>
+
+
+<!-- ========== Component Declarations ==================================== -->
+
+
+  <!-- The name of this component -->
+  <property name="component.name"          value="commons-io"/>
+
+  <!-- The primary package name of this component -->
+  <property name="component.package"       value="org.apache.commons.io"/>
+
+  <!-- The title of this component -->
+  <property name="component.title"         value="Commons IO"/>
+
+  <!-- The current version number of this component -->
+  <property name="component.version"       value="2.5-SNAPSHOT"/>
+
+  <!-- The base directory for component sources -->
+  <property name="source.home"             value="src/main/java"/>
+
+  <!-- The base directory for unit test sources -->
+  <property name="test.home"               value="src/test/java"/>
+
+  <!-- The base directory for unit test resources -->
+  <property name="test.resources.home"               value="src/test/resources"/>
+
+  <!-- Download lib dir -->
+  <property name="download.lib.dir"        value="lib"/>
+
+  <!-- The base directory for compilation targets -->
+  <property name="build.home"              value="target"/>
+
+  <!-- The base directory for distribution targets -->
+  <property name="dist.home"               value="${build.home}"/>
+
+  <!-- Base file name for dist files -->
+  <property name="final.name"        value="${component.name}-${component.version}"/>
+
+  <!-- Directory where binary release files are staged -->
+  <property name="stage.bin.dir"           value="${dist.home}/stage-bin"/>
+
+  <!-- Directory where source release files are staged -->
+  <property name="stage.src.dir"           value="${dist.home}/stage-src"/>
+
+<!-- ========== Compiler Defaults ========================================= -->
+
+  <!-- compiler source JDK version -->
+  <property name="compile.source"          value="1.6"/>
+
+  <!-- compiler target JDK version -->
+  <property name="compile.target"          value="1.6"/>
+
+  <!-- Should Java compilations set the 'debug' compiler option? -->
+  <property name="compile.debug"           value="true"/>
+
+  <!-- Should Java compilations set the 'deprecation' compiler option? -->
+  <property name="compile.deprecation"     value="false"/>
+
+  <!-- Should Java compilations set the 'optimize' compiler option? -->
+  <property name="compile.optimize"        value="true"/>
+
+  <!-- Construct compile classpath -->
+  <path id="compile.classpath">
+    <pathelement location="${build.home}/classes"/>
+  </path>
+
+  <!-- Construct compile classpath -->
+  <path id="downloaded.lib.classpath">
+    <pathelement location="${download.lib.dir}/junit-${junit.version}.jar"/>
+    <pathelement location="${download.lib.dir}/hamcrest-core-1.3.jar"/>
+  </path>
+
+<!-- ========== Test Execution Defaults =================================== -->
+
+
+  <!-- Construct unit test classpath -->
+  <path id="test.classpath">
+    <pathelement location="${build.home}/classes"/>
+    <pathelement location="${build.home}/test-classes"/>
+    <pathelement location="${build.home}/test-resources"/>
+    <pathelement location="${junit.jar}"/>
+    <path refid="downloaded.lib.classpath"/>
+  </path>
+
+  <!-- Should all tests fail if one does? -->
+  <property name="test.failonerror"        value="true"/>
+
+  <!-- The test runner to execute -->
+  <property name="test.runner"             value="junit.textui.TestRunner"/>
+
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="clean" description="Clean build and distribution directories">
+    <delete    dir="${build.home}"/>
+    <delete    dir="test"/>
+  </target>
+
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- ${component.title} ${component.version} --------"/>
+    <filter  token="name"                  value="${component.name}"/>
+    <filter  token="package"               value="${component.package}"/>
+    <filter  token="version"               value="${component.version}"/>
+    <filter  token="compilesource"         value="${compile.source}"/>
+    <filter  token="compiletarget"         value="${compile.target}"/>
+    <tstamp/>
+    <mkdir dir="${build.home}"/>
+    <mkdir dir="${build.home}/classes"/>
+    <mkdir dir="${build.home}/test-classes"/>
+  </target>
+
+<!-- ========== Compile Targets =========================================== -->
+
+  <target name="compile" depends="init" description="Compile">
+
+    <javac srcdir="${source.home}"
+           destdir="${build.home}/classes"
+           source="${compile.source}"
+           target="${compile.target}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           includeantruntime="false">
+      <classpath refid="compile.classpath"/>
+    </javac>
+  </target>
+
+
+<!-- ========== Unit Test Targets ========================================= -->
+
+    <target name="compile.tests" depends="compile, download-dependencies" description="Compile unit test cases dependent on JDK version">
+
+      <javac srcdir="${test.home}"
+             destdir="${build.home}/test-classes"
+             debug="${compile.debug}"
+             deprecation="${compile.deprecation}"
+             optimize="${compile.optimize}"
+             includeantruntime="false">
+          <classpath refid="test.classpath"/>
+      </javac>
+      <copy todir="${build.home}/test-resources">
+        <fileset dir="${test.resources.home}"/>
+      </copy>
+    </target>
+
+  <target name="test"  depends="compile.tests"
+                       description="Run all unit test cases">
+    <mkdir dir="${build.home}/ant-reports"/>
+    <junit printsummary="true" showoutput="true" fork="yes" haltonfailure="${test.failonerror}">
+      <classpath refid="test.classpath"/>
+      <formatter type="plain" usefile="true" />
+      <!-- If test.entry is defined, run a single test, otherwise run all valid tests -->
+      <test name="${test.entry}" if="test.entry"/>
+      <batchtest todir="${build.home}/ant-reports" unless="test.entry">
+        <fileset dir="${test.home}">
+          <include name="**/*Test*.java"/>
+          <!-- Test support files -->
+          <exclude name="**/testtools/**"/>
+          <!-- Ant JUnit does not handle abstract classes -->
+          <exclude name="**/*AbstractTestCase*"/>
+            <exclude name="**/Abstract*TestCase*"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+
+<!-- ========== Produce JavaDocs ========================================== -->
+
+  <target name="javadoc" depends="compile" description="Create component Javadoc documentation">
+    <mkdir dir="${build.home}/apidocs"/>
+    <tstamp>
+        <format property="current.year" pattern="yyyy"/>
+    </tstamp>
+    <javadoc sourcepath="${source.home}"
+                destdir="${build.home}/apidocs"
+           packagenames="org.apache.commons.*"
+                 author="true"
+                private="true"
+                version="true"
+               doctitle="&lt;h1&gt;${component.title} ${component.version}&lt;/h1&gt;"
+            windowtitle="${component.title} ${component.version}"
+                 bottom="Copyright (c) 2002-${current.year}  Apache Software Foundation"
+           classpathref="compile.classpath">
+        <link href="http://java.sun.com/javaee/5/docs/api/"/>
+        <link href="http://download.oracle.com/javase/1.5.0/docs/api/index.html"/>
+    </javadoc>
+  </target>
+
+
+<!-- ========== Create Jar ================================================ -->
+
+  <target name="jar" depends="compile" description="Create jar file">
+
+    <mkdir dir="${build.home}/classes/META-INF"/>
+    <copy file="LICENSE.txt" tofile="${build.home}/classes/META-INF/LICENSE.txt"/>
+    <copy file="NOTICE.txt"  tofile="${build.home}/classes/META-INF/NOTICE.txt"/>
+
+    <manifest file="${build.home}/MANIFEST.MF">
+        <attribute name="Specification-Title"      value="${component.title}"/>
+        <attribute name="Specification-Version"    value="${component.version}"/>
+        <attribute name="Specification-Vendor"     value="The Apache Software Foundation"/>
+        <attribute name="Implementation-Title"     value="${component.title}"/>
+        <attribute name="Implementation-Version"   value="${component.version}"/>
+        <attribute name="Implementation-Vendor"    value="The Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+        <attribute name="X-Compile-Source-JDK"     value="${compile.source}"/>
+        <attribute name="X-Compile-Target-JDK"     value="${compile.target}"/>
+    </manifest>
+
+    <jar jarfile="${build.home}/${final.name}.jar"
+         basedir="${build.home}/classes"
+        manifest="${build.home}/MANIFEST.MF"/>
+  </target>
+
+
+<!-- ========== Distribution Target =========================================== -->
+
+  <target name="dist" depends="clean,jar,javadoc" description="Create distribution artifacts">
+
+    <mkdir dir="${dist.home}"/>
+
+    <!-- jar(s) -->
+    <copy todir="${dist.home}">
+      <fileset dir=".">
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+      <fileset dir="${build.home}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- Binary Distro -->
+    <mkdir dir="${stage.bin.dir}/${final.name}"/>
+    <copy todir="${stage.bin.dir}/${final.name}">
+      <fileset dir=".">
+        <include name="LICENSE.txt"/>
+        <include name="NOTICE.txt"/>
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+      <fileset dir="${build.home}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${stage.bin.dir}/${final.name}/apidocs">
+      <fileset dir="${build.home}/apidocs" />
+    </copy>
+
+    <!-- Source Distro -->
+    <mkdir dir="${stage.src.dir}/${final.name}-src"/>
+    <copy todir="${stage.src.dir}/${final.name}-src">
+      <fileset dir=".">
+        <include name="build.xml"/>
+        <include name="checkstyle.xml"/>
+        <include name="LICENSE.txt"/>
+        <include name="NOTICE.txt"/>
+        <include name="pom.xml"/>
+        <include name="PROPOSAL.html"/>
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+    </copy>
+    <copy todir="${stage.src.dir}/${final.name}-src/src">
+      <fileset dir="src" />
+    </copy>
+
+    <zip  zipfile="${dist.home}/${final.name}.zip"     basedir="${stage.bin.dir}"/>
+    <zip  zipfile="${dist.home}/${final.name}-src.zip" basedir="${stage.src.dir}"/>
+    <tar  tarfile="${dist.home}/${final.name}.tar"     basedir="${stage.bin.dir}" longfile="gnu"/>
+    <tar  tarfile="${dist.home}/${final.name}-src.tar" basedir="${stage.src.dir}" longfile="gnu"/>
+    <gzip     src="${dist.home}/${final.name}.tar"     zipfile="${dist.home}/${final.name}.tar.gz"/>
+    <gzip     src="${dist.home}/${final.name}-src.tar" zipfile="${dist.home}/${final.name}-src.tar.gz"/>
+
+    <!-- clean up staging directories -->
+    <delete    dir="${stage.bin.dir}"/>
+    <delete    dir="${stage.src.dir}"/>
+
+  </target>
+
+
+<!-- ========== Gump Target ===================================================== -->
+
+  <target name="gump" depends="clean,test,javadoc,jar" description="Gump Target - clean,test,javadoc,jar"/>
+
+
+<!-- ========== Download Dependencies =========================================== -->
+
+    <target name="download-dependencies"
+           depends="check-availability" unless="skip.download">
+        <echo message="doing download-dependencies..." />
+        <antcall target="download-junit" />
+    </target>
+
+    <target name="check-availability">
+        <echo message="doing check-availability..." />
+        <available file="${download.lib.dir}/junit-${junit.version}.jar" property="junit.found"/>
+    </target>
+
+    <target name="download-junit" unless="junit.found">
+        <echo message="Downloading junit..."/>
+        <mkdir dir="${download.lib.dir}" />
+        <!-- TODO check hash of jar -->
+        <get dest="${download.lib.dir}"
+            usetimestamp="true" ignoreerrors="true"
+            src="http://repo1.maven.org/maven2/junit/junit/${junit.version}/junit-${junit.version}.jar"/>
+        <get dest="${download.lib.dir}"
+            usetimestamp="true" ignoreerrors="true"
+            src="https://hamcrest.googlecode.com/files/hamcrest-core-1.3.jar"/>
+    </target>
+
+</project>
+

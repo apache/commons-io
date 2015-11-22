@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 1.1 to 1.2</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 1.1 to version 1.2.
+<source>
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+and endian transformation classes.
+
+
+Compatibility with 1.1
+----------------------
+Binary compatible - Yes
+
+Source compatible - Yes
+
+Semantic compatible - Yes
+
+
+Deprecations from 1.1
+---------------------
+
+
+Bug fixes from 1.1
+------------------
+- FileSystemUtils.freeSpace(drive)
+  Fix to allow Windows based command to function in French locale
+
+- FileUtils.read*
+  Increase certainty that files are closed in case of error
+
+- LockableFileWriter
+  Locking mechanism was broken and only provided limited protection [38942]
+  File deletion and locking in case of constructor error was broken
+
+
+Enhancements from 1.1
+---------------------
+- AgeFileFilter/SizeFileFilter
+  New file filters that compares against the age and size of the file
+
+- FileSystemUtils.freeSpaceKb(drive)
+  New method that unifies result to be in kilobytes [38574]
+
+- FileUtils.contentEquals(File,File)
+  Performance improved by adding length and file location checking
+
+- FileUtils.iterateFiles
+  Two new method to provide direct access to iterators over files
+
+- FileUtils.lineIterator
+  IOUtils.lineIterator
+  New methods to provide an iterator over the lines in a file [38083]
+
+- FileUtils.copyDirectoryToDirectory
+  New method to copy a directory to within another directory [36315]
+
+</source>
+</p>
+</section>
+
+</body>
+</document>

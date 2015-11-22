@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!--
+  This file contains some false positive bugs detected by findbugs. Their
+  false positive nature has been analyzed individually and they have been
+  put here to instruct findbugs it must ignore them.
+-->
+<FindBugsFilter>
+
+
+  <!--  See discussion on https://issues.apache.org/jira/browse/IO-215 -->
+  <Match>
+    <Class name="org.apache.commons.io.FileUtils" />
+    <Or>
+      <Method name="doCopyDirectory" params="java.io.File,java.io.File,java.io.FileFilter,boolean,java.util.List" returns="void" />
+      <Method name="doCopyFile" params="java.io.File,java.io.File,boolean" returns="void" />
+    </Or>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+  </Match>
+
+
+  <!--
+       Ignoring the return from mkdirs() is a false positives since the
+       following line in both those methods checks for the existence of
+       the directory and throws an exception if it doesn't exist. 
+    -->
+  <Match>
+    <Class name="org.apache.commons.io.FileUtils" />
+    <Or>
+      <Method name="moveDirectoryToDirectory" params="java.io.File,java.io.File,boolean" returns="void" />
+      <Method name="moveFileToDirectory" params="java.io.File,java.io.File,boolean" returns="void" />
+    </Or>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+  </Match>
+
+
+  <!--
+      FileEntry is used internally by FileAlterationObserver to refresh and
+      update the state of files it is monitoring and in that context this is
+      not an issue. If people re-use it elsewhere then they need to
+      take care - but its not its primary purpose here and so its OK
+    -->
+  <Match>
+    <Class name="org.apache.commons.io.monitor.FileEntry" />
+    <Method name="setChildren" params="org.apache.commons.io.monitor.FileEntry[]" returns="void" />
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
+
+  <!--  See discussion on https://issues.apache.org/jira/browse/IO-214 -->
+  <Match>
+    <Class name="org.apache.commons.io.output.ByteArrayOutputStream" />
+    <Bug pattern="IS2_INCONSISTENT_SYNC" />
+  </Match>
+
+
+  <!-- This is a false positive since close() does nothing in the Stream implementation being used -->
+  <Match>
+    <Class name="org.apache.commons.io.output.ByteArrayOutputStream" />
+    <Method name="toBufferedInputStream" params="java.io.InputStream" returns="java.io.InputStream" />
+    <Bug pattern="OS_OPEN_STREAM" />
+  </Match>
+
+
+  <!--  See discussion on https://issues.apache.org/jira/browse/IO-216 -->
+  <Match>
+    <Class name="org.apache.commons.io.output.LockableFileWriter" />
+    <Method name="close" params="" returns="void" />
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+  </Match>
+
+  <Match>
+    <Class name="org.apache.commons.io.output.DeferredFileOutputStream" />
+    <Or>
+      <Method name="thresholdReached" params="" returns="void" />
+    </Or>
+    <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+  </Match>
+</FindBugsFilter>

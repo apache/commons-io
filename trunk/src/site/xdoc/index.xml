@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Commons IO Overview</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+<!-- ================================================== -->
+<section name="Commons IO">
+<p>
+Commons IO is a library of utilities to assist with developing IO functionality.
+</p>
+<p>
+There are six main areas included:
+<ul>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/package-summary.html">Utility classes</a>
+   - with static methods to perform common tasks</li>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/input/package-summary.html">Input</a>
+   - useful Input Stream and Reader implementations</li>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/output/package-summary.html">Output</a>
+   - useful Output Stream and Writer implementations</li>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">Filters</a>
+   - various implementations of file filters</li>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/comparator/package-summary.html">Comparators</a>
+   - various implementations of <code>java.util.Comparator</code> for files</li>
+<li><a href="javadocs/api-release/index.html?org/apache/commons/io/monitor/package-summary.html">File Monitor</a>
+   - a component for monitoring file system events</li>
+</ul>
+</p>
+</section>
+<!-- ================================================== -->
+<section name="Releases">
+
+    <subsection name="Commons IO 2.5 (requires JDK 1.6+)">
+        <p>
+            Commons IO 2.5 is the latest version and requires a minimum of JDK 1.6 -
+            <a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
+        </p>
+        <p>
+            View the
+            <a href="upgradeto2_5.html">Release Notes</a>
+            and
+            <a href="javadocs/api-release/index.html">JavaDoc API documents</a>
+        </p>
+    </subsection>
+
+
+    <subsection name="Commons IO 2.4 (requires JDK 1.6+)">
+<p>
+    Commons IO 2.4 requires a minimum of JDK 1.6 -
+<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
+</p> 
+<p>
+View the <a href="upgradeto2_4.html">Release Notes</a> and
+<a href="javadocs/api-release/index.html">JavaDoc API documents</a>
+</p> 
+</subsection>
+
+<subsection name="Commons IO 2.2 (requires JDK 1.5+)">
+<p>
+Commons IO 2.2 requires a minimum of JDK 1.5 -
+<a href="http://commons.apache.org/io/download_io.cgi">Download now!</a>
+</p> 
+<p>
+View the <a href="upgradeto2_2.html">Release Notes</a> and
+<a href="javadocs/api-2.2/index.html">JavaDoc API documents</a>
+</p> 
+</subsection>
+
+<subsection name="Older Releases">
+<p>
+For previous releases, see the <a href="http://archive.apache.org/dist/commons/io/">Apache Archive</a>.
+</p> 
+</subsection>
+
+</section>
+<!-- ================================================== -->
+<section name="Support">
+<p>
+The <a href="mail-lists.html">commons mailing lists</a> act as the main support forum.
+The user list is suitable for most library usage queries.
+The dev list is intended for the development discussion.
+Please remember that the lists are shared between all commons components,
+so prefix your email by [io].
+</p>
+<p>
+Issues may be reported via <a href="issue-tracking.html">ASF JIRA</a>.
+Please read the instructions carefully to submit a useful bug report or enhancement request.
+</p>
+</section>
+<!-- ================================================== -->
+</body>
+</document>

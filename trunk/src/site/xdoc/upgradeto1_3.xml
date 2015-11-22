@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 1.2 to 1.3</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 1.2 to version 1.3.
+<source>
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+and endian transformation classes.
+
+
+Compatibility with 1.2
+----------------------
+Binary compatible - Yes
+
+Source compatible - Yes
+
+Semantic compatible - Yes
+  Check the bug fixes section for semantic bug fixes
+
+
+Deprecations from 1.2
+---------------------
+- WildcardFilter deprecated, replaced by WildcardFileFilter
+  - old class only accepted files, thus had a confusing dual purpose
+
+- FileSystemUtils.freeSpace deprecated, replaced by freeSpaceKb
+  - freeSpace returns a result that varies by operating system and
+    thus isn't that useful
+  - freeSpaceKb returns much better and more consistent results
+  - freeSpaceKb existed in v1.2, so this is a gentle cutover
+
+
+Bug fixes from 1.2
+------------------
+- LineIterator now implements Iterator
+  - It was always supposed to...
+
+- FileSystemUtils.freeSpace/freeSpaceKb [IO-83]
+  - These should now work on AIX and HP-UX
+
+- FileSystemUtils.freeSpace/freeSpaceKb [IO-90]
+  - Avoid infinite looping in Windows
+  - Catch more errors with nice messages
+
+- FileSystemUtils.freeSpace [IO-91]
+  - This is now documented not to work on SunOS 5
+
+- FileSystemUtils [IO-93]
+  - Fixed resource leak leading to 'Too many open files' error
+  - Previously did not destroy Process instances (as JDK Javadoc is so poor)
+  - http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+
+- FileUtils.touch [IO-100]
+  - The touch method previously gave no indication when the file could not
+    be touched successfully (such as due to access restrictions) - it now
+    throws an IOException if the last modified date cannot be changed
+
+- FileCleaner
+  - This now handles the situation where an error occurs when deleting the file
+
+- IOUtils.copy [IO-84]
+  - Copy methods could return inaccurate byte/char count for large streams
+  - The copy(InputStream, OutputStream) method now returns -1 if the count is greater than an int
+  - The copy(Reader, Writer) method now throws now returns -1 if the count is greater than an int
+  - Added a new copyLarge(InputStream, OutputStream) method that returns a long
+  - Added a new copyLarge(Reader, Writer) method that returns a long
+
+- CountingInputStream/CountingOutputStream [IO-84]
+  - Methods were declared as int thus the count was innacurate for large streams
+  - new long based methods getByteCount()/resetByteCount() added
+  - existing methods changed to throw an exception if the count is greater than an int
+
+- FileBasedTestCase
+  - Fixed bug in compare content methods identified by GNU classpath
+
+- EndianUtils.writeSwappedLong(byte[], int) [IO-101]
+  - An int overrun in the bit shifting when it should have been a long
+
+- EndianUtils.writeSwappedLong(InputStream) [IO-102]
+  - The return of input.read(byte[]) was not being checked to ensure all 8 bytes were read
+
+Enhancements from 1.2
+---------------------
+- DirectoryWalker [IO-86]
+  - New class designed for subclassing to walk through a set of files.
+    DirectoryWalker provides the walk of the directories, filtering of
+    directories and files, and cancellation support. The subclass must provide
+    the specific behaviour, such as text searching or image processing.
+
+- IOCase
+  - New class/enumeration for case-sensitivity control
+
+- FilenameUtils
+  - New methods to handle case-sensitivity
+  - wildcardMatch - new method that has IOCase as a parameter
+  - equals - new method that has IOCase as a parameter
+
+- FileUtils [IO-108] - new default encoding methods for:
+  - readFileToString(File)
+  - readLines(File)
+  - lineIterator(File)
+  - writeStringToFile(File, String)
+  - writeLines(File, Collection)
+  - writeLines(File, Collection, String)
+
+- FileUtils.openOutputStream  [IO-107]
+  - new method to open a FileOutputStream, creating parent directories if required
+- FileUtils.touch
+- FileUtils.copyURLToFile
+- FileUtils.writeStringToFile
+- FileUtils.writeByteArrayToFile
+- FileUtils.writeLines
+  - enhanced to create parent directories if required
+- FileUtils.openInputStream  [IO-107]
+  - new method to open a FileInputStream, providing better error messages than the JDK
+
+- FileUtils.isFileOlder
+  - new methods to check if a file is older (i.e. isFileOlder()) - counterparts
+    to the existing isFileNewer() methods.
+
+- FileUtils.checksum, FileUtils.checksumCRC32
+  - new methods to create a checksum of a file
+
+- FileUtils.copyFileToDirectory  [IO-104]
+  - new variant that optionally retains the file date
+
+- FileDeleteStrategy
+- FileCleaner    [IO-56,IO-70]
+  - FileDeleteStrategy is a strategy for handling file deletion
+  - This can be used as a calback in FileCleaner
+  - Together these allow FileCleaner to do a forceDelete to kill directories
+
+- FileCleaner.exitWhenFinished [IO-99]
+  - A new method that allows the internal cleaner thread to be cleanly terminated
+
+- WildcardFileFilter
+  - Replacement for WildcardFilter
+  - Accepts both files and directories
+  - Ability to control case-sensitivity
+
+- NameFileFilter
+  - Ability to control case-sensitivity
+
+- FileFileFilter
+  - New IOFileFilter implementation
+  - Accepts files where File.isFile() is true
+  - In other words it filters out directories
+  - Singleton instance provided (FILE)
+
+- CanReadFileFilter
+  - New IOFileFilter implementation
+  - Accepts files where File.canRead() is true
+  - Singleton instances provided (CAN_READ/CANNOT_READ/READ_ONLY)
+
+- CanWriteFileFilter
+  - New IOFileFilter implementation
+  - Accepts files where File.canWrite() is true
+  - Singleton instances provided (CAN_WRITE/CANNOT_WRITE)
+
+- HiddenFileFilter
+  - New IOFileFilter implementation
+  - Accepts files where File.isHidden() is true
+  - Singleton instances provided (HIDDEN/VISIBLE)
+
+- EmptyFileFilter
+  - New IOFileFilter implementation
+  - Accepts files or directories that are empty
+  - Singleton instances provided (EMPTY/NOT_EMPTY)
+
+- TrueFileFilter/FalseFileFilter/DirectoryFileFilter
+  - New singleton instance constants (TRUE/FALSE/DIRECTORY)
+  - The new constants are more JDK 1.5 friendly with regards to static imports
+    (whereas if everything uses INSTANCE, then they just clash)
+  - The old INSTANCE constants are still present and have not been deprecated
+
+- FileFilterUtils.sizeRangeFileFilter
+  - new sizeRangeFileFilter(long minimumSize, long maximumSize) method which 
+    creates a filter that accepts files within the specified size range.
+
+- FileFilterUtils.makeDirectoryOnly/makeFileOnly
+  - two new methods that decorate a file filter to make it apply to
+    directories only or files only
+
+- NullWriter
+  - New writer that acts as a sink for all data, as per /dev/null
+
+- NullInputStream
+  - New input stream that emulates a stream of a specified size
+
+- NullReader
+  - New reader that emulates a reader of a specified size
+
+- ByteArrayOutputStream  [IO-97]
+  - Performance enhancements
+
+</source>
+</p>
+</section>
+
+</body>
+</document>
