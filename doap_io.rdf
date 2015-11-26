@@ -98,6 +98,28 @@
         <revision>2.1</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>commons-io</name>
+        <created>2012-03-30</created>
+        <revision>2.2</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>commons-io</name>
+        <created>2012-04-15</created>
+        <revision>2.3</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>commons-io</name>
+        <created>2012-07-06</created>
+        <revision>2.4</revision>
+      </Version>
+    </release>
+
     <mailing-list rdf:resource="http://commons.apache.org/mail-lists.html"/>
   </Project>
 </rdf:RDF>
