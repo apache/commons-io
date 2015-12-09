@@ -16,31 +16,21 @@
  */
 package org.apache.commons.io.testtools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Arrays;
-
 import junit.framework.AssertionFailedError;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
+import java.io.*;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Base class for testcases doing tests with files.
  */
-public abstract class TestUtils  {
+public abstract class TestUtils {
 
     private TestUtils() {
 
@@ -77,7 +67,7 @@ public abstract class TestUtils  {
             //output.write((byte)'X');
 
             // nice varied byte pattern compatible with Readers and Writers
-            out.write( (byte)( (i % 127) + 1) );
+            out.write((byte) ((i % 127) + 1));
         }
     }
 
@@ -96,7 +86,7 @@ public abstract class TestUtils  {
     }
 
     public static File newFile(File testDirectory, final String filename) throws IOException {
-        final File destination = new File( testDirectory, filename );
+        final File destination = new File(testDirectory, filename);
         /*
         assertTrue( filename + "Test output data file shouldn't previously exist",
                     !destination.exists() );
@@ -107,41 +97,41 @@ public abstract class TestUtils  {
         return destination;
     }
 
-    public static void checkFile( final File file, final File referenceFile )
+    public static void checkFile(final File file, final File referenceFile)
             throws Exception {
-        assertTrue( "Check existence of output file", file.exists() );
-        assertEqualContent( referenceFile, file );
+        assertTrue("Check existence of output file", file.exists());
+        assertEqualContent(referenceFile, file);
     }
 
-    /** Assert that the content of two files is the same. */
-    private static void assertEqualContent( final File f0, final File f1 )
-            throws IOException
-    {
+    /**
+     * Assert that the content of two files is the same.
+     */
+    private static void assertEqualContent(final File f0, final File f1)
+            throws IOException {
         /* This doesn't work because the filesize isn't updated until the file
          * is closed.
         assertTrue( "The files " + f0 + " and " + f1 +
                     " have differing file sizes (" + f0.length() +
                     " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
         */
-        final InputStream is0 = new java.io.FileInputStream( f0 );
+        final InputStream is0 = new java.io.FileInputStream(f0);
         try {
-            final InputStream is1 = new java.io.FileInputStream( f1 );
+            final InputStream is1 = new java.io.FileInputStream(f1);
             try {
-                final byte[] buf0 = new byte[ 1024 ];
-                final byte[] buf1 = new byte[ 1024 ];
+                final byte[] buf0 = new byte[1024];
+                final byte[] buf1 = new byte[1024];
                 int n0 = 0;
                 int n1;
 
-                while( -1 != n0 )
-                {
-                    n0 = is0.read( buf0 );
-                    n1 = is1.read( buf1 );
-                    assertTrue( "The files " + f0 + " and " + f1 +
+                while (-1 != n0) {
+                    n0 = is0.read(buf0);
+                    n1 = is1.read(buf1);
+                    assertTrue("The files " + f0 + " and " + f1 +
                             " have differing number of bytes available (" + n0 +
-                            " vs " + n1 + ")", ( n0 == n1 ) );
+                            " vs " + n1 + ")", (n0 == n1));
 
-                    assertTrue( "The files " + f0 + " and " + f1 +
-                            " have different content", Arrays.equals( buf0, buf1 ) );
+                    assertTrue("The files " + f0 + " and " + f1 +
+                            " have different content", Arrays.equals(buf0, buf1));
                 }
             } finally {
                 is1.close();
@@ -154,9 +144,8 @@ public abstract class TestUtils  {
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
-     * @param b0 the expected contents
+     * @param b0   the expected contents
      * @param file the file to check
-     *
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
@@ -180,9 +169,8 @@ public abstract class TestUtils  {
     /**
      * Assert that the content of a file is equal to that in a char[].
      *
-     * @param c0 the expected contents
+     * @param c0   the expected contents
      * @param file the file to check
-     *
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
@@ -225,12 +213,36 @@ public abstract class TestUtils  {
         }
     }
 
-    public static void deleteFile( final File file )
+    public static void deleteFile(final File file)
             throws Exception {
         if (file.exists()) {
             assertTrue("Couldn't delete file: " + file, file.delete());
         }
     }
 
+    /**
+     * Sleep for a guaranteed number of milliseconds unless interrupted.
+     *
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
+     * it deems appropriate. Read the docs on Thread.sleep for further details.
+     * @
+     * @param ms the number of milliseconds to sleep for
+     * @throws InterruptedException if interrupted
+     */
+    public static void sleep(long ms) throws InterruptedException {
+        long finishAt = System.currentTimeMillis() + ms;
+        long remaining = ms;
+        do {
+            Thread.sleep(remaining);
+            remaining = finishAt - System.currentTimeMillis();
+        } while (remaining > 0);
+    }
+
+    public static void sleepQuietly(long ms) {
+        try {
+            sleep(ms);
+        } catch (InterruptedException ignored){
+        }
+    }
 
 }

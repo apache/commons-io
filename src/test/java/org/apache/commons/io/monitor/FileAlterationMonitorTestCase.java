@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.monitor;
 
+import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -179,7 +180,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             if (files.contains(file)) {
                 return; // found, test passes
             }
-            sleepHandleInterruped(pauseTime);
+            TestUtils.sleepQuietly(pauseTime);
         }
         fail(label + " " + file + " not found");
     }

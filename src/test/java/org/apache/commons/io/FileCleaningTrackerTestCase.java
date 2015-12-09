@@ -296,7 +296,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
         for (int i = 0; i < 20 && theInstance.reaper.isAlive(); i++) {
-            Thread.sleep(500L);  // allow reaper thread to die
+            TestUtils.sleep(500L);  // allow reaper thread to die
         }
         assertTrue(theInstance.exitWhenFinished);
         assertFalse(theInstance.reaper.isAlive());
@@ -307,7 +307,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         int count = 0;
         while(file.exists() && count++ < 40) {
             try {
-                Thread.sleep(500L);
+                TestUtils.sleep(500L);
             } catch (final InterruptedException ignore) {
             }
             file = new File(file.getPath());
@@ -323,7 +323,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     private void waitUntilTrackCount() throws Exception {
         System.gc();
-        Thread.sleep(500);
+        TestUtils.sleep(500);
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<String>();
@@ -336,7 +336,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             }
             list = null;
             System.gc();
-            Thread.sleep(1000);
+            TestUtils.sleep(1000);
         }
         if (theInstance.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the testcase with less memory (-Xmx)");

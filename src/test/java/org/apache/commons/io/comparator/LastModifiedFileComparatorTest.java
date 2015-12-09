@@ -61,11 +61,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
             IOUtils.closeQuietly(output1);
         }
         do {
-            try { 
-                Thread.sleep(300);
-            } catch(final InterruptedException ie) {
-                // ignore
-            }
+            TestUtils.sleepQuietly(300);
             equalFile.setLastModified(System.currentTimeMillis());
         } while( olderFile.lastModified() == equalFile.lastModified() );
 
@@ -82,11 +78,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
             IOUtils.closeQuietly(output);
         }
         do {
-            try { 
-                Thread.sleep(300);
-            } catch(final InterruptedException ie) {
-                // ignore
-            }
+            TestUtils.sleepQuietly(300);
             newerFile.setLastModified(System.currentTimeMillis());
         } while( equalFile.lastModified() == newerFile.lastModified() );
         equalFile1 = equalFile;
