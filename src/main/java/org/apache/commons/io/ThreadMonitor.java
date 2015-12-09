@@ -105,10 +105,30 @@ class ThreadMonitor implements Runnable {
      */
     public void run() {
         try {
-            Thread.sleep(timeout);
+            sleep(timeout);
             thread.interrupt();
         } catch (final InterruptedException e) {
             // timeout not reached
         }
     }
+
+    /**
+     * Sleep for a guaranteed minimum number of milliseconds unless interrupted.
+     *
+     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
+     * it deems appropriate. Read the docs on Thread.sleep for further interesting details.
+     * @
+     * @param ms the number of milliseconds to sleep for
+     * @throws InterruptedException if interrupted
+     */
+    private static void sleep(long ms) throws InterruptedException {
+        long finishAt = System.currentTimeMillis() + ms;
+        long remaining = ms;
+        do {
+            Thread.sleep(remaining);
+            remaining = finishAt - System.currentTimeMillis();
+        } while (remaining > 0);
+    }
+
+
 }

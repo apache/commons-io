@@ -28,6 +28,7 @@ import java.util.Random;
 import org.apache.commons.io.input.DemuxInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
+import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Test;
 
 /**
@@ -165,7 +166,7 @@ public class DemuxTestCase {
                     m_buffer.append((char) ch);
 
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
-                    Thread.sleep(sleepTime);
+                    TestUtils.sleep(sleepTime);
                     ch = m_demux.read();
                 }
             } catch (final Exception e) {
@@ -198,7 +199,7 @@ public class DemuxTestCase {
                     //System.out.println( "Writing: " + (char)m_data[ i ] );
                     m_demux.write(element);
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
-                    Thread.sleep(sleepTime);
+                    TestUtils.sleep(sleepTime);
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }

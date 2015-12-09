@@ -1048,7 +1048,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         do {
             try {
-                Thread.sleep(1000);
+                TestUtils.sleep(1000);
             } catch (final InterruptedException ie) {
                 // ignore
             }
@@ -1070,7 +1070,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         do {
             try {
-                Thread.sleep(1000);
+                TestUtils.sleep(1000);
             } catch (final InterruptedException ie) {
                 // ignore
             }

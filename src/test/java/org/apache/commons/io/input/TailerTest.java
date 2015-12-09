@@ -52,10 +52,10 @@ public class TailerTest extends FileBasedTestCase {
     public void tearDown() throws Exception {
         if (tailer != null) {
             tailer.stop();
-            Thread.sleep(1000);
+            TestUtils.sleep(1000);
         }
         FileUtils.deleteDirectory(getTestDirectory());
-        Thread.sleep(1000);
+        TestUtils.sleep(1000);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class TailerTest extends FileBasedTestCase {
             out.close(); // ensure data is written
 
            final long testDelayMillis = delay * 10;
-           Thread.sleep(testDelayMillis);
+            TestUtils.sleep(testDelayMillis);
            List<String> tailerlines = listener.getLines();
            assertEquals("line count",lines.size(),tailerlines.size());
            for(int i = 0,len = lines.size();i<len;i++){
@@ -176,12 +176,12 @@ public class TailerTest extends FileBasedTestCase {
         try {
             writeString(file, "Line");
 
-            Thread.sleep(delay * 2);
+            TestUtils.sleep(delay * 2);
             List<String> lines = listener.getLines();
             assertEquals("1 line count", 0, lines.size());
 
             writeString(file, " one\n");
-            Thread.sleep(delay * 2);
+            TestUtils.sleep(delay * 2);
             lines = listener.getLines();
 
             assertEquals("1 line count", 1, lines.size());
@@ -190,7 +190,7 @@ public class TailerTest extends FileBasedTestCase {
             listener.clear();
         } finally {
             tailer.stop();
-            Thread.sleep(delay * 2);
+            TestUtils.sleep(delay * 2);
             IOUtils.closeQuietly(writer);
         }
     }
@@ -212,7 +212,7 @@ public class TailerTest extends FileBasedTestCase {
         // Write some lines to the file
         write(file, "Line one", "Line two");
         final long testDelayMillis = delayMillis * 10;
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
         List<String> lines = listener.getLines();
         assertEquals("1 line count", 2, lines.size());
         assertEquals("1 line 1", "Line one", lines.get(0));
@@ -221,7 +221,7 @@ public class TailerTest extends FileBasedTestCase {
 
         // Write another line to the file
         write(file, "Line three");
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("2 line count", 1, lines.size());
         assertEquals("2 line 3", "Line three", lines.get(0));
@@ -239,11 +239,11 @@ public class TailerTest extends FileBasedTestCase {
         final boolean exists = file.exists();
         assertFalse("File should not exist", exists);
         createFile(file, 0);
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
 
         // Write another line
         write(file, "Line four");
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("4 line count", 1, lines.size());
         assertEquals("4 line 3", "Line four", lines.get(0));
@@ -253,7 +253,7 @@ public class TailerTest extends FileBasedTestCase {
         tailer.stop();
         tailer=null;
         thread.interrupt();
-        Thread.sleep(testDelayMillis * 4);
+        TestUtils.sleep(testDelayMillis * 4);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
         assertNotNull("Missing InterruptedException", listener.exception);
@@ -279,15 +279,15 @@ public class TailerTest extends FileBasedTestCase {
 
         // write a few lines
         write(file, "line1", "line2", "line3");
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
 
         // write a few lines
         write(file, "line4", "line5", "line6");
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
 
         // write a few lines
         write(file, "line7", "line8", "line9");
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
 
         assertEquals("end of file reached 3 times", 3, listener.reachedEndOfFile);
     }
@@ -316,7 +316,7 @@ public class TailerTest extends FileBasedTestCase {
                 } catch (final FileNotFoundException ignore) {
                 }
                 try {
-                    Thread.sleep(200L);
+                    TestUtils.sleep(200L);
                 } catch (final InterruptedException ignore) {
                     // ignore
                 }
@@ -361,10 +361,10 @@ public class TailerTest extends FileBasedTestCase {
         final int delay = 100;
         final int idle = 50; // allow time for thread to work
         tailer = Tailer.create(file, listener, delay, false);
-        Thread.sleep(idle);
+        TestUtils.sleep(idle);
         tailer.stop();
         tailer=null;
-        Thread.sleep(delay+idle);
+        TestUtils.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
@@ -387,10 +387,10 @@ public class TailerTest extends FileBasedTestCase {
         final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
-        Thread.sleep(idle);
+        TestUtils.sleep(idle);
         thread.interrupt();
         tailer = null;
-        Thread.sleep(delay + idle);
+        TestUtils.sleep(delay + idle);
         assertNotNull("Missing InterruptedException", listener.exception);
         assertTrue("Unexpected Exception: " + listener.exception, listener.exception instanceof InterruptedException);
         assertEquals("Expected init to be called", 1, listener.initialised);
@@ -409,10 +409,10 @@ public class TailerTest extends FileBasedTestCase {
         tailer = new Tailer(file, listener, delay, false);
         final Executor exec = new ScheduledThreadPoolExecutor(1);
         exec.execute(tailer);
-        Thread.sleep(idle);
+        TestUtils.sleep(idle);
         tailer.stop();
         tailer=null;
-        Thread.sleep(delay+idle);
+        TestUtils.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
@@ -434,7 +434,7 @@ public class TailerTest extends FileBasedTestCase {
         // Write some lines to the file
         writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
         final long testDelayMillis = delayMillis * 10;
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
         final List<String> lines = listener.getLines();
         assertEquals("line count", 4, lines.size());
         assertEquals("line 1", "CRLF", lines.get(0));
@@ -446,7 +446,7 @@ public class TailerTest extends FileBasedTestCase {
         tailer.stop();
         tailer=null;
         thread.interrupt();
-        Thread.sleep(testDelayMillis);
+        TestUtils.sleep(testDelayMillis);
     }
 
     /**

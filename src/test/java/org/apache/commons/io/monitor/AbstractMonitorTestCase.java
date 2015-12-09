@@ -19,15 +19,15 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.FileFilter;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.testtools.TestUtils;
 import org.junit.After;
 import org.junit.Before;
 
+import static org.apache.commons.io.testtools.TestUtils.sleepQuietly;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -149,27 +149,15 @@ public abstract class AbstractMonitorTestCase  {
             FileUtils.touch(file);
             file = new File(file.getParent(), file.getName());
             while (lastModified == file.lastModified()) {
-                sleepHandleInterruped(pauseTime);
+                sleepQuietly(pauseTime);
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());
             }
         } catch (final Exception e) {
             fail("Touching " + file + ": " + e);
         }
-        sleepHandleInterruped(pauseTime);
+        sleepQuietly(pauseTime);
         return file;
     }
 
-    /**
-     * Thread.sleep(timeInMilliseconds) - ignore InterruptedException
-     * 
-     * @param timeInMilliseconds the time to sleep
-     */
-    protected void sleepHandleInterruped(final long timeInMilliseconds) {
-        try {
-            Thread.sleep(timeInMilliseconds);
-        } catch(final InterruptedException ie) {
-            // ignore
-        }
-    }
 }
