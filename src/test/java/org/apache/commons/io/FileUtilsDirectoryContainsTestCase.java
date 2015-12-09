@@ -20,7 +20,13 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
@@ -41,12 +47,9 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
     private File file3;
     final File top = getTestDirectory();
 
-    public FileUtilsDirectoryContainsTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Before
+    public void setUp() throws Exception {
         top.mkdirs();
 
         directory1 = new File(top, "directory1");
@@ -70,8 +73,8 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         FileUtils.touch(file3);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(top);
     }
 

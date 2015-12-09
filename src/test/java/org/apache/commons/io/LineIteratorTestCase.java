@@ -33,16 +33,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  * This is used to test LineIterator for correctness.
  *
  * @version $Id$
  */
 public class LineIteratorTestCase extends FileBasedTestCase {
-
-    public LineIteratorTestCase(final String name) {
-        super(name);
-    }
 
     private void assertLines(final List<String> lines, final LineIterator iterator) {
         try {
@@ -99,9 +101,8 @@ public class LineIteratorTestCase extends FileBasedTestCase {
         return lines;
     }
 
-    @Override
     @Before
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         final File dir = getTestDirectory();
         if (dir.exists()) {
             FileUtils.deleteDirectory(dir);
@@ -110,9 +111,8 @@ public class LineIteratorTestCase extends FileBasedTestCase {
 
     }
 
-    @Override
     @After
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 

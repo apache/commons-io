@@ -16,17 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +28,16 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link Tailer}.
@@ -48,12 +48,8 @@ public class TailerTest extends FileBasedTestCase {
 
     private Tailer tailer;
 
-    public TailerTest(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         if (tailer != null) {
             tailer.stop();
             Thread.sleep(1000);
@@ -62,6 +58,7 @@ public class TailerTest extends FileBasedTestCase {
         Thread.sleep(1000);
     }
 
+    @Test
     public void testLongFile() throws Exception {
         final long delay = 50;
 
@@ -91,6 +88,7 @@ public class TailerTest extends FileBasedTestCase {
         listener.clear();
     }
 
+    @Test
     public void testBufferBreak() throws Exception {
         final long delay = 50;
 
@@ -113,6 +111,7 @@ public class TailerTest extends FileBasedTestCase {
     }
 
     @SuppressWarnings("deprecation") // unavoidable until Java 7
+    @Test
     public void testMultiByteBreak() throws Exception {
         System.out.println("testMultiByteBreak() Default charset: "+Charset.defaultCharset().displayName());
         final long delay = 50;
@@ -133,7 +132,7 @@ public class TailerTest extends FileBasedTestCase {
         try{
             List<String> lines = new ArrayList<String>();
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8));
-            String line = null;
+            String line;
             while((line = reader.readLine()) != null){
                 out.write(line);
                 out.write("\n");
@@ -161,6 +160,7 @@ public class TailerTest extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testTailerEof() throws Exception {
         // Create & start the Tailer
         final long delay = 50;
@@ -195,6 +195,7 @@ public class TailerTest extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testTailer() throws Exception {
 
         // Create & start the Tailer
@@ -262,6 +263,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
     }
 
+    @Test
     public void testTailerEndOfFileReached() throws Exception {
         // Create & start the Tailer
         final long delayMillis = 50;
@@ -290,10 +292,19 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("end of file reached 3 times", 3, listener.reachedEndOfFile);
     }
 
-    @Override
     protected void createFile(final File file, final long size)
         throws IOException {
-        super.createFile(file, size);
+        if (!file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(file));
+        try {
+            TestUtils.generateTestData(output, size);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
 
         // try to make sure file is found
         // (to stop continuum occasionally failing)
@@ -302,11 +313,11 @@ public class TailerTest extends FileBasedTestCase {
             while (reader == null) {
                 try {
                     reader = new RandomAccessFile(file.getPath(), "r");
-                } catch (final FileNotFoundException e) {
+                } catch (final FileNotFoundException ignore) {
                 }
                 try {
                     Thread.sleep(200L);
-                } catch (final InterruptedException e) {
+                } catch (final InterruptedException ignore) {
                     // ignore
                 }
             }
@@ -341,6 +352,8 @@ public class TailerTest extends FileBasedTestCase {
         }
     }
 
+
+    @Test
     public void testStopWithNoFile() throws Exception {
         final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
@@ -362,6 +375,7 @@ public class TailerTest extends FileBasedTestCase {
     /*
      * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
      */
+    @Test
     public void testInterrupt() throws Exception {
         final File file = new File(getTestDirectory(), "nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
@@ -385,6 +399,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("end of file never reached", 0, listener.reachedEndOfFile);
     }
 
+    @Test
     public void testStopWithNoFileUsingExecutor() throws Exception {
         final File file = new File(getTestDirectory(),"nosuchfile");
         assertFalse("nosuchfile should not exist", file.exists());
@@ -405,6 +420,7 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("end of file never reached", 0, listener.reachedEndOfFile);
     }
 
+    @Test
     public void testIO335() throws Exception { // test CR behaviour
         // Create & start the Tailer
         final long delayMillis = 50;

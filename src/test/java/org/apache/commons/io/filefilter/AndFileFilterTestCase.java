@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.filefilter;
 
+import org.junit.Before;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +31,6 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
   private List<boolean[]> testFalseResults;
   private List<Boolean> testFileResults;
   private List<Boolean> testFilenameResults;
-
-  public AndFileFilterTestCase(final String name) {
-    super(name);
-  }
-
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    this.setUpTestFilters();
-  }
 
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
@@ -94,7 +86,8 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
     return WORKING_PATH_NAME_PROPERTY_KEY;
   }
 
-  private void setUpTestFilters() {
+  @Before
+  public void setUpTestFilters() {
     // filters
     //tests
     this.testFilters = new ArrayList<List<IOFileFilter>>();

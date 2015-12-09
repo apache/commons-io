@@ -21,11 +21,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * JUnit Test Case for {@link TeeInputStream}.
  */
-public class TeeInputStreamTest extends TestCase {
+public class TeeInputStreamTest  {
 
     private final String ASCII = "US-ASCII";
 
@@ -33,22 +37,25 @@ public class TeeInputStreamTest extends TestCase {
 
     private ByteArrayOutputStream output;
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         final InputStream input = new ByteArrayInputStream("abc".getBytes(ASCII));
         output = new ByteArrayOutputStream();
         tee = new TeeInputStream(input, output);
     }
 
+    @Test
     public void testReadNothing() throws Exception {
         assertEquals("", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testReadOneByte() throws Exception {
         assertEquals('a', tee.read());
         assertEquals("a", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testReadEverything() throws Exception {
         assertEquals('a', tee.read());
         assertEquals('b', tee.read());
@@ -57,6 +64,7 @@ public class TeeInputStreamTest extends TestCase {
         assertEquals("abc", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testReadToArray() throws Exception {
         final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer));
@@ -67,6 +75,7 @@ public class TeeInputStreamTest extends TestCase {
         assertEquals("abc", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testReadToArrayWithOffset() throws Exception {
         final byte[] buffer = new byte[8];
         assertEquals(3, tee.read(buffer, 4, 4));
@@ -77,6 +86,7 @@ public class TeeInputStreamTest extends TestCase {
         assertEquals("abc", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testSkip() throws Exception {
         assertEquals('a', tee.read());
         assertEquals(1, tee.skip(1));
@@ -85,6 +95,7 @@ public class TeeInputStreamTest extends TestCase {
         assertEquals("ac", new String(output.toString(ASCII)));
     }
 
+    @Test
     public void testMarkReset() throws Exception {
         assertEquals('a', tee.read());
         tee.mark(1);

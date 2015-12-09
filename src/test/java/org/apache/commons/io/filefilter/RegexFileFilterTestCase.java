@@ -22,22 +22,24 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Used to test RegexFileFilterUtils.
  */
 public class RegexFileFilterTestCase extends FileBasedTestCase {
 
-    public RegexFileFilterTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
+    @Before
     public void setUp() {
         getTestDirectory().mkdirs();
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
@@ -60,6 +62,7 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testRegex() throws Exception {
         IOFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertFiltering(filter, new File("Test.java"), true);
@@ -89,28 +92,28 @@ public class RegexFileFilterTestCase extends FileBasedTestCase {
         try {
             new RegexFileFilter((String)null);
             fail();
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ignore) {
             // expected
         }
 
         try {
             new RegexFileFilter(null, Pattern.CASE_INSENSITIVE);
             fail();
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ignore) {
             // expected
         }
 
         try {
             new RegexFileFilter(null, IOCase.INSENSITIVE);
             fail();
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ignore) {
             // expected
         }
 
         try {
             new RegexFileFilter((java.util.regex.Pattern)null);
             fail();
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ignore) {
             // expected
         }
     }

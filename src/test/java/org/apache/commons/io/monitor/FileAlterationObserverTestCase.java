@@ -23,6 +23,12 @@ import java.util.Iterator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.CanReadFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * {@link FileAlterationObserver} Test Case.
@@ -32,22 +38,16 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Construct a new test case.
      *
-     * @param name The name of the test
      */
-    public FileAlterationObserverTestCase(final String name) {
-        super(name);
+    public FileAlterationObserverTestCase() {
         testDirName = "test-observer";
-    }
-
-    @Override
-    protected void setUp() throws Exception {
         listener = new CollectionFileListener(true);
-        super.setUp();
     }
 
     /**
      * Test add/remove listeners.
      */
+    @Test
     public void testAddRemoveListeners() {
         final FileAlterationObserver observer = new FileAlterationObserver("/foo");
         // Null Listener
@@ -72,6 +72,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test toString().
      */
+    @Test
     public void testToString() {
         final File file = new File("/foo");
         FileAlterationObserver observer = null;
@@ -90,6 +91,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() method
      */
+    @Test
     public void testDirectory() {
         try {
             checkAndNotify();
@@ -152,6 +154,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() creating
      */
+    @Test
     public void testFileCreate() {
         try {
             checkAndNotify();
@@ -214,6 +217,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() creating
      */
+    @Test
     public void testFileUpdate() {
         try {
             checkAndNotify();
@@ -273,6 +277,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() deleting
      */
+    @Test
     public void testFileDelete() {
         try {
             checkAndNotify();
@@ -336,6 +341,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() method
      */
+    @Test
     public void testObserveSingleFile() {
         try {
             final File testDirA = new File(testDir, "test-dir-A");

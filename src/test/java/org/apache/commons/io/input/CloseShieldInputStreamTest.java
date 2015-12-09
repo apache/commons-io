@@ -16,16 +16,20 @@
  */
 package org.apache.commons.io.input;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * JUnit Test Case for {@link CloseShieldInputStream}.
  */
-public class CloseShieldInputStreamTest extends TestCase {
+public class CloseShieldInputStreamTest {
 
     private byte[] data;
 
@@ -35,8 +39,8 @@ public class CloseShieldInputStreamTest extends TestCase {
 
     private boolean closed;
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
         original = new ByteArrayInputStream(data) {
             @Override
@@ -48,6 +52,7 @@ public class CloseShieldInputStreamTest extends TestCase {
         closed = false;
     }
 
+    @Test
     public void testClose() throws IOException {
         shielded.close();
         assertFalse("closed", closed);

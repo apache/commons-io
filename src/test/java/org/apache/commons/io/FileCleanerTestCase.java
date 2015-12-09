@@ -29,8 +29,4 @@ public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
     protected FileCleaningTracker newInstance() {
         return FileCleaner.getInstance();
     }
-
-    public FileCleanerTestCase(final String name) {
-        super(name);
-    }
 }

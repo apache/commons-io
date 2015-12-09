@@ -24,6 +24,13 @@ import java.nio.charset.UnsupportedCharsetException;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests that files really lock, although no writing is done as
@@ -39,11 +46,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     private File altLockDir;
     private File altLockFile;
 
-    public LockableFileWriterTest(final String name) {
-        super(name);
-    }
-
-    @Override
+    @Before
     public void setUp() {
         file = new File(getTestDirectory(), "testlockfile");
         lockDir = new File(System.getProperty("java.io.tmpdir"));
@@ -52,7 +55,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
         altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
-    @Override
+    @After
     public void tearDown() {
         file.delete();
         lockFile.delete();
@@ -60,7 +63,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testFileLocked() throws IOException {
+    @Test public void testFileLocked() throws IOException {
         LockableFileWriter lfw1 = null;
         LockableFileWriter lfw2 = null;
         LockableFileWriter lfw3 = null;
@@ -105,7 +108,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     @SuppressWarnings("deprecation") // unavoidable until Java 7
-    public void testAlternateLockDir() throws IOException {
+    @Test public void testAlternateLockDir() throws IOException {
         LockableFileWriter lfw1 = null;
         LockableFileWriter lfw2 = null;
         try {
@@ -135,7 +138,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testFileNotLocked() throws IOException {
+    @Test public void testFileNotLocked() throws IOException {
         // open a valid locakable writer
         LockableFileWriter lfw1 = null;
         try {
@@ -162,7 +165,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_encoding_badEncoding() throws IOException {
+    @Test public void testConstructor_File_encoding_badEncoding() throws IOException {
         Writer writer = null;
         try {
             writer = new LockableFileWriter(file, "BAD-ENCODE");
@@ -179,7 +182,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_directory() {
+    @Test public void testConstructor_File_directory() {
         Writer writer = null;
         try {
             writer = new LockableFileWriter(getTestDirectory());
@@ -196,7 +199,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_File_nullFile() throws IOException {
+    @Test public void testConstructor_File_nullFile() throws IOException {
         Writer writer = null;
         try {
             writer = new LockableFileWriter((File) null);
@@ -213,7 +216,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    public void testConstructor_fileName_nullFile() throws IOException {
+    @Test public void testConstructor_fileName_nullFile() throws IOException {
         Writer writer = null;
         try {
             writer = new LockableFileWriter((String) null);

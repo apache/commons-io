@@ -16,26 +16,31 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link BrokenOutputStream}.
  */
-public class BrokenOutputStreamTest extends TestCase {
+public class BrokenOutputStreamTest {
 
     private IOException exception;
 
     private OutputStream stream;
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         exception = new IOException("test exception");
         stream = new BrokenOutputStream(exception);
     }
 
+    @Test
     public void testWrite() {
         try {
             stream.write(1);
@@ -59,6 +64,7 @@ public class BrokenOutputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testFlush() {
         try {
             stream.flush();
@@ -68,6 +74,7 @@ public class BrokenOutputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testClose() {
         try {
             stream.close();

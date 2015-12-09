@@ -16,33 +16,25 @@
  */
 package org.apache.commons.io.input;
 
+import org.junit.Test;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link NullInputStream}.
  *
  * @version $Id$
  */
-public class NullInputStreamTest extends TestCase {
+public class NullInputStreamTest {
 
-    public NullInputStreamTest(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
+    @Test
     public void testRead() throws Exception {
         final int size = 5;
         final InputStream input = new TestNullInputStream(size);
@@ -69,6 +61,7 @@ public class NullInputStreamTest extends TestCase {
         assertEquals("Available after close", size, input.available());
     }
 
+    @Test
     public void testReadByteArray() throws Exception {
         final byte[] bytes = new byte[10];
         final InputStream input = new TestNullInputStream(15);
@@ -112,6 +105,7 @@ public class NullInputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testEOFException() throws Exception {
         final InputStream input = new TestNullInputStream(2, false, true);
         assertEquals("Read 1",  0, input.read());
@@ -125,6 +119,7 @@ public class NullInputStreamTest extends TestCase {
         input.close();
     }
 
+    @Test
     public void testMarkAndReset() throws Exception {
         int position = 0;
         final int readlimit = 10;
@@ -176,6 +171,7 @@ public class NullInputStreamTest extends TestCase {
         input.close();
     }
 
+    @Test
     public void testMarkNotSupported() throws Exception {
         final InputStream input = new TestNullInputStream(100, false, true);
         assertFalse("Mark Should NOT be Supported", input.markSupported());
@@ -196,7 +192,8 @@ public class NullInputStreamTest extends TestCase {
         input.close();
     }
 
-   public void testSkip() throws Exception {
+    @Test
+    public void testSkip() throws Exception {
         final InputStream input = new TestNullInputStream(10, true, false);
         assertEquals("Read 1", 0, input.read());
         assertEquals("Read 2", 1, input.read());

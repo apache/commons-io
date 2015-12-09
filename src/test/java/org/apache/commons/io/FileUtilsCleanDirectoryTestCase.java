@@ -22,6 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method.
@@ -31,10 +38,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     final File top = getLocalTestDirectory();
 
-    public FileUtilsCleanDirectoryTestCase(final String name) {
-        super(name);
-    }
-
     private File getLocalTestDirectory() {
         return new File(getTestDirectory(), "list-files");
     }
@@ -42,21 +45,22 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         top.mkdirs();
     }
 
     /**
      * @see junit.framework.TestCase#tearDown()
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         chmod(top, 775, true);
         FileUtils.deleteDirectory(top);
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testCleanEmpty() throws Exception {
         assertEquals(0, top.list().length);
 
@@ -65,6 +69,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         assertEquals(0, top.list().length);
     }
 
+    @Test
     public void testDeletesRegular() throws Exception {
         FileUtils.touch(new File(top, "regular"));
         FileUtils.touch(new File(top, ".hidden"));
@@ -76,6 +81,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         assertEquals(0, top.list().length);
     }
 
+    @Test
     public void testDeletesNested() throws Exception {
         final File nested = new File(top, "nested");
 
@@ -90,6 +96,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         assertEquals(0, top.list().length);
     }
 
+    @Test
     public void testThrowsOnNullList() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")  ||  !chmod(top, 0, false)) {
             // test wont work if we can't restrict permissions on the
@@ -106,6 +113,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testThrowsOnCannotDeleteFile() throws Exception {
         final File file = new File(top, "restricted");
         FileUtils.touch(file);

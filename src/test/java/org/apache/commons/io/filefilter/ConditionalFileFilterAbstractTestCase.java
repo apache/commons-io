@@ -16,9 +16,15 @@
  */
 package org.apache.commons.io.filefilter;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilterAbstractTestCase {
 
@@ -31,11 +37,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
     private File file;
     private File workingPath;
 
-    public ConditionalFileFilterAbstractTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
+    @Before
     public void setUp() throws Exception {
         this.workingPath = determineWorkingDirectoryPath(this.getWorkingPathNamePropertyKey(), this.getDefaultWorkingPath());
         this.file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
@@ -49,6 +51,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         this.falseFilters[3] = new TesterFalseFileFilter();
     }
 
+    @Test
     public void testAdd() {
         final List<TesterTrueFileFilter> filters = new ArrayList<TesterTrueFileFilter>();
         final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
@@ -67,6 +70,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         assertEquals("file filters count", filters.size(), fileFilter.getFileFilters().size());
     }
 
+    @Test
     public void testRemove() {
         final List<TesterTrueFileFilter> filters = new ArrayList<TesterTrueFileFilter>();
         final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
@@ -81,6 +85,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         assertEquals("file filters count", 0, fileFilter.getFileFilters().size());
     }
 
+    @Test
     public void testNoFilters() throws Exception {
         final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
         final File file = new File(this.workingPath, TEST_FILE_NAME_PREFIX + 1 + TEST_FILE_TYPE);
@@ -88,6 +93,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         assertFilenameFiltering(1, (IOFileFilter) fileFilter, file, false);
     }
 
+    @Test
     public void testFilterBuiltUsingConstructor() throws Exception {
         final List<List<IOFileFilter>> testFilters = this.getTestFilters();
         final List<boolean[]> testTrueResults = this.getTrueResults();
@@ -121,6 +127,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         }
     }
 
+    @Test
     public void testFilterBuiltUsingAdd() throws Exception {
         final List<List<IOFileFilter>> testFilters = this.getTestFilters();
         final List<boolean[]> testTrueResults = this.getTrueResults();

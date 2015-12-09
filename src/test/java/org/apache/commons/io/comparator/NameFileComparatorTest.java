@@ -16,27 +16,22 @@
  */
 package org.apache.commons.io.comparator;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.Comparator;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test case for {@link NameFileComparator}.
  */
 public class NameFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /**
-     * Construct a new test case with the specified name.
-     *
-     * @param name Name of the test
-     */
-    public NameFileComparatorTest(final String name) {
-        super(name);
-    }
-
     /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         comparator = (AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
         reverse = NameFileComparator.NAME_REVERSE;
         equalFile1 = new File("a/foo.txt");
@@ -46,6 +41,7 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** Test case sensitivity */
+    @Test
     public void testCaseSensitivity() {
         final File file3 = new File("a/FOO.txt");
         final Comparator<File> sensitive = new NameFileComparator(null); /* test null as well */

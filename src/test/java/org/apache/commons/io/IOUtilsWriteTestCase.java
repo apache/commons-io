@@ -16,15 +16,21 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.junit.Test;
+
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit tests for IOUtils write methods.
@@ -38,29 +44,14 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
 
-    private final byte[] inData = generateTestData(FILE_SIZE);
-
-    public IOUtilsWriteTestCase(final String testName) {
-        super(testName);
-    }
-
-    // ----------------------------------------------------------------
-    // Setup
-    // ----------------------------------------------------------------
-
-    @Override
-    public void setUp() throws Exception {
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-    }
+    private final byte[] inData = TestUtils.generateTestData((long) FILE_SIZE);
 
     // ----------------------------------------------------------------
     // Tests
     // ----------------------------------------------------------------
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -73,6 +64,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_byteArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -84,14 +76,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_byteArrayToOutputStream_nullStream() throws Exception {
         try {
             IOUtils.write(inData, (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -106,6 +101,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_byteArrayToWriter_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -119,14 +115,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_byteArrayToWriter_nullWriter() throws Exception {
         try {
             IOUtils.write(inData, (Writer) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_byteArrayToWriter_Encoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -142,6 +141,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, bytes));
     }
 
+    @Test
     public void testWrite_byteArrayToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -155,13 +155,16 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_byteArrayToWriter_Encoding_nullWriter() throws Exception {
         try {
             IOUtils.write(inData, null, "UTF8");
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
+    @Test
     public void testWrite_byteArrayToWriter_Encoding_nullEncoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -175,7 +178,9 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", inData.length, baout.size());
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
+
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charSequenceToOutputStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
 
@@ -190,6 +195,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_charSequenceToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -201,15 +207,18 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
         try {
             IOUtils.write(csq, (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
 
@@ -225,6 +234,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, bytes));
     }
 
+    @Test
     public void testWrite_charSequenceToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -236,14 +246,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
         try {
             IOUtils.write(csq, (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
+    @Test
     public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
 
@@ -259,6 +272,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charSequenceToWriter() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
 
@@ -275,6 +289,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_charSequenceToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -288,14 +303,18 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
         try {
             IOUtils.write(csq, (Writer) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
+
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_stringToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -310,6 +329,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_stringToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -321,15 +341,18 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_stringToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str, (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_stringToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -345,6 +368,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, bytes));
     }
 
+    @Test
     public void testWrite_stringToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -356,14 +380,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_stringToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str, (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
+    @Test
     public void testWrite_stringToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -379,6 +406,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_stringToWriter() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -395,6 +423,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_stringToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -408,15 +437,18 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_stringToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str, (Writer) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charArrayToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -431,6 +463,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_charArrayToOutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -442,15 +475,18 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str.toCharArray(), (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -466,6 +502,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, bytes));
     }
 
+    @Test
     public void testWrite_charArrayToOutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -477,14 +514,17 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str.toCharArray(), (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
+    @Test
     public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -500,6 +540,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWrite_charArrayToWriter() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
@@ -516,6 +557,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testWrite_charArrayToWriter_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -529,18 +571,21 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         try {
             IOUtils.write(str.toCharArray(), (Writer) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWriteLines_OutputStream() throws Exception {
-        final Object[] data = new Object[] {
-            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        final Object[] data = new Object[]{
+                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -556,6 +601,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_OutputStream_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -567,8 +613,9 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWriteLines_OutputStream_nullSeparator() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -583,19 +630,22 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_OutputStream_nullStream() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (OutputStream) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWriteLines_OutputStream_Encoding() throws Exception {
-        final Object[] data = new Object[] {
-            "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
+        final Object[] data = new Object[]{
+                "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -611,6 +661,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_OutputStream_Encoding_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -622,8 +673,9 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -638,18 +690,21 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", null, "US-ASCII");
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
+    @Test
     public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
-        final Object[] data = new Object[] {
-            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        final Object[] data = new Object[]{
+                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -666,9 +721,10 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testWriteLines_Writer() throws Exception {
-        final Object[] data = new Object[] {
-            "hello", new StringBuffer("world"), "", "this is", null, "some text"};
+        final Object[] data = new Object[]{
+                "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -686,6 +742,7 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_Writer_nullData() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
@@ -699,8 +756,9 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals("Sizes differ", 0, baout.size());
     }
 
+    @Test
     public void testWriteLines_Writer_nullSeparator() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -717,13 +775,15 @@ public class IOUtilsWriteTestCase extends FileBasedTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testWriteLines_Writer_nullStream() throws Exception {
-        final Object[] data = new Object[] {"hello", "world"};
+        final Object[] data = new Object[]{"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (Writer) null);
             fail();
-        } catch (final NullPointerException ex) {}
+        } catch (final NullPointerException ignore) {
+        }
     }
 
 }
