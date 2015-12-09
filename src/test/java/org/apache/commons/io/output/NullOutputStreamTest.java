@@ -17,9 +17,9 @@
 package org.apache.commons.io.output;
 
 
-import java.io.IOException;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+import java.io.IOException;
 
 
 /**
@@ -29,12 +29,9 @@ import junit.framework.TestCase;
  * @version $Id$
  */
 
-public class NullOutputStreamTest extends TestCase {
+public class NullOutputStreamTest {
 
-    public NullOutputStreamTest(final String name) {
-        super(name);
-    }
-
+    @Test
     public void testNull() throws IOException {
         final NullOutputStream nos = new NullOutputStream();
         nos.write("string".getBytes());

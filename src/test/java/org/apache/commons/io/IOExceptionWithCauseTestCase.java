@@ -20,17 +20,22 @@ package org.apache.commons.io;
 import java.io.IOException;
 
 import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests IOExceptionWithCause
  * 
  * @version $Id$
  */
-public class IOExceptionWithCauseTestCase extends TestCase {
+public class IOExceptionWithCauseTestCase {
 
     /**
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(String,Throwable)} constructor.
      */
+    @Test
     public void testIOExceptionStringThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException("message", cause);
@@ -40,6 +45,8 @@ public class IOExceptionWithCauseTestCase extends TestCase {
     /**
      * Tests the {@link IOExceptionWithCause#IOExceptionWithCause(Throwable)} constructor.
      */
+
+    @Test
     public void testIOExceptionThrowable() {
         final Throwable cause = new IllegalArgumentException("cause");
         final IOException exception = new IOException(cause);

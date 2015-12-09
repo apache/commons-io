@@ -16,21 +16,20 @@
  */
 package org.apache.commons.io;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link ThreadMonitor}.
  */
-public class ThreadMonitorTestCase extends TestCase {
-
-
-    public ThreadMonitorTestCase(final String name) {
-        super(name);
-    }
+public class ThreadMonitorTestCase {
 
     /**
      * Test timeout.
      */
+    @Test
     public void testTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(100);
@@ -45,6 +44,7 @@ public class ThreadMonitorTestCase extends TestCase {
     /**
      * Test task completed before timeout.
      */
+    @Test
     public void testCompletedWithoutTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(200);
@@ -58,6 +58,7 @@ public class ThreadMonitorTestCase extends TestCase {
     /**
      * Test No timeout.
      */
+    @Test
     public void testNoTimeout() {
 
         // timeout = -1

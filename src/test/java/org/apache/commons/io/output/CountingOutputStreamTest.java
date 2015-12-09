@@ -21,22 +21,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
  * @version $Id$
  */
 
-public class CountingOutputStreamTest extends TestCase {
+public class CountingOutputStreamTest {
 
-    public CountingOutputStreamTest(final String name) {
-        super(name);
-    }
 
+    @Test
     public void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final CountingOutputStream cos = new CountingOutputStream(baos);
@@ -77,6 +77,7 @@ public class CountingOutputStreamTest extends TestCase {
     /*
      * Test for files > 2GB in size - see issue IO-84
      */
+    @Test
     public void testLargeFiles_IO84() throws Exception {
         final long size = (long)Integer.MAX_VALUE + (long)1;
 

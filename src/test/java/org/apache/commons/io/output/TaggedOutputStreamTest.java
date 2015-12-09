@@ -23,12 +23,19 @@ import java.util.UUID;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.TaggedIOException;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link TaggedOutputStream}.
  */
-public class TaggedOutputStreamTest extends TestCase {
+public class TaggedOutputStreamTest  {
 
+    @Test
     public void testNormalStream() {
         try {
             final ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
@@ -47,6 +54,7 @@ public class TaggedOutputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testBrokenStream() {
         final IOException exception = new IOException("test exception");
         final TaggedOutputStream stream =
@@ -95,6 +103,7 @@ public class TaggedOutputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
         final OutputStream closed = new ClosedOutputStream();

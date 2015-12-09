@@ -16,21 +16,19 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.junit.Test;
+
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
  * @version $Id$
  */
-public class HexDumpTest extends TestCase {
-
-    public HexDumpTest(final String name) {
-        super(name);
-    }
+public class HexDumpTest {
 
     private char toHex(final int n) {
         final char[] hexChars =
@@ -42,6 +40,7 @@ public class HexDumpTest extends TestCase {
         return hexChars[n % 16];
     }
 
+    @Test
     public void testDump()
             throws IOException {
         final byte[] testArray = new byte[256];

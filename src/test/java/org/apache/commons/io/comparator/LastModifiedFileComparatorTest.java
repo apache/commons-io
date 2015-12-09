@@ -16,34 +16,50 @@
  */
 package org.apache.commons.io.comparator;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Before;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Test case for {@link LastModifiedFileComparator}.
  */
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /**
-     * Construct a new test case with the specified name.
-     *
-     * @param name Name of the test
-     */
-    public LastModifiedFileComparatorTest(final String name) {
-        super(name);
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         comparator = (AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
         final File dir = getTestDirectory();
         final File olderFile = new File(dir, "older.txt");
-        createFile(olderFile, 0);
+        if (!olderFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + olderFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(olderFile));
+        try {
+            TestUtils.generateTestData(output2, (long) 0);
+        } finally {
+            IOUtils.closeQuietly(output2);
+        }
 
         final File equalFile = new File(dir, "equal.txt");
-        createFile(equalFile, 0);
+        if (!equalFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + equalFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(equalFile));
+        try {
+            TestUtils.generateTestData(output1, (long) 0);
+        } finally {
+            IOUtils.closeQuietly(output1);
+        }
         do {
             try { 
                 Thread.sleep(300);
@@ -54,7 +70,17 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         } while( olderFile.lastModified() == equalFile.lastModified() );
 
         final File newerFile = new File(dir, "newer.txt");
-        createFile(newerFile, 0);
+        if (!newerFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + newerFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(newerFile));
+        try {
+            TestUtils.generateTestData(output, (long) 0);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
         do {
             try { 
                 Thread.sleep(300);

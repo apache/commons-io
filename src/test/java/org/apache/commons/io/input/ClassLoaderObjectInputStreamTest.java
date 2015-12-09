@@ -16,24 +16,17 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the CountingInputStream.
  *
  * @version $Id$
  */
-public class ClassLoaderObjectInputStreamTest extends TestCase {
-
-    public ClassLoaderObjectInputStreamTest(final String name) {
-        super(name);
-    }
+public class ClassLoaderObjectInputStreamTest {
 
     /* Note: This test case tests the simplest functionality of
      * ObjectInputStream.  IF we really wanted to test ClassLoaderObjectInputStream
@@ -41,6 +34,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
      */
 
 
+    @org.junit.Test
     public void testExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -58,6 +52,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
+    @org.junit.Test
     public void testLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -75,6 +70,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
+    @org.junit.Test
     public void testPrimitiveLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -134,6 +130,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         }
     }
 
+    @org.junit.Test
     public void testObject1() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -152,6 +149,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
+    @org.junit.Test
     public void testObject2() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -170,6 +168,7 @@ public class ClassLoaderObjectInputStreamTest extends TestCase {
         clois.close();
     }
 
+    @org.junit.Test
     public void testResolveProxyClass() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();

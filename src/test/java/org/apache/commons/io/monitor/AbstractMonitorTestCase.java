@@ -25,11 +25,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * {@link FileAlterationObserver} Test Case.
  */
-public abstract class AbstractMonitorTestCase extends TestCase {
+public abstract class AbstractMonitorTestCase  {
 
     /** File observer */
     protected FileAlterationObserver observer;
@@ -46,17 +51,8 @@ public abstract class AbstractMonitorTestCase extends TestCase {
     /** Time in milliseconds to pause in tests */
     protected long pauseTime = 100L;
 
-    /**
-     * Construct a new test case.
-     *
-     * @param name The name of the test
-     */
-    public AbstractMonitorTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         testDir = new File(new File("."), testDirName);
         if (testDir.exists()) {
             FileUtils.cleanDirectory(testDir);
@@ -94,8 +90,8 @@ public abstract class AbstractMonitorTestCase extends TestCase {
         }
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(testDir);
     }
 

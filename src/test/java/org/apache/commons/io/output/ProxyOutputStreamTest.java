@@ -16,22 +16,25 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 /**
  * JUnit Test Case for {@link CloseShieldOutputStream}.
  */
-public class ProxyOutputStreamTest extends TestCase {
+public class ProxyOutputStreamTest {
 
     private ByteArrayOutputStream original;
 
     private OutputStream proxied;
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         original = new ByteArrayOutputStream(){
             @Override
             public void write(final byte[] ba) throws IOException {
@@ -43,12 +46,14 @@ public class ProxyOutputStreamTest extends TestCase {
         proxied = new ProxyOutputStream(original);
     }
 
+    @Test
     public void testWrite() throws Exception {
         proxied.write('y');
         assertEquals(1, original.size());
         assertEquals('y', original.toByteArray()[0]);
     }
 
+    @Test
     public void testWriteNullBaSucceeds() throws Exception {
         final byte[] ba = null;
         original.write(ba);

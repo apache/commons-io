@@ -16,10 +16,19 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Test;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test for FileDeleteStrategy.
@@ -29,27 +38,24 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  */
 public class FileDeleteStrategyTestCase extends FileBasedTestCase {
 
-    public FileDeleteStrategyTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     //-----------------------------------------------------------------------
+    @Test
     public void testDeleteNormal() throws Exception {
         final File baseDir = getTestDirectory();
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");
-        createFile(subFile, 16);
+        if (!subFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + subFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile));
+        try {
+            TestUtils.generateTestData(output, (long) 16);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
 
         assertTrue(subDir.exists());
         assertTrue(subFile.exists());
@@ -74,12 +80,23 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         assertFalse(subDir.exists());
     }
 
+    @Test
     public void testDeleteQuietlyNormal() throws Exception {
         final File baseDir = getTestDirectory();
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");
-        createFile(subFile, 16);
+        if (!subFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + subFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile));
+        try {
+            TestUtils.generateTestData(output, (long) 16);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
 
         assertTrue(subDir.exists());
         assertTrue(subFile.exists());
@@ -99,12 +116,23 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         assertFalse(subDir.exists());
     }
 
+    @Test
     public void testDeleteForce() throws Exception {
         final File baseDir = getTestDirectory();
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");
-        createFile(subFile, 16);
+        if (!subFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + subFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile));
+        try {
+            TestUtils.generateTestData(output, (long) 16);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
 
         assertTrue(subDir.exists());
         assertTrue(subFile.exists());
@@ -117,6 +145,7 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         assertFalse(subDir.exists());
     }
 
+    @Test
     public void testDeleteNull() throws Exception {
         try {
             FileDeleteStrategy.NORMAL.delete(null);
@@ -127,6 +156,7 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
         assertTrue(FileDeleteStrategy.NORMAL.deleteQuietly(null));
     }
 
+    @Test
     public void testToString() {
         assertEquals("FileDeleteStrategy[Normal]", FileDeleteStrategy.NORMAL.toString());
         assertEquals("FileDeleteStrategy[Force]", FileDeleteStrategy.FORCE.toString());

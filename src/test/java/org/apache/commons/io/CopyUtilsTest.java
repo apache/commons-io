@@ -26,8 +26,15 @@ import java.util.Arrays;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
 
@@ -49,34 +56,20 @@ public class CopyUtilsTest extends FileBasedTestCase {
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
 
-    private final byte[] inData = generateTestData(FILE_SIZE);
-
-    public CopyUtilsTest(final String testName) {
-        super(testName);
-    }
-
-    // ----------------------------------------------------------------
-    // Setup
-    // ----------------------------------------------------------------
-
-    @Override
-    public void setUp() throws Exception {
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-    }
+    private final byte[] inData = TestUtils.generateTestData((long) FILE_SIZE);
 
     // ----------------------------------------------------------------
     // Tests
     // ----------------------------------------------------------------
 
+    @Test
     public void testCtor() {
         new CopyUtils();
         // Nothing to assert, the constructor is public and does not blow up.
     }
 
-    public void testCopy_byteArrayToOutputStream() throws Exception {
+    @Test
+    public void copy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
 
@@ -86,7 +79,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-    public void testCopy_byteArrayToWriter() throws Exception {
+    @Test
+    public void copy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
@@ -98,6 +92,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
+    @Test
     public void testCopy_byteArrayToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
         final String charsetName = "UTF-8";
@@ -107,6 +102,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -123,7 +119,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
-    public void testCopy_inputStreamToWriter() throws Exception {
+    @Test
+    public void copy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
 
@@ -139,7 +136,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-    public void testCopy_inputStreamToWriterWithEncoding() throws Exception {
+    @Test
+    public void copy_inputStreamToWriterWithEncoding() throws Exception {
         final String inDataStr = "data";
         final String charsetName = "UTF-8";
         final StringWriter writer = new StringWriter();
@@ -148,6 +146,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
+    @Test
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
@@ -169,7 +168,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
-    public void testCopy_readerToWriter() throws Exception {
+    @Test
+    public void copy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
@@ -188,7 +188,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-    public void testCopy_stringToOutputStream() throws Exception {
+    @Test
+    public void copy_stringToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -206,7 +207,8 @@ public class CopyUtilsTest extends FileBasedTestCase {
         assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
     }
 
-    public void testCopy_stringToWriter() throws Exception {
+    @Test
+    public void copy_stringToWriter() throws Exception {
         final String str = new String(inData, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();

@@ -16,6 +16,12 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.OrFileFilter;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -23,12 +29,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import junit.framework.TestCase;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.OrFileFilter;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This is used to test DirectoryWalker for correctness when using Java4 (i.e. no generics).
@@ -37,7 +41,7 @@ import org.junit.Assert;
  * @see DirectoryWalker
  */
 @SuppressWarnings({"unchecked", "rawtypes"}) // Java4
-public class DirectoryWalkerTestCaseJava4 extends TestCase {
+public class DirectoryWalkerTestCaseJava4 {
 
     // Directories
     private static final File current = new File(".");
@@ -67,25 +71,12 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);
 
-    public DirectoryWalkerTestCaseJava4(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     //-----------------------------------------------------------------------
 
     /**
      * Test Filtering
      */
+    @Test
     public void testFilter() {
         final List<File> results = new TestFileFinder(dirsAndFilesFilter, -1).find(javaDir);
         assertEquals("Result Size", 1 + dirs.length + ioFiles.length + outputFiles.length, results.size());
@@ -98,6 +89,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Filtering and limit to depth 0
      */
+    @Test
     public void testFilterAndLimitA() {
         final List<File> results = new TestFileFinder(NOT_SVN, 0).find(javaDir);
         assertEquals("[A] Result Size", 1, results.size());
@@ -107,6 +99,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Filtering and limit to depth 1
      */
+    @Test
     public void testFilterAndLimitB() {
         final List<File> results = new TestFileFinder(NOT_SVN, 1).find(javaDir);
         assertEquals("[B] Result Size", 2, results.size());
@@ -117,6 +110,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Filtering and limit to depth 3
      */
+    @Test
     public void testFilterAndLimitC() {
         final List<File> results = new TestFileFinder(NOT_SVN, 3).find(javaDir);
         assertEquals("[C] Result Size", 4, results.size());
@@ -129,6 +123,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Filtering and limit to depth 5
      */
+    @Test
     public void testFilterAndLimitD() {
         final List<File> results = new TestFileFinder(dirsAndFilesFilter, 5).find(javaDir);
         assertEquals("[D] Result Size", 1 + dirs.length + ioFiles.length, results.size());
@@ -140,6 +135,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test separate dir and file filters
      */
+    @Test
     public void testFilterDirAndFile1() {
         final List<File> results = new TestFileFinder(dirsFilter, iofilesFilter, -1).find(javaDir);
         assertEquals("[DirAndFile1] Result Size", 1 + dirs.length + ioFiles.length, results.size());
@@ -151,6 +147,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test separate dir and file filters
      */
+    @Test
     public void testFilterDirAndFile2() {
         final List<File> results = new TestFileFinder(null, null, -1).find(javaDir);
         assertTrue("[DirAndFile2] Result Size", results.size() > 1 + dirs.length + ioFiles.length);
@@ -162,6 +159,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test separate dir and file filters
      */
+    @Test
     public void testFilterDirAndFile3() {
         final List<File> results = new TestFileFinder(dirsFilter, null, -1).find(javaDir);
         final List resultDirs = directoriesOnly(results);
@@ -173,6 +171,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test separate dir and file filters
      */
+    @Test
     public void testFilterDirAndFile4() {
         final List<File> results = new TestFileFinder(null, iofilesFilter, -1).find(javaDir);
         final List resultFiles = filesOnly(results);
@@ -184,6 +183,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Limiting to current directory
      */
+    @Test
     public void testLimitToCurrent() {
         final List<File> results = new TestFileFinder(null, 0).find(current);
         assertEquals("Result Size", 1, results.size());
@@ -193,6 +193,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * test an invalid start directory
      */
+    @Test
     public void testMissingStartDirectory() {
 
         // TODO is this what we want with invalid directory?
@@ -212,6 +213,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * test an invalid start directory
      */
+    @Test
     public void testHandleStartDirectoryFalse() {
 
         final List<File> results = new TestFalseFileFinder(null, -1).find(current);
@@ -271,6 +273,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Cancel
      */
+    @Test
     public void testCancel() {
         String cancelName = null;
 
@@ -312,6 +315,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
     /**
      * Test Cancel
      */
+    @Test
     public void testMultiThreadCancel() {
         String cancelName = "DirectoryWalker.java";
         TestMultiThreadCancelWalker walker = new TestMultiThreadCancelWalker(cancelName, false);
@@ -376,7 +380,7 @@ public class DirectoryWalkerTestCaseJava4 extends TestCase {
             try {
                 walk(startDirectory, results);
             } catch (final IOException ex) {
-                Assert.fail(ex.toString());
+                fail(ex.toString());
             }
             return results;
         }

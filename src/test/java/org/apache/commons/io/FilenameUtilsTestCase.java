@@ -16,12 +16,24 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This is used to test FilenameUtils for correctness.
@@ -40,35 +52,78 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     private final int testFile1Size;
     private final int testFile2Size;
 
-    public FilenameUtilsTestCase(final String name) {
-        super(name);
-
+    public FilenameUtilsTestCase() {
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
         testFile2 = new File(getTestDirectory(), "file1a-test.txt");
 
-        testFile1Size = (int)testFile1.length();
-        testFile2Size = (int)testFile2.length();
+        testFile1Size = (int) testFile1.length();
+        testFile2Size = (int) testFile2.length();
     }
 
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        getTestDirectory().mkdirs();
-        createFile(testFile1, testFile1Size);
-        createFile(testFile2, testFile2Size);
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
+    @Before
+    public void setUp() throws Exception {
+        getTestDirectory();
+        if (!testFile1.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile1
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output3 =
+                new BufferedOutputStream(new FileOutputStream(testFile1));
+        try {
+            TestUtils.generateTestData(output3, (long) testFile1Size);
+        } finally {
+            IOUtils.closeQuietly(output3);
+        }
+        if (!testFile2.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile2
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(testFile2));
+        try {
+            TestUtils.generateTestData(output2, (long) testFile2Size);
+        } finally {
+            IOUtils.closeQuietly(output2);
+        }
         FileUtils.deleteDirectory(getTestDirectory());
-        getTestDirectory().mkdirs();
-        createFile(testFile1, testFile1Size);
-        createFile(testFile2, testFile2Size);
+        getTestDirectory();
+        if (!testFile1.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile1
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(testFile1));
+        try {
+            TestUtils.generateTestData(output1, (long) testFile1Size);
+        } finally {
+            IOUtils.closeQuietly(output1);
+        }
+        if (!testFile2.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile2
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(testFile2));
+        try {
+            TestUtils.generateTestData(output, (long) testFile2Size);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
     }
 
-    /** @see junit.framework.TestCase#tearDown() */
-    @Override
-    protected void tearDown() throws Exception {
+    /**
+     * @see junit.framework.TestCase#tearDown()
+     */
+    @After
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testNormalize() throws Exception {
         assertEquals(null, FilenameUtils.normalize(null));
         assertEquals(null, FilenameUtils.normalize(":"));
@@ -218,6 +273,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
     }
 
+    @Test
     public void testNormalize_with_nullbytes() throws Exception {
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
@@ -230,11 +286,12 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testNormalizeUnixWin() throws Exception {
 
         // Normalize (Unix Separator)
-        assertEquals("/a/c/",    FilenameUtils.normalize("/a/b/../c/", true));
-        assertEquals("/a/c/",    FilenameUtils.normalize("\\a\\b\\..\\c\\", true));
+        assertEquals("/a/c/", FilenameUtils.normalize("/a/b/../c/", true));
+        assertEquals("/a/c/", FilenameUtils.normalize("\\a\\b\\..\\c\\", true));
 
         // Normalize (Windows Separator)
         assertEquals("\\a\\c\\", FilenameUtils.normalize("/a/b/../c/", false));
@@ -242,6 +299,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testNormalizeNoEndSeparator() throws Exception {
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator(null));
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator(":"));
@@ -391,11 +449,12 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalizeNoEndSeparator("//server/"));
     }
 
+    @Test
     public void testNormalizeNoEndSeparatorUnixWin() throws Exception {
 
         // Normalize (Unix Separator)
-        assertEquals("/a/c",   FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", true));
-        assertEquals("/a/c",   FilenameUtils.normalizeNoEndSeparator("\\a\\b\\..\\c\\", true));
+        assertEquals("/a/c", FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", true));
+        assertEquals("/a/c", FilenameUtils.normalizeNoEndSeparator("\\a\\b\\..\\c\\", true));
 
         // Normalize (Windows Separator)
         assertEquals("\\a\\c", FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", false));
@@ -403,6 +462,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testConcat() {
         assertEquals(null, FilenameUtils.concat("", null));
         assertEquals(null, FilenameUtils.concat(null, null));
@@ -442,6 +502,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testSeparatorsToUnix() {
         assertEquals(null, FilenameUtils.separatorsToUnix(null));
         assertEquals("/a/b/c", FilenameUtils.separatorsToUnix("/a/b/c"));
@@ -451,6 +512,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("D:/a/b/c", FilenameUtils.separatorsToUnix("D:\\a\\b\\c"));
     }
 
+    @Test
     public void testSeparatorsToWindows() {
         assertEquals(null, FilenameUtils.separatorsToWindows(null));
         assertEquals("\\a\\b\\c", FilenameUtils.separatorsToWindows("\\a\\b\\c"));
@@ -460,6 +522,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("D:\\a\\b\\c", FilenameUtils.separatorsToWindows("D:/a/b/c"));
     }
 
+    @Test
     public void testSeparatorsToSystem() {
         if (WINDOWS) {
             assertEquals(null, FilenameUtils.separatorsToSystem(null));
@@ -479,6 +542,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testGetPrefixLength() {
         assertEquals(-1, FilenameUtils.getPrefixLength(null));
         assertEquals(-1, FilenameUtils.getPrefixLength(":"));
@@ -519,8 +583,9 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(9, FilenameUtils.getPrefixLength("//server/a/b/c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("\\\\\\a\\b\\c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("///a/b/c.txt"));
-}
+    }
 
+    @Test
     public void testIndexOfLastSeparator() {
         assertEquals(-1, FilenameUtils.indexOfLastSeparator(null));
         assertEquals(-1, FilenameUtils.indexOfLastSeparator("noseperator.inthispath"));
@@ -528,6 +593,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(3, FilenameUtils.indexOfLastSeparator("a\\b\\c"));
     }
 
+    @Test
     public void testIndexOfExtension() {
         assertEquals(-1, FilenameUtils.indexOfExtension(null));
         assertEquals(-1, FilenameUtils.indexOfExtension("file"));
@@ -540,6 +606,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testGetPrefix() {
         assertEquals(null, FilenameUtils.getPrefix(null));
         assertEquals(null, FilenameUtils.getPrefix(":"));
@@ -577,6 +644,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("~user\\", FilenameUtils.getPrefix("~user\\a\\b\\c.txt"));
     }
 
+    @Test
     public void testGetPrefix_with_nullbyte() {
         try {
             assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
@@ -585,6 +653,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testGetPath() {
         assertEquals(null, FilenameUtils.getPath(null));
         assertEquals("", FilenameUtils.getPath("noseperator.inthispath"));
@@ -621,16 +690,13 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a/b/", FilenameUtils.getPath("~user/a/b/c.txt"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
     public void testGetPath_with_nullbyte() {
-        try {
-            assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
-        } catch (IllegalArgumentException ignore) {
-
-        }
-        ;
+        assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
     }
 
 
+    @Test
     public void testGetPathNoEndSeparator() {
         assertEquals(null, FilenameUtils.getPath(null));
         assertEquals("", FilenameUtils.getPath("noseperator.inthispath"));
@@ -667,6 +733,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a/b/c.txt"));
     }
 
+    @Test
     public void testGetPathNoEndSeparator_with_null_byte() {
         try {
             assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
@@ -675,6 +742,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testGetFullPath() {
         assertEquals(null, FilenameUtils.getFullPath(null));
         assertEquals("", FilenameUtils.getFullPath("noseperator.inthispath"));
@@ -709,6 +777,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("~user/a/b/", FilenameUtils.getFullPath("~user/a/b/c.txt"));
     }
 
+    @Test
     public void testGetFullPathNoEndSeparator() {
         assertEquals(null, FilenameUtils.getFullPathNoEndSeparator(null));
         assertEquals("", FilenameUtils.getFullPathNoEndSeparator("noseperator.inthispath"));
@@ -746,21 +815,23 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     /**
      * Test for https://issues.apache.org/jira/browse/IO-248
      */
+    @Test
     public void testGetFullPathNoEndSeparator_IO_248() {
 
         // Test single separator
-        assertEquals("/",  FilenameUtils.getFullPathNoEndSeparator("/"));
+        assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\"));
 
         // Test one level directory
-        assertEquals("/",  FilenameUtils.getFullPathNoEndSeparator("/abc"));
+        assertEquals("/", FilenameUtils.getFullPathNoEndSeparator("/abc"));
         assertEquals("\\", FilenameUtils.getFullPathNoEndSeparator("\\abc"));
 
         // Test one level directory
-        assertEquals("/abc",  FilenameUtils.getFullPathNoEndSeparator("/abc/xyz"));
+        assertEquals("/abc", FilenameUtils.getFullPathNoEndSeparator("/abc/xyz"));
         assertEquals("\\abc", FilenameUtils.getFullPathNoEndSeparator("\\abc\\xyz"));
     }
 
+    @Test
     public void testGetName() {
         assertEquals(null, FilenameUtils.getName(null));
         assertEquals("noseperator.inthispath", FilenameUtils.getName("noseperator.inthispath"));
@@ -770,6 +841,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("c", FilenameUtils.getName("a\\b\\c"));
     }
 
+    @Test
     public void testInjectionFailure() {
         try {
             assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
@@ -778,6 +850,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testGetBaseName() {
         assertEquals(null, FilenameUtils.getBaseName(null));
         assertEquals("noseperator", FilenameUtils.getBaseName("noseperator.inthispath"));
@@ -788,6 +861,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("file.txt", FilenameUtils.getBaseName("file.txt.bak"));
     }
 
+    @Test
     public void testGetBaseName_with_nullByte() {
         try {
             assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
@@ -796,6 +870,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testGetExtension() {
         assertEquals(null, FilenameUtils.getExtension(null));
         assertEquals("ext", FilenameUtils.getExtension("file.ext"));
@@ -812,6 +887,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
     }
 
+    @Test
     public void testRemoveExtension() {
         assertEquals(null, FilenameUtils.removeExtension(null));
         assertEquals("file", FilenameUtils.removeExtension("file.ext"));
@@ -829,6 +905,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testEquals() {
         assertTrue(FilenameUtils.equals(null, null));
         assertFalse(FilenameUtils.equals(null, ""));
@@ -839,6 +916,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertFalse(FilenameUtils.equals("a\\b\\file.txt", "a/b/file.txt"));
     }
 
+    @Test
     public void testEqualsOnSystem() {
         assertTrue(FilenameUtils.equalsOnSystem(null, null));
         assertFalse(FilenameUtils.equalsOnSystem(null, ""));
@@ -850,6 +928,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testEqualsNormalized() {
         assertTrue(FilenameUtils.equalsNormalized(null, null));
         assertFalse(FilenameUtils.equalsNormalized(null, ""));
@@ -861,6 +940,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertFalse(FilenameUtils.equalsNormalized("a/b/", "a/b"));
     }
 
+    @Test
     public void testEqualsNormalizedOnSystem() {
         assertTrue(FilenameUtils.equalsNormalizedOnSystem(null, null));
         assertFalse(FilenameUtils.equalsNormalizedOnSystem(null, ""));
@@ -875,27 +955,29 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     /**
      * Test for https://issues.apache.org/jira/browse/IO-128
      */
+    @Test
     public void testEqualsNormalizedError_IO_128() {
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
             fail("Invalid normalized first file");
-        } catch(final NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
             fail("Invalid normalized second file");
-        } catch(final NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
             fail("Invalid normalized both filse");
-        } catch(final NullPointerException e) {
+        } catch (final NullPointerException e) {
             // expected result
         }
     }
 
+    @Test
     public void testEquals_fullControl() {
         assertFalse(FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.SENSITIVE));
         assertTrue(FilenameUtils.equals("file.txt", "FILE.TXT", true, IOCase.INSENSITIVE));
@@ -904,6 +986,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testIsExtension() {
         assertFalse(FilenameUtils.isExtension(null, (String) null));
         assertFalse(FilenameUtils.isExtension("file.txt", (String) null));
@@ -936,6 +1019,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
     }
 
+    @Test
     public void testIsExtension_injection() {
         try {
             FilenameUtils.isExtension("a.b\\fi\u0000le.txt", "TXT");
@@ -944,80 +1028,82 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testIsExtensionArray() {
         assertFalse(FilenameUtils.isExtension(null, (String[]) null));
         assertFalse(FilenameUtils.isExtension("file.txt", (String[]) null));
         assertTrue(FilenameUtils.isExtension("file", (String[]) null));
         assertFalse(FilenameUtils.isExtension("file.txt", new String[0]));
-        assertTrue(FilenameUtils.isExtension("file.txt", new String[] {"txt"}));
-        assertFalse(FilenameUtils.isExtension("file.txt", new String[] {"rtf"}));
-        assertTrue(FilenameUtils.isExtension("file", new String[] {"rtf", ""}));
-        assertTrue(FilenameUtils.isExtension("file.txt", new String[] {"rtf", "txt"}));
+        assertTrue(FilenameUtils.isExtension("file.txt", new String[]{"txt"}));
+        assertFalse(FilenameUtils.isExtension("file.txt", new String[]{"rtf"}));
+        assertTrue(FilenameUtils.isExtension("file", new String[]{"rtf", ""}));
+        assertTrue(FilenameUtils.isExtension("file.txt", new String[]{"rtf", "txt"}));
 
         assertFalse(FilenameUtils.isExtension("a/b/file.txt", (String[]) null));
         assertFalse(FilenameUtils.isExtension("a/b/file.txt", new String[0]));
-        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new String[] {"txt"}));
-        assertFalse(FilenameUtils.isExtension("a/b/file.txt", new String[] {"rtf"}));
-        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new String[] {"rtf", "txt"}));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new String[]{"txt"}));
+        assertFalse(FilenameUtils.isExtension("a/b/file.txt", new String[]{"rtf"}));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new String[]{"rtf", "txt"}));
 
         assertFalse(FilenameUtils.isExtension("a.b/file.txt", (String[]) null));
         assertFalse(FilenameUtils.isExtension("a.b/file.txt", new String[0]));
-        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new String[] {"txt"}));
-        assertFalse(FilenameUtils.isExtension("a.b/file.txt", new String[] {"rtf"}));
-        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new String[] {"rtf", "txt"}));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new String[]{"txt"}));
+        assertFalse(FilenameUtils.isExtension("a.b/file.txt", new String[]{"rtf"}));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new String[]{"rtf", "txt"}));
 
         assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", (String[]) null));
         assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new String[0]));
-        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"txt"}));
-        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"rtf"}));
-        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new String[] {"rtf", "txt"}));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new String[]{"txt"}));
+        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new String[]{"rtf"}));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new String[]{"rtf", "txt"}));
 
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", (String[]) null));
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[0]));
-        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new String[] {"txt"}));
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[] {"rtf"}));
-        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new String[] {"rtf", "txt"}));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new String[]{"txt"}));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[]{"rtf"}));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new String[]{"rtf", "txt"}));
 
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT"}));
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[] {"TXT", "RTF"}));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[]{"TXT"}));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new String[]{"TXT", "RTF"}));
     }
 
+    @Test
     public void testIsExtensionCollection() {
         assertFalse(FilenameUtils.isExtension(null, (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("file.txt", (Collection<String>) null));
         assertTrue(FilenameUtils.isExtension("file", (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("file.txt", new ArrayList<String>()));
-        assertTrue(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[] {"txt"}))));
-        assertFalse(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf"}))));
-        assertTrue(FilenameUtils.isExtension("file", new ArrayList<String>(Arrays.asList(new String[] {"rtf", ""}))));
-        assertTrue(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf", "txt"}))));
+        assertTrue(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[]{"txt"}))));
+        assertFalse(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf"}))));
+        assertTrue(FilenameUtils.isExtension("file", new ArrayList<String>(Arrays.asList(new String[]{"rtf", ""}))));
+        assertTrue(FilenameUtils.isExtension("file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf", "txt"}))));
 
         assertFalse(FilenameUtils.isExtension("a/b/file.txt", (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>()));
-        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"txt"}))));
-        assertFalse(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf"}))));
-        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf", "txt"}))));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"txt"}))));
+        assertFalse(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf"}))));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf", "txt"}))));
 
         assertFalse(FilenameUtils.isExtension("a.b/file.txt", (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>()));
-        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"txt"}))));
-        assertFalse(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf"}))));
-        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf", "txt"}))));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"txt"}))));
+        assertFalse(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf"}))));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf", "txt"}))));
 
         assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>()));
-        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"txt"}))));
-        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf"}))));
-        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf", "txt"}))));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"txt"}))));
+        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf"}))));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf", "txt"}))));
 
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>()));
-        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"txt"}))));
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf"}))));
-        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"rtf", "txt"}))));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"txt"}))));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf"}))));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"rtf", "txt"}))));
 
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"TXT"}))));
-        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[] {"TXT", "RTF"}))));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"TXT"}))));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<String>(Arrays.asList(new String[]{"TXT", "RTF"}))));
     }
 
 }

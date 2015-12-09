@@ -21,6 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
@@ -30,20 +37,17 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
     final File top = getTestDirectory();
 
-    public FileUtilsCleanSymlinksTestCase(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         top.mkdirs();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(top);
     }
 
+    @Test
     public void testCleanDirWithSymlinkFile() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -78,6 +82,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
     }
 
 
+    @Test
     public void testCleanDirWithASymlinkDir() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -112,6 +117,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertEquals("Contents of sym link should not have been removed", 1, randomDirectory.list().length);
     }
 
+    @Test
     public void testCleanDirWithParentSymlinks() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -150,6 +156,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertEquals("Contents of sym link should not have been removed", 1, randomDirectory.list().length);
     }
 
+    @Test
     public void testStillClearsIfGivenDirectoryIsASymlink() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -171,6 +178,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
     }
 
 
+    @Test
     public void testIdentifiesSymlinkDir() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -187,6 +195,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.isSymlink(randomDirectory));
     }
 
+    @Test
     public void testIdentifiesSymlinkFile() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -203,6 +212,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.isSymlink(randomFile));
     }
 
+    @Test
     public void testIdentifiesBrokenSymlinkFile() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.
@@ -222,6 +232,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
         assertFalse(FileUtils.isSymlink(badSymlinkInPathFile));
     }
 
+    @Test
     public void testCorrectlyIdentifySymlinkWithParentSymLink() throws Exception {
         if (System.getProperty("os.name").startsWith("Win")) {
             // cant create symlinks in windows.

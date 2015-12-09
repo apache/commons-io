@@ -16,10 +16,20 @@
  */
 package org.apache.commons.io;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -33,24 +43,42 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     private final File m_testFile1;
     private final File m_testFile2;
 
-    public FileUtilsFileNewerTestCase(final String name) {
-        super(name);
-
+    public FileUtilsFileNewerTestCase() {
         m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
         m_testFile2 = new File(getTestDirectory(), "file2-test.txt");
     }
 
     /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         getTestDirectory().mkdirs();
-        createFile(m_testFile1, FILE1_SIZE);
-        createFile(m_testFile2, FILE2_SIZE);
+        if (!m_testFile1.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + m_testFile1
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(m_testFile1));
+        try {
+            TestUtils.generateTestData(output1, (long) FILE1_SIZE);
+        } finally {
+            IOUtils.closeQuietly(output1);
+        }
+        if (!m_testFile2.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + m_testFile2
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(m_testFile2));
+        try {
+            TestUtils.generateTestData(output, (long) FILE2_SIZE);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
     }
 
     /** @see junit.framework.TestCase#tearDown() */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         m_testFile1.delete();
         m_testFile2.delete();
     }
@@ -62,6 +90,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
+    @Test
     public void testIsFileNewer() {
         if (!m_testFile1.exists()) {
             throw new IllegalStateException("The m_testFile1 should exist");
@@ -82,6 +111,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
+    @Test
     public void testIsFileNewerImaginaryFile() {
         final File imaginaryFile = new File(getTestDirectory(), "imaginaryFile");
         if (imaginaryFile.exists()) {
@@ -130,11 +160,10 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * <br>
      * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
      */
+    @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoFile() {
-        try {
-            FileUtils.isFileNewer(null,0);
-            fail("File not specified");
-        } catch (final IllegalArgumentException e) {}
+        FileUtils.isFileNewer(null,0);
+        fail("File not specified");
     }
 
     /**
@@ -142,11 +171,10 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * <br>
      * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
      */
+    @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoDate() {
-        try {
-            FileUtils.isFileNewer(m_testFile1, (Date) null);
-            fail("Date not specified");
-        } catch (final IllegalArgumentException e) {}
+        FileUtils.isFileNewer(m_testFile1, (Date) null);
+        fail("Date not specified");
     }
 
     /**
@@ -154,10 +182,9 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * <br>
      * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
      */
+    @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoFileReference() {
-        try {
-            FileUtils.isFileNewer(m_testFile1, (File) null);
-            fail("Reference file not specified");
-        } catch (final IllegalArgumentException e) {}
+        FileUtils.isFileNewer(m_testFile1, (File) null);
+        fail("Reference file not specified");
     }
 }

@@ -16,25 +16,23 @@
  */
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.io.IOUtils;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link BoundedInputStream}.
  *
  * @version $Id$
  */
-public class BoundedInputStreamTest extends TestCase {
+public class BoundedInputStreamTest {
 
-    public BoundedInputStreamTest(final String name) {
-        super(name);
-    }
-
+    @Test
     public void testReadSingle() throws Exception {
-        BoundedInputStream bounded = null;
+        BoundedInputStream bounded;
         final byte[] helloWorld = "Hello World".getBytes();
         final byte[] hello      = "Hello".getBytes();
 
@@ -60,9 +58,10 @@ public class BoundedInputStreamTest extends TestCase {
         assertEquals("limit < length end", -1, bounded.read());
     }
 
+    @Test
     public void testReadArray() throws Exception {
 
-        BoundedInputStream bounded = null;
+        BoundedInputStream bounded;
         final byte[] helloWorld = "Hello World".getBytes();
         final byte[] hello      = "Hello".getBytes();
 

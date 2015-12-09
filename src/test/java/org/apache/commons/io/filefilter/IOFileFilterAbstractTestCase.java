@@ -20,11 +20,9 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-public abstract class IOFileFilterAbstractTestCase extends TestCase {
+import static org.junit.Assert.assertEquals;
 
-    public IOFileFilterAbstractTestCase(final String name) {
-        super(name);
-    }
+public abstract class IOFileFilterAbstractTestCase {
 
     public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {

@@ -16,13 +16,15 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Random;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class WriterOutputStreamTest extends TestCase {
+public class WriterOutputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
     private static final String LARGE_TEST_STRING;
 
@@ -61,47 +63,58 @@ public class WriterOutputStreamTest extends TestCase {
         assertEquals(testString, writer.toString());
     }
 
+    @Test
     public void testUTF8WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, "UTF-8");
     }
 
+    @Test
     public void testLargeUTF8WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(LARGE_TEST_STRING, "UTF-8");
     }
 
+    @Test
     public void testUTF8WithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, "UTF-8");
     }
 
+    @Test
     public void testLargeUTF8WithBufferedWrite() throws IOException {
         testWithBufferedWrite(LARGE_TEST_STRING, "UTF-8");
     }
 
+    @Test
     public void testUTF16WithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, "UTF-16");
     }
 
+    @Test
     public void testUTF16WithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, "UTF-16");
     }
 
+    @Test
     public void testUTF16BEWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, "UTF-16BE");
     }
 
+    @Test
     public void testUTF16BEWithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, "UTF-16BE");
     }
 
+    @Test
     public void testUTF16LEWithSingleByteWrite() throws IOException {
         testWithSingleByteWrite(TEST_STRING, "UTF-16LE");
     }
 
+    @Test
     public void testUTF16LEWithBufferedWrite() throws IOException {
         testWithBufferedWrite(TEST_STRING, "UTF-16LE");
     }
 
 
+    @Test
     public void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
         final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false);
@@ -112,6 +125,7 @@ public class WriterOutputStreamTest extends TestCase {
         out.close();
     }
 
+    @Test
     public void testWriteImmediately() throws IOException {
         final StringWriter writer = new StringWriter();
         final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true);
