@@ -63,7 +63,7 @@ public class CharSequenceInputStreamTest {
                 final int bufferLength = random.nextInt(64);
                 int read = in.read(buffer, bufferOffset, bufferLength);
                 if (read == -1) {
-                    assertEquals("EOF: offset should equal length", expected.length, offset);
+                    assertEquals("EOF: offset should equal length for charset " + charsetName, expected.length, offset);
                     break;
                 } else {
                     assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
