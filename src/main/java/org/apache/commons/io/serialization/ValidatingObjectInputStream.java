@@ -59,6 +59,10 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         super(input);
     }
 
+    /** Check that the classname conforms to requirements.
+     * @param name The class name
+     * @throws InvalidClassException when a non-accepted class is encountered
+     */
     private void validateClassName(String name) throws InvalidClassException {
         // Reject has precedence over accept
         for (ClassNameMatcher m : rejectMatchers) {
@@ -126,9 +130,9 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     }
 
     /**
-     * Accept the wildcard specified classes for deserialization, 
+     * Accept the wildcard specified classes for deserialization,
      * unless they are otherwise rejected.
-     * 
+     *
      * @param patterns Wildcard filename patterns as defined by
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
