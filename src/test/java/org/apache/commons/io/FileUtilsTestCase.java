@@ -1882,6 +1882,52 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     }
 
     @Test
+    public void testIterateFilesDepthFirst() throws IOException {
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "list_test");
+        subDir.mkdir();
+
+        final String[] fileNames = {"a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"};
+        final int[] fileSizes = {123, 234, 345, 456, 678, 789};
+
+        for (int i = 0; i < fileNames.length; ++i) {
+            final File theFile = new File(subDir, fileNames[i]);
+            if (!theFile.getParentFile().exists()) {
+                throw new IOException("Cannot create file " + theFile
+                        + " as the parent directory does not exist");
+            }
+            final BufferedOutputStream output =
+                    new BufferedOutputStream(new FileOutputStream(theFile));
+            try {
+                TestUtils.generateTestData(output, (long) fileSizes[i]);
+            } finally {
+                IOUtils.closeQuietly(output);
+            }
+        }
+
+        final Iterator<File> files = FileUtils.iterateFilesDepthFirst(subDir,
+                new WildcardFileFilter("*.*"));
+
+        final Map<String, String> foundFileNames = new HashMap<String, String>();
+
+        while (files.hasNext()) {
+            boolean found = false;
+            final String fileName = files.next().getName();
+
+            for (int j = 0; !found && j < fileNames.length; ++j) {
+                if (fileNames[j].equals(fileName)) {
+                    foundFileNames.put(fileNames[j], fileNames[j]);
+                    found = true;
+                }
+            }
+        }
+
+        assertEquals(foundFileNames.size(), fileNames.length);
+
+        subDir.delete();
+    }
+
+    @Test
     public void testIterateFilesAndDirs() throws IOException {
         final File srcDir = getTestDirectory();
 

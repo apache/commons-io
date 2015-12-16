@@ -621,6 +621,27 @@ public class FileUtils {
     }
 
     /**
+     * Allows iteration over the files in given directory
+     * <p>
+     * All files found are filtered by an IOFileFilter. This method creates a
+     * true iterator, meaning that the file tree will be traversed as and when the
+     * files are consumed from iterator. Note that the implementation uses a stack
+     * and performs Depth first traversal.
+     * <p>
+     * @param directory  the directory to search in
+     * @param fileFilter filter to apply when finding files.
+     * @return an iterator of java.io.File for the matching files
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     * @since 1.2
+     */
+    public static Iterator<File> iterateFilesDepthFirst(
+            final File directory, final IOFileFilter fileFilter) {
+        IOFileFilter filter = setUpEffectiveFileFilter(fileFilter);
+        return new DepthFirstFileIterator(directory, filter);
+    }
+
+    /**
      * Allows iteration over the files in given directory (and optionally
      * its subdirectories).
      * <p>
