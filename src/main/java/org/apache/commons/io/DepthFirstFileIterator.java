@@ -28,9 +28,9 @@ public class DepthFirstFileIterator implements Iterator<File> {
      */
     public DepthFirstFileIterator(File root, FileFilter fileFilter){
         this.stack = new Stack<File>();
+        this.fileFilter = fileFilter;
         this.stack.add(root);
         this.next = getNext();
-        this.fileFilter = fileFilter;
     }
 
 
