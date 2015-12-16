@@ -199,6 +199,18 @@ public class IOUtils {
             // ignore
         }
     }
+    
+   /**
+   * Close quietly using an indefinite number of <code>Closeable</code> objects
+   * <p>
+   * Note: This will not work on sockets unless JRE 7 is in use.
+   * 
+   * @param closeable The closeable instance to operate on.
+   */
+    public static void closeQuietly(Closeable... closeable) {
+        for (Closeable c : closeable)
+            IOUtils.closeQuietly(c);
+    }
 
     // read toByteArray
     //-----------------------------------------------------------------------
