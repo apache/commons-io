@@ -20,6 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,8 +69,8 @@ public class CharSequenceInputStreamTest {
                 } else {
                     assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
                     while (read > 0) {
-                        assertTrue("offset " + offset + " < " + expected.length, offset < expected.length);
-                        assertEquals("bytes should agree", expected[offset], buffer[bufferOffset]);
+                        assertTrue("offset for " + charsetName +" " + offset + " < " + expected.length, offset < expected.length);
+                        assertEquals("bytes should agree for " + charsetName, expected[offset], buffer[bufferOffset]);
                         offset++;
                         bufferOffset++;
                         read--;
@@ -426,14 +427,26 @@ public class CharSequenceInputStreamTest {
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailableRead(CharSequenceInputStreamTest.java:412)
 //            at org.apache.commons.io.input.CharSequenceInputStreamTest.testAvailable(CharSequenceInputStreamTest.java:424)
 
-            if (isAvailabilityTestableForCharset(csName)) {
-                testAvailableSkip(csName);
-                testAvailableRead(csName);
+            try {
+                if (isAvailabilityTestableForCharset(csName)) {
+                    testAvailableSkip(csName);
+                    testAvailableRead(csName);
+                }
+            } catch (UnsupportedOperationException e){
+                fail("Operation not supported for " + csName);
             }
         }
     }
 
     private boolean isAvailabilityTestableForCharset(final String csName) {
-        return Charset.forName(csName).canEncode() && ! "COMPOUND_TEXT".equalsIgnoreCase(csName) && ! "x-COMPOUND_TEXT".equalsIgnoreCase(csName);
+        return Charset.forName(csName).canEncode()
+                && !"COMPOUND_TEXT".equalsIgnoreCase(csName) && !"x-COMPOUND_TEXT".equalsIgnoreCase(csName)
+                && !isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(csName);
+    }
+
+    private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(String csName) {
+        return "x-IBM1388".equalsIgnoreCase(csName) ||
+                "ISO-2022-CN".equalsIgnoreCase(csName) ||
+                "ISO-2022-JP".equalsIgnoreCase(csName);
     }
 }
