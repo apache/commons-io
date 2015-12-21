@@ -32,7 +32,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -41,6 +43,7 @@ import javax.xml.parsers.ParserConfigurationException;
  *
  * @version $Id$
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class BOMInputStreamTest {
     //----------------------------------------------------------------------------
     //  Support code
@@ -180,7 +183,7 @@ public class BOMInputStreamTest {
     }
 
     private void readFile(final BOMInputStream bomInputStream) throws Exception {
-        int bytes = 0;
+        int bytes;
         final byte[] bytesFromStream = new byte[100];
         do {
             bytes = bomInputStream.read(bytesFromStream);
@@ -367,13 +370,13 @@ public class BOMInputStreamTest {
     public void testNoBoms() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
         try {
-            (new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null)).close();;
+            (new BOMInputStream(createUtf8DataStream(data, true), false, (ByteOrderMark[])null)).close();
             fail("Null BOMs, expected IllegalArgumentException");
         } catch (final IllegalArgumentException e) {
             // expected
         }
         try {
-            (new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0])).close();;
+            (new BOMInputStream(createUtf8DataStream(data, true), false, new ByteOrderMark[0])).close();
             fail("Null BOMs, expected IllegalArgumentException");
         } catch (final IllegalArgumentException e) {
             // expected
@@ -596,6 +599,8 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUcs2() throws Exception {
+        Assume.assumeFalse("This test does not pass on some IBM VMs xml parsers", System.getProperty("java.vendor").contains("IBM"));
+
         // UCS-2 is BE.
         Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
@@ -612,6 +617,7 @@ public class BOMInputStreamTest {
         // XML parser does not know what to do with UTF-32
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
         // XML parser does not know what to do with UTF-32
+        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         parseXml(createUtf32BeDataStream(data, true));
     }
 
@@ -633,7 +639,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Be() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
+        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
         // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
@@ -642,7 +648,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Le() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         parseXml(new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE));
         // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
@@ -659,15 +665,15 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithoutBOMUtf32Be() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
-        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
+        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
+        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF_32BE\"?><X/>".getBytes("UTF_32BE");
         parseXml(new BOMInputStream(createUtf32BeDataStream(data, false)));
         parseXml(createUtf32BeDataStream(data, false));
     }
 
     @Test
     public void testReadXmlWithoutBOMUtf32Le() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         parseXml(new BOMInputStream(createUtf32LeDataStream(data, false)));
         parseXml(createUtf32BeDataStream(data, false));
@@ -746,5 +752,22 @@ public class BOMInputStreamTest {
         assertData(
                 new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'A', 'B' },
                 buf, len);
+    }
+
+    private boolean jvmAndSaxBothSupportCharset(String charSetName) throws ParserConfigurationException, SAXException, IOException {
+        return Charset.isSupported(charSetName) &&  doesSaxSupportCharacterSet(charSetName);
+    }
+
+    private boolean doesSaxSupportCharacterSet(String charSetName) throws ParserConfigurationException, SAXException, IOException {
+        final byte[] data = ("<?xml version=\"1.0\" encoding=\"" + charSetName + "\"?><Z/>").getBytes(charSetName);
+        final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        try {
+            final InputSource is = new InputSource(new ByteArrayInputStream(data));
+            is.setEncoding(charSetName);
+            documentBuilder.parse(is);
+        } catch (SAXParseException e) {
+            if (e.getMessage().contains(charSetName)) return false;
+        }
+        return true;
     }
 }
