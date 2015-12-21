@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class WriterOutputStreamTest {
     private static final String TEST_STRING = "\u00e0 peine arriv\u00e9s nous entr\u00e2mes dans sa chambre";
@@ -85,12 +86,24 @@ public class WriterOutputStreamTest {
 
     @Test
     public void testUTF16WithSingleByteWrite() throws IOException {
-        testWithSingleByteWrite(TEST_STRING, "UTF-16");
+        try {
+            testWithSingleByteWrite(TEST_STRING, "UTF-16");
+        } catch (UnsupportedOperationException e){
+            if (!System.getProperty("java.vendor").contains("IBM")){
+                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
+            }
+        }
     }
 
     @Test
     public void testUTF16WithBufferedWrite() throws IOException {
-        testWithBufferedWrite(TEST_STRING, "UTF-16");
+        try {
+            testWithBufferedWrite(TEST_STRING, "UTF-16");
+        } catch (UnsupportedOperationException e) {
+            if (!System.getProperty("java.vendor").contains("IBM")) {
+                fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
+            }
+        }
     }
 
     @Test
