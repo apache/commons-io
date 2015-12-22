@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 
+import org.junit.Assume;
 import org.junit.Test;
 
 public class Java7SupportTest {
@@ -39,6 +40,8 @@ public class Java7SupportTest {
     @Test
     public void createAndReadSymlink()
             throws Exception {
+
+        Assume.assumeFalse(System.getProperty("os.name").contains("windows"));
 
         File file = new File("target/fzz");
         if (Java7Support.isAtLeastJava7()) {
