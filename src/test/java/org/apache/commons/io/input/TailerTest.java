@@ -250,8 +250,6 @@ public class TailerTest extends FileBasedTestCase {
         listener.clear();
 
         // Stop
-        tailer.stop();
-        tailer=null;
         thread.interrupt();
         TestUtils.sleep(testDelayMillis * 4);
         write(file, "Line five");
@@ -261,6 +259,9 @@ public class TailerTest extends FileBasedTestCase {
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertEquals("fileNotFound should not be called", 0 , listener.notFound);
         assertEquals("fileRotated should be be called", 1 , listener.rotated);
+        tailer.stop();
+        tailer=null;
+
     }
 
     @Test
