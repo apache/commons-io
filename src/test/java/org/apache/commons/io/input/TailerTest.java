@@ -290,7 +290,8 @@ public class TailerTest extends FileBasedTestCase {
         write(file, "line7", "line8", "line9");
         TestUtils.sleep(testDelayMillis);
 
-        assertEquals("end of file reached 3 times", 3, listener.reachedEndOfFile);
+        // May be > 3 times due to underlying OS behaviour wrt streams
+        assertTrue("end of file reached at least 3 times", listener.reachedEndOfFile >= 3);
     }
 
     protected void createFile(final File file, final long size)
