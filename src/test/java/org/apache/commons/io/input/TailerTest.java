@@ -269,7 +269,7 @@ public class TailerTest extends FileBasedTestCase {
         // Create & start the Tailer
         final long delayMillis = 50;
         final long testDelayMillis = delayMillis * 10;
-        final File file = new File(getTestDirectory(), "tailer1-test.txt");
+        final File file = new File(getTestDirectory(), "tailer-eof-test.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
         final String osname = System.getProperty("os.name");
