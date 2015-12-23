@@ -447,6 +447,7 @@ public class CharSequenceInputStreamTest {
     private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(String csName) {
         return "x-IBM1388".equalsIgnoreCase(csName) ||
                 "ISO-2022-CN".equalsIgnoreCase(csName) ||
-                "ISO-2022-JP".equalsIgnoreCase(csName);
+                "ISO-2022-JP".equalsIgnoreCase(csName) ||
+                "Shift_JIS".equalsIgnoreCase(csName);
     }
 }
