@@ -20,7 +20,6 @@ New features and bug fixes.
 Changes in this version include:
 
 New features:
-o IO-433:  Converted all testcases to JUnit 4 
 o IO-487:  Add ValidatingObjectInputStream for controlled deserialization 
 o IO-471:  Support for additional encodings in ReversedLinesFileReader Thanks to Leandro Reis. 
 o IO-425:  Setter method for threshold on ThresholdingOutputStream Thanks to Craig Swank. 
@@ -93,6 +92,7 @@ o IO-352:  Spelling fixes. Thanks to scop.
 o IO-436:  Improper JavaDoc comment for FilenameUtils.indexOfExtension. Thanks to christoph.schneegans. 
 
 Changes:
+o IO-433:  Converted all testcases to JUnit 4 
 o IO-466:  Added testcase to show this was fixed with IO-423 
 o IO-479:  Correct exception message in FileUtils.getFile(File, String...) Thanks to Zhouce Chen. 
 o IO-465:  Update to JUnit 4.12 Thanks to based2. 
