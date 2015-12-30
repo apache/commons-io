@@ -37,14 +37,14 @@ public class StringBuilderWriter extends Writer implements Serializable {
     private final StringBuilder builder;
 
     /**
-     * Construct a new {@link StringBuilder} instance with default capacity.
+     * Constructs a new {@link StringBuilder} instance with default capacity.
      */
     public StringBuilderWriter() {
         this.builder = new StringBuilder();
     }
 
     /**
-     * Construct a new {@link StringBuilder} instance with the specified capacity.
+     * Constructs a new {@link StringBuilder} instance with the specified capacity.
      *
      * @param capacity The initial capacity of the underlying {@link StringBuilder}
      */
@@ -53,7 +53,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Construct a new instance with the specified {@link StringBuilder}.
+     * Constructs a new instance with the specified {@link StringBuilder}.
      * 
      * <p>If {@code builder} is null a new instance with default capacity will be created.</p>
      *
@@ -64,7 +64,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Append a single character to this Writer.
+     * Appends a single character to this Writer.
      *
      * @param value The character to append
      * @return This writer instance
@@ -76,7 +76,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Append a character sequence to this Writer.
+     * Appends a character sequence to this Writer.
      *
      * @param value The character to append
      * @return This writer instance
@@ -88,7 +88,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Append a portion of a character sequence to the {@link StringBuilder}.
+     * Appends a portion of a character sequence to the {@link StringBuilder}.
      *
      * @param value The character to append
      * @param start The index of the first character
@@ -119,7 +119,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
 
     /**
-     * Write a String to the {@link StringBuilder}.
+     * Writes a String to the {@link StringBuilder}.
      * 
      * @param value The value to write
      */
@@ -131,7 +131,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Write a portion of a character array to the {@link StringBuilder}.
+     * Writes a portion of a character array to the {@link StringBuilder}.
      *
      * @param value The value to write
      * @param offset The index of the first character
@@ -145,7 +145,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
     }
 
     /**
-     * Return the underlying builder.
+     * Returns the underlying builder.
      *
      * @return The underlying builder
      */
