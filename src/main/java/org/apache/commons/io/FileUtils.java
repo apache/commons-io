@@ -1724,7 +1724,7 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}
      */
     public static boolean waitFor(final File file, final int seconds) {
-        long finishAt = System.currentTimeMillis() + (seconds * 1000);
+        long finishAt = System.currentTimeMillis() + (seconds * 1000L);
         boolean wasInterrupted = false;
         try {
             while (!file.exists()) {
