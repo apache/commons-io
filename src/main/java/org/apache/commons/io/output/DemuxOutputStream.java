@@ -28,7 +28,7 @@ public class DemuxOutputStream extends OutputStream {
     private final InheritableThreadLocal<OutputStream> m_streams = new InheritableThreadLocal<OutputStream>();
 
     /**
-     * Bind the specified stream to the current thread.
+     * Binds the specified stream to the current thread.
      *
      * @param output
      *            the stream to bind
