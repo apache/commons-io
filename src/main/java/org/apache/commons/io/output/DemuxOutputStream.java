@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * @version $Id$
  */
 public class DemuxOutputStream extends OutputStream {
-    private final InheritableThreadLocal<OutputStream> m_streams = new InheritableThreadLocal<OutputStream>();
+    private final InheritableThreadLocal<OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<OutputStream>();
 
     /**
      * Binds the specified stream to the current thread.
@@ -35,8 +35,8 @@ public class DemuxOutputStream extends OutputStream {
      * @return the OutputStream that was previously active
      */
     public OutputStream bindStream(final OutputStream output) {
-        final OutputStream stream = m_streams.get();
-        m_streams.set(output);
+        final OutputStream stream = outputStreamThreadLocal.get();
+        outputStreamThreadLocal.set(output);
         return stream;
     }
 
@@ -48,7 +48,7 @@ public class DemuxOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        final OutputStream output = m_streams.get();
+        final OutputStream output = outputStreamThreadLocal.get();
         if (null != output) {
             output.close();
         }
@@ -62,7 +62,7 @@ public class DemuxOutputStream extends OutputStream {
      */
     @Override
     public void flush() throws IOException {
-        final OutputStream output = m_streams.get();
+        final OutputStream output = outputStreamThreadLocal.get();
         if (null != output) {
             output.flush();
         }
@@ -78,7 +78,7 @@ public class DemuxOutputStream extends OutputStream {
      */
     @Override
     public void write(final int ch) throws IOException {
-        final OutputStream output = m_streams.get();
+        final OutputStream output = outputStreamThreadLocal.get();
         if (null != output) {
             output.write(ch);
         }
