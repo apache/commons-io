@@ -165,11 +165,10 @@ public class CharSequenceInputStream extends InputStream {
         for (;;) {
             if (this.bbuf.hasRemaining()) {
                 return this.bbuf.get() & 0xFF;
-            } else {
-                fillBuffer();
-                if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
-                    return EOF;
-                }
+            }
+            fillBuffer();
+            if (!this.bbuf.hasRemaining() && !this.cbuf.hasRemaining()) {
+                return EOF;
             }
         }
     }
