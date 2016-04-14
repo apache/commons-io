@@ -311,7 +311,9 @@ public class WriterOutputStream extends OutputStream {
     }
 
     private static void checkIbmJdkWithBrokenUTF16(Charset charset){
-        if (!"UTF-16".equals(charset.name())) return;
+        if (!"UTF-16".equals(charset.name())) {
+            return;
+        }
         final String TEST_STRING_2 = "v\u00e9s";
         byte[] bytes = TEST_STRING_2.getBytes(charset);
 
