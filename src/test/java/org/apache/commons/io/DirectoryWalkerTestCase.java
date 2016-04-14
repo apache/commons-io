@@ -263,7 +263,7 @@ public class DirectoryWalkerTestCase {
     }
 
     /**
-     * Create an name filter containg the names of the files
+     * Create a name filter containing the names of the files
      * in the array.
      */
     private static IOFileFilter createNameFilter(final File[] files) {
