@@ -51,7 +51,7 @@ public class XmlStreamWriter extends Writer {
     private String encoding;
 
     /**
-     * Construct a new XML stream writer for the specified output stream
+     * Constructs a new XML stream writer for the specified output stream
      * with a default encoding of UTF-8.
      *
      * @param out The output stream
@@ -61,7 +61,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct a new XML stream writer for the specified output stream
+     * Constructs a new XML stream writer for the specified output stream
      * with the specified default encoding.
      *
      * @param out The output stream
@@ -73,7 +73,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct a new XML stream writer for the specified file
+     * Constructs a new XML stream writer for the specified file
      * with a default encoding of UTF-8.
      * 
      * @param file The file to write to
@@ -85,7 +85,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct a new XML stream writer for the specified file
+     * Constructs a new XML stream writer for the specified file
      * with the specified default encoding.
      * 
      * @param file The file to write to
@@ -98,7 +98,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Return the detected encoding.
+     * Returns the detected encoding.
      *
      * @return the detected encoding
      */
@@ -107,7 +107,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Return the default encoding.
+     * Returns the default encoding.
      *
      * @return the default encoding
      */
@@ -116,7 +116,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Close the underlying writer.
+     * Closes the underlying writer.
      *
      * @throws IOException if an error occurs closing the underlying writer
      */
@@ -131,7 +131,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Flush the underlying writer.
+     * Flushes the underlying writer.
      *
      * @throws IOException if an error occurs flushing the underlying writer
      */
@@ -143,7 +143,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Detect the encoding.
+     * Detects the encoding.
      *
      * @param cbuf the buffer to write the characters from
      * @param off The start offset
@@ -200,7 +200,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Write the characters to the underlying writer, detecing encoding.
+     * Writes the characters to the underlying writer, detecing encoding.
      * 
      * @param cbuf the buffer to write the characters from
      * @param off The start offset
