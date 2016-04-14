@@ -200,7 +200,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Writes the characters to the underlying writer, detecing encoding.
+     * Writes the characters to the underlying writer, detecting encoding.
      * 
      * @param cbuf the buffer to write the characters from
      * @param off The start offset
