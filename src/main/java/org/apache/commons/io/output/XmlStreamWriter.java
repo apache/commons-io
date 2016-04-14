@@ -51,7 +51,7 @@ public class XmlStreamWriter extends Writer {
     private String encoding;
 
     /**
-     * Construct an new XML stream writer for the specified output stream
+     * Construct a new XML stream writer for the specified output stream
      * with a default encoding of UTF-8.
      *
      * @param out The output stream
@@ -61,7 +61,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct an new XML stream writer for the specified output stream
+     * Construct a new XML stream writer for the specified output stream
      * with the specified default encoding.
      *
      * @param out The output stream
@@ -73,7 +73,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct an new XML stream writer for the specified file
+     * Construct a new XML stream writer for the specified file
      * with a default encoding of UTF-8.
      * 
      * @param file The file to write to
@@ -85,7 +85,7 @@ public class XmlStreamWriter extends Writer {
     }
 
     /**
-     * Construct an new XML stream writer for the specified file
+     * Construct a new XML stream writer for the specified file
      * with the specified default encoding.
      * 
      * @param file The file to write to

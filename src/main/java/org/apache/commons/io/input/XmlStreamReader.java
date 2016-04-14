@@ -51,7 +51,7 @@ import org.apache.commons.io.ByteOrderMark;
  * Files, raw streams and HTTP streams by offering a wide set of constructors.
  * <p>
  * By default the charset encoding detection is lenient, the constructor with
- * the lenient flag can be used for an script (following HTTP MIME and XML
+ * the lenient flag can be used for a script (following HTTP MIME and XML
  * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a
  * href="http://diveintomark.org/archives/2004/02/13/xml-media-types">
  * Determining the character encoding of a feed</a>.
@@ -277,7 +277,7 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Creates a Reader using an InputStream an the associated content-type
+     * Creates a Reader using an InputStream and the associated content-type
      * header.
      * <p>
      * First it checks if the stream has BOM. If there is not BOM checks the
@@ -299,7 +299,7 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Creates a Reader using an InputStream an the associated content-type
+     * Creates a Reader using an InputStream and the associated content-type
      * header. This constructor is lenient regarding the encoding detection.
      * <p>
      * First it checks if the stream has BOM. If there is not BOM checks the
@@ -342,7 +342,7 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Creates a Reader using an InputStream an the associated content-type
+     * Creates a Reader using an InputStream and the associated content-type
      * header. This constructor is lenient regarding the encoding detection.
      * <p>
      * First it checks if the stream has BOM. If there is not BOM checks the

@@ -503,7 +503,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an collection of java.io.File with the matching files
+     * @return a collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
@@ -574,7 +574,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return an collection of java.io.File with the matching files
+     * @return a collection of java.io.File with the matching files
      * @see org.apache.commons.io.FileUtils#listFiles
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
@@ -670,7 +670,7 @@ public class FileUtils {
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
-     * @return an collection of java.io.File with the matching files
+     * @return a collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(
             final File directory, final String[] extensions, final boolean recursive) {
