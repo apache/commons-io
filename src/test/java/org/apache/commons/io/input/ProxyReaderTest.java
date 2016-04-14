@@ -16,23 +16,22 @@
  */
 package org.apache.commons.io.input;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.fail;
 
 /**
  * Test {@link ProxyReader}. 
  *
  * @version $Id$
  */
-public class ProxyReaderTest extends TestCase {
+public class ProxyReaderTest {
 
-    public ProxyReaderTest(final String name) {
-        super(name);
-    }
-
+    @Test
     public void testNullCharArray() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
@@ -51,6 +50,7 @@ public class ProxyReaderTest extends TestCase {
         proxy.close();
     }
 
+    @Test
     public void testNullCharBuffer() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));

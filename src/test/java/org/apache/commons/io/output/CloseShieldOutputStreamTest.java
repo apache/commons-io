@@ -16,15 +16,20 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link CloseShieldOutputStream}.
  */
-public class CloseShieldOutputStreamTest extends TestCase {
+public class CloseShieldOutputStreamTest {
 
     private ByteArrayOutputStream original;
 
@@ -32,8 +37,8 @@ public class CloseShieldOutputStreamTest extends TestCase {
 
     private boolean closed;
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         original = new ByteArrayOutputStream() {
             @Override
             public void close() {
@@ -44,13 +49,14 @@ public class CloseShieldOutputStreamTest extends TestCase {
         closed = false;
     }
 
+    @Test
     public void testClose() throws IOException {
         shielded.close();
         assertFalse("closed", closed);
         try {
             shielded.write('x');
             fail("write(b)");
-        } catch (final IOException e) {
+        } catch (final IOException ignore) {
             // expected
         }
         original.write('y');

@@ -96,19 +96,6 @@ public class ReversedLinesFileReader implements Closeable {
         this.blockSize = blockSize;
         this.encoding = encoding;
 
-        randomAccessFile = new RandomAccessFile(file, "r");
-        totalByteLength = randomAccessFile.length();
-        int lastBlockLength = (int) (totalByteLength % blockSize);
-        if (lastBlockLength > 0) {
-            totalBlockCount = totalByteLength / blockSize + 1;
-        } else {
-            totalBlockCount = totalByteLength / blockSize;
-            if (totalByteLength > 0) {
-                lastBlockLength = blockSize;
-            }
-        }
-        currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
-
         // --- check & prepare encoding ---
         final Charset charset = Charsets.toCharset(encoding);
         final CharsetEncoder charsetEncoder = charset.newEncoder();
@@ -121,7 +108,7 @@ public class ReversedLinesFileReader implements Closeable {
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
         } else if(charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
-                                      // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+                // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
                 charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
                 charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
                 charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
@@ -138,10 +125,26 @@ public class ReversedLinesFileReader implements Closeable {
             throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to " +
                     "submit a patch)");
         }
+
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
         newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
 
         avoidNewlineSplitBufferSize = newLineSequences[0].length;
+
+        // Open file
+        randomAccessFile = new RandomAccessFile(file, "r");
+        totalByteLength = randomAccessFile.length();
+        int lastBlockLength = (int) (totalByteLength % blockSize);
+        if (lastBlockLength > 0) {
+            totalBlockCount = totalByteLength / blockSize + 1;
+        } else {
+            totalBlockCount = totalByteLength / blockSize;
+            if (totalByteLength > 0) {
+                lastBlockLength = blockSize;
+            }
+        }
+        currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
+
     }
 
     /**

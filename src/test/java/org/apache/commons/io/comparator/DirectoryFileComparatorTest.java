@@ -16,6 +16,9 @@
  */
 package org.apache.commons.io.comparator;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 
 /**
@@ -23,19 +26,8 @@ import java.io.File;
  */
 public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /**
-     * Construct a new test case with the specified name.
-     *
-     * @param name Name of the test
-     */
-    public DirectoryFileComparatorTest(final String name) {
-        super(name);
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         comparator = (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR;
         reverse = DirectoryFileComparator.DIRECTORY_REVERSE;
         final File currentDir = new File(".");
@@ -48,7 +40,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
     /**
      * Test the comparator array sort.
      */
-    @Override
+    @Test
     public void testSortArray() {
         // skip sort test
     }

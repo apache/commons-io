@@ -550,7 +550,9 @@ public class Tailer implements Runnable {
         IOUtils.closeQuietly(lineBuf); // not strictly necessary
         reader.seek(rePos); // Ensure we can re-read if necessary
 
-        listener.endOfFileReached();
+        if (listener instanceof TailerListenerAdapter) {
+            ((TailerListenerAdapter) listener).endOfFileReached();
+        }
 
         return rePos;
     }

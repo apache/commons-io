@@ -16,23 +16,25 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.Writer;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 /**
  * Test case for {@link StringBuilderWriter}.
  *
  * @version $Id$
  */
-public class StringBuilderWriterTest extends TestCase {
+public class StringBuilderWriterTest {
     private static final char[] FOOBAR_CHARS = new char[] {'F', 'o', 'o', 'B', 'a', 'r'};
 
-    public StringBuilderWriterTest(final String name) {
-        super(name);
-    }
 
+    @Test
     public void testAppendConstructCapacity() throws IOException {
         final Writer writer = new StringBuilderWriter(100);
         writer.append("Foo");
@@ -40,6 +42,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testAppendConstructStringBuilder() {
         final StringBuilder builder = new StringBuilder("Foo");
         final StringBuilderWriter writer = new StringBuilderWriter(builder);
@@ -49,6 +52,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testAppendConstructNull() throws IOException {
         final Writer writer = new StringBuilderWriter(null);
         writer.append("Foo");
@@ -56,6 +60,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testAppendChar() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.append('F').append('o').append('o');
@@ -63,6 +68,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testAppendCharSequence() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.append("Foo").append("Bar");
@@ -70,6 +76,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testAppendCharSequencePortion() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
@@ -77,6 +84,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testClose() {
         final Writer writer = new StringBuilderWriter();
         try {
@@ -89,6 +97,7 @@ public class StringBuilderWriterTest extends TestCase {
         assertEquals("FooBar", writer.toString());
     }
 
+    @Test
     public void testWriteChar() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.write('F');
@@ -100,6 +109,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testWriteCharArray() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.write(new char[] {'F', 'o', 'o'});
@@ -109,6 +119,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testWriteCharArrayPortion() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.write(FOOBAR_CHARS, 3, 3);
@@ -118,6 +129,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testWriteString() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.write("Foo");
@@ -127,6 +139,7 @@ public class StringBuilderWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testWriteStringPortion() throws IOException {
         final Writer writer = new StringBuilderWriter();
         writer.write("FooBar", 3, 3);

@@ -16,16 +16,19 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @version $Id$
  */
-public class XmlStreamWriterTest extends TestCase {
+public class XmlStreamWriterTest {
     /** french */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";
     /** greek */
@@ -43,8 +46,7 @@ public class XmlStreamWriterTest extends TestCase {
         if (encoding != null) {
             xmlDecl = "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>";
         }
-        final String xml = xmlDecl + "\n<text>" + text + "</text>";
-        return xml;
+        return xmlDecl + "\n<text>" + text + "</text>";
     }
 
     private static void checkXmlContent(final String xml, final String encoding, final String defaultEncoding)
@@ -74,11 +76,13 @@ public class XmlStreamWriterTest extends TestCase {
         checkXmlContent(xml, effectiveEncoding, defaultEncoding);
     }
 
+    @Test
     public void testNoXmlHeader() throws IOException {
         final String xml = "<text>text with no XML header</text>";
         checkXmlContent(xml, "UTF-8", null);
     }
 
+    @Test
     public void testEmpty() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XmlStreamWriter writer = new XmlStreamWriter(out);
@@ -90,6 +94,7 @@ public class XmlStreamWriterTest extends TestCase {
         writer.close();
     }
 
+    @Test
     public void testDefaultEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, null, null);
         checkXmlWriter(TEXT_UNICODE, null, "UTF-8");
@@ -98,38 +103,47 @@ public class XmlStreamWriterTest extends TestCase {
         checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
     }
 
+    @Test
     public void testUTF8Encoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "UTF-8");
     }
 
+    @Test
     public void testUTF16Encoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "UTF-16");
     }
 
+    @Test
     public void testUTF16BEEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "UTF-16BE");
     }
 
+    @Test
     public void testUTF16LEEncoding() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "UTF-16LE");
     }
 
+    @Test
     public void testLatin1Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN1, "ISO-8859-1");
     }
 
+    @Test
     public void testLatin7Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN7, "ISO-8859-7");
     }
 
+    @Test
     public void testLatin15Encoding() throws IOException {
         checkXmlWriter(TEXT_LATIN15, "ISO-8859-15");
     }
 
+    @Test
     public void testEUC_JPEncoding() throws IOException {
         checkXmlWriter(TEXT_EUC_JP, "EUC-JP");
     }
 
+    @Test
     public void testEBCDICEncoding() throws IOException {
         checkXmlWriter("simple text in EBCDIC", "CP1047");
     }

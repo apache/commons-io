@@ -16,11 +16,13 @@
  */
 package org.apache.commons.io;
 
+import org.junit.Test;
+
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This is used to test FileUtils.waitFor() method for correctness.
@@ -28,32 +30,18 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
  * @version $Id$
  * @see FileUtils
  */
-public class FileUtilsWaitForTestCase extends FileBasedTestCase {
+public class FileUtilsWaitForTestCase {
     // This class has been broken out from FileUtilsTestCase
     // to solve issues as per BZ 38927
 
-    public FileUtilsWaitForTestCase(final String name) {
-        super(name);
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        getTestDirectory().mkdirs();
-    }
-
-    /** @see junit.framework.TestCase#tearDown() */
-    @Override
-    protected void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
-    }
-
     //-----------------------------------------------------------------------
+    @Test
     public void testWaitFor() {
         FileUtils.waitFor(new File(""), -1);
         FileUtils.waitFor(new File(""), 2);
     }
 
+    @Test
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
         final CountDownLatch started = new CountDownLatch(1);

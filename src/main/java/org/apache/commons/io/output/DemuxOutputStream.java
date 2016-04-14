@@ -20,41 +20,36 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Data written to this stream is forwarded to a stream that has been associated
- * with this thread.
+ * Forwards data to a stream that has been associated with this thread.
  *
  * @version $Id$
  */
-public class DemuxOutputStream
-    extends OutputStream
-{
-    private final InheritableThreadLocal<OutputStream> m_streams = new InheritableThreadLocal<OutputStream>();
+public class DemuxOutputStream extends OutputStream {
+    private final InheritableThreadLocal<OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<OutputStream>();
 
     /**
-     * Bind the specified stream to the current thread.
+     * Binds the specified stream to the current thread.
      *
-     * @param output the stream to bind
+     * @param output
+     *            the stream to bind
      * @return the OutputStream that was previously active
      */
-    public OutputStream bindStream( final OutputStream output )
-    {
-        final OutputStream stream = m_streams.get();
-        m_streams.set( output );
+    public OutputStream bindStream(final OutputStream output) {
+        final OutputStream stream = outputStreamThreadLocal.get();
+        outputStreamThreadLocal.set(output);
         return stream;
     }
 
     /**
      * Closes stream associated with current thread.
      *
-     * @throws IOException if an error occurs
+     * @throws IOException
+     *             if an error occurs
      */
     @Override
-    public void close()
-        throws IOException
-    {
-        final OutputStream output = m_streams.get();
-        if( null != output )
-        {
+    public void close() throws IOException {
+        final OutputStream output = outputStreamThreadLocal.get();
+        if (null != output) {
             output.close();
         }
     }
@@ -62,15 +57,14 @@ public class DemuxOutputStream
     /**
      * Flushes stream associated with current thread.
      *
-     * @throws IOException if an error occurs
+     * @throws IOException
+     *             if an error occurs
      */
     @Override
-    public void flush()
-        throws IOException
-    {
-        final OutputStream output = m_streams.get();
-        if( null != output )
-        {
+    public void flush() throws IOException {
+        @SuppressWarnings("resource")
+        final OutputStream output = outputStreamThreadLocal.get();
+        if (null != output) {
             output.flush();
         }
     }
@@ -78,17 +72,17 @@ public class DemuxOutputStream
     /**
      * Writes byte to stream associated with current thread.
      *
-     * @param ch the byte to write to stream
-     * @throws IOException if an error occurs
+     * @param ch
+     *            the byte to write to stream
+     * @throws IOException
+     *             if an error occurs
      */
     @Override
-    public void write( final int ch )
-        throws IOException
-    {
-        final OutputStream output = m_streams.get();
-        if( null != output )
-        {
-            output.write( ch );
+    public void write(final int ch) throws IOException {
+        @SuppressWarnings("resource")
+        final OutputStream output = outputStreamThreadLocal.get();
+        if (null != output) {
+            output.write(ch);
         }
     }
 }

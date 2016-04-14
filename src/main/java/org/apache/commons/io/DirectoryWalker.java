@@ -203,7 +203,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *        cancelled = true;
  *    }
  *
- *    private void handleIsCancelled(File file, int depth, Collection results) {
+ *    protected boolean handleIsCancelled(File file, int depth, Collection results) {
  *        return cancelled;
  *    }
  *

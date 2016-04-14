@@ -16,18 +16,21 @@
  */
 package org.apache.commons.io.output;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementation.
  */
-public class ByteArrayOutputStreamTestCase extends TestCase {
+public class ByteArrayOutputStreamTestCase {
 
     private static final byte[] DATA;
 
@@ -36,10 +39,6 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         for (byte i = 0; i < 64; i++) {
             DATA[i] = i;
         }
-    }
-
-    public ByteArrayOutputStreamTestCase(final String name) {
-        super(name);
     }
 
     private int writeData(final ByteArrayOutputStream baout,
@@ -96,6 +95,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         checkByteArrays(buf, refbuf);
     }
 
+    @Test
     public void testToInputStream() throws IOException {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
@@ -127,6 +127,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         in.close();
     }
 
+    @Test
     public void testToInputStreamWithReset() throws IOException {
         //Make sure reset() do not destroy InputStream returned from toInputStream()
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -161,6 +162,7 @@ public class ByteArrayOutputStreamTestCase extends TestCase {
         in.close();
     }
 
+    @Test
     public void testStream() throws Exception {
         int written;
 

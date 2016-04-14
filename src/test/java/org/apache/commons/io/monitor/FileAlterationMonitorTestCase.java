@@ -16,10 +16,18 @@
  */
 package org.apache.commons.io.monitor;
 
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * {@link FileAlterationMonitor} Test Case.
@@ -29,22 +37,16 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     /**
      * Construct a new test case.
      *
-     * @param name The name of the test
      */
-    public FileAlterationMonitorTestCase(final String name) {
-        super(name);
+    public FileAlterationMonitorTestCase() {
         testDirName = "test-monitor";
-    }
-
-    @Override
-    protected void setUp() throws Exception {
         listener = new CollectionFileListener(false);
-        super.setUp();
     }
 
     /**
      * Test default constructor.
      */
+    @Test
     public void testDefaultConstructor() {
         final FileAlterationMonitor monitor = new FileAlterationMonitor();
         assertEquals("Interval", 10000, monitor.getInterval());
@@ -53,6 +55,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     /**
      * Test add/remove observers.
      */
+    @Test
     public void testAddRemoveObservers() {
         FileAlterationObserver[] observers = null;
         FileAlterationMonitor monitor = null;
@@ -88,6 +91,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     /**
      * Test checkAndNotify() method
      */
+    @Test
     public void testMonitor() {
         try {
             final long interval = 100;
@@ -137,6 +141,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     /**
      * Test using a thread factory.
      */
+    @Test
     public void testThreadFactory() {
         try {
             final long interval = 100;
@@ -175,7 +180,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             if (files.contains(file)) {
                 return; // found, test passes
             }
-            sleepHandleInterruped(pauseTime);
+            TestUtils.sleepQuietly(pauseTime);
         }
         fail(label + " " + file + " not found");
     }

@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.comparator;
 
+import org.junit.Before;
+
 import java.io.File;
 
 /**
@@ -23,19 +25,8 @@ import java.io.File;
  */
 public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /**
-     * Construct a new test case with the specified name.
-     *
-     * @param name Name of the test
-     */
-    public DefaultFileComparatorTest(final String name) {
-        super(name);
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         comparator = (AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
         equalFile1 = new File("foo");

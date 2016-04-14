@@ -16,23 +16,27 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Test cases for FileUtils.listFiles() methods.
  */
 public class FileUtilsListFilesTestCase extends FileBasedTestCase {
-
-    public FileUtilsListFilesTestCase(final String name) {
-        super(name);
-    }
 
     private File getLocalTestDirectory() {
         return new File(getTestDirectory(), "list-files");
@@ -41,8 +45,9 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#setUp()
      */
-    @Override
-    protected void setUp() throws Exception {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Before
+    public void setUp() throws Exception {
         File dir = getLocalTestDirectory();
         if (dir.exists()) {
             FileUtils.deleteDirectory(dir);
@@ -79,8 +84,8 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     /**
      * @see junit.framework.TestCase#tearDown()
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         final File dir = getLocalTestDirectory();
         FileUtils.deleteDirectory(dir);
     }
@@ -101,6 +106,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         return filenames;
     }
 
+    @Test
     public void testIterateFilesByExtension() throws Exception {
         final String[] extensions = { "xml", "txt" };
 
@@ -125,6 +131,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         assertFalse(filenames.contains("dummy-file.txt"));
     }
 
+    @Test
     public void testListFilesByExtension() throws Exception {
         final String[] extensions = {"xml", "txt"};
 
@@ -149,6 +156,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
         assertFalse(filenames.contains("dummy-file.txt"));
     }
 
+    @Test
     public void testListFiles() throws Exception {
         Collection<File> files;
         Collection<String> filenames;

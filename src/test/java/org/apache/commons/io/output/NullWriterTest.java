@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.output;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * Really not a lot to do here, but checking that no 
@@ -24,12 +24,9 @@ import junit.framework.TestCase;
  *
  * @version $Id$
  */
-public class NullWriterTest extends TestCase {
+public class NullWriterTest {
 
-    public NullWriterTest(final String name) {
-        super(name);
-    }
-
+    @Test
     public void testNull() {
         final char[] chars = new char[] {'A', 'B', 'C'};
         final NullWriter writer = new NullWriter();

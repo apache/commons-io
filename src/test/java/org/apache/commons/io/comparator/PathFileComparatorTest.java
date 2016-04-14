@@ -16,27 +16,22 @@
  */
 package org.apache.commons.io.comparator;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.Comparator;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test case for {@link PathFileComparator}.
  */
 public class PathFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /**
-     * Construct a new test case with the specified name.
-     *
-     * @param name Name of the test
-     */
-    public PathFileComparatorTest(final String name) {
-        super(name);
-    }
 
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         comparator = (AbstractFileComparator) PathFileComparator.PATH_COMPARATOR;
         reverse = PathFileComparator.PATH_REVERSE;
         equalFile1 = new File("foo/file.txt");
@@ -46,6 +41,7 @@ public class PathFileComparatorTest extends ComparatorAbstractTestCase {
     }
 
     /** Test case sensitivity */
+    @Test
     public void testCaseSensitivity() {
         final File file3 = new File("FOO/file.txt");
         final Comparator<File> sensitive = new PathFileComparator(null); /* test null as well */

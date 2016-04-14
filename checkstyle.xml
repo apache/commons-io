@@ -41,7 +41,7 @@ limitations under the License.
       <property name="allowSubclasses" value="true"/>
     </module>
     <module name="LineLength">
-      <property name="max" value="120"/>
+      <property name="max" value="160"/>
     </module>
     <module name="JavadocMethod">
       <property name="allowUndeclaredRTE" value="true"/>

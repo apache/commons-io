@@ -16,26 +16,25 @@
  */
 package org.apache.commons.io.input;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.NullOutputStream;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import junit.framework.TestCase;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the CountingInputStream.
  *
  * @version $Id$
  */
-public class CountingInputStreamTest extends TestCase {
+public class CountingInputStreamTest {
 
-    public CountingInputStreamTest(final String name) {
-        super(name);
-    }
-
+    @Test
     public void testCounting() throws Exception {
         final String text = "A piece of text";
         final byte[] bytes = text.getBytes();
@@ -73,6 +72,7 @@ public class CountingInputStreamTest extends TestCase {
     /*
      * Test for files > 2GB in size - see issue IO-84
      */
+    @Test
     public void testLargeFiles_IO84() throws Exception {
         final long size = (long)Integer.MAX_VALUE + (long)1;
         final NullInputStream mock    = new NullInputStream(size);
@@ -102,6 +102,7 @@ public class CountingInputStreamTest extends TestCase {
         assertEquals("resetByteCount()", size, cis.resetByteCount());
     }
 
+    @Test
     public void testResetting() throws Exception {
         final String text = "A piece of text";
         final byte[] bytes = text.getBytes();
@@ -119,6 +120,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testZeroLength1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -129,6 +131,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testZeroLength2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -141,6 +144,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testZeroLength3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -153,6 +157,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testEOF1() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -169,6 +174,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testEOF2() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -181,6 +187,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testEOF3() throws Exception {
         final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[2]);
         final CountingInputStream cis = new CountingInputStream(bais);
@@ -193,6 +200,7 @@ public class CountingInputStreamTest extends TestCase {
         cis.close();
     }
 
+    @Test
     public void testSkipping() throws IOException {
         final String text = "Hello World!";
         final byte[] bytes = text.getBytes();

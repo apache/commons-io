@@ -16,13 +16,21 @@
  */
 package org.apache.commons.io;
 
-import java.io.File;
-import java.io.RandomAccessFile;
+import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.*;
 import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
@@ -38,21 +46,18 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     private File testFile;
     private FileCleaningTracker theInstance;
 
-    public FileCleaningTrackerTestCase(final String name) {
-        super(name);
+    public FileCleaningTrackerTestCase() {
         testFile = new File(getTestDirectory(), "file-test.txt");
     }
 
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         theInstance = newInstance();
-        getTestDirectory().mkdirs();
+        getTestDirectory();
     }
 
-    /** @see junit.framework.TestCase#tearDown() */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         FileUtils.deleteDirectory(getTestDirectory());
 
         // reset file cleaner class, so as not to break other tests
@@ -75,6 +80,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
+    @Test
     public void testFileCleanerFile() throws Exception {
         final String path = testFile.getPath();
 
@@ -97,8 +103,9 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertEquals(showFailures(), false, new File(path).exists());
     }
 
+    @Test
     public void testFileCleanerDirectory() throws Exception {
-        createFile(testFile, 100);
+        TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
 
@@ -116,8 +123,9 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
 
+    @Test
     public void testFileCleanerDirectory_NullStrategy() throws Exception {
-        createFile(testFile, 100);
+        TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
 
@@ -135,8 +143,19 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertTrue(testFile.getParentFile().exists());  // not deleted, as dir not empty
     }
 
+    @Test
     public void testFileCleanerDirectory_ForceStrategy() throws Exception {
-        createFile(testFile, 100);
+        if (!testFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(testFile));
+        try {
+            TestUtils.generateTestData(output, (long) 100);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
 
@@ -155,6 +174,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertEquals(showFailures(), false, testFile.getParentFile().exists());
     }
 
+    @Test
     public void testFileCleanerNull() throws Exception {
         try {
             theInstance.track((File) null, new Object());
@@ -182,6 +202,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test
     public void testFileCleanerExitWhenFinishedFirst() throws Exception {
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
@@ -195,6 +216,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertEquals(null, theInstance.reaper);
     }
 
+    @Test
     public void testFileCleanerExitWhenFinished_NoTrackAfter() throws Exception {
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
@@ -213,6 +235,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertEquals(null, theInstance.reaper);
     }
 
+    @Test
     public void testFileCleanerExitWhenFinished1() throws Exception {
         final String path = testFile.getPath();
 
@@ -244,6 +267,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertEquals("13-reaper.isAlive", false, theInstance.reaper.isAlive());
     }
 
+    @Test
     public void testFileCleanerExitWhenFinished2() throws Exception {
         final String path = testFile.getPath();
 
@@ -272,7 +296,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
         for (int i = 0; i < 20 && theInstance.reaper.isAlive(); i++) {
-            Thread.sleep(500L);  // allow reaper thread to die
+            TestUtils.sleep(500L);  // allow reaper thread to die
         }
         assertTrue(theInstance.exitWhenFinished);
         assertFalse(theInstance.reaper.isAlive());
@@ -283,8 +307,8 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         int count = 0;
         while(file.exists() && count++ < 40) {
             try {
-                Thread.sleep(500L);
-            } catch (final InterruptedException e) {
+                TestUtils.sleep(500L);
+            } catch (final InterruptedException ignore) {
             }
             file = new File(file.getPath());
         }
@@ -299,7 +323,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
 
     private void waitUntilTrackCount() throws Exception {
         System.gc();
-        Thread.sleep(500);
+        TestUtils.sleep(500);
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
             List<String> list = new ArrayList<String>();
@@ -312,7 +336,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             }
             list = null;
             System.gc();
-            Thread.sleep(1000);
+            TestUtils.sleep(1000);
         }
         if (theInstance.getTrackCount() != 0) {
             throw new IllegalStateException("Your JVM is not releasing References, try running the testcase with less memory (-Xmx)");

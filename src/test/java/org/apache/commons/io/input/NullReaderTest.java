@@ -16,33 +16,25 @@
  */
 package org.apache.commons.io.input;
 
+import org.junit.Test;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link NullReader}.
  *
  * @version $Id$
  */
-public class NullReaderTest extends TestCase {
+public class NullReaderTest {
 
-    public NullReaderTest(final String name) {
-        super(name);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
+    @Test
     public void testRead() throws Exception {
         final int size = 5;
         final TestNullReader reader = new TestNullReader(size);
@@ -66,6 +58,7 @@ public class NullReaderTest extends TestCase {
         assertEquals("Available after close", 0, reader.getPosition());
     }
 
+    @Test
     public void testReadCharArray() throws Exception {
         final char[] chars = new char[10];
         final Reader reader = new TestNullReader(15);
@@ -109,6 +102,7 @@ public class NullReaderTest extends TestCase {
         }
     }
 
+    @Test
     public void testEOFException() throws Exception {
         final Reader reader = new TestNullReader(2, false, true);
         assertEquals("Read 1",  0, reader.read());
@@ -122,6 +116,7 @@ public class NullReaderTest extends TestCase {
         reader.close();
     }
 
+    @Test
     public void testMarkAndReset() throws Exception {
         int position = 0;
         final int readlimit = 10;
@@ -173,6 +168,7 @@ public class NullReaderTest extends TestCase {
         reader.close();
     }
 
+    @Test
     public void testMarkNotSupported() throws Exception {
         final Reader reader = new TestNullReader(100, false, true);
         assertFalse("Mark Should NOT be Supported", reader.markSupported());
@@ -193,7 +189,8 @@ public class NullReaderTest extends TestCase {
         reader.close();
     }
 
-   public void testSkip() throws Exception {
+    @Test
+    public void testSkip() throws Exception {
         final Reader reader = new TestNullReader(10, true, false);
         assertEquals("Read 1", 0, reader.read());
         assertEquals("Read 2", 1, reader.read());

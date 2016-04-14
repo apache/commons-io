@@ -16,20 +16,27 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Unit tests for the <code>DeferredFileOutputStream</code> class.
  *
  * @version $Id$
  */
-public class DeferredFileOutputStreamTest extends TestCase
+public class DeferredFileOutputStreamTest
  {
 
     /**
@@ -43,19 +50,10 @@ public class DeferredFileOutputStreamTest extends TestCase
     private final byte[] testBytes = testString.getBytes();
 
     /**
-     * Standard JUnit test case constructor.
-     *
-     * @param name The name of the test case.
-     */
-    public DeferredFileOutputStreamTest(final String name)
-    {
-        super(name);
-    }
-
-    /**
      * Tests the case where the amount of data falls below the threshold, and
      * is therefore confined to memory.
      */
+    @Test
     public void testBelowThreshold()
     {
         final DeferredFileOutputStream dfos =
@@ -80,6 +78,7 @@ public class DeferredFileOutputStreamTest extends TestCase
      * threshold. The behavior should be the same as that for the amount of
      * data being below (i.e. not exceeding) the threshold.
      */
+    @Test
     public void testAtThreshold() {
         final DeferredFileOutputStream dfos =
                 new DeferredFileOutputStream(testBytes.length, null);
@@ -103,6 +102,7 @@ public class DeferredFileOutputStreamTest extends TestCase
      * therefore written to disk. The actual data written to disk is verified,
      * as is the file itself.
      */
+    @Test
     public void testAboveThreshold() {
         final File testFile = new File("testAboveThreshold.dat");
 
@@ -133,6 +133,7 @@ public class DeferredFileOutputStreamTest extends TestCase
      * ensure that the <code>thresholdReached()</code> method is only called
      * once, as the threshold is crossed for the first time.
      */
+    @Test
     public void testThresholdReached() {
         final File testFile = new File("testThresholdReached.dat");
 
@@ -167,6 +168,7 @@ public class DeferredFileOutputStreamTest extends TestCase
     /**
      * Test wether writeTo() properly writes small content.
      */
+    @Test
     public void testWriteToSmall(){
         final File testFile = new File("testWriteToMem.dat");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -202,6 +204,7 @@ public class DeferredFileOutputStreamTest extends TestCase
     /**
      * Test wether writeTo() properly writes large content.
      */
+    @Test
     public void testWriteToLarge(){
         final File testFile = new File("testWriteToFile.dat");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -237,6 +240,7 @@ public class DeferredFileOutputStreamTest extends TestCase
     /**
      * Test specifying a temporary file and the threshold not reached.
      */
+    @Test
     public void testTempFileBelowThreshold() {
 
         final String prefix = "commons-io-test";
@@ -260,6 +264,7 @@ public class DeferredFileOutputStreamTest extends TestCase
     /**
      * Test specifying a temporary file and the threshold is reached.
      */
+    @Test
     public void testTempFileAboveThreshold() {
 
         final String prefix = "commons-io-test";
@@ -293,6 +298,7 @@ public class DeferredFileOutputStreamTest extends TestCase
     /**
      * Test specifying a temporary file and the threshold is reached.
      */
+    @Test
     public void testTempFileAboveThresholdPrefixOnly() {
 
         final String prefix = "commons-io-test";
@@ -326,6 +332,7 @@ public class DeferredFileOutputStreamTest extends TestCase
      * Test specifying a temporary file and the threshold is reached.
      * @throws Exception 
      */
+    @Test
     public void testTempFileError() throws Exception {
 
         final String prefix = null;

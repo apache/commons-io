@@ -16,25 +16,25 @@
  */
 package org.apache.commons.io;
 
-import junit.framework.TestCase;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link ThreadMonitor}.
  */
-public class ThreadMonitorTestCase extends TestCase {
-
-
-    public ThreadMonitorTestCase(final String name) {
-        super(name);
-    }
+public class ThreadMonitorTestCase {
 
     /**
      * Test timeout.
      */
+    @Test
     public void testTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(100);
-            Thread.sleep(200);
+            TestUtils.sleep(200);
             ThreadMonitor.stop(monitor);
             fail("Expected InterruptedException");
         } catch (final InterruptedException e) {
@@ -45,10 +45,11 @@ public class ThreadMonitorTestCase extends TestCase {
     /**
      * Test task completed before timeout.
      */
+    @Test
     public void testCompletedWithoutTimeout() {
         try {
             final Thread monitor = ThreadMonitor.start(200);
-            Thread.sleep(100);
+            TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final InterruptedException e) {
             fail("Timed Out");
@@ -58,13 +59,14 @@ public class ThreadMonitorTestCase extends TestCase {
     /**
      * Test No timeout.
      */
+    @Test
     public void testNoTimeout() {
 
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(-1);
             assertNull("Timeout -1, Monitor should be null", monitor);
-            Thread.sleep(100);
+            TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
             fail("Timeout -1, threw " + e);
@@ -74,7 +76,7 @@ public class ThreadMonitorTestCase extends TestCase {
         try {
             final Thread monitor = ThreadMonitor.start(0);
             assertNull("Timeout 0, Monitor should be null", monitor);
-            Thread.sleep(100);
+            TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
             fail("Timeout 0, threw " + e);

@@ -19,16 +19,20 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 
 import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link ClosedOutputStream}.
  */
-public class ClosedOutputStreamTest extends TestCase {
+public class ClosedOutputStreamTest {
 
     /**
      * Test the <code>write(b)</code> method.
      * @throws Exception 
      */
+    @Test
     public void testRead() throws Exception {
         ClosedOutputStream cos = null;
         try {

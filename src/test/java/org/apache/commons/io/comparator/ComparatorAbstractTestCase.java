@@ -23,6 +23,15 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Base Test case for Comparator implementations.
@@ -47,24 +56,9 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /** File which is more than the "lessFile" */
     protected File moreFile;
 
-    /**
-     * Construct a new test case with the specified name
-     * @param name Name of the test
-     */
-    public ComparatorAbstractTestCase(final String name) {
-        super(name);
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
-    @Override
-    protected void setUp() throws Exception {
-        comparator = (AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR;
-        reverse = DefaultFileComparator.DEFAULT_REVERSE;
-    }
-
     /** @see junit.framework.TestCase#tearDown() */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         comparator = null;
         reverse = null;
         equalFile1 = null;
@@ -77,6 +71,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test the comparator.
      */
+    @Test
     public void testComparator() {
         assertEquals("equal", 0, comparator.compare(equalFile1, equalFile2));
         assertTrue("less",  comparator.compare(lessFile, moreFile) < 0);
@@ -86,6 +81,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test the comparator reversed.
      */
+    @Test
     public void testReverseComparator() {
         assertEquals("equal", 0, reverse.compare(equalFile1, equalFile2));
         assertTrue("less",  reverse.compare(moreFile, lessFile) < 0);
@@ -95,6 +91,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test comparator array sort is null safe.
      */
+    @Test
     public void testSortArrayNull() {
         assertNull(comparator.sort((File[])null));
     }
@@ -102,6 +99,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test the comparator array sort.
      */
+    @Test
     public void testSortArray() {
         final File[] files = new File[3];
         files[0] = equalFile1;
@@ -116,6 +114,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test the comparator array sort.
      */
+    @Test
     public void testSortList() {
         final List<File> files = new ArrayList<File>();
         files.add(equalFile1);
@@ -130,6 +129,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test comparator list sort is null safe.
      */
+    @Test
     public void testSortListNull() {
         assertNull(comparator.sort((List<File>)null));
     }
@@ -137,6 +137,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
     /**
      * Test comparator toString.
      */
+    @Test
     public void testToString() {
         assertNotNull("comparator", comparator.toString());
         assertTrue("reverse", reverse.toString().startsWith("ReverseComparator["));

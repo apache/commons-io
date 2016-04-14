@@ -16,18 +16,19 @@
  */
 package org.apache.commons.io.output;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @version $Id$
  */
 
-public class TeeOutputStreamTest extends TestCase {
+public class TeeOutputStreamTest {
 
     private static class ExceptionOnCloseByteArrayOutputStream extends ByteArrayOutputStream {
 
@@ -48,14 +49,11 @@ public class TeeOutputStreamTest extends TestCase {
         }
     }
 
-    public TeeOutputStreamTest(final String name) {
-        super(name);
-    }
-
     /**
      * Tests that the branch {@code OutputStream} is closed when closing the main {@code OutputStream} throws an
      * exception on {@link TeeOutputStream#close()}.
      */
+    @Test
     public void testCloseBranchIOException() {
         final ByteArrayOutputStream badOs = new ExceptionOnCloseByteArrayOutputStream();
         final RecordCloseByteArrayOutputStream goodOs = new RecordCloseByteArrayOutputStream();
@@ -72,6 +70,7 @@ public class TeeOutputStreamTest extends TestCase {
      * Tests that the main {@code OutputStream} is closed when closing the branch {@code OutputStream} throws an
      * exception on {@link TeeOutputStream#close()}.
      */
+    @Test
     public void testCloseMainIOException() {
         final ByteArrayOutputStream badOs = new ExceptionOnCloseByteArrayOutputStream();
         final RecordCloseByteArrayOutputStream goodOs = new RecordCloseByteArrayOutputStream();
@@ -84,6 +83,7 @@ public class TeeOutputStreamTest extends TestCase {
         }
     }
 
+    @Test
     public void testTee() throws IOException {
         final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
