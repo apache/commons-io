@@ -162,12 +162,13 @@ public final class FileAlterationMonitor implements Runnable {
         if (running == false) {
             throw new IllegalStateException("Monitor is not running");
         }
-        running = false;
         try {
             thread.join(stopInterval);
+            running = false;
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        
         for (final FileAlterationObserver observer : observers) {
             observer.destroy();
         }
