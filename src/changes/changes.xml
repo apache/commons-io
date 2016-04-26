@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.5" date="2015-04-22" description="New features and bug fixes.">
+    <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
       <action issue="IO-492" dev="ggregory" type="fix" due-to="Santiago Castro">
         Typo: In an IOUtils.java comment it says "focussed" instead of "focused".
       </action>
