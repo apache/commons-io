@@ -1154,6 +1154,18 @@ public class FileUtils {
                 }
                 pos += bytesCopied;
             }
+
+            output.close();
+            output = null;
+
+            fos.close();
+            fos = null;
+
+            input.close();
+            input = null;
+
+            fis.close();
+            fis = null;
         } finally {
             IOUtils.closeQuietly(output, fos, input, fis);
         }
