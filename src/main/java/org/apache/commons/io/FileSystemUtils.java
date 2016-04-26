@@ -510,6 +510,23 @@ public class FileSystemUtils {
                         "Command line did not return any info " +
                         "for command " + Arrays.asList(cmdAttribs));
             }
+
+            inr.close();
+            inr = null;
+
+            in.close();
+            in = null;
+
+            if (out != null) {
+                out.close();
+                out = null;
+            }
+
+            if (err != null) {
+                err.close();
+                err = null;
+            }
+
             return lines;
 
         } catch (final InterruptedException ex) {
