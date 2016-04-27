@@ -80,6 +80,7 @@ public class FileSystemUtils {
             } else if (osName.contains("linux") ||
                     osName.contains("mpe/ix") ||
                     osName.contains("freebsd") ||
+                    osName.contains("openbsd") ||
                     osName.contains("irix") ||
                     osName.contains("digital unix") ||
                     osName.contains("unix") ||
