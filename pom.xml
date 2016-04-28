@@ -234,12 +234,12 @@ file comparators, endian transformation classes, and much more.
   </dependencies>
 
   <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.rc.version>RC4</commons.rc.version>
     <commons.release.version>2.5</commons.release.version>
-    <commons.release.desc>(requires JDK 1.6+)</commons.release.desc>
+    <commons.release.desc>(requires JDK 1.7+)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
     <commons.osgi.export>
