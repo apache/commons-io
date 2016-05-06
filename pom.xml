@@ -44,7 +44,7 @@ file comparators, endian transformation classes, and much more.
     <site>
       <id>apache.website</id>
       <name>Apache Commons Site</name>
-      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</url>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/javadocs/api-${project.version}</url>
     </site>
   </distributionManagement>
 
