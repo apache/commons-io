@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
@@ -47,7 +48,7 @@ import java.util.NoSuchElementException;
  * @version $Id$
  * @since 1.2
  */
-public class LineIterator implements Iterator<String> {
+public class LineIterator implements Iterator<String>, Closeable {
 
     // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
 
@@ -102,7 +103,11 @@ public class LineIterator implements Iterator<String> {
                     }
                 }
             } catch(final IOException ioe) {
-                close();
+                try {
+                    close();
+                } catch (final IOException e) {
+                    ioe.addSuppressed(e);
+                }
                 throw new IllegalStateException(ioe);
             }
         }
@@ -144,16 +149,21 @@ public class LineIterator implements Iterator<String> {
     }
 
     /**
-     * Closes the underlying <code>Reader</code> quietly.
+     * Closes the underlying {@code Reader}.
      * This method is useful if you only want to process the first few
      * lines of a larger file. If you do not close the iterator
-     * then the <code>Reader</code> remains open.
+     * then the {@code Reader} remains open.
      * This method can safely be called multiple times.
+     *
+     * @throws IOException if closing the underlying {@code Reader} fails.
      */
-    public void close() {
+    @Override
+    public void close() throws IOException {
         finished = true;
-        IOUtils.closeQuietly(bufferedReader);
         cachedLine = null;
+        if (this.bufferedReader != null) {
+            this.bufferedReader.close();
+        }
     }
 
     /**
@@ -167,13 +177,21 @@ public class LineIterator implements Iterator<String> {
 
     //-----------------------------------------------------------------------
     /**
-     * Closes the iterator, handling null and ignoring exceptions.
+     * Closes a {@code LineIterator} quietly.
      *
-     * @param iterator  the iterator to close
+     * @param iterator The iterator to close, or {@code null}.
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final LineIterator iterator) {
-        if (iterator != null) {
-            iterator.close();
+        try {
+            if (iterator != null) {
+                iterator.close();
+            }
+        } catch(final IOException e) {
+            // Suppressed.
         }
     }
 
