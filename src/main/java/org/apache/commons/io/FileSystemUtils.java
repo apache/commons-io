@@ -168,7 +168,9 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 1.2, enhanced OS support in 1.3
+     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
+    @Deprecated
     public static long freeSpaceKb(final String path) throws IOException {
         return freeSpaceKb(path, -1);
     }
@@ -197,7 +199,9 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
+     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
+    @Deprecated
     public static long freeSpaceKb(final String path, final long timeout) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, true, timeout);
     }
@@ -213,7 +217,9 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
+     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
+    @Deprecated
     public static long freeSpaceKb() throws IOException {
         return freeSpaceKb(-1);
     }
@@ -231,7 +237,9 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
+     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
+    @Deprecated
     public static long freeSpaceKb(final long timeout) throws IOException {
         return freeSpaceKb(new File(".").getAbsolutePath(), timeout);
     }

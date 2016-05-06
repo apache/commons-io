@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-503" dev="ggregory" type="fix">
         Update platform requirement to Java 7.
       </action>
+      <action issue="IO-506" dev="ggregory" type="update" due-to="Christian Schulte">
+        Deprecate methods FileSystemUtils.freeSpaceKb().
+      </action>
     </release>
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
       <action issue="IO-492" dev="ggregory" type="fix" due-to="Santiago Castro">
