@@ -59,6 +59,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-505" dev="ggregory" type="update" due-to="Christian Schulte">
         Make LineIterator implement Closeable to support try-with-resources statements.
       </action>
+      <action issue="IO-507" dev="ggregory" type="new">
+        Add a ByteOrderFactory class.
+      </action>
     </release>
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
       <action issue="IO-492" dev="ggregory" type="fix" due-to="Santiago Castro">
