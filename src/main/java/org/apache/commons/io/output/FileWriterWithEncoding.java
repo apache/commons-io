@@ -26,7 +26,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Writer of files that allows the encoding to be set.
@@ -230,34 +229,30 @@ public class FileWriterWithEncoding extends Writer {
         if (encoding == null) {
             throw new NullPointerException("Encoding is missing");
         }
-        final boolean fileExistedAlready = file.exists();
         OutputStream stream = null;
-        Writer writer = null;
+        final boolean fileExistedAlready = file.exists();
         try {
             stream = new FileOutputStream(file, append);
             if (encoding instanceof Charset) {
-                writer = new OutputStreamWriter(stream, (Charset)encoding);
+                return new OutputStreamWriter(stream, (Charset)encoding);
             } else if (encoding instanceof CharsetEncoder) {
-                writer = new OutputStreamWriter(stream, (CharsetEncoder)encoding);
+                return new OutputStreamWriter(stream, (CharsetEncoder)encoding);
             } else {
-                writer = new OutputStreamWriter(stream, (String)encoding);
+                return new OutputStreamWriter(stream, (String)encoding);
             }
-        } catch (final IOException ex) {
-            IOUtils.closeQuietly(writer);
-            IOUtils.closeQuietly(stream);
-            if (fileExistedAlready == false) {
-                FileUtils.deleteQuietly(file);
+        } catch (final IOException | RuntimeException ex) {
+            try {
+                if (stream != null) {
+                    stream.close();
+                }
+            } catch (final IOException e) {
+                ex.addSuppressed(e);
             }
-            throw ex;
-        } catch (final RuntimeException ex) {
-            IOUtils.closeQuietly(writer);
-            IOUtils.closeQuietly(stream);
             if (fileExistedAlready == false) {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;
         }
-        return writer;
     }
 
     //-----------------------------------------------------------------------

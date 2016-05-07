@@ -26,7 +26,6 @@ import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
@@ -431,10 +430,9 @@ public class Tailer implements Runnable {
                 if (length < position) {
                     // File was rotated
                     listener.fileRotated();
-                    // Reopen the reader after rotation
-                    try {
-                        // Ensure that the old file is closed iff we re-open it successfully
-                        final RandomAccessFile save = reader;
+                    // Reopen the reader after rotation ensuring that the old file is closed iff we re-open it
+                    // successfully
+                    try (RandomAccessFile save = reader) {
                         reader = new RandomAccessFile(file, RAF_MODE);
                         // At this point, we're sure that the old file is rotated
                         // Finish scanning the old file and then we'll start with the new one
@@ -444,8 +442,6 @@ public class Tailer implements Runnable {
                             listener.handle(ioe);
                         }
                         position = 0;
-                        // close old file explicitly rather than relying on GC picking up previous RAF
-                        IOUtils.closeQuietly(save);
                     } catch (final FileNotFoundException e) {
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
@@ -471,8 +467,8 @@ public class Tailer implements Runnable {
                         last = file.lastModified();
                     }
                 }
-                if (reOpen) {
-                    IOUtils.closeQuietly(reader);
+                if (reOpen && reader != null) {
+                    reader.close();
                 }
                 Thread.sleep(delayMillis);
                 if (getRun() && reOpen) {
@@ -482,21 +478,20 @@ public class Tailer implements Runnable {
             }
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
-            stop(e);
+            listener.handle(e);
         } catch (final Exception e) {
-            stop(e);
+            listener.handle(e);
         } finally {
-            IOUtils.closeQuietly(reader);
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+            catch (final IOException e) {
+                listener.handle(e);
+            }
+            stop();
         }
-    }
-
-    /**
-     * Stops the tailer with an exception
-     * @param e The exception to send to listener
-     */
-    private void stop(final Exception e) {
-        listener.handle(e);
-        stop();
     }
 
     /**
@@ -514,47 +509,47 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessFile reader) throws IOException {
-        ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64);
-        long pos = reader.getFilePointer();
-        long rePos = pos; // position to re-read
-        int num;
-        boolean seenCR = false;
-        while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
-            for (int i = 0; i < num; i++) {
-                final byte ch = inbuf[i];
-                switch (ch) {
-                case '\n':
-                    seenCR = false; // swallow CR before LF
-                    listener.handle(new String(lineBuf.toByteArray(), cset));
-                    lineBuf.reset();
-                    rePos = pos + i + 1;
-                    break;
-                case '\r':
-                    if (seenCR) {
-                        lineBuf.write('\r');
+        try (ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64)) {
+            long pos = reader.getFilePointer();
+            long rePos = pos; // position to re-read
+            int num;
+            boolean seenCR = false;
+            while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
+                for (int i = 0; i < num; i++) {
+                    final byte ch = inbuf[i];
+                    switch ( ch ) {
+                        case '\n':
+                            seenCR = false; // swallow CR before LF
+                            listener.handle(new String(lineBuf.toByteArray(), cset));
+                            lineBuf.reset();
+                            rePos = pos + i + 1;
+                            break;
+                        case '\r':
+                            if (seenCR) {
+                                lineBuf.write('\r');
+                            }
+                            seenCR = true;
+                            break;
+                        default:
+                            if (seenCR) {
+                                seenCR = false; // swallow final CR
+                                listener.handle(new String(lineBuf.toByteArray(), cset));
+                                lineBuf.reset();
+                                rePos = pos + i + 1;
+                            }
+                            lineBuf.write(ch);
                     }
-                    seenCR = true;
-                    break;
-                default:
-                    if (seenCR) {
-                        seenCR = false; // swallow final CR
-                        listener.handle(new String(lineBuf.toByteArray(), cset));
-                        lineBuf.reset();
-                        rePos = pos + i + 1;
-                    }
-                    lineBuf.write(ch);
                 }
+                pos = reader.getFilePointer();
             }
-            pos = reader.getFilePointer();
-        }
-        IOUtils.closeQuietly(lineBuf); // not strictly necessary
-        reader.seek(rePos); // Ensure we can re-read if necessary
 
-        if (listener instanceof TailerListenerAdapter) {
-            ((TailerListenerAdapter) listener).endOfFileReached();
-        }
+            reader.seek(rePos); // Ensure we can re-read if necessary
 
-        return rePos;
+            if (listener instanceof TailerListenerAdapter) {
+                ((TailerListenerAdapter) listener).endOfFileReached();
+            }
+
+            return rePos;
+        }
     }
-
 }

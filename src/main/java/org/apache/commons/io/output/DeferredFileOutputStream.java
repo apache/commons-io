@@ -267,22 +267,15 @@ public class DeferredFileOutputStream
         // we may only need to check if this is closed if we are working with a file
         // but we should force the habit of closing wether we are working with
         // a file or memory.
-        if (!closed)
-        {
+        if (!closed) {
             throw new IOException("Stream not closed");
         }
 
-        if(isInMemory())
-        {
+        if (isInMemory()) {
             memoryOutputStream.writeTo(out);
-        }
-        else
-        {
-            final FileInputStream fis = new FileInputStream(outputFile);
-            try {
+        } else {
+            try (FileInputStream fis = new FileInputStream(outputFile)) {
                 IOUtils.copy(fis, out);
-            } finally {
-                IOUtils.closeQuietly(fis);
             }
         }
     }

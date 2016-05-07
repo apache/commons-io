@@ -19,14 +19,12 @@ package org.apache.commons.io.output;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * FileWriter that will create and honor lock files to allow simple
@@ -267,29 +265,17 @@ public class LockableFileWriter extends Writer {
      */
     private Writer initWriter(final File file, final Charset encoding, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
-        OutputStream stream = null;
-        Writer writer = null;
         try {
-            stream = new FileOutputStream(file.getAbsolutePath(), append);
-            writer = new OutputStreamWriter(stream, Charsets.toCharset(encoding));
-        } catch (final IOException ex) {
-            IOUtils.closeQuietly(writer);
-            IOUtils.closeQuietly(stream);
-            FileUtils.deleteQuietly(lockFile);
-            if (fileExistedAlready == false) {
-                FileUtils.deleteQuietly(file);
-            }
-            throw ex;
-        } catch (final RuntimeException ex) {
-            IOUtils.closeQuietly(writer);
-            IOUtils.closeQuietly(stream);
+            return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),
+                                          Charsets.toCharset(encoding));
+
+        } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);
             if (fileExistedAlready == false) {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;
         }
-        return writer;
     }
 
     //-----------------------------------------------------------------------
