@@ -766,7 +766,9 @@ public class BOMInputStreamTest {
             is.setEncoding(charSetName);
             documentBuilder.parse(is);
         } catch (SAXParseException e) {
-            if (e.getMessage().contains(charSetName)) return false;
+            if (e.getMessage().contains(charSetName)) {
+                return false;
+            }
         }
         return true;
     }
