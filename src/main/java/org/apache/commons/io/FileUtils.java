@@ -432,8 +432,7 @@ public class FileUtils {
      */
     public static void touch(final File file) throws IOException {
         if (!file.exists()) {
-            final OutputStream out = openOutputStream(file);
-            IOUtils.closeQuietly(out);
+            openOutputStream(file).close();
         }
         final boolean success = file.setLastModified(System.currentTimeMillis());
         if (!success) {
@@ -745,16 +744,9 @@ public class FileUtils {
             return true;
         }
 
-        InputStream input1 = null;
-        InputStream input2 = null;
-        try {
-            input1 = new FileInputStream(file1);
-            input2 = new FileInputStream(file2);
+        try (InputStream input1 = new FileInputStream(file1);
+             InputStream input2 = new FileInputStream(file2)) {
             return IOUtils.contentEquals(input1, input2);
-
-        } finally {
-            IOUtils.closeQuietly(input1);
-            IOUtils.closeQuietly(input2);
         }
     }
 
@@ -798,22 +790,13 @@ public class FileUtils {
             return true;
         }
 
-        Reader input1 = null;
-        Reader input2 = null;
-        try {
-            if (charsetName == null) {
-                // N.B. make explicit the use of the default charset
-                input1 = new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset());
-                input2 = new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset());
-            } else {
-                input1 = new InputStreamReader(new FileInputStream(file1), charsetName);
-                input2 = new InputStreamReader(new FileInputStream(file2), charsetName);
-            }
+        try (Reader input1 = charsetName == null
+                                 ? new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset())
+                                 : new InputStreamReader(new FileInputStream(file1), charsetName);
+             Reader input2 = charsetName == null
+                                 ? new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset())
+                                 : new InputStreamReader(new FileInputStream(file2), charsetName)) {
             return IOUtils.contentEqualsIgnoreEOL(input1, input2);
-
-        } finally {
-            IOUtils.closeQuietly(input1);
-            IOUtils.closeQuietly(input2);
         }
     }
 
@@ -1133,15 +1116,10 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        FileChannel input = null;
-        FileChannel output = null;
-        try {
-            fis = new FileInputStream(srcFile);
-            fos = new FileOutputStream(destFile);
-            input = fis.getChannel();
-            output = fos.getChannel();
+        try (FileInputStream fis = new FileInputStream(srcFile);
+             FileChannel input = fis.getChannel();
+             FileOutputStream fos = new FileOutputStream(destFile);
+             FileChannel output = fos.getChannel()) {
             final long size = input.size(); // TODO See IO-386
             long pos = 0;
             long count = 0;
@@ -1154,20 +1132,6 @@ public class FileUtils {
                 }
                 pos += bytesCopied;
             }
-
-            output.close();
-            output = null;
-
-            fos.close();
-            fos = null;
-
-            input.close();
-            input = null;
-
-            fis.close();
-            fis = null;
-        } finally {
-            IOUtils.closeQuietly(output, fos, input, fis);
         }
 
         final long srcLen = srcFile.length(); // TODO See IO-386
@@ -1536,10 +1500,8 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
-        try {
-            copyToFile(source, destination);
-        } finally {
-            IOUtils.closeQuietly(source);
+        try (InputStream in = source) {
+            copyToFile(in, destination);
         }
     }
 
@@ -1561,12 +1523,9 @@ public class FileUtils {
      * @since 2.5
      */
     public static void copyToFile(final InputStream source, final File destination) throws IOException {
-        final FileOutputStream output = openOutputStream(destination);
-        try {
-            IOUtils.copy(source, output);
-            output.close(); // don't swallow close Exception if copy completes normally
-        } finally {
-            IOUtils.closeQuietly(output);
+        try (InputStream in = source;
+             OutputStream out = openOutputStream(destination)) {
+            IOUtils.copy(in, out);
         }
     }
 
@@ -1772,12 +1731,8 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset encoding) throws IOException {
-        InputStream in = null;
-        try {
-            in = openInputStream(file);
+        try (InputStream in = openInputStream(file)) {
             return IOUtils.toString(in, Charsets.toCharset(encoding));
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1822,12 +1777,8 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        InputStream in = null;
-        try {
-            in = openInputStream(file);
+        try (InputStream in = openInputStream(file)) {
             return IOUtils.toByteArray(in); // Do NOT use file.length() - see IO-453
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1842,12 +1793,8 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset encoding) throws IOException {
-        InputStream in = null;
-        try {
-            in = openInputStream(file);
+        try (InputStream in = openInputStream(file)) {
             return IOUtils.readLines(in, Charsets.toCharset(encoding));
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1917,11 +1864,15 @@ public class FileUtils {
         try {
             in = openInputStream(file);
             return IOUtils.lineIterator(in, encoding);
-        } catch (final IOException ex) {
-            IOUtils.closeQuietly(in);
-            throw ex;
-        } catch (final RuntimeException ex) {
-            IOUtils.closeQuietly(in);
+        } catch (final IOException | RuntimeException ex) {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            }
+            catch (final IOException e) {
+                ex.addSuppressed(e);
+            }
             throw ex;
         }
     }
@@ -1986,15 +1937,10 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(final File file, final String data, final Charset encoding, final boolean
-            append) throws IOException {
-        OutputStream out = null;
-        try {
-            out = openOutputStream(file, append);
+    public static void writeStringToFile(final File file, final String data, final Charset encoding,
+                                         final boolean append) throws IOException {
+        try (OutputStream out = openOutputStream(file, append)) {
             IOUtils.write(data, out, encoding);
-            out.close(); // don't swallow close Exception if copy completes normally
-        } finally {
-            IOUtils.closeQuietly(out);
         }
     }
 
@@ -2200,13 +2146,8 @@ public class FileUtils {
      */
     public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
                                             final boolean append) throws IOException {
-        OutputStream out = null;
-        try {
-            out = openOutputStream(file, append);
+        try (OutputStream out = openOutputStream(file, append)) {
             out.write(data, off, len);
-            out.close(); // don't swallow close Exception if copy completes normally
-        } finally {
-            IOUtils.closeQuietly(out);
         }
     }
 
@@ -2317,15 +2258,8 @@ public class FileUtils {
      */
     public static void writeLines(final File file, final String encoding, final Collection<?> lines,
                                   final String lineEnding, final boolean append) throws IOException {
-        FileOutputStream out = null;
-        try {
-            out = openOutputStream(file, append);
-            final BufferedOutputStream buffer = new BufferedOutputStream(out);
-            IOUtils.writeLines(lines, lineEnding, buffer, encoding);
-            buffer.flush();
-            out.close(); // don't swallow close Exception if copy completes normally
-        } finally {
-            IOUtils.closeQuietly(out);
+        try (OutputStream out = new BufferedOutputStream(openOutputStream(file, append))) {
+            IOUtils.writeLines(lines, lineEnding, out, encoding);
         }
     }
 
@@ -2880,12 +2814,8 @@ public class FileUtils {
         if (file.isDirectory()) {
             throw new IllegalArgumentException("Checksums can't be computed on directories");
         }
-        InputStream in = null;
-        try {
-            in = new CheckedInputStream(new FileInputStream(file), checksum);
+        try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
             IOUtils.copy(in, new NullOutputStream());
-        } finally {
-            IOUtils.closeQuietly(in);
         }
         return checksum;
     }

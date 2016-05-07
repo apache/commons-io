@@ -212,7 +212,12 @@ public class IOUtils {
      * </pre>
      *
      * @param input the Reader to close, may be null or already closed
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Reader input) {
         closeQuietly((Closeable) input);
     }
@@ -238,7 +243,12 @@ public class IOUtils {
      * </pre>
      *
      * @param output the Writer to close, may be null or already closed
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Writer output) {
         closeQuietly((Closeable) output);
     }
@@ -265,7 +275,12 @@ public class IOUtils {
      * </pre>
      *
      * @param input the InputStream to close, may be null or already closed
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final InputStream input) {
         closeQuietly((Closeable) input);
     }
@@ -293,7 +308,12 @@ public class IOUtils {
      * </pre>
      *
      * @param output the OutputStream to close, may be null or already closed
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final OutputStream output) {
         closeQuietly((Closeable) output);
     }
@@ -332,7 +352,12 @@ public class IOUtils {
      *
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Closeable closeable) {
         try {
             if (closeable != null) {
@@ -385,7 +410,12 @@ public class IOUtils {
      * @param closeables the objects to close, may be null or already closed
      * @see #closeQuietly(Closeable)
      * @since 2.5
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Closeable... closeables) {
         if (closeables == null) {
             return;
@@ -417,7 +447,12 @@ public class IOUtils {
      *
      * @param sock the Socket to close, may be null or already closed
      * @since 2.0
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Socket sock) {
         if (sock != null) {
             try {
@@ -450,7 +485,12 @@ public class IOUtils {
      *
      * @param selector the Selector to close, may be null or already closed
      * @since 2.2
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final Selector selector) {
         if (selector != null) {
             try {
@@ -483,7 +523,12 @@ public class IOUtils {
      *
      * @param sock the ServerSocket to close, may be null or already closed
      * @since 2.2
+     *
+     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
      */
+    @Deprecated
     public static void closeQuietly(final ServerSocket sock) {
         if (sock != null) {
             try {

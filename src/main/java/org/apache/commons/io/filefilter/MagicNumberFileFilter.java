@@ -23,8 +23,6 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * <p>
  * File filter for matching files containing a "magic number". A magic number
@@ -234,20 +232,19 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
     @Override
     public boolean accept(final File file) {
         if (file != null && file.isFile() && file.canRead()) {
-            RandomAccessFile randomAccessFile = null;
             try {
-                final byte[] fileBytes = new byte[this.magicNumbers.length];
-                randomAccessFile = new RandomAccessFile(file, "r");
-                randomAccessFile.seek(byteOffset);
-                final int read = randomAccessFile.read(fileBytes);
-                if (read != magicNumbers.length) {
-                    return false;
+                try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+                    final byte[] fileBytes = new byte[this.magicNumbers.length];
+                    randomAccessFile.seek(byteOffset);
+                    final int read = randomAccessFile.read(fileBytes);
+                    if (read != magicNumbers.length) {
+                        return false;
+                    }
+                    return Arrays.equals(this.magicNumbers, fileBytes);
                 }
-                return Arrays.equals(this.magicNumbers, fileBytes);
-            } catch (final IOException ioe) {
+            }
+            catch (final IOException ioe) {
                 // Do nothing, fall through and do not accept file
-            } finally {
-                IOUtils.closeQuietly(randomAccessFile);
             }
         }
 
