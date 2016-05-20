@@ -59,7 +59,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-505" dev="ggregory" type="update" due-to="Christian Schulte">
         Make LineIterator implement Closeable to support try-with-resources statements.
       </action>
-      <action issue="IO-505" dev="ggregory" type="update" due-to="Christian Schulte">
+      <action issue="IO-504" dev="ggregory" type="update" due-to="Christian Schulte">
         Deprecated of all IOUtils.closeQuietly() methods and use try-with-resources internally.
       </action>
       <action issue="IO-507" dev="ggregory" type="new">
