@@ -181,4 +181,12 @@ public class BoundedReaderTest
         mr.close();
         assertTrue( closed.get() );
     }
+
+    @Test(timeout = 5000)
+    public void testReadBytesEOF() throws IOException {
+        BoundedReader mr = new BoundedReader( sr, 3 );
+        BufferedReader br = new BufferedReader( mr );
+        br.readLine();
+        br.readLine();
+    }
 }
