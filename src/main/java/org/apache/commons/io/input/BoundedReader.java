@@ -139,7 +139,7 @@ public class BoundedReader
         for ( int i = 0; i < len; i++ ) {
             c = read();
             if ( c == -1 ) {
-                return i;
+                return i == 0 ? -1 : i;
             }
             cbuf[off + i] = (char) c;
         }
