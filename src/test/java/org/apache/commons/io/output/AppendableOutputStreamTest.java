@@ -32,7 +32,7 @@ public class AppendableOutputStreamTest {
 
     @Before
     public void setUp() throws Exception {
-        out = new AppendableOutputStream<StringBuilder>(new StringBuilder());
+        out = new AppendableOutputStream<>(new StringBuilder());
     }
 
     @Test

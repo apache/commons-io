@@ -48,7 +48,7 @@ public class FileCleaningTracker {
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    ReferenceQueue<Object> q = new ReferenceQueue<Object>();
+    ReferenceQueue<Object> q = new ReferenceQueue<>();
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */

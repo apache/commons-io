@@ -114,10 +114,8 @@ public abstract class TestUtils {
                     " have differing file sizes (" + f0.length() +
                     " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
         */
-        final InputStream is0 = new java.io.FileInputStream(f0);
-        try {
-            final InputStream is1 = new java.io.FileInputStream(f1);
-            try {
+        try (InputStream is0 = new FileInputStream(f0)) {
+            try (InputStream is1 = new FileInputStream(f1)) {
                 final byte[] buf0 = new byte[1024];
                 final byte[] buf1 = new byte[1024];
                 int n0 = 0;
@@ -133,11 +131,7 @@ public abstract class TestUtils {
                     assertTrue("The files " + f0 + " and " + f1 +
                             " have different content", Arrays.equals(buf0, buf1));
                 }
-            } finally {
-                is1.close();
             }
-        } finally {
-            is0.close();
         }
     }
 
@@ -149,10 +143,9 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
-        final InputStream is = new java.io.FileInputStream(file);
         int count = 0, numRead = 0;
         final byte[] b1 = new byte[b0.length];
-        try {
+        try (InputStream is = new FileInputStream(file)) {
             while (count < b0.length && numRead >= 0) {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
@@ -161,8 +154,6 @@ public abstract class TestUtils {
             for (int i = 0; i < count; i++) {
                 assertEquals("byte " + i + " differs", b0[i], b1[i]);
             }
-        } finally {
-            is.close();
         }
     }
 
@@ -174,10 +165,9 @@ public abstract class TestUtils {
      * @throws IOException If an I/O error occurs while reading the file contents
      */
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
-        final Reader ir = new java.io.FileReader(file);
         int count = 0, numRead = 0;
         final char[] c1 = new char[c0.length];
-        try {
+        try (Reader ir = new FileReader(file)) {
             while (count < c0.length && numRead >= 0) {
                 numRead = ir.read(c1, count, c0.length);
                 count += numRead;
@@ -186,8 +176,6 @@ public abstract class TestUtils {
             for (int i = 0; i < count; i++) {
                 assertEquals("char " + i + " differs", c0[i], c1[i]);
             }
-        } finally {
-            ir.close();
         }
     }
 

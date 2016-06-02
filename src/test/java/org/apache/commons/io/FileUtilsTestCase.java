@@ -746,15 +746,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
 
         // Tests that resuorce was copied correctly
-        final FileInputStream fis = new FileInputStream(file);
-        try {
+        try (FileInputStream fis = new FileInputStream(file)) {
             assertTrue(
                     "Content is not equal.",
                     IOUtils.contentEquals(
                             getClass().getResourceAsStream(resourceName),
                             fis));
-        } finally {
-            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -770,15 +767,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file, 500, 500);
 
         // Tests that resuorce was copied correctly
-        final FileInputStream fis = new FileInputStream(file);
-        try {
+        try (FileInputStream fis = new FileInputStream(file)) {
             assertTrue(
                     "Content is not equal.",
                     IOUtils.contentEquals(
                             getClass().getResourceAsStream(resourceName),
                             fis));
-        } finally {
-            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -1692,11 +1686,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         final String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
-        final OutputStream out = new java.io.FileOutputStream(file1);
-        try {
+        try (OutputStream out = new FileOutputStream(file1)) {
             out.write("This is a test".getBytes("UTF-8"));
-        } finally {
-            out.close();
         }
 
         final File file2 = new File(getTestDirectory(), "test2.txt");
@@ -1779,7 +1770,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         assertEquals(fileNames.length, files.size());
 
-        final Map<String, String> foundFileNames = new HashMap<String, String>();
+        final Map<String, String> foundFileNames = new HashMap<>();
 
         for (int i = 0; i < count; ++i) {
             boolean found = false;
@@ -1862,7 +1853,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
                 new WildcardFileFilter("*.*"),
                 new WildcardFileFilter("*"));
 
-        final Map<String, String> foundFileNames = new HashMap<String, String>();
+        final Map<String, String> foundFileNames = new HashMap<>();
 
         while (files.hasNext()) {
             boolean found = false;
@@ -3063,7 +3054,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         List<File> list(final File startDirectory) throws IOException {
-            final ArrayList<File> files = new ArrayList<File>();
+            final ArrayList<File> files = new ArrayList<>();
             walk(startDirectory, files);
             return files;
         }

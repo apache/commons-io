@@ -189,11 +189,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.append('c');
-        } finally {
-            proxy.close();
         }
     }
 
@@ -205,11 +202,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.append("ABCE");
-        } finally {
-            proxy.close();
         }
     }
 
@@ -221,11 +215,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.append("ABCE", 1, 2);
-        } finally {
-            proxy.close();
         }
     }
 
@@ -237,11 +228,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.write((int) 'a');
-        } finally {
-            proxy.close();
         }
     }
 
@@ -253,11 +241,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.write("ABCE".toCharArray());
-        } finally {
-            proxy.close();
         }
     }
 
@@ -269,11 +254,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.write("ABCE".toCharArray(), 2, 3);
-        } finally {
-            proxy.close();
         }
     }
 
@@ -285,11 +267,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.write("ABCE");
-        } finally {
-            proxy.close();
         }
     }
 
@@ -301,11 +280,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.write("ABCE", 1, 3);
-        } finally {
-            proxy.close();
         }
     }
 
@@ -317,11 +293,8 @@ public class ProxyWriterTest {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        try {
+        try (ProxyWriter proxy = new ProxyWriter(osw)) {
             proxy.flush();
-        } finally {
-            proxy.close();
         }
     }
 

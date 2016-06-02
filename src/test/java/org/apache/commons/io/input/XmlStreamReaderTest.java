@@ -380,7 +380,7 @@ public class XmlStreamReaderTest {
     private static final int[] UTF_32LE_BOM_BYTES = {0xFF, 0XFE, 0x00, 0x00};
     private static final int[] UTF_8_BOM_BYTES = {0xEF, 0xBB, 0xBF};
 
-    private static final Map<String, int[]> BOMs = new HashMap<String, int[]>();
+    private static final Map<String, int[]> BOMs = new HashMap<>();
 
     static {
         BOMs.put("no-bom", NO_BOM_BYTES);
@@ -406,7 +406,7 @@ public class XmlStreamReaderTest {
     private static final MessageFormat INFO = new MessageFormat(
             "\nBOM : {0}\nDoc : {1}\nStream Enc : {2}\nProlog Enc : {3}\n");
 
-    private static final Map<String, MessageFormat> XMLs = new HashMap<String, MessageFormat>();
+    private static final Map<String, MessageFormat> XMLs = new HashMap<>();
 
     static {
         XMLs.put(XML1, XML);

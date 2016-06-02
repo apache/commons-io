@@ -46,8 +46,8 @@ public class DemuxTestCase {
     private static final String DATA4 = "Data for thread4";
 
     private static final Random c_random = new Random();
-    private final HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<String, ByteArrayOutputStream>();
-    private final HashMap<String, Thread> m_threadMap = new HashMap<String, Thread>();
+    private final HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<>();
+    private final HashMap<String, Thread> m_threadMap = new HashMap<>();
 
     @SuppressWarnings("deprecation") // unavoidable until Java 7
     private String getOutput(final String threadName) {

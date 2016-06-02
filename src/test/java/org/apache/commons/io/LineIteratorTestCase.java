@@ -94,7 +94,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      * @return a new lines list.
      */
     private List<String> createStringLines(final int lineCount) {
-        final List<String> lines = new ArrayList<String>();
+        final List<String> lines = new ArrayList<>();
         for (int i = 0; i < lineCount; i++) {
             lines.add("LINE " + i);
         }

@@ -514,7 +514,7 @@ public class FileUtils {
         final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
-        final Collection<File> files = new java.util.LinkedList<File>();
+        final Collection<File> files = new java.util.LinkedList<>();
         innerListFiles(files, directory,
                 FileFilterUtils.or(effFileFilter, effDirFilter), false);
         return files;
@@ -587,7 +587,7 @@ public class FileUtils {
         final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
-        final Collection<File> files = new java.util.LinkedList<File>();
+        final Collection<File> files = new java.util.LinkedList<>();
         if (directory.isDirectory()) {
             files.add(directory);
         }
@@ -1085,11 +1085,8 @@ public class FileUtils {
      * @since 2.1
      */
     public static long copyFile(final File input, final OutputStream output) throws IOException {
-        final FileInputStream fis = new FileInputStream(input);
-        try {
+        try (FileInputStream fis = new FileInputStream(input)) {
             return IOUtils.copyLarge(fis, output);
-        } finally {
-            fis.close();
         }
     }
 
@@ -1354,7 +1351,7 @@ public class FileUtils {
         if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
             final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
             if (srcFiles != null && srcFiles.length > 0) {
-                exclusionList = new ArrayList<String>(srcFiles.length);
+                exclusionList = new ArrayList<>(srcFiles.length);
                 for (final File srcFile : srcFiles) {
                     final File copiedFile = new File(destDir, srcFile.getName());
                     exclusionList.add(copiedFile.getCanonicalPath());

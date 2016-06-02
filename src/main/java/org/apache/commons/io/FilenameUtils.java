@@ -1338,7 +1338,7 @@ public class FilenameUtils {
         boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        final Stack<int[]> backtrack = new Stack<int[]>();
+        final Stack<int[]> backtrack = new Stack<>();
 
         // loop around a backtrack stack, to handle complex * matching
         do {
@@ -1423,7 +1423,7 @@ public class FilenameUtils {
         }
 
         final char[] array = text.toCharArray();
-        final ArrayList<String> list = new ArrayList<String>();
+        final ArrayList<String> list = new ArrayList<>();
         final StringBuilder buffer = new StringBuilder();
         char prevChar = 0;
         for (final char ch : array) {

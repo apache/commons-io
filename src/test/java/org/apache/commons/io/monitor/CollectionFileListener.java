@@ -29,12 +29,12 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     private static final long serialVersionUID = 939724715678693963L;
     private final boolean clearOnStart;
-    private final Collection<File> createdFiles = new ArrayList<File>();
-    private final Collection<File> changedFiles = new ArrayList<File>();
-    private final Collection<File> deletedFiles = new ArrayList<File>();
-    private final Collection<File> createdDirectories = new ArrayList<File>();
-    private final Collection<File> changedDirectories = new ArrayList<File>();
-    private final Collection<File> deletedDirectories = new ArrayList<File>();
+    private final Collection<File> createdFiles = new ArrayList<>();
+    private final Collection<File> changedFiles = new ArrayList<>();
+    private final Collection<File> deletedFiles = new ArrayList<>();
+    private final Collection<File> createdDirectories = new ArrayList<>();
+    private final Collection<File> changedDirectories = new ArrayList<>();
+    private final Collection<File> deletedDirectories = new ArrayList<>();
 
     /**
      * Create a new observer.

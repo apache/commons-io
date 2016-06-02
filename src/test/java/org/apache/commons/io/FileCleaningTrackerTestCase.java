@@ -69,7 +69,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
          * which we should, IMO, not.
          */
         {
-            theInstance.q = new ReferenceQueue<Object>();
+            theInstance.q = new ReferenceQueue<>();
             theInstance.trackers.clear();
             theInstance.deleteFailures.clear();
             theInstance.exitWhenFinished = false;
@@ -326,7 +326,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
         TestUtils.sleep(500);
         int count = 0;
         while(theInstance.getTrackCount() != 0 && count++ < 5) {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             try {
                 long i = 0;
                 while (theInstance.getTrackCount() != 0) {

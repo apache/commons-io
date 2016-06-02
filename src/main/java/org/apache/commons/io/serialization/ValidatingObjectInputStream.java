@@ -43,8 +43,8 @@ import java.util.regex.Pattern;
  * </p>
  */
 public class ValidatingObjectInputStream extends ObjectInputStream {
-    private final List<ClassNameMatcher> acceptMatchers = new ArrayList<ClassNameMatcher>();
-    private final List<ClassNameMatcher> rejectMatchers = new ArrayList<ClassNameMatcher>();
+    private final List<ClassNameMatcher> acceptMatchers = new ArrayList<>();
+    private final List<ClassNameMatcher> rejectMatchers = new ArrayList<>();
 
     /**
      * Constructs an object to deserialize the specified input stream.

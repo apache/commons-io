@@ -30,7 +30,7 @@ import org.junit.Before;
  *  and cleans them up.
  */
 public class ClosingBase {
-    private final List<Closeable> toClose = new ArrayList<Closeable>();
+    private final List<Closeable> toClose = new ArrayList<>();
 
     protected <T extends Closeable> T willClose(T t) {
         toClose.add(t);

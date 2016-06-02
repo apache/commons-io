@@ -73,7 +73,7 @@ public class Charsets {
     public static SortedMap<String, Charset> requiredCharsets() {
         // maybe cache?
         // TODO Re-implement on Java 7 to use java.nio.charset.StandardCharsets
-        final TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
+        final TreeMap<String, Charset> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         m.put(ISO_8859_1.name(), ISO_8859_1);
         m.put(US_ASCII.name(), US_ASCII);
         m.put(UTF_16.name(), UTF_16);
