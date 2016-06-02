@@ -47,7 +47,7 @@ public class OrFileFilter
      * @since 1.1
      */
     public OrFileFilter() {
-        this.fileFilters = new ArrayList<IOFileFilter>();
+        this.fileFilters = new ArrayList<>();
     }
 
     /**
@@ -59,9 +59,9 @@ public class OrFileFilter
      */
     public OrFileFilter(final List<IOFileFilter> fileFilters) {
         if (fileFilters == null) {
-            this.fileFilters = new ArrayList<IOFileFilter>();
+            this.fileFilters = new ArrayList<>();
         } else {
-            this.fileFilters = new ArrayList<IOFileFilter>(fileFilters);
+            this.fileFilters = new ArrayList<>(fileFilters);
         }
     }
 
@@ -76,7 +76,7 @@ public class OrFileFilter
         if (filter1 == null || filter2 == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        this.fileFilters = new ArrayList<IOFileFilter>(2);
+        this.fileFilters = new ArrayList<>(2);
         addFileFilter(filter1);
         addFileFilter(filter2);
     }

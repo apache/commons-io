@@ -38,7 +38,7 @@ public class MoreComplexObject implements Serializable {
     private final int pInt = random.nextInt();
     private final long pLong = random.nextLong();
     private final Integer [] intArray = { random.nextInt(), random.nextInt() };
-    private final List<Boolean> boolList = new ArrayList<Boolean>();
+    private final List<Boolean> boolList = new ArrayList<>();
     
     MoreComplexObject() {
         for(int i=0 ; i < 5; i++) {

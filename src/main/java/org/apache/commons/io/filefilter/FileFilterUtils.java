@@ -80,7 +80,7 @@ public class FileFilterUtils {
         if (files == null) {
             return new File[0];
         }
-        final List<File> acceptedFiles = new ArrayList<File>();
+        final List<File> acceptedFiles = new ArrayList<>();
         for (final File file : files) {
             if (file == null) {
                 throw new IllegalArgumentException("file array contains null");
@@ -210,7 +210,7 @@ public class FileFilterUtils {
      */
     public static Set<File> filterSet(final IOFileFilter filter, final File... files) {
         final File[] acceptedFiles = filter(filter, files);
-        return new HashSet<File>(Arrays.asList(acceptedFiles));
+        return new HashSet<>(Arrays.asList(acceptedFiles));
     }
 
     /**
@@ -449,7 +449,7 @@ public class FileFilterUtils {
         if (filters == null) {
             throw new IllegalArgumentException("The filters must not be null");
         }
-        final List<IOFileFilter> list = new ArrayList<IOFileFilter>(filters.length);
+        final List<IOFileFilter> list = new ArrayList<>(filters.length);
         for (int i = 0; i < filters.length; i++) {
             if (filters[i] == null) {
                 throw new IllegalArgumentException("The filter[" + i + "] is null");

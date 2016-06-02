@@ -73,7 +73,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         if (delegates == null) {
             this.delegates = (Comparator<File>[]) NO_COMPARATORS; //1
         } else {
-            final List<Comparator<File>> list = new ArrayList<Comparator<File>>();
+            final List<Comparator<File>> list = new ArrayList<>();
             for (final Comparator<File> comparator : delegates) {
                 list.add(comparator);
             }

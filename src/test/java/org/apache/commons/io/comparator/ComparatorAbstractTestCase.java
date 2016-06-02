@@ -116,7 +116,7 @@ public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
      */
     @Test
     public void testSortList() {
-        final List<File> files = new ArrayList<File>();
+        final List<File> files = new ArrayList<>();
         files.add(equalFile1);
         files.add(moreFile);
         files.add(lessFile);

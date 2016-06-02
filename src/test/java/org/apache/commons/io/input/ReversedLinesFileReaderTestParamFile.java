@@ -82,7 +82,7 @@ public class ReversedLinesFileReaderTestParamFile {
         final File testFileIso = new File(this.getClass().getResource("/" + fileName).toURI());
         reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, buffSize, encoding);
 
-        final Stack<String> lineStack = new Stack<String>();
+        final Stack<String> lineStack = new Stack<>();
 
         bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(testFileIso), encoding));
         String line = null;

@@ -136,7 +136,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     private boolean chmod(final File file, final int mode, final boolean recurse)
             throws InterruptedException {
         // TODO: Refactor this to FileSystemUtils
-        final List<String> args = new ArrayList<String>();
+        final List<String> args = new ArrayList<>();
         args.add("chmod");
 
         if (recurse) {

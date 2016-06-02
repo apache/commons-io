@@ -55,8 +55,7 @@ public class CharSequenceInputStreamTest {
 
     private void testBufferedRead(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
-        final InputStream in = new CharSequenceInputStream(testString, charsetName, 512);
-        try {
+        try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
             final byte[] buffer = new byte[128];
             int offset = 0;
             while (true) {
@@ -69,7 +68,8 @@ public class CharSequenceInputStreamTest {
                 } else {
                     assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
                     while (read > 0) {
-                        assertTrue("offset for " + charsetName +" " + offset + " < " + expected.length, offset < expected.length);
+                        assertTrue("offset for " + charsetName + " " + offset + " < " + expected.length, offset <
+                                expected.length);
                         assertEquals("bytes should agree for " + charsetName, expected[offset], buffer[bufferOffset]);
                         offset++;
                         bufferOffset++;
@@ -77,8 +77,6 @@ public class CharSequenceInputStreamTest {
                     }
                 }
             }
-        } finally {
-            in.close();
         }
     }
 
@@ -115,12 +113,9 @@ public class CharSequenceInputStreamTest {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         final Charset charset = Charset.forName(csName); // infinite loop for US-ASCII, UTF-8 OK
-        final InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512);
-        try {
+        try (InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512)) {
             while (stream.read() != -1) {
             }
-        } finally {
-            stream.close();
         }
     }
 
@@ -239,8 +234,7 @@ public class CharSequenceInputStreamTest {
 
     // This test is broken for charsets that don't create a single byte for each char
     private void testMarkReset(final String csName) throws Exception {
-        final InputStream r = new CharSequenceInputStream("test", csName);
-        try {
+        try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(2, r.skip(2));
             r.mark(0);
             assertEquals(csName, 's', r.read());
@@ -252,8 +246,6 @@ public class CharSequenceInputStreamTest {
             assertEquals(csName, -1, r.read());
             r.reset();
             r.reset();
-        } finally {
-            r.close();
         }
     }
 
@@ -277,32 +269,23 @@ public class CharSequenceInputStreamTest {
 
     @Test
     public void testMarkSupported() throws Exception {
-        final InputStream r = new CharSequenceInputStream("test", "UTF-8");
-        try {
+        try (InputStream r = new CharSequenceInputStream("test", "UTF-8")) {
             assertTrue(r.markSupported());
-        } finally {
-            r.close();
         }
     }
 
     private void testReadZero(final String csName) throws Exception {
-        final InputStream r = new CharSequenceInputStream("test", csName);
-        try {
+        try (InputStream r = new CharSequenceInputStream("test", csName)) {
             final byte[] bytes = new byte[30];
             assertEquals(0, r.read(bytes, 0, 0));
-        } finally {
-            r.close();
         }
     }
 
     @Test
     public void testReadZero_EmptyString() throws Exception {
-        final InputStream r = new CharSequenceInputStream("", "UTF-8");
-        try {
+        try (InputStream r = new CharSequenceInputStream("", "UTF-8")) {
             final byte[] bytes = new byte[30];
             assertEquals(0, r.read(bytes, 0, 0));
-        } finally {
-            r.close();
         }
     }
 
@@ -315,8 +298,7 @@ public class CharSequenceInputStreamTest {
 
     private void testSingleByteRead(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
-        final InputStream in = new CharSequenceInputStream(testString, charsetName, 512);
-        try {
+        try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
             for (final byte b : bytes) {
                 final int read = in.read();
                 assertTrue("read " + read + " >=0 ", read >= 0);
@@ -324,8 +306,6 @@ public class CharSequenceInputStreamTest {
                 assertEquals("Should agree with input", b, (byte) read);
             }
             assertEquals(-1, in.read());
-        } finally {
-            in.close();
         }
     }
 
@@ -348,15 +328,12 @@ public class CharSequenceInputStreamTest {
 
     // This is broken for charsets that don't map each char to a byte
     private void testSkip(final String csName) throws Exception {
-        final InputStream r = new CharSequenceInputStream("test", csName);
-        try {
+        try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(1, r.skip(1));
             assertEquals(2, r.skip(2));
             assertEquals(csName, 't', r.read());
             r.skip(100);
             assertEquals(csName, -1, r.read());
-        } finally {
-            r.close();
         }
     }
 
@@ -386,30 +363,24 @@ public class CharSequenceInputStreamTest {
 
     private void testAvailableSkip(final String csName) throws Exception {
         final String input = "test";
-        final InputStream r = new CharSequenceInputStream(input, csName);
-        try {
+        try (InputStream r = new CharSequenceInputStream(input, csName)) {
             int available = checkAvail(r, input.length());
-            assertEquals(available - 1, r.skip(available-1)); // skip all but one
+            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
             available = checkAvail(r, 1);
             assertEquals(1, r.skip(1));
             available = checkAvail(r, 0);
-        } finally {
-            r.close();
         }
     }
 
     private void testAvailableRead(final String csName) throws Exception {
         final String input = "test";
-        final InputStream r = new CharSequenceInputStream(input, csName);
-        try {
+        try (InputStream r = new CharSequenceInputStream(input, csName)) {
             int available = checkAvail(r, input.length());
             byte buff[] = new byte[available];
-            assertEquals(available - 1, r.skip(available-1)); // skip all but one
+            assertEquals(available - 1, r.skip(available - 1)); // skip all but one
             available = checkAvail(r, 1);
             buff = new byte[available];
             assertEquals(available, r.read(buff, 0, available));
-        } finally {
-            r.close();
         }
     }
 

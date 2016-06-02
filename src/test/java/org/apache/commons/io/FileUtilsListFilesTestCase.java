@@ -91,7 +91,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
 
     private Collection<String> filesToFilenames(final Collection<File> files) {
-        final Collection<String> filenames = new ArrayList<String>(files.size());
+        final Collection<String> filenames = new ArrayList<>(files.size());
         for (final File file : files) {
             filenames.add(file.getName());
         }
@@ -99,7 +99,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     }
 
     private Collection<String> filesToFilenames(final Iterator<File> files) {
-        final Collection<String> filenames = new ArrayList<String>();
+        final Collection<String> filenames = new ArrayList<>();
         while (files.hasNext()) {
             filenames.add(files.next().getName());
         }

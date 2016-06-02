@@ -240,7 +240,7 @@ public class DirectoryWalkerTestCase {
      * Extract the directories.
      */
     private List<File> directoriesOnly(final Collection<File> results) {
-        final List<File> list = new ArrayList<File>(results.size());
+        final List<File> list = new ArrayList<>(results.size());
         for (final File file : results) {
             if (file.isDirectory()) {
                 list.add(file);
@@ -253,7 +253,7 @@ public class DirectoryWalkerTestCase {
      * Extract the files.
      */
     private List<File> filesOnly(final Collection<File> results) {
-        final List<File> list = new ArrayList<File>(results.size());
+        final List<File> list = new ArrayList<>(results.size());
         for (final File file : results) {
             if (file.isFile()) {
                 list.add(file);
@@ -389,7 +389,7 @@ public class DirectoryWalkerTestCase {
 
         /** find files. */
         protected List<File> find(final File startDirectory) {
-           final List<File> results = new ArrayList<File>();
+           final List<File> results = new ArrayList<>();
            try {
                walk(startDirectory, results);
            } catch(final IOException ex) {
@@ -448,7 +448,7 @@ public class DirectoryWalkerTestCase {
 
         /** find files. */
         protected List<File> find(final File startDirectory) throws IOException {
-           final List<File> results = new ArrayList<File>();
+           final List<File> results = new ArrayList<>();
            walk(startDirectory, results);
            return results;
         }
@@ -499,7 +499,7 @@ public class DirectoryWalkerTestCase {
 
         /** find files. */
         protected List<File> find(final File startDirectory) throws IOException {
-           results = new ArrayList<File>();
+           results = new ArrayList<>();
            walk(startDirectory, results);
            return results;
         }
@@ -552,7 +552,7 @@ public class DirectoryWalkerTestCase {
 
         /** find files. */
         protected List<String> find(final File startDirectory) {
-           final List<String> results = new ArrayList<String>();
+           final List<String> results = new ArrayList<>();
            try {
                walk(startDirectory, results);
            } catch(final IOException ex) {

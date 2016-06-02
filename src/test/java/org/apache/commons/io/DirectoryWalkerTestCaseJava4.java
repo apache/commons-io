@@ -376,7 +376,7 @@ public class DirectoryWalkerTestCaseJava4 {
          * find files.
          */
         protected List<File> find(final File startDirectory) {
-            final List<File> results = new ArrayList<File>();
+            final List<File> results = new ArrayList<>();
             try {
                 walk(startDirectory, results);
             } catch (final IOException ex) {

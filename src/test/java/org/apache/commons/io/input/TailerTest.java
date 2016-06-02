@@ -130,7 +130,7 @@ public class TailerTest extends FileBasedTestCase {
         Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
         BufferedReader reader = null;
         try{
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8));
             String line;
             while((line = reader.readLine()) != null){

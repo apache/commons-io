@@ -60,7 +60,7 @@ public class ByteArrayOutputStream extends OutputStream {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /** The list of buffers, which grows and never reduces. */
-    private final List<byte[]> buffers = new ArrayList<byte[]>();
+    private final List<byte[]> buffers = new ArrayList<>();
     /** The index of the current buffer. */
     private int currentBufferIndex;
     /** The total count of bytes in all the filled buffers. */
@@ -338,7 +338,7 @@ public class ByteArrayOutputStream extends OutputStream {
         if (remaining == 0) {
             return new ClosedInputStream();
         }
-        final List<ByteArrayInputStream> list = new ArrayList<ByteArrayInputStream>(buffers.size());
+        final List<ByteArrayInputStream> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
             list.add(new ByteArrayInputStream(buf, 0, c));

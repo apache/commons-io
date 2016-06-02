@@ -31,7 +31,7 @@ import java.util.concurrent.ThreadFactory;
 public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
-    private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<FileAlterationObserver>();
+    private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
     private Thread thread = null;
     private ThreadFactory threadFactory;
     private volatile boolean running = false;

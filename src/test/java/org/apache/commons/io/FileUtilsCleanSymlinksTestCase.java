@@ -257,7 +257,7 @@ public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
 
     private void setupSymlink(final File res, final File link) throws Exception {
         // create symlink
-        final List<String> args = new ArrayList<String>();
+        final List<String> args = new ArrayList<>();
         args.add("ln");
         args.add("-s");
 

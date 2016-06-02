@@ -34,15 +34,11 @@ public class ClosedOutputStreamTest {
      */
     @Test
     public void testRead() throws Exception {
-        ClosedOutputStream cos = null;
-        try {
-            cos = new ClosedOutputStream();
+        try (ClosedOutputStream cos = new ClosedOutputStream()) {
             cos.write('x');
             fail("write(b)");
         } catch (final IOException e) {
             // expected
-        } finally {
-            cos.close();
         }
     }
 

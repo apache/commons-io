@@ -140,12 +140,9 @@ public class ReaderInputStreamTest {
         final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         // Charset charset = Charset.forName("UTF-8"); // works
         final Charset charset = Charset.forName("ASCII"); // infinite loop
-        final ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset);
-        try {
+        try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {
             while (stream.read() != -1) {
             }
-        } finally {
-            stream.close();
         }
     }
 }

@@ -100,7 +100,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
      */
     @Test
     public void constructorIterable_order() {
-        final List<Comparator<File>> list = new ArrayList<Comparator<File>>();
+        final List<Comparator<File>> list = new ArrayList<>();
         list.add(SizeFileComparator.SIZE_COMPARATOR);
         list.add(ExtensionFileComparator.EXTENSION_COMPARATOR);
         final Comparator<File> c = new CompositeFileComparator(list);

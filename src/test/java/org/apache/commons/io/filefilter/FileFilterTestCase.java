@@ -351,7 +351,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, new File("BAR"), false);
 
         // repeat for a List
-        final java.util.ArrayList<String> list = new java.util.ArrayList<String>();
+        final java.util.ArrayList<String> list = new java.util.ArrayList<>();
         list.add("foo");
         list.add("bar");
         filter = new NameFileFilter(list);
@@ -440,7 +440,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(new AndFileFilter(falseFilter, trueFilter), new File("foo.test"), false);
         assertFiltering(new AndFileFilter(falseFilter, falseFilter), new File("foo.test"), false);
 
-        final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+        final List<IOFileFilter> filters = new ArrayList<>();
         assertFiltering( new AndFileFilter( filters ), new File( "test" ), false );
         assertFiltering( new AndFileFilter(), new File( "test" ), false );
 
@@ -473,7 +473,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(new OrFileFilter(falseFilter, falseFilter), testFile, false);
         assertFiltering(new OrFileFilter(), testFile, false);
 
-        final List<IOFileFilter> filters = new ArrayList<IOFileFilter>();
+        final List<IOFileFilter> filters = new ArrayList<>();
         filters.add( trueFilter );
         filters.add( falseFilter );
 
@@ -1485,7 +1485,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
     public void testFilterSet() throws Exception {
         final File fileA = TestUtils.newFile(getTestDirectory(), "A");
         final File fileB = TestUtils.newFile(getTestDirectory(), "B");
-        final Set<File> fileList = new HashSet<File>(Arrays.asList(fileA, fileB));
+        final Set<File> fileList = new HashSet<>(Arrays.asList(fileA, fileB));
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
 
@@ -1528,7 +1528,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterSet(filter, new HashSet<File>(Arrays.asList((File) null)));
+            FileFilterUtils.filterSet(filter, new HashSet<>(Arrays.asList((File) null)));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for set containing null

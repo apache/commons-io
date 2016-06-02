@@ -53,7 +53,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
 
     @Test
     public void testAdd() {
-        final List<TesterTrueFileFilter> filters = new ArrayList<TesterTrueFileFilter>();
+        final List<TesterTrueFileFilter> filters = new ArrayList<>();
         final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());
@@ -72,7 +72,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
 
     @Test
     public void testRemove() {
-        final List<TesterTrueFileFilter> filters = new ArrayList<TesterTrueFileFilter>();
+        final List<TesterTrueFileFilter> filters = new ArrayList<>();
         final ConditionalFileFilter fileFilter = this.getConditionalFileFilter();
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());

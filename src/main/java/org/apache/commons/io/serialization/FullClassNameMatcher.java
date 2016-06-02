@@ -39,7 +39,7 @@ final class FullClassNameMatcher implements ClassNameMatcher {
      * @param classes a list of class names
      */
     public FullClassNameMatcher(String... classes) {
-        classesSet = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(classes)));
+        classesSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(classes)));
     }
 
     @Override

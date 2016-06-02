@@ -70,9 +70,7 @@ class Java7Support {
             exists = files.getMethod("exists", path, emptyLinkOpts.getClass());
             toPath = File.class.getMethod("toPath");
             toFile = path.getMethod("toFile");
-        } catch (ClassNotFoundException e) {
-            isJava7x = false;
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
             isJava7x = false;
         }
         IS_JAVA7 = isJava7x;
@@ -88,9 +86,7 @@ class Java7Support {
             Object path = toPath.invoke(file);
             Boolean result = (Boolean) isSymbolicLink.invoke(null, path);
             return result.booleanValue();
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
@@ -108,9 +104,7 @@ class Java7Support {
             Object path = toPath.invoke(symlink);
             Object resultPath = readSymlink.invoke(null, path);
             return (File) toFile.invoke(resultPath);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

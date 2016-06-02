@@ -952,11 +952,8 @@ public class IOUtils {
      * @since 2.4
      */
     public static byte[] toByteArray(final URLConnection urlConn) throws IOException {
-        final InputStream inputStream = urlConn.getInputStream();
-        try {
+        try (InputStream inputStream = urlConn.getInputStream()) {
             return IOUtils.toByteArray(inputStream);
-        } finally {
-            inputStream.close();
         }
     }
 
@@ -1195,11 +1192,8 @@ public class IOUtils {
      * @since 2.3
      */
     public static String toString(final URL url, final Charset encoding) throws IOException {
-        final InputStream inputStream = url.openStream();
-        try {
+        try (InputStream inputStream = url.openStream()) {
             return toString(inputStream, encoding);
-        } finally {
-            inputStream.close();
         }
     }
 
@@ -1332,7 +1326,7 @@ public class IOUtils {
      */
     public static List<String> readLines(final Reader input) throws IOException {
         final BufferedReader reader = toBufferedReader(input);
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         String line = reader.readLine();
         while (line != null) {
             list.add(line);
