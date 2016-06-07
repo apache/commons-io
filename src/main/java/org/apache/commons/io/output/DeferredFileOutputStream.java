@@ -153,7 +153,7 @@ public class DeferredFileOutputStream
      *
      * @return The underlying output stream.
      *
-     * @exception IOException if an error occurs.
+     * @throws IOException if an error occurs.
      */
     @Override
     protected OutputStream getStream() throws IOException
@@ -168,7 +168,7 @@ public class DeferredFileOutputStream
      * much data is being written to keep in memory, so we elect to switch to
      * disk-based storage.
      *
-     * @exception IOException if an error occurs.
+     * @throws IOException if an error occurs.
      */
     @Override
     protected void thresholdReached() throws IOException
@@ -245,7 +245,7 @@ public class DeferredFileOutputStream
     /**
      * Closes underlying output stream, and mark this as closed
      *
-     * @exception IOException if an error occurs.
+     * @throws IOException if an error occurs.
      */
     @Override
     public void close() throws IOException
@@ -260,7 +260,7 @@ public class DeferredFileOutputStream
      * after it has been closed.
      *
      * @param out output stream to write to.
-     * @exception IOException if this stream is not yet closed or an error occurs.
+     * @throws IOException if this stream is not yet closed or an error occurs.
      */
     public void writeTo(final OutputStream out) throws IOException
     {
