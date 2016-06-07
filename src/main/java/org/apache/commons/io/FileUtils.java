@@ -33,6 +33,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -843,7 +844,7 @@ public class FileUtils {
      * @return The decoded URL or {@code null} if the input was
      * {@code null}.
      */
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
+//    @SuppressWarnings("deprecation") // unavoidable until Java 7
     static String decodeUrl(final String url) {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
@@ -865,7 +866,7 @@ public class FileUtils {
                     } finally {
                         if (bytes.position() > 0) {
                             bytes.flip();
-                            buffer.append(Charsets.UTF_8.decode(bytes).toString());
+                            buffer.append(StandardCharsets.UTF_8.decode(bytes).toString());
                             bytes.clear();
                         }
                     }
