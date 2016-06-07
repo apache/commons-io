@@ -67,6 +67,10 @@ import org.apache.commons.io.output.NullOutputStream;
  * <li>calculating a checksum
  * </ul>
  * <p>
+ * Note that a specific charset should be specified whenever possible.
+ * Relying on the platform default means that the code is Locale-dependent.
+ * Only use the default if the files are known to always use the platform default.
+ * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
  *
  * @version $Id$
