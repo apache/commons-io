@@ -57,6 +57,7 @@ public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     public void tearDown() throws Exception {
         chmod(top, 775, true);
         FileUtils.deleteDirectory(top);
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     //-----------------------------------------------------------------------

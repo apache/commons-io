@@ -88,6 +88,7 @@ public class FileUtilsListFilesTestCase extends FileBasedTestCase {
     public void tearDown() throws Exception {
         final File dir = getLocalTestDirectory();
         FileUtils.deleteDirectory(dir);
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     private Collection<String> filesToFilenames(final Collection<File> files) {

@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.BufferedOutputStream;
@@ -160,6 +161,11 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
     public void testToString() {
         assertEquals("FileDeleteStrategy[Normal]", FileDeleteStrategy.NORMAL.toString());
         assertEquals("FileDeleteStrategy[Force]", FileDeleteStrategy.FORCE.toString());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
 }
