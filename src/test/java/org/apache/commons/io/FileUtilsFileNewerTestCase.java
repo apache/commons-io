@@ -81,6 +81,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     public void tearDown() throws Exception {
         m_testFile1.delete();
         m_testFile2.delete();
+        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     /**
