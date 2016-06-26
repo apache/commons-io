@@ -22,6 +22,7 @@ import java.io.Writer;
 import java.nio.charset.UnsupportedCharsetException;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
@@ -56,10 +57,11 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
         file.delete();
         lockFile.delete();
         altLockFile.delete();
+        FileUtils.deleteDirectory(altLockDir);
     }
 
     //-----------------------------------------------------------------------
