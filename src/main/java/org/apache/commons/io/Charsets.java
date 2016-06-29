@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -72,14 +73,13 @@ public class Charsets {
      */
     public static SortedMap<String, Charset> requiredCharsets() {
         // maybe cache?
-        // TODO Re-implement on Java 7 to use java.nio.charset.StandardCharsets
         final TreeMap<String, Charset> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        m.put(ISO_8859_1.name(), ISO_8859_1);
-        m.put(US_ASCII.name(), US_ASCII);
-        m.put(UTF_16.name(), UTF_16);
-        m.put(UTF_16BE.name(), UTF_16BE);
-        m.put(UTF_16LE.name(), UTF_16LE);
-        m.put(UTF_8.name(), UTF_8);
+        m.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
+        m.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
+        m.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);
+        m.put(StandardCharsets.UTF_16BE.name(), StandardCharsets.UTF_16BE);
+        m.put(StandardCharsets.UTF_16LE.name(), StandardCharsets.UTF_16LE);
+        m.put(StandardCharsets.UTF_8.name(), StandardCharsets.UTF_8);
         return Collections.unmodifiableSortedMap(m);
     }
 
@@ -117,7 +117,7 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
+    public static final Charset ISO_8859_1 = StandardCharsets.ISO_8859_1;
 
     /**
      * <p>
@@ -131,7 +131,7 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset US_ASCII = Charset.forName("US-ASCII");
+    public static final Charset US_ASCII = StandardCharsets.US_ASCII;
 
     /**
      * <p>
@@ -146,7 +146,7 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset UTF_16 = Charset.forName("UTF-16");
+    public static final Charset UTF_16 = StandardCharsets.UTF_16;
 
     /**
      * <p>
@@ -160,7 +160,7 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset UTF_16BE = Charset.forName("UTF-16BE");
+    public static final Charset UTF_16BE = StandardCharsets.UTF_16BE;
 
     /**
      * <p>
@@ -174,7 +174,7 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset UTF_16LE = Charset.forName("UTF-16LE");
+    public static final Charset UTF_16LE = StandardCharsets.UTF_16LE;
 
     /**
      * <p>
@@ -188,5 +188,5 @@ public class Charsets {
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
     @Deprecated
-    public static final Charset UTF_8 = Charset.forName("UTF-8");
+    public static final Charset UTF_8 = StandardCharsets.UTF_8;
 }
