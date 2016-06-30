@@ -46,6 +46,11 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
+    <release version="2.7" date="Not yet published">
+      <action dev="jochen" type="add">
+        Added the ObservableInputStream, and the MessageDigestCalculatingInputStream.
+      </action>
+    </release>
     <release version="2.6" date="2016-MM-DD" description="New features and bug fixes.">
       <action issue="IO-511" dev="britter" type="fix" due-to="Ahmet Celik">
         After a few unit tests, a few newly created directories not cleaned completely.
