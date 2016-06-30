@@ -35,6 +35,7 @@ import java.io.OutputStream;
  *
  * @version $Id$
  * @since 1.4
+ * @see ObservableInputStream 
  */
 public class TeeInputStream extends ProxyInputStream {
 
