@@ -29,7 +29,7 @@
 
   <inceptionYear>2002</inceptionYear>
   <description>
-The Apache Commons IO library contains utility classes, stream implementations, file filters, 
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
   </description>
 
@@ -273,7 +273,7 @@ file comparators, endian transformation classes, and much more.
             <classpathDependencyExclude>xerces:xercesImpl</classpathDependencyExclude>
           </classpathDependencyExcludes>
           <forkCount>1</forkCount>
-          <reuseForks>false</reuseForks> 
+          <reuseForks>false</reuseForks>
           <!-- limit memory size see IO-161 -->
           <argLine>-Xmx25M</argLine>
           <includes>
@@ -405,6 +405,15 @@ file comparators, endian transformation classes, and much more.
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>jdk8-javadoc</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <additionalparam>-Xdoclint:none</additionalparam>
+      </properties>
     </profile>
   </profiles>
 </project>
