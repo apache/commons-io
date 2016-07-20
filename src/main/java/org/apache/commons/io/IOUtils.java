@@ -55,7 +55,6 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * <p>
  * This class provides static utility methods for input/output operations.
  * <ul>
- * <li>closeQuietly - these methods close a stream ignoring nulls and exceptions
  * <li>toXxx/read - these methods read data from a stream
  * <li>write - these methods write data to a stream
  * <li>copy - these methods copy all the data from one stream to another
@@ -214,7 +213,7 @@ public class IOUtils {
      * @param input the Reader to close, may be null or already closed
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method. 
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -245,7 +244,7 @@ public class IOUtils {
      * @param output the Writer to close, may be null or already closed
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -277,7 +276,7 @@ public class IOUtils {
      * @param input the InputStream to close, may be null or already closed
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -310,7 +309,7 @@ public class IOUtils {
      * @param output the OutputStream to close, may be null or already closed
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -354,7 +353,7 @@ public class IOUtils {
      * @since 2.0
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -412,7 +411,7 @@ public class IOUtils {
      * @since 2.5
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -449,7 +448,7 @@ public class IOUtils {
      * @since 2.0
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -487,7 +486,7 @@ public class IOUtils {
      * @since 2.2
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
@@ -525,7 +524,7 @@ public class IOUtils {
      * @since 2.2
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
+     * suppressed exceptions manually. Please note, that IOExceptions are caught but any RuntimeExceptions can be thrown from the close() method.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
