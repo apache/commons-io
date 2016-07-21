@@ -135,11 +135,11 @@ public class IOUtils {
 
     static {
         // avoid security issues
-        final StringBuilderWriter buf = new StringBuilderWriter(4);
-        final PrintWriter out = new PrintWriter(buf);
-        out.println();
-        LINE_SEPARATOR = buf.toString();
-        out.close();
+        try (final StringBuilderWriter buf = new StringBuilderWriter(4); 
+                final PrintWriter out = new PrintWriter(buf)) {
+            out.println();
+            LINE_SEPARATOR = buf.toString();
+        }
     }
 
     /**
@@ -762,9 +762,10 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static byte[] toByteArray(final InputStream input) throws IOException {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy(input, output);
-        return output.toByteArray();
+        try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            copy(input, output);
+            return output.toByteArray();
+        }
     }
 
     /**
@@ -864,9 +865,10 @@ public class IOUtils {
      * @since 2.3
      */
     public static byte[] toByteArray(final Reader input, final Charset encoding) throws IOException {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy(input, output, encoding);
-        return output.toByteArray();
+        try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            copy(input, output, encoding);
+            return output.toByteArray();
+        }
     }
 
     /**
@@ -1079,9 +1081,10 @@ public class IOUtils {
      * @since 2.3
      */
     public static String toString(final InputStream input, final Charset encoding) throws IOException {
-        final StringBuilderWriter sw = new StringBuilderWriter();
-        copy(input, sw, encoding);
-        return sw.toString();
+        try (final StringBuilderWriter sw = new StringBuilderWriter()) {
+            copy(input, sw, encoding);
+            return sw.toString();
+        }
     }
 
     /**
@@ -1120,9 +1123,10 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static String toString(final Reader input) throws IOException {
-        final StringBuilderWriter sw = new StringBuilderWriter();
-        copy(input, sw);
-        return sw.toString();
+        try (final StringBuilderWriter sw = new StringBuilderWriter()) {
+            copy(input, sw);
+            return sw.toString();
+        }
     }
 
     /**
