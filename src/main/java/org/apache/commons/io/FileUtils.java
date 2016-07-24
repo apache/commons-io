@@ -383,24 +383,25 @@ public class FileUtils {
      */
     // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
     public static String byteCountToDisplaySize(final BigInteger size) {
-        String displaySize;
-
         if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_EB_BI)) + " EB";
-        } else if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_PB_BI)) + " PB";
-        } else if (size.divide(ONE_TB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_TB_BI)) + " TB";
-        } else if (size.divide(ONE_GB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_GB_BI)) + " GB";
-        } else if (size.divide(ONE_MB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_MB_BI)) + " MB";
-        } else if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
-            displaySize = String.valueOf(size.divide(ONE_KB_BI)) + " KB";
-        } else {
-            displaySize = String.valueOf(size) + " bytes";
+            return String.valueOf(size.divide(ONE_EB_BI)) + " EB";
         }
-        return displaySize;
+        if (size.divide(ONE_PB_BI).compareTo(BigInteger.ZERO) > 0) {
+            return String.valueOf(size.divide(ONE_PB_BI)) + " PB";
+        }
+        if (size.divide(ONE_TB_BI).compareTo(BigInteger.ZERO) > 0) {
+            return String.valueOf(size.divide(ONE_TB_BI)) + " TB";
+        }
+        if (size.divide(ONE_GB_BI).compareTo(BigInteger.ZERO) > 0) {
+            return String.valueOf(size.divide(ONE_GB_BI)) + " GB";
+        }
+        if (size.divide(ONE_MB_BI).compareTo(BigInteger.ZERO) > 0) {
+            return String.valueOf(size.divide(ONE_MB_BI)) + " MB";
+        }
+        if (size.divide(ONE_KB_BI).compareTo(BigInteger.ZERO) > 0) {
+            return String.valueOf(size.divide(ONE_KB_BI)) + " KB";
+        }
+        return String.valueOf(size) + " bytes";
     }
 
     /**

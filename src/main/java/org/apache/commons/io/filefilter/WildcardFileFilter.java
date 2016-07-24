@@ -182,11 +182,13 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         buffer.append(super.toString());
         buffer.append("(");
         if (wildcards != null) {
-            for (int i = 0; i < wildcards.length; i++) {
-                if (i > 0) {
+            final int length = wildcards.length;
+            if (length > 0) {
+            	buffer.append(wildcards[0]);
+            	for (int i = 1; i < length; i++) {
                     buffer.append(",");
+                    buffer.append(wildcards[i]);
                 }
-                buffer.append(wildcards[i]);
             }
         }
         buffer.append(")");

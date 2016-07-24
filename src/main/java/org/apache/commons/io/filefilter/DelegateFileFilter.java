@@ -74,9 +74,8 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     public boolean accept(final File file) {
         if (fileFilter != null) {
             return fileFilter.accept(file);
-        } else {
-            return super.accept(file);
         }
+        return super.accept(file);
     }
 
     /**
@@ -90,9 +89,8 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
     public boolean accept(final File dir, final String name) {
         if (filenameFilter != null) {
             return filenameFilter.accept(dir, name);
-        } else {
-            return super.accept(dir, name);
         }
+        return super.accept(dir, name);
     }
 
     /**

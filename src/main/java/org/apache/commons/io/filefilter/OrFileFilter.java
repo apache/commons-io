@@ -147,16 +147,22 @@ public class OrFileFilter
         buffer.append(super.toString());
         buffer.append("(");
         if (fileFilters != null) {
-            for (int i = 0; i < fileFilters.size(); i++) {
-                if (i > 0) {
-                    buffer.append(",");
+            final int fileFiltersSize = fileFilters.size();
+            if (fileFiltersSize > 0) {
+            	buffer.append(handleFilter(0));
+            	for (int i = 1; i < fileFiltersSize; i++) {
+            		buffer.append(",");
+                    buffer.append(handleFilter(i));
                 }
-                final Object filter = fileFilters.get(i);
-                buffer.append(filter == null ? "null" : filter.toString());
             }
         }
         buffer.append(")");
         return buffer.toString();
     }
+
+	private String handleFilter(final int index) {
+		final Object filter = fileFilters.get(index);
+		return filter == null ? "null" : filter.toString();
+	}
 
 }

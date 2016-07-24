@@ -183,11 +183,13 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         buffer.append(super.toString());
         buffer.append("(");
         if (prefixes != null) {
-            for (int i = 0; i < prefixes.length; i++) {
-                if (i > 0) {
+            final int length = prefixes.length;
+            if (length > 0) {
+            	buffer.append(prefixes[0]);
+            	for (int i = 1; i < length; i++) {
                     buffer.append(",");
+                    buffer.append(prefixes[i]);
                 }
-                buffer.append(prefixes[i]);
             }
         }
         buffer.append(")");

@@ -110,11 +110,13 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         final StringBuilder builder = new StringBuilder();
         builder.append(super.toString());
         builder.append('{');
-        for (int i = 0; i < delegates.length; i++) {
-            if (i > 0) {
-                builder.append(',');
+        final int delegatesLength = delegates.length;
+        if (delegatesLength > 0) {
+        	builder.append(delegates[0]);
+    		for (int i = 1; i < delegatesLength; i++) {
+    			builder.append(',');
+    			builder.append(delegates[i]);
             }
-            builder.append(delegates[i]);
         }
         builder.append('}');
         return builder.toString();
