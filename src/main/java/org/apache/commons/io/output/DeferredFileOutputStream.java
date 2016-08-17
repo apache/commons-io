@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 
@@ -176,6 +177,7 @@ public class DeferredFileOutputStream
         if (prefix != null) {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
+        FileUtils.forceMkdirParent(outputFile);
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
             memoryOutputStream.writeTo(fos);
