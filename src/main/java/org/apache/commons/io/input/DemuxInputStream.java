@@ -76,9 +76,6 @@ public class DemuxInputStream
         {
             return input.read();
         }
-        else
-        {
-            return EOF;
-        }
+        return EOF;
     }
 }

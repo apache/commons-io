@@ -176,11 +176,13 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         buffer.append(super.toString());
         buffer.append("(");
         if (names != null) {
-            for (int i = 0; i < names.length; i++) {
-                if (i > 0) {
+            final int namesLength = names.length;
+            if (namesLength > 0) {
+            	buffer.append(names[0]);
+            	for (int i = 1; i < namesLength; i++) {
                     buffer.append(",");
+                    buffer.append(names[i]);
                 }
-                buffer.append(names[i]);
             }
         }
         buffer.append(")");
