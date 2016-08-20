@@ -28,6 +28,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -1184,6 +1185,18 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         } catch (NullPointerException npe) {
             // expected
         }
+    }
+
+    @Test(expected = Test.None.class) public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
+        IOUtils.resourceToString("/test-file-utf8.bin", Charset.defaultCharset());
+    }
+
+    @Test(expected = Test.None.class) public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
+        IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", Charset.defaultCharset());
+    }
+
+    @Test(expected = IOException.class) public void testResourceToString_NonExistingResource() throws Exception {
+        IOUtils.resourceToString("/non-existing-file.bin", Charset.defaultCharset());
     }
 
     @Test public void testAsBufferedInputStream() {

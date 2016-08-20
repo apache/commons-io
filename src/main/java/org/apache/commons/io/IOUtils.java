@@ -37,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
@@ -1248,6 +1249,32 @@ public class IOUtils {
      */
     public static String toString(final byte[] input, final String encoding) throws IOException {
         return new String(input, Charsets.toCharset(encoding));
+    }
+
+
+    /**
+     * Gets the contents of a classpath resource as a String using the
+     * specified character encoding.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @param encoding the encoding to use, null means platform default
+     * @return the requested String
+     * @throws IOException if an I/O error occurs
+     */
+    public static String resourceToString(final String name, final Charset encoding) throws IOException {
+        final URL resource = IOUtils.class.getResource(name);
+        if (resource == null) {
+            throw new IOException("Resource not found: " + name);
+        }
+
+        try (InputStream content = (InputStream) resource.getContent()) {
+            return toString(content, encoding);
+        }
     }
 
     // readLines
