@@ -1199,6 +1199,30 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.resourceToString("/non-existing-file.bin", Charset.defaultCharset());
     }
 
+    @Test(expected = Test.None.class) public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
+        IOUtils.resourceToByteArray("/test-file-utf8.bin");
+    }
+
+    @Test(expected = Test.None.class) public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
+        IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+    }
+
+    @Test(expected = IOException.class) public void testResourceToByteArray_NonExistingResource() throws Exception {
+        IOUtils.resourceToByteArray("/non-existing-file.bin");
+    }
+
+    @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
+        IOUtils.resourceToURL("/test-file-utf8.bin");
+    }
+
+    @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
+        IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+    }
+
+    @Test(expected = IOException.class) public void testResourceToURL_NonExistingResource() throws Exception {
+        IOUtils.resourceToURL("/non-existing-file.bin");
+    }
+
     @Test public void testAsBufferedInputStream() {
         InputStream is = new InputStream() {
             @Override
