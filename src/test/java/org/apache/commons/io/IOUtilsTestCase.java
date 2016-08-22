@@ -1224,11 +1224,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
     }
 
     @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
-        IOUtils.resourceToURL("/test-file-utf8.bin");
+        final URL url = IOUtils.resourceToURL("/test-file-utf8.bin");
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
     }
 
     @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
-        IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
     }
 
     @Test(expected = IOException.class) public void testResourceToURL_NonExistingResource() throws Exception {
