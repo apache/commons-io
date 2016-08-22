@@ -1187,14 +1187,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    @Test(expected = Test.None.class) public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
+    @Test public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").getFile()).length();
         final String content = IOUtils.resourceToString("/test-file-utf8.bin", Charset.defaultCharset());
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
 
-    @Test(expected = Test.None.class) public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
+    @Test public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").getFile()).length();
         final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", Charset.defaultCharset());
         assertNotNull(content);
@@ -1205,14 +1205,14 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.resourceToString("/non-existing-file.bin", Charset.defaultCharset());
     }
 
-    @Test(expected = Test.None.class) public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
+    @Test public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").getFile()).length();
         final byte[] bytes = IOUtils.resourceToByteArray("/test-file-utf8.bin");
         assertNotNull(bytes);
         assertEquals(fileSize, bytes.length);
     }
 
-    @Test(expected = Test.None.class) public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
+    @Test public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").getFile()).length();
         final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
         assertNotNull(bytes);
@@ -1223,13 +1223,13 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.resourceToByteArray("/non-existing-file.bin");
     }
 
-    @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
+    @Test public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
         final URL url = IOUtils.resourceToURL("/test-file-utf8.bin");
         assertNotNull(url);
         assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
     }
 
-    @Test(expected = Test.None.class) public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
+    @Test public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
         final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
         assertNotNull(url);
         assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
