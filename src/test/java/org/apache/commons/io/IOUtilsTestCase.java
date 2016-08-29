@@ -23,8 +23,33 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
@@ -1205,6 +1230,19 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.resourceToString("/non-existing-file.bin", Charset.defaultCharset());
     }
 
+    @Test public void testResourceToString_NullResource() throws Exception {
+        try {
+            IOUtils.resourceToString(null, Charset.defaultCharset());
+            fail();
+        } catch (NullPointerException npe) {
+            assertNotNull(npe);
+        }
+    }
+
+    @Test public void testResourceToString_NullCharset() throws Exception {
+        IOUtils.resourceToString("/test-file-utf8.bin", null);
+    }
+
     @Test public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").getFile()).length();
         final byte[] bytes = IOUtils.resourceToByteArray("/test-file-utf8.bin");
@@ -1223,6 +1261,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         IOUtils.resourceToByteArray("/non-existing-file.bin");
     }
 
+    @Test public void testResourceToByteArray_Null() throws Exception {
+        try {
+            IOUtils.resourceToByteArray(null);
+            fail();
+        } catch (NullPointerException npe) {
+            assertNotNull(npe);
+        }
+    }
+
     @Test public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
         final URL url = IOUtils.resourceToURL("/test-file-utf8.bin");
         assertNotNull(url);
@@ -1237,6 +1284,15 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @Test(expected = IOException.class) public void testResourceToURL_NonExistingResource() throws Exception {
         IOUtils.resourceToURL("/non-existing-file.bin");
+    }
+
+    @Test public void testResourceToURL_Null() throws Exception {
+        try {
+            IOUtils.resourceToURL(null);
+            fail();
+        } catch (NullPointerException npe) {
+            assertNotNull(npe);
+        }
     }
 
     @Test public void testAsBufferedInputStream() {
