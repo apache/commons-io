@@ -28,7 +28,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -1189,25 +1189,25 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @Test public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").getFile()).length();
-        final String content = IOUtils.resourceToString("/test-file-utf8.bin", Charset.defaultCharset());
+        final String content = IOUtils.resourceToString("/test-file-utf8.bin", StandardCharsets.UTF_8);
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
 
     @Test public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
         final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").getFile()).length();
-        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", Charset.defaultCharset());
+        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", StandardCharsets.UTF_8);
         assertNotNull(content);
         assertEquals(fileSize, content.getBytes().length);
     }
 
     @Test(expected = IOException.class) public void testResourceToString_NonExistingResource() throws Exception {
-        IOUtils.resourceToString("/non-existing-file.bin", Charset.defaultCharset());
+        IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8);
     }
 
     @Test public void testResourceToString_NullResource() throws Exception {
         try {
-            IOUtils.resourceToString(null, Charset.defaultCharset());
+            IOUtils.resourceToString(null, StandardCharsets.UTF_8);
             fail();
         } catch (NullPointerException npe) {
             assertNotNull(npe);
