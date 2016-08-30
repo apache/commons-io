@@ -1250,6 +1250,70 @@ public class IOUtils {
         return new String(input, Charsets.toCharset(encoding));
     }
 
+
+    /**
+     * Gets the contents of a classpath resource as a String using the
+     * specified character encoding.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @param encoding the encoding to use, null means platform default
+     * @return the requested String
+     * @throws IOException if an I/O error occurs
+     */
+    public static String resourceToString(final String name, final Charset encoding) throws IOException {
+        final URL resource = resourceToURL(name);
+
+        try (InputStream content = (InputStream) resource.getContent()) {
+            return toString(content, encoding);
+        }
+    }
+
+    /**
+     * Gets the contents of a classpath resource as a byte array.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @return the requested byte array
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] resourceToByteArray(final String name) throws IOException {
+        final URL resource = resourceToURL(name);
+
+        try (InputStream content = (InputStream) resource.getContent()) {
+            return toByteArray(content);
+        }
+    }
+
+    /**
+     * Gets a URL pointing to the given classpath resource.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @return the requested URL
+     * @throws IOException if an I/O error occurs
+     */
+    public static URL resourceToURL(final String name) throws IOException {
+        final URL resource = IOUtils.class.getResource(name);
+        if (resource == null) {
+            throw new IOException("Resource not found: " + name);
+        }
+
+        return resource;
+    }
+
     // readLines
     //-----------------------------------------------------------------------
 
