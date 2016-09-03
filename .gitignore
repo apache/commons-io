@@ -9,3 +9,6 @@ release.properties
 
 
 site-content
+/.classpath
+/.project
+/.settings/
