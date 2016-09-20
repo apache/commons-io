@@ -67,7 +67,7 @@ public class ObservableInputStream extends ProxyInputStream {
         void error(IOException pException) throws IOException { throw pException; }
     }
 
-    private final List<Observer> observers = new ArrayList<Observer>();
+    private final List<Observer> observers = new ArrayList<>();
     
     public ObservableInputStream(InputStream pProxy) {
         super(pProxy);
