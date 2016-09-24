@@ -33,7 +33,6 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -68,13 +67,9 @@ import org.apache.commons.io.output.NullOutputStream;
  * <li>calculating a checksum
  * </ul>
  * <p>
- * Note that a specific charset should be specified whenever possible.
- * Relying on the platform default means that the code is Locale-dependent.
- * Only use the default if the files are known to always use the platform default.
- * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
  *
- * @version $Id$
+ * @version $Id: FileUtils.java 1722481 2016-01-01 01:42:04Z dbrosius $
  */
 public class FileUtils {
 
@@ -437,7 +432,8 @@ public class FileUtils {
      */
     public static void touch(final File file) throws IOException {
         if (!file.exists()) {
-            openOutputStream(file).close();
+            final OutputStream out = openOutputStream(file);
+            IOUtils.closeQuietly(out);
         }
         final boolean success = file.setLastModified(System.currentTimeMillis());
         if (!success) {
@@ -507,7 +503,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return a collection of java.io.File with the matching files
+     * @return an collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
@@ -519,7 +515,7 @@ public class FileUtils {
         final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
-        final Collection<File> files = new java.util.LinkedList<>();
+        final Collection<File> files = new java.util.LinkedList<File>();
         innerListFiles(files, directory,
                 FileFilterUtils.or(effFileFilter, effDirFilter), false);
         return files;
@@ -578,7 +574,7 @@ public class FileUtils {
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @return a collection of java.io.File with the matching files
+     * @return an collection of java.io.File with the matching files
      * @see org.apache.commons.io.FileUtils#listFiles
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
@@ -592,7 +588,7 @@ public class FileUtils {
         final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
 
         //Find files
-        final Collection<File> files = new java.util.LinkedList<>();
+        final Collection<File> files = new java.util.LinkedList<File>();
         if (directory.isDirectory()) {
             files.add(directory);
         }
@@ -674,7 +670,7 @@ public class FileUtils {
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
      *                   parameter is {@code null}, all files are returned.
      * @param recursive  if true all subdirectories are searched as well
-     * @return a collection of java.io.File with the matching files
+     * @return an collection of java.io.File with the matching files
      */
     public static Collection<File> listFiles(
             final File directory, final String[] extensions, final boolean recursive) {
@@ -749,9 +745,16 @@ public class FileUtils {
             return true;
         }
 
-        try (InputStream input1 = new FileInputStream(file1);
-             InputStream input2 = new FileInputStream(file2)) {
+        InputStream input1 = null;
+        InputStream input2 = null;
+        try {
+            input1 = new FileInputStream(file1);
+            input2 = new FileInputStream(file2);
             return IOUtils.contentEquals(input1, input2);
+
+        } finally {
+            IOUtils.closeQuietly(input1);
+            IOUtils.closeQuietly(input2);
         }
     }
 
@@ -795,13 +798,22 @@ public class FileUtils {
             return true;
         }
 
-        try (Reader input1 = charsetName == null
-                                 ? new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset())
-                                 : new InputStreamReader(new FileInputStream(file1), charsetName);
-             Reader input2 = charsetName == null
-                                 ? new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset())
-                                 : new InputStreamReader(new FileInputStream(file2), charsetName)) {
+        Reader input1 = null;
+        Reader input2 = null;
+        try {
+            if (charsetName == null) {
+                // N.B. make explicit the use of the default charset
+                input1 = new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset());
+                input2 = new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset());
+            } else {
+                input1 = new InputStreamReader(new FileInputStream(file1), charsetName);
+                input2 = new InputStreamReader(new FileInputStream(file2), charsetName);
+            }
             return IOUtils.contentEqualsIgnoreEOL(input1, input2);
+
+        } finally {
+            IOUtils.closeQuietly(input1);
+            IOUtils.closeQuietly(input2);
         }
     }
 
@@ -844,6 +856,7 @@ public class FileUtils {
      * @return The decoded URL or {@code null} if the input was
      * {@code null}.
      */
+    @SuppressWarnings("deprecation") // unavoidable until Java 7
     static String decodeUrl(final String url) {
         String decoded = url;
         if (url != null && url.indexOf('%') >= 0) {
@@ -865,7 +878,7 @@ public class FileUtils {
                     } finally {
                         if (bytes.position() > 0) {
                             bytes.flip();
-                            buffer.append(StandardCharsets.UTF_8.decode(bytes).toString());
+                            buffer.append(Charsets.UTF_8.decode(bytes).toString());
                             bytes.clear();
                         }
                     }
@@ -960,6 +973,36 @@ public class FileUtils {
         copyFileToDirectory(srcFile, destDir, true);
     }
 
+    /**
+     * Copies a file or directory to a directory preserving the file date.
+     * <p>
+     * This method copies the contents of the specified source file or directory
+     * to a file or directory of the same name in the specified destination directory.
+     * The destination directory is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     *
+     * @param srcFile an existing file to copy, must not be {@code null}
+     * @param destDir the directory to place the copy in, must not be {@code null}
+     *
+     * @throws NullPointerException if source or destination is null
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
+     * @see #copyFile(File, File, boolean)
+     */
+    public static void copyToDirectory(final File srcFile, final File destDir) throws IOException{
+    	if(srcFile != null && srcFile.isDirectory()){
+    		copyDirectoryToDirectory(srcFile, destDir);
+    	}
+    	else{
+    		copyFileToDirectory(srcFile, destDir);
+    	}
+    }
+    
     /**
      * Copies a file to a directory optionally preserving the file date.
      * <p>
@@ -1089,8 +1132,11 @@ public class FileUtils {
      * @since 2.1
      */
     public static long copyFile(final File input, final OutputStream output) throws IOException {
-        try (FileInputStream fis = new FileInputStream(input)) {
+        final FileInputStream fis = new FileInputStream(input);
+        try {
             return IOUtils.copyLarge(fis, output);
+        } finally {
+            fis.close();
         }
     }
 
@@ -1117,10 +1163,15 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        try (FileInputStream fis = new FileInputStream(srcFile);
-             FileChannel input = fis.getChannel();
-             FileOutputStream fos = new FileOutputStream(destFile);
-             FileChannel output = fos.getChannel()) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        FileChannel input = null;
+        FileChannel output = null;
+        try {
+            fis = new FileInputStream(srcFile);
+            fos = new FileOutputStream(destFile);
+            input = fis.getChannel();
+            output = fos.getChannel();
             final long size = input.size(); // TODO See IO-386
             long pos = 0;
             long count = 0;
@@ -1133,6 +1184,8 @@ public class FileUtils {
                 }
                 pos += bytesCopied;
             }
+        } finally {
+            IOUtils.closeQuietly(output, fos, input, fis);
         }
 
         final long srcLen = srcFile.length(); // TODO See IO-386
@@ -1355,7 +1408,7 @@ public class FileUtils {
         if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
             final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
             if (srcFiles != null && srcFiles.length > 0) {
-                exclusionList = new ArrayList<>(srcFiles.length);
+                exclusionList = new ArrayList<String>(srcFiles.length);
                 for (final File srcFile : srcFiles) {
                     final File copiedFile = new File(destDir, srcFile.getName());
                     exclusionList.add(copiedFile.getCanonicalPath());
@@ -1501,8 +1554,10 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
-        try (InputStream in = source) {
-            copyToFile(in, destination);
+        try {
+            copyToFile(source, destination);
+        } finally {
+            IOUtils.closeQuietly(source);
         }
     }
 
@@ -1524,9 +1579,12 @@ public class FileUtils {
      * @since 2.5
      */
     public static void copyToFile(final InputStream source, final File destination) throws IOException {
-        try (InputStream in = source;
-             OutputStream out = openOutputStream(destination)) {
-            IOUtils.copy(in, out);
+        final FileOutputStream output = openOutputStream(destination);
+        try {
+            IOUtils.copy(source, output);
+            output.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeQuietly(output);
         }
     }
 
@@ -1732,8 +1790,12 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset encoding) throws IOException {
-        try (InputStream in = openInputStream(file)) {
+        InputStream in = null;
+        try {
+            in = openInputStream(file);
             return IOUtils.toString(in, Charsets.toCharset(encoding));
+        } finally {
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1761,7 +1823,7 @@ public class FileUtils {
      * @return the file contents, never {@code null}
      * @throws IOException in case of an I/O error
      * @since 1.3.1
-     * @deprecated 2.5 use {@link #readFileToString(File, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #readFileToString(File, Charset)} instead
      */
     @Deprecated
     public static String readFileToString(final File file) throws IOException {
@@ -1778,8 +1840,12 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        try (InputStream in = openInputStream(file)) {
+        InputStream in = null;
+        try {
+            in = openInputStream(file);
             return IOUtils.toByteArray(in); // Do NOT use file.length() - see IO-453
+        } finally {
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1794,8 +1860,12 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset encoding) throws IOException {
-        try (InputStream in = openInputStream(file)) {
+        InputStream in = null;
+        try {
+            in = openInputStream(file);
             return IOUtils.readLines(in, Charsets.toCharset(encoding));
+        } finally {
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -1822,7 +1892,7 @@ public class FileUtils {
      * @return the list of Strings representing each line in the file, never {@code null}
      * @throws IOException in case of an I/O error
      * @since 1.3
-     * @deprecated 2.5 use {@link #readLines(File, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #readLines(File, Charset)} instead
      */
     @Deprecated
     public static List<String> readLines(final File file) throws IOException {
@@ -1865,15 +1935,11 @@ public class FileUtils {
         try {
             in = openInputStream(file);
             return IOUtils.lineIterator(in, encoding);
-        } catch (final IOException | RuntimeException ex) {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            }
-            catch (final IOException e) {
-                ex.addSuppressed(e);
-            }
+        } catch (final IOException ex) {
+            IOUtils.closeQuietly(in);
+            throw ex;
+        } catch (final RuntimeException ex) {
+            IOUtils.closeQuietly(in);
             throw ex;
         }
     }
@@ -1938,10 +2004,15 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(final File file, final String data, final Charset encoding,
-                                         final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+    public static void writeStringToFile(final File file, final String data, final Charset encoding, final boolean
+            append) throws IOException {
+        OutputStream out = null;
+        try {
+            out = openOutputStream(file, append);
             IOUtils.write(data, out, encoding);
+            out.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 
@@ -1969,7 +2040,7 @@ public class FileUtils {
      * @param file the file to write
      * @param data the content to write to the file
      * @throws IOException in case of an I/O error
-     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset)} instead
      */
     @Deprecated
     public static void writeStringToFile(final File file, final String data) throws IOException {
@@ -1985,7 +2056,7 @@ public class FileUtils {
      *               end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
-     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset, boolean)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #writeStringToFile(File, String, Charset, boolean)} instead
      */
     @Deprecated
     public static void writeStringToFile(final File file, final String data, final boolean append) throws IOException {
@@ -1999,7 +2070,7 @@ public class FileUtils {
      * @param data the content to write to the file
      * @throws IOException in case of an I/O error
      * @since 2.0
-     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset)} instead
      */
     @Deprecated
     public static void write(final File file, final CharSequence data) throws IOException {
@@ -2015,7 +2086,7 @@ public class FileUtils {
      *               end of the file rather than overwriting
      * @throws IOException in case of an I/O error
      * @since 2.1
-     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset, boolean)} instead (and specify the appropriate encoding)
+     * @deprecated 2.5 use {@link #write(File, CharSequence, Charset, boolean)} instead
      */
     @Deprecated
     public static void write(final File file, final CharSequence data, final boolean append) throws IOException {
@@ -2147,8 +2218,13 @@ public class FileUtils {
      */
     public static void writeByteArrayToFile(final File file, final byte[] data, final int off, final int len,
                                             final boolean append) throws IOException {
-        try (OutputStream out = openOutputStream(file, append)) {
+        OutputStream out = null;
+        try {
+            out = openOutputStream(file, append);
             out.write(data, off, len);
+            out.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 
@@ -2259,8 +2335,15 @@ public class FileUtils {
      */
     public static void writeLines(final File file, final String encoding, final Collection<?> lines,
                                   final String lineEnding, final boolean append) throws IOException {
-        try (OutputStream out = new BufferedOutputStream(openOutputStream(file, append))) {
-            IOUtils.writeLines(lines, lineEnding, out, encoding);
+        FileOutputStream out = null;
+        try {
+            out = openOutputStream(file, append);
+            final BufferedOutputStream buffer = new BufferedOutputStream(out);
+            IOUtils.writeLines(lines, lineEnding, buffer, encoding);
+            buffer.flush();
+            out.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 
@@ -2815,8 +2898,12 @@ public class FileUtils {
         if (file.isDirectory()) {
             throw new IllegalArgumentException("Checksums can't be computed on directories");
         }
-        try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
+        InputStream in = null;
+        try {
+            in = new CheckedInputStream(new FileInputStream(file), checksum);
             IOUtils.copy(in, new NullOutputStream());
+        } finally {
+            IOUtils.closeQuietly(in);
         }
         return checksum;
     }
