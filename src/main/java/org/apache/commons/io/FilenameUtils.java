@@ -667,6 +667,8 @@ public class FilenameUtils {
                         return 2;
                     }
                     return 3;
+                } else if (ch0 == UNIX_SEPARATOR) {
+                    return 1;
                 }
                 return NOT_FOUND;
 
