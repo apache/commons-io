@@ -292,10 +292,15 @@ public class FileSystemUtils {
      * @param timeout The timeout amount in milliseconds or no timeout if the value
      *  is zero or less
      * @return the amount of free drive space on the drive
-     * @throws IOException if an error occurs
+     * @throws IOException if an error occurs, NullPointerException if path cannot be parsed by FilenameUtils.normalize()
      */
-    long freeSpaceWindows(String path, final long timeout) throws IOException {
+    long freeSpaceWindows(String path, final long timeout) throws IOException, NullPointerException {
         path = FilenameUtils.normalize(path, false);
+
+        if(path == null)
+            throw new NullPointerException(
+                "The path cannot be parsed by FilenameUtils.normalize().");
+
         if (path.length() > 0 && path.charAt(0) != '"') {
             path = "\"" + path + "\"";
         }

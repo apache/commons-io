@@ -581,4 +581,22 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testGetFreeSpaceWindows_String_InvalidPath() throws Exception {
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)         180260 bytes\n" +
+                        "              10 Dir(s)     41411551232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines, "dir /a /-c \"C:\"");
+        fsu.freeSpaceWindows("..", -1);
+    }
+
 }
