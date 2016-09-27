@@ -57,7 +57,7 @@ public class DeferredFileOutputStreamTest
     public void testBelowThreshold()
     {
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length + 42, null);
+                new DeferredFileOutputStream(testBytes.length + 42, testBytes.length, null);
         try
         {
             dfos.write(testBytes, 0, testBytes.length);
@@ -247,7 +247,7 @@ public class DeferredFileOutputStreamTest
         final String suffix = ".out";
         final File tempDir  = new File(".");
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length + 42, prefix, suffix, tempDir);
+                new DeferredFileOutputStream(testBytes.length + 42, testBytes.length, prefix, suffix, tempDir);
         assertNull("Check file is null-A", dfos.getFile());
         try
         {
