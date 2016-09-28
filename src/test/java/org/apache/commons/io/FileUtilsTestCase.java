@@ -41,7 +41,7 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test FileUtils for correctness.
  *
- * @version $Id$
+ * @version $Id: FileUtilsTestCase.java 1718945 2015-12-09 19:51:14Z krosenvold $
  * @see FileUtils
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
@@ -746,12 +746,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
 
         // Tests that resuorce was copied correctly
-        try (FileInputStream fis = new FileInputStream(file)) {
+        final FileInputStream fis = new FileInputStream(file);
+        try {
             assertTrue(
                     "Content is not equal.",
                     IOUtils.contentEquals(
                             getClass().getResourceAsStream(resourceName),
                             fis));
+        } finally {
+            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -767,12 +770,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file, 500, 500);
 
         // Tests that resuorce was copied correctly
-        try (FileInputStream fis = new FileInputStream(file)) {
+        final FileInputStream fis = new FileInputStream(file);
+        try {
             assertTrue(
                     "Content is not equal.",
                     IOUtils.contentEquals(
                             getClass().getResourceAsStream(resourceName),
                             fis));
+        } finally {
+            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -1327,6 +1333,50 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue(new File(actualDestDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
     }
+    
+    @Test
+    public void testCopyToDirectory_NonExistingDest() throws Exception {
+        if (!testFile1.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile1
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(testFile1));
+        try {
+            TestUtils.generateTestData(output1, (long) 1234);
+        } finally {
+            IOUtils.closeQuietly(output1);
+        }
+        if (!testFile2.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile2
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(testFile2));
+        try {
+            TestUtils.generateTestData(output, (long) 4321);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
+        final File srcDir = getTestDirectory();
+        final File subDir = new File(srcDir, "sub");
+        subDir.mkdir();
+        final File subFile = new File(subDir, "A.txt");
+        FileUtils.writeStringToFile(subFile, "HELLO WORLD", "UTF8");
+        final File destDir = new File(System.getProperty("java.io.tmpdir"), "tmp-FileUtilsTestCase");
+        FileUtils.deleteDirectory(destDir);
+        final File actualDestDir = new File(destDir, srcDir.getName());
+
+        FileUtils.copyToDirectory(srcDir, destDir);
+
+        assertTrue("Check exists", destDir.exists());
+        assertTrue("Check exists", actualDestDir.exists());
+        final long srcSize = FileUtils.sizeOfDirectory(srcDir);
+        assertTrue("Size > 0", srcSize > 0);
+        assertEquals("Check size", srcSize, FileUtils.sizeOfDirectory(actualDestDir));
+        assertTrue(new File(actualDestDir, "sub/A.txt").exists());
+        FileUtils.deleteDirectory(destDir);
+    }
 
     @Test
     public void testCopyDirectoryToNonExistingDest() throws Exception {
@@ -1524,6 +1574,15 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         FileUtils.copyDirectoryToDirectory(dir, dir);
         assertEquals(1, LIST_WALKER.list(dir).size());
     }
+    
+    /* Test for IO-217 FileUtils.copyToDirectory makes infinite loops */
+    @Test
+    public void testCopyToDirectoryToItself() throws Exception {
+        final File dir = new File(getTestDirectory(), "itself");
+        dir.mkdirs();
+        FileUtils.copyToDirectory(dir, dir);
+        assertEquals(1, LIST_WALKER.list(dir).size());
+    }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws Exception {
         final File childDir2 = new File(parentDir, "child2");
@@ -1644,6 +1703,33 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             //we want that, cannot copy to the same directory as the original file
         }
     }
+    
+    @Test
+    public void testCopy1ToDir() throws Exception {
+        final File directory = new File(getTestDirectory(), "subdir");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        final File destination = new File(directory, testFile1.getName());
+
+        //Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if
+        //the lastModified date is not ok
+
+        FileUtils.copyToDirectory(testFile1, directory);
+        assertTrue("Check Exist", destination.exists());
+        assertEquals("Check Full copy", testFile1Size, destination.length());
+        /* disabled: Thread.sleep doesn't work reliantly for this case
+        assertTrue("Check last modified date preserved",
+            testFile1.lastModified() == destination.lastModified());*/
+
+        try {
+            FileUtils.copyToDirectory(destination, directory);
+            fail("Should not be able to copy a file into the same directory as itself");
+        } catch (final IOException ioe) {
+            //we want that, cannot copy to the same directory as the original file
+        }
+    }
 
     @Test
     public void testCopyFile2ToDir() throws Exception {
@@ -1658,6 +1744,26 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         //the lastModified date is not ok
 
         FileUtils.copyFileToDirectory(testFile1, directory);
+        assertTrue("Check Exist", destination.exists());
+        assertEquals("Check Full copy", testFile2Size, destination.length());
+        /* disabled: Thread.sleep doesn't work reliantly for this case
+        assertTrue("Check last modified date preserved",
+            testFile1.lastModified() == destination.lastModified());*/
+    }
+    
+    @Test
+    public void testCopy2ToDir() throws Exception {
+        final File directory = new File(getTestDirectory(), "subdir");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        final File destination = new File(directory, testFile1.getName());
+
+        //Thread.sleep(LAST_MODIFIED_DELAY);
+        //This is to slow things down so we can catch if
+        //the lastModified date is not ok
+
+        FileUtils.copyToDirectory(testFile1, directory);
         assertTrue("Check Exist", destination.exists());
         assertEquals("Check Full copy", testFile2Size, destination.length());
         /* disabled: Thread.sleep doesn't work reliantly for this case
@@ -1686,8 +1792,11 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         final String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
-        try (OutputStream out = new FileOutputStream(file1)) {
+        final OutputStream out = new java.io.FileOutputStream(file1);
+        try {
             out.write("This is a test".getBytes("UTF-8"));
+        } finally {
+            out.close();
         }
 
         final File file2 = new File(getTestDirectory(), "test2.txt");
@@ -1770,7 +1879,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         assertEquals(fileNames.length, files.size());
 
-        final Map<String, String> foundFileNames = new HashMap<>();
+        final Map<String, String> foundFileNames = new HashMap<String, String>();
 
         for (int i = 0; i < count; ++i) {
             boolean found = false;
@@ -1853,7 +1962,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
                 new WildcardFileFilter("*.*"),
                 new WildcardFileFilter("*"));
 
-        final Map<String, String> foundFileNames = new HashMap<>();
+        final Map<String, String> foundFileNames = new HashMap<String, String>();
 
         while (files.hasNext()) {
             boolean found = false;
@@ -3054,7 +3163,7 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
 
         List<File> list(final File startDirectory) throws IOException {
-            final ArrayList<File> files = new ArrayList<>();
+            final ArrayList<File> files = new ArrayList<File>();
             walk(startDirectory, files);
             return files;
         }
