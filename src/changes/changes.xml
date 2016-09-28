@@ -52,6 +52,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
     </release>
     <release version="2.6" date="2016-MM-DD" description="New features and bug fixes.">
+      <action issue="IO-515" dev="ggregory" type="fix" due-to="Brett Lounsbury, Gary Gregory">
+        Allow Specifying Initial Buffer Size of DeferredFileOutputStream.
+      </action>
       <action issue="IO-512" dev="ggregory" type="fix" due-to="Ralf Hauser">
         ThresholdingOutputStream.thresholdReached() results in FileNotFoundException.
       </action>

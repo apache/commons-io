@@ -16,14 +16,6 @@
  */
 package org.apache.commons.io.output;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -31,14 +23,35 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
 /**
  * Unit tests for the <code>DeferredFileOutputStream</code> class.
  *
  * @version $Id$
  */
+@RunWith(value=Parameterized.class)
 public class DeferredFileOutputStreamTest
  {
 
+    @Parameters(name = "initialBufferSize = {0}")
+    public static Iterable<Object[]> data() {
+        return Arrays.asList(new Object[][] { { 1 }, { 2 }, { 4 }, { 8 }, { 16 }, { 32 }, { 64 }, { 128 }, { 256 },
+                { 512 }, { 1024 }, { 2048 }, { 4096 } });
+    }
+
+    public DeferredFileOutputStreamTest(final int initialBufferSize) {
+        this.initialBufferSize = initialBufferSize;
+    }
     /**
      * The test data as a string (which is the simplest form).
      */
@@ -48,6 +61,8 @@ public class DeferredFileOutputStreamTest
      * The test data as a byte array, derived from the string.
      */
     private final byte[] testBytes = testString.getBytes();
+    
+    private final int initialBufferSize;
 
     /**
      * Tests the case where the amount of data falls below the threshold, and
@@ -57,7 +72,7 @@ public class DeferredFileOutputStreamTest
     public void testBelowThreshold()
     {
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length + 42, null);
+                new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, null);
         try
         {
             dfos.write(testBytes, 0, testBytes.length);
@@ -81,7 +96,7 @@ public class DeferredFileOutputStreamTest
     @Test
     public void testAtThreshold() {
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length, null);
+                new DeferredFileOutputStream(testBytes.length, initialBufferSize, null);
         try
         {
             dfos.write(testBytes, 0, testBytes.length);
@@ -110,7 +125,7 @@ public class DeferredFileOutputStreamTest
         testFile.delete();
 
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length - 5, testFile);
+                new DeferredFileOutputStream(testBytes.length - 5, initialBufferSize, testFile);
         try
         {
             dfos.write(testBytes, 0, testBytes.length);
@@ -141,7 +156,7 @@ public class DeferredFileOutputStreamTest
         testFile.delete();
 
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length / 2, testFile);
+                new DeferredFileOutputStream(testBytes.length / 2, initialBufferSize, testFile);
         final int chunkSize = testBytes.length / 3;
 
         try
@@ -171,12 +186,12 @@ public class DeferredFileOutputStreamTest
     @Test
     public void testWriteToSmall(){
         final File testFile = new File("testWriteToMem.dat");
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
         // Ensure that the test starts from a clean base.
         testFile.delete();
 
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length *2, testFile);
+                new DeferredFileOutputStream(testBytes.length *2, initialBufferSize, testFile);
         try{
             dfos.write(testBytes);
 
@@ -207,7 +222,7 @@ public class DeferredFileOutputStreamTest
     @Test
     public void testWriteToLarge(){
         final File testFile = new File("testWriteToFile.dat");
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
         // Ensure that the test starts from a clean base.
         testFile.delete();
 
@@ -247,7 +262,7 @@ public class DeferredFileOutputStreamTest
         final String suffix = ".out";
         final File tempDir  = new File(".");
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length + 42, prefix, suffix, tempDir);
+                new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, prefix, suffix, tempDir);
         assertNull("Check file is null-A", dfos.getFile());
         try
         {
@@ -271,7 +286,7 @@ public class DeferredFileOutputStreamTest
         final String suffix = ".out";
         final File tempDir  = new File(".");
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+                new DeferredFileOutputStream(testBytes.length - 5, initialBufferSize, prefix, suffix, tempDir);
         assertNull("Check file is null-A", dfos.getFile());
         try
         {
@@ -305,7 +320,7 @@ public class DeferredFileOutputStreamTest
         final String suffix = null;
         final File tempDir  = null;
         final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir);
+                new DeferredFileOutputStream(testBytes.length - 5, initialBufferSize, prefix, suffix, tempDir);
         assertNull("Check file is null-A", dfos.getFile());
         try
         {

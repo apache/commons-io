@@ -56,6 +56,8 @@ import org.apache.commons.io.input.ClosedInputStream;
  */
 public class ByteArrayOutputStream extends OutputStream {
 
+    static final int DEFAULT_SIZE = 1024;
+
     /** A singleton empty byte array. */
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
@@ -77,7 +79,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * initially 1024 bytes, though its size increases if necessary.
      */
     public ByteArrayOutputStream() {
-        this(1024);
+        this(DEFAULT_SIZE);
     }
 
     /**

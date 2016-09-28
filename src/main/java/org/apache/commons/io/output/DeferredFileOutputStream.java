@@ -42,7 +42,6 @@ import org.apache.commons.io.IOUtils;
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
-
     // ----------------------------------------------------------- Data members
 
 
@@ -93,19 +92,38 @@ public class DeferredFileOutputStream
     /**
      * Constructs an instance of this class which will trigger an event at the
      * specified threshold, and save data to a file beyond that point.
+     * The initial buffer size will default to 1024 bytes which is ByteArrayOutputStream's default buffer size.
      *
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.
      */
     public DeferredFileOutputStream(final int threshold, final File outputFile)
     {
-        this(threshold,  outputFile, null, null, null);
+        this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);
     }
 
+    /**
+     * Constructs an instance of this class which will trigger an event at the
+     * specified threshold, and save data to a file beyond that point.
+     *
+     * @param threshold  The number of bytes at which to trigger an event.
+     * @param initialBufferSize The initial size of the in memory buffer.
+     * @param outputFile The file to which data is saved beyond the threshold.
+     *
+     * @since 2.5
+     */
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final File outputFile)
+    {
+        this(threshold, outputFile, null, null, null, initialBufferSize);
+        if (initialBufferSize < 0) {
+            throw new IllegalArgumentException("Initial buffer size must be atleast 0.");
+        }
+    }
 
     /**
      * Constructs an instance of this class which will trigger an event at the
      * specified threshold, and save data to a temporary file beyond that point.
+     * The initial buffer size will default to 32 bytes which is ByteArrayOutputStream's default buffer size.
      *
      * @param threshold  The number of bytes at which to trigger an event.
      * @param prefix Prefix to use for the temporary file.
@@ -116,9 +134,33 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
     {
-        this(threshold, null, prefix, suffix, directory);
+        this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);
         if (prefix == null) {
             throw new IllegalArgumentException("Temporary file prefix is missing");
+        }
+    }
+
+    /**
+     * Constructs an instance of this class which will trigger an event at the
+     * specified threshold, and save data to a temporary file beyond that point.
+     *
+     * @param threshold  The number of bytes at which to trigger an event.
+     * @param initialBufferSize The initial size of the in memory buffer.
+     * @param prefix Prefix to use for the temporary file.
+     * @param suffix Suffix to use for the temporary file.
+     * @param directory Temporary file directory.
+     *
+     * @since 2.5
+     */
+    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
+                                    final String suffix, final File directory)
+    {
+        this(threshold, null, prefix, suffix, directory, initialBufferSize);
+        if (prefix == null) {
+            throw new IllegalArgumentException("Temporary file prefix is missing");
+        }
+        if (initialBufferSize < 0) {
+            throw new IllegalArgumentException("Initial buffer size must be atleast 0.");
         }
     }
 
@@ -131,17 +173,18 @@ public class DeferredFileOutputStream
      * @param prefix Prefix to use for the temporary file.
      * @param suffix Suffix to use for the temporary file.
      * @param directory Temporary file directory.
+     * @param initialBufferSize The initial size of the in memory buffer.
      */
     private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
-                                     final String suffix, final File directory) {
+                                     final String suffix, final File directory, final int initialBufferSize) {
         super(threshold);
         this.outputFile = outputFile;
-
-        memoryOutputStream = new ByteArrayOutputStream();
-        currentOutputStream = memoryOutputStream;
         this.prefix = prefix;
         this.suffix = suffix;
         this.directory = directory;
+
+        memoryOutputStream = new ByteArrayOutputStream(initialBufferSize);
+        currentOutputStream = memoryOutputStream;
     }
 
 
