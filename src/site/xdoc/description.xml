@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>User guide</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+  <body>
+
+    <section name="User guide">
+        <p>
+            Commons-IO contains
+            <a href="#Utility classes">utility classes</a>,
+            <a href="#Endian classes">endian classes</a>,
+            <a href="#Line iterator">line iterator</a>,
+            <a href="#File filters">file filters</a>,
+            <a href="#File comparators">file comparators</a> and
+            <a href="#Streams">stream implementations</a>.
+        </p>
+
+        <p>
+            For a more detailed descriptions, take a look at the
+            <a href="api-release/index.html">javadocs</a>.
+        </p>
+    </section>
+
+    <section name="Utility classes">
+        <subsection name="IOUtils">
+            <p>
+                <a href="javadocs/api-release/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
+                contains utility methods dealing with reading, writing and copying.
+                The methods work on InputStream, OutputStream, Reader and Writer.
+            </p>
+            <p>
+                As an example, consider the task of reading bytes
+                from a URL, and printing them. This would typically done like this:
+            </p>
+
+            <source>
+ InputStream in = new URL( "http://commons.apache.org" ).openStream();
+ try {
+   InputStreamReader inR = new InputStreamReader( in );
+   BufferedReader buf = new BufferedReader( inR );
+   String line;
+   while ( ( line = buf.readLine() ) != null ) {
+     System.out.println( line );
+   }
+ } finally {
+   in.close();
+ }</source>
+
+            <p>
+                With the IOUtils class, that could be done with:
+            </p>
+
+            <source>
+ InputStream in = new URL( "http://commons.apache.org" ).openStream();
+ try {
+   System.out.println( IOUtils.toString( in ) );
+ } finally {
+   IOUtils.closeQuietly(in);
+ }</source>
+
+            <p>
+                In certain application domains, such IO operations are
+                common, and this class can save a great deal of time. And you can
+                rely on well-tested code.
+            </p>
+            <p>
+                For utility code such as this, flexibility and speed are of primary importance.
+                However you should also understand the limitations of this approach.
+                Using the above technique to read a 1GB file would result in an
+                attempt to create a 1GB String object!
+            </p>
+
+        </subsection>
+
+        <subsection name="FileUtils">
+            <p>
+                The <a href="api-release/index.html?org/apache/commons/io/FileUtils.html">FileUtils</a>
+                class contains utility methods for working with File objects.
+                These include reading, writing, copying and comparing files.
+            </p>
+            <p>
+                For example to read an entire file line by line you could use:
+            </p>
+            <source>
+ File file = new File("/commons/io/project.properties");
+ List lines = FileUtils.readLines(file, "UTF-8");</source>
+        </subsection>
+
+        <subsection name="FilenameUtils">
+            <p>
+                The <a href="api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>
+                class contains utility methods for working with filenames <i>without</i>
+                using File objects. The class aims to be consistent
+                between Unix and Windows, to aid transitions between these
+                environments (such as moving from development to production).
+            </p>
+            <p>
+                For example to normalize a filename removing double dot segments:
+            </p>
+            <source>
+ String filename = "C:/commons/io/../lang/project.xml";
+ String normalized = FilenameUtils.normalize(filename);
+ // result is "C:/commons/lang/project.xml"</source>
+        </subsection>
+
+        <subsection name="FileSystemUtils">
+            <p>
+                The <a href="api-release/index.html?org/apache/commons/io/FileSystemUtils.html">FileSystemUtils</a>
+                class contains
+                utility methods for working with the file system
+                to access functionality not supported by the JDK.
+                Currently, the only method is to get the free space on a drive.
+                Note that this uses the command line, not native code.
+            </p>
+            <p>
+                For example to find the free space on a drive:
+            </p>
+            <source>
+ long freeSpace = FileSystemUtils.freeSpace("C:/");</source>
+        </subsection>
+
+    </section>
+
+    <section name="Endian classes">
+        <p>
+            Different computer architectures adopt different
+            conventions for byte ordering. In so-called
+            "Little Endian" architectures (eg Intel), the low-order
+            byte is stored in memory at the lowest address, and
+            subsequent bytes at higher addresses. For "Big Endian"
+            architectures (eg Motorola), the situation is reversed.
+        </p>
+
+        <p>
+        There are two classes in this package of relevance:
+        </p>
+
+        <ul>
+           <li>
+           The <a href="api-release/index.html?org/apache/commons/io/EndianUtils.html">EndianUtils</a>
+           class contains static methods for swapping the Endian-ness
+           of Java primitives and streams.
+           </li>
+
+           <li>
+           The <a href="api-release/index.html?org/apache/commons/io/input/SwappedDataInputStream.html">SwappedDataInputStream</a>
+           class is an implementation of the <code>DataInput</code> interface. With
+           this, one can read data from files of non-native Endian-ness.
+           </li>
+        </ul>
+
+        <p>
+            For more information, see
+            <a
+                href="http://www.cs.umass.edu/~verts/cs32/endian.html">http://www.cs.umass.edu/~verts/cs32/endian.html</a>
+         </p>
+
+    </section>
+
+    <section name="Line iterator">
+        <p>
+            The <code>org.apache.commons.io.LineIterator</code> class
+            provides a flexible way for working with a line-based file.
+            An instance can be created directly, or via factory methods on
+            <code>FileUtils</code> or <code>IOUtils</code>.
+            The recommended usage pattern is:
+        </p>
+        <source>
+ LineIterator it = FileUtils.lineIterator(file, "UTF-8");
+ try {
+   while (it.hasNext()) {
+     String line = it.nextLine();
+     /// do something with line
+   }
+ } finally {
+   LineIterator.closeQuietly(iterator);
+ }</source>
+    </section>
+
+    <section name="File filters">
+        <p>
+            The <code>org.apache.commons.io.filefilter</code>
+            package defines an interface
+            (<a href="api-release/index.html?org/apache/commons/io/filefilter/IOFileFilter.html">IOFileFilter</a>)
+            that combines both <code>java.io.FileFilter</code> and
+            <code>java.io.FilenameFilter</code>. Besides
+            that the package offers a series of ready-to-use
+            implementations of the <code>IOFileFilter</code>
+            interface including
+            implementation that allow you to combine other such filters.
+
+            These filters can be used to list files or in FileDialog, for example.
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+            package javadoc for more details.
+        </p>
+    </section>
+
+    <section name="File comparators">
+        <p>
+            The <code>org.apache.commons.io.comparator</code>
+            package provides a number of <code>java.util.Comparator</code>
+            implementations for <code>java.io.File</code>.
+
+            These comparators can be used to sort lists and arrays of files, for example.
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
+            package javadoc for more details.
+        </p>
+    </section>
+
+    <section name="Streams">
+        <p>
+            The <code>org.apache.commons.io.input</code> and
+            <code>org.apache.commons.io.output</code> packages
+            contain various useful implementations of streams.
+            These include:
+            <ul>
+            <li>Null output stream - that silently absorbs all data sent to it</li>
+            <li>Tee output stream - that sends output data to two streams instead of one</li>
+            <li>Byte array output stream - that is a faster version of the JDK class</li>
+            <li>Counting streams - that count the number of bytes passed</li>
+            <li>Proxy streams - that delegate to the correct method in the proxy</li>
+            <li>Lockable writer - that provides synchronization of writes using a lock file</li>
+            </ul>
+        </p>
+        <p>
+            See the
+            <a href="api-release/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
+            <a href="api-release/index.html?org/apache/commons/io/output/package-summary.html">output</a>
+            package javadoc for more details.
+        </p>
+    </section>
+
+  </body>
+
+</document>

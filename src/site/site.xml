@@ -24,11 +24,13 @@
 
     <body>
         <menu name="Commons IO">
-            <item name="Overview"                 href="/index.html"/>
-            <item name="Download"                 href="http://commons.apache.org/downloads/download_io.cgi"/>
-            <item name="User guide"               href="/description.html"/>
-            <item name="Best practices"           href="/bestpractices.html"/>
-            <item name="Javadoc (latest release)" href="api-release/index.html"/>
+            <item name="Overview"             href="/index.html"/>
+            <item name="Download"             href="http://commons.apache.org/io/download_io.cgi"/>
+            <item name="User guide"           href="/description.html"/>
+            <item name="Best practices"       href="/bestpractices.html"/>
+            <item name="Javadoc 2.4"          href="/javadocs/api-2.4/index.html"/>
+            <item name="Javadoc 2.2"          href="/javadocs/api-2.2/index.html"/>
+            <item name="Javadoc 1.4"          href="/javadocs/api-1.4/index.html"/>
         </menu>
 
         <menu name="Development">
@@ -39,7 +41,7 @@
             <item name="Tasks"                href="/tasks.html"/>
             <item name="Proposal"             href="/proposal.html"/>
             <item name="SVN repository"       href="/source-repository.html"/>
-            <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
+            <item name="Javadoc (latest SVN)" href="apidocs/index.html"/>
         </menu>
 
     </body>

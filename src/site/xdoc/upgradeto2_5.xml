@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Upgrade from 2.4 to 2.5</title>
+        <author email="dev@commons.apache.org">Commons Documentation Team</author>
+    </properties>
+    <body>
+
+        <section name="Upgrade">
+            <p>
+                These are the release notes and advice for upgrading Commons-IO from
+                version 2.4 to version 2.5
+                <source>
+                    Commons IO is a package of Java utility classes like java.io.
+                    Classes in this package are considered to be so standard and of such high
+                    reuse as to justify existence in java.io.
+
+                    The Apache Commons IO library contains utility classes, stream implementations, file filters,
+                    file comparators, endian transformation classes, and much more.
+
+                    ==============================================================================
+                    Apache Commons IO Version 2.5
+                    ==============================================================================
+                    New features and bug fixes.
+
+                    Changes in this version include:
+
+                    New features:
+                    o IO-487:  Add ValidatingObjectInputStream for controlled deserialization
+                    o IO-471:  Support for additional encodings in ReversedLinesFileReader Thanks to Leandro Reis.
+                    o IO-425:  Setter method for threshold on ThresholdingOutputStream Thanks to Craig Swank.
+                    o IO-406:  Introduce new class AppendableOutputStream Thanks to Niall Pemberton.
+                    o IO-459:  Add WindowsLineEndingInputStream and UnixLineEndingInputStream. Thanks to Kristian Rosenvold.
+                    o IO-457:  Add a BoundedReader, a wrapper that can be used to constrain access
+                            to an underlying stream when used with mark/reset -
+                            to avoid overflowing the mark limit of the underlying buffer. Thanks to Kristian Rosenvold.
+                    o IO-426:  Add API IOUtils.closeQuietly(Closeable...)
+                    o IO-410:  Readfully() That Returns A Byte Array Thanks to Beluga Behr.
+                    o IO-395:  Overload IOUtils buffer methods to accept buffer size Thanks to Beluga Behr.
+                    o IO-382:  Chunked IO for large arrays.
+                             Added writeChunked(byte[], OutputStream) and writeChunked(char[] Writer)
+                             Added ChunkedOutputStream, ChunkedWriter
+                    o IO-233:  Add Methods for Buffering Streams/Writers To IOUtils
+                             Added overloaded buffer() methods - see also IO-330
+                    o IO-330:  IOUtils#toBufferedOutputStream/toBufferedWriter to conditionally wrap the output
+                             Added overloaded buffer() methods - see also IO-233
+                    o IO-381:  Add FileUtils.copyInputStreamToFile API with option to leave the source open.
+                            See copyInputStreamToFile(final InputStream source, final File destination, boolean closeSource)
+                    o IO-379:  CharSequenceInputStream - add tests for available()
+                             Fix code so it really does reflect a minimum available.
+                    o IO-346:  Add ByteArrayOutputStream.toInputStream()
+                    o IO-341:  A constant for holding the BOM character (U+FEFF)
+                    o IO-361:  Add API FileUtils.forceMkdirsParent().
+                    o IO-360:  Add API Charsets.requiredCharsets().
+                    o IO-359:  Add IOUtils.skip and skipFully(ReadableByteChannel, long). Thanks to yukoba.
+                    o IO-358:  Add IOUtils.read and readFully(ReadableByteChannel, ByteBuffer buffer). Thanks to yukoba.
+                    o IO-353:  Add API IOUtils.copy(InputStream, OutputStream, int) Thanks to ggregory.
+                    o IO-349:  Add API with array offset and length argument to FileUtils.writeByteArrayToFile. Thanks to scop.
+                    o IO-348:  Missing information in IllegalArgumentException thrown by org.apache.commons.io.FileUtils#validateListFilesParameters. Thanks to plcstpierre.
+                    o IO-345:  Supply a hook method allowing Tailer actively determining stop condition. Thanks to mkresse.
+                    o IO-437:  Make IOUtils.EOF public and reuse it in various classes.
+
+                    Fixed Bugs:
+                    o IO-446:  adds an endOfFileReached method to the TailerListener Thanks to Jeffrey Barrus.
+                    o IO-484:  FilenameUtils should handle embedded null bytes Thanks to Philippe Arteau.
+                    o IO-481:  Changed/Corrected algorithm for waitFor
+                    o IO-428:  BOMInputStream.skip returns wrong count if stream contains no BOM Thanks to Stefan Gmeiner.
+                    o IO-488:  FileUtils.waitFor(...) swallows thread interrupted status Thanks to Bj�rn Buchner.
+                    o IO-452:  Support for symlinks with missing target. Added support for JDK7 symlink features when present Thanks to David Standish.
+                    o IO-453:  Regression in FileUtils.readFileToString from 2.0.1 Thanks to Steven Christou.
+                    o IO-451:  ant test fails - resources missing from test classpath Thanks to David Standish.
+                    o IO-435:  Document that FileUtils.deleteDirectory, directoryContains and cleanDirectory
+                             may throw an IllegalArgumentException in case the passed directory does not
+                             exist or is not a directory. Thanks to Dominik Stadler.
+                    o IO-424:  Javadoc fixes, mostly to appease 1.8.0 Thanks to Ville Skytt�.
+                    o IO-389:  FileUtils.sizeOfDirectory can throw IllegalArgumentException Thanks to Austin Doupnik.
+                    o IO-390:  FileUtils.sizeOfDirectoryAsBigInteger can overflow.
+                             Ensure that recursive calls all use BigInteger
+                    o IO-385:  FileUtils.doCopyFile can potentially loop for ever
+                             Exit loop if no data to copy
+                    o IO-383:  FileUtils.doCopyFile caches the file size; needs to be documented
+                             Added Javadoc; show file lengths in exception message
+                    o IO-380:  FileUtils.copyInputStreamToFile should document it closes the input source Thanks to claudio_ch.
+                    o IO-279:  Tailer erroneously considers file as new.
+                            Fix to use file.lastModified() rather than System.currentTimeMillis()
+                    o IO-356:  CharSequenceInputStream#reset() behaves incorrectly in case when buffer size is not dividable by data size.
+                             Fix code so skip relates to the encoded bytes; reset now re-encodes the data up to the point of the mark
+                    o IO-368:  ClassLoaderObjectInputStream does not handle primitive typed members
+                    o IO-314:  Deprecate all methods that use the default encoding
+                    o IO-338:  When a file is rotated, finish reading previous file prior to starting new one
+                    o IO-354:  Commons IO Tailer does not respect UTF-8 Charset.
+                    o IO-323:  What should happen in FileUtils.sizeOf[Directory] when an overflow takes place?
+                            Added Javadoc.
+                    o IO-372:  FileUtils.moveDirectory can produce misleading error message on failiure
+                    o IO-362:  IOUtils.contentEquals* methods returns false if input1 == input2, should return true. Thanks to mmadson, ggregory.
+                    o IO-357:  [Tailer] InterruptedException while the thread is sleeping is silently ignored Thanks to mortenh.
+                    o IO-352:  Spelling fixes. Thanks to scop.
+                    o IO-436:  Improper JavaDoc comment for FilenameUtils.indexOfExtension. Thanks to christoph.schneegans.
+
+                    Changes:
+                    o IO-433:  Converted all testcases to JUnit 4
+                    o IO-466:  Added testcase to show this was fixed with IO-423
+                    o IO-479:  Correct exception message in FileUtils.getFile(File, String...) Thanks to Zhouce Chen.
+                    o IO-465:  Update to JUnit 4.12 Thanks to based2.
+                    o IO-462:  IOExceptionWithCause no longer needed
+                    o IO-422:  Deprecate Charsets Charset constants in favor of Java 7's java.nio.charset.StandardCharsets
+                    o IO-239:  Convert IOCase to a Java 1.5+ Enumeration
+                             [N.B. this is binary compatible]
+                    o IO-328:  getPrefixLength returns null if filename has leading slashes
+                            Javadoc: add examples to show correct behaviour; add unit tests
+                    o IO-299:  FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
+                            Javadoc: clarify that original dir is included in the results
+                    o IO-375:  FilenameUtils.splitOnTokens(String text) check for '**' could be simplified
+                    o IO-374:  WildcardFileFilter ctors should not use null to mean IOCase.SENSITIVE when delegating to other ctors
+
+                    Compatibility with 2.4:
+                    Binary compatible: Yes.
+                    Source compatible: Yes.
+                    Semantic compatible: Yes.
+
+                    Compatibility with 2.2 and 1.4:
+                    Binary compatible: Yes.
+                    Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+                    Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
+
+                    Commons IO 2.5 requires JDK 1.6 or later.
+                    Commons IO 2.4 requires JDK 1.6 or later.
+                    Commons IO 2.3 requires JDK 1.6 or later.
+                    Commons IO 2.2 requires JDK 1.5 or later.
+                    Commons IO 1.4 requires JDK 1.3 or later.
+                </source>
+            </p>
+        </section>
+
+    </body>
+</document>

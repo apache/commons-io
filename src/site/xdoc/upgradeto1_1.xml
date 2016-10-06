@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 1.0 to 1.1</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 1.0 to version 1.1.
+<source>
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+and endian transformation classes.
+
+
+Incompatible changes from 1.0
+-----------------------------
+Binary compatible - Yes
+
+Source compatible - Yes
+
+Semantic compatible - Yes, except:
+- FileUtils.writeStringToFile()
+    A null encoding previously used 'ISO-8859-1', now it uses the platform default
+    Generally this will make no difference
+
+- LockableFileWriter
+    Improved validation and now create directories if necesssary
+
+plus these bug fixes may affect you semantically:
+- FileUtils.touch()  (Bug fix 29821)
+    Now creates the file if it did not previously exist
+
+- FileUtils.toFile(URL) (Bug fix 32575)
+    Now handles escape syntax such as %20
+
+- FileUtils.sizeOfDirectory()  (Bug fix 36801)
+    May now return a size of 0 if the directory is security restricted
+
+
+Deprecations from 1.0
+---------------------
+- CopyUtils has been deprecated.
+    Its methods have been moved to IOUtils.
+    The new IOUtils methods handle nulls better, and have clearer names.
+
+- IOUtils.toByteArray(String) - Use {@link String#getBytes()}
+- IOUtils.toString(byte[]) - Use {@link String#String(byte[])}
+- IOUtils.toString(byte[],String) - Use {@link String#String(byte[],String)}
+
+
+Bug fixes from 1.0
+------------------
+- FileUtils - touch()  [29821]
+    Now creates the file if it did not previously exist
+
+- FileUtils - toFile(URL)  [32575]
+    Now handles escape syntax such as %20
+
+- FileFilterUtils - makeCVSAware(IOFileFilter)  [33023]
+    Fixed bug that caused method to be completely broken
+
+- CountingInputStream  [33336]
+    Fixed bug that caused the count to reduce by one at the end of the stream
+
+- CountingInputStream - skip(long)  [34311]
+    Bytes from calls to this method were not previously counted
+
+- NullOutputStream  [33481]
+    Remove unnecessary synchronization
+
+- AbstractFileFilter - accept(File, String)  [30992]
+    Fixed broken implementation
+
+- FileUtils  [36801]
+    Previously threw NPE when listing files in a security restricted directory
+    Now throw IOException with a better message
+
+- FileUtils - writeStringToFile()
+    Null encoding now correctly uses the platform default
+
+
+Enhancements from 1.0
+---------------------
+- FilenameUtils - new class  [33303,29351]
+    A static utility class for working with filenames
+    Seeks to ease the pain of developing on Windows and deploying on Unix
+
+- FileSystemUtils - new class  [32982,36325]
+    A static utility class for working with file systems
+    Provides one method at present, to get the free space on the filing system
+
+- IOUtils - new public constants
+    Constants for directory and line separators on Windows and Unix
+
+- IOUtils - toByteArray(Reader,encoding)
+    Handles encodings when reading to a byte array
+
+- IOUtils - toCharArray(InputStream)  [28979]
+          - toCharArray(InputStream,encoding)
+          - toCharArray(Reader)
+    Reads a stream/reader into a charatcter array
+
+- IOUtils - readLines(InputStream)  [36214]
+          - readLines(InputStream,encoding)
+          - readLines(Reader)
+    Reads a stream/reader line by line into a List of Strings
+
+- IOUtils - toInputStream(String)  [32958]
+          - toInputStream(String,encoding)
+    Creates an input stream that uses the string as a source of data
+
+- IOUtils - writeLines(Collection,lineEnding,OutputStream)  [36214]
+          - writeLines(Collection,lineEnding,OutputStream,encoding)
+          - writeLines(Collection,lineEnding,Writer)
+    Writes a collection to a stream/writer line by line
+
+- IOUtils - write(...)
+    Write data to a stream/writer (moved from CopyUtils with better null handling)
+
+- IOUtils - copy(...)
+    Copy data between streams (moved from CopyUtils with better null handling)
+
+- IOUtils - contentEquals(Reader,Reader)
+    Method to compare the contents of two readers
+
+- FileUtils - toFiles(URL[])
+    Converts an array of URLs to an array of Files
+
+- FileUtils - copyDirectory()  [32944]
+    New methods to copy a directory
+
+- FileUtils - readFileToByteArray(File)
+    Reads an entire file into a byte array
+
+- FileUtils - writeByteArrayToFile(File,byte[])
+    Writes a byte array to a file
+
+- FileUtils - readLines(File,encoding)  [36214]
+    Reads a file line by line into a List of Strings
+
+- FileUtils - writeLines(File,encoding,List)
+              writeLines(File,encoding,List,lineEnding)
+    Writes a collection to a file line by line
+
+- FileUtils - EMPTY_FILE_ARRAY
+    Constant for an empty array of File objects
+
+- ConditionalFileFilter - new interface  [30705]
+    Defines the behaviour of list based filters
+
+- AndFileFilter, OrFileFilter  [30705]
+    Now support a list of filters to and/or
+
+- WildcardFilter  [31115]
+    New filter that can match using wildcard file names
+
+- FileFilterUtils - makeSVNAware(IOFileFilter)
+    New method, like makeCVSAware, that ignores Subversion source control directories
+
+- ClassLoaderObjectInputStream
+    An ObjectInputStream that supports a ClassLoader
+
+- CountingInputStream,CountingOutputStream - resetCount()  [28976]
+    Adds the ability to reset the count part way through reading/writing the stream
+
+- DeferredFileOutputStream - writeTo(OutputStream)  [34173]
+    New method to allow current contents to be written to a stream
+
+- DeferredFileOutputStream  [34142]
+    Performance optimizations avoiding double buffering
+
+- LockableFileWriter - encoding support [36825]
+    Add support for character encodings to LockableFileWriter
+    Improve the validation
+    Create directories if necesssary
+
+- IOUtils and EndianUtils are no longer final  [28978]
+    Allows developers to have subclasses if desired
+</source>
+</p>
+</section>
+
+</body>
+</document>

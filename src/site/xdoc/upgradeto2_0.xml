@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+ <properties>
+  <title>Upgrade from 1.4 to 2.0</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+<body>
+
+<section name="Upgrade">
+<p>
+These are the release notes and advice for upgrading Commons-IO from
+version 1.4 to version 2.0.
+<source>
+Commons IO is a package of Java utility classes for java.io's hierarchy.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+Commons IO contains utility classes, stream implementations, file filters, 
+file comparators and endian transformation classes.
+
+
+Compatibility with 1.4
+----------------------
+Binary compatible - Yes
+
+Source compatible - Yes
+
+Semantic compatible - Yes
+  Check the bug fixes section for semantic bug fixes
+
+Commons IO 2.0 requires a minimum of JDK 1.5
+ (Commons IO 1.4 had a minimum of JDK 1.3) 
+
+
+Deprecations from 1.4
+---------------------
+
+- IOUtils
+  - write(StringBuffer, Writer) in favour of write(CharSequence, Writer)
+  - write(StringBuffer, OutputStream)  in favour of write(CharSequence, OutputStream)
+  - write(StringBuffer, OutputStream, String) in favour of write(CharSequence, OutputStream, String)
+
+- FileFilterUtils
+  - andFileFilter(IOFileFilter, IOFileFilter) in favour of and(IOFileFilter...) 
+  - orFileFilter(IOFileFilter, IOFileFilter)  in favour of or(IOFileFilter...)
+
+
+Enhancements from 1.4
+---------------------
+
+  * [IO-140] Move minimum Java requirement from JDK 1.3 to JDK 1.5
+             - use Generics
+             - add new CharSequence write() flavour methods to IOUtils and FileUtils
+             - replace StringBuffer with StringBuilder, where appropriate
+             - add new Reader/Writer methods to ProxyReader and ProxyWriter
+             - Annotate with @Override and @Deprecated
+
+  * [IO-178] New BOMInputStream and ByteOrderMark implementations - to detect and optionally exclude an initial Byte Order mark (BOM)
+  * [IO-197] New BoundedInputStream (copied from from Apache JackRabbit)
+  * [IO-193] New Broken Input and Output streams
+  * [IO-132] New File Listener/Monitor facility
+  * [IO-158] New ReaderInputStream and WriterOutputStream implementations
+  * [IO-139] New StringBuilder Writer implementation
+  * [IO-192] New Tagged Input and Output streams
+  * [IO-177] New Tailer class - simple implementation of the Unix "tail -f" functionality
+  * [IO-162] New XML Stream Reader/Writer implementations (from ROME via plexus-utils)
+
+  * [IO-142] Comparators - add facility to sort file lists/arrays
+  * [IO-186] Comparators - new Composite and Directory File Comparator implementations
+  * [IO-176] DirectoryWalker - add filterDirectoryContents() callback method for filtering directory contents
+  * [IO-210] FileFilter - new Magic Number FileFilter
+  * [IO-221] FileFilterUtils - add methods for suffix and prefix filters which take an IOCase object
+  * [IO-232] FileFilterUtils - add method for name filters which take an IOCase object
+  * [IO-229] FileFilterUtils - add varargs and() and or() methods
+  * [IO-198] FileFilterUtils - add ability to apply file filters to collections and arrays
+  * [IO-156] FilenameUtils - add normalize() and normalizeNoEndSeparator() methods which allow the separator character to be specified
+  * [IO-194] FileSystemUtils - add freeSpaceKb() method with no input arguments
+  * [IO-185] FileSystemUtils - add freeSpaceKb() methods that take a timeout parameter - fixes freeSpaceWindows() blocks
+  * [IO-155] FileUtils - use NIO to copy files
+  * [IO-168] FileUtils - add new isSymlink() method
+  * [IO-219] FileUtils - throw FileExistsException when moving a file or directory if the destination already exists
+  * [IO-234] FileUtils - add Methods for retrieving System User/Temp directories/paths
+  * [IO-208] FileUtils - add timeout (connection and read) support for copyURLToFile() method 
+  * [IO-238] FileUtils - add sizeOf(File) method
+  * [IO-181] LineIterator now implements Iterable
+  * [IO-224] IOUtils - add closeQuietly(Closeable) and closeQuietly(Socket) methods
+  * [IO-203] IOUtils - add skipFully() method for InputStreams
+  * [IO-137] IOUtils and ByteArrayOutputStream - add toBufferedInputStream() method to avoid unnecessary array allocation/copy
+  * [IO-195] Proxy streams/Reader/Writer - provide exception handling methods
+  * [IO-211] Proxy Input/Output streams - add pre/post processing support
+  * [IO-242] Proxy Reader/Writer - add pre/post processing support
+
+
+Bug fixes from 1.4
+------------------
+  * [IO-214] ByteArrayOutputStream - fix inconsistent synchronization of fields
+  * [IO-201] Counting Input/Output streams - fix inconsistent synchronization
+  * [IO-159] FileCleaningTracker - fix remove() never returns null
+  * [IO-220] FileCleaningTracker - fix Vector performs badly under load
+  * [IO-167] FilenameUtils - fix case-insensitive string handling in FilenameUtils and FilesystemUtils
+  * [IO-179] FilenameUtils - fix StringIndexOutOfBounds exception in getPathNoEndSeparator()
+  * [IO-248] FilenameUtils - fix getFullPathNoEndSeparator() returns empty while path is a one level directory
+  * [IO-246] FilenameUtils - fix wildcardMatch gives incorrect results 
+  * [IO-187] FileSystemUtils - fix freeSpaceKb() doesn't work with relative paths on Linux
+  * [IO-160] FileSystemUtils - fix freeSpace() fails on solaris
+  * [IO-209] FileSystemUtils - fix freeSpaceKb() fails to return correct size for a windows mount point
+  * [IO-163] FileUtils - fix toURLs() using deprecated method of conversion to URL
+  * [IO-168] FileUtils - fix Symbolic links followed when deleting directory
+  * [IO-231] FileUtils - fix wrong exception message generated in isFileNewer() method
+  * [IO-207] FileUtils - fix race condition in forceMkdir() method
+  * [IO-217] FileUtils - fix copyDirectoryToDirectory() makes infinite loops
+  * [IO-166] FileUtils - fix URL decoding in toFile(URL)
+  * [IO-190] FileUtils - fix copyDirectory not preserving lastmodified date on sub-directories
+  * [IO-240] FileFilterUtils - ensure cvsFilter and svnFilter are only created once.
+  * [IO-175] IOUtils - fix copyFile() issues with very large files
+  * [IO-191] Improvements from static analysis
+  * [IO-216] LockableFileWriter - delete files quietly when an exception is thrown during initialization
+  * [IO-243] SwappedDataInputStream - fix readBoolean is inverted
+  * [IO-235] Tests - remove unused YellOnFlushAndCloseOutputStream from CopyUtilsTest
+  * [IO-161] Tests - fix FileCleaningTrackerTestCase hanging
+
+
+Documentation changes from 1.4
+------------------------------
+  * [IO-183 FilenameUtils.getExtension() method documentation improvements
+  * [IO-226 FileUtils.byteCountToDisplaySize() documentation corrections
+  * [IO-205 FileUtils.forceMkdir() documentation improvements
+  * [IO-215 FileUtils copy file/directory improve documentation regarding preserving the last modified date
+  * [IO-189 HexDump.dump() method documentation improvements
+  * [IO-171 IOCase document that it assumes there are only two OSes: Windows and Unix
+  * [IO-223 IOUtils.copy() documentation corrections
+  * [IO-247 IOUtils.closeQuietly() improve documentation with examples
+  * [IO-202 NotFileFilter documentation corrections
+  * [IO-206 ProxyInputStream - fix misleading parameter names
+  * [IO-212 ProxyInputStream.skip() documentation corrections
+</source>
+</p>
+</section>
+
+</body>
+</document>
