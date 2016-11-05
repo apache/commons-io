@@ -83,6 +83,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-519" dev="jochen" type="add">
         Add MessageDigestCalculatingInputStream
       </action>
+      <action issue="IO-514" dev="pschumacher" type="remove">
+        Remove org.apache.commons.io.Java7Support
+      </action>
     </release>
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
       <action issue="IO-492" dev="ggregory" type="fix" due-to="Santiago Castro">
