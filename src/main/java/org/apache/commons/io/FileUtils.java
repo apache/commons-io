@@ -34,6 +34,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -3029,61 +3030,9 @@ public class FileUtils {
      * @since 2.0
      */
     public static boolean isSymlink(final File file) throws IOException {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( file );
-        }
-
         if (file == null) {
             throw new NullPointerException("File must not be null");
         }
-        if (FilenameUtils.isSystemWindows()) {
-            return false;
-        }
-        File fileInCanonicalDir = null;
-        if (file.getParent() == null) {
-            fileInCanonicalDir = file;
-        } else {
-            final File canonicalDir = file.getParentFile().getCanonicalFile();
-            fileInCanonicalDir = new File(canonicalDir, file.getName());
-        }
-
-        if (fileInCanonicalDir.getCanonicalFile().equals(fileInCanonicalDir.getAbsoluteFile())) {
-            return isBrokenSymlink(file);
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Determines if the specified file is possibly a broken symbolic link.
-     *
-     * @param file the file to check
-
-     * @return true if the file is a Symbolic Link
-     * @throws IOException if an IO error occurs while checking the file
-     */
-    private static boolean isBrokenSymlink(final File file) throws IOException {
-        // if file exists then if it is a symlink it's not broken
-        if (file.exists()) {
-            return false;
-        }
-        // a broken symlink will show up in the list of files of its parent directory
-        final File canon = file.getCanonicalFile();
-        File parentDir = canon.getParentFile();
-        if (parentDir == null || !parentDir.exists()) {
-            return false;
-        }
-
-        // is it worthwhile to create a FileFilterUtil method for this?
-        // is it worthwhile to create an "identity"  IOFileFilter for this?
-        File[] fileInDir = parentDir.listFiles(
-                new FileFilter() {
-                    public boolean accept(File aFile) {
-                        return aFile.equals(canon);
-                    }
-                }
-        );
-        return fileInDir != null && fileInDir.length > 0;
+        return Files.isSymbolicLink(file.toPath());
     }
 }
