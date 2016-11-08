@@ -46,11 +46,6 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.7" date="Not yet published">
-      <action dev="jochen" type="add">
-        Added the ObservableInputStream, and the MessageDigestCalculatingInputStream.
-      </action>
-    </release>
     <release version="2.6" date="2016-MM-DD" description="New features and bug fixes.">
       <action issue="IO-515" dev="ggregory" type="fix" due-to="Brett Lounsbury, Gary Gregory">
         Allow Specifying Initial Buffer Size of DeferredFileOutputStream.
@@ -76,8 +71,14 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-504" dev="ggregory" type="update" due-to="Christian Schulte">
         Deprecated of all IOUtils.closeQuietly() methods and use try-with-resources internally.
       </action>
-      <action issue="IO-507" dev="ggregory" type="new">
+      <action issue="IO-507" dev="ggregory" type="add">
         Add a ByteOrderFactory class.
+      </action>
+      <action issue="IO-518" dev="jochen" type="add">
+        Add ObservableInputStream
+      </action>
+      <action issue="IO-519" dev="jochen" type="add">
+        Add MessageDigestCalculatingInputStream
       </action>
     </release>
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
