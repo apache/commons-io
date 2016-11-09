@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.TaggedIOException;
 import org.junit.Test;
 

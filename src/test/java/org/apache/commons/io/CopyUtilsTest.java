@@ -29,8 +29,6 @@ import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

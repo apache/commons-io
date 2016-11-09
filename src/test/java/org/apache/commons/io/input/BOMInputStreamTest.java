@@ -26,7 +26,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.ByteOrderMark;
-import org.apache.commons.io.Charsets;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;

@@ -18,8 +18,6 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 
-import junit.framework.TestCase;
-
 import static org.junit.Assert.assertEquals;
 
 public abstract class IOFileFilterAbstractTestCase {

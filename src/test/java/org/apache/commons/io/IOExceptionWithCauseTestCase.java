@@ -19,7 +19,6 @@ package org.apache.commons.io;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

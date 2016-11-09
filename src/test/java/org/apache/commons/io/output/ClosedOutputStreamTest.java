@@ -18,7 +18,6 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;

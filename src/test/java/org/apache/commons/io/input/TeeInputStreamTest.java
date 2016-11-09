@@ -20,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
