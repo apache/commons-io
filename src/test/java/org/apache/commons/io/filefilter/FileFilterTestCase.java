@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.filefilter;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
@@ -27,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -1156,7 +1156,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test
     public void testMagicNumberFileFilterBytes() throws Exception {
         final byte[] classFileMagicNumber =
@@ -1175,7 +1174,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         TestUtils.generateTestData(classFileAStream, (long) 32);
         classFileAStream.close();
 
-        FileUtils.write(xmlFileB, xmlFileContent, Charsets.UTF_8);
+        FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);
         FileUtils.touch(emptyFile);
 
         IOFileFilter filter = new MagicNumberFileFilter(classFileMagicNumber);
@@ -1236,7 +1235,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, dir, false);
     }
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test
     public void testMagicNumberFileFilterString() throws Exception {
         final byte[] classFileMagicNumber =
@@ -1255,7 +1253,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
         TestUtils.generateTestData(classFileAStream, (long) 32);
         classFileAStream.close();
 
-        FileUtils.write(xmlFileB, xmlFileContent, Charsets.UTF_8);
+        FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);
 
         IOFileFilter filter = new MagicNumberFileFilter(xmlMagicNumber);
 
@@ -1270,7 +1268,6 @@ public class FileFilterTestCase extends FileBasedTestCase {
         assertFiltering(filter, dir, false);
     }
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test
     public void testMagicNumberFileFilterStringOffset() throws Exception {
         final String tarMagicNumber = "ustar";
@@ -1283,7 +1280,7 @@ public class FileFilterTestCase extends FileBasedTestCase {
 
         final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
         TestUtils.generateTestData(tarFileAStream, tarMagicNumberOffset);
-        IOUtils.write(tarMagicNumber, tarFileAStream, Charsets.UTF_8);
+        IOUtils.write(tarMagicNumber, tarFileAStream, StandardCharsets.UTF_8);
         tarFileAStream.close();
 
         if (!randomFileB.getParentFile().exists()) {

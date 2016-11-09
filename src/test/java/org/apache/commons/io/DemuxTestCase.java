@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -49,13 +50,12 @@ public class DemuxTestCase {
     private final HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<>();
     private final HashMap<String, Thread> m_threadMap = new HashMap<>();
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     private String getOutput(final String threadName) {
         final ByteArrayOutputStream output =
                 m_outputMap.get(threadName);
         assertNotNull("getOutput()", output);
 
-        return output.toString(Charsets.UTF_8);
+        return output.toString(StandardCharsets.UTF_8);
     }
 
     private String getInput(final String threadName) {

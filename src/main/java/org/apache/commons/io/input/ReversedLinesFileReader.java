@@ -23,6 +23,7 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.Charsets;
 
@@ -91,7 +92,6 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException  if an I/O error occurs
      * @since 2.3
      */
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public ReversedLinesFileReader(final File file, final int blockSize, final Charset encoding) throws IOException {
         this.blockSize = blockSize;
         this.encoding = encoding;
@@ -103,7 +103,7 @@ public class ReversedLinesFileReader implements Closeable {
         if (maxBytesPerChar == 1f) {
             // all one byte encodings are no problem
             byteDecrement = 1;
-        } else if (charset == Charsets.UTF_8) {
+        } else if (charset == StandardCharsets.UTF_8) {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
@@ -114,11 +114,11 @@ public class ReversedLinesFileReader implements Closeable {
                 charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
                 charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
             byteDecrement = 1;
-        } else if (charset == Charsets.UTF_16BE || charset == Charsets.UTF_16LE) {
+        } else if (charset == StandardCharsets.UTF_16BE || charset == StandardCharsets.UTF_16LE) {
             // UTF-16 new line sequences are not allowed as second tuple of four byte sequences,
             // however byte order has to be specified
             byteDecrement = 2;
-        } else if (charset == Charsets.UTF_16) {
+        } else if (charset == StandardCharsets.UTF_16) {
             throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " +
                     "UTF-16LE)");
         } else {

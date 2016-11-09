@@ -28,6 +28,7 @@ import org.junit.Test;
  * 
  * @version $Id: CharEncodingTest.java 1298985 2012-03-09 19:12:49Z ggregory $
  */
+@SuppressWarnings("deprecation") // testing deprecated code
 public class CharsetsTestCase {
 
     @Test
@@ -44,7 +45,6 @@ public class CharsetsTestCase {
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testIso8859_1() {
         Assert.assertEquals("ISO-8859-1", Charsets.ISO_8859_1.name());
     }
@@ -58,31 +58,26 @@ public class CharsetsTestCase {
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testUsAscii() {
         Assert.assertEquals("US-ASCII", Charsets.US_ASCII.name());
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testUtf16() {
         Assert.assertEquals("UTF-16", Charsets.UTF_16.name());
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testUtf16Be() {
         Assert.assertEquals("UTF-16BE", Charsets.UTF_16BE.name());
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testUtf16Le() {
         Assert.assertEquals("UTF-16LE", Charsets.UTF_16LE.name());
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testUtf8() {
         Assert.assertEquals("UTF-8", Charsets.UTF_8.name());
     }

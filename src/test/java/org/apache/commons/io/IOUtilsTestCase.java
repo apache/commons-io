@@ -28,6 +28,7 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.Selector;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -212,26 +213,25 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         }
     }
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test public void testContentEquals_InputStream_InputStream() throws Exception {
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(Charsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8));
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         assertTrue(IOUtils
-                .contentEquals(new ByteArrayInputStream("".getBytes(Charsets.UTF_8)), new ByteArrayInputStream("".getBytes(Charsets.UTF_8))));
-        assertTrue(IOUtils.contentEquals(new BufferedInputStream(new ByteArrayInputStream("".getBytes(Charsets.UTF_8))), new BufferedInputStream(
-                new ByteArrayInputStream("".getBytes(Charsets.UTF_8)))));
-        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8)),
-                new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8))));
-        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABCD".getBytes(Charsets.UTF_8)),
-                new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8))));
-        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(Charsets.UTF_8)),
-                new ByteArrayInputStream("ABCD".getBytes(Charsets.UTF_8))));
+                .contentEquals(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)), new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8))));
+        assertTrue(IOUtils.contentEquals(new BufferedInputStream(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8))), new BufferedInputStream(
+                new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)))));
+        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
+                new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8)),
+                new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
+                new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8))));
     }
 
     @Test public void testContentEquals_Reader_Reader() throws Exception {

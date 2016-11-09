@@ -18,13 +18,13 @@ package org.apache.commons.io.input;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -110,7 +110,6 @@ public class TailerTest extends FileBasedTestCase {
         listener.clear();
     }
 
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test
     public void testMultiByteBreak() throws Exception {
         System.out.println("testMultiByteBreak() Default charset: "+Charset.defaultCharset().displayName());
@@ -122,7 +121,7 @@ public class TailerTest extends FileBasedTestCase {
         final String osname = System.getProperty("os.name");
         final boolean isWindows = osname.startsWith("Windows");
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
-        final Charset charsetUTF8 = Charsets.UTF_8;
+        final Charset charsetUTF8 = StandardCharsets.UTF_8;
         tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, 4096);
         final Thread thread = new Thread(tailer);
         thread.start();

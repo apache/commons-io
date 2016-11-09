@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
@@ -440,8 +441,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf16Be() throws Exception {
-        @SuppressWarnings("deprecation") // unavoidable until Java 7
-        final byte[] data = "ABC".getBytes(Charsets.UTF_16BE);
+        final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16BE);
         final BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE);
         assertEquals(0, in.read());
         assertEquals('A', in.read());
@@ -464,8 +464,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf16Le() throws Exception {
-        @SuppressWarnings("deprecation") // unavoidable until Java 7
-        final byte[] data = "ABC".getBytes(Charsets.UTF_16LE);
+        final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16LE);
         final BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE);
         assertEquals('A', in.read());
         assertEquals(0, in.read());
@@ -548,8 +547,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf8() throws Exception {
-        @SuppressWarnings("deprecation") // unavoidable until Java 7
-        final byte[] data = "ABC".getBytes(Charsets.UTF_8);
+        final byte[] data = "ABC".getBytes(StandardCharsets.UTF_8);
         final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), ByteOrderMark.UTF_8);
         assertEquals('A', in.read());
         assertEquals('B', in.read());
@@ -622,17 +620,15 @@ public class BOMInputStreamTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testReadXmlWithBOMUtf16Be() throws Exception {
-        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(Charsets.UTF_16BE);
+        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(StandardCharsets.UTF_16BE);
         parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
         parseXml(createUtf16BeDataStream(data, true));
     }
 
     @Test
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     public void testReadXmlWithBOMUtf16Le() throws Exception {
-        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(Charsets.UTF_16LE);
+        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(StandardCharsets.UTF_16LE);
         parseXml(new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE));
         parseXml(createUtf16LeDataStream(data, true));
     }
@@ -657,8 +653,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf8() throws Exception {
-        @SuppressWarnings("deprecation") // unavoidable until Java 7
-        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(Charsets.UTF_8);
+        final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(StandardCharsets.UTF_8);
         parseXml(new BOMInputStream(createUtf8DataStream(data, true)));
         parseXml(createUtf8DataStream(data, true));
     }

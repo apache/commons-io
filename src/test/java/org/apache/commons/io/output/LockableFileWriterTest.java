@@ -19,9 +19,9 @@ package org.apache.commons.io.output;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.FileBasedTestCase;
@@ -109,7 +109,6 @@ public class LockableFileWriterTest extends FileBasedTestCase {
     }
 
     //-----------------------------------------------------------------------
-    @SuppressWarnings("deprecation") // unavoidable until Java 7
     @Test public void testAlternateLockDir() throws IOException {
         LockableFileWriter lfw1 = null;
         LockableFileWriter lfw2 = null;
@@ -121,7 +120,7 @@ public class LockableFileWriterTest extends FileBasedTestCase {
 
             // try to open a second writer
             try {
-                lfw2 = new LockableFileWriter(file, Charsets.UTF_8, true, altLockDir.getAbsolutePath());
+                lfw2 = new LockableFileWriter(file, StandardCharsets.UTF_8, true, altLockDir.getAbsolutePath());
                 fail("Somehow able to open a locked file. ");
             } catch(final IOException ioe) {
                 final String msg = ioe.getMessage();
