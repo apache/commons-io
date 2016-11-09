@@ -41,7 +41,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test FileUtils for correctness.
  *
- * @version $Id$
  * @see FileUtils
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods

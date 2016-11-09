@@ -28,7 +28,6 @@ import java.io.IOException;
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
  *
- * @version $Id$
  * @since 2.0
  */
 public class XmlStreamReaderException extends IOException {

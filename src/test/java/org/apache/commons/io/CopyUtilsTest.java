@@ -39,7 +39,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * JUnit tests for CopyUtils.
  *
- * @version $Id$
  * @see CopyUtils
  */
 public class CopyUtilsTest extends FileBasedTestCase {

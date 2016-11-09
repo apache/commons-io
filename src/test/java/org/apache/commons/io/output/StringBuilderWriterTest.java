@@ -28,7 +28,6 @@ import static org.junit.Assert.fail;
 /**
  * Test case for {@link StringBuilderWriter}.
  *
- * @version $Id$
  */
 public class StringBuilderWriterTest {
     private static final char[] FOOBAR_CHARS = new char[] {'F', 'o', 'o', 'B', 'a', 'r'};

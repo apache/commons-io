@@ -38,7 +38,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test FilenameUtils for correctness.
  *
- * @version $Id$
  * @see FilenameUtils
  */
 public class FilenameUtilsTestCase extends FileBasedTestCase {

@@ -29,7 +29,6 @@ import java.lang.reflect.Proxy;
  * <p>
  * This is useful in dynamic container environments.
  *
- * @version $Id$
  * @since 1.1
  */
 public class ClassLoaderObjectInputStream extends ObjectInputStream {

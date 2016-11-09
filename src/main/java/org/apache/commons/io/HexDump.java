@@ -28,7 +28,6 @@ import java.nio.charset.Charset;
  * <p>
  * Origin of code: POI.
  *
- * @version $Id$
  */
 public class HexDump {
 

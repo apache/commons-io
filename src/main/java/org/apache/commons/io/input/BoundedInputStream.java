@@ -32,7 +32,6 @@ import java.io.InputStream;
  * ServletInputStream's header, will stop it blocking, providing it's been sent
  * with a correct content length.
  *
- * @version $Id$
  * @since 2.0
  */
 public class BoundedInputStream extends InputStream {

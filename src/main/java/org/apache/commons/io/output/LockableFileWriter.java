@@ -44,7 +44,6 @@ import org.apache.commons.io.FileUtils;
  * <code>java.io.tmpdir</code>.
  * The encoding may also be specified, and defaults to the platform default.
  *
- * @version $Id$
  */
 public class LockableFileWriter extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be

@@ -40,7 +40,6 @@ import java.util.Comparator;
  * </pre>
  * <p>
  *
- * @version $Id$
  * @since 2.0
  */
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {

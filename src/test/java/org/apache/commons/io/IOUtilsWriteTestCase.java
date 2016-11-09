@@ -35,7 +35,6 @@ import static org.junit.Assert.fail;
 /**
  * JUnit tests for IOUtils write methods.
  *
- * @version $Id$
  * @see IOUtils
  */
 @SuppressWarnings("deprecation") // includes tests for deprecated methods

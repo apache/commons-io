@@ -25,7 +25,6 @@ import java.util.Set;
 /**
  * Extends {@link Selector} with no-ops for testing.
  *
- * @version $Id$
  */
 public class SelectorAdapter extends Selector {
 

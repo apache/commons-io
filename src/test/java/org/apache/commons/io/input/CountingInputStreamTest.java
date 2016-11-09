@@ -30,7 +30,6 @@ import static org.junit.Assert.fail;
 /**
  * Tests the CountingInputStream.
  *
- * @version $Id$
  */
 public class CountingInputStreamTest {
 

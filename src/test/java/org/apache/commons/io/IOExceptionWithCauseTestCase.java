@@ -26,8 +26,7 @@ import static org.junit.Assert.assertSame;
 
 /**
  * Tests IOExceptionWithCause
- * 
- * @version $Id$
+ *
  */
 public class IOExceptionWithCauseTestCase {
 

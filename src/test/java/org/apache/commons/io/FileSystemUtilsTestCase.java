@@ -29,7 +29,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test FileSystemUtils.
  *
- * @version $Id$
  */
 public class FileSystemUtilsTestCase extends FileBasedTestCase {
 

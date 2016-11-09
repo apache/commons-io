@@ -41,7 +41,6 @@ import javax.xml.parsers.ParserConfigurationException;
 /**
  * Test case for {@link BOMInputStream}.
  *
- * @version $Id$
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class BOMInputStreamTest {

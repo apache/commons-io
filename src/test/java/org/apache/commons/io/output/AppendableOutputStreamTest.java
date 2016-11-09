@@ -24,7 +24,6 @@ import org.junit.Test;
 /**
  * Unit tests for {@link AppendableOutputStream}.
  *
- * @version $Id$
  */
 public class AppendableOutputStreamTest {
 

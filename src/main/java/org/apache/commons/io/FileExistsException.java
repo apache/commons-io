@@ -21,8 +21,7 @@ import java.io.IOException;
 
 /**
  * Indicates that a file already exists.
- * 
- * @version $Id$
+ *
  * @since 2.0
  */
 public class FileExistsException extends IOException {

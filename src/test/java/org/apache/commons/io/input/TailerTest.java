@@ -42,7 +42,6 @@ import static org.junit.Assert.fail;
 /**
  * Tests for {@link Tailer}.
  *
- * @version $Id$
  */
 public class TailerTest extends FileBasedTestCase {
 

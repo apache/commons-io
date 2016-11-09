@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests for {@link BoundedInputStream}.
  *
- * @version $Id$
  */
 public class BoundedInputStreamTest {
 

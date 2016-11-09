@@ -59,7 +59,6 @@ import org.apache.commons.io.ByteOrderMark;
  * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
  * Apache License 2.0.
  *
- * @version $Id$
  * @see org.apache.commons.io.output.XmlStreamWriter
  * @since 2.0
  */

@@ -33,7 +33,6 @@ import static org.junit.Assert.fail;
 /**
  * Test cases for FileUtils.cleanDirectory() method.
  *
- * @version $Id$
  */
 public class FileUtilsCleanDirectoryTestCase extends FileBasedTestCase {
     final File top = getLocalTestDirectory();

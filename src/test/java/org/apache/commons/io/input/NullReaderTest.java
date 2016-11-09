@@ -30,7 +30,6 @@ import static org.junit.Assert.fail;
 /**
  * JUnit Test Case for {@link NullReader}.
  *
- * @version $Id$
  */
 public class NullReaderTest {
 

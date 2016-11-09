@@ -22,7 +22,6 @@ import java.io.OutputStream;
 /**
  * Forwards data to a stream that has been associated with this thread.
  *
- * @version $Id$
  */
 public class DemuxOutputStream extends OutputStream {
     private final InheritableThreadLocal<OutputStream> outputStreamThreadLocal = new InheritableThreadLocal<>();

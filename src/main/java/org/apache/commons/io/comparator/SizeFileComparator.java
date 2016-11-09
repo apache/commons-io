@@ -46,7 +46,6 @@ import org.apache.commons.io.FileUtils;
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
  * <code>sumDirectoryContents</code> is {@code true}.
  *
- * @version $Id$
  * @since 1.4
  */
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {

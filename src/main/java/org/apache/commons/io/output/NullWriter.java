@@ -24,7 +24,6 @@ import java.io.Writer;
  * This <code>Writer</code> has no destination (file/socket etc.) and all
  * characters written to it are ignored and lost.
  *
- * @version $Id$
  */
 public class NullWriter extends Writer {
 

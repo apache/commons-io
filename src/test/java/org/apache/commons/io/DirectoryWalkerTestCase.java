@@ -35,7 +35,6 @@ import org.junit.Test;
 /**
  * This is used to test DirectoryWalker for correctness.
  *
- * @version $Id$
  * @see DirectoryWalker
  *
  */

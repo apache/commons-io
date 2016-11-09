@@ -27,8 +27,7 @@ import java.io.Writer;
  * to increase reusability, because FilterWriter changes the 
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
- * 
- * @version $Id$
+ *
  */
 public class ProxyWriter extends FilterWriter {
 

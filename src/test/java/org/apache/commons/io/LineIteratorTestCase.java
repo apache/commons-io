@@ -42,7 +42,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test LineIterator for correctness.
  *
- * @version $Id$
  */
 public class LineIteratorTestCase extends FileBasedTestCase {
 

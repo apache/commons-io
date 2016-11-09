@@ -39,7 +39,6 @@ import org.apache.commons.io.IOCase;
  * }
  * </pre>
  *
- * @version $Id$
  * @since 1.4
  */
 public class RegexFileFilter extends AbstractFileFilter implements Serializable {

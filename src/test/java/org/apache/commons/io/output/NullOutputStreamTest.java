@@ -26,7 +26,6 @@ import java.io.IOException;
  * Really not a lot to do here, but checking that no 
  * Exceptions are thrown. 
  *
- * @version $Id$
  */
 
 public class NullOutputStreamTest {

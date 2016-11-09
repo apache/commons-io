@@ -75,7 +75,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
  *
- * @version $Id$
  */
 public class FileUtils {
 

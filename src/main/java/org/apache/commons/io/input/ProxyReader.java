@@ -31,8 +31,7 @@ import java.nio.CharBuffer;
  * It is an alternative base class to FilterReader
  * to increase reusability, because FilterReader changes the 
  * methods being called, such as read(char[]) to read(char[], int, int).
- * 
- * @version $Id$
+ *
  */
 public abstract class ProxyReader extends FilterReader {
 

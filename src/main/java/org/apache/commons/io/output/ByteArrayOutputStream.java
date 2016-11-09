@@ -52,7 +52,6 @@ import org.apache.commons.io.input.ClosedInputStream;
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
  *
- * @version $Id$
  */
 public class ByteArrayOutputStream extends OutputStream {
 

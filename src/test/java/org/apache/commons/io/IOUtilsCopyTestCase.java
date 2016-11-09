@@ -36,7 +36,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * JUnit tests for IOUtils copy methods.
  *
- * @version $Id$
  * @see IOUtils
  */
 public class IOUtilsCopyTestCase extends FileBasedTestCase {

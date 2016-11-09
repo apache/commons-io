@@ -32,7 +32,6 @@ import java.io.File;
  * {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
  *
- * @version $Id$
  * @deprecated Use {@link FileCleaningTracker}
  */
 @Deprecated

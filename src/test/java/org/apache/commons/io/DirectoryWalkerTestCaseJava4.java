@@ -37,7 +37,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test DirectoryWalker for correctness when using Java4 (i.e. no generics).
  *
- * @version $Id$
  * @see DirectoryWalker
  */
 @SuppressWarnings({"unchecked", "rawtypes"}) // Java4

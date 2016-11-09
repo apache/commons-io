@@ -24,7 +24,6 @@ import java.io.OutputStream;
  * command. It allows a stream to be branched off so there 
  * are now two streams.
  *
- * @version $Id$
  */
 public class TeeOutputStream extends ProxyOutputStream {
 

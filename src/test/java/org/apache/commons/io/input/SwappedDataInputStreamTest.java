@@ -32,7 +32,6 @@ import static org.junit.Assert.fail;
  * Test for the SwappedDataInputStream. This also 
  * effectively tests the underlying EndianUtils Stream methods.
  *
- * @version $Id$
  */
 
 public class SwappedDataInputStreamTest {

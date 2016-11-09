@@ -40,7 +40,6 @@ import static org.junit.Assert.fail;
 /**
  * Tests that the encoding is actually set and used.
  *
- * @version $Id$
  */
 public class FileWriterWithEncodingTest extends FileBasedTestCase {
 

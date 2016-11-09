@@ -28,7 +28,6 @@ import java.io.InputStream;
  * that accept input streams and acting as a sentinel value instead of a
  * {@code null} input stream.
  *
- * @version $Id$
  * @since 1.4
  */
 public class ClosedInputStream extends InputStream {

@@ -27,7 +27,6 @@ import static org.junit.Assert.fail;
 /**
  * Test {@link ProxyReader}. 
  *
- * @version $Id$
  */
 public class ProxyReaderTest {
 

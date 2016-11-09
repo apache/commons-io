@@ -32,7 +32,6 @@ import static org.junit.Assert.fail;
 /**
  * Test for {@link ByteOrderMark}.
  *
- * @version $Id$
  */
 public class ByteOrderMarkTestCase  {
 

@@ -36,7 +36,6 @@ package org.apache.commons.io;
  *       }
  * </pre>
  *
- * @version  $Id$
  */
 class ThreadMonitor implements Runnable {
 

@@ -34,7 +34,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test IOCase for correctness.
  *
- * @version $Id$
  */
 public class IOCaseTestCase extends FileBasedTestCase {
 

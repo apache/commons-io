@@ -25,8 +25,7 @@ import org.junit.Test;
 
 /**
  * Tests {@link Charsets}.
- * 
- * @version $Id: CharEncodingTest.java 1298985 2012-03-09 19:12:49Z ggregory $
+ *
  */
 @SuppressWarnings("deprecation") // testing deprecated code
 public class CharsetsTestCase {

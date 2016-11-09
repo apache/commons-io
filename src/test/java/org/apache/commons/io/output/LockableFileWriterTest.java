@@ -37,7 +37,6 @@ import static org.junit.Assert.fail;
  * Tests that files really lock, although no writing is done as
  * the locking is tested only on construction.
  *
- * @version $Id$
  */
 public class LockableFileWriterTest extends FileBasedTestCase {
 

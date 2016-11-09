@@ -95,7 +95,6 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * <p>
  * Origin of code: Excalibur.
  *
- * @version $Id$
  */
 public class IOUtils {
     // NOTE: This class is focused on InputStream, OutputStream, Reader and

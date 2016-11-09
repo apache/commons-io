@@ -35,7 +35,6 @@ import static org.junit.Assert.fail;
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
  *
- * @version $Id$
  * @see FileCleaningTracker
  */
 public class FileCleaningTrackerTestCase extends FileBasedTestCase {

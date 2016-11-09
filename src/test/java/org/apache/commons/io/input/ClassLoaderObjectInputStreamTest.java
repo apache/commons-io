@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the CountingInputStream.
  *
- * @version $Id$
  */
 public class ClassLoaderObjectInputStreamTest {
 

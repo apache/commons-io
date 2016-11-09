@@ -33,7 +33,6 @@ import java.io.OutputStream;
  * called on this proxy. It is configurable whether the associated output
  * stream will also closed.
  *
- * @version $Id$
  * @since 1.4
  * @see ObservableInputStream 
  */

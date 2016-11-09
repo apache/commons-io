@@ -34,7 +34,6 @@ import static org.junit.Assert.fail;
 /**
  * Test for FileDeleteStrategy.
  *
- * @version $Id$
  * @see FileDeleteStrategy
  */
 public class FileDeleteStrategyTestCase extends FileBasedTestCase {

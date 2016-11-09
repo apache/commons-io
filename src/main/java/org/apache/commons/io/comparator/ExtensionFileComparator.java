@@ -48,7 +48,6 @@ import org.apache.commons.io.IOCase;
  * </pre>
  * <p>
  *
- * @version $Id$
  * @since 1.4
  */
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {

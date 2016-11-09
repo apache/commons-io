@@ -25,7 +25,6 @@ import java.io.InputStream;
  * Data written to this stream is forwarded to a stream that has been associated
  * with this thread.
  *
- * @version $Id$
  */
 public class DemuxInputStream
     extends InputStream

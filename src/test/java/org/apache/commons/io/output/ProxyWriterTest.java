@@ -29,7 +29,6 @@ import org.junit.Test;
 /**
  * Test {@link ProxyWriter}.
  *
- * @version $Id$
  */
 public class ProxyWriterTest {
 

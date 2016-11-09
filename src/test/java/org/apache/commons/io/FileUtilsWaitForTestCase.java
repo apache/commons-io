@@ -27,7 +27,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * This is used to test FileUtils.waitFor() method for correctness.
  *
- * @version $Id$
  * @see FileUtils
  */
 public class FileUtilsWaitForTestCase {

@@ -37,7 +37,6 @@ import org.junit.runners.Parameterized.Parameters;
 /**
  * Unit tests for the <code>DeferredFileOutputStream</code> class.
  *
- * @version $Id$
  */
 @RunWith(value=Parameterized.class)
 public class DeferredFileOutputStreamTest
