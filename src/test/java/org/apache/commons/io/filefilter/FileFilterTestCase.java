@@ -703,12 +703,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output2, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output2);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
@@ -718,12 +715,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output1, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -733,12 +727,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -761,12 +752,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output2, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output2);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
@@ -776,12 +764,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output1, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -791,12 +776,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -812,12 +794,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + oldFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(oldFile));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(oldFile))) {
             TestUtils.generateTestData(output1, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
 
         do {
@@ -830,12 +809,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
                 throw new IOException("Cannot create file " + reference
                         + " as the parent directory does not exist");
             }
-            final BufferedOutputStream output =
-                    new BufferedOutputStream(new FileOutputStream(reference));
-            try {
+            try (final BufferedOutputStream output =
+                    new BufferedOutputStream(new FileOutputStream(reference))) {
                 TestUtils.generateTestData(output, (long) 0);
-            } finally {
-                IOUtils.closeQuietly(output);
             }
         } while( oldFile.lastModified() == reference.lastModified() );
 
@@ -852,12 +828,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
                 throw new IOException("Cannot create file " + newFile
                         + " as the parent directory does not exist");
             }
-            final BufferedOutputStream output =
-                    new BufferedOutputStream(new FileOutputStream(newFile));
-            try {
+            try (final BufferedOutputStream output =
+                    new BufferedOutputStream(new FileOutputStream(newFile))) {
                 TestUtils.generateTestData(output, (long) 0);
-            } finally {
-                IOUtils.closeQuietly(output);
             }
         } while( reference.lastModified() == newFile.lastModified() );
 
@@ -898,24 +871,18 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + smallFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(smallFile));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(smallFile))) {
             TestUtils.generateTestData(output1, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         final File largeFile = new File(getTestDirectory(), "large.txt");
         if (!largeFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(largeFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(largeFile))){
             TestUtils.generateTestData(output, (long) 128);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         final IOFileFilter filter1 = FileFilterUtils.sizeFileFilter(64);
         final IOFileFilter filter2 = FileFilterUtils.sizeFileFilter(64, true);
@@ -971,12 +938,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + readOnlyFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(readOnlyFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
             TestUtils.generateTestData(output, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         readOnlyFile.setReadOnly();
         assertFiltering(CanReadFileFilter.CAN_READ,  readOnlyFile, true);
@@ -992,12 +956,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + readOnlyFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(readOnlyFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
             TestUtils.generateTestData(output, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         readOnlyFile.setReadOnly();
         assertFiltering(CanWriteFileFilter.CAN_WRITE,    getTestDirectory(), true);
@@ -1022,12 +983,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + emptyFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(emptyFile));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(emptyFile))){
             TestUtils.generateTestData(output1, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         assertFiltering(EmptyFileFilter.EMPTY, emptyFile, true);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, emptyFile, false);
@@ -1042,12 +1000,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + notEmptyFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(notEmptyFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(notEmptyFile))){
             TestUtils.generateTestData(output, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         assertFiltering(EmptyFileFilter.EMPTY, notEmptyFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, notEmptyFile, true);
@@ -1078,23 +1033,17 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + fileA
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(fileA));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(fileA))) {
             TestUtils.generateTestData(output1, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!fileB.getParentFile().exists()) {
             throw new IOException("Cannot create file " + fileB
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(fileB));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(fileB))) {
             TestUtils.generateTestData(output, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         assertFiltering(filter, fileA, false);
@@ -1128,23 +1077,17 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + fileA
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(fileA));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(fileA))){
             TestUtils.generateTestData(output1, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!fileB.getParentFile().exists()) {
             throw new IOException("Cannot create file " + fileB
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(fileB));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(fileB))){
             TestUtils.generateTestData(output, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         assertFiltering(filter, fileA, false);
@@ -1212,12 +1155,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + randomFileB
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(randomFileB));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(randomFileB))) {
             TestUtils.generateTestData(output, 2 * tarMagicNumberOffset);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         IOFileFilter filter =
@@ -1287,12 +1227,9 @@ public class FileFilterTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + randomFileB
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(randomFileB));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(randomFileB))) {
             TestUtils.generateTestData(output, 2 * tarMagicNumberOffset);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         IOFileFilter filter =

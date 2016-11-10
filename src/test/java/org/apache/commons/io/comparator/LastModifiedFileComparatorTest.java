@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.comparator;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Before;
 
@@ -40,12 +39,9 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
             throw new IOException("Cannot create file " + olderFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(olderFile));
-        try {
+        try (final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(olderFile))) {
             TestUtils.generateTestData(output2, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output2);
         }
 
         final File equalFile = new File(dir, "equal.txt");
@@ -53,12 +49,9 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
             throw new IOException("Cannot create file " + equalFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(equalFile));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(equalFile))) {
             TestUtils.generateTestData(output1, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         do {
             TestUtils.sleepQuietly(300);
@@ -70,12 +63,9 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
             throw new IOException("Cannot create file " + newerFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(newerFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(newerFile))){
             TestUtils.generateTestData(output, (long) 0);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         do {
             TestUtils.sleepQuietly(300);

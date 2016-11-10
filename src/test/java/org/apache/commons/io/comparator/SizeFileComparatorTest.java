@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.comparator;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,34 +56,25 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
             throw new IOException("Cannot create file " + smallerFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(smallerFile));
-        try {
+        try (final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(smallerFile))) {
             TestUtils.generateTestData(output2, (long) 32);
-        } finally {
-            IOUtils.closeQuietly(output2);
         }
         if (!equalFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(equalFile));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(equalFile))) {
             TestUtils.generateTestData(output1, (long) 48);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!largerFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + largerFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(largerFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(largerFile))) {
             TestUtils.generateTestData(output, (long) 64);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         equalFile1 = equalFile;
         equalFile2 = equalFile;

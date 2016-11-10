@@ -49,12 +49,9 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile))) {
             TestUtils.generateTestData(output, (long) 16);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         assertTrue(subDir.exists());
@@ -90,12 +87,9 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile))) {
             TestUtils.generateTestData(output, (long) 16);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         assertTrue(subDir.exists());
@@ -126,12 +120,9 @@ public class FileDeleteStrategyTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + subFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(subFile))) {
             TestUtils.generateTestData(output, (long) 16);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         assertTrue(subDir.exists());

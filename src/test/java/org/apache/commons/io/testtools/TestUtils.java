@@ -42,12 +42,9 @@ public abstract class TestUtils {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new java.io.FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new java.io.FileOutputStream(file))) {
             generateTestData(output, size);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
     }
 

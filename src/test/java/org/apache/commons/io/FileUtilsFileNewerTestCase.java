@@ -56,23 +56,17 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + m_testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(m_testFile1));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(m_testFile1))) {
             TestUtils.generateTestData(output1, (long) FILE1_SIZE);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!m_testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + m_testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(m_testFile2));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(m_testFile2))) {
             TestUtils.generateTestData(output, (long) FILE2_SIZE);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
     }
 

@@ -148,12 +148,9 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(testFile))) {
             TestUtils.generateTestData(output, (long) 100);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());
