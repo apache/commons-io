@@ -22,3 +22,6 @@
 *.css    text
 *.js     text
 *.sql    text
+
+# Exclude test files for line-ending related tests from normalization (IO-520)
+*.dat binary
