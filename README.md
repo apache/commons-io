@@ -95,8 +95,8 @@ You like Apache Commons IO? Then [donate back to the ASF](https://www.apache.org
 Additional Resources
 --------------------
 
-+ [Apache Commons Homepage](https://commons.apache.org/)
-+ [Apache Bugtracker (JIRA)](https://issues.apache.org/jira/)
++ [Apache Commons IO Homepage](https://commons.apache.org/proper/commons-io/)
++ [Apache Commons IO Bugtracker (JIRA)](https://issues.apache.org/jira/browse/IO)
 + [Apache Commons Twitter Account](https://twitter.com/ApacheCommons)
 + #apachecommons IRC channel on freenode.org
 
