@@ -185,8 +185,9 @@ public class BoundedReaderTest
     @Test(timeout = 5000)
     public void testReadBytesEOF() throws IOException {
         BoundedReader mr = new BoundedReader( sr, 3 );
-        BufferedReader br = new BufferedReader( mr );
-        br.readLine();
-        br.readLine();
+        try ( BufferedReader br = new BufferedReader( mr ) ) {
+            br.readLine();
+            br.readLine();
+        }
     }
 }

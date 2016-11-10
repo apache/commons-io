@@ -38,10 +38,12 @@ public class MessageDigestCalculatingInputStreamTest {
             final byte[] buffer = generateRandomByteStream(i);
             final MessageDigest md5Sum = MessageDigest.getInstance("MD5");
             final byte[] expect = md5Sum.digest(buffer);
-            final MessageDigestCalculatingInputStream md5InputStream = new MessageDigestCalculatingInputStream(new ByteArrayInputStream(buffer));
-            md5InputStream.consume();
-            final byte[] got = md5InputStream.getMessageDigest().digest();
-            assertArrayEquals(expect, got);
+            try (final MessageDigestCalculatingInputStream md5InputStream =
+                    new MessageDigestCalculatingInputStream(new ByteArrayInputStream(buffer))) {
+                md5InputStream.consume();
+                final byte[] got = md5InputStream.getMessageDigest().digest();
+                assertArrayEquals(expect, got);
+            }
         }
     }
 

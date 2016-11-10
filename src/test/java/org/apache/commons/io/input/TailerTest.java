@@ -63,12 +63,12 @@ public class TailerTest extends FileBasedTestCase {
 
         final File file = new File(getTestDirectory(), "testLongFile.txt");
         createFile(file, 0);
-        final Writer writer = new FileWriter(file, true);
-        for (int i = 0; i < 100000; i++) {
-            writer.write("LineLineLineLineLineLineLineLineLineLine\n");
+        try (final Writer writer = new FileWriter(file, true)) {
+            for (int i = 0; i < 100000; i++) {
+                writer.write("LineLineLineLineLineLineLineLineLineLine\n");
+            }
+            writer.write("SBTOURIST\n");
         }
-        writer.write("SBTOURIST\n");
-        IOUtils.closeQuietly(writer);
 
         final TestTailerListener listener = new TestTailerListener();
         tailer = new Tailer(file, listener, delay, false);
