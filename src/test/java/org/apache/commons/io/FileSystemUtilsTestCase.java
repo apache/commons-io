@@ -34,6 +34,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
 
     //-----------------------------------------------------------------------
     @Test
+    @SuppressWarnings("deprecation") // testing decrecated code
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
@@ -52,22 +53,16 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
             }
             final Process proc = Runtime.getRuntime().exec(cmd);
             boolean kilobyteBlock = true;
-            BufferedReader r = null;
-            try {
-                r = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(proc.getInputStream()))){
                 final String line = r.readLine();
                 Assert.assertNotNull("Unexpected null line", line);
                 if (line.contains("512")) {
                     kilobyteBlock = false;
                 }
-            } finally {
-                IOUtils.closeQuietly(r);
             }
 
             // now perform the test
-            @SuppressWarnings("deprecation")
-            final
-            long free = FileSystemUtils.freeSpace("/");
+            final long free = FileSystemUtils.freeSpace("/");
             final long kb = FileSystemUtils.freeSpaceKb("/");
             if (kilobyteBlock) {
                 assertEquals(free, kb, 256d);
@@ -75,9 +70,7 @@ public class FileSystemUtilsTestCase extends FileBasedTestCase {
                 assertEquals(free / 2d, kb, 256d);
             }
         } else {
-            @SuppressWarnings("deprecation")
-            final
-            long bytes = FileSystemUtils.freeSpace("");
+            final long bytes = FileSystemUtils.freeSpace("");
             final long kb = FileSystemUtils.freeSpaceKb("");
             assertEquals((double) bytes / 1024, kb, 256d);
         }
