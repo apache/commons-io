@@ -41,6 +41,7 @@ public class MoreComplexObjectTest extends ClosingBase {
     private InputStream inputStream;
     private MoreComplexObject original;
     
+    @Override
     @Before
     public void setup() throws IOException {
         original = new MoreComplexObject();

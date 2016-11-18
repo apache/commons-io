@@ -53,6 +53,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
+    @Override
     public boolean readBoolean()
         throws IOException, EOFException
     {
@@ -65,6 +66,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
+    @Override
     public byte readByte()
         throws IOException, EOFException
     {
@@ -77,6 +79,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
+    @Override
     public char readChar()
         throws IOException, EOFException
     {
@@ -89,6 +92,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
+    @Override
     public double readDouble()
         throws IOException, EOFException
     {
@@ -101,6 +105,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
      */
+    @Override
     public float readFloat()
         throws IOException, EOFException
     {
@@ -114,6 +119,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void readFully( final byte[] data )
         throws IOException, EOFException
     {
@@ -130,6 +136,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void readFully( final byte[] data, final int offset, final int length )
         throws IOException, EOFException
     {
@@ -155,6 +162,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int readInt()
         throws IOException, EOFException
     {
@@ -167,6 +175,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public String readLine()
         throws IOException, EOFException
     {
@@ -180,6 +189,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public long readLong()
         throws IOException, EOFException
     {
@@ -192,6 +202,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public short readShort()
         throws IOException, EOFException
     {
@@ -204,6 +215,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int readUnsignedByte()
         throws IOException, EOFException
     {
@@ -216,6 +228,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int readUnsignedShort()
         throws IOException, EOFException
     {
@@ -228,6 +241,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public String readUTF()
         throws IOException, EOFException
     {
@@ -242,6 +256,7 @@ public class SwappedDataInputStream extends ProxyInputStream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public int skipBytes( final int count )
         throws IOException, EOFException
     {

@@ -104,6 +104,7 @@ public class ExtensionFileComparator extends AbstractFileComparator implements S
      * is greater than the second file.
      * 
      */
+    @Override
     public int compare(final File file1, final File file2) {
         final String suffix1 = FilenameUtils.getExtension(file1.getName());
         final String suffix2 = FilenameUtils.getExtension(file2.getName());

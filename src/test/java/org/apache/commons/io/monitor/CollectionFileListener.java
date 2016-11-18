@@ -50,6 +50,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      *
      * @param observer The file system observer
      */
+    @Override
     public void onStart(final FileAlterationObserver observer) {
         if (clearOnStart) {
             clear();
@@ -127,6 +128,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param directory The directory created
      */
+    @Override
     public void onDirectoryCreate(final File directory) {
         createdDirectories.add(directory);
     }
@@ -136,6 +138,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param directory The directory changed
      */
+    @Override
     public void onDirectoryChange(final File directory) {
         changedDirectories.add(directory);
     }
@@ -145,6 +148,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param directory The directory deleted
      */
+    @Override
     public void onDirectoryDelete(final File directory) {
         deletedDirectories.add(directory);
     }
@@ -154,6 +158,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param file The file created
      */
+    @Override
     public void onFileCreate(final File file) {
         createdFiles.add(file);
     }
@@ -163,6 +168,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param file The file changed
      */
+    @Override
     public void onFileChange(final File file) {
         changedFiles.add(file);
     }
@@ -172,6 +178,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * 
      * @param file The file deleted
      */
+    @Override
     public void onFileDelete(final File file) {
         deletedFiles.add(file);
     }
@@ -181,6 +188,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      *
      * @param observer The file system observer
      */
+    @Override
     public void onStop(final FileAlterationObserver observer) {
     }
 

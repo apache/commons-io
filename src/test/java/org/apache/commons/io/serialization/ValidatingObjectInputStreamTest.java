@@ -46,6 +46,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
         }
     };
 
+    @Override
     @Before
     public void setup() throws IOException {
         testObject = new MockSerializedClass(UUID.randomUUID().toString());

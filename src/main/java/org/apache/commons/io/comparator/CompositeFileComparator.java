@@ -88,6 +88,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
      * @return the first non-zero result returned from
      * the delegate comparators or zero.
      */
+    @Override
     public int compare(final File file1, final File file2) {
         int result = 0;
         for (final Comparator<File> delegate : delegates) {

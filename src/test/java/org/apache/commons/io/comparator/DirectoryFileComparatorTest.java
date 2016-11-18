@@ -40,6 +40,7 @@ public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
     /**
      * Test the comparator array sort.
      */
+    @Override
     @Test
     public void testSortArray() {
         // skip sort test

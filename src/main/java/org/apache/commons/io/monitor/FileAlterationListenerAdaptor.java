@@ -32,6 +32,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      *
      * @param observer The file system observer (ignored)
      */
+    @Override
     public void onStart(final FileAlterationObserver observer) {
     }
 
@@ -40,6 +41,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param directory The directory created (ignored)
      */
+    @Override
     public void onDirectoryCreate(final File directory) {
     }
 
@@ -48,6 +50,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param directory The directory changed (ignored)
      */
+    @Override
     public void onDirectoryChange(final File directory) {
     }
 
@@ -56,6 +59,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param directory The directory deleted (ignored)
      */
+    @Override
     public void onDirectoryDelete(final File directory) {
     }
 
@@ -64,6 +68,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param file The file created (ignored)
      */
+    @Override
     public void onFileCreate(final File file) {
     }
 
@@ -72,6 +77,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param file The file changed (ignored)
      */
+    @Override
     public void onFileChange(final File file) {
     }
 
@@ -80,6 +86,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * 
      * @param file The file deleted (ignored)
      */
+    @Override
     public void onFileDelete(final File file) {
     }
 
@@ -88,6 +95,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      *
      * @param observer The file system observer (ignored)
      */
+    @Override
     public void onStop(final FileAlterationObserver observer) {
     }
 

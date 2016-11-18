@@ -121,6 +121,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @Test public void testCloseQuietly_AllCloseableIOException() {
         final Closeable closeable = new Closeable() {
+            @Override
             public void close() throws IOException {
                 throw new IOException();
             }
@@ -130,6 +131,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
     @Test public void testCloseQuietly_CloseableIOException() {
         IOUtils.closeQuietly(new Closeable() {
+            @Override
             public void close() throws IOException {
                 throw new IOException();
             }

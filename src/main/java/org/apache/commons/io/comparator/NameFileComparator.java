@@ -99,6 +99,7 @@ public class NameFileComparator extends AbstractFileComparator implements Serial
      * same and a positive value if the first files name
      * is greater than the second file.
      */
+    @Override
     public int compare(final File file1, final File file2) {
         return caseSensitivity.checkCompareTo(file1.getName(), file2.getName());
     }

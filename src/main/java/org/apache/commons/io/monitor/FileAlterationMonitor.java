@@ -176,6 +176,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Run.
      */
+    @Override
     public void run() {
         while (running) {
             for (final FileAlterationObserver observer : observers) {

@@ -138,6 +138,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = new Comparator<ByteOrderMark>() {
 
+        @Override
         public int compare(final ByteOrderMark bom1, final ByteOrderMark bom2) {
             final int len1 = bom1.length();
             final int len2 = bom2.length();
