@@ -1251,6 +1251,7 @@ public class IOUtils {
 
     // resources
     //-----------------------------------------------------------------------
+
     /**
      * Gets the contents of a classpath resource as a String using the
      * specified character encoding.
@@ -1367,8 +1368,6 @@ public class IOUtils {
 
         return resource;
     }
-
-
 
     // readLines
     //-----------------------------------------------------------------------
