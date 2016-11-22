@@ -134,7 +134,7 @@ public class IOUtils {
 
     static {
         // avoid security issues
-        try (final StringBuilderWriter buf = new StringBuilderWriter(4); 
+        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
                 final PrintWriter out = new PrintWriter(buf)) {
             out.println();
             LINE_SEPARATOR = buf.toString();
@@ -1248,6 +1248,127 @@ public class IOUtils {
     public static String toString(final byte[] input, final String encoding) throws IOException {
         return new String(input, Charsets.toCharset(encoding));
     }
+
+    // resources
+    //-----------------------------------------------------------------------
+    /**
+     * Gets the contents of a classpath resource as a String using the
+     * specified character encoding.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name     name of the desired resource
+     * @param encoding the encoding to use, null means platform default
+     * @return the requested String
+     * @throws IOException if an I/O error occurs
+     */
+    public static String resourceToString(final String name, final Charset encoding) throws IOException {
+        return resourceToString(name, encoding, null);
+    }
+
+    /**
+     * Gets the contents of a classpath resource as a String using the
+     * specified character encoding.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name     name of the desired resource
+     * @param encoding the encoding to use, null means platform default
+     * @param classLoader the class loader that the resolution of the resource is delegated to
+     * @return the requested String
+     * @throws IOException if an I/O error occurs
+     */
+    public static String resourceToString(final String name, final Charset encoding, ClassLoader classLoader) throws IOException {
+        final URL resource = resourceToURL(name, classLoader);
+
+        try (InputStream content = (InputStream) resource.getContent()) {
+            return toString(content, encoding);
+        }
+    }
+
+    /**
+     * Gets the contents of a classpath resource as a byte array.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @return the requested byte array
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] resourceToByteArray(final String name) throws IOException {
+        return resourceToByteArray(name, null);
+    }
+
+    /**
+     * Gets the contents of a classpath resource as a byte array.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @param classLoader the class loader that the resolution of the resource is delegated to
+     * @return the requested byte array
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] resourceToByteArray(final String name, final ClassLoader classLoader) throws IOException {
+        final URL resource = resourceToURL(name, classLoader);
+
+        try (InputStream content = (InputStream) resource.getContent()) {
+            return toByteArray(content);
+        }
+    }
+
+    /**
+     * Gets a URL pointing to the given classpath resource.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name name of the desired resource
+     * @return the requested URL
+     * @throws IOException if an I/O error occurs
+     */
+    public static URL resourceToURL(final String name) throws IOException {
+        return resourceToURL(name, null);
+    }
+
+    /**
+     * Gets a URL pointing to the given classpath resource.
+     *
+     * <p>
+     * It is expected the given <code>name</code> to be absolute. The
+     * behavior is not well-defined otherwise.
+     * </p>
+     *
+     * @param name        name of the desired resource
+     * @param classLoader the class loader that the resolution of the resource is delegated to
+     * @return the requested URL
+     * @throws IOException if an I/O error occurs
+     */
+    public static URL resourceToURL(final String name, final ClassLoader classLoader) throws IOException {
+        final URL resource = (classLoader == null) ? IOUtils.class.getResource(name) : classLoader.getResource(name);
+
+        if (resource == null) {
+            throw new IOException("Resource not found: " + name);
+        }
+
+        return resource;
+    }
+
+
 
     // readLines
     //-----------------------------------------------------------------------
