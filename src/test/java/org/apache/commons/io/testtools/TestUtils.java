@@ -18,7 +18,6 @@ package org.apache.commons.io.testtools;
 
 import junit.framework.AssertionFailedError;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.*;
@@ -72,13 +71,10 @@ public abstract class TestUtils {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
-        try {
+        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
             for (final String element : data) {
                 output.println(element);
             }
-        } finally {
-            IOUtils.closeQuietly(output);
         }
     }
 
