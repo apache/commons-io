@@ -77,6 +77,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-504" dev="ggregory" type="update" due-to="Christian Schulte">
         Deprecated of all IOUtils.closeQuietly() methods and use try-with-resources internally.
       </action>
+      <action issue="IO-493" dev="pschumacher" type="add" due-to="Piotr Turski">
+        Add infinite circular input stream
+      </action>
       <action issue="IO-507" dev="ggregory" type="add">
         Add a ByteOrderFactory class.
       </action>
