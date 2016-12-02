@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.6" date="2016-MM-DD" description="New features and bug fixes.">
+      <action issue="IO-483" dev="kinow" type="fix" due-to="Marko Vasic">
+        getPrefixLength return -1 if unix file contains colon
+      </action>
       <action issue="IO-520" dev="pschumacher" type="fix">
         FileUtilsTestCase#testContentEqualsIgnoreEOL fails on Windows
       </action>
