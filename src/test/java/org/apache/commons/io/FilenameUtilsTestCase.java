@@ -570,6 +570,10 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
         assertEquals(9, FilenameUtils.getPrefixLength("//server/a/b/c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("\\\\\\a\\b\\c.txt"));
         assertEquals(-1, FilenameUtils.getPrefixLength("///a/b/c.txt"));
+
+        assertEquals(1, FilenameUtils.getPrefixLength("/:foo"));
+        assertEquals(1, FilenameUtils.getPrefixLength("/:/"));
+        assertEquals(1, FilenameUtils.getPrefixLength("/:::::::.txt"));
     }
 
     @Test
