@@ -24,12 +24,13 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * This class is an example for using an {@link ObservableInputStream}. It
- * creates its own {@link Observer}, which calculates a checksum using a
- * MessageDigest, for example an MD5 sum.
- * {@em Note}: Neither {@link ObservableInputStream}, nor {@link MessageDigest},
+ * creates its own {@link org.apache.commons.io.input.ObservableInputStream.Observer},
+ * which calculates a checksum using a MessageDigest, for example an MD5 sum.
+ * <em>Note</em>: Neither {@link ObservableInputStream}, nor {@link MessageDigest},
  * are thread safe. So is {@link MessageDigestCalculatingInputStream}.
  */
 public class MessageDigestCalculatingInputStream extends ObservableInputStream {
+
     public static class MessageDigestMaintainingObserver extends Observer {
         private final MessageDigest md;
 
@@ -58,12 +59,14 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         messageDigest = pDigest;
         add(new MessageDigestMaintainingObserver(pDigest));
     }
+
     /** Creates a new instance, which calculates a signature on the given stream,
      * using a {@link MessageDigest} with the given algorithm.
      */
     public MessageDigestCalculatingInputStream(InputStream pStream, String pAlgorithm) throws NoSuchAlgorithmException {
         this(pStream, MessageDigest.getInstance(pAlgorithm));
     }
+
     /** Creates a new instance, which calculates a signature on the given stream,
      * using a {@link MessageDigest} with the "MD5" algorithm.
      */
@@ -73,7 +76,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
 
     /** Returns the {@link MessageDigest}, which is being used for generating the
      * checksum.
-     * {@em Note}: The checksum will only reflect the data, which has been read so far.
+     * <em>Note</em>: The checksum will only reflect the data, which has been read so far.
      * This is probably not, what you expect. Make sure, that the complete data has been
      * read, if that is what you want. The easiest way to do so is by invoking
      * {@link #consume()}.
