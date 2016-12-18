@@ -263,6 +263,18 @@ file comparators, endian transformation classes, and much more.
 
   <build>
     <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>src/test/resources/**/*.bin</exclude>
+              <exclude>test/**</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
@@ -307,18 +319,6 @@ file comparators, endian transformation classes, and much more.
           </ignorePathsToDelete>
         </configuration>
       </plugin>
-      <!-- Configure RAT for CLI invocation: mvn apache-rat:rat -->
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <!-- Must agree with report section RAT config -->
-        <configuration>
-          <excludes>
-            <exclude>src/test/resources/**/*.bin</exclude>
-            <exclude>test/**</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -346,17 +346,6 @@ file comparators, endian transformation classes, and much more.
           <threshold>Normal</threshold>
           <effort>Default</effort>
           <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <!-- Must agree with build section RAT config -->
-        <configuration>
-          <excludes>
-            <exclude>src/test/resources/**/*.bin</exclude>
-            <exclude>test/**</exclude>
-          </excludes>
         </configuration>
       </plugin>
     </plugins>
