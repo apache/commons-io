@@ -446,6 +446,7 @@ public class Tailer implements Runnable {
                     } catch (final FileNotFoundException e) {
                         // in this case we continue to use the previous reader and position values
                         listener.fileNotFound();
+                        Thread.sleep(delayMillis);
                     }
                     continue;
                 } else {
