@@ -574,7 +574,7 @@ public class FileFilterUtils {
      * the specified reference file.
      *
      * @param cutoffReference  the file whose last modification
-     *        time is usesd as the threshold age of the files
+     *        time is used as the threshold age of the files
      * @return an appropriately configured age file filter
      * @see AgeFileFilter
      * @since 1.2
@@ -587,7 +587,7 @@ public class FileFilterUtils {
      * Returns a filter that filters files based on a cutoff reference file.
      *
      * @param cutoffReference  the file whose last modification
-     *        time is usesd as the threshold age of the files
+     *        time is used as the threshold age of the files
      * @param acceptOlder  if true, older files get accepted, if false, newer
      * @return an appropriately configured age file filter
      * @see AgeFileFilter

@@ -54,7 +54,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * To manually observe a directory, initialize the observer and invoked the
  * {@link #checkAndNotify()} method as required:
  * <pre>
- *      // intialize
+ *      // initialize
  *      observer.init();
  *      ...
  *      // invoke as required
@@ -65,7 +65,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *      // finished
  *      observer.finish();
  * </pre>
- * Alternatively, register the oberver(s) with a {@link FileAlterationMonitor},
+ * Alternatively, register the observer(s) with a {@link FileAlterationMonitor},
  * which creates a new thread, invoking the observer at the specified interval:
  * <pre>
  *      long interval = ...
@@ -288,7 +288,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Check whether the file and its chlidren have been created, modified or deleted.
+     * Check whether the file and its children have been created, modified or deleted.
      */
     public void checkAndNotify() {
 

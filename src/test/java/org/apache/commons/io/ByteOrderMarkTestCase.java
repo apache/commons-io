@@ -107,7 +107,7 @@ public class ByteOrderMarkTestCase  {
         assertEquals("hash test3 ", bomClassHash + 6,  TEST_BOM_3.hashCode());
     }
 
-    /** Test Erros */
+    /** Test Errors */
     @Test
     public void errors() {
         try {

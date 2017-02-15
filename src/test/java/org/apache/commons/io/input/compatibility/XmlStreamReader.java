@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.output.XmlStreamWriter;
 
 /**
- * Character stream that handles all the necessary Voodo to figure out the
+ * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document within the stream.
  * <p>
  * IMPORTANT: This class is not related in any way to the org.xml.sax.XMLReader.

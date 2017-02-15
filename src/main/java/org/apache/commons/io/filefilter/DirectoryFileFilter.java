@@ -55,7 +55,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
     public static final IOFileFilter INSTANCE = DIRECTORY;
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected DirectoryFileFilter() {
     }

@@ -46,7 +46,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Construct a monitor with the specified interval.
      *
-     * @param interval The amount of time in miliseconds to wait between
+     * @param interval The amount of time in milliseconds to wait between
      * checks of the file system
      */
     public FileAlterationMonitor(final long interval) {
@@ -56,7 +56,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Construct a monitor with the specified interval and set of observers.
      *
-     * @param interval The amount of time in miliseconds to wait between
+     * @param interval The amount of time in milliseconds to wait between
      * checks of the file system
      * @param observers The set of observers to add to the monitor.
      */

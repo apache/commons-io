@@ -75,7 +75,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
                                                 CanWriteFileFilter.CANNOT_WRITE);
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected CanReadFileFilter() {
     }

@@ -82,7 +82,7 @@ public class FileCleaningTracker {
     /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
-     * The speified deletion strategy is used.
+     * The specified deletion strategy is used.
      *
      * @param file  the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
@@ -112,7 +112,7 @@ public class FileCleaningTracker {
     /**
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
-     * The speified deletion strategy is used.
+     * The specified deletion strategy is used.
      *
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
@@ -175,7 +175,7 @@ public class FileCleaningTracker {
      * thread will simply exit when the JVM exits. In a more complex environment,
      * with multiple class loaders (such as an application server), you should be
      * aware that the file cleaner thread will continue running even if the class
-     * loader it was started from terminates. This can consitute a memory leak.
+     * loader it was started from terminates. This can constitute a memory leak.
      * <p>
      * For example, suppose that you have developed a web application, which
      * contains the commons-io jar file in your WEB-INF/lib directory. In other

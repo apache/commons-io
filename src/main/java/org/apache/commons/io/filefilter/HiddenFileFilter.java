@@ -59,7 +59,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     public static final IOFileFilter VISIBLE = new NotFileFilter(HIDDEN);
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected HiddenFileFilter() {
     }

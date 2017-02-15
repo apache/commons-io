@@ -44,7 +44,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     public static final IOFileFilter INSTANCE = FALSE;
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected FalseFileFilter() {
     }

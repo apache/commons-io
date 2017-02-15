@@ -390,7 +390,7 @@ public class BOMInputStream extends ProxyInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>skip(long)</code> method, detecting and optionallyskipping BOM.
+     * Invokes the delegate's <code>skip(long)</code> method, detecting and optionally skipping BOM.
      * 
      * @param n
      *            the number of bytes to skip

@@ -45,8 +45,8 @@ import org.apache.commons.io.FilenameUtils;
  * </pre>
  *
  * @since 1.1
- * @deprecated Use WilcardFileFilter. Deprecated as this class performs directory
- * filtering which it shouldn't do, but that can't be removed due to compatability.
+ * @deprecated Use WildcardFileFilter. Deprecated as this class performs directory
+ * filtering which it shouldn't do, but that can't be removed due to compatibility.
  */
 @Deprecated
 public class WildcardFilter extends AbstractFileFilter implements Serializable {

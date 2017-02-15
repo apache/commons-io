@@ -166,9 +166,9 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Provide a String representaion of this file filter.
+     * Provide a String representation of this file filter.
      *
-     * @return a String representaion
+     * @return a String representation
      */
     @Override
     public String toString() {

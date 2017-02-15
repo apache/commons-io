@@ -40,7 +40,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /** Called to indicate, that {@link InputStream#read()} has been invoked
          * on the {@link ObservableInputStream}, and will return a value.
          * @param pByte The value, which is being returned. This will never be -1 (EOF),
-         *    because, in that case, {link #finished()} will be invoked instead.
+         *    because, in that case, {@link #finished()} will be invoked instead.
          */
         void data(int pByte) throws IOException {}
         /** Called to indicate, that {@link InputStream#read(byte[])}, or

@@ -48,7 +48,7 @@ public class BoundedInputStream extends InputStream {
     /** the marked position */
     private long mark = EOF;
 
-    /** flag if close shoud be propagated */
+    /** flag if close should be propagated */
     private boolean propagateClose = true;
 
     /**
