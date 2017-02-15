@@ -44,7 +44,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
     public static final IOFileFilter FILE = new FileFileFilter();
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected FileFileFilter() {
     }

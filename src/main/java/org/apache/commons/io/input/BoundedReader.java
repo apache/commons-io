@@ -73,9 +73,10 @@ public class BoundedReader
     }
 
     /**
-     * Resets the target to the latest mark, @see java.io.Reader#reset()
+     * Resets the target to the latest mark,
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's reset method
+     * @see java.io.Reader#reset()
      */
     @Override
     public void reset() throws IOException {
@@ -84,7 +85,7 @@ public class BoundedReader
     }
 
     /**
-     * marks the target stream, @see java.io.Reader#mark(int).
+     * marks the target stream
      *
      * @param readAheadLimit The number of characters that can be read while
      *                       still retaining the ability to do #reset().
@@ -94,6 +95,7 @@ public class BoundedReader
      *                       greater.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
+     * @see java.io.Reader#mark(int).
      */
     @Override
     public void mark( int readAheadLimit ) throws IOException {
@@ -105,10 +107,11 @@ public class BoundedReader
     }
 
     /**
-     * Reads a single character, @see java.io.Reader#read()
+     * Reads a single character
      *
      * @return -1 on eof or the character read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
+     * @see java.io.Reader#read()
      */
     @Override
     public int read() throws IOException {
@@ -125,13 +128,14 @@ public class BoundedReader
     }
 
     /**
-     * Reads into an array, @see java.io.Reader#read(char[], int, int)
+     * Reads into an array
      *
      * @param cbuf The buffer to fill
      * @param off  The offset
      * @param len  The number of chars to read
      * @return the number of chars read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
+     * @see java.io.Reader#read(char[], int, int)
      */
     @Override
     public int read( char[] cbuf, int off, int len ) throws IOException {

@@ -62,7 +62,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     public static final IOFileFilter NOT_EMPTY = new NotFileFilter(EMPTY);
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected EmptyFileFilter() {
     }

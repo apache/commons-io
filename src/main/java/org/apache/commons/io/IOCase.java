@@ -54,7 +54,7 @@ public enum IOCase implements Serializable {
      * Unix file separator and case-insensitive if they use the Windows file separator
      * (see {@link java.io.File#separatorChar}).
      * <p>
-     * If you derialize this constant of Windows, and deserialize on Unix, or vice
+     * If you serialize this constant on Windows, and deserialize on Unix, or vice
      * versa, then the value of the case-sensitivity flag will change.
      */
     SYSTEM ("System", !FilenameUtils.isSystemWindows());

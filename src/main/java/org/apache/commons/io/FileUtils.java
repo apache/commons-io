@@ -2562,7 +2562,7 @@ public class FileUtils {
     /**
      * the size of a file
      * @param file the file to check
-     * @return the size of the fil
+     * @return the size of the file
      */
     private static long sizeOf0(File file) {
         if (file.isDirectory()) {
@@ -2616,7 +2616,7 @@ public class FileUtils {
     // internal method; if file does not exist will return 0
 
     /**
-     * Returns the sid of a file
+     * Returns the size of a file
      * @param fileOrDir The file
      * @return the size
      */

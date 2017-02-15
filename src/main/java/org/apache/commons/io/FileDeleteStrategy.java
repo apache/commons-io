@@ -106,7 +106,7 @@ public class FileDeleteStrategy {
      * This implementation uses {@link File#delete()}.
      *
      * @param fileToDelete  the file to delete, exists, not null
-     * @return true if the file was deleteds
+     * @return true if the file was deleted
      * @throws NullPointerException if the file is null
      * @throws IOException if an error occurs during file deletion
      */

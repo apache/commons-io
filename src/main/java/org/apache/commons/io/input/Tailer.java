@@ -110,7 +110,7 @@ import org.apache.commons.io.FileUtils;
  * </pre>
  * <p>If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.</p>
  *
- * <p>The file is read using the default charset; this can be overriden if necessary</p>
+ * <p>The file is read using the default charset; this can be overridden if necessary</p>
  * @see TailerListener
  * @see TailerListenerAdapter
  * @version $Id$

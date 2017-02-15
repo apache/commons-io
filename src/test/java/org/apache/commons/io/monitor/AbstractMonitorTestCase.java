@@ -41,7 +41,7 @@ public abstract class AbstractMonitorTestCase  {
     /** Listener which collects file changes */
     protected CollectionFileListener listener;
 
-    /** Test diretory name */
+    /** Test directory name */
     protected String testDirName = null;
 
     /** Directory for test files */

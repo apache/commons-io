@@ -122,13 +122,13 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
      * Creates :
      * <ul>
      * <li>a <code>Date</code> which represents the time reference</li>
-     * <li>a temporary file with the same last modification date than the time reference</li>
+     * <li>a temporary file with the same last modification date as the time reference</li>
      * </ul>
      * Then compares (with the needed <code>isFileNewer</code> method) the last modification date of
      * the specified file with the specified time reference, the created <code>Date</code> and the temporary
      * file.
      * <br>
-     * The test is successfull if the three comparaisons return the specified wanted result.
+     * The test is successful if the three comparisons return the specified wanted result.
      *
      * @param description describes the tested situation
      * @param file the file of which the last modification date is compared
@@ -153,7 +153,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     /**
      * Tests the <code>isFileNewer(File, long)</code> method without specifying a <code>File</code>.
      * <br>
-     * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoFile() {
@@ -164,7 +164,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     /**
      * Tests the <code>isFileNewer(File, Date)</code> method without specifying a <code>Date</code>.
      * <br>
-     * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoDate() {
@@ -175,7 +175,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
     /**
      * Tests the <code>isFileNewer(File, File)</code> method without specifying a reference <code>File</code>.
      * <br>
-     * The test is successfull if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testIsFileNewerNoFileReference() {

@@ -87,7 +87,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * If the <code>sumDirectoryContents</code> is {@code true} The size of
      * directories is calculated using  {@link FileUtils#sizeOfDirectory(File)}.
      *
-     * @param sumDirectoryContents {@code true} if the sum of the directoryies contents
+     * @param sumDirectoryContents {@code true} if the sum of the directories' contents
      *  should be calculated, otherwise {@code false} if directories should be treated
      *  as size zero (see {@link FileUtils#sizeOfDirectory(File)}).
      */

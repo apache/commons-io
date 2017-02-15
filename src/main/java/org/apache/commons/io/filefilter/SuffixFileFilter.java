@@ -80,7 +80,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Constructs a new Suffix file filter for an array of suffixs.
+     * Constructs a new Suffix file filter for an array of suffixes.
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
@@ -93,7 +93,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Constructs a new Suffix file filter for an array of suffixs
+     * Constructs a new Suffix file filter for an array of suffixes
      * specifying case-sensitivity.
      *
      * @param suffixes  the suffixes to allow, must not be null
@@ -174,9 +174,9 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Provide a String representaion of this file filter.
+     * Provide a String representation of this file filter.
      *
-     * @return a String representaion
+     * @return a String representation
      */
     @Override
     public String toString() {

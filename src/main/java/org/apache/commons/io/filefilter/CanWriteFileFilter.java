@@ -63,7 +63,7 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
     public static final IOFileFilter CANNOT_WRITE = new NotFileFilter(CAN_WRITE);
 
     /**
-     * Restrictive consructor.
+     * Restrictive constructor.
      */
     protected CanWriteFileFilter() {
     }

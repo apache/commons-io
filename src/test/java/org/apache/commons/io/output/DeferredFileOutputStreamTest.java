@@ -180,7 +180,7 @@ public class DeferredFileOutputStreamTest
 
 
     /**
-     * Test wether writeTo() properly writes small content.
+     * Test whether writeTo() properly writes small content.
      */
     @Test
     public void testWriteToSmall(){
@@ -216,7 +216,7 @@ public class DeferredFileOutputStreamTest
     }
 
     /**
-     * Test wether writeTo() properly writes large content.
+     * Test whether writeTo() properly writes large content.
      */
     @Test
     public void testWriteToLarge(){

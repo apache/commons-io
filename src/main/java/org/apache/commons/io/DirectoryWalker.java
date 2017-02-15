@@ -30,7 +30,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * subclasses with convenient hooks to add specific behaviour.
  * <p>
  * This class operates with a {@link FileFilter} and maximum depth to
- * limit the files and direcories visited.
+ * limit the files and directories visited.
  * Commons IO supplies many common filter implementations in the
  * <a href="filefilter/package-summary.html"> filefilter</a> package.
  * <p>
@@ -172,7 +172,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * Two possible scenarios are envisaged for cancellation:
  * <ul>
- *    <li><a href="#external">3.1 External / Mult-threaded</a> - cancellation being
+ *    <li><a href="#external">3.1 External / Multi-threaded</a> - cancellation being
  *        decided/initiated by an external process.</li>
  *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated
  *        from within a DirectoryWalker implementation.</li>

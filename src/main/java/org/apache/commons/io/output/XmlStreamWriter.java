@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.input.XmlStreamReader;
 
 /**
- * Character stream that handles all the necessary Voodo to figure out the
+ * Character stream that handles all the necessary Voodoo to figure out the
  * charset encoding of the XML document written to the stream.
  *
  * @see XmlStreamReader

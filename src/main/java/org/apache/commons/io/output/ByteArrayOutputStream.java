@@ -353,7 +353,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the curent contents of this byte stream as a byte array.
+     * Gets the current contents of this byte stream as a byte array.
      * The result is independent of this stream.
      *
      * @return the current contents of this output stream, as a byte array
@@ -379,7 +379,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the curent contents of this byte stream as a string
+     * Gets the current contents of this byte stream as a string
      * using the platform default charset.
      * @return the contents of the byte array as a String
      * @see java.io.ByteArrayOutputStream#toString()
@@ -393,7 +393,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the curent contents of this byte stream as a string
+     * Gets the current contents of this byte stream as a string
      * using the specified encoding.
      *
      * @param enc  the name of the character encoding
@@ -406,7 +406,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Gets the curent contents of this byte stream as a string
+     * Gets the current contents of this byte stream as a string
      * using the specified encoding.
      *
      * @param charset  the character encoding
