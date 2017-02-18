@@ -34,7 +34,7 @@ public class DirectoryUtils {
      * @return true if directory and compareDirectory are equal
      * @throws IOException
      */
-    public static boolean isDirectoryEqual(Path directory, Path compareDirectory, boolean checkFileContent)
+    public static boolean isEqual(Path directory, Path compareDirectory, boolean checkFileContent)
             throws IOException {
 
         boolean check = isEverythingInCompareDirectory(directory, compareDirectory, checkFileContent);
@@ -103,7 +103,7 @@ public class DirectoryUtils {
         }
     }
 
-    public static boolean compareDirectoryContents(Path directory, Path compareDirectory, boolean checkFileContent)
+    private static boolean compareDirectoryContents(Path directory, Path compareDirectory, boolean checkFileContent)
             throws IOException {
         boolean result = true;
         // LOGGER.info("compareDirectoryContents: " + directory);
