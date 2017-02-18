@@ -23,7 +23,7 @@ public class DirectoryUtilsTestCase_Simple {
         Path directory = FileSystems.getDefault().getPath(basePath + "directory");
         Path compareDirectory = FileSystems.getDefault().getPath(basePath + "directory");
 
-        assertTrue(DirectoryUtils.isDirectoryEqual(directory, compareDirectory, checkFileContent));
+        assertTrue(DirectoryUtils.isEqual(directory, compareDirectory, checkFileContent));
     }
 
 
@@ -33,7 +33,7 @@ public class DirectoryUtilsTestCase_Simple {
         Path directory = FileSystems.getDefault().getPath(basePath + "directory_missing_file1");
         Path compareDirectory = FileSystems.getDefault().getPath(basePath + "directory");
 
-        assertFalse(DirectoryUtils.isDirectoryEqual(directory, compareDirectory, checkFileContent));
+        assertFalse(DirectoryUtils.isEqual(directory, compareDirectory, checkFileContent));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class DirectoryUtilsTestCase_Simple {
         Path directory = FileSystems.getDefault().getPath(basePath + "directory");
         Path compareDirectory = FileSystems.getDefault().getPath(basePath + "missing_file2");
 
-        assertFalse(DirectoryUtils.isDirectoryEqual(directory, compareDirectory, checkFileContent));
+        assertFalse(DirectoryUtils.isEqual(directory, compareDirectory, checkFileContent));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class DirectoryUtilsTestCase_Simple {
         Path directory = FileSystems.getDefault().getPath(basePath + "directory");
         Path compareDirectory = FileSystems.getDefault().getPath(basePath + "directory");
 
-        assertTrue(DirectoryUtils.isDirectoryEqual(directory, compareDirectory, checkFileContent));
+        assertTrue(DirectoryUtils.isEqual(directory, compareDirectory, checkFileContent));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DirectoryUtilsTestCase_Simple {
         Path directory = FileSystems.getDefault().getPath(basePath + "directory");
         Path compareDirectory = FileSystems.getDefault().getPath(basePath + "file1_not_equal");
 
-        assertFalse(DirectoryUtils.isDirectoryEqual(directory, compareDirectory, checkFileContent));
+        assertFalse(DirectoryUtils.isEqual(directory, compareDirectory, checkFileContent));
     }
 
 }
