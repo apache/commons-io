@@ -105,7 +105,7 @@ public class DirectoryUtils {
 
     private static boolean compareDirectoryContents(Path directory, Path compareDirectory, boolean checkFileContent)
             throws IOException {
-        boolean result = true;
+
         // LOGGER.info("compareDirectoryContents: " + directory);
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
 
@@ -127,7 +127,8 @@ public class DirectoryUtils {
 
                     } else {
                         // LOGGER.info("going into recursion with directory " +directoryFilePath);
-                        result = isEverythingInCompareDirectory(directoryFilePath, compareFilePath, checkFileContent);
+                        boolean result = isEverythingInCompareDirectory(directoryFilePath, compareFilePath,
+                                checkFileContent);
 
                         // cancel if not equal, otherwise continue processing
                         if (!result) {
@@ -143,6 +144,6 @@ public class DirectoryUtils {
             }
         }
 
-        return result;
+        return true;
     }
 }
