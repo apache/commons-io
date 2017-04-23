@@ -1619,10 +1619,9 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     @Test
     public void testForceDeleteDir() throws Exception {
         final File testDirectory = getTestDirectory();
-        FileUtils.forceDelete(testDirectory.getParentFile());
-        assertTrue(
-                "Check No Exist",
-                !testDirectory.getParentFile().exists());
+        assertTrue("TestDirectory must exist", testDirectory.exists());
+        FileUtils.forceDelete(testDirectory);
+        assertFalse("TestDirectory must not exist", testDirectory.exists());
     }
 
     /*
