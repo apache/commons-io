@@ -125,11 +125,9 @@ public class TailerTest extends FileBasedTestCase {
         final Thread thread = new Thread(tailer);
         thread.start();
 
-        Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
-        BufferedReader reader = null;
-        try{
+        try (Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8))) {
             List<String> lines = new ArrayList<>();
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8));
             String line;
             while((line = reader.readLine()) != null){
                 out.write(line);
@@ -151,10 +149,8 @@ public class TailerTest extends FileBasedTestCase {
                            + "\nAct: (" + actual.length() + ") "+ actual);
                }
            }
-        }finally{
+        } finally{
             tailer.stop();
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(out);
         }
     }
 
@@ -170,7 +166,6 @@ public class TailerTest extends FileBasedTestCase {
         thread.start();
 
         // Write some lines to the file
-        final FileWriter writer = null;
         try {
             writeString(file, "Line");
 
@@ -189,7 +184,6 @@ public class TailerTest extends FileBasedTestCase {
         } finally {
             tailer.stop();
             TestUtils.sleep(delay * 2);
-            IOUtils.closeQuietly(writer);
         }
     }
 
@@ -298,12 +292,9 @@ public class TailerTest extends FileBasedTestCase {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(file));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(file))) {
             TestUtils.generateTestData(output, size);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
 
         // try to make sure file is found
@@ -328,30 +319,21 @@ public class TailerTest extends FileBasedTestCase {
 
     /** Append some lines to a file */
     private void write(final File file, final String... lines) throws Exception {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
+        try (FileWriter writer = new FileWriter(file, true)) {
             for (final String line : lines) {
                 writer.write(line + "\n");
             }
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
 
     /** Append a string to a file */
     private void writeString(final File file, final String ... strings) throws Exception {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
+        try (FileWriter writer = new FileWriter(file, true)) {
             for (final String string : strings) {
                 writer.write(string);
             }
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
-
 
     @Test
     public void testStopWithNoFile() throws Exception {
