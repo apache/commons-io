@@ -1531,6 +1531,75 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Copies a file or directory to within another directory preserving the file dates.
+     * <p>
+     * This method copies the source file or directory, along all its contents, to a
+     * directory of the same name in the specified destination directory.
+     * <p>
+     * The destination directory is created if it does not exist.
+     * If the destination directory did exist, then this method merges
+     * the source with the destination, with the source taking precedence.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the files' last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
+     *
+     * @param src      an existing file or directory to copy, must not be {@code null}
+     * @param destDir  the directory to place the copy in, must not be {@code null}
+     *
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying 
+     * @see #copyDirectoryToDirectory(File, File)
+     * @see #copyFileToDirectory(File, File)
+     * @since 2.6
+     */
+    public static void copyToDirectory(final File src, final File destDir) throws IOException {
+        if (src == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (src.isFile()) {
+            copyFileToDirectory(src, destDir);
+        } else if (src.isDirectory()) {
+            copyDirectoryToDirectory(src, destDir);
+        } else {
+            throw new IOException("The source " + src + " does not exist");
+        }
+    }
+
+    /**
+     * Copies a files to a directory preserving each file's date.
+     * <p>
+     * This method copies the contents of the specified source files
+     * to a file of the same name in the specified destination directory.
+     * The destination directory is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     *
+     * @param srcs     a existing files to copy, must not be {@code null}
+     * @param destDir  the directory to place the copy in, must not be {@code null}
+     *
+     * @throws NullPointerException if source or destination is null
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying
+     * @see #copyFileToDirectory(File, File)
+     * @since 2.6
+     */
+    public static void copyToDirectory(final Iterable<File> srcs, final File destDir) throws IOException {
+        if (srcs == null) {
+            throw new NullPointerException("Sources must not be null");
+        }
+        for (File src : srcs) {
+            copyFileToDirectory(src, destDir);
+        }
+    }
+
     //-----------------------------------------------------------------------
     /**
      * Deletes a directory recursively.
