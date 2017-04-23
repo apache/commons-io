@@ -17,6 +17,7 @@
 package org.apache.commons.io.testtools;
 
 import java.io.*;
+import static org.junit.Assert.fail;
 
 /**
  * Base class for testcases doing tests with files.
@@ -28,9 +29,12 @@ public abstract class FileBasedTestCase  {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static File getTestDirectory() {
         if (testDir == null) {
-            testDir = new File("test/io/").getAbsoluteFile();
+            testDir = new File("target/test_io/").getAbsoluteFile();
         }
         testDir.mkdirs();
+        if (!testDir.isDirectory()) {
+            fail("Could not create directory " + testDir);
+        }
         return testDir;
     }
 
