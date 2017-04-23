@@ -763,23 +763,19 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         // Tests with existing directory
         assertTrue(getTestDirectory().exists());
         final File testParentDir = new File(getTestDirectory(), "testForceMkdirParent");
-        try {
-            testParentDir.delete();
-            assertFalse(testParentDir.exists());
-            final File testFile = new File(testParentDir, "test.txt");
-            assertFalse(testParentDir.exists());
-            assertFalse(testFile.exists());
-            // Create
-            FileUtils.forceMkdirParent(testFile);
-            assertTrue(testParentDir.exists());
-            assertFalse(testFile.exists());
-            // Again
-            FileUtils.forceMkdirParent(testFile);
-            assertTrue(testParentDir.exists());
-            assertFalse(testFile.exists());
-        } finally {
-            testParentDir.delete();
-        }
+        testParentDir.delete();
+        assertFalse(testParentDir.exists());
+        final File testFile = new File(testParentDir, "test.txt");
+        assertFalse(testParentDir.exists());
+        assertFalse(testFile.exists());
+        // Create
+        FileUtils.forceMkdirParent(testFile);
+        assertTrue(testParentDir.exists());
+        assertFalse(testFile.exists());
+        // Again
+        FileUtils.forceMkdirParent(testFile);
+        assertTrue(testParentDir.exists());
+        assertFalse(testFile.exists());
     }
 
     // sizeOfDirectory
@@ -797,7 +793,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
 
         // Creates file
         file.createNewFile();
-        file.deleteOnExit();
 
         // Existing file
         try {
@@ -2512,7 +2507,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         assertTrue("Original deleted", !src.exists());
     }
 
-
     @Test
     public void testMoveFile_CopyDelete_Failed() throws Exception {
         final File destination = new File(getTestDirectory(), "move3.txt");
@@ -2599,7 +2593,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         } catch (final FileExistsException e) {
             // expected
         }
-
     }
 
     @Test
@@ -2792,7 +2785,6 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         } catch (final FileExistsException e) {
             // expected
         }
-
     }
 
     @Test
