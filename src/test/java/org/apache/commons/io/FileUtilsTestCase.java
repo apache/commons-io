@@ -94,23 +94,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output3 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
-        try {
+        try (final BufferedOutputStream output3 =
+                new BufferedOutputStream(new FileOutputStream(testFile1))) {
             TestUtils.generateTestData(output3, (long) testFile1Size);
-        } finally {
-            IOUtils.closeQuietly(output3);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
-        try {
+        try (final BufferedOutputStream output2 =
+                new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output2, (long) testFile2Size);
-        } finally {
-            IOUtils.closeQuietly(output2);
         }
         FileUtils.deleteDirectory(getTestDirectory());
         getTestDirectory().mkdirs();
@@ -118,23 +112,17 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
-        try {
+        try (final BufferedOutputStream output1 =
+                new BufferedOutputStream(new FileOutputStream(testFile1))) {
             TestUtils.generateTestData(output1, (long) testFile1Size);
-        } finally {
-            IOUtils.closeQuietly(output1);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
-        try {
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output, (long) testFile2Size);
-        } finally {
-            IOUtils.closeQuietly(output);
         }
     }
 
@@ -216,12 +204,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void test_openInputStream_exists() throws Exception {
         final File file = new File(getTestDirectory(), "test.txt");
         TestUtils.createLineBasedFile(file, new String[]{"Hello"});
-        FileInputStream in = null;
-        try {
-            in = FileUtils.openInputStream(file);
+        try (FileInputStream in = FileUtils.openInputStream(file)) {
             assertEquals('H', in.read());
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
@@ -229,28 +213,20 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void test_openInputStream_existsButIsDirectory() throws Exception {
         final File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
-        FileInputStream in = null;
-        try {
-            in = FileUtils.openInputStream(directory);
+        try (FileInputStream in = FileUtils.openInputStream(directory)) {
             fail();
         } catch (final IOException ioe) {
             // expected
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
     @Test
     public void test_openInputStream_notExists() throws Exception {
         final File directory = new File(getTestDirectory(), "test.txt");
-        FileInputStream in = null;
-        try {
-            in = FileUtils.openInputStream(directory);
+        try (FileInputStream in = FileUtils.openInputStream(directory)) {
             fail();
         } catch (final IOException ioe) {
             // expected
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
@@ -262,12 +238,8 @@ public class FileUtilsTestCase extends FileBasedTestCase {
             if (createFile) {
                 TestUtils.createLineBasedFile(file, new String[]{"Hello"});
             }
-            FileOutputStream out = null;
-            try {
-                out = FileUtils.openOutputStream(file);
+            try (FileOutputStream out = FileUtils.openOutputStream(file)) {
                 out.write(0);
-            } finally {
-                IOUtils.closeQuietly(out);
             }
             assertTrue(file.exists());
         } finally {
@@ -287,17 +259,12 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         openOutputStream_noParent(false);
     }
 
-
     @Test
     public void test_openOutputStream_exists() throws Exception {
         final File file = new File(getTestDirectory(), "test.txt");
         TestUtils.createLineBasedFile(file, new String[]{"Hello"});
-        FileOutputStream out = null;
-        try {
-            out = FileUtils.openOutputStream(file);
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             out.write(0);
-        } finally {
-            IOUtils.closeQuietly(out);
         }
         assertTrue(file.exists());
     }
@@ -306,26 +273,18 @@ public class FileUtilsTestCase extends FileBasedTestCase {
     public void test_openOutputStream_existsButIsDirectory() throws Exception {
         final File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
-        FileOutputStream out = null;
-        try {
-            out = FileUtils.openOutputStream(directory);
+        try (FileOutputStream out = FileUtils.openOutputStream(directory)) {
             fail();
         } catch (final IOException ioe) {
             // expected
-        } finally {
-            IOUtils.closeQuietly(out);
         }
     }
 
     @Test
     public void test_openOutputStream_notExists() throws Exception {
         final File file = new File(getTestDirectory(), "a/test.txt");
-        FileOutputStream out = null;
-        try {
-            out = FileUtils.openOutputStream(file);
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             out.write(0);
-        } finally {
-            IOUtils.closeQuietly(out);
         }
         assertTrue(file.exists());
     }
@@ -341,14 +300,10 @@ public class FileUtilsTestCase extends FileBasedTestCase {
                         "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
                         "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz";  // 300 chars
         final File file = new File(getTestDirectory(), "a/" + longStr + "/test.txt");
-        FileOutputStream out = null;
-        try {
-            out = FileUtils.openOutputStream(file);
+        try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             fail();
         } catch (final IOException ioe) {
             // expected
-        } finally {
-            IOUtils.closeQuietly(out);
         }
     }
 
