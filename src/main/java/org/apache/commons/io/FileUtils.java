@@ -504,10 +504,10 @@ public class FileUtils {
      *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files. Must not be {@code null},
-     *                   use {@link TrueFileFilter.INSTANCE} to match all files in selected directories. 
+     *                   use {@link TrueFileFilter#INSTANCE} to match all files in selected directories. 
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
-     *                   search. Use {@link TrueFileFilter.INSTANCE} to match all directories.
+     *                   search. Use {@link TrueFileFilter#INSTANCE} to match all directories.
      * @return a collection of java.io.File with the matching files
      * @see org.apache.commons.io.filefilter.FileFilterUtils
      * @see org.apache.commons.io.filefilter.NameFileFilter
