@@ -310,6 +310,11 @@ public class WriterOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * Check if the JDK in use properly supports the given charset.
+     * 
+     * @param charset the charset to check the support for
+     */
     private static void checkIbmJdkWithBrokenUTF16(Charset charset){
         if (!"UTF-16".equals(charset.name())) {
             return;
