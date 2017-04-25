@@ -904,7 +904,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             IOUtils.toByteArray(fin, -1);
-            fail("IllegalArgumentException excepted");
+            fail("IllegalArgumentException expected");
         } catch (final IllegalArgumentException exc) {
             assertTrue("Exception message does not start with \"Size must be equal or greater than zero\"", exc
                     .getMessage().startsWith("Size must be equal or greater than zero"));
