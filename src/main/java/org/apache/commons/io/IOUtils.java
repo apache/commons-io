@@ -818,10 +818,10 @@ public class IOUtils {
 
         final byte[] data = new byte[size];
         int offset = 0;
-        int readed;
+        int read;
 
-        while (offset < size && (readed = input.read(data, offset, size - offset)) != EOF) {
-            offset += readed;
+        while (offset < size && (read = input.read(data, offset, size - offset)) != EOF) {
+            offset += read;
         }
 
         if (offset != size) {
