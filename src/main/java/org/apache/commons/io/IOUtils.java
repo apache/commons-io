@@ -825,7 +825,7 @@ public class IOUtils {
         }
 
         if (offset != size) {
-            throw new IOException("Unexpected readed size. current: " + offset + ", excepted: " + size);
+            throw new IOException("Unexpected read size. current: " + offset + ", expected: " + size);
         }
 
         return data;
