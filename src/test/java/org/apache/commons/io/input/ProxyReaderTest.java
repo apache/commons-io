@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import static org.junit.Assert.fail;
-
 /**
  * Test {@link ProxyReader}. 
  *
@@ -34,18 +32,8 @@ public class ProxyReaderTest {
     public void testNullCharArray() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
-
-        try {
-            proxy.read((char[])null);
-        } catch(final Exception e) {
-            fail("Writing null String threw " + e);
-        }
-
-        try {
-            proxy.read(null, 0, 0);
-        } catch(final Exception e) {
-            fail("Writing null String threw " + e);
-        }
+        proxy.read((char[])null);
+        proxy.read(null, 0, 0);
         proxy.close();
     }
 
@@ -53,12 +41,7 @@ public class ProxyReaderTest {
     public void testNullCharBuffer() throws Exception {
 
         final ProxyReader proxy = new ProxyReaderImpl(new CustomNullReader(0));
-
-        try {
-            proxy.read((CharBuffer)null);
-        } catch(final Exception e) {
-            fail("Writing null String threw " + e);
-        }
+        proxy.read((CharBuffer)null);
         proxy.close();
     }
 

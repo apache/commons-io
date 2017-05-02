@@ -35,36 +35,28 @@ import static org.junit.Assert.fail;
 public class TaggedInputStreamTest  {
 
     @Test
-    public void testEmptyStream() {
-        try {
-            final InputStream stream = new TaggedInputStream(new ClosedInputStream());
-            assertEquals(0, stream.available());
-            assertEquals(-1, stream.read());
-            assertEquals(-1, stream.read(new byte[1]));
-            assertEquals(-1, stream.read(new byte[1], 0, 1));
-            stream.close();
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
+    public void testEmptyStream() throws IOException {
+        final InputStream stream = new TaggedInputStream(new ClosedInputStream());
+        assertEquals(0, stream.available());
+        assertEquals(-1, stream.read());
+        assertEquals(-1, stream.read(new byte[1]));
+        assertEquals(-1, stream.read(new byte[1], 0, 1));
+        stream.close();
     }
 
     @Test
-    public void testNormalStream() {
-        try {
-            final InputStream stream = new TaggedInputStream(
-                    new ByteArrayInputStream(new byte[] { 'a', 'b', 'c' }));
-            assertEquals(3, stream.available());
-            assertEquals('a', stream.read());
-            final byte[] buffer = new byte[1];
-            assertEquals(1, stream.read(buffer));
-            assertEquals('b', buffer[0]);
-            assertEquals(1, stream.read(buffer, 0, 1));
-            assertEquals('c', buffer[0]);
-            assertEquals(-1, stream.read());
-            stream.close();
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
+    public void testNormalStream() throws IOException {
+        final InputStream stream = new TaggedInputStream(
+                new ByteArrayInputStream(new byte[] { 'a', 'b', 'c' }));
+        assertEquals(3, stream.available());
+        assertEquals('a', stream.read());
+        final byte[] buffer = new byte[1];
+        assertEquals(1, stream.read(buffer));
+        assertEquals('b', buffer[0]);
+        assertEquals(1, stream.read(buffer, 0, 1));
+        assertEquals('c', buffer[0]);
+        assertEquals(-1, stream.read());
+        stream.close();
     }
 
     @Test
@@ -126,18 +118,10 @@ public class TaggedInputStreamTest  {
         assertFalse(stream.isCauseOf(
                 new TaggedIOException(exception, UUID.randomUUID())));
 
-        try {
-            stream.throwIfCauseOf(exception);
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
+        stream.throwIfCauseOf(exception);
 
-        try {
-            stream.throwIfCauseOf(
+        stream.throwIfCauseOf(
                     new TaggedIOException(exception, UUID.randomUUID()));
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
         stream.close();
     }
 
