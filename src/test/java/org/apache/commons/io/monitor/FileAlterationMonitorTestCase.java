@@ -102,6 +102,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
             try {
                 monitor.start(); // try and start again
+                fail("Expected IllegalStateException");
             } catch (final IllegalStateException e) {
                 // expected result, monitor already running
             }
@@ -129,6 +130,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
             try {
                 monitor.stop(); // try and stop again
+                fail("Expected IllegalStateException");
             } catch (final IllegalStateException e) {
                 // expected result, monitor already stopped
             }
