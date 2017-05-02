@@ -904,7 +904,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             IOUtils.toByteArray(fin, -1);
-            fail("IllegalArgumentException excepted");
+            fail("IllegalArgumentException expected");
         } catch (final IllegalArgumentException exc) {
             assertTrue("Exception message does not start with \"Size must be equal or greater than zero\"", exc
                     .getMessage().startsWith("Size must be equal or greater than zero"));
@@ -926,10 +926,10 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             IOUtils.toByteArray(fin, m_testFile.length() + 1);
-            fail("IOException excepted");
+            fail("IOException expected");
         } catch (final IOException exc) {
-            assertTrue("Exception message does not start with \"Unexpected readed size\"",
-                    exc.getMessage().startsWith("Unexpected readed size"));
+            assertTrue("Exception message does not start with \"Unexpected read size\"",
+                    exc.getMessage().startsWith("Unexpected read size"));
         }
 
     }
@@ -938,7 +938,7 @@ public class IOUtilsTestCase extends FileBasedTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1);
-            fail("IOException excepted");
+            fail("IOException expected");
         } catch (final IllegalArgumentException exc) {
             assertTrue("Exception message does not start with \"Size cannot be greater than Integer max value\"", exc
                     .getMessage().startsWith("Size cannot be greater than Integer max value"));

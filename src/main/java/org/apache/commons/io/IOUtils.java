@@ -818,14 +818,14 @@ public class IOUtils {
 
         final byte[] data = new byte[size];
         int offset = 0;
-        int readed;
+        int read;
 
-        while (offset < size && (readed = input.read(data, offset, size - offset)) != EOF) {
-            offset += readed;
+        while (offset < size && (read = input.read(data, offset, size - offset)) != EOF) {
+            offset += read;
         }
 
         if (offset != size) {
-            throw new IOException("Unexpected readed size. current: " + offset + ", excepted: " + size);
+            throw new IOException("Unexpected read size. current: " + offset + ", expected: " + size);
         }
 
         return data;

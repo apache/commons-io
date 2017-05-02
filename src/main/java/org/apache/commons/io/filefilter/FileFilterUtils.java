@@ -518,8 +518,8 @@ public class FileFilterUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Returns a filter that returns true if the file was last modified after
-     * the specified cutoff time.
+     * Returns a filter that returns true if the file was last modified before
+     * or at the specified cutoff time.
      *
      * @param cutoff  the time threshold
      * @return an appropriately configured age file filter
@@ -544,8 +544,8 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the file was last modified after
-     * the specified cutoff date.
+     * Returns a filter that returns true if the file was last modified before
+     * or at the specified cutoff date.
      *
      * @param cutoffDate  the time threshold
      * @return an appropriately configured age file filter
@@ -570,8 +570,8 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the file was last modified after
-     * the specified reference file.
+     * Returns a filter that returns true if the file was last modified before
+     * or at the same time as the specified reference file.
      *
      * @param cutoffReference  the file whose last modification
      *        time is used as the threshold age of the files

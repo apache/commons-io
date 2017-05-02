@@ -1534,6 +1534,95 @@ public class FileUtilsTestCase extends FileBasedTestCase {
         }
     }
 
+    // copyToDirectory
+
+    @Test
+    public void testCopyToDirectoryWithFile() throws IOException {
+        final File directory = new File(getTestDirectory(), "subdir");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        final File destination = new File(directory, testFile1.getName());
+
+        FileUtils.copyToDirectory(testFile1, directory);
+        assertTrue("Check Exists", destination.exists());
+        assertEquals("Check Full Copy", testFile1Size, destination.length());
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testCopyToDirectoryWithFileSourceIsNull() throws IOException {
+        FileUtils.copyToDirectory((File) null, getTestDirectory());
+    }
+
+    @Test(expected=IOException.class)
+    public void testCopyToDirectoryWithFileSourceDoesNotExist() throws IOException {
+        FileUtils.copyToDirectory(new File(getTestDirectory(), "doesNotExists"), getTestDirectory());
+    }
+
+    @Test
+    public void testCopyToDirectoryWithDirectory() throws IOException {
+        final File destDirectory = new File(getTestDirectory(), "destination");
+        if (!destDirectory.exists()) {
+            destDirectory.mkdirs();
+        }
+
+        // Create a test directory
+        final File inputDirectory = new File(getTestDirectory(), "input");
+        if (!inputDirectory.exists()) {
+            inputDirectory.mkdirs();
+        }
+        final File outputDirDestination = new File(destDirectory, inputDirectory.getName());
+        FileUtils.copyToDirectory(testFile1, inputDirectory);
+        final File destFile1 = new File(outputDirDestination, testFile1.getName());
+        FileUtils.copyToDirectory(testFile2, inputDirectory);
+        final File destFile2 = new File(outputDirDestination, testFile2.getName());
+
+        FileUtils.copyToDirectory(inputDirectory, destDirectory);
+
+        // Check the directory was created
+        assertTrue("Check Exists", outputDirDestination.exists());
+        assertTrue("Check Directory", outputDirDestination.isDirectory());
+
+        // Check each file
+        assertTrue("Check Exists", destFile1.exists());
+        assertEquals("Check Full Copy", testFile1Size, destFile1.length());
+        assertTrue("Check Exists", destFile2.exists());
+        assertEquals("Check Full Copy", testFile2Size, destFile2.length());
+    }
+
+    @Test
+    public void testCopyToDirectoryWithIterable() throws IOException {
+        final File directory = new File(getTestDirectory(), "subdir");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        List<File> input = new ArrayList<>();
+        input.add(testFile1);
+        input.add(testFile2);
+
+        final File destFile1 = new File(directory, testFile1.getName());
+        final File destFile2 = new File(directory, testFile2.getName());
+
+        FileUtils.copyToDirectory(input, directory);
+        // Check each file
+        assertTrue("Check Exists", destFile1.exists());
+        assertEquals("Check Full Copy", testFile1Size, destFile1.length());
+        assertTrue("Check Exists", destFile2.exists());
+        assertEquals("Check Full Copy", testFile2Size, destFile2.length());
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testCopyToDirectoryWithIterableSourceIsNull() throws IOException {
+        FileUtils.copyToDirectory((List<File>) null, getTestDirectory());
+    }
+
+    @Test(expected=IOException.class)
+    public void testCopyToDirectoryWithIterableSourceDoesNotExist() throws IOException {
+        FileUtils.copyToDirectory(Collections.singleton(new File(getTestDirectory(), "doesNotExists")),
+                getTestDirectory());
+    }
+
     // forceDelete
 
     @Test

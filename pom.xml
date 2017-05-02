@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>41</version>
+    <version>42</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -259,6 +259,9 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.export>
 
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
+    <!-- Override clirr version to be able to build the site on Java 8 -->
+    <commons.clirr.version>2.8</commons.clirr.version>
+    <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
   </properties>
 
   <build>
@@ -312,6 +315,15 @@ file comparators, endian transformation classes, and much more.
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
+        <configuration>
+          <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-scm-publish-plugin</artifactId>
         <configuration>
           <ignorePathsToDelete>
@@ -332,7 +344,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.12.1</version>
+        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${basedir}/checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
