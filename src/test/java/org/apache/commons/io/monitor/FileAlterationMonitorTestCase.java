@@ -90,88 +90,79 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
+     * @throws Exception 
      */
     @Test
-    public void testMonitor() {
+    public void testMonitor() throws Exception {
+        final long interval = 100;
+        listener.clear();
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+        assertEquals("Interval", interval, monitor.getInterval());
+        monitor.start();
+
         try {
-            final long interval = 100;
-            listener.clear();
-            final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
-            assertEquals("Interval", interval, monitor.getInterval());
-            monitor.start();
+            monitor.start(); // try and start again
+            fail("Expected IllegalStateException");
+        } catch (final IllegalStateException e) {
+            // expected result, monitor already running
+        }
 
-            try {
-                monitor.start(); // try and start again
-                fail("Expected IllegalStateException");
-            } catch (final IllegalStateException e) {
-                // expected result, monitor already running
-            }
+        // Create a File
+        checkCollectionsEmpty("A");
+        File file1 = touch(new File(testDir, "file1.java"));
+        checkFile("Create", file1, listener.getCreatedFiles());
+        listener.clear();
 
-            // Create a File
-            checkCollectionsEmpty("A");
-            File file1 = touch(new File(testDir, "file1.java"));
-            checkFile("Create", file1, listener.getCreatedFiles());
-            listener.clear();
+        // Update a file
+        checkCollectionsEmpty("B");
+        file1 = touch(file1);
+        checkFile("Update", file1, listener.getChangedFiles());
+        listener.clear();
 
-            // Update a file
-            checkCollectionsEmpty("B");
-            file1 = touch(file1);
-            checkFile("Update", file1, listener.getChangedFiles());
-            listener.clear();
+        // Delete a file
+        checkCollectionsEmpty("C");
+        file1.delete();
+        checkFile("Delete", file1, listener.getDeletedFiles());
+        listener.clear();
 
-            // Delete a file
-            checkCollectionsEmpty("C");
-            file1.delete();
-            checkFile("Delete", file1, listener.getDeletedFiles());
-            listener.clear();
+        // Stop monitoring
+        monitor.stop();
 
-            // Stop monitoring
-            monitor.stop();
-
-            try {
-                monitor.stop(); // try and stop again
-                fail("Expected IllegalStateException");
-            } catch (final IllegalStateException e) {
-                // expected result, monitor already stopped
-            }
-        } catch (final Exception e) {
-            e.printStackTrace();
-            fail("Threw " + e);
+        try {
+            monitor.stop(); // try and stop again
+            fail("Expected IllegalStateException");
+        } catch (final IllegalStateException e) {
+            // expected result, monitor already stopped
         }
     }
 
     /**
      * Test using a thread factory.
+     * @throws Exception 
      */
     @Test
-    public void testThreadFactory() {
-        try {
-            final long interval = 100;
-            listener.clear();
-            final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
-            monitor.setThreadFactory(Executors.defaultThreadFactory());
-            assertEquals("Interval", interval, monitor.getInterval());
-            monitor.start();
+    public void testThreadFactory() throws Exception {
+        final long interval = 100;
+        listener.clear();
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(interval, observer);
+        monitor.setThreadFactory(Executors.defaultThreadFactory());
+        assertEquals("Interval", interval, monitor.getInterval());
+        monitor.start();
 
-            // Create a File
-            checkCollectionsEmpty("A");
-            final File file2 = touch(new File(testDir, "file2.java"));
-            checkFile("Create", file2, listener.getCreatedFiles());
-            listener.clear();
+        // Create a File
+        checkCollectionsEmpty("A");
+        final File file2 = touch(new File(testDir, "file2.java"));
+        checkFile("Create", file2, listener.getCreatedFiles());
+        listener.clear();
 
-            // Delete a file
-            checkCollectionsEmpty("B");
-            file2.delete();
-            checkFile("Delete", file2, listener.getDeletedFiles());
-            listener.clear();
+        // Delete a file
+        checkCollectionsEmpty("B");
+        file2.delete();
+        checkFile("Delete", file2, listener.getDeletedFiles());
+        listener.clear();
 
-            // Stop monitoring
-            monitor.stop();
-
-        } catch (final Exception e) {
-            e.printStackTrace();
-            fail("Threw " + e);
-        }
+        // Stop monitoring
+        monitor.stop();
     }
 
     /**

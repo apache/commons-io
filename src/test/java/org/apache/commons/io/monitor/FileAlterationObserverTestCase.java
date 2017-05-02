@@ -90,65 +90,61 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
+     * @throws Exception 
      */
     @Test
-    public void testDirectory() {
-        try {
-            checkAndNotify();
-            checkCollectionsEmpty("A");
-            final File testDirA = new File(testDir, "test-dir-A");
-            final File testDirB = new File(testDir, "test-dir-B");
-            final File testDirC = new File(testDir, "test-dir-C");
-            testDirA.mkdir();
-            testDirB.mkdir();
-            testDirC.mkdir();
-            final File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
-            final File testDirAFile2 = touch(new File(testDirA, "A-file2.txt")); // filter should ignore this
-            final File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
-            File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
-            final File testDirBFile1 = touch(new File(testDirB, "B-file1.java"));
+    public void testDirectory() throws Exception {
+        checkAndNotify();
+        checkCollectionsEmpty("A");
+        final File testDirA = new File(testDir, "test-dir-A");
+        final File testDirB = new File(testDir, "test-dir-B");
+        final File testDirC = new File(testDir, "test-dir-C");
+        testDirA.mkdir();
+        testDirB.mkdir();
+        testDirC.mkdir();
+        final File testDirAFile1 = touch(new File(testDirA, "A-file1.java"));
+        final File testDirAFile2 = touch(new File(testDirA, "A-file2.txt")); // filter should ignore this
+        final File testDirAFile3 = touch(new File(testDirA, "A-file3.java"));
+        File testDirAFile4 = touch(new File(testDirA, "A-file4.java"));
+        final File testDirBFile1 = touch(new File(testDirB, "B-file1.java"));
 
-            checkAndNotify();
-            checkCollectionSizes("B", 3, 0, 0, 4, 0, 0);
-            assertTrue("B testDirA",   listener.getCreatedDirectories().contains(testDirA));
-            assertTrue("B testDirB",   listener.getCreatedDirectories().contains(testDirB));
-            assertTrue("B testDirC",   listener.getCreatedDirectories().contains(testDirC));
-            assertTrue("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
-            assertFalse("B testDirAFile2", listener.getCreatedFiles().contains(testDirAFile2));
-            assertTrue("B testDirAFile3", listener.getCreatedFiles().contains(testDirAFile3));
-            assertTrue("B testDirAFile4", listener.getCreatedFiles().contains(testDirAFile4));
-            assertTrue("B testDirBFile1", listener.getCreatedFiles().contains(testDirBFile1));
+        checkAndNotify();
+        checkCollectionSizes("B", 3, 0, 0, 4, 0, 0);
+        assertTrue("B testDirA",   listener.getCreatedDirectories().contains(testDirA));
+        assertTrue("B testDirB",   listener.getCreatedDirectories().contains(testDirB));
+        assertTrue("B testDirC",   listener.getCreatedDirectories().contains(testDirC));
+        assertTrue("B testDirAFile1", listener.getCreatedFiles().contains(testDirAFile1));
+        assertFalse("B testDirAFile2", listener.getCreatedFiles().contains(testDirAFile2));
+        assertTrue("B testDirAFile3", listener.getCreatedFiles().contains(testDirAFile3));
+        assertTrue("B testDirAFile4", listener.getCreatedFiles().contains(testDirAFile4));
+        assertTrue("B testDirBFile1", listener.getCreatedFiles().contains(testDirBFile1));
 
-            checkAndNotify();
-            checkCollectionsEmpty("C");
+        checkAndNotify();
+        checkCollectionsEmpty("C");
 
-            testDirAFile4 = touch(testDirAFile4);
-            FileUtils.deleteDirectory(testDirB);
-            checkAndNotify();
-            checkCollectionSizes("D", 0, 0, 1, 0, 1, 1);
-            assertTrue("D testDirB",   listener.getDeletedDirectories().contains(testDirB));
-            assertTrue("D testDirAFile4", listener.getChangedFiles().contains(testDirAFile4));
-            assertTrue("D testDirBFile1", listener.getDeletedFiles().contains(testDirBFile1));
+        testDirAFile4 = touch(testDirAFile4);
+        FileUtils.deleteDirectory(testDirB);
+        checkAndNotify();
+        checkCollectionSizes("D", 0, 0, 1, 0, 1, 1);
+        assertTrue("D testDirB",   listener.getDeletedDirectories().contains(testDirB));
+        assertTrue("D testDirAFile4", listener.getChangedFiles().contains(testDirAFile4));
+        assertTrue("D testDirBFile1", listener.getDeletedFiles().contains(testDirBFile1));
 
-            FileUtils.deleteDirectory(testDir);
-            checkAndNotify();
-            checkCollectionSizes("E", 0, 0, 2, 0, 0, 3);
-            assertTrue("E testDirA",   listener.getDeletedDirectories().contains(testDirA));
-            assertTrue("E testDirAFile1", listener.getDeletedFiles().contains(testDirAFile1));
-            assertFalse("E testDirAFile2", listener.getDeletedFiles().contains(testDirAFile2));
-            assertTrue("E testDirAFile3", listener.getDeletedFiles().contains(testDirAFile3));
-            assertTrue("E testDirAFile4", listener.getDeletedFiles().contains(testDirAFile4));
+        FileUtils.deleteDirectory(testDir);
+        checkAndNotify();
+        checkCollectionSizes("E", 0, 0, 2, 0, 0, 3);
+        assertTrue("E testDirA",   listener.getDeletedDirectories().contains(testDirA));
+        assertTrue("E testDirAFile1", listener.getDeletedFiles().contains(testDirAFile1));
+        assertFalse("E testDirAFile2", listener.getDeletedFiles().contains(testDirAFile2));
+        assertTrue("E testDirAFile3", listener.getDeletedFiles().contains(testDirAFile3));
+        assertTrue("E testDirAFile4", listener.getDeletedFiles().contains(testDirAFile4));
 
-            testDir.mkdir();
-            checkAndNotify();
-            checkCollectionsEmpty("F");
+        testDir.mkdir();
+        checkAndNotify();
+        checkCollectionsEmpty("F");
 
-            checkAndNotify();
-            checkCollectionsEmpty("G");
-        } catch (final Exception e) {
-            e.printStackTrace();
-            fail("Threw " + e);
-        }
+        checkAndNotify();
+        checkCollectionsEmpty("G");
     }
 
     /**
