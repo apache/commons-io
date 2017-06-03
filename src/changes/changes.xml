@@ -83,6 +83,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-503" dev="ggregory" type="fix">
         Update platform requirement to Java 7.
       </action>
+      <action issue="IO-537" dev="ggregory" type="fix" due-to="Borys Zibrov">
+        BOMInputStream shouldn't sort array of BOMs in-place.
+      </action>
       <action issue="IO-506" dev="ggregory" type="update" due-to="Christian Schulte">
         Deprecate methods FileSystemUtils.freeSpaceKb().
       </action>

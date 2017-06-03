@@ -21,6 +21,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -168,9 +169,10 @@ public class BOMInputStream extends ProxyInputStream {
             throw new IllegalArgumentException("No BOMs specified");
         }
         this.include = include;
+        List<ByteOrderMark> list = Arrays.asList(boms);
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
-        Arrays.sort(boms, ByteOrderMarkLengthComparator);
-        this.boms = Arrays.asList(boms);
+        Collections.sort(list, ByteOrderMarkLengthComparator);
+        this.boms = list;
 
     }
 
