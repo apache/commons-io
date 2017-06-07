@@ -377,4 +377,17 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
 
     }
 
+    // @Test
+    // public void MorphisZhang() throws Exception {
+    //     InputStream in = new ByteArrayInputStream(inData);
+    //     in = new YellOnCloseInputStream(in);
+    //     final Reader reader = new InputStreamReader(in, "US-ASCII");
+
+    //     final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+    //     final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+    //     out.flush();
+    //     out.close();
+    //     IOUtils.copy(reader, out, "UTF16");
+    // }
+
 }
