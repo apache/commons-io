@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
 
 /**
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
- * 
+ *
  * @see FileUtils#directoryContains(File, File)
  * @since 2.2
  * @version $Id$
@@ -40,10 +40,10 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
     private File directory1;
     private File directory2;
     private File directory3;
-    private File file1; 
-    private File file1ByRelativeDirectory2; 
-    private File file2; 
-    private File file2ByRelativeDirectory1; 
+    private File file1;
+    private File file1ByRelativeDirectory2;
+    private File file2;
+    private File file2ByRelativeDirectory1;
     private File file3;
     final File top = getTestDirectory();
 
@@ -177,5 +177,25 @@ public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
         } catch (final IllegalArgumentException e) {
             // expected
         }
+    }
+
+    @Test
+    public void testSimilarStartingCanonicalPath() throws Exception{
+        final File top2 = getTestDirectory();
+        top2.mkdirs();
+
+        File foo = new File(top2, "foo");
+        File foo2 = new File(top2, "foo2");
+
+        foo.mkdir();
+        foo2.mkdir();
+
+        File a = new File(foo, "a.txt");
+        File b = new File(foo2, "b.txt");
+
+        FileUtils.touch(a);
+        FileUtils.touch(b);
+
+        assertFalse(FileUtils.directoryContains(foo, b));
     }
 }

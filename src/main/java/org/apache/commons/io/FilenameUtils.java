@@ -528,24 +528,48 @@ public class FilenameUtils {
      * @since 2.2
      * @see FileUtils#directoryContains(File, File)
      */
-    public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
-            throws IOException {
+     public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
+         throws IOException {
 
-        // Fail fast against NullPointerException
-        if (canonicalParent == null) {
-            throw new IllegalArgumentException("Directory must not be null");
-        }
+     // Fail fast against NullPointerException
+     if (canonicalParent == null) {
+         throw new IllegalArgumentException("Directory must not be null");
+     }
 
-        if (canonicalChild == null) {
-            return false;
-        }
+     if (canonicalChild == null) {
+         return false;
+     }
 
-        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
-            return false;
-        }
+     if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
+         return false;
+     }
 
-        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
-    }
+     return FilenameUtils.checkStartsWithDir(canonicalParent, canonicalChild);
+
+ }
+
+ /**
+  * Checks if the parent directory contains the child directory/file
+  *
+  * @param parent  the file path to consider as parent
+  * @param child the file path to consider as child
+  * @return true if the parent file path contains the child file path
+  */
+ public static boolean checkStartsWithDir(final String parent, final String child){
+     final int length = parent.length();
+
+     if(length > child.length()){
+         return false;
+     }
+
+     final int splitIndex = child.indexOf('/', length);
+
+     if(splitIndex == -1){
+         return false;
+     }
+
+     return parent.equals(child.substring(0,splitIndex));
+ }
 
     //-----------------------------------------------------------------------
     /**
@@ -716,7 +740,7 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
-     * 
+     *
      * @param filename
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
