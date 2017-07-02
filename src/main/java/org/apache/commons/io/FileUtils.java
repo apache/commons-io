@@ -1849,7 +1849,9 @@ public class FileUtils {
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
         try (InputStream in = openInputStream(file)) {
-            return IOUtils.toByteArray(in); // Do NOT use file.length() - see IO-453
+            long fileLength = file.length();
+            // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
+            return fileLength > 0 ? IOUtils.toByteArray(in, fileLength) : IOUtils.toByteArray(in);
         }
     }
 
