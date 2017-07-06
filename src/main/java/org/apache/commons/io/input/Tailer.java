@@ -162,6 +162,11 @@ public class Tailer implements Runnable {
      * Whether to close and reopen the file whilst waiting for more input.
      */
     private final boolean reOpen;
+    
+    /**
+     * Whether to ignore reading modified file with the same length.
+     */
+    private final boolean ignoreNew;
 
     /**
      * The tailer will run as long as this value is true.
@@ -210,6 +215,20 @@ public class Tailer implements Runnable {
                   final boolean reOpen) {
         this(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
     }
+    
+    /**
+     * Creates a Tailer for the given file, with a delay other than the default 1.0s.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
+     */
+    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
+                  final boolean reOpen, final boolean ignoreNew) {
+        this(file, listener, delayMillis, end, reOpen, ignoreNew, DEFAULT_BUFSIZE);
+    }
 
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
@@ -235,7 +254,22 @@ public class Tailer implements Runnable {
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
                   final boolean reOpen, final int bufSize) {
-        this(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
+        this(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, false, bufSize);
+    }
+    
+    /**
+     * Creates a Tailer for the given file, with a specified buffer size.
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen if true, close and reopen the file between reading chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
+     * @param bufSize Buffer size
+     */
+    public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
+                  final boolean reOpen, final boolean ignoreNew, final int bufSize) {
+        this(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, ignoreNew, bufSize);
     }
 
     /**
@@ -246,10 +280,11 @@ public class Tailer implements Runnable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
      * @param bufSize Buffer size
      */
     public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis,
-                  final boolean end, final boolean reOpen
+                  final boolean end, final boolean reOpen, final boolean ignoreNew
             , final int bufSize) {
         this.file = file;
         this.delayMillis = delayMillis;
@@ -261,6 +296,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
+        this.ignoreNew = ignoreNew;
         this.cset = cset; 
     }
 
@@ -293,7 +329,25 @@ public class Tailer implements Runnable {
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end, final boolean reOpen,
             final int bufSize) {
-        return create(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, bufSize);
+        return create(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, false, bufSize);
+    }
+    
+    /**
+     * Creates and starts a Tailer for the given file.
+     *
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen whether to close/reopen the file between chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
+     * @param bufSize buffer size.
+     * @return The new tailer
+     */
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end, final boolean reOpen, final boolean ignoreNew,
+            final int bufSize) {
+        return create(file, DEFAULT_CHARSET, listener, delayMillis, end, reOpen, ignoreNew, bufSize);
     }
 
     /**
@@ -305,13 +359,14 @@ public class Tailer implements Runnable {
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen whether to close/reopen the file between chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
      * @param bufSize buffer size.
      * @return The new tailer
      */
     public static Tailer create(final File file, final Charset charset, final TailerListener listener,
-                                final long delayMillis, final boolean end, final boolean reOpen
+                                final long delayMillis, final boolean end, final boolean reOpen, final boolean ignoreNew
             ,final int bufSize) {
-        final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, bufSize);
+        final Tailer tailer = new Tailer(file, charset, listener, delayMillis, end, reOpen, ignoreNew, bufSize);
         final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
@@ -345,6 +400,22 @@ public class Tailer implements Runnable {
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end, final boolean reOpen) {
         return create(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+    }
+    
+    /**
+     * Creates and starts a Tailer for the given file with default buffer size.
+     *
+     * @param file the file to follow.
+     * @param listener the TailerListener to use.
+     * @param delayMillis the delay between checks of the file for new content in milliseconds.
+     * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
+     * @param reOpen whether to close/reopen the file between chunks
+     * @param ignoreNew if true, will ignore reading modified file with the same length.
+     * @return The new tailer
+     */
+    public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
+                                final boolean end, final boolean reOpen, final boolean ignoreNew) {
+        return create(file, listener, delayMillis, end, reOpen, ignoreNew, DEFAULT_BUFSIZE);
     }
 
     /**
@@ -457,15 +528,17 @@ public class Tailer implements Runnable {
                         position = readLines(reader);
                         last = file.lastModified();
                     } else if (newer) {
-                        /*
-                         * This can happen if the file is truncated or overwritten with the exact same length of
-                         * information. In cases like this, the file position needs to be reset
-                         */
-                        position = 0;
-                        reader.seek(position); // cannot be null here
+                        if (ignoreNew) {
+                            /*
+                             * This can happen if the file is truncated or overwritten with the exact same length of
+                             * information. In cases like this, the file position needs to be reset
+                             */
+                            position = 0;
+                            reader.seek(position); // cannot be null here
 
-                        // Now we can read new lines
-                        position = readLines(reader);
+                            // Now we can read new lines
+                            position = readLines(reader);
+                        }
                         last = file.lastModified();
                     }
                 }

@@ -121,7 +121,7 @@ public class TailerTest extends FileBasedTestCase {
         final boolean isWindows = osname.startsWith("Windows");
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
         final Charset charsetUTF8 = StandardCharsets.UTF_8;
-        tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, 4096);
+        tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, false, 4096);
         final Thread thread = new Thread(tailer);
         thread.start();
 
