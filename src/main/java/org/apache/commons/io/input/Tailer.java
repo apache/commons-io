@@ -528,7 +528,7 @@ public class Tailer implements Runnable {
                         position = readLines(reader);
                         last = file.lastModified();
                     } else if (newer) {
-                        if (ignoreNew) {
+                        if (!ignoreNew) {
                             /*
                              * This can happen if the file is truncated or overwritten with the exact same length of
                              * information. In cases like this, the file position needs to be reset
