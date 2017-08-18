@@ -41,4 +41,18 @@ public class ClosedOutputStreamTest {
         }
     }
 
+    /**
+     * Test the <code>flush()</code> method.
+     * @throws Exception
+     */
+    @Test
+    public void testFlush() throws Exception {
+        try (ClosedOutputStream cos = new ClosedOutputStream()) {
+            cos.flush();
+            fail("flush()");
+        } catch (final IOException e) {
+            // expected
+        }
+    }
+
 }
