@@ -294,13 +294,16 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     long freeSpaceWindows(String path, final long timeout) throws IOException {
-        path = FilenameUtils.normalize(path, false);
-        if (path.length() > 0 && path.charAt(0) != '"') {
-            path = "\"" + path + "\"";
+        String normPath = FilenameUtils.normalize(path, false);
+        if (normPath == null) {
+            throw new IllegalArgumentException(path);
+        }
+        if (normPath.length() > 0 && normPath.charAt(0) != '"') {
+            normPath = "\"" + normPath + "\"";
         }
 
         // build and run the 'dir' command
-        final String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /a /-c " + path};
+        final String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /a /-c " + normPath};
 
         // read in the output of the command to an ArrayList
         final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);
@@ -312,13 +315,13 @@ public class FileSystemUtils {
         for (int i = lines.size() - 1; i >= 0; i--) {
             final String line = lines.get(i);
             if (line.length() > 0) {
-                return parseDir(line, path);
+                return parseDir(line, normPath);
             }
         }
         // all lines are blank
         throw new IOException(
                 "Command line 'dir /-c' did not return any info " +
-                "for path '" + path + "'");
+                "for path '" + normPath + "'");
     }
 
     /**

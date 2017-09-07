@@ -50,6 +50,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-542" dev="pschumacher" type="update" due-to="Ilmars Poikans">
         FileUtils#readFileToByteArray: optimize reading of files with known size
       </action>
+      <action issue="IO-547" dev="ggregory" type="update" due-to="Nikhil Shinde, Michael Ernst, Gary Greory">
+        Throw a IllegalArgumentException instead of NullPointerException in FileSystemUtils.freeSpaceWindows().
+      </action>
       <action issue="IO-367" dev="pschumacher" type="add" due-to="James Sawle">
         Add convenience methods for copyToDirectory
       </action>
