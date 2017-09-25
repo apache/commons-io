@@ -20,6 +20,7 @@ import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests the CountingInputStream.
@@ -183,4 +184,24 @@ public class ClassLoaderObjectInputStreamTest {
         clois.close();
     }
 
+    @org.junit.Test
+    public void testResolveProxyClassWithMultipleInterfaces() throws Exception {
+
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(Boolean.FALSE);
+        final InputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+        final ClassLoaderObjectInputStream clois =
+                new ClassLoaderObjectInputStream(getClass().getClassLoader(), bais);
+        final String[] interfaces = new String[]{Comparable.class.getName(),
+                                                 Serializable.class.getName(),
+                                                 Runnable.class.getName()};
+        final Class<?> result = clois.resolveProxyClass(interfaces);
+        assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
+        assertTrue("Assignable", Runnable.class.isAssignableFrom(result));
+        assertTrue("Assignable", Serializable.class.isAssignableFrom(result));
+        assertFalse("Not Assignable", Flushable.class.isAssignableFrom(result));
+        clois.close();
+    }
 }
