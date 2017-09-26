@@ -24,7 +24,6 @@
     <fileSets>
         <fileSet>
             <includes>
-                <include>build.xml</include>
                 <include>checkstyle.xml</include>
                 <include>findbugs-exclude-filter.xml</include>
                 <include>LICENSE.txt</include>
