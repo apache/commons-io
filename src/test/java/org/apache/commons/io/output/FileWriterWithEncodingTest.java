@@ -47,7 +47,7 @@ public class FileWriterWithEncodingTest extends FileBasedTestCase {
     private File file1;
     private File file2;
     private String textContent;
-    private char[] anotherTestContent = new char[]{'f', 'z', 'x'};
+    private final char[] anotherTestContent = new char[]{'f', 'z', 'x'};
 
     @Before
     public void setUp() {

@@ -93,11 +93,11 @@ public class ClassLoaderObjectInputStreamTest {
 
     private static class Test implements Serializable {
         private static final long serialVersionUID = 1L;
-        private int i;
+        private final int i;
 
-        private Object o;
+        private final Object o;
 
-        private E e;
+        private final E e;
 
         Test(int i, Object o) {
             this.i = i;
