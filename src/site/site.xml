@@ -40,8 +40,8 @@
             <item name="Team"                 href="/team-list.html"/>
             <item name="Tasks"                href="/tasks.html"/>
             <item name="Proposal"             href="/proposal.html"/>
-            <item name="SVN repository"       href="/source-repository.html"/>
-            <item name="Javadoc (latest SVN)" href="apidocs/index.html"/>
+            <item name="Source repository"    href="/source-repository.html"/>
+            <item name="Javadoc (GIT latest)" href="apidocs/index.html"/>
         </menu>
 
     </body>
