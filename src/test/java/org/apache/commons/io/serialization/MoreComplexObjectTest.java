@@ -32,15 +32,15 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-/** This is more an example than a test - deserialize our {@link MoreComplexObject} 
- *  to verify which settings it requires, as the object uses a number of primitive 
+/** This is more an example than a test - deserialize our {@link MoreComplexObject}
+ *  to verify which settings it requires, as the object uses a number of primitive
  *  and java.* member objects.
  */
 public class MoreComplexObjectTest extends ClosingBase {
-    
+
     private InputStream inputStream;
     private MoreComplexObject original;
-    
+
     @Override
     @Before
     public void setup() throws IOException {
@@ -50,12 +50,12 @@ public class MoreComplexObjectTest extends ClosingBase {
         oos.writeObject(original);
         inputStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
     }
-    
+
     private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
         assertEquals("Expecting same data after deserializing", original.toString(), copy.toString());
     }
-    
+
     /** Trusting java.lang.* and the array variants of that means we have
      *  to define a number of accept classes explicitly. Quite safe but
      *  might become a bit verbose.
@@ -68,7 +68,7 @@ public class MoreComplexObjectTest extends ClosingBase {
                 .accept("java.lang.*","[Ljava.lang.*")
         ));
     }
-    
+
     /** Trusting java.* is probably reasonable and avoids having to be too
      *  detailed in the accepts.
      */
@@ -80,10 +80,10 @@ public class MoreComplexObjectTest extends ClosingBase {
                 .accept("java.*","[Ljava.*")
         ));
     }
-    
+
     /** Here we accept everything but reject specific classes, using a pure
      *  blacklist mode.
-     *  
+     *
      *  That's not as safe as it's hard to get an exhaustive blacklist, but
      *  might be ok in controlled environments.
      */

@@ -35,7 +35,7 @@ final class FullClassNameMatcher implements ClassNameMatcher {
 
     /**
      * Constructs an object based on the specified class names.
-     * 
+     *
      * @param classes a list of class names
      */
     public FullClassNameMatcher(String... classes) {

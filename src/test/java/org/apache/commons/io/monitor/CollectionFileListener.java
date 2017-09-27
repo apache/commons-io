@@ -125,7 +125,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * Directory created Event.
-     * 
+     *
      * @param directory The directory created
      */
     @Override
@@ -135,7 +135,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * Directory changed Event.
-     * 
+     *
      * @param directory The directory changed
      */
     @Override
@@ -145,7 +145,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * Directory deleted Event.
-     * 
+     *
      * @param directory The directory deleted
      */
     @Override
@@ -155,7 +155,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * File created Event.
-     * 
+     *
      * @param file The file created
      */
     @Override
@@ -165,7 +165,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * File changed Event.
-     * 
+     *
      * @param file The file changed
      */
     @Override
@@ -175,7 +175,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
 
     /**
      * File deleted Event.
-     * 
+     *
      * @param file The file deleted
      */
     @Override

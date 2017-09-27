@@ -186,7 +186,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
                 .reject(MockSerializedClass.class, Integer.class)
         );
     }
-    
+
     @Test(expected = InvalidClassException.class)
     public void rejectPrecedence() throws Exception {
         assertSerialization(
@@ -195,7 +195,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
                 .reject(MockSerializedClass.class, Integer.class)
         );
     }
-    
+
     @Test(expected = InvalidClassException.class)
     public void rejectOnly() throws Exception {
         assertSerialization(
@@ -203,7 +203,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
                 .reject(Integer.class)
         );
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void customInvalidMethod() throws Exception {
         class CustomVOIS extends ValidatingObjectInputStream {
@@ -216,7 +216,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
                 throw new RuntimeException("Custom exception");
             }
         };
-        
+
         assertSerialization(
                 willClose(new CustomVOIS(testStream))
                 .reject(Integer.class)

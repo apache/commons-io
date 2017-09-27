@@ -114,12 +114,12 @@ public abstract class AbstractMonitorTestCase  {
      * @param fileChange expected number of files changed
      * @param fileDelete expected number of files deleted
      */
-    protected void checkCollectionSizes(String label, 
-                                        final int dirCreate, 
-                                        final int dirChange, 
-                                        final int dirDelete, 
-                                        final int fileCreate, 
-                                        final int fileChange, 
+    protected void checkCollectionSizes(String label,
+                                        final int dirCreate,
+                                        final int dirChange,
+                                        final int dirDelete,
+                                        final int fileCreate,
+                                        final int fileChange,
                                         final int fileDelete) {
         label = label + "[" + listener.getCreatedDirectories().size() +
                         " " + listener.getChangedDirectories().size() +

@@ -504,7 +504,7 @@ public class FileUtils {
      *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files. Must not be {@code null},
-     *                   use {@link TrueFileFilter#INSTANCE} to match all files in selected directories. 
+     *                   use {@link TrueFileFilter#INSTANCE} to match all files in selected directories.
      * @param dirFilter  optional filter to apply when finding subdirectories.
      *                   If this parameter is {@code null}, subdirectories will not be included in the
      *                   search. Use {@link TrueFileFilter#INSTANCE} to match all directories.
@@ -1551,7 +1551,7 @@ public class FileUtils {
      *
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException if source or destination is invalid
-     * @throws IOException if an IO error occurs during copying 
+     * @throws IOException if an IO error occurs during copying
      * @see #copyDirectoryToDirectory(File, File)
      * @see #copyFileToDirectory(File, File)
      * @since 2.6

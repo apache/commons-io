@@ -1265,7 +1265,7 @@ public class IOUtils {
      * @param encoding the encoding to use, null means platform default
      * @return the requested String
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static String resourceToString(final String name, final Charset encoding) throws IOException {
@@ -1286,7 +1286,7 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested String
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static String resourceToString(final String name, final Charset encoding, ClassLoader classLoader) throws IOException {
@@ -1304,7 +1304,7 @@ public class IOUtils {
      * @param name name of the desired resource
      * @return the requested byte array
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static byte[] resourceToByteArray(final String name) throws IOException {
@@ -1323,7 +1323,7 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested byte array
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static byte[] resourceToByteArray(final String name, final ClassLoader classLoader) throws IOException {
@@ -1341,7 +1341,7 @@ public class IOUtils {
      * @param name name of the desired resource
      * @return the requested URL
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static URL resourceToURL(final String name) throws IOException {
@@ -1360,7 +1360,7 @@ public class IOUtils {
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested URL
      * @throws IOException if an I/O error occurs
-     * 
+     *
      * @since 2.6
      */
     public static URL resourceToURL(final String name, final ClassLoader classLoader) throws IOException {

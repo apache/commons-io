@@ -22,9 +22,9 @@ import java.io.Serializable;
 
 public class MockSerializedClass implements Serializable {
     private static final long serialVersionUID = 2139985988735372175L;
-    
+
     private final String str;
-    
+
     MockSerializedClass(String str) {
         this.str = str;
     }

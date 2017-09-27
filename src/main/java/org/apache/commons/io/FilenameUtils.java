@@ -716,7 +716,7 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
-     * 
+     *
      * @param filename
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character

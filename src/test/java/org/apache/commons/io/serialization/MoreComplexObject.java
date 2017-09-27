@@ -31,7 +31,7 @@ import java.util.UUID;
  */
 public class MoreComplexObject implements Serializable {
     private static final long serialVersionUID = -5187124661539240729L;
-    
+
     private final Random random = new Random(System.currentTimeMillis());
     private final String string = UUID.randomUUID().toString();
     private final Integer integer = random.nextInt();
@@ -39,7 +39,7 @@ public class MoreComplexObject implements Serializable {
     private final long pLong = random.nextLong();
     private final Integer [] intArray = { random.nextInt(), random.nextInt() };
     private final List<Boolean> boolList = new ArrayList<>();
-    
+
     MoreComplexObject() {
         for(int i=0 ; i < 5; i++) {
             boolList.add(random.nextBoolean());

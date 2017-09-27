@@ -32,7 +32,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
 
     /**
      * Constructs an object based on the specified regular expression.
-     * 
+     *
      * @param regex a regular expression for evaluating acceptable class names
      */
     public RegexpClassNameMatcher(String regex) {
@@ -41,7 +41,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
 
     /**
      * Constructs an object based on the specified pattern.
-     * 
+     *
      * @param pattern a pattern for evaluating acceptable class names
      * @throws IllegalArgumentException if <code>pattern</code> is null
      */

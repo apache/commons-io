@@ -26,7 +26,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 
-/** Test base class that keeps track of Closeable objects 
+/** Test base class that keeps track of Closeable objects
  *  and cleans them up.
  */
 public class ClosingBase {
@@ -36,7 +36,7 @@ public class ClosingBase {
         toClose.add(t);
         return t;
     }
-    
+
     @Before
     public void setup() throws IOException {
         toClose.clear();

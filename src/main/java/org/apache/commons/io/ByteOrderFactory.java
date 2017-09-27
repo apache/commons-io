@@ -52,7 +52,7 @@ public class ByteOrderFactory {
      * <li>{@code ByteOrderFactory.parseByteOrder("little")} returns {@code ByteOrder.LITTLE_ENDIAN}</li>
      * <li>{@code ByteOrderFactory.parseByteOrder("big")} returns {@code ByteOrder.BIG_ENDIAN}</li>
      * </ul>
-     * 
+     *
      * @param value
      *            the {@code String} containing the ByteOrder representation to be parsed
      * @return the ByteOrder represented by the string argument

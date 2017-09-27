@@ -90,7 +90,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testMonitor() throws Exception {
@@ -138,7 +138,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test using a thread factory.
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testThreadFactory() throws Exception {

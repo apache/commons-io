@@ -271,7 +271,7 @@ public class DirectoryWalkerTestCaseJava4 {
 
     /**
      * Test Cancel
-     * @throws IOException 
+     * @throws IOException
      */
     @Test
     public void testCancel() throws IOException {
@@ -305,7 +305,7 @@ public class DirectoryWalkerTestCaseJava4 {
 
     /**
      * Test Cancel
-     * @throws IOException 
+     * @throws IOException
      */
     @Test
     public void testMultiThreadCancel() throws IOException {

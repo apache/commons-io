@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,8 @@ import org.apache.commons.io.EndianUtils;
 
 /**
  * DataInput for systems relying on little endian data formats.
- * When read, values will be changed from little endian to big 
- * endian formats for internal usage. 
+ * When read, values will be changed from little endian to big
+ * endian formats for internal usage.
  * <p>
  * <b>Origin of code: </b>Avalon Excalibur (IO)
  *
@@ -87,7 +87,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedDouble(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedDouble(InputStream)}.
      * @return the read long
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
@@ -100,7 +100,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedFloat(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedFloat(InputStream)}.
      * @return the read long
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
@@ -114,7 +114,7 @@ public class SwappedDataInputStream extends ProxyInputStream
 
     /**
      * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
-     * 
+     *
      * @param data the buffer to read the bytes into
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -129,7 +129,7 @@ public class SwappedDataInputStream extends ProxyInputStream
 
     /**
      * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
-     * 
+     *
      * @param data the buffer to read the bytes into
      * @param offset The start offset
      * @param length The number of bytes to read
@@ -157,7 +157,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedInteger(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedInteger(InputStream)}.
      * @return the read long
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -179,12 +179,12 @@ public class SwappedDataInputStream extends ProxyInputStream
     public String readLine()
         throws IOException, EOFException
     {
-        throw new UnsupportedOperationException( 
+        throw new UnsupportedOperationException(
                 "Operation not supported: readLine()" );
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedLong(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedLong(InputStream)}.
      * @return the read long
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -197,7 +197,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedShort(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedShort(InputStream)}.
      * @return the read long
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -223,7 +223,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Delegates to {@link EndianUtils#readSwappedUnsignedShort(InputStream)}. 
+     * Delegates to {@link EndianUtils#readSwappedUnsignedShort(InputStream)}.
      * @return the read long
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -245,7 +245,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     public String readUTF()
         throws IOException, EOFException
     {
-        throw new UnsupportedOperationException( 
+        throw new UnsupportedOperationException(
                 "Operation not supported: readUTF()" );
     }
 

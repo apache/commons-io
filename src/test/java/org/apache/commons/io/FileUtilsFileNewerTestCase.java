@@ -118,7 +118,7 @@ public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
 
     /**
      * Tests the <code>isFileNewer(File, *)</code> methods which the specified conditions.
-     * 
+     *
      * Creates :
      * <ul>
      * <li>a <code>Date</code> which represents the time reference</li>

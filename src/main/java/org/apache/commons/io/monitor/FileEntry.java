@@ -29,7 +29,7 @@ import java.io.Serializable;
  *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
- * 
+ *
  * <h3>Custom Implementations</h3>
  * <p>
  * If the state of additional {@link File} attributes is required then create a custom

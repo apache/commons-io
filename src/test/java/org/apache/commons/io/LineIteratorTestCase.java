@@ -319,7 +319,7 @@ public class LineIteratorTestCase extends FileBasedTestCase {
      *
      * @param lineCount the lines to create in the test file
      *
-     * @throws IOException If an I/O error occurs while creating the file 
+     * @throws IOException If an I/O error occurs while creating the file
      */
     private void doTestFileWithSpecifiedLines(final int lineCount) throws IOException {
         final String encoding = "UTF-8";

@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * A runnable that spawns a monitoring thread triggering any
  * registered {@link FileAlterationObserver} at a specified interval.
- * 
+ *
  * @see FileAlterationObserver
  * @version $Id$
  * @since 2.0
@@ -112,7 +112,7 @@ public final class FileAlterationMonitor implements Runnable {
 
     /**
      * Returns the set of {@link FileAlterationObserver} registered with
-     * this monitor. 
+     * this monitor.
      *
      * @return The set of {@link FileAlterationObserver}
      */

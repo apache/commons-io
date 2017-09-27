@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +21,10 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method 
- * calls on to the proxied stream and doesn't change which methods are 
+ * A Proxy stream which acts as expected, that is it passes the method
+ * calls on to the proxied stream and doesn't change which methods are
  * being called. It is an alternative base class to FilterWriter
- * to increase reusability, because FilterWriter changes the 
+ * to increase reusability, because FilterWriter changes the
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
  *
@@ -33,7 +33,7 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Constructs a new ProxyWriter.
-     * 
+     *
      * @param proxy  the Writer to delegate to
      */
     public ProxyWriter(final Writer proxy) {

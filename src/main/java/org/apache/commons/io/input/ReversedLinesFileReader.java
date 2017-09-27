@@ -243,7 +243,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Handles block rollover
-         * 
+         *
          * @return the new FilePart or null
          * @throws IOException if there was a problem reading the file
          */
@@ -268,7 +268,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Reads a line.
-         * 
+         *
          * @return the line or null
          * @throws IOException if there is an error reading from the file
          */
@@ -343,7 +343,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * Finds the new-line sequence and return its length.
-         * 
+         *
          * @param data buffer to scan
          * @param i start offset in buffer
          * @return length of newline sequence or 0 if none found

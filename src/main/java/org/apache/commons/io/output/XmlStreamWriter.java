@@ -74,7 +74,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Constructs a new XML stream writer for the specified file
      * with a default encoding of UTF-8.
-     * 
+     *
      * @param file The file to write to
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
@@ -86,7 +86,7 @@ public class XmlStreamWriter extends Writer {
     /**
      * Constructs a new XML stream writer for the specified file
      * with the specified default encoding.
-     * 
+     *
      * @param file The file to write to
      * @param defaultEncoding The default encoding if not encoding could be detected
      * @throws FileNotFoundException if there is an error creating or
@@ -200,7 +200,7 @@ public class XmlStreamWriter extends Writer {
 
     /**
      * Writes the characters to the underlying writer, detecting encoding.
-     * 
+     *
      * @param cbuf the buffer to write the characters from
      * @param off The start offset
      * @param len The number of characters to write

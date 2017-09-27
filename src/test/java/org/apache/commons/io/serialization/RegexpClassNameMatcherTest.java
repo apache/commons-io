@@ -53,7 +53,7 @@ public class RegexpClassNameMatcherTest {
     public void testNullStringPattern() {
         new RegexpClassNameMatcher((String)null);
     }
-    
+
     @Test(expected=IllegalArgumentException.class)
     public void testNullPatternPattern() {
         new RegexpClassNameMatcher((Pattern)null);

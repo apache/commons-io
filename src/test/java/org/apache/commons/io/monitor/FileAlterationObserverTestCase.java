@@ -89,7 +89,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testDirectory() throws Exception {
@@ -148,7 +148,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testFileCreate() throws Exception {
@@ -208,7 +208,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testFileUpdate() throws Exception {
@@ -265,7 +265,7 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() deleting
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testFileDelete() throws Exception {

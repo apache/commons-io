@@ -29,7 +29,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
- * 
+ *
  * <h2>1. Create a TailerListener implementation</h2>
  * <p>
  * First you need to create a {@link TailerListener} implementation
@@ -261,7 +261,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
-        this.cset = cset; 
+        this.cset = cset;
     }
 
     /**

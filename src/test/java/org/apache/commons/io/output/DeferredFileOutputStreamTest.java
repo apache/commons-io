@@ -60,7 +60,7 @@ public class DeferredFileOutputStreamTest
      * The test data as a byte array, derived from the string.
      */
     private final byte[] testBytes = testString.getBytes();
-    
+
     private final int initialBufferSize;
 
     /**
@@ -344,7 +344,7 @@ public class DeferredFileOutputStreamTest
 
     /**
      * Test specifying a temporary file and the threshold is reached.
-     * @throws Exception 
+     * @throws Exception
      */
     @Test
     public void testTempFileError() throws Exception {

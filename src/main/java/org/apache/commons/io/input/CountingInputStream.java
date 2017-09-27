@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -93,8 +93,8 @@ public class CountingInputStream extends ProxyInputStream {
         return (int) result;
     }
 
-    /** 
-     * Set the byte count back to 0. 
+    /**
+     * Set the byte count back to 0.
      * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an <code>int</code>.
@@ -125,8 +125,8 @@ public class CountingInputStream extends ProxyInputStream {
         return this.count;
     }
 
-    /** 
-     * Set the byte count back to 0. 
+    /**
+     * Set the byte count back to 0.
      * <p>
      * NOTE: This method is an alternative for <code>resetCount()</code>
      * and was added because that method returns an integer which will

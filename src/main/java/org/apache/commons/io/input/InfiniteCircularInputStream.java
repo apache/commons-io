@@ -19,7 +19,7 @@ package org.apache.commons.io.input;
 import java.io.InputStream;
 
 /**
- * 
+ *
  * An {@link InputStream} that infinitely repeats provided bytes.
  * <p>
  * Closing a <tt>InfiniteCircularInputStream</tt> has no effect. The methods in
@@ -34,7 +34,7 @@ public class InfiniteCircularInputStream extends InputStream {
 
     /**
      * Creates a InfiniteCircularStream from the specified array of chars.
-     * 
+     *
      * @param repeatedContent
      *            Input buffer to be repeated (not copied)
      */

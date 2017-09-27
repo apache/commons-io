@@ -1493,9 +1493,9 @@ public class IOUtilsTestCase extends FileBasedTestCase {
         assertSame(bw, IOUtils.buffer(bw));
         assertSame(bw, IOUtils.buffer(bw, 1024));
     }
-    
-    
-    @Test 
+
+
+    @Test
     public void testCopyLarge_SkipWithInvalidOffset() throws IOException {
         ByteArrayInputStream is = null;
         ByteArrayOutputStream os = null;
@@ -1520,5 +1520,5 @@ public class IOUtilsTestCase extends FileBasedTestCase {
             IOUtils.closeQuietly(os);
         }
     }
-    
+
 }

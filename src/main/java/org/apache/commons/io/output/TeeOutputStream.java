@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Classic splitter of OutputStream. Named after the unix 'tee' 
- * command. It allows a stream to be branched off so there 
+ * Classic splitter of OutputStream. Named after the unix 'tee'
+ * command. It allows a stream to be branched off so there
  * are now two streams.
  *
  */
@@ -87,12 +87,12 @@ public class TeeOutputStream extends ProxyOutputStream {
 
     /**
      * Closes both output streams.
-     * 
+     *
      * If closing the main output stream throws an exception, attempt to close the branch output stream.
-     * 
+     *
      * If closing the main and branch output streams both throw exceptions, which exceptions is thrown by this method is
      * currently unspecified and subject to change.
-     * 
+     *
      * @throws IOException
      *             if an I/O error occurs
      */

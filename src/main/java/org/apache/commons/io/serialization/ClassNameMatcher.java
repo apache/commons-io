@@ -24,8 +24,8 @@ package org.apache.commons.io.serialization;
 public interface ClassNameMatcher {
 
     /**
-     * Returns <code>true</code> if the supplied class name matches this object's condition. 
-     * 
+     * Returns <code>true</code> if the supplied class name matches this object's condition.
+     *
      * @param className fully qualified class name
      * @return <code>true</code> if the class name matches this object's condition
      */

@@ -144,8 +144,8 @@ public class TailerTest extends FileBasedTestCase {
                final String expected = lines.get(i);
                final String actual = tailerlines.get(i);
                if (!expected.equals(actual)) {
-                   fail("Line: " + i 
-                           + "\nExp: (" + expected.length() + ") " + expected 
+                   fail("Line: " + i
+                           + "\nExp: (" + expected.length() + ") " + expected
                            + "\nAct: (" + actual.length() + ") "+ actual);
                }
            }
