@@ -145,8 +145,8 @@ public class FileSystemUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Returns the free space on a drive or volume in kilobytes by invoking
-     * the command line.
+     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
+     * by invoking the command line.
      * <pre>
      * FileSystemUtils.freeSpaceKb("C:");       // Windows
      * FileSystemUtils.freeSpaceKb("/volume");  // *nix
@@ -167,15 +167,15 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 1.2, enhanced OS support in 1.3
-     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
     @Deprecated
     public static long freeSpaceKb(final String path) throws IOException {
         return freeSpaceKb(path, -1);
     }
     /**
-     * Returns the free space on a drive or volume in kilobytes by invoking
-     * the command line.
+     * Returns the free space on a drive or volume in kibibytes (1024 bytes)
+     * by invoking the command line.
      * <pre>
      * FileSystemUtils.freeSpaceKb("C:");       // Windows
      * FileSystemUtils.freeSpaceKb("/volume");  // *nix
@@ -198,7 +198,7 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
-     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
     @Deprecated
     public static long freeSpaceKb(final String path, final long timeout) throws IOException {
@@ -206,7 +206,8 @@ public class FileSystemUtils {
     }
 
     /**
-     * Returns the disk size of the volume which holds the working directory.
+     * Returns the free space for the working directory
+     * in kibibytes (1024 bytes) by invoking the command line.
      * <p>
      * Identical to:
      * <pre>
@@ -216,7 +217,7 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
-     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
     @Deprecated
     public static long freeSpaceKb() throws IOException {
@@ -224,7 +225,8 @@ public class FileSystemUtils {
     }
 
     /**
-     * Returns the disk size of the volume which holds the working directory.
+     * Returns the free space for the working directory
+     * in kibibytes (1024 bytes) by invoking the command line.
      * <p>
      * Identical to:
      * <pre>
@@ -236,7 +238,7 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      * @since 2.0
-     * @deprecated As of 2.6 removed without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
+     * @deprecated As of 2.6 deprecated without replacement. Please use {@link java.nio.file.FileStore#getUsableSpace()}.
      */
     @Deprecated
     public static long freeSpaceKb(final long timeout) throws IOException {
