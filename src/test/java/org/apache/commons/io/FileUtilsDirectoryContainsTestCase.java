@@ -23,9 +23,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -34,16 +33,11 @@ import org.junit.rules.TemporaryFolder;
  *
  * @see FileUtils#directoryContains(File, File)
  * @since 2.2
- * @version $Id$
  */
 public class FileUtilsDirectoryContainsTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     private File directory1;
     private File directory2;
@@ -53,12 +47,12 @@ public class FileUtilsDirectoryContainsTestCase {
     private File file2;
     private File file2ByRelativeDirectory1;
     private File file3;
-    final File top = getTestDirectory();
+    private File top;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Before
     public void setUp() throws Exception {
-        top.mkdirs();
+        top = temporaryFolder.getRoot();
 
         directory1 = new File(top, "directory1");
         directory2 = new File(top, "directory2");
@@ -73,17 +67,12 @@ public class FileUtilsDirectoryContainsTestCase {
         file3 = new File(top, "file3");
 
         // Tests case with relative path
-        file1ByRelativeDirectory2 = new File(getTestDirectory(), "directory2/../directory1/file1");
-        file2ByRelativeDirectory1 = new File(getTestDirectory(), "directory1/../directory2/file2");
+        file1ByRelativeDirectory2 = new File(top, "directory2/../directory1/file1");
+        file2ByRelativeDirectory1 = new File(top, "directory1/../directory2/file2");
 
         FileUtils.touch(file1);
         FileUtils.touch(file2);
         FileUtils.touch(file3);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(top);
     }
 
     @Test

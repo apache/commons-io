@@ -70,10 +70,7 @@ public class TailerTest {
     public void tearDown() throws Exception {
         if (tailer != null) {
             tailer.stop();
-            TestUtils.sleep(1000);
         }
-        FileUtils.deleteDirectory(getTestDirectory());
-        TestUtils.sleep(1000);
     }
 
     @Test

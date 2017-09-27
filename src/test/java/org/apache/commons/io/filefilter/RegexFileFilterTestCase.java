@@ -22,11 +22,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -35,22 +32,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class RegexFileFilterTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
-
-    @Before
-    public void setUp() {
-        getTestDirectory().mkdirs();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
-    }
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of

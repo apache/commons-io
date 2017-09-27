@@ -29,22 +29,13 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test FileSystemUtils.
  *
  */
 public class FileSystemUtilsTestCase {
-
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
 
     //-----------------------------------------------------------------------
     @Test

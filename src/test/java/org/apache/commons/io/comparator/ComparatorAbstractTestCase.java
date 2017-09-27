@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -62,18 +60,6 @@ public abstract class ComparatorAbstractTestCase {
 
     /** File which is more than the "lessFile" */
     protected File moreFile;
-
-    /** @see junit.framework.TestCase#tearDown() */
-    @After
-    public void tearDown() throws Exception {
-        comparator = null;
-        reverse = null;
-        equalFile1 = null;
-        equalFile2 = null;
-        lessFile = null;
-        moreFile = null;
-        FileUtils.deleteDirectory(getTestDirectory());
-    }
 
     /**
      * Test the comparator.

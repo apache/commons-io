@@ -25,9 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -37,35 +36,14 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsCleanDirectoryTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    private File top;
 
-    final File top = getLocalTestDirectory();
-
-    private File getLocalTestDirectory() {
-        return new File(getTestDirectory(), "list-files");
-    }
-
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
     @Before
     public void setUp() throws Exception {
-        top.mkdirs();
-    }
-
-    /**
-     * @see junit.framework.TestCase#tearDown()
-     */
-    @After
-    public void tearDown() throws Exception {
-        chmod(top, 775, true);
-        FileUtils.deleteDirectory(top);
-        FileUtils.deleteDirectory(getTestDirectory());
+        top = temporaryFolder.getRoot();
     }
 
     //-----------------------------------------------------------------------

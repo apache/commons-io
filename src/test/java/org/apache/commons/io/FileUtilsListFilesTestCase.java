@@ -28,9 +28,8 @@ import java.util.Iterator;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -39,15 +38,11 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsListFilesTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     private File getLocalTestDirectory() {
-        return new File(getTestDirectory(), "list-files");
+        return temporaryFolder.getRoot();
     }
 
     /**
@@ -57,10 +52,6 @@ public class FileUtilsListFilesTestCase {
     @Before
     public void setUp() throws Exception {
         File dir = getLocalTestDirectory();
-        if (dir.exists()) {
-            FileUtils.deleteDirectory(dir);
-        }
-        dir.mkdirs();
         File file = new File(dir, "dummy-build.xml");
         FileUtils.touch(file);
         file = new File(dir, "README");
@@ -87,16 +78,6 @@ public class FileUtilsListFilesTestCase {
         FileUtils.touch(file);
         file = new File(dir, "Repository");
         FileUtils.touch(file);
-    }
-
-    /**
-     * @see junit.framework.TestCase#tearDown()
-     */
-    @After
-    public void tearDown() throws Exception {
-        final File dir = getLocalTestDirectory();
-        FileUtils.deleteDirectory(dir);
-        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     private Collection<String> filesToFilenames(final Collection<File> files) {

@@ -34,9 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -46,10 +45,10 @@ import org.junit.rules.TemporaryFolder;
  */
 public class LineIteratorTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
+    private File getTestDirectory() {
         return temporaryFolder.getRoot();
     }
 
@@ -116,11 +115,6 @@ public class LineIteratorTestCase {
         }
         dir.mkdirs();
 
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     // -----------------------------------------------------------------------

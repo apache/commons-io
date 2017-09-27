@@ -28,22 +28,13 @@ import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test IOCase for correctness.
  *
  */
 public class IOCaseTestCase {
-
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
