@@ -16,28 +16,41 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.*;
-import java.lang.ref.ReferenceQueue;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.lang.ref.ReferenceQueue;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
  *
  * @see FileCleaningTracker
  */
-public class FileCleaningTrackerTestCase extends FileBasedTestCase {
+public class FileCleaningTrackerTestCase {
+    
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
+
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
     }
@@ -45,34 +58,30 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     private File testFile;
     private FileCleaningTracker theInstance;
 
-    public FileCleaningTrackerTestCase() {
-        testFile = new File(getTestDirectory(), "file-test.txt");
-    }
-
     @Before
     public void setUp() throws Exception {
+        testFile = new File(getTestDirectory(), "file-test.txt");
         theInstance = newInstance();
-        getTestDirectory();
     }
 
     @After
     public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
 
         // reset file cleaner class, so as not to break other tests
 
         /**
-         * The following block of code can possibly be removed when the
-         * deprecated {@link FileCleaner} is gone. The question is, whether
-         * we want to support reuse of {@link FileCleaningTracker} instances,
-         * which we should, IMO, not.
+         * The following block of code can possibly be removed when the deprecated {@link FileCleaner} is gone. The
+         * question is, whether we want to support reuse of {@link FileCleaningTracker} instances, which we should, IMO,
+         * not.
          */
         {
-            theInstance.q = new ReferenceQueue<>();
-            theInstance.trackers.clear();
-            theInstance.deleteFailures.clear();
-            theInstance.exitWhenFinished = false;
-            theInstance.reaper = null;
+            if (theInstance != null) {
+                theInstance.q = new ReferenceQueue<>();
+                theInstance.trackers.clear();
+                theInstance.deleteFailures.clear();
+                theInstance.exitWhenFinished = false;
+                theInstance.reaper = null;
+            }
         }
 
         theInstance = null;
@@ -235,7 +244,7 @@ public class FileCleaningTrackerTestCase extends FileBasedTestCase {
     public void testFileCleanerExitWhenFinished1() throws Exception {
         final String path = testFile.getPath();
 
-        assertEquals("1-testFile exists", false, testFile.exists());
+        assertEquals("1-testFile exists: " + testFile, false, testFile.exists());
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
         assertEquals("2-testFile exists", true, testFile.exists());
 
