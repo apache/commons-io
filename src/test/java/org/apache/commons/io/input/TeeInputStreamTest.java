@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * JUnit Test Case for {@link TeeInputStream}.

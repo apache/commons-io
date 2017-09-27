@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.input;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
+
+import org.junit.Test;
 
 /**
  * Test {@link ProxyReader}.

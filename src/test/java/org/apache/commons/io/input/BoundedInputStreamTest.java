@@ -16,12 +16,12 @@
  */
 package org.apache.commons.io.input;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 /**
  * Tests for {@link BoundedInputStream}.

@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.security.MessageDigest;

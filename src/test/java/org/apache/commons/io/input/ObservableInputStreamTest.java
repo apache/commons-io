@@ -16,12 +16,13 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.apache.commons.io.input.ObservableInputStream;
 import org.apache.commons.io.input.ObservableInputStream.Observer;
 import org.junit.Test;
 

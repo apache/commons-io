@@ -16,11 +16,16 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.*;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Flushable;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Tests the CountingInputStream.
