@@ -37,9 +37,7 @@ import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * JUnit tests for IOUtils copy methods.
@@ -47,13 +45,6 @@ import org.junit.rules.TemporaryFolder;
  * @see IOUtils
  */
 public class IOUtilsCopyTestCase {
-
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
 
     /*
      * NOTE this is not particularly beautiful code. A better way to check for
