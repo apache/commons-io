@@ -16,6 +16,11 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.testtools.TestUtils.checkFile;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -27,21 +32,24 @@ import java.nio.charset.CharsetEncoder;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
-import static org.apache.commons.io.testtools.TestUtils.checkFile;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests that the encoding is actually set and used.
  *
  */
-public class FileWriterWithEncodingTest extends FileBasedTestCase {
+public class FileWriterWithEncodingTest {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private String defaultEncoding;
     private File file1;
