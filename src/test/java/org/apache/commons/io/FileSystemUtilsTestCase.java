@@ -78,15 +78,22 @@ public class FileSystemUtilsTestCase {
             // now perform the test
             final long free = FileSystemUtils.freeSpace("/");
             final long kb = FileSystemUtils.freeSpaceKb("/");
+            // Assume disk space does not fluctuate
+            // more than 1% between the above two calls;
+            // this also also small enough to verifiy freeSpaceKb uses
+            // kibibytes (1024) instead of SI kilobytes (1000)
+            double acceptableDelta = kb * 0.01d;
             if (kilobyteBlock) {
-                assertEquals(free, kb, 256d);
+                assertEquals(free, kb, acceptableDelta);
             } else {
-                assertEquals(free / 2d, kb, 256d);
+                assertEquals(free / 2d, kb, acceptableDelta);
             }
         } else {
             final long bytes = FileSystemUtils.freeSpace("");
             final long kb = FileSystemUtils.freeSpaceKb("");
-            assertEquals((double) bytes / 1024, kb, 256d);
+            // Assume disk space does not fluctuate more than 1%
+            double acceptableDelta = kb * 0.01d;
+            assertEquals((double) bytes / 1024, kb, acceptableDelta);
         }
     }
 
