@@ -36,7 +36,7 @@ import org.junit.rules.TemporaryFolder;
  *
  */
 public class FileUtilsCleanDirectoryTestCase {
-    
+
     @ClassRule
     public static TemporaryFolder temporaryFolder = new TemporaryFolder();
 

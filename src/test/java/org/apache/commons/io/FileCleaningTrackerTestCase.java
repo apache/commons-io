@@ -43,7 +43,7 @@ import org.junit.rules.TemporaryFolder;
  * @see FileCleaningTracker
  */
 public class FileCleaningTrackerTestCase {
-    
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
