@@ -120,7 +120,7 @@ public class IOUtilsTestCase {
             final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(m_testFile));
             try {
-                TestUtils.generateTestData(output, (long) FILE_SIZE);
+                TestUtils.generateTestData(output, FILE_SIZE);
             } finally {
                 IOUtils.closeQuietly(output);
             }

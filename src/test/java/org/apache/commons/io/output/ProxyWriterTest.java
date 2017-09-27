@@ -182,7 +182,7 @@ public class ProxyWriterTest {
             }
         };
         try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write((int) 'a');
+            proxy.write('a');
         }
     }
 

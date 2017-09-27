@@ -65,7 +65,7 @@ public class IOUtilsCopyTestCase {
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
 
-    private final byte[] inData = TestUtils.generateTestData((long) FILE_SIZE);
+    private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
     //-----------------------------------------------------------------------
     @SuppressWarnings("resource") // 'in' is deliberately not closed

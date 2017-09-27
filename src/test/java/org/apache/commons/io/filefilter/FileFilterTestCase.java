@@ -725,7 +725,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output2, (long) 0);
+            TestUtils.generateTestData(output2, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
@@ -737,7 +737,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -749,7 +749,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -774,7 +774,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output2, (long) 0);
+            TestUtils.generateTestData(output2, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
@@ -786,7 +786,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -798,7 +798,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(file))) {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         }
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
@@ -816,7 +816,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(oldFile))) {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         }
 
         do {
@@ -831,7 +831,7 @@ public class FileFilterTestCase {
             }
             try (final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(reference))) {
-                TestUtils.generateTestData(output, (long) 0);
+                TestUtils.generateTestData(output, 0);
             }
         } while( oldFile.lastModified() == reference.lastModified() );
 
@@ -850,7 +850,7 @@ public class FileFilterTestCase {
             }
             try (final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(newFile))) {
-                TestUtils.generateTestData(output, (long) 0);
+                TestUtils.generateTestData(output, 0);
             }
         } while( reference.lastModified() == newFile.lastModified() );
 
@@ -893,7 +893,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(smallFile))) {
-            TestUtils.generateTestData(output1, (long) 32);
+            TestUtils.generateTestData(output1, 32);
         }
         final File largeFile = new File(getTestDirectory(), "large.txt");
         if (!largeFile.getParentFile().exists()) {
@@ -902,7 +902,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(largeFile))){
-            TestUtils.generateTestData(output, (long) 128);
+            TestUtils.generateTestData(output, 128);
         }
         final IOFileFilter filter1 = FileFilterUtils.sizeFileFilter(64);
         final IOFileFilter filter2 = FileFilterUtils.sizeFileFilter(64, true);
@@ -960,7 +960,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
-            TestUtils.generateTestData(output, (long) 32);
+            TestUtils.generateTestData(output, 32);
         }
         readOnlyFile.setReadOnly();
         assertFiltering(CanReadFileFilter.CAN_READ,  readOnlyFile, true);
@@ -978,7 +978,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
-            TestUtils.generateTestData(output, (long) 32);
+            TestUtils.generateTestData(output, 32);
         }
         readOnlyFile.setReadOnly();
         assertFiltering(CanWriteFileFilter.CAN_WRITE,    getTestDirectory(), true);
@@ -1005,7 +1005,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(emptyFile))){
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         }
         assertFiltering(EmptyFileFilter.EMPTY, emptyFile, true);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, emptyFile, false);
@@ -1022,7 +1022,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(notEmptyFile))){
-            TestUtils.generateTestData(output, (long) 32);
+            TestUtils.generateTestData(output, 32);
         }
         assertFiltering(EmptyFileFilter.EMPTY, notEmptyFile, false);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, notEmptyFile, true);
@@ -1055,7 +1055,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(fileA))) {
-            TestUtils.generateTestData(output1, (long) 32);
+            TestUtils.generateTestData(output1, 32);
         }
         if (!fileB.getParentFile().exists()) {
             throw new IOException("Cannot create file " + fileB
@@ -1063,7 +1063,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(fileB))) {
-            TestUtils.generateTestData(output, (long) 32);
+            TestUtils.generateTestData(output, 32);
         }
 
         assertFiltering(filter, fileA, false);
@@ -1099,7 +1099,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(fileA))){
-            TestUtils.generateTestData(output1, (long) 32);
+            TestUtils.generateTestData(output1, 32);
         }
         if (!fileB.getParentFile().exists()) {
             throw new IOException("Cannot create file " + fileB
@@ -1107,7 +1107,7 @@ public class FileFilterTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(fileB))){
-            TestUtils.generateTestData(output, (long) 32);
+            TestUtils.generateTestData(output, 32);
         }
 
         assertFiltering(filter, fileA, false);
@@ -1134,7 +1134,7 @@ public class FileFilterTestCase {
 
         final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
         IOUtils.write(classFileMagicNumber, classFileAStream);
-        TestUtils.generateTestData(classFileAStream, (long) 32);
+        TestUtils.generateTestData(classFileAStream, 32);
         classFileAStream.close();
 
         FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);
@@ -1210,7 +1210,7 @@ public class FileFilterTestCase {
 
         final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
         IOUtils.write(classFileMagicNumber, classFileAStream);
-        TestUtils.generateTestData(classFileAStream, (long) 32);
+        TestUtils.generateTestData(classFileAStream, 32);
         classFileAStream.close();
 
         FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);

@@ -124,7 +124,7 @@ public class FileUtilsTestCase {
         }
         try (final BufferedOutputStream output3 =
                 new BufferedOutputStream(new FileOutputStream(testFile1))) {
-            TestUtils.generateTestData(output3, (long) testFile1Size);
+            TestUtils.generateTestData(output3, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
@@ -132,7 +132,7 @@ public class FileUtilsTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
-            TestUtils.generateTestData(output2, (long) testFile2Size);
+            TestUtils.generateTestData(output2, testFile2Size);
         }
         FileUtils.deleteDirectory(getTestDirectory());
         getTestDirectory().mkdirs();
@@ -142,7 +142,7 @@ public class FileUtilsTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1))) {
-            TestUtils.generateTestData(output1, (long) testFile1Size);
+            TestUtils.generateTestData(output1, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
@@ -150,7 +150,7 @@ public class FileUtilsTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
-            TestUtils.generateTestData(output, (long) testFile2Size);
+            TestUtils.generateTestData(output, testFile2Size);
         }
     }
 
@@ -1012,7 +1012,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(oldFile));
         try {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -1030,7 +1030,7 @@ public class FileUtilsTestCase {
             final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(reference));
             try {
-                TestUtils.generateTestData(output, (long) 0);
+                TestUtils.generateTestData(output, 0);
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -1052,7 +1052,7 @@ public class FileUtilsTestCase {
             final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(newFile));
             try {
-                TestUtils.generateTestData(output, (long) 0);
+                TestUtils.generateTestData(output, 0);
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -1270,7 +1270,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
-            TestUtils.generateTestData(output1, (long) 1234);
+            TestUtils.generateTestData(output1, 1234);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -1281,7 +1281,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
-            TestUtils.generateTestData(output, (long) 4321);
+            TestUtils.generateTestData(output, 4321);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -1314,7 +1314,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
-            TestUtils.generateTestData(output1, (long) 1234);
+            TestUtils.generateTestData(output1, 1234);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -1325,7 +1325,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
-            TestUtils.generateTestData(output, (long) 4321);
+            TestUtils.generateTestData(output, 4321);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -1356,7 +1356,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
-            TestUtils.generateTestData(output1, (long) 1234);
+            TestUtils.generateTestData(output1, 1234);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -1367,7 +1367,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
-            TestUtils.generateTestData(output, (long) 4321);
+            TestUtils.generateTestData(output, 4321);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -1820,7 +1820,7 @@ public class FileUtilsTestCase {
             final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(theFile));
             try {
-                TestUtils.generateTestData(output, (long) fileSizes[i]);
+                TestUtils.generateTestData(output, fileSizes[i]);
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -1870,7 +1870,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(someFile));
         try {
-            TestUtils.generateTestData(output, (long) 100);
+            TestUtils.generateTestData(output, 100);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -1908,7 +1908,7 @@ public class FileUtilsTestCase {
             final BufferedOutputStream output =
                     new BufferedOutputStream(new FileOutputStream(theFile));
             try {
-                TestUtils.generateTestData(output, (long) fileSizes[i]);
+                TestUtils.generateTestData(output, fileSizes[i]);
             } finally {
                 IOUtils.closeQuietly(output);
             }
@@ -1955,7 +1955,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(someFile));
         try {
-            TestUtils.generateTestData(output, (long) 100);
+            TestUtils.generateTestData(output, 100);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2552,7 +2552,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2574,7 +2574,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2688,7 +2688,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testSourceFile));
         try {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -2699,7 +2699,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testDestFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2746,7 +2746,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -2757,7 +2757,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2792,7 +2792,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2834,7 +2834,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2881,7 +2881,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2917,7 +2917,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -2962,7 +2962,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
@@ -2973,7 +2973,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }
@@ -3006,7 +3006,7 @@ public class FileUtilsTestCase {
         final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile));
         try {
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         } finally {
             IOUtils.closeQuietly(output);
         }

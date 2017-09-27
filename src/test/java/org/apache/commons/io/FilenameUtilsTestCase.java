@@ -75,7 +75,7 @@ public class FilenameUtilsTestCase {
         }
         try (final BufferedOutputStream output3 =
                 new BufferedOutputStream(new FileOutputStream(testFile1))) {
-            TestUtils.generateTestData(output3, (long) testFile1Size);
+            TestUtils.generateTestData(output3, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
@@ -83,7 +83,7 @@ public class FilenameUtilsTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
-            TestUtils.generateTestData(output2, (long) testFile2Size);
+            TestUtils.generateTestData(output2, testFile2Size);
         }
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
@@ -91,7 +91,7 @@ public class FilenameUtilsTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(testFile1))) {
-            TestUtils.generateTestData(output1, (long) testFile1Size);
+            TestUtils.generateTestData(output1, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2
@@ -99,7 +99,7 @@ public class FilenameUtilsTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
-            TestUtils.generateTestData(output, (long) testFile2Size);
+            TestUtils.generateTestData(output, testFile2Size);
         }
     }
 

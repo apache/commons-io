@@ -58,7 +58,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(smallerFile))) {
-            TestUtils.generateTestData(output2, (long) 32);
+            TestUtils.generateTestData(output2, 32);
         }
         if (!equalFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile
@@ -66,7 +66,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(equalFile))) {
-            TestUtils.generateTestData(output1, (long) 48);
+            TestUtils.generateTestData(output1, 48);
         }
         if (!largerFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + largerFile
@@ -74,7 +74,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(largerFile))) {
-            TestUtils.generateTestData(output, (long) 64);
+            TestUtils.generateTestData(output, 64);
         }
         equalFile1 = equalFile;
         equalFile2 = equalFile;

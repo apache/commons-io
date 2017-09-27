@@ -159,7 +159,7 @@ public class FileCleaningTrackerTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(testFile))) {
-            TestUtils.generateTestData(output, (long) 100);
+            TestUtils.generateTestData(output, 100);
         }
         assertTrue(testFile.exists());
         assertTrue(getTestDirectory().exists());

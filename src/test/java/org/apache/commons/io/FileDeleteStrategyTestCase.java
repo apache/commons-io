@@ -59,7 +59,7 @@ public class FileDeleteStrategyTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(subFile))) {
-            TestUtils.generateTestData(output, (long) 16);
+            TestUtils.generateTestData(output, 16);
         }
 
         assertTrue(subDir.exists());
@@ -97,7 +97,7 @@ public class FileDeleteStrategyTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(subFile))) {
-            TestUtils.generateTestData(output, (long) 16);
+            TestUtils.generateTestData(output, 16);
         }
 
         assertTrue(subDir.exists());
@@ -130,7 +130,7 @@ public class FileDeleteStrategyTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(subFile))) {
-            TestUtils.generateTestData(output, (long) 16);
+            TestUtils.generateTestData(output, 16);
         }
 
         assertTrue(subDir.exists());

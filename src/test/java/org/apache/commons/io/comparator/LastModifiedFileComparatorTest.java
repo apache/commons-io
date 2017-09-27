@@ -41,7 +41,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(olderFile))) {
-            TestUtils.generateTestData(output2, (long) 0);
+            TestUtils.generateTestData(output2, 0);
         }
 
         final File equalFile = new File(dir, "equal.txt");
@@ -51,7 +51,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(equalFile))) {
-            TestUtils.generateTestData(output1, (long) 0);
+            TestUtils.generateTestData(output1, 0);
         }
         do {
             TestUtils.sleepQuietly(300);
@@ -65,7 +65,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(newerFile))){
-            TestUtils.generateTestData(output, (long) 0);
+            TestUtils.generateTestData(output, 0);
         }
         do {
             TestUtils.sleepQuietly(300);

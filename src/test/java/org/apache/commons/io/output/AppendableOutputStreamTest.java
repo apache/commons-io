@@ -45,7 +45,7 @@ public class AppendableOutputStreamTest {
 
     @Test
     public void testWriteInt() throws Exception {
-        out.write((int) 'F');
+        out.write('F');
 
         assertEquals("F", out.getAppendable().toString());
     }

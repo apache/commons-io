@@ -55,7 +55,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
 
         try (final BufferedOutputStream output3 =
                 new BufferedOutputStream(new FileOutputStream(lessFile))) {
-            TestUtils.generateTestData(output3, (long) 32);
+            TestUtils.generateTestData(output3, 32);
         }
         if (!equalFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile1
@@ -63,7 +63,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output2 =
                 new BufferedOutputStream(new FileOutputStream(equalFile1))) {
-            TestUtils.generateTestData(output2, (long) 48);
+            TestUtils.generateTestData(output2, 48);
         }
         if (!equalFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile2
@@ -71,7 +71,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output1 =
                 new BufferedOutputStream(new FileOutputStream(equalFile2))) {
-            TestUtils.generateTestData(output1, (long) 48);
+            TestUtils.generateTestData(output1, 48);
         }
         if (!moreFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + moreFile
@@ -79,7 +79,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         }
         try (final BufferedOutputStream output =
                 new BufferedOutputStream(new FileOutputStream(moreFile))) {
-            TestUtils.generateTestData(output, (long) 48);
+            TestUtils.generateTestData(output, 48);
         }
     }
 
