@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;

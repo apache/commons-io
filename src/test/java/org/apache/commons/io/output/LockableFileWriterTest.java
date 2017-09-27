@@ -16,6 +16,10 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -23,21 +27,25 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests that files really lock, although no writing is done as
  * the locking is tested only on construction.
  *
  */
-public class LockableFileWriterTest extends FileBasedTestCase {
+public class LockableFileWriterTest {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private File file;
     private File lockDir;

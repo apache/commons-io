@@ -17,9 +17,9 @@
 package org.apache.commons.io.output;
 
 
-import org.junit.Test;
-
 import java.io.IOException;
+
+import org.junit.Test;
 
 
 /**

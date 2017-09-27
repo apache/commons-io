@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import org.junit.Test;
-
-import static org.junit.Assert.fail;
 
 /**
  * JUnit Test Case for {@link ClosedOutputStream}.

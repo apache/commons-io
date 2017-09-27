@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.output;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  * Test case for {@link StringBuilderWriter}.
