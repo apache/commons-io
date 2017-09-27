@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io.filefilter;
 
-import org.junit.Before;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Before;
 
 public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
 

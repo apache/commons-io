@@ -16,23 +16,31 @@
  */
 package org.apache.commons.io.filefilter;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Used to test RegexFileFilterUtils.
  */
-public class RegexFileFilterTestCase extends FileBasedTestCase {
+public class RegexFileFilterTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     @Before
     public void setUp() {
