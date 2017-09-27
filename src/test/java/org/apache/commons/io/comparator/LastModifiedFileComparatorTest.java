@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.comparator;
 
-import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Before;
 
 /**
  * Test case for {@link LastModifiedFileComparator}.

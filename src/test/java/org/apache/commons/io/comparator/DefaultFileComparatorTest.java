@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.comparator;
 
-import org.junit.Before;
-
 import java.io.File;
+
+import org.junit.Before;
 
 /**
  * Test case for {@link DefaultFileComparator}.

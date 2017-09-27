@@ -16,26 +16,34 @@
  */
 package org.apache.commons.io.comparator;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.After;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 /**
  * Base Test case for Comparator implementations.
  */
-public abstract class ComparatorAbstractTestCase extends FileBasedTestCase {
+public abstract class ComparatorAbstractTestCase {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    protected File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     /** comparator instance */
     protected AbstractFileComparator comparator;

@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.comparator;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Comparator;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test case for {@link ExtensionFileComparator}.

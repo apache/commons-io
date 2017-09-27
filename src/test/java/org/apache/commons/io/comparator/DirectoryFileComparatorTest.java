@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io.comparator;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.File;
 
 /**
  * Test case for {@link DirectoryFileComparator}.
