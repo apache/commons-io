@@ -16,11 +16,10 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,41 +29,46 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test FilenameUtils for correctness.
  *
  * @see FilenameUtils
  */
-public class FilenameUtilsTestCase extends FileBasedTestCase {
+public class FilenameUtilsTestCase {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private static final String SEP = "" + File.separatorChar;
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
-    private final File testFile1;
-    private final File testFile2;
+    private File testFile1;
+    private File testFile2;
 
-    private final int testFile1Size;
-    private final int testFile2Size;
-
-    public FilenameUtilsTestCase() {
-        testFile1 = new File(getTestDirectory(), "file1-test.txt");
-        testFile2 = new File(getTestDirectory(), "file1a-test.txt");
-
-        testFile1Size = (int) testFile1.length();
-        testFile2Size = (int) testFile2.length();
-    }
+    private int testFile1Size;
+    private int testFile2Size;
 
     /**
      * @see junit.framework.TestCase#setUp()
      */
     @Before
     public void setUp() throws Exception {
-        getTestDirectory();
+        testFile1 = temporaryFolder.newFile("file1-test.txt");
+        testFile2 = temporaryFolder.newFile("file1a-test.txt");
+
+        testFile1Size = (int) testFile1.length();
+        testFile2Size = (int) testFile2.length();
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
@@ -81,8 +85,6 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output2, (long) testFile2Size);
         }
-        FileUtils.deleteDirectory(getTestDirectory());
-        getTestDirectory();
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
@@ -106,7 +108,7 @@ public class FilenameUtilsTestCase extends FileBasedTestCase {
      */
     @After
     public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
+        temporaryFolder.delete();
     }
 
     //-----------------------------------------------------------------------
