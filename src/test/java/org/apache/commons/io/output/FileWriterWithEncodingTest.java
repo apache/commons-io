@@ -30,9 +30,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -77,13 +75,6 @@ public class FileWriterWithEncodingTest {
             arr[i] = chars[i % chars.length];
         }
         textContent = new String(arr);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
-        defaultEncoding = null;
-        textContent = null;
     }
 
     //-----------------------------------------------------------------------

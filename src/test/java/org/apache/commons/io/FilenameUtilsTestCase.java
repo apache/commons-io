@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,10 +45,6 @@ public class FilenameUtilsTestCase {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
-
     private static final String SEP = "" + File.separatorChar;
     private static final boolean WINDOWS = File.separatorChar == '\\';
 
@@ -59,9 +54,6 @@ public class FilenameUtilsTestCase {
     private int testFile1Size;
     private int testFile2Size;
 
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
     @Before
     public void setUp() throws Exception {
         testFile1 = temporaryFolder.newFile("file1-test.txt");
@@ -101,14 +93,6 @@ public class FilenameUtilsTestCase {
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output, testFile2Size);
         }
-    }
-
-    /**
-     * @see junit.framework.TestCase#tearDown()
-     */
-    @After
-    public void tearDown() throws Exception {
-        temporaryFolder.delete();
     }
 
     //-----------------------------------------------------------------------

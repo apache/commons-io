@@ -27,7 +27,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.junit.After;
 import org.junit.Before;
 
 /**
@@ -87,11 +86,6 @@ public abstract class AbstractMonitorTestCase  {
         } catch (final Exception e) {
             fail("Observer init() threw " + e);
         }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(testDir);
     }
 
     /**

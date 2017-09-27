@@ -26,8 +26,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,14 +58,6 @@ public class LockableFileWriterTest {
         lockFile = new File(lockDir, file.getName() + ".lck");
         altLockDir = getTestDirectory();
         altLockFile = new File(altLockDir, file.getName() + ".lck");
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        file.delete();
-        lockFile.delete();
-        altLockFile.delete();
-        FileUtils.deleteDirectory(altLockDir);
     }
 
     //-----------------------------------------------------------------------

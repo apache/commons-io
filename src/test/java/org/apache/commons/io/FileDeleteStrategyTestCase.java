@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -160,10 +159,4 @@ public class FileDeleteStrategyTestCase {
         assertEquals("FileDeleteStrategy[Normal]", FileDeleteStrategy.NORMAL.toString());
         assertEquals("FileDeleteStrategy[Force]", FileDeleteStrategy.FORCE.toString());
     }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
-    }
-
 }

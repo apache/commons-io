@@ -43,8 +43,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -67,16 +65,6 @@ public class FileFilterTestCase {
     static final String SVN_DIR_NAME = ".svn";
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
-
-    @Before
-    public void setUp() {
-        getTestDirectory();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
-    }
 
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
