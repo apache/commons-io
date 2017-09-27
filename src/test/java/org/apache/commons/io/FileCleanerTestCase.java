@@ -20,7 +20,6 @@ package org.apache.commons.io;
 /**
  * This is used to test FileCleaner for correctness.
  *
-
  * @see FileCleaner
  */
 public class FileCleanerTestCase extends FileCleaningTrackerTestCase {
