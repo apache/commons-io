@@ -38,7 +38,7 @@ public class InfiniteCircularInputStream extends InputStream {
      * @param repeatedContent
      *            Input buffer to be repeated (not copied)
      */
-    public InfiniteCircularInputStream(byte[] repeatedContent) {
+    public InfiniteCircularInputStream(final byte[] repeatedContent) {
         this.repeatedContent = repeatedContent;
     }
 

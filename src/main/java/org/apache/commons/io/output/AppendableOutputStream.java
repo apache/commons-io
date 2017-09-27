@@ -39,7 +39,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
      *
      * @param appendable the appendable to write to
      */
-    public AppendableOutputStream(T appendable) {
+    public AppendableOutputStream(final T appendable) {
         this.appendable = appendable;
     }
 
@@ -50,7 +50,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
      * @throws IOException upon error
      */
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         appendable.append((char)b);
     }
 

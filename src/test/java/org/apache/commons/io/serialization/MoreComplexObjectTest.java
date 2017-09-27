@@ -51,7 +51,7 @@ public class MoreComplexObjectTest extends ClosingBase {
         inputStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
     }
 
-    private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
         assertEquals("Expecting same data after deserializing", original.toString(), copy.toString());
     }

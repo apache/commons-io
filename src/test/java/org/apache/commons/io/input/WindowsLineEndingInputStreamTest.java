@@ -62,11 +62,11 @@ public class WindowsLineEndingInputStreamTest {
         assertEquals( "a", roundtrip( "a", false ) );
     }
 
-    private String roundtrip( String msg ) throws IOException {
+    private String roundtrip( final String msg ) throws IOException {
         return roundtrip( msg, true );
     }
 
-    private String roundtrip( String msg, boolean ensure ) throws IOException {
+    private String roundtrip( final String msg, final boolean ensure ) throws IOException {
         ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes( "UTF-8" ) );
         WindowsLineEndingInputStream lf = new WindowsLineEndingInputStream( baos, ensure );
         byte[] buf = new byte[100];

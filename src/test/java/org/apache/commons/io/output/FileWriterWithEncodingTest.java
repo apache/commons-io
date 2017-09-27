@@ -119,7 +119,7 @@ public class FileWriterWithEncodingTest {
         succesfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
     }
 
-    private void succesfulRun(FileWriterWithEncoding fw21) throws Exception {
+    private void succesfulRun(final FileWriterWithEncoding fw21) throws Exception {
         FileWriter fw1 = null;
         FileWriterWithEncoding fw2 = null;
         try {
@@ -182,7 +182,7 @@ public class FileWriterWithEncodingTest {
         }
     }
 
-    private void writeTestPayload(FileWriter fw1, FileWriterWithEncoding fw2) throws IOException {
+    private void writeTestPayload(final FileWriter fw1, final FileWriterWithEncoding fw2) throws IOException {
         assertTrue(file1.exists());
         assertTrue(file2.exists());
 

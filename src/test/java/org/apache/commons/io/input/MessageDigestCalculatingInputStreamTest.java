@@ -25,7 +25,7 @@ import java.util.Random;
 import org.junit.Test;
 
 public class MessageDigestCalculatingInputStreamTest {
-    public static byte[] generateRandomByteStream(int pSize) {
+    public static byte[] generateRandomByteStream(final int pSize) {
         final byte[] buffer = new byte[pSize];
         final Random rnd = new Random();
         rnd.nextBytes(buffer);

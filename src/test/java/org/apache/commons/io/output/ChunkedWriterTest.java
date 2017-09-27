@@ -53,7 +53,7 @@ public class ChunkedWriterTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         return new OutputStreamWriter(baos) {
             @Override
-            public void write(char[] cbuf, int off, int len) throws IOException {
+            public void write(final char[] cbuf, final int off, final int len) throws IOException {
                 numWrites.incrementAndGet();
                 super.write(cbuf, off, len);
             }

@@ -401,7 +401,7 @@ public class BOMInputStream extends ProxyInputStream {
      *             if an I/O error occurs
      */
     @Override
-    public long skip(long n) throws IOException {
+    public long skip(final long n) throws IOException {
         int skipped = 0;
         while ((n > skipped) && (readFirstBytes() >= 0)) {
             skipped++;

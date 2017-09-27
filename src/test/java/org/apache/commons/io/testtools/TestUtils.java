@@ -90,7 +90,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static File newFile(File testDirectory, final String filename) throws IOException {
+    public static File newFile(final File testDirectory, final String filename) throws IOException {
         final File destination = new File(testDirectory, filename);
         /*
         assertTrue( filename + "Test output data file shouldn't previously exist",
@@ -222,7 +222,7 @@ public abstract class TestUtils {
      * @param ms the number of milliseconds to sleep for
      * @throws InterruptedException if interrupted
      */
-    public static void sleep(long ms) throws InterruptedException {
+    public static void sleep(final long ms) throws InterruptedException {
         long finishAt = System.currentTimeMillis() + ms;
         long remaining = ms;
         do {
@@ -231,7 +231,7 @@ public abstract class TestUtils {
         } while (remaining > 0);
     }
 
-    public static void sleepQuietly(long ms) {
+    public static void sleepQuietly(final long ms) {
         try {
             sleep(ms);
         } catch (InterruptedException ignored){

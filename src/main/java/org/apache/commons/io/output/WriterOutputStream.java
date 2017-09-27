@@ -315,7 +315,7 @@ public class WriterOutputStream extends OutputStream {
      *
      * @param charset the charset to check the support for
      */
-    private static void checkIbmJdkWithBrokenUTF16(Charset charset){
+    private static void checkIbmJdkWithBrokenUTF16(final Charset charset){
         if (!"UTF-16".equals(charset.name())) {
             return;
         }

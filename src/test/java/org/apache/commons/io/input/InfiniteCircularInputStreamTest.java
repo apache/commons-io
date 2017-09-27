@@ -47,7 +47,7 @@ public class InfiniteCircularInputStreamTest {
         assertStreamOutput(contentToCycle, expectedOutput);
     }
 
-    private void assertStreamOutput(byte[] toCycle, byte[] expected) throws IOException {
+    private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         byte[] actual = new byte[expected.length];
 
         try (InputStream infStream = new InfiniteCircularInputStream(toCycle)) {

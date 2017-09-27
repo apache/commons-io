@@ -1372,7 +1372,7 @@ public class FileUtils {
      * @param dest the destination
      * @throws FileNotFoundException if the destination does not exist
      */
-    private static void checkFileRequirements(File src, File dest) throws FileNotFoundException {
+    private static void checkFileRequirements(final File src, final File dest) throws FileNotFoundException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
         }
@@ -1735,7 +1735,7 @@ public class FileUtils {
      * @return The files in the directory, never null.
      * @throws IOException if an I/O error occurs
      */
-    private static File[] verifiedListFiles(File directory) throws IOException {
+    private static File[] verifiedListFiles(final File directory) throws IOException {
         if (!directory.exists()) {
             final String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
@@ -2636,7 +2636,7 @@ public class FileUtils {
      * @param file the file to check
      * @return the size of the file
      */
-    private static long sizeOf0(File file) {
+    private static long sizeOf0(final File file) {
         if (file.isDirectory()) {
             return sizeOfDirectory0(file);
         } else {

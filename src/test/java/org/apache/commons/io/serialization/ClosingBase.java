@@ -32,7 +32,7 @@ import org.junit.Before;
 public class ClosingBase {
     private final List<Closeable> toClose = new ArrayList<>();
 
-    protected <T extends Closeable> T willClose(T t) {
+    protected <T extends Closeable> T willClose(final T t) {
         toClose.add(t);
         return t;
     }

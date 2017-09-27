@@ -44,7 +44,7 @@ public class ObservableInputStream extends ProxyInputStream {
          *    because, in that case, {@link #finished()} will be invoked instead.
          * @throws IOException if an i/o-error occurs
          */
-        void data(int pByte) throws IOException {}
+        void data(final int pByte) throws IOException {}
 
         /** Called to indicate, that {@link InputStream#read(byte[])}, or
          * {@link InputStream#read(byte[], int, int)} have been called, and are about to
@@ -55,7 +55,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * @param pLength The number of bytes, which have been stored in the byte array.
          * @throws IOException if an i/o-error occurs
          */
-        void data(byte[] pBuffer, int pOffset, int pLength) throws IOException {}
+        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {}
 
         /** Called to indicate, that EOF has been seen on the underlying stream.
          * This method may be called multiple times, if the reader keeps invoking
@@ -74,7 +74,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * Called to indicate, that an error occurred on the underlying stream.
          * @throws IOException if an i/o-error occurs
          */
-        void error(IOException pException) throws IOException { throw pException; }
+        void error(final IOException pException) throws IOException { throw pException; }
     }
 
     private final List<Observer> observers = new ArrayList<>();
@@ -83,7 +83,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * Creates a new ObservableInputStream for the given InputStream.
      * @param pProxy the input stream to proxy
      */
-    public ObservableInputStream(InputStream pProxy) {
+    public ObservableInputStream(final InputStream pProxy) {
         super(pProxy);
     }
 
@@ -91,7 +91,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * Adds an Observer.
      * @param pObserver the observer to add
      */
-    public void add(Observer pObserver) {
+    public void add(final Observer pObserver) {
         observers.add(pObserver);
     }
 
@@ -99,7 +99,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * Removes an Observer.
      * @param pObserver the observer to remove
      */
-    public void remove(Observer pObserver) {
+    public void remove(final Observer pObserver) {
         observers.remove(pObserver);
     }
 
@@ -130,7 +130,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     @Override
-    public int read(byte[] pBuffer) throws IOException {
+    public int read(final byte[] pBuffer) throws IOException {
         int result = 0;
         IOException ioe = null;
         try {
@@ -149,7 +149,7 @@ public class ObservableInputStream extends ProxyInputStream {
     }
 
     @Override
-    public int read(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+    public int read(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
         int result = 0;
         IOException ioe = null;
         try {
@@ -175,7 +175,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * @throws IOException Some observer has thrown an exception, which is being
      *   passed down.
      */
-    protected void noteDataBytes(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+    protected void noteDataBytes(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
         for (Observer observer : getObservers()) {
             observer.data(pBuffer, pOffset, pLength);
         }
@@ -197,7 +197,7 @@ public class ObservableInputStream extends ProxyInputStream {
      * @throws IOException Some observer has thrown an exception, which is being
      *   passed down.
      */
-    protected void noteDataByte(int pDataByte) throws IOException {
+    protected void noteDataByte(final int pDataByte) throws IOException {
         for (Observer observer : getObservers()) {
             observer.data(pDataByte);
         }
@@ -210,7 +210,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   passed down. This may be the same exception, which has been passed as an
      *   argument.
      */
-    protected void noteError(IOException pException) throws IOException {
+    protected void noteError(final IOException pException) throws IOException {
         for (Observer observer : getObservers()) {
             observer.error(pException);
         }

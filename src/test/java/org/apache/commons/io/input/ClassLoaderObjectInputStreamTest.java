@@ -104,14 +104,14 @@ public class ClassLoaderObjectInputStreamTest {
 
         private final E e;
 
-        Test(int i, Object o) {
+        Test(final int i, final Object o) {
             this.i = i;
             this.e = E.A;
             this.o = o;
         }
 
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(final Object other) {
             if (other instanceof Test) {
                 Test tother = (Test) other;
                 return (this.i == tother.i)
@@ -122,7 +122,7 @@ public class ClassLoaderObjectInputStreamTest {
             }
         }
 
-        private boolean equalObject(Object other) {
+        private boolean equalObject(final Object other) {
             if (this.o == null) {
                 return other == null;
             }

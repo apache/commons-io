@@ -355,7 +355,7 @@ public class CharSequenceInputStreamTest {
         testSkip("UTF-8");
     }
 
-    private int checkAvail(InputStream is, int min) throws Exception {
+    private int checkAvail(final InputStream is, final int min) throws Exception {
         int available = is.available();
         assertTrue("avail should be >= " + min + ", but was " + available, available >= min);
         return available;
@@ -415,7 +415,7 @@ public class CharSequenceInputStreamTest {
                 && !isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(csName);
     }
 
-    private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(String csName) {
+    private boolean isOddBallLegacyCharsetThatDoesNotSupportFrenchCharacters(final String csName) {
         return "x-IBM1388".equalsIgnoreCase(csName) ||
                 "ISO-2022-CN".equalsIgnoreCase(csName) ||
                 "ISO-2022-JP".equalsIgnoreCase(csName) ||

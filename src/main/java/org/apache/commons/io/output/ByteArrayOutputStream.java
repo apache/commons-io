@@ -315,7 +315,7 @@ public class ByteArrayOutputStream extends OutputStream {
      * @throws IOException if an I/O error occurs
      * @since 2.5
      */
-    public static InputStream toBufferedInputStream(final InputStream input, int size)
+    public static InputStream toBufferedInputStream(final InputStream input, final int size)
             throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
         @SuppressWarnings("resource")

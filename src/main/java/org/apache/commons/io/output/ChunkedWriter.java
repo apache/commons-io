@@ -46,7 +46,7 @@ public class ChunkedWriter extends FilterWriter {
      * @param chunkSize the chunk size to use; must be a positive number.
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
      */
-    public ChunkedWriter(final Writer writer, int chunkSize) {
+    public ChunkedWriter(final Writer writer, final int chunkSize) {
        super(writer);
        if (chunkSize <= 0) {
            throw new IllegalArgumentException();
@@ -71,7 +71,7 @@ public class ChunkedWriter extends FilterWriter {
      * @throws IOException upon error
      */
     @Override
-    public void write(char[] data, int srcOffset, int length) throws IOException {
+    public void write(final char[] data, final int srcOffset, final int length) throws IOException {
         int bytes = length;
         int dstOffset = srcOffset;
         while(bytes > 0) {

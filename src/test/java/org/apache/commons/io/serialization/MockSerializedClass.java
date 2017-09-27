@@ -25,7 +25,7 @@ public class MockSerializedClass implements Serializable {
 
     private final String str;
 
-    MockSerializedClass(String str) {
+    MockSerializedClass(final String str) {
         this.str = str;
     }
 
@@ -35,7 +35,7 @@ public class MockSerializedClass implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(!(obj instanceof MockSerializedClass)) {
             return false;
         }

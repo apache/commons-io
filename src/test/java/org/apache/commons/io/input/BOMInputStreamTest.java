@@ -752,11 +752,11 @@ public class BOMInputStreamTest {
                 buf, len);
     }
 
-    private boolean jvmAndSaxBothSupportCharset(String charSetName) throws ParserConfigurationException, SAXException, IOException {
+    private boolean jvmAndSaxBothSupportCharset(final String charSetName) throws ParserConfigurationException, SAXException, IOException {
         return Charset.isSupported(charSetName) &&  doesSaxSupportCharacterSet(charSetName);
     }
 
-    private boolean doesSaxSupportCharacterSet(String charSetName) throws ParserConfigurationException, SAXException, IOException {
+    private boolean doesSaxSupportCharacterSet(final String charSetName) throws ParserConfigurationException, SAXException, IOException {
         final byte[] data = ("<?xml version=\"1.0\" encoding=\"" + charSetName + "\"?><Z/>").getBytes(charSetName);
         final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         try {

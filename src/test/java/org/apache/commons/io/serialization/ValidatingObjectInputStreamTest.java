@@ -41,7 +41,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
 
     static private final ClassNameMatcher ALWAYS_TRUE = new ClassNameMatcher() {
         @Override
-        public boolean matches(String className) {
+        public boolean matches(final String className) {
             return true;
         }
     };
@@ -56,7 +56,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
         testStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
     }
 
-    private void assertSerialization(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+    private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         final MockSerializedClass result = (MockSerializedClass) (ois.readObject());
         assertEquals(testObject, result);
     }
@@ -207,12 +207,12 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     @Test(expected = RuntimeException.class)
     public void customInvalidMethod() throws Exception {
         class CustomVOIS extends ValidatingObjectInputStream {
-            CustomVOIS(InputStream is) throws IOException {
+            CustomVOIS(final InputStream is) throws IOException {
                 super(is);
             }
 
             @Override
-            protected void invalidClassNameFound(String className) throws InvalidClassException {
+            protected void invalidClassNameFound(final String className) throws InvalidClassException {
                 throw new RuntimeException("Custom exception");
             }
         };

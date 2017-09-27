@@ -1440,7 +1440,7 @@ public class IOUtilsTestCase {
     @Test public void testAsBufferedOutputStream() {
         OutputStream is = new OutputStream() {
             @Override
-            public void write(int b) throws IOException { }
+            public void write(final int b) throws IOException { }
         };
         final BufferedOutputStream bis = IOUtils.buffer(is);
         assertNotSame(is, bis);
@@ -1450,7 +1450,7 @@ public class IOUtilsTestCase {
     @Test public void testAsBufferedOutputStreamWithBufferSize() {
         OutputStream os = new OutputStream() {
             @Override
-            public void write(int b) throws IOException { }
+            public void write(final int b) throws IOException { }
         };
         final BufferedOutputStream bos = IOUtils.buffer(os, 2048);
         assertNotSame(os, bos);
@@ -1461,7 +1461,7 @@ public class IOUtilsTestCase {
     @Test public void testAsBufferedReader() {
         Reader is = new Reader() {
             @Override
-            public int read(char[] cbuf, int off, int len) throws IOException {
+            public int read(final char[] cbuf, final int off, final int len) throws IOException {
                 return 0;
             }
             @Override
@@ -1475,7 +1475,7 @@ public class IOUtilsTestCase {
     @Test public void testAsBufferedReaderWithBufferSize() {
         Reader r = new Reader() {
             @Override
-            public int read(char[] cbuf, int off, int len) throws IOException {
+            public int read(final char[] cbuf, final int off, final int len) throws IOException {
                 return 0;
             }
             @Override
@@ -1490,10 +1490,10 @@ public class IOUtilsTestCase {
     @Test public void testAsBufferedWriter() {
         Writer is = new Writer() {
             @Override
-            public void write(int b) throws IOException { }
+            public void write(final int b) throws IOException { }
 
             @Override
-            public void write(char[] cbuf, int off, int len) throws IOException { }
+            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
 
             @Override
             public void flush() throws IOException { }
@@ -1510,10 +1510,10 @@ public class IOUtilsTestCase {
     public void testAsBufferedWriterWithBufferSize() {
         Writer w = new Writer() {
             @Override
-            public void write(int b) throws IOException { }
+            public void write(final int b) throws IOException { }
 
             @Override
-            public void write(char[] cbuf, int off, int len) throws IOException { }
+            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
 
             @Override
             public void flush() throws IOException { }

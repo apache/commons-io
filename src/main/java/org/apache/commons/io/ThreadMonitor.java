@@ -121,7 +121,7 @@ class ThreadMonitor implements Runnable {
      * @param ms the number of milliseconds to sleep for
      * @throws InterruptedException if interrupted
      */
-    private static void sleep(long ms) throws InterruptedException {
+    private static void sleep(final long ms) throws InterruptedException {
         long finishAt = System.currentTimeMillis() + ms;
         long remaining = ms;
         do {

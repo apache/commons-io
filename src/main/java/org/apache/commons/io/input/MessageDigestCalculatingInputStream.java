@@ -41,17 +41,17 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
          * Creates an MessageDigestMaintainingObserver for the given MessageDigest.
          * @param pMd the message digest to use
          */
-        public MessageDigestMaintainingObserver(MessageDigest pMd) {
+        public MessageDigestMaintainingObserver(final MessageDigest pMd) {
             md = pMd;
         }
 
         @Override
-        void data(int pByte) throws IOException {
+        void data(final int pByte) throws IOException {
             md.update((byte) pByte);
         }
 
         @Override
-        void data(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
             md.update(pBuffer, pOffset, pLength);
         }
     }
@@ -63,7 +63,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * @param pStream the stream to calculate the message digest for
      * @param pDigest the message digest to use
      */
-    public MessageDigestCalculatingInputStream(InputStream pStream, MessageDigest pDigest) {
+    public MessageDigestCalculatingInputStream(final InputStream pStream, final MessageDigest pDigest) {
         super(pStream);
         messageDigest = pDigest;
         add(new MessageDigestMaintainingObserver(pDigest));
@@ -75,7 +75,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * @param pAlgorithm the name of the algorithm to use
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
      */
-    public MessageDigestCalculatingInputStream(InputStream pStream, String pAlgorithm) throws NoSuchAlgorithmException {
+    public MessageDigestCalculatingInputStream(final InputStream pStream, final String pAlgorithm) throws NoSuchAlgorithmException {
         this(pStream, MessageDigest.getInstance(pAlgorithm));
     }
 
@@ -84,7 +84,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
      * @param pStream the stream to calculate the message digest for
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified algorithm.
      */
-    public MessageDigestCalculatingInputStream(InputStream pStream) throws NoSuchAlgorithmException {
+    public MessageDigestCalculatingInputStream(final InputStream pStream) throws NoSuchAlgorithmException {
         this(pStream, MessageDigest.getInstance("MD5"));
     }
 

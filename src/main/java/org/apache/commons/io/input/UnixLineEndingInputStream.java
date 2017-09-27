@@ -43,7 +43,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @param in                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
      */
-    public UnixLineEndingInputStream( InputStream in, boolean ensureLineFeedAtEndOfFile ) {
+    public UnixLineEndingInputStream( final InputStream in, final boolean ensureLineFeedAtEndOfFile ) {
         this.target = in;
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
@@ -96,7 +96,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * @param previousWasSlashR Indicates if the last seen was a \r
      * @return The next char to output to the stream
      */
-    private int eofGame(boolean previousWasSlashR) {
+    private int eofGame(final boolean previousWasSlashR) {
         if ( previousWasSlashR || !ensureLineFeedAtEndOfFile ) {
             return -1;
         }
@@ -122,7 +122,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark( int readlimit ) {
+    public synchronized void mark( final int readlimit ) {
         throw new UnsupportedOperationException( "Mark notsupported" );
     }
 }

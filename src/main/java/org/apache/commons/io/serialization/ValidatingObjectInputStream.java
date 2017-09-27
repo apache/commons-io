@@ -55,7 +55,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param input an input stream
      * @throws IOException if an I/O error occurs while reading stream header
      */
-    public ValidatingObjectInputStream(InputStream input) throws IOException {
+    public ValidatingObjectInputStream(final InputStream input) throws IOException {
         super(input);
     }
 
@@ -63,7 +63,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param name The class name
      * @throws InvalidClassException when a non-accepted class is encountered
      */
-    private void validateClassName(String name) throws InvalidClassException {
+    private void validateClassName(final String name) throws InvalidClassException {
         // Reject has precedence over accept
         for (ClassNameMatcher m : rejectMatchers) {
             if (m.matches(name)) {
@@ -91,12 +91,12 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param className name of the invalid class
      * @throws InvalidClassException if the specified class is not allowed
      */
-    protected void invalidClassNameFound(String className) throws InvalidClassException {
+    protected void invalidClassNameFound(final String className) throws InvalidClassException {
         throw new InvalidClassException("Class name not accepted: " + className);
     }
 
     @Override
-    protected Class<?> resolveClass(ObjectStreamClass osc) throws IOException, ClassNotFoundException {
+    protected Class<?> resolveClass(final ObjectStreamClass osc) throws IOException, ClassNotFoundException {
         validateClassName(osc.getName());
         return super.resolveClass(osc);
     }
@@ -108,7 +108,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param classes Classes to accept
      * @return this object
      */
-    public ValidatingObjectInputStream accept(Class<?>... classes) {
+    public ValidatingObjectInputStream accept(final Class<?>... classes) {
         for (Class<?> c : classes) {
             acceptMatchers.add(new FullClassNameMatcher(c.getName()));
         }
@@ -122,7 +122,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param classes Classes to reject
      * @return this object
      */
-    public ValidatingObjectInputStream reject(Class<?>... classes) {
+    public ValidatingObjectInputStream reject(final Class<?>... classes) {
         for (Class<?> c : classes) {
             rejectMatchers.add(new FullClassNameMatcher(c.getName()));
         }
@@ -137,7 +137,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
      */
-    public ValidatingObjectInputStream accept(String... patterns) {
+    public ValidatingObjectInputStream accept(final String... patterns) {
         for (String pattern : patterns) {
             acceptMatchers.add(new WildcardClassNameMatcher(pattern));
         }
@@ -152,7 +152,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
      */
-    public ValidatingObjectInputStream reject(String... patterns) {
+    public ValidatingObjectInputStream reject(final String... patterns) {
         for (String pattern : patterns) {
             rejectMatchers.add(new WildcardClassNameMatcher(pattern));
         }
@@ -166,7 +166,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param pattern standard Java regexp
      * @return this object
      */
-    public ValidatingObjectInputStream accept(Pattern pattern) {
+    public ValidatingObjectInputStream accept(final Pattern pattern) {
         acceptMatchers.add(new RegexpClassNameMatcher(pattern));
         return this;
     }
@@ -178,7 +178,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param pattern standard Java regexp
      * @return this object
      */
-    public ValidatingObjectInputStream reject(Pattern pattern) {
+    public ValidatingObjectInputStream reject(final Pattern pattern) {
         rejectMatchers.add(new RegexpClassNameMatcher(pattern));
         return this;
     }
@@ -190,7 +190,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param m the matcher to use
      * @return this object
      */
-    public ValidatingObjectInputStream accept(ClassNameMatcher m) {
+    public ValidatingObjectInputStream accept(final ClassNameMatcher m) {
         acceptMatchers.add(m);
         return this;
     }
@@ -202,7 +202,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @param m the matcher to use
      * @return this object
      */
-    public ValidatingObjectInputStream reject(ClassNameMatcher m) {
+    public ValidatingObjectInputStream reject(final ClassNameMatcher m) {
         rejectMatchers.add(m);
         return this;
     }

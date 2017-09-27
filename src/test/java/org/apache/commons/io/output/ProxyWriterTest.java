@@ -138,7 +138,7 @@ public class ProxyWriterTest {
     public void exceptions_in_append_char() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(int c) throws IOException {
+            public void write(final int c) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -151,7 +151,7 @@ public class ProxyWriterTest {
     public void exceptions_in_append_charSequence() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public Writer append(CharSequence csq) throws IOException {
+            public Writer append(final CharSequence csq) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -164,7 +164,7 @@ public class ProxyWriterTest {
     public void exceptions_in_append_charSequence_offset() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public Writer append(CharSequence csq, int start, int end) throws IOException {
+            public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -177,7 +177,7 @@ public class ProxyWriterTest {
     public void exceptions_in_write_int() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(int c) throws IOException {
+            public void write(final int c) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -190,7 +190,7 @@ public class ProxyWriterTest {
     public void exceptions_in_write_char_array() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(char[] cbuf) throws IOException {
+            public void write(final char[] cbuf) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -203,7 +203,7 @@ public class ProxyWriterTest {
     public void exceptions_in_write_offset_char_array() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(char[] cbuf, int off, int len) throws IOException {
+            public void write(final char[] cbuf, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -216,7 +216,7 @@ public class ProxyWriterTest {
     public void exceptions_in_write_string() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(String str) throws IOException {
+            public void write(final String str) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };
@@ -229,7 +229,7 @@ public class ProxyWriterTest {
     public void exceptions_in_write_string_offset() throws IOException {
         OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
-            public void write(String str, int off, int len) throws IOException {
+            public void write(final String str, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
         };

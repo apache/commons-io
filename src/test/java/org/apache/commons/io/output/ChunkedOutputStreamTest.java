@@ -57,7 +57,7 @@ public class ChunkedOutputStreamTest {
     private ByteArrayOutputStream getByteArrayOutputStream(final AtomicInteger numWrites) {
         return new ByteArrayOutputStream() {
             @Override
-            public void write(byte[] b, int off, int len) {
+            public void write(final byte[] b, final int off, final int len) {
                 numWrites.incrementAndGet();
                 super.write(b, off, len);
             }

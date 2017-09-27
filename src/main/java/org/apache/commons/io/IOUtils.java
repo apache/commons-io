@@ -585,7 +585,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.5
      */
-    public static InputStream toBufferedInputStream(final InputStream input, int size) throws IOException {
+    public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
         return ByteArrayOutputStream.toBufferedInputStream(input, size);
     }
 
@@ -614,7 +614,7 @@ public class IOUtils {
      * @see #buffer(Reader)
      * @since 2.5
      */
-    public static BufferedReader toBufferedReader(final Reader reader, int size) {
+    public static BufferedReader toBufferedReader(final Reader reader, final int size) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader, size);
     }
 
@@ -641,7 +641,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
-    public static BufferedReader buffer(final Reader reader, int size) {
+    public static BufferedReader buffer(final Reader reader, final int size) {
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader, size);
     }
 
@@ -668,7 +668,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
-    public static BufferedWriter buffer(final Writer writer, int size) {
+    public static BufferedWriter buffer(final Writer writer, final int size) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer, size);
     }
 
@@ -700,7 +700,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
-    public static BufferedOutputStream buffer(final OutputStream outputStream, int size) {
+    public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         if (outputStream == null) { // not checked by BufferedOutputStream
             throw new NullPointerException();
@@ -737,7 +737,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
-    public static BufferedInputStream buffer(final InputStream inputStream, int size) {
+    public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         if (inputStream == null) { // not checked by BufferedInputStream
             throw new NullPointerException();
@@ -1289,7 +1289,7 @@ public class IOUtils {
      *
      * @since 2.6
      */
-    public static String resourceToString(final String name, final Charset encoding, ClassLoader classLoader) throws IOException {
+    public static String resourceToString(final String name, final Charset encoding, final ClassLoader classLoader) throws IOException {
         return toString(resourceToURL(name, classLoader), encoding);
     }
 

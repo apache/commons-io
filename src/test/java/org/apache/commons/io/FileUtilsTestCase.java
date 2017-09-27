@@ -3081,7 +3081,7 @@ public class FileUtilsTestCase {
     private static class ShorterFile extends File {
         private static final long serialVersionUID = 1L;
 
-        public ShorterFile(String pathname) {
+        public ShorterFile(final String pathname) {
             super(pathname);
         }
 

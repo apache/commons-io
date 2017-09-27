@@ -35,7 +35,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
      *
      * @param regex a regular expression for evaluating acceptable class names
      */
-    public RegexpClassNameMatcher(String regex) {
+    public RegexpClassNameMatcher(final String regex) {
         this(Pattern.compile(regex));
     }
 
@@ -45,7 +45,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
      * @param pattern a pattern for evaluating acceptable class names
      * @throws IllegalArgumentException if <code>pattern</code> is null
      */
-    public RegexpClassNameMatcher(Pattern pattern) {
+    public RegexpClassNameMatcher(final Pattern pattern) {
         if (pattern == null) {
             throw new IllegalArgumentException("Null pattern");
         }
@@ -53,7 +53,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
     }
 
     @Override
-    public boolean matches(String className) {
+    public boolean matches(final String className) {
         return pattern.matcher(className).matches();
     }
 }

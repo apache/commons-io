@@ -33,7 +33,7 @@ public class ObservableInputStreamTest {
         private boolean closed;
 
         @Override
-        void data(int pByte) throws IOException {
+        void data(final int pByte) throws IOException {
             super.data(pByte);
             lastByteSeen = pByte;
         }
@@ -56,7 +56,7 @@ public class ObservableInputStreamTest {
         private int length = -1;
 
         @Override
-        void data(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
             super.data(pBuffer, pOffset, pLength);
             buffer = pBuffer;
             offset = pOffset;

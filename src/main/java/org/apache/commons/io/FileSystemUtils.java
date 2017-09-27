@@ -293,7 +293,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
      */
-    long freeSpaceWindows(String path, final long timeout) throws IOException {
+    long freeSpaceWindows(final String path, final long timeout) throws IOException {
         String normPath = FilenameUtils.normalize(path, false);
         if (normPath == null) {
             throw new IllegalArgumentException(path);

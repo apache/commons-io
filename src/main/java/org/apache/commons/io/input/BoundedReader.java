@@ -57,7 +57,7 @@ public class BoundedReader
      * @param maxCharsFromTargetReader The maximum number of characters that can be read from target
      * @throws IOException if mark fails
      */
-    public BoundedReader( Reader target, int maxCharsFromTargetReader ) throws IOException {
+    public BoundedReader( final Reader target, final int maxCharsFromTargetReader ) throws IOException {
         this.target = target;
         this.maxCharsFromTargetReader = maxCharsFromTargetReader;
     }
@@ -98,7 +98,7 @@ public class BoundedReader
      * @see java.io.Reader#mark(int).
      */
     @Override
-    public void mark( int readAheadLimit ) throws IOException {
+    public void mark( final int readAheadLimit ) throws IOException {
         this.readAheadLimit = readAheadLimit - charsRead;
 
         markedAt = charsRead;
@@ -138,7 +138,7 @@ public class BoundedReader
      * @see java.io.Reader#read(char[], int, int)
      */
     @Override
-    public int read( char[] cbuf, int off, int len ) throws IOException {
+    public int read( final char[] cbuf, final int off, final int len ) throws IOException {
         int c;
         for ( int i = 0; i < len; i++ ) {
             c = read();

@@ -367,7 +367,7 @@ public class FileAlterationObserver implements Serializable {
      * @param entry the parent entry
      * @return The child files
      */
-    private FileEntry[] doListFiles(File file, FileEntry entry) {
+    private FileEntry[] doListFiles(final File file, final FileEntry entry) {
         final File[] files = listFiles(file);
         final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
         for (int i = 0; i < files.length; i++) {

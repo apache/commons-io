@@ -982,7 +982,7 @@ public class FilenameUtils {
      * This may be used for poison byte attacks.
      * @param path the path to check
      */
-    private static void failIfNullBytePresent(String path) {
+    private static void failIfNullBytePresent(final String path) {
         int len = path.length();
         for (int i = 0; i < len; i++) {
             if (path.charAt(i) == 0) {
