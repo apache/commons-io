@@ -51,11 +51,10 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -67,10 +66,10 @@ import org.junit.rules.TemporaryFolder;
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
+    private File getTestDirectory() {
         return temporaryFolder.getRoot();
     }
 
@@ -101,23 +100,19 @@ public class FileUtilsTestCase {
      */
     //private static final int LAST_MODIFIED_DELAY = 600;
 
-    private final File testFile1;
-    private final File testFile2;
+    private File testFile1;
+    private File testFile2;
 
-    private final int testFile1Size;
-    private final int testFile2Size;
+    private int testFile1Size;
+    private int testFile2Size;
 
-    public FileUtilsTestCase() {
+    @Before
+    public void setUp() throws Exception {
         testFile1 = new File(getTestDirectory(), "file1-test.txt");
         testFile2 = new File(getTestDirectory(), "file1a-test.txt");
 
         testFile1Size = (int) testFile1.length();
         testFile2Size = (int) testFile2.length();
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        getTestDirectory().mkdirs();
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
@@ -152,11 +147,6 @@ public class FileUtilsTestCase {
                 new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output, testFile2Size);
         }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     private String getName() {

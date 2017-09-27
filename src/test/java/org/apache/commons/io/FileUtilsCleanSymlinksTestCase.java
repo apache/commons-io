@@ -24,9 +24,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -36,23 +35,14 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsCleanSymlinksTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
-
-    final File top = getTestDirectory();
+    private File top;
 
     @Before
     public void setUp() throws Exception {
-        top.mkdirs();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileUtils.deleteDirectory(top);
+        top = temporaryFolder.getRoot();
     }
 
     @Test

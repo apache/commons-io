@@ -59,10 +59,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -79,10 +78,10 @@ import org.junit.rules.TemporaryFolder;
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
 public class IOUtilsTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
+    private File getTestDirectory() {
         return temporaryFolder.getRoot();
     }
 
@@ -110,7 +109,6 @@ public class IOUtilsTestCase {
     @Before
     public void setUp() {
         try {
-            getTestDirectory().mkdirs();
             m_testFile = new File(getTestDirectory(), "file2-test.txt");
 
             if (!m_testFile.getParentFile().exists()) {
@@ -138,17 +136,6 @@ public class IOUtilsTestCase {
         Arrays.fill( carr, (char)-1);
         for( int i=0; i< 80; i++){
             carr[i] = (char) i;
-        }
-    }
-
-    @After
-    public void tearDown() {
-        carr = null;
-        iarr = null;
-        try {
-            FileUtils.deleteDirectory(getTestDirectory());
-        } catch (final IOException e) {
-            throw new RuntimeException("Could not clear up " + getTestDirectory() + ": " + e);
         }
     }
 

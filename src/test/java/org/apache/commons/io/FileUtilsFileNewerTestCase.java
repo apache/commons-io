@@ -26,9 +26,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -37,10 +36,10 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsFileNewerTestCase {
 
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static File getTestDirectory() {
+    private File getTestDirectory() {
         return temporaryFolder.getRoot();
     }
 
@@ -48,18 +47,13 @@ public class FileUtilsFileNewerTestCase {
     private static final int FILE1_SIZE = 1;
     private static final int FILE2_SIZE = 1024 * 4 + 1;
 
-    private final File m_testFile1;
-    private final File m_testFile2;
+    private File m_testFile1;
+    private File m_testFile2;
 
-    public FileUtilsFileNewerTestCase() {
-        m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
-        m_testFile2 = new File(getTestDirectory(), "file2-test.txt");
-    }
-
-    /** @see junit.framework.TestCase#setUp() */
     @Before
     public void setUp() throws Exception {
-        getTestDirectory().mkdirs();
+        m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
+        m_testFile2 = new File(getTestDirectory(), "file2-test.txt");
         if (!m_testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + m_testFile1
                     + " as the parent directory does not exist");
@@ -76,14 +70,6 @@ public class FileUtilsFileNewerTestCase {
                 new BufferedOutputStream(new FileOutputStream(m_testFile2))) {
             TestUtils.generateTestData(output, FILE2_SIZE);
         }
-    }
-
-    /** @see junit.framework.TestCase#tearDown() */
-    @After
-    public void tearDown() throws Exception {
-        m_testFile1.delete();
-        m_testFile2.delete();
-        FileUtils.deleteDirectory(getTestDirectory());
     }
 
     /**
