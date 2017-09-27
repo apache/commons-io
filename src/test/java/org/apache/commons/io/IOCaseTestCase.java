@@ -16,26 +16,34 @@
  */
 package org.apache.commons.io;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 /**
  * This is used to test IOCase for correctness.
  *
  */
-public class IOCaseTestCase extends FileBasedTestCase {
+public class IOCaseTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private static final boolean WINDOWS = File.separatorChar == '\\';
 

@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Test;
-
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Test;
 
 /**
  * Tests for {@link ThreadMonitor}.

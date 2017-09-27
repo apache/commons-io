@@ -16,6 +16,12 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,22 +34,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test LineIterator for correctness.
  *
  */
-public class LineIteratorTestCase extends FileBasedTestCase {
+public class LineIteratorTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private void assertLines(final List<String> lines, final LineIterator iterator) {
         try {

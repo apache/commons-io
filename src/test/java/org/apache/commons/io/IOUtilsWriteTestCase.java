@@ -16,21 +16,23 @@
  */
 package org.apache.commons.io;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.apache.commons.io.testtools.TestUtils;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * JUnit tests for IOUtils write methods.
@@ -38,10 +40,16 @@ import static org.junit.Assert.fail;
  * @see IOUtils
  */
 @SuppressWarnings("deprecation") // includes tests for deprecated methods
-public class IOUtilsWriteTestCase extends FileBasedTestCase {
+public class IOUtilsWriteTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private static final int FILE_SIZE = 1024 * 4 + 1;
-
 
     private final byte[] inData = TestUtils.generateTestData((long) FILE_SIZE);
 

@@ -16,25 +16,33 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * This is used to test FileUtils for correctness.
  */
-public class FileUtilsFileNewerTestCase extends FileBasedTestCase {
+public class FileUtilsFileNewerTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     // Test data
     private static final int FILE1_SIZE = 1;

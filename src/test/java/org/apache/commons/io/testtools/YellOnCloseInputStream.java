@@ -19,9 +19,9 @@ package org.apache.commons.io.testtools;
 import java.io.IOException;
 import java.io.InputStream;
 
-import junit.framework.AssertionFailedError;
-
 import org.apache.commons.io.input.ProxyInputStream;
+
+import junit.framework.AssertionFailedError;
 
 /**
  * Helper class for checking behaviour of IO classes.

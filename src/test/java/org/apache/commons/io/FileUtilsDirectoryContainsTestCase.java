@@ -16,17 +16,18 @@
  */
 package org.apache.commons.io;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.testtools.FileBasedTestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
@@ -35,7 +36,14 @@ import static org.junit.Assert.fail;
  * @since 2.2
  * @version $Id$
  */
-public class FileUtilsDirectoryContainsTestCase extends FileBasedTestCase {
+public class FileUtilsDirectoryContainsTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     private File directory1;
     private File directory2;

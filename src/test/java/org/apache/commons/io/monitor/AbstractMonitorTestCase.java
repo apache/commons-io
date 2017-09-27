@@ -16,6 +16,10 @@
  */
 package org.apache.commons.io.monitor;
 
+import static org.apache.commons.io.testtools.TestUtils.sleepQuietly;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileFilter;
 
@@ -25,10 +29,6 @@ import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.junit.After;
 import org.junit.Before;
-
-import static org.apache.commons.io.testtools.TestUtils.sleepQuietly;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * {@link FileAlterationObserver} Test Case.

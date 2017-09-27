@@ -16,24 +16,32 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
  * &amp; FileUtils.isSymlink(File file)
  */
-public class FileUtilsCleanSymlinksTestCase extends FileBasedTestCase {
+public class FileUtilsCleanSymlinksTestCase {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     final File top = getTestDirectory();
 

@@ -16,7 +16,11 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -25,14 +29,12 @@ import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.FileBasedTestCase;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.junit.ClassRule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.rules.TemporaryFolder;
 
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
 
@@ -41,7 +43,14 @@ import static org.junit.Assert.assertTrue;
  *
  * @see CopyUtils
  */
-public class CopyUtilsTest extends FileBasedTestCase {
+public class CopyUtilsTest {
+
+    @ClassRule
+    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    private static File getTestDirectory() {
+        return temporaryFolder.getRoot();
+    }
 
     /*
      * NOTE this is not particularly beautiful code. A better way to check for
