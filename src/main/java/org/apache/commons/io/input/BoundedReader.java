@@ -95,7 +95,7 @@ public class BoundedReader
      *                       greater.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
-     * @see java.io.Reader#mark(int).
+     * @see java.io.Reader#mark(int)
      */
     @Override
     public void mark( final int readAheadLimit ) throws IOException {

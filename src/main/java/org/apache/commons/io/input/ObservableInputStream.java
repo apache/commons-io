@@ -26,7 +26,7 @@ import java.util.List;
  * The {@link ObservableInputStream} allows, that an InputStream may be consumed
  * by other receivers, apart from the thread, which is reading it.
  * The other consumers are implemented as instances of {@link Observer}. A
- * typical application may be the generation of a {@link MessageDigest} on the
+ * typical application may be the generation of a {@link java.security.MessageDigest} on the
  * fly.
  * {@code Note}: The {@link ObservableInputStream} is <em>not</em> thread safe,
  * as instances of InputStream usually aren't.
