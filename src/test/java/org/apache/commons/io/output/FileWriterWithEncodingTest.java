@@ -56,16 +56,10 @@ public class FileWriterWithEncodingTest {
     private final char[] anotherTestContent = new char[]{'f', 'z', 'x'};
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         final File encodingFinder = new File(getTestDirectory(), "finder.txt");
-        OutputStreamWriter out = null;
-        try {
-            out = new OutputStreamWriter(new FileOutputStream(encodingFinder));
+        try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(encodingFinder))) {
             defaultEncoding = out.getEncoding();
-        } catch (final IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        } finally {
-            IOUtils.closeQuietly(out);
         }
         file1 = new File(getTestDirectory(), "testfile1.txt");
         file2 = new File(getTestDirectory(), "testfile2.txt");
