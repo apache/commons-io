@@ -139,7 +139,7 @@ public class FileUtilsDirectoryContainsTestCase {
 
     @Test
     public void testIO466() throws IOException {
-            File fooFile = new File(directory1.getParent(), "directory1.txt");
+            final File fooFile = new File(directory1.getParent(), "directory1.txt");
             assertFalse(FileUtils.directoryContains(directory1, fooFile));
     }
 

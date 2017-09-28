@@ -236,7 +236,7 @@ public class DirectoryWalkerTestCaseJava4 {
      */
     private List directoriesOnly(final Collection<File> results) {
         final List list = new ArrayList(results.size());
-        for (File file : results) {
+        for (final File file : results) {
             if (file.isDirectory()) {
                 list.add(file);
             }
@@ -249,7 +249,7 @@ public class DirectoryWalkerTestCaseJava4 {
      */
     private List filesOnly(final Collection<File> results) {
         final List list = new ArrayList(results.size());
-        for (File file : results) {
+        for (final File file : results) {
             if (file.isFile()) {
                 list.add(file);
             }

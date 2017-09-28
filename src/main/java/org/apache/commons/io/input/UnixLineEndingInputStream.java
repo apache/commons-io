@@ -69,12 +69,12 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        boolean previousWasSlashR = slashRSeen;
+        final boolean previousWasSlashR = slashRSeen;
         if ( eofSeen ) {
             return eofGame(previousWasSlashR);
         }
         else {
-            int target = readWithUpdate();
+            final int target = readWithUpdate();
             if ( eofSeen ) {
                 return eofGame(previousWasSlashR);
             }

@@ -320,18 +320,18 @@ public class WriterOutputStream extends OutputStream {
             return;
         }
         final String TEST_STRING_2 = "v\u00e9s";
-        byte[] bytes = TEST_STRING_2.getBytes(charset);
+        final byte[] bytes = TEST_STRING_2.getBytes(charset);
 
         final CharsetDecoder charsetDecoder2 = charset.newDecoder();
-        ByteBuffer bb2 = ByteBuffer.allocate(16);
-        CharBuffer cb2 = CharBuffer.allocate(TEST_STRING_2.length());
+        final ByteBuffer bb2 = ByteBuffer.allocate(16);
+        final CharBuffer cb2 = CharBuffer.allocate(TEST_STRING_2.length());
         final int len = bytes.length;
         for (int i = 0; i < len; i++) {
             bb2.put(bytes[i]);
             bb2.flip();
             try {
                 charsetDecoder2.decode(bb2, cb2, i == (len - 1));
-            } catch ( IllegalArgumentException e){
+            } catch ( final IllegalArgumentException e){
                 throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
                         "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
             }

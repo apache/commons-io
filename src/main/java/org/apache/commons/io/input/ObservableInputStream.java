@@ -116,7 +116,7 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read();
-        } catch (IOException pException) {
+        } catch (final IOException pException) {
             ioe = pException;
         }
         if (ioe != null) {
@@ -135,7 +135,7 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read(pBuffer);
-        } catch (IOException pException) {
+        } catch (final IOException pException) {
             ioe = pException;
         }
         if (ioe != null) {
@@ -154,7 +154,7 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read(pBuffer, pOffset, pLength);
-        } catch (IOException pException) {
+        } catch (final IOException pException) {
             ioe = pException;
         }
         if (ioe != null) {
@@ -176,7 +176,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   passed down.
      */
     protected void noteDataBytes(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
-        for (Observer observer : getObservers()) {
+        for (final Observer observer : getObservers()) {
             observer.data(pBuffer, pOffset, pLength);
         }
     }
@@ -186,7 +186,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   passed down.
      */
     protected void noteFinished() throws IOException {
-        for (Observer observer : getObservers()) {
+        for (final Observer observer : getObservers()) {
             observer.finished();
         }
     }
@@ -198,7 +198,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   passed down.
      */
     protected void noteDataByte(final int pDataByte) throws IOException {
-        for (Observer observer : getObservers()) {
+        for (final Observer observer : getObservers()) {
             observer.data(pDataByte);
         }
     }
@@ -211,7 +211,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   argument.
      */
     protected void noteError(final IOException pException) throws IOException {
-        for (Observer observer : getObservers()) {
+        for (final Observer observer : getObservers()) {
             observer.error(pException);
         }
     }
@@ -221,7 +221,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   passed down.
      */
     protected void noteClosed() throws IOException {
-        for (Observer observer : getObservers()) {
+        for (final Observer observer : getObservers()) {
             observer.closed();
         }
     }
@@ -238,7 +238,7 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             super.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             ioe = e;
         }
         if (ioe == null) {

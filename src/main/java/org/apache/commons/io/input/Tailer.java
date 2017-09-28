@@ -439,7 +439,7 @@ public class Tailer implements Runnable {
                         // Finish scanning the old file and then we'll start with the new one
                         try {
                             readLines(save);
-                        }  catch (IOException ioe) {
+                        }  catch (final IOException ioe) {
                             listener.handle(ioe);
                         }
                         position = 0;

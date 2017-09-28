@@ -250,12 +250,12 @@ public class FilenameUtilsTestCase {
     public void testNormalize_with_nullbytes() throws Exception {
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
         }
 
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\u0000a\\b/c.txt"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
         }
     }
 
@@ -625,7 +625,7 @@ public class FilenameUtilsTestCase {
     public void testGetPrefix_with_nullbyte() {
         try {
             assertEquals("~user\\", FilenameUtils.getPrefix("~u\u0000ser\\a\\b\\c.txt"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
 
         }
     }
@@ -714,7 +714,7 @@ public class FilenameUtilsTestCase {
     public void testGetPathNoEndSeparator_with_null_byte() {
         try {
             assertEquals("a/b", FilenameUtils.getPathNoEndSeparator("~user/a\u0000/b/c.txt"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
 
         }
     }
@@ -822,7 +822,7 @@ public class FilenameUtilsTestCase {
     public void testInjectionFailure() {
         try {
             assertEquals("c", FilenameUtils.getName("a\\b\\\u0000c"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
 
         }
     }
@@ -842,7 +842,7 @@ public class FilenameUtilsTestCase {
     public void testGetBaseName_with_nullByte() {
         try {
             assertEquals("file.txt", FilenameUtils.getBaseName("fil\u0000e.txt.bak"));
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
 
         }
     }
@@ -1001,7 +1001,7 @@ public class FilenameUtilsTestCase {
         try {
             FilenameUtils.isExtension("a.b\\fi\u0000le.txt", "TXT");
             fail("Should throw IAE");
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
         }
     }
 

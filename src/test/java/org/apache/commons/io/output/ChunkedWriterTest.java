@@ -28,9 +28,9 @@ public class ChunkedWriterTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        OutputStreamWriter osw = getOutputStreamWriter(numWrites);
+        final OutputStreamWriter osw = getOutputStreamWriter(numWrites);
 
-        ChunkedWriter chunked = new ChunkedWriter(osw, 10);
+        final ChunkedWriter chunked = new ChunkedWriter(osw, 10);
         chunked.write("0123456789012345678901234567891".toCharArray());
         chunked.flush();
         assertEquals(4, numWrites.get());
@@ -40,9 +40,9 @@ public class ChunkedWriterTest {
     @Test
     public void write_two_chunks_default_constructor() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        OutputStreamWriter osw = getOutputStreamWriter(numWrites);
+        final OutputStreamWriter osw = getOutputStreamWriter(numWrites);
 
-        ChunkedWriter chunked = new ChunkedWriter(osw);
+        final ChunkedWriter chunked = new ChunkedWriter(osw);
         chunked.write(new char[1024 * 4 + 1]);
         chunked.flush();
         assertEquals(2, numWrites.get());
@@ -50,7 +50,7 @@ public class ChunkedWriterTest {
     }
 
     private OutputStreamWriter getOutputStreamWriter(final AtomicInteger numWrites) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         return new OutputStreamWriter(baos) {
             @Override
             public void write(final char[] cbuf, final int off, final int len) throws IOException {

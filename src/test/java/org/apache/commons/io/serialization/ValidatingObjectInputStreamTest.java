@@ -73,7 +73,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
             assertSerialization(
                     willClose(new ValidatingObjectInputStream(testStream)));
             fail("Expected an InvalidClassException");
-        } catch(InvalidClassException ice) {
+        } catch(final InvalidClassException ice) {
             final String name = MockSerializedClass.class.getName();
             assertTrue("Expecting message to contain " + name, ice.getMessage().contains(name));
         }

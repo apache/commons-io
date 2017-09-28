@@ -698,8 +698,8 @@ public class BOMInputStreamTest {
 
     @Test
     public void skipReturnValueWithBom() throws IOException {
-        byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
-        BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true));
+        final byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
+        final BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true));
         assertEquals(2, is1.skip(2));
         assertEquals((byte) 0x33, is1.read());
         is1.close();
@@ -707,8 +707,8 @@ public class BOMInputStreamTest {
 
     @Test
     public void skipReturnValueWithoutBom() throws IOException {
-        byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
-        BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false));
+        final byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
+        final BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false));
         assertEquals(2, is2.skip(2)); // IO-428
         assertEquals((byte) 0x33, is2.read());
         is2.close();
@@ -763,7 +763,7 @@ public class BOMInputStreamTest {
             final InputSource is = new InputSource(new ByteArrayInputStream(data));
             is.setEncoding(charSetName);
             documentBuilder.parse(is);
-        } catch (SAXParseException e) {
+        } catch (final SAXParseException e) {
             if (e.getMessage().contains(charSetName)) {
                 return false;
             }

@@ -97,8 +97,8 @@ public class ByteArrayOutputStreamTestCase {
 
     @Test
     public void testToInputStream() throws IOException {
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
         //Write 8224 bytes
         writeData(baout, ref, 32);
@@ -107,7 +107,7 @@ public class ByteArrayOutputStreamTestCase {
         }
 
         //Get data before more writes
-        InputStream in = baout.toInputStream();
+        final InputStream in = baout.toInputStream();
         byte refData[] = ref.toByteArray();
 
         //Write some more data
@@ -130,8 +130,8 @@ public class ByteArrayOutputStreamTestCase {
     @Test
     public void testToInputStreamWithReset() throws IOException {
         //Make sure reset() do not destroy InputStream returned from toInputStream()
-        ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
         //Write 8224 bytes
         writeData(baout, ref, 32);
@@ -140,7 +140,7 @@ public class ByteArrayOutputStreamTestCase {
         }
 
         //Get data before reset
-        InputStream in = baout.toInputStream();
+        final InputStream in = baout.toInputStream();
         byte refData[] = ref.toByteArray();
 
         //Reset and write some new data

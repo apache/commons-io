@@ -1595,7 +1595,7 @@ public class FileUtils {
         if (srcs == null) {
             throw new NullPointerException("Sources must not be null");
         }
-        for (File src : srcs) {
+        for (final File src : srcs) {
             copyFileToDirectory(src, destDir);
         }
     }
@@ -1766,11 +1766,11 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}
      */
     public static boolean waitFor(final File file, final int seconds) {
-        long finishAt = System.currentTimeMillis() + (seconds * 1000L);
+        final long finishAt = System.currentTimeMillis() + (seconds * 1000L);
         boolean wasInterrupted = false;
         try {
             while (!file.exists()) {
-                long remaining = finishAt -  System.currentTimeMillis();
+                final long remaining = finishAt -  System.currentTimeMillis();
                 if (remaining < 0){
                     return false;
                 }
@@ -1849,7 +1849,7 @@ public class FileUtils {
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
         try (InputStream in = openInputStream(file)) {
-            long fileLength = file.length();
+            final long fileLength = file.length();
             // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
             return fileLength > 0 ? IOUtils.toByteArray(in, fileLength) : IOUtils.toByteArray(in);
         }

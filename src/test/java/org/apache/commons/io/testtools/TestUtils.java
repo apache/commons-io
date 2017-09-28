@@ -223,7 +223,7 @@ public abstract class TestUtils {
      * @throws InterruptedException if interrupted
      */
     public static void sleep(final long ms) throws InterruptedException {
-        long finishAt = System.currentTimeMillis() + ms;
+        final long finishAt = System.currentTimeMillis() + ms;
         long remaining = ms;
         do {
             Thread.sleep(remaining);
@@ -234,7 +234,7 @@ public abstract class TestUtils {
     public static void sleepQuietly(final long ms) {
         try {
             sleep(ms);
-        } catch (InterruptedException ignored){
+        } catch (final InterruptedException ignored){
         }
     }
 

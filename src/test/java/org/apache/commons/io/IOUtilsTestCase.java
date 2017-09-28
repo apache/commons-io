@@ -1214,7 +1214,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToString(null, StandardCharsets.UTF_8);
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1228,7 +1228,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1286,7 +1286,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToByteArray(null);
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1300,7 +1300,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader());
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1350,7 +1350,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToURL(null);
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1364,7 +1364,7 @@ public class IOUtilsTestCase {
         try {
             IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader());
             fail();
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             exceptionOccurred = true;
             assertNotNull(npe);
         }
@@ -1376,31 +1376,31 @@ public class IOUtilsTestCase {
         try {
             IOUtils.buffer((InputStream) null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             // expected
         }
         try {
             IOUtils.buffer((OutputStream) null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             // expected
         }
         try {
             IOUtils.buffer((Reader) null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             // expected
         }
         try {
             IOUtils.buffer((Writer) null);
             fail("Expected NullPointerException");
-        } catch (NullPointerException npe) {
+        } catch (final NullPointerException npe) {
             // expected
         }
     }
 
     @Test public void testAsBufferedInputStream() {
-        InputStream is = new InputStream() {
+        final InputStream is = new InputStream() {
             @Override
             public int read() throws IOException {
                 return 0;
@@ -1412,7 +1412,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedInputStreamWithBufferSize() {
-        InputStream is = new InputStream() {
+        final InputStream is = new InputStream() {
             @Override
             public int read() throws IOException {
                 return 0;
@@ -1425,7 +1425,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedOutputStream() {
-        OutputStream is = new OutputStream() {
+        final OutputStream is = new OutputStream() {
             @Override
             public void write(final int b) throws IOException { }
         };
@@ -1435,7 +1435,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedOutputStreamWithBufferSize() {
-        OutputStream os = new OutputStream() {
+        final OutputStream os = new OutputStream() {
             @Override
             public void write(final int b) throws IOException { }
         };
@@ -1446,7 +1446,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedReader() {
-        Reader is = new Reader() {
+        final Reader is = new Reader() {
             @Override
             public int read(final char[] cbuf, final int off, final int len) throws IOException {
                 return 0;
@@ -1460,7 +1460,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedReaderWithBufferSize() {
-        Reader r = new Reader() {
+        final Reader r = new Reader() {
             @Override
             public int read(final char[] cbuf, final int off, final int len) throws IOException {
                 return 0;
@@ -1475,7 +1475,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testAsBufferedWriter() {
-        Writer is = new Writer() {
+        final Writer is = new Writer() {
             @Override
             public void write(final int b) throws IOException { }
 
@@ -1495,7 +1495,7 @@ public class IOUtilsTestCase {
 
     @Test
     public void testAsBufferedWriterWithBufferSize() {
-        Writer w = new Writer() {
+        final Writer w = new Writer() {
             @Override
             public void write(final int b) throws IOException { }
 

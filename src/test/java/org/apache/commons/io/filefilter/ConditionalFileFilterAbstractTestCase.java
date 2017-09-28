@@ -78,7 +78,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());
         filters.add(new TesterTrueFileFilter());
-        for (TesterTrueFileFilter filter : filters) {
+        for (final TesterTrueFileFilter filter : filters) {
             fileFilter.removeFileFilter(filter);
             assertTrue("file filter removed", !fileFilter.getFileFilters().contains(filter));
         }

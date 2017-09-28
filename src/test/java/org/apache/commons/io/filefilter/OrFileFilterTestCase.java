@@ -35,7 +35,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
   @Override
   protected IOFileFilter buildFilterUsingAdd(final List<IOFileFilter> filters) {
     final OrFileFilter filter = new OrFileFilter();
-    for (IOFileFilter filter1 : filters) {
+    for (final IOFileFilter filter1 : filters) {
       filter.addFileFilter(filter1);
     }
     return filter;

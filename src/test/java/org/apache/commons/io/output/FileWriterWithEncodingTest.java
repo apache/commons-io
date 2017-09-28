@@ -94,13 +94,13 @@ public class FileWriterWithEncodingTest {
 
     @Test
     public void sameEncoding_CharsetEncoder_constructor() throws Exception {
-        CharsetEncoder enc = Charset.defaultCharset().newEncoder();
+        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
         succesfulRun(new FileWriterWithEncoding(file2, enc));
     }
 
     @Test
     public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
-        CharsetEncoder enc = Charset.defaultCharset().newEncoder();
+        final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
         succesfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
     }
 
@@ -255,7 +255,7 @@ public class FileWriterWithEncodingTest {
         try {
             succesfulRun(new FileWriterWithEncoding(file2, (Charset) null));
             fail();
-        } catch (NullPointerException ignore) {
+        } catch (final NullPointerException ignore) {
 
         }
     }

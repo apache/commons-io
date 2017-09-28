@@ -1706,7 +1706,7 @@ public class IOUtils {
             int bytes = data.length;
             int offset = 0;
             while (bytes > 0) {
-                int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
+                final int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
                 output.write(data, offset, chunk);
                 bytes -= chunk;
                 offset += chunk;
@@ -1813,7 +1813,7 @@ public class IOUtils {
             int bytes = data.length;
             int offset = 0;
             while (bytes > 0) {
-                int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
+                final int chunk = Math.min(bytes, DEFAULT_BUFFER_SIZE);
                 output.write(data, offset, chunk);
                 bytes -= chunk;
                 offset += chunk;

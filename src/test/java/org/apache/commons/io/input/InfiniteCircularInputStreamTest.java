@@ -27,31 +27,31 @@ public class InfiniteCircularInputStreamTest {
 
     @Test
     public void should_cycle_bytes() throws IOException {
-        byte[] input = new byte[] { 1, 2 };
-        byte[] expected = new byte[] { 1, 2, 1, 2, 1 };
+        final byte[] input = new byte[] { 1, 2 };
+        final byte[] expected = new byte[] { 1, 2, 1, 2, 1 };
 
         assertStreamOutput(input, expected);
     }
 
     @Test
     public void should_handle_whole_range_of_bytes() throws IOException {
-        int size = Byte.MAX_VALUE - Byte.MIN_VALUE + 1;
-        byte[] contentToCycle = new byte[size];
+        final int size = Byte.MAX_VALUE - Byte.MIN_VALUE + 1;
+        final byte[] contentToCycle = new byte[size];
         byte value = Byte.MIN_VALUE;
         for (int i = 0; i < contentToCycle.length; i++) {
             contentToCycle[i] = value++;
         }
 
-        byte[] expectedOutput = Arrays.copyOf(contentToCycle, size);
+        final byte[] expectedOutput = Arrays.copyOf(contentToCycle, size);
 
         assertStreamOutput(contentToCycle, expectedOutput);
     }
 
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
-        byte[] actual = new byte[expected.length];
+        final byte[] actual = new byte[expected.length];
 
         try (InputStream infStream = new InfiniteCircularInputStream(toCycle)) {
-            int actualReadBytes = infStream.read(actual);
+            final int actualReadBytes = infStream.read(actual);
 
             Assert.assertArrayEquals(expected, actual);
             Assert.assertEquals(expected.length, actualReadBytes);

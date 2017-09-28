@@ -37,7 +37,7 @@ public class BoundedReaderTest
 
     @Test
     public void readTillEnd() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.read();
         mr.read();
         mr.read();
@@ -47,7 +47,7 @@ public class BoundedReaderTest
 
     @Test
     public void shortReader() throws IOException {
-        BoundedReader mr = new BoundedReader( shortReader, 3 );
+        final BoundedReader mr = new BoundedReader( shortReader, 3 );
         mr.read();
         mr.read();
         assertEquals( -1, mr.read() );
@@ -56,8 +56,8 @@ public class BoundedReaderTest
 
     @Test
     public void readMulti() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
-        char[] cbuf = new char[4];
+        final BoundedReader mr = new BoundedReader( sr, 3 );
+        final char[] cbuf = new char[4];
         for ( int i = 0; i < cbuf.length; i++ )
         {
             cbuf[i] = 'X';
@@ -73,8 +73,8 @@ public class BoundedReaderTest
 
     @Test
     public void readMultiWithOffset() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
-        char[] cbuf = new char[4];
+        final BoundedReader mr = new BoundedReader( sr, 3 );
+        final char[] cbuf = new char[4];
         for ( int i = 0; i < cbuf.length; i++ ) {
             cbuf[i] = 'X';
         }
@@ -89,7 +89,7 @@ public class BoundedReaderTest
 
     @Test
     public void markReset() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.mark( 3 );
         mr.read();
         mr.read();
@@ -105,7 +105,7 @@ public class BoundedReaderTest
 
     @Test
     public void markResetWithMarkOutsideBoundedReaderMax() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.mark( 4 );
         mr.read();
         mr.read();
@@ -116,7 +116,7 @@ public class BoundedReaderTest
 
     @Test
     public void markResetWithMarkOutsideBoundedReaderMaxAndInitialOffset() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.read();
         mr.mark( 3 );
         mr.read();
@@ -127,7 +127,7 @@ public class BoundedReaderTest
 
     @Test
     public void markResetFromOffset1() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.mark( 3 );
         mr.read();
         mr.read();
@@ -142,7 +142,7 @@ public class BoundedReaderTest
 
     @Test
     public void markResetMarkMore() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.mark( 4 );
         mr.read();
         mr.read();
@@ -157,7 +157,7 @@ public class BoundedReaderTest
 
     @Test
     public void skipTest() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.skip( 2 );
         mr.read();
         assertEquals( -1, mr.read() );
@@ -177,14 +177,14 @@ public class BoundedReaderTest
             }
         };
 
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         mr.close();
         assertTrue( closed.get() );
     }
 
     @Test(timeout = 5000)
     public void testReadBytesEOF() throws IOException {
-        BoundedReader mr = new BoundedReader( sr, 3 );
+        final BoundedReader mr = new BoundedReader( sr, 3 );
         try ( BufferedReader br = new BufferedReader( mr ) ) {
             br.readLine();
             br.readLine();

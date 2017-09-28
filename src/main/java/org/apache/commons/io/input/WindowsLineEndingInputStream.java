@@ -76,8 +76,8 @@ public class WindowsLineEndingInputStream  extends InputStream {
             injectSlashN = false;
             return '\n';
         } else {
-            boolean prevWasSlashR = slashRSeen;
-            int target = readWithUpdate();
+            final boolean prevWasSlashR = slashRSeen;
+            final int target = readWithUpdate();
             if ( eofSeen ) {
                 return eofGame();
             }

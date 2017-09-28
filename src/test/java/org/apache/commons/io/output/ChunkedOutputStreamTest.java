@@ -31,8 +31,8 @@ public class ChunkedOutputStreamTest {
     @Test
     public void write_four_chunks() throws Exception {
         final AtomicInteger numWrites = new AtomicInteger();
-        ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
-        ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10);
+        final ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
+        final ChunkedOutputStream chunked = new ChunkedOutputStream(baos, 10);
         chunked.write("0123456789012345678901234567891".getBytes());
         assertEquals(4, numWrites.get());
         chunked.close();
@@ -40,15 +40,15 @@ public class ChunkedOutputStreamTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void negative_chunksize_not_permitted() throws Exception{
-        ChunkedOutputStream chunked = new ChunkedOutputStream(new ByteArrayOutputStream(), 0);
+        final ChunkedOutputStream chunked = new ChunkedOutputStream(new ByteArrayOutputStream(), 0);
         chunked.close();
     }
 
     @Test
     public void defaultConstructor() throws IOException {
         final AtomicInteger numWrites = new AtomicInteger();
-        ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
-        ChunkedOutputStream chunked = new ChunkedOutputStream(baos);
+        final ByteArrayOutputStream baos = getByteArrayOutputStream(numWrites);
+        final ChunkedOutputStream chunked = new ChunkedOutputStream(baos);
         chunked.write(new byte[1024 * 4 + 1]);
         assertEquals(2, numWrites.get());
         chunked.close();

@@ -98,7 +98,7 @@ public class ObservableInputStreamTest {
     @Test
     public void testDataBytesCalled() throws Exception {
         final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(4096);
-        ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         final ObservableInputStream ois = new ObservableInputStream(bais);
         final LastBytesKeepingObserver lko = new LastBytesKeepingObserver();
         final byte[] readBuffer = new byte[23];

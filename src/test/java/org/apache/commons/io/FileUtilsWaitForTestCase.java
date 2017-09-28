@@ -44,7 +44,7 @@ public class FileUtilsWaitForTestCase {
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
         final CountDownLatch started = new CountDownLatch(1);
-        Runnable thread = new Runnable() {
+        final Runnable thread = new Runnable() {
             @Override
             public void run() {
                 started.countDown();
@@ -52,7 +52,7 @@ public class FileUtilsWaitForTestCase {
                 wasInterrupted.set( Thread.currentThread().isInterrupted());
             }
         };
-        Thread thread1 = new Thread(thread);
+        final Thread thread1 = new Thread(thread);
         thread1.start();
         started.await();
         thread1.interrupt();

@@ -772,7 +772,7 @@ public class FilenameUtils {
             failIfNullBytePresent(filename + UNIX_SEPARATOR);
             return filename + UNIX_SEPARATOR;
         }
-        String path = filename.substring(0, len);
+        final String path = filename.substring(0, len);
         failIfNullBytePresent(path);
         return path;
     }
@@ -852,7 +852,7 @@ public class FilenameUtils {
         if (prefix >= filename.length() || index < 0 || prefix >= endIndex) {
             return "";
         }
-        String path = filename.substring(prefix, endIndex);
+        final String path = filename.substring(prefix, endIndex);
         failIfNullBytePresent(path);
         return path;
     }
@@ -983,7 +983,7 @@ public class FilenameUtils {
      * @param path the path to check
      */
     private static void failIfNullBytePresent(final String path) {
-        int len = path.length();
+        final int len = path.length();
         for (int i = 0; i < len; i++) {
             if (path.charAt(i) == 0) {
                 throw new IllegalArgumentException("Null byte present in file/path name. There are no " +

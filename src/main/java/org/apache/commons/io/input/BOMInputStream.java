@@ -169,7 +169,7 @@ public class BOMInputStream extends ProxyInputStream {
             throw new IllegalArgumentException("No BOMs specified");
         }
         this.include = include;
-        List<ByteOrderMark> list = Arrays.asList(boms);
+        final List<ByteOrderMark> list = Arrays.asList(boms);
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
         Collections.sort(list, ByteOrderMarkLengthComparator);
         this.boms = list;

@@ -77,7 +77,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
         int bytes = length;
         int dstOffset = srcOffset;
         while(bytes > 0) {
-            int chunk = Math.min(bytes, chunkSize);
+            final int chunk = Math.min(bytes, chunkSize);
             out.write(data, dstOffset, chunk);
             bytes -= chunk;
             dstOffset += chunk;

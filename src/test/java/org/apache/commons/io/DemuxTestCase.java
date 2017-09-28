@@ -67,7 +67,7 @@ public class DemuxTestCase {
 
     private void doStart()
             throws Exception {
-        for (String name : m_threadMap.keySet()) {
+        for (final String name : m_threadMap.keySet()) {
             final Thread thread = m_threadMap.get(name);
             thread.start();
         }
@@ -75,7 +75,7 @@ public class DemuxTestCase {
 
     private void doJoin()
             throws Exception {
-        for (String name : m_threadMap.keySet()) {
+        for (final String name : m_threadMap.keySet()) {
             final Thread thread = m_threadMap.get(name);
             thread.join();
         }

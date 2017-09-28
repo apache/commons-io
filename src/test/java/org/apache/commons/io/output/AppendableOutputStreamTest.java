@@ -36,7 +36,7 @@ public class AppendableOutputStreamTest {
 
     @Test
     public void testWriteStringBuilder() throws Exception {
-        String testData = "ABCD";
+        final String testData = "ABCD";
 
         out.write(testData.getBytes());
 

@@ -65,14 +65,14 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      */
     private void validateClassName(final String name) throws InvalidClassException {
         // Reject has precedence over accept
-        for (ClassNameMatcher m : rejectMatchers) {
+        for (final ClassNameMatcher m : rejectMatchers) {
             if (m.matches(name)) {
                 invalidClassNameFound(name);
             }
         }
 
         boolean ok = false;
-        for (ClassNameMatcher m : acceptMatchers) {
+        for (final ClassNameMatcher m : acceptMatchers) {
             if (m.matches(name)) {
                 ok = true;
                 break;
@@ -109,7 +109,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @return this object
      */
     public ValidatingObjectInputStream accept(final Class<?>... classes) {
-        for (Class<?> c : classes) {
+        for (final Class<?> c : classes) {
             acceptMatchers.add(new FullClassNameMatcher(c.getName()));
         }
         return this;
@@ -123,7 +123,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @return this object
      */
     public ValidatingObjectInputStream reject(final Class<?>... classes) {
-        for (Class<?> c : classes) {
+        for (final Class<?> c : classes) {
             rejectMatchers.add(new FullClassNameMatcher(c.getName()));
         }
         return this;
@@ -138,7 +138,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @return this object
      */
     public ValidatingObjectInputStream accept(final String... patterns) {
-        for (String pattern : patterns) {
+        for (final String pattern : patterns) {
             acceptMatchers.add(new WildcardClassNameMatcher(pattern));
         }
         return this;
@@ -153,7 +153,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @return this object
      */
     public ValidatingObjectInputStream reject(final String... patterns) {
-        for (String pattern : patterns) {
+        for (final String pattern : patterns) {
             rejectMatchers.add(new WildcardClassNameMatcher(pattern));
         }
         return this;

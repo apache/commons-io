@@ -223,7 +223,7 @@ public class DeferredFileOutputStream
         final FileOutputStream fos = new FileOutputStream(outputFile);
         try {
             memoryOutputStream.writeTo(fos);
-        } catch (IOException e){
+        } catch (final IOException e){
             fos.close();
             throw e;
         }

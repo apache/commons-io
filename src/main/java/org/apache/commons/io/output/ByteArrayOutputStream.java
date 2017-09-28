@@ -240,7 +240,7 @@ public class ByteArrayOutputStream extends OutputStream {
         } else {
             //Throw away old buffers
             currentBuffer = null;
-            int size = buffers.get(0).length;
+            final int size = buffers.get(0).length;
             buffers.clear();
             needNewBuffer(size);
             reuseBuffers = true;

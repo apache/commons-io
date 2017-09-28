@@ -44,10 +44,10 @@ public class ClosingBase {
 
     @After
     public void cleanup() {
-        for (Closeable c : toClose) {
+        for (final Closeable c : toClose) {
             try {
                 c.close();
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
             }
         }
     }

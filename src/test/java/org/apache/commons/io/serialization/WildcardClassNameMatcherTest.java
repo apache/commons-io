@@ -27,7 +27,7 @@ public class WildcardClassNameMatcherTest {
 
     @Test
     public void noPattern() {
-        ClassNameMatcher ca = new WildcardClassNameMatcher("org.foo");
+        final ClassNameMatcher ca = new WildcardClassNameMatcher("org.foo");
         assertTrue(ca.matches("org.foo"));
         assertFalse(ca.matches("org.foo.and.more"));
         assertFalse(ca.matches("org_foo"));
@@ -35,14 +35,14 @@ public class WildcardClassNameMatcherTest {
 
     @Test
     public void star() {
-        ClassNameMatcher ca = new WildcardClassNameMatcher("org*");
+        final ClassNameMatcher ca = new WildcardClassNameMatcher("org*");
         assertTrue(ca.matches("org.foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
     public void starAndQuestionMark() {
-        ClassNameMatcher ca = new WildcardClassNameMatcher("org?apache?something*");
+        final ClassNameMatcher ca = new WildcardClassNameMatcher("org?apache?something*");
         assertTrue(ca.matches("org.apache_something.more"));
         assertFalse(ca.matches("org..apache_something.more"));
     }

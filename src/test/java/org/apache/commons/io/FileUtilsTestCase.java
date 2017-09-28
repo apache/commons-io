@@ -1615,7 +1615,7 @@ public class FileUtilsTestCase {
             directory.mkdirs();
         }
 
-        List<File> input = new ArrayList<>();
+        final List<File> input = new ArrayList<>();
         input.add(testFile1);
         input.add(testFile2);
 
@@ -3084,12 +3084,12 @@ public class FileUtilsTestCase {
     // This test relies on FileUtils.copyFile using File.length to check the output size
     @Test
     public void testIncorrectOutputSize() throws Exception {
-        File inFile = new File("pom.xml");
-        File outFile = new ShorterFile("target/pom.tmp"); // it will report a shorter file
+        final File inFile = new File("pom.xml");
+        final File outFile = new ShorterFile("target/pom.tmp"); // it will report a shorter file
         try {
             FileUtils.copyFile(inFile, outFile);
             fail("Expected IOException");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             final String msg = e.toString();
             assertTrue(msg, msg.contains("Failed to copy full contents"));
         } finally {

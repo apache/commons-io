@@ -29,21 +29,21 @@ public class RegexpClassNameMatcherTest {
 
     @Test
     public void testSimplePatternFromString() {
-        ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*");
+        final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*");
         assertTrue(ca.matches("foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
     public void testSimplePatternFromPattern() {
-        ClassNameMatcher ca = new RegexpClassNameMatcher(Pattern.compile("foo.*"));
+        final ClassNameMatcher ca = new RegexpClassNameMatcher(Pattern.compile("foo.*"));
         assertTrue(ca.matches("foo.should.match"));
         assertFalse(ca.matches("bar.should.not.match"));
     }
 
     @Test
     public void testOrPattern() {
-        ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*|bar.*");
+        final ClassNameMatcher ca = new RegexpClassNameMatcher("foo.*|bar.*");
         assertTrue(ca.matches("foo.should.match"));
         assertTrue(ca.matches("bar.should.match"));
         assertFalse(ca.matches("zoo.should.not.match"));

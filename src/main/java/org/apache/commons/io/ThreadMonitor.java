@@ -122,7 +122,7 @@ class ThreadMonitor implements Runnable {
      * @throws InterruptedException if interrupted
      */
     private static void sleep(final long ms) throws InterruptedException {
-        long finishAt = System.currentTimeMillis() + ms;
+        final long finishAt = System.currentTimeMillis() + ms;
         long remaining = ms;
         do {
             Thread.sleep(remaining);

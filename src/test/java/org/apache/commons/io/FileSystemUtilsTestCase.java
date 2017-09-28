@@ -73,7 +73,7 @@ public class FileSystemUtilsTestCase {
             // more than 1% between the above two calls;
             // this also also small enough to verifiy freeSpaceKb uses
             // kibibytes (1024) instead of SI kilobytes (1000)
-            double acceptableDelta = kb * 0.01d;
+            final double acceptableDelta = kb * 0.01d;
             if (kilobyteBlock) {
                 assertEquals(free, kb, acceptableDelta);
             } else {
@@ -83,7 +83,7 @@ public class FileSystemUtilsTestCase {
             final long bytes = FileSystemUtils.freeSpace("");
             final long kb = FileSystemUtils.freeSpaceKb("");
             // Assume disk space does not fluctuate more than 1%
-            double acceptableDelta = kb * 0.01d;
+            final double acceptableDelta = kb * 0.01d;
             assertEquals((double) bytes / 1024, kb, acceptableDelta);
         }
     }

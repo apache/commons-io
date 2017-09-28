@@ -77,9 +77,9 @@ public class UnixLineEndingInputStreamTest
     }
 
     private String roundtrip( final String msg, final boolean ensure ) throws IOException {
-        ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes( "UTF-8" ) );
-        UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
-        byte[] buf = new byte[100];
+        final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes( "UTF-8" ) );
+        final UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
+        final byte[] buf = new byte[100];
         final int read = lf.read( buf );
         lf.close();
         return new String( buf, 0, read, "UTF-8" );

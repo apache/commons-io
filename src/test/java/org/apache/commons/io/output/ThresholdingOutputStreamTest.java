@@ -29,7 +29,7 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testSetByteCount() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean(false);
-        ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+        final ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
             {
                 setByteCount(2);
             }

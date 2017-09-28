@@ -66,7 +66,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
         try {
             return Class.forName(objectStreamClass.getName(), false, classLoader);
-        } catch (ClassNotFoundException cnfe) {
+        } catch (final ClassNotFoundException cnfe) {
             // delegate to super class loader which can resolve primitives
             return super.resolveClass(objectStreamClass);
         }

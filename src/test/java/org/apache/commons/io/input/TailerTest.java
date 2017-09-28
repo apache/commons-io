@@ -143,7 +143,7 @@ public class TailerTest {
 
         try (Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
              BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8))) {
-            List<String> lines = new ArrayList<>();
+            final List<String> lines = new ArrayList<>();
             String line;
             while((line = reader.readLine()) != null){
                 out.write(line);
@@ -154,7 +154,7 @@ public class TailerTest {
 
            final long testDelayMillis = delay * 10;
            TestUtils.sleep(testDelayMillis);
-           List<String> tailerlines = listener.getLines();
+           final List<String> tailerlines = listener.getLines();
            assertEquals("line count",lines.size(),tailerlines.size());
            for(int i = 0,len = lines.size();i<len;i++){
                final String expected = lines.get(i);

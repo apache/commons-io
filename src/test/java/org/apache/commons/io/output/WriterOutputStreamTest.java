@@ -88,7 +88,7 @@ public class WriterOutputStreamTest {
     public void testUTF16WithSingleByteWrite() throws IOException {
         try {
             testWithSingleByteWrite(TEST_STRING, "UTF-16");
-        } catch (UnsupportedOperationException e){
+        } catch (final UnsupportedOperationException e){
             if (!System.getProperty("java.vendor").contains("IBM")){
                 fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
             }
@@ -99,7 +99,7 @@ public class WriterOutputStreamTest {
     public void testUTF16WithBufferedWrite() throws IOException {
         try {
             testWithBufferedWrite(TEST_STRING, "UTF-16");
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             if (!System.getProperty("java.vendor").contains("IBM")) {
                 fail("This test should only throw UOE on IBM JDKs with broken UTF-16");
             }

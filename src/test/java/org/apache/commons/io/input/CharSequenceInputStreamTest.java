@@ -356,7 +356,7 @@ public class CharSequenceInputStreamTest {
     }
 
     private int checkAvail(final InputStream is, final int min) throws Exception {
-        int available = is.available();
+        final int available = is.available();
         assertTrue("avail should be >= " + min + ", but was " + available, available >= min);
         return available;
     }
@@ -403,7 +403,7 @@ public class CharSequenceInputStreamTest {
                     testAvailableSkip(csName);
                     testAvailableRead(csName);
                 }
-            } catch (UnsupportedOperationException e){
+            } catch (final UnsupportedOperationException e){
                 fail("Operation not supported for " + csName);
             }
         }
