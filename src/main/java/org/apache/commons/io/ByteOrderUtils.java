@@ -25,7 +25,7 @@ import java.util.Locale;
  *
  * @since 2.6
  */
-public final class ByteOrderFactory {
+public final class ByteOrderUtils {
 
     private static final Locale ComparisonLocale = Locale.ROOT;
 
@@ -39,7 +39,7 @@ public final class ByteOrderFactory {
      */
     public static final String LITTLE_ENDIAN = "Little";
 
-    private ByteOrderFactory() {
+    private ByteOrderUtils() {
     }
 
     /**
@@ -52,8 +52,8 @@ public final class ByteOrderFactory {
      * </p>
      * Examples:
      * <ul>
-     * <li>{@code ByteOrderFactory.parseByteOrder("little")} returns {@code ByteOrder.LITTLE_ENDIAN}</li>
-     * <li>{@code ByteOrderFactory.parseByteOrder("big")} returns {@code ByteOrder.BIG_ENDIAN}</li>
+     * <li>{@code ByteOrderUtils.parseByteOrder("little")} returns {@code ByteOrder.LITTLE_ENDIAN}</li>
+     * <li>{@code ByteOrderUtils.parseByteOrder("big")} returns {@code ByteOrder.BIG_ENDIAN}</li>
      * </ul>
      *
      * @param value

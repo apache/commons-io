@@ -21,10 +21,10 @@ import java.nio.ByteOrder;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ByteOrderFactoryTest {
+public class ByteOrderUtilsTest {
 
     private ByteOrder parseByteOrder(final String value) {
-        return ByteOrderFactory.parseByteOrder(value);
+        return ByteOrderUtils.parseByteOrder(value);
     }
 
     @Test
