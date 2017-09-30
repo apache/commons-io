@@ -41,7 +41,12 @@ import java.util.StringTokenizer;
  * </ul>
  *
  * @since 1.1
+ * @deprecated As of 2.6 deprecated without replacement. Use equivalent
+ *  methods in {@link java.nio.file.FileStore} instead, e.g.
+ *  <code>Files.getFileStore(Paths.get("/home")).getUsableSpace()</code>
+ *  or iterate over <code>FileSystems.getDefault().getFileStores()</code>
  */
+@Deprecated
 public class FileSystemUtils {
 
     /** Singleton instance, used mainly for testing. */
