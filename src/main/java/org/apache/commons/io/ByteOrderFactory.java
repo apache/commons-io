@@ -25,7 +25,7 @@ import java.util.Locale;
  *
  * @since 2.6
  */
-public class ByteOrderFactory {
+public final class ByteOrderFactory {
 
     private static final Locale ComparisonLocale = Locale.ROOT;
 
@@ -38,6 +38,9 @@ public class ByteOrderFactory {
      * Little endian.
      */
     public static final String LITTLE_ENDIAN = "Little";
+
+    private ByteOrderFactory() {
+    }
 
     /**
      * Parses the String argument as a {@link ByteOrder}, ignoring case.
