@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Upgrade from 2.5 to 2.6</title>
+        <author email="dev@commons.apache.org">Commons Documentation Team</author>
+    </properties>
+    <body>
+
+        <section name="Upgrade">
+            <p>
+                These are the release notes and advice for upgrading Apache Commons IO from
+                version 2.5 to version 2.6
+                <source>
+                    Apache Commons IO is a package of Java utility classes like java.io.
+                    Classes in this package are considered to be so standard and of such high
+                    reuse as to justify existence in java.io.
+
+                    The Apache Commons IO library contains utility classes, stream implementations,
+                    file filters, file comparators, endian transformation classes, and much more.
+
+                    Apache Commons IO 2.6 requires at least Java 7 to build and run.
+
+
+                    DEPRECATIONS
+                    ============
+
+                    All closeQuietly overloads in org.apache.commons.io.IOUtils have been
+                    deprecated. Use the try-with-resources statement or handle suppressed
+                    exceptions manually.
+
+                    The class org.apache.commons.io.FileSystemUtils has been deprecated.
+                    Use equivalent methods in java.nio.file.FileStore instead, e.g.
+                    Files.getFileStore(Paths.get("/home")).getUsableSpace() or iterate over
+                    FileSystems.getDefault().getFileStores().
+
+
+                    COMPATIBILITY WITH JAVA 9
+                    ==================
+
+                    The MANIFEST.MF now contains an additional entry:
+
+                    Automatic-Module-Name: org.apache.commons.io
+
+                    This should make it possible to use Commons IO 2.6 as a module in the Java 9
+                    module system. For more information see the corresponding issue:
+
+                    https://issues.apache.org/jira/browse/IO-551
+
+                    Building Commons IO 2.6 should work out of the box with the latest Java 9
+                    release. Please report any Java 9 related issues at:
+
+                    https://issues.apache.org/jira/browse/IO
+
+
+                    NEW FEATURES
+                    ============
+
+                    o IO-551: Add Automatic-Module-Name MANIFEST entry for Java 9 compatibility.
+                    o IO-367: Add convenience methods for copyToDirectory. Thanks to James Sawle.
+                    o IO-493: Add infinite circular input stream. Thanks to Piotr Turski.
+                    o IO-507: Add a ByteOrderUtils class.
+                    o IO-518: Add ObservableInputStream.
+                    o IO-519: Add MessageDigestCalculatingInputStream.
+                    o IO-513: Add convenience methods for reading class path resources.
+                    Thanks to Behrang Saeedzadeh.
+
+                    FIXED BUGS
+                    ==========
+
+                    o IO-550: Documentation issue, fix 404 Javadoc issues in the description page.
+                    Thanks to Jimi Adrian.
+                    o IO-442: Javadoc contradictory for FileFilterUtils.ageFileFilter(cutoff) and
+                    the filter it constructs: AgeFileFilter(cutoff).
+                    Thanks to Simon Robinson.
+                    o IO-534: FileUtilTestCase.testForceDeleteDir() should not delete testDirectory
+                    parent.
+                    o IO-528: Fix Tailer.run race condition runaway logging. Thanks to Dave Moten.
+                    o IO-483: getPrefixLength return -1 if unix file contains colon.
+                    Thanks to Marko Vasic.
+                    o IO-520: FileUtilsTestCase#testContentEqualsIgnoreEOL fails on Windows.
+                    o IO-516: .gitattributes not correctly applied. Thanks to Jason Pyeron.
+                    o IO-515: Allow Specifying Initial Buffer Size of DeferredFileOutputStream.
+                    Thanks to Brett Lounsbury, Gary Gregory.
+                    o IO-512: ThresholdingOutputStream.thresholdReached() results in
+                    FileNotFoundException. Thanks to Ralf Hauser.
+                    o IO-511: After a few unit tests, a few newly created directories not cleaned
+                    completely. Thanks to Ahmet Celik.
+                    o IO-502: Exceptions are suppressed incorrectly when copying files.
+                    Thanks to Christian Schulte.
+                    o IO-503: Update platform requirement to Java 7.
+                    o IO-537: BOMInputStream shouldn't sort array of BOMs in-place.
+                    Thanks to Borys Zibrov.
+
+                    CHANGES
+                    =======
+
+                    o IO-542: FileUtils#readFileToByteArray: optimize reading of files with known
+                    size. Thanks to Ilmars Poikans.
+                    o IO-547: Throw a IllegalArgumentException instead of NullPointerException in
+                    FileSystemUtils.freeSpaceWindows(). Thanks to Nikhil Shinde,
+                    Michael Ernst, Gary Greory.
+                    o IO-506: Deprecate methods FileSystemUtils.freeSpaceKb().
+                    Thanks to Christian Schulte.
+                    o IO-505: Make LineIterator implement Closeable to support try-with-resources
+                    statements. Thanks to Christian Schulte.
+                    o IO-504: Deprecated of all IOUtils.closeQuietly() methods and use
+                    try-with-resources internally. Thanks to Christian Schulte.
+
+                    REMOVED
+                    =======
+
+                    o IO-514: Remove org.apache.commons.io.Java7Support.
+
+                    COMPATIBILITY WITH OLDER VERSIONS
+                    =================================
+
+                    Compatibility with 2.5:
+                    Binary compatible: Yes.
+                    Source compatible: Yes.
+                    Semantic compatible: Yes.
+
+                    Compatibility with 2.6 and 1.4:
+                    Binary compatible: Yes.
+                    Source compatible: No, see the rare case in
+                    https://issues.apache.org/jira/browse/IO-318.
+                    Semantic compatible: No, see the rare case in
+                    https://issues.apache.org/jira/browse/IO-318.
+
+                    Commons IO 2.6 requires JDK 1.7 or later.
+                    Commons IO 2.5 requires JDK 1.6 or later.
+                    Commons IO 2.4 requires JDK 1.6 or later.
+                    Commons IO 2.3 requires JDK 1.6 or later.
+                    Commons IO 2.2 requires JDK 1.5 or later.
+                    Commons IO 1.4 requires JDK 1.3 or later.
+                </source>
+            </p>
+        </section>
+
+    </body>
+</document>
