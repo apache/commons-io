@@ -44,15 +44,17 @@ Apache Commons IO
 ===================
 
 [![Build Status](https://travis-ci.org/apache/commons-io.svg?branch=master)](https://travis-ci.org/apache/commons-io)
-[![Coverage Status](https://coveralls.io/repos/github/apache/commons-io/badge.svg?branch=master)](https://coveralls.io/github/apache/commons-io?branch=master)
+[![Coverage Status](https://coveralls.io/repos/apache/commons-io/badge.svg?branch=master)](https://coveralls.io/r/apache/commons-io)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-The Apache Commons IO library contains utility classes, stream implementations, file filters, 
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
 
 Documentation
 -------------
 
-More information can be found on the [homepage](https://commons.apache.org/proper/commons-io).
+More information can be found on the [Apache Commons IO homepage](https://commons.apache.org/proper/commons-io).
 The [JavaDoc](https://commons.apache.org/proper/commons-io/javadocs/api-release) can be browsed.
 Questions related to the usage of Apache Commons IO should be posted to the [user mailing list][ml].
 
@@ -66,14 +68,14 @@ Alternatively you can pull it from the central Maven repositories:
 <dependency>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.5</version>
+  <version>2.6</version>
 </dependency>
 ```
 
 Contributing
 ------------
 
-We accept PRs via github. The [developer mailing list][ml] is the main channel of communication for contributors.
+We accept Pull Requests via GitHub. The [developer mailing list][ml] is the main channel of communication for contributors.
 There are some guidelines which will make applying PRs easier for us:
 + No tabs! Please use spaces for indentation.
 + Respect the code style.
@@ -85,7 +87,9 @@ You can learn more about contributing via GitHub in our [contribution guidelines
 
 License
 -------
-Code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
+This code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0).
+
+See the `NOTICE.txt` file for required notices and attributions.
 
 Donations
 ---------
@@ -94,9 +98,9 @@ You like Apache Commons IO? Then [donate back to the ASF](https://www.apache.org
 Additional Resources
 --------------------
 
-+ [Apache Commons IO Homepage](https://commons.apache.org/proper/commons-io/)
-+ [Apache Commons IO Bugtracker (JIRA)](https://issues.apache.org/jira/browse/IO)
++ [Apache Commons Homepage](https://commons.apache.org/)
++ [Apache Issue Tracker (JIRA)](https://issues.apache.org/jira/browse/IO)
 + [Apache Commons Twitter Account](https://twitter.com/ApacheCommons)
-+ #apachecommons IRC channel on freenode.org
++ `#apache-commons` IRC channel on `irc.freenode.org`
 
 [ml]:https://commons.apache.org/mail-lists.html
