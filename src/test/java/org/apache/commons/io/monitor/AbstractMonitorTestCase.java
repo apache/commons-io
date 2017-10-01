@@ -28,20 +28,22 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * {@link FileAlterationObserver} Test Case.
  */
-public abstract class AbstractMonitorTestCase  {
+public abstract class AbstractMonitorTestCase {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /** File observer */
     protected FileAlterationObserver observer;
 
     /** Listener which collects file changes */
     protected CollectionFileListener listener;
-
-    /** Test directory name */
-    protected String testDirName = null;
 
     /** Directory for test files */
     protected File testDir;
@@ -51,12 +53,7 @@ public abstract class AbstractMonitorTestCase  {
 
     @Before
     public void setUp() throws Exception {
-        testDir = new File(new File("."), testDirName);
-        if (testDir.exists()) {
-            FileUtils.cleanDirectory(testDir);
-        } else {
-            testDir.mkdir();
-        }
+        testDir = temporaryFolder.getRoot();
 
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");

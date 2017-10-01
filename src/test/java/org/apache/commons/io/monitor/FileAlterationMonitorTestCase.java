@@ -39,7 +39,6 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
      *
      */
     public FileAlterationMonitorTestCase() {
-        testDirName = "test-monitor";
         listener = new CollectionFileListener(false);
     }
 
