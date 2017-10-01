@@ -39,6 +39,9 @@ public final class ByteOrderUtils {
      */
     public static final String LITTLE_ENDIAN = "Little";
 
+    /**
+     * ByteOrderUtils is a static utility class, so prevent construction with a private constructor.
+     */
     private ByteOrderUtils() {
     }
 
