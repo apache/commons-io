@@ -455,5 +455,17 @@ file comparators, endian transformation classes, and much more.
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>java9</id>
+      <activation>
+        <jdk>9</jdk>
+      </activation>
+      <properties>
+        <!-- versions below 3.0.0 do not work with java 9 -->
+        <commons.javadoc.version>3.0.0-M1</commons.javadoc.version>
+        <!-- coverall version 4.3.0 does not work with java 9, see https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
+        <coveralls.skip>true</coveralls.skip>
+      </properties>
+    </profile>
   </profiles>
 </project>
