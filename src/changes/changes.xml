@@ -114,7 +114,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add infinite circular input stream
       </action>
       <action issue="IO-507" dev="ggregory" type="add">
-        Add a ByteOrderUtils class.
+        Add a ByteOrderParser class.
       </action>
       <action issue="IO-518" dev="jochen" type="add">
         Add ObservableInputStream
