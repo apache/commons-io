@@ -288,7 +288,10 @@ public class LockableFileWriter extends Writer {
         try {
             out.close();
         } finally {
-            lockFile.delete();
+            if (!lockFile.delete()) {
+                throw new IOException("Can't delete file, lock " +
+                         lockFile.getPath() + " exists");
+            }
         }
     }
 
