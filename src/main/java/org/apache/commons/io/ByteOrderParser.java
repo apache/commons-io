@@ -18,7 +18,6 @@
 package org.apache.commons.io;
 
 import java.nio.ByteOrder;
-import java.util.Locale;
 
 /**
  * Converts Strings to {@link ByteOrder} instances.
