@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.6" date="2017-MM-DD" description="New features and bug fixes.">
+      <action issue="IO-553" dev="britter" type="update" due-to="Michael Ernst">
+        Make code style of hasBOM() consistent with getBOMCharsetName()
+      </action>
       <action issue="IO-550" dev="kinow" type="fix" due-to="Jimi Adrian">
         Documentation issue, fix 404 Javadoc issues in the description page
       </action>
