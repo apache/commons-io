@@ -33,7 +33,7 @@ public final class ByteOrderParser {
     }
 
     /**
-     * Parses the String argument as a {@link ByteOrder}, ignoring case.
+     * Parses the String argument as a {@link ByteOrder}.
      * <p>
      * Returns {@code ByteOrder.LITTLE_ENDIAN} if the given value is {@code "LITTLE_ENDIAN"}.
      * </p>
