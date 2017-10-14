@@ -25,38 +25,26 @@ import java.util.Locale;
  *
  * @since 2.6
  */
-public final class ByteOrderUtils {
-
-    private static final Locale ComparisonLocale = Locale.ROOT;
-
-    /**
-     * Big endian.
-     */
-    public static final String BIG_ENDIAN = "Big";
-
-    /**
-     * Little endian.
-     */
-    public static final String LITTLE_ENDIAN = "Little";
+public final class ByteOrderParser {
 
     /**
      * ByteOrderUtils is a static utility class, so prevent construction with a private constructor.
      */
-    private ByteOrderUtils() {
+    private ByteOrderParser() {
     }
 
     /**
      * Parses the String argument as a {@link ByteOrder}, ignoring case.
      * <p>
-     * Returns {@code ByteOrder.LITTLE_ENDIAN} if the given value is {@code "little"} or {@code "LITTLE_ENDIAN"}.
+     * Returns {@code ByteOrder.LITTLE_ENDIAN} if the given value is {@code "LITTLE_ENDIAN"}.
      * </p>
      * <p>
-     * Returns {@code ByteOrder.BIG_ENDIAN} if the given value is {@code "big"} or {@code "BIG_ENDIAN"}.
+     * Returns {@code ByteOrder.BIG_ENDIAN} if the given value is {@code "BIG_ENDIAN"}.
      * </p>
      * Examples:
      * <ul>
-     * <li>{@code ByteOrderUtils.parseByteOrder("little")} returns {@code ByteOrder.LITTLE_ENDIAN}</li>
-     * <li>{@code ByteOrderUtils.parseByteOrder("big")} returns {@code ByteOrder.BIG_ENDIAN}</li>
+     * <li>{@code ByteOrderParser.parseByteOrder("LITTLE_ENDIAN")} returns {@code ByteOrder.LITTLE_ENDIAN}</li>
+     * <li>{@code ByteOrderParser.parseByteOrder("BIG_ENDIAN")} returns {@code ByteOrder.BIG_ENDIAN}</li>
      * </ul>
      *
      * @param value
@@ -66,17 +54,14 @@ public final class ByteOrderUtils {
      *             if the {@code String} containing the ByteOrder representation to be parsed is unknown.
      */
     public static ByteOrder parseByteOrder(final String value) {
-        final String valueUp = value.toUpperCase(ComparisonLocale);
-        final String bigEndianUp = BIG_ENDIAN.toUpperCase(ComparisonLocale);
-        final String littleEndianUp = LITTLE_ENDIAN.toUpperCase(ComparisonLocale);
-        if (bigEndianUp.equals(valueUp) || ByteOrder.BIG_ENDIAN.toString().equals(valueUp)) {
+        if (ByteOrder.BIG_ENDIAN.toString().equals(value)) {
             return ByteOrder.BIG_ENDIAN;
         }
-        if (littleEndianUp.equals(valueUp) || ByteOrder.LITTLE_ENDIAN.toString().equals(valueUp)) {
+        if (ByteOrder.LITTLE_ENDIAN.toString().equals(value)) {
             return ByteOrder.LITTLE_ENDIAN;
         }
-        throw new IllegalArgumentException("Unsupported byte order setting: " + value + ", expeced one of " + ByteOrder.LITTLE_ENDIAN + ", " +
-                LITTLE_ENDIAN + ", " + ByteOrder.BIG_ENDIAN + ", " + bigEndianUp);
+        throw new IllegalArgumentException("Unsupported byte order setting: " + value + ", expeced one of " + ByteOrder.LITTLE_ENDIAN +
+                 ", " + ByteOrder.BIG_ENDIAN);
     }
 
 }

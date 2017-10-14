@@ -21,23 +21,24 @@ import java.nio.ByteOrder;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ByteOrderUtilsTest {
+public class ByteOrderParserTest {
 
     private ByteOrder parseByteOrder(final String value) {
-        return ByteOrderUtils.parseByteOrder(value);
+        return ByteOrderParser.parseByteOrder(value);
     }
 
     @Test
     public void testParseBig() {
-        Assert.assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("big"));
-        Assert.assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("Big"));
-        Assert.assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG"));
+        Assert.assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG_ENDIAN"));
     }
 
     @Test
     public void testParseLittle() {
-        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("little"));
-        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("Little"));
-        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE"));
+        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testThrowsException() throws Exception {
+        parseByteOrder("some value");
     }
 }
