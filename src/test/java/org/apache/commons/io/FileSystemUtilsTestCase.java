@@ -182,8 +182,7 @@ public class FileSystemUtilsTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Big() throws Exception {
-        // this is the format of response when calling dir /c
-        // we have now switched to dir /-c, so we should never get this
+        // test with very large free space
         final String lines =
                 " Volume in drive C is HDD\n" +
                         " Volume Serial Number is XXXX-YYYY\n" +
@@ -203,8 +202,7 @@ public class FileSystemUtilsTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Small() throws Exception {
-        // this is the format of response when calling dir /c
-        // we have now switched to dir /-c, so we should never get this
+        // test with very large free space
         final String lines =
                 " Volume in drive C is HDD\n" +
                         " Volume Serial Number is XXXX-YYYY\n" +
