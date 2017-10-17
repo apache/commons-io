@@ -181,6 +181,48 @@ public class FileSystemUtilsTestCase {
 
     //-----------------------------------------------------------------------
     @Test
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Big() throws Exception {
+        // this is the format of response when calling dir /c
+        // we have now switched to dir /-c, so we should never get this
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)        180,260 bytes\n" +
+                        "              10 Dir(s)  141,411,551,232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(141411551232L, fsu.freeSpaceWindows("", -1));
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testGetFreeSpaceWindows_String_ParseCommaFormatBytes_Small() throws Exception {
+        // this is the format of response when calling dir /c
+        // we have now switched to dir /-c, so we should never get this
+        final String lines =
+                " Volume in drive C is HDD\n" +
+                        " Volume Serial Number is XXXX-YYYY\n" +
+                        "\n" +
+                        " Directory of C:\\Documents and Settings\\Xxxx\n" +
+                        "\n" +
+                        "19/08/2005  22:43    <DIR>          .\n" +
+                        "19/08/2005  22:43    <DIR>          ..\n" +
+                        "11/08/2005  01:07                81 build.properties\n" +
+                        "17/08/2005  21:44    <DIR>          Desktop\n" +
+                        "               7 File(s)        180,260 bytes\n" +
+                        "              10 Dir(s)  1,232 bytes free";
+        final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
+        assertEquals(1232L, fsu.freeSpaceWindows("", -1));
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
     public void testGetFreeSpaceWindows_String_EmptyPath() throws Exception {
         final String lines =
                 " Volume in drive C is HDD\n" +
