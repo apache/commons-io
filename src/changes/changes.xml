@@ -46,6 +46,9 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
+    <release version="2.7" date="tba" description="tba">
+    </release>
+
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
       <action issue="IO-553" dev="britter" type="update" due-to="Michael Ernst">
         Make code style of hasBOM() consistent with getBOMCharsetName()
@@ -132,6 +135,7 @@ The <action> type attribute can be add,update,fix,remove.
         Remove org.apache.commons.io.Java7Support
       </action>
     </release>
+
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
       <action issue="IO-492" dev="ggregory" type="fix" due-to="Santiago Castro">
         Typo: In an IOUtils.java comment it says "focussed" instead of "focused".
@@ -345,7 +349,7 @@ The <action> type attribute can be add,update,fix,remove.
         Make IOUtils.EOF public and reuse it in various classes.
       </action>
     </release>
-    <!-- The release date is the date RC is cut -->
+
     <release version="2.4" date="2012-06-12" description="New features and bug fixes.">
       <action issue="IO-343" dev="ggregory" type="fix" due-to="igorlash">
         org.apache.commons.io.comparator Javadoc is inconsistent with real code.
@@ -399,7 +403,7 @@ The <action> type attribute can be add,update,fix,remove.
         FileUtils.sizeOfDirectory follows symbolic links.
       </action>
     </release>
-    <!-- The release date is the date RC is cut -->
+
     <release version="2.3" date="2012-April-10" description="New features and bug fixes.">
       <action issue="IO-322" dev="ggregory" type="add" due-to="ggregory">
         Add and use class Charsets.
@@ -411,6 +415,7 @@ The <action> type attribute can be add,update,fix,remove.
         Add Charset sister APIs to method that take a String charset name.
       </action>
     </release>
+
     <release version="2.2" date="2012-March-26" description="New features and bug fixes.">
       <action issue="IO-313" dev="ggregory" type="add" due-to="ggregory">
         Add IOUTils.toBufferedReader(Reader)
@@ -487,6 +492,7 @@ The <action> type attribute can be add,update,fix,remove.
         Added contentEqualsIgnoreEOL methods to both classes
       </action>
     </release>
+
     <release version="2.1" date="2011-Sep-28" description="New features and bug fixes.">
       <action dev="ggregory" type="add" issue="IO-285" due-to="ggregory">
         Use standard Maven directory layout
@@ -534,7 +540,6 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="sebb" type="add" issue="IO-251" due-to="Marco Albini">
         Add new read method "toByteArray" to handle InputStream with known size.
       </action>
-
     </release>
 
     <release version="2.0.1" date="2010-Dec-26">
