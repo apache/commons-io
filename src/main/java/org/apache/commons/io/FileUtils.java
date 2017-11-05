@@ -1526,7 +1526,7 @@ public class FileUtils {
      */
     public static void copyToFile(final InputStream source, final File destination) throws IOException {
         try (OutputStream out = openOutputStream(destination)) {
-            IOUtils.copy(in, out);
+            IOUtils.copy(source, out);
         }
     }
 
