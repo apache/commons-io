@@ -1293,9 +1293,9 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks whether the given character is illegal in a Windows file names.
+     * Checks whether the given character is illegal in a Windows file name.
      * <p>
-     * The illegal character are:
+     * The illegal characters are:
      * </p>
      * <ul>
      * <li>&lt; (less than</li>
@@ -1309,7 +1309,7 @@ public class FilenameUtils {
      * <li>* (asterisk</li>
      * <li>ASCII NUL (0)</li>
      * <li>Integer characters 1 through 31</li>
-     * <li>There may be other characters that the file name does not allow. Please see
+     * <li>There may be other characters that the file system does not allow. Please see
      * <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx">Naming Files, Paths,
      * and Namespaces</a></li>
      * </ul>
@@ -1318,7 +1318,7 @@ public class FilenameUtils {
      *      Paths, and Namespaces</a>
      * @param c
      *            the character to check
-     * @return whether the give character is legal
+     * @return {@code true} if the given character is illegal
      * @since 2.7
      */
     public static boolean isIllegalWindowsFileName(final char c) {
