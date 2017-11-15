@@ -47,8 +47,8 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="tba" description="tba">
-      <action issue="IO-553" dev="ggregory" type="update">
-        Add org.apache.commons.io.FilenameUtils.WINDOWS_ILLEGAL_FILE_NAME_CHARS.
+      <action issue="IO-553" dev="ggregory" type="add">
+        Add org.apache.commons.io.FilenameUtils.isIllegalWindowsFileName(char).
       </action>
     </release>
 

@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Stack;
 
@@ -121,14 +122,15 @@ public class FilenameUtils {
      * @see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx">Naming Files,
      *      Paths, and Namespaces</a>
      */
-    public static final char[] WINDOWS_ILLEGAL_FILE_NAME_CHARS = {
+    private static final char[] WINDOWS_ILLEGAL_FILE_NAME_CHARS = {
+            // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NULL
             0,  
             // 1-31 may be allowed in file streams
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
             29, 30, 31, 
-            '<', '>', ':', '"', '/', '\\', '|', '?', '*'
+            '"', '*', '/', ':', '<', '>', '?', '\\', '|'
             // @formatter:on
     };
 
@@ -1290,6 +1292,35 @@ public class FilenameUtils {
         return false;
     }
 
+    /**
+     * Checks whether the given character is illegal in a Windows file names.
+     * <p>
+     * The illegal character are:
+     * </p>
+     * <ul>
+     * <li>< (less than</li>
+     * <li>> (greater than</li>
+     * <li>: (colon</li>
+     * <li>" (double quote</li>
+     * <li>/ (forward slash</li>
+     * <li>\ (backslash</li>
+     * <li>| (vertical bar or pipe</li>
+     * <li>? (question mark</li>
+     * <li>* (asterisk</li>
+     * <li>ASCII NUL (0)</li>
+     * <li>Integer characters 1 through 31</li>
+     * </ul>
+     * 
+     * @see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx">Naming Files,
+     *      Paths, and Namespaces</a>
+     * @param c the character to check
+     * @return whether the give character is legal
+     * @since 2.7
+     */
+    public static boolean isIllegalWindowsFileName(final char c) {
+        return Arrays.binarySearch(WINDOWS_ILLEGAL_FILE_NAME_CHARS, c) >= 0;
+    }
+    
     //-----------------------------------------------------------------------
     /**
      * Checks a filename to see if it matches the specified wildcard matcher,
