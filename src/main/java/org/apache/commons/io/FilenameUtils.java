@@ -105,8 +105,8 @@ public class FilenameUtils {
      * The characters that are illegal in Windows file names.
      * 
      * <ul>
-     * <li>< (less than</li>
-     * <li>> (greater than</li>
+     * <li>&lt; (less than</li>
+     * <li>&gt; (greater than</li>
      * <li>: (colon</li>
      * <li>" (double quote</li>
      * <li>/ (forward slash</li>
@@ -1298,8 +1298,8 @@ public class FilenameUtils {
      * The illegal character are:
      * </p>
      * <ul>
-     * <li>< (less than</li>
-     * <li>> (greater than</li>
+     * <li>&lt; (less than</li>
+     * <li>&gt; (greater than</li>
      * <li>: (colon</li>
      * <li>" (double quote</li>
      * <li>/ (forward slash</li>
