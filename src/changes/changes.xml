@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="tba" description="tba">
+      <action issue="IO-553" dev="ggregory" type="update">
+        Add org.apache.commons.io.FilenameUtils.WINDOWS_ILLEGAL_FILE_NAME_CHARS.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
