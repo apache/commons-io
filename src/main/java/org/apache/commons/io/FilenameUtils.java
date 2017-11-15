@@ -1309,11 +1309,15 @@ public class FilenameUtils {
      * <li>* (asterisk</li>
      * <li>ASCII NUL (0)</li>
      * <li>Integer characters 1 through 31</li>
+     * <li>There may be other characters that the file name does not allow. Please see
+     * <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx">Naming Files, Paths,
+     * and Namespaces</a></li>
      * </ul>
      * 
      * @see <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx">Naming Files,
      *      Paths, and Namespaces</a>
-     * @param c the character to check
+     * @param c
+     *            the character to check
      * @return whether the give character is legal
      * @since 2.7
      */
