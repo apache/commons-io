@@ -17,12 +17,20 @@
 
 package org.apache.commons.io;
 
-import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 public class FileSystemTestCase {
+
+    @Test
+    public void testSorted() {
+        for (FileSystem fs : FileSystem.values()) {
+            char[] chars=fs.getIllegalFileNameChars();
+            for (int i=0; i < chars.length - 1; i++) {
+                Assert.assertTrue(fs.name(), chars[i] < chars[i+1]);
+            }
+        }
+    }    
 
     @Test
     public void testToLegalFileNameWindows() {
@@ -32,8 +40,6 @@ public class FileSystemTestCase {
             Assert.assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
         char[] illegal = new char[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
-        Arrays.sort(illegal);
-        System.out.println(Arrays.toString(illegal));
         for (char i = 0; i < illegal.length; i++) {
             Assert.assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
