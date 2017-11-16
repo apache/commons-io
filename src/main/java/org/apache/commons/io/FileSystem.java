@@ -199,7 +199,7 @@ public enum FileSystem {
     /**
      * Converts a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"} to a legal file
      * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
-     * name exceeds {@link #getMaxFileNameLength()}, then the name is truncated to {@link #getMaxFileNameLength()}.
+     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to {@link #getMaxFileNameLength()}.
      *
      * @param candidate
      *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
@@ -224,5 +224,28 @@ public enum FileSystem {
             }
         }
         return changed ? String.valueOf(charArray) : truncated;
+    }
+
+    /**
+     * Checks if a candidate file name (without a path)
+     * such as {@code "filename.ext"} or {@code "filename"}
+     * is a potentially legal file name.
+     * If the file name length exceeds {@link #getMaxFileNameLength()},
+     * or if it contains an illegal character then the check fails.
+     *
+     * @param candidate
+     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @return {@code true} if the candidate name is legal
+     */
+    public boolean isLegalFileName(final CharSequence candidate) {
+        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
+            return false;
+        }
+        for (int i = 0; i < candidate.length(); i++) {
+            if (isIllegalFileNameChar(candidate.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -52,5 +52,15 @@ public class FileSystemTestCase {
         for (char i = '0'; i < '9'; i++) {
             Assert.assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
+    }    
+
+    @Test
+    public void testIsLegalName() {
+        for (FileSystem fs : FileSystem.values()) {
+            Assert.assertFalse(fs.name(), fs.isLegalFileName("")); // Empty is always illegal
+            Assert.assertFalse(fs.name(), fs.isLegalFileName(null)); // null is always illegal
+            Assert.assertFalse(fs.name(), fs.isLegalFileName("\0")); // Assume NUL is always illegal
+            Assert.assertTrue(fs.name(), fs.isLegalFileName("0")); // Assume simple name always legal
+        }
     }
 }
