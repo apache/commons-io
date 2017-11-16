@@ -52,7 +52,7 @@ public class FileSystemTestCase {
         for (char i = '0'; i < '9'; i++) {
             Assert.assertEquals(i, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
-    }    
+    }
 
     @Test
     public void testIsLegalName() {
@@ -61,6 +61,17 @@ public class FileSystemTestCase {
             Assert.assertFalse(fs.name(), fs.isLegalFileName(null)); // null is always illegal
             Assert.assertFalse(fs.name(), fs.isLegalFileName("\0")); // Assume NUL is always illegal
             Assert.assertTrue(fs.name(), fs.isLegalFileName("0")); // Assume simple name always legal
+        }
+    }
+
+    @Test
+    public void testReplacementWithNUL() {
+        for (FileSystem fs : FileSystem.values()) {
+            try {
+                fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
+            } catch (IllegalArgumentException iae) {
+                Assert.assertTrue(iae.getMessage(), iae.getMessage().startsWith("The replacement character '\\0'"));
+            }
         }
     }
 }

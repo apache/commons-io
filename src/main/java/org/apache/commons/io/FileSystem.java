@@ -211,7 +211,8 @@ public enum FileSystem {
         if (isIllegalFileNameChar(replacement)) {
             throw new IllegalArgumentException(
                     String.format("The replacement character '%s' cannot be one of the %s illegal characters: %s",
-                            replacement, name(), Arrays.toString(illegalFileNameChars)));
+                            // %s does not work properly with NUL
+                            replacement == '\0' ? "\\0" : replacement, name(), Arrays.toString(illegalFileNameChars)));
         }
         final String truncated = candidate.length() > maxFileNameLength ? candidate.substring(0, maxFileNameLength)
                 : candidate;
