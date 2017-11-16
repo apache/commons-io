@@ -247,28 +247,6 @@ public class FilenameUtilsTestCase {
     }
 
     @Test
-    public void testIsIllegalWindowsFileName() {
-        for (char i = 0; i < 32; i++) {
-            assertTrue(FilenameUtils.isIllegalWindowsFileName(i));
-        }
-        char[] illegal = new char[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
-        Arrays.sort(illegal);
-        System.out.println(Arrays.toString(illegal));
-        for (char i = 0; i < illegal.length; i++) {
-            assertTrue(FilenameUtils.isIllegalWindowsFileName(illegal[i]));
-        }
-        for (char i = 'a'; i < 'z'; i++) {
-            assertFalse("i = " + (int) i, FilenameUtils.isIllegalWindowsFileName(i));
-        }
-        for (char i = 'A'; i < 'Z'; i++) {
-            assertFalse("i = " + (int) i, FilenameUtils.isIllegalWindowsFileName(i));
-        }
-        for (char i = '0'; i < '9'; i++) {
-            assertFalse("i = " + (int) i, FilenameUtils.isIllegalWindowsFileName(i));
-        }
-    }
-    
-    @Test
     public void testNormalize_with_nullbytes() throws Exception {
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
