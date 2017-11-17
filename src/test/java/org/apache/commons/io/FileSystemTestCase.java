@@ -24,22 +24,22 @@ public class FileSystemTestCase {
 
     @Test
     public void testSorted() {
-        for (FileSystem fs : FileSystem.values()) {
-            char[] chars=fs.getIllegalFileNameChars();
-            for (int i=0; i < chars.length - 1; i++) {
-                Assert.assertTrue(fs.name(), chars[i] < chars[i+1]);
+        for (final FileSystem fs : FileSystem.values()) {
+            final char[] chars = fs.getIllegalFileNameChars();
+            for (int i = 0; i < chars.length - 1; i++) {
+                Assert.assertTrue(fs.name(), chars[i] < chars[i + 1]);
             }
         }
-    }    
+    }
 
     @Test
     public void testToLegalFileNameWindows() {
-        FileSystem fs = FileSystem.WINDOWS;
-        char replacement = '-';
+        final FileSystem fs = FileSystem.WINDOWS;
+        final char replacement = '-';
         for (char i = 0; i < 32; i++) {
             Assert.assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
-        char[] illegal = new char[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
+        final char[] illegal = new char[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
         for (char i = 0; i < illegal.length; i++) {
             Assert.assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
@@ -56,20 +56,33 @@ public class FileSystemTestCase {
 
     @Test
     public void testIsLegalName() {
-        for (FileSystem fs : FileSystem.values()) {
+        for (final FileSystem fs : FileSystem.values()) {
             Assert.assertFalse(fs.name(), fs.isLegalFileName("")); // Empty is always illegal
             Assert.assertFalse(fs.name(), fs.isLegalFileName(null)); // null is always illegal
             Assert.assertFalse(fs.name(), fs.isLegalFileName("\0")); // Assume NUL is always illegal
             Assert.assertTrue(fs.name(), fs.isLegalFileName("0")); // Assume simple name always legal
+            for (final String candidate : fs.getReservedFileNames()) {
+                // Reserved file names are not legal
+                Assert.assertFalse(fs.isLegalFileName(candidate));
+            }
+        }
+    }
+
+    @Test
+    public void testIsReservedFileName() {
+        for (final FileSystem fs : FileSystem.values()) {
+            for (final String candidate : fs.getReservedFileNames()) {
+                Assert.assertTrue(fs.isReservedFileName(candidate));
+            }
         }
     }
 
     @Test
     public void testReplacementWithNUL() {
-        for (FileSystem fs : FileSystem.values()) {
+        for (final FileSystem fs : FileSystem.values()) {
             try {
                 fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
-            } catch (IllegalArgumentException iae) {
+            } catch (final IllegalArgumentException iae) {
                 Assert.assertTrue(iae.getMessage(), iae.getMessage().startsWith("The replacement character '\\0'"));
             }
         }

@@ -39,7 +39,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }),
+    }, new String[] {}),
 
     MAC_OSX(255, 1024, new char[] {
             // KEEP THIS ARRAY SORTED!
@@ -49,9 +49,9 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }),
+    }, new String[] {}),
 
-    GENERIC(Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }),
+    GENERIC(Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
 
     WINDOWS(255, 32000, new char[] {
             // KEEP THIS ARRAY SORTED!
@@ -63,7 +63,10 @@ public enum FileSystem {
             29, 30, 31,
             '"', '*', '/', ':', '<', '>', '?', '\\', '|'
             // @formatter:on
-    });
+    },
+            // KEEP THIS ARRAY SORTED!
+            new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
+                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" });
 
     /**
      * The prefix String for all Windows OS.
@@ -176,13 +179,16 @@ public enum FileSystem {
 
     private final char[] illegalFileNameChars;
     private final int maxFileNameLength;
-
     private final int maxPathLength;
+    private final String[] reservedFileNames;
 
-    private FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars) {
+    private FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars,
+            final String[] reservedFileNames) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
+        this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
+        ;
     }
 
     /**
@@ -217,9 +223,21 @@ public enum FileSystem {
     }
 
     /**
+     * Returns whether the given string is a reserved file name.
+     * 
+     * @param candidate
+     *            the string to test
+     * @return {@code true} if the given string is a reserved file name.
+     */
+    public boolean isReservedFileName(final CharSequence candidate) {
+        return Arrays.binarySearch(reservedFileNames, candidate) >= 0;
+    }
+
+    /**
      * Converts a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"} to a legal file
      * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
-     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to {@link #getMaxFileNameLength()}.
+     * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to
+     * {@link #getMaxFileNameLength()}.
      *
      * @param candidate
      *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
@@ -248,11 +266,9 @@ public enum FileSystem {
     }
 
     /**
-     * Checks if a candidate file name (without a path)
-     * such as {@code "filename.ext"} or {@code "filename"}
-     * is a potentially legal file name.
-     * If the file name length exceeds {@link #getMaxFileNameLength()},
-     * or if it contains an illegal character then the check fails.
+     * Checks if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
+     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
+     * an illegal character then the check fails.
      *
      * @param candidate
      *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
@@ -262,11 +278,18 @@ public enum FileSystem {
         if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
             return false;
         }
+        if (isReservedFileName(candidate)) {
+            return false;
+        }
         for (int i = 0; i < candidate.length(); i++) {
             if (isIllegalFileNameChar(candidate.charAt(i))) {
                 return false;
             }
         }
         return true;
+    }
+
+    public String[] getReservedFileNames() {
+        return reservedFileNames;
     }
 }
