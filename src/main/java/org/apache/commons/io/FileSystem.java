@@ -27,7 +27,7 @@ import java.util.Objects;
  * The starting point of any operation is {@link #getCurrent()} which gets you the enum for the file system that matches
  * the OS hosting the running JVM.
  * </p>
- * 
+ *
  * @since 2.7
  */
 public enum FileSystem {
@@ -102,6 +102,11 @@ public enum FileSystem {
 
     private static final String OS_NAME = getSystemProperty("os.name");
 
+    /**
+     * Gets the current file system.
+     *
+     * @return the current file system
+     */
     public static FileSystem getCurrent() {
         if (IS_OS_LINUX) {
             return LINUX;
@@ -180,14 +185,29 @@ public enum FileSystem {
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
     }
 
+    /**
+     * Gets the illegal characters for this file system.
+     *
+     * @return the illegal characters for this file system.
+     */
     public char[] getIllegalFileNameChars() {
         return this.illegalFileNameChars.clone();
     }
 
+    /**
+     * Gets the maximum length for file names. The file name does not include folders.
+     *
+     * @return the maximum length for file names.
+     */
     public int getMaxFileNameLength() {
         return maxFileNameLength;
     }
 
+    /**
+     * Gets the maximum length of the path to a file. This can include folders.
+     *
+     * @return the maximum length of the path to a file.
+     */
     public int getMaxPathLength() {
         return maxPathLength;
     }
