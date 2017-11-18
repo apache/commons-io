@@ -32,6 +32,8 @@ import java.util.Objects;
  */
 public enum FileSystem {
 
+    GENERIC(Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
+
     LINUX(255, 4096, new char[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
@@ -51,8 +53,6 @@ public enum FileSystem {
             // @formatter:on
     }, new String[] {}),
 
-    GENERIC(Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
-
     WINDOWS(255, 32000, new char[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
@@ -67,21 +67,6 @@ public enum FileSystem {
             // KEEP THIS ARRAY SORTED!
             new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
                     "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" });
-
-    /**
-     * The prefix String for all Windows OS.
-     */
-    private static final String OS_NAME_WINDOWS_PREFIX = "Windows";
-
-    /**
-     * <p>
-     * Is {@code true} if this is Windows.
-     * </p>
-     * <p>
-     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
-     * </p>
-     */
-    private static final boolean IS_OS_WINDOWS = getOsMatchesName(OS_NAME_WINDOWS_PREFIX);
 
     /**
      * <p>
@@ -102,6 +87,21 @@ public enum FileSystem {
      * </p>
      */
     private static final boolean IS_OS_MAC = getOsMatchesName("Mac");
+
+    /**
+     * The prefix String for all Windows OS.
+     */
+    private static final String OS_NAME_WINDOWS_PREFIX = "Windows";
+
+    /**
+     * <p>
+     * Is {@code true} if this is Windows.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     */
+    private static final boolean IS_OS_WINDOWS = getOsMatchesName(OS_NAME_WINDOWS_PREFIX);
 
     private static final String OS_NAME = getSystemProperty("os.name");
 
@@ -231,6 +231,15 @@ public enum FileSystem {
     }
 
     /**
+     * Gets the reserved file names.
+     * 
+     * @return the reserved file names.
+     */
+    public String[] getReservedFileNames() {
+        return reservedFileNames;
+    }
+
+    /**
      * Returns {@code true} if the given character is illegal in a file name, {@code false} otherwise.
      * 
      * @param c
@@ -239,6 +248,30 @@ public enum FileSystem {
      */
     private boolean isIllegalFileNameChar(final char c) {
         return Arrays.binarySearch(illegalFileNameChars, c) >= 0;
+    }
+
+    /**
+     * Checks if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
+     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
+     * an illegal character then the check fails.
+     *
+     * @param candidate
+     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
+     * @return {@code true} if the candidate name is legal
+     */
+    public boolean isLegalFileName(final CharSequence candidate) {
+        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
+            return false;
+        }
+        if (isReservedFileName(candidate)) {
+            return false;
+        }
+        for (int i = 0; i < candidate.length(); i++) {
+            if (isIllegalFileNameChar(candidate.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -282,38 +315,5 @@ public enum FileSystem {
             }
         }
         return changed ? String.valueOf(charArray) : truncated;
-    }
-
-    /**
-     * Checks if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
-     * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
-     * an illegal character then the check fails.
-     *
-     * @param candidate
-     *            a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
-     * @return {@code true} if the candidate name is legal
-     */
-    public boolean isLegalFileName(final CharSequence candidate) {
-        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
-            return false;
-        }
-        if (isReservedFileName(candidate)) {
-            return false;
-        }
-        for (int i = 0; i < candidate.length(); i++) {
-            if (isIllegalFileNameChar(candidate.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Gets the reserved file names.
-     * 
-     * @return the reserved file names.
-     */
-    public String[] getReservedFileNames() {
-        return reservedFileNames;
     }
 }
