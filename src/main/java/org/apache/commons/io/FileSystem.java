@@ -182,6 +182,18 @@ public enum FileSystem {
     private final int maxPathLength;
     private final String[] reservedFileNames;
 
+    /**
+     * Constructs a new instance.
+     * 
+     * @param maxFileLength
+     *            the maximum length for file names. The file name does not include folders.
+     * @param maxPathLength
+     *            the maximum length of the path to a file. This can include folders.
+     * @param illegalFileNameChars
+     *            illegal characters for this file system.
+     * @param reservedFileNames
+     *            the reserved file names.
+     */
     private FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars,
             final String[] reservedFileNames) {
         this.maxFileNameLength = maxFileLength;
@@ -218,6 +230,13 @@ public enum FileSystem {
         return maxPathLength;
     }
 
+    /**
+     * Returns {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     * 
+     * @param c
+     *            the character to test
+     * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     */
     private boolean isIllegalFileNameChar(final char c) {
         return Arrays.binarySearch(illegalFileNameChars, c) >= 0;
     }
@@ -289,6 +308,11 @@ public enum FileSystem {
         return true;
     }
 
+    /**
+     * Gets the reserved file names.
+     * 
+     * @return the reserved file names.
+     */
     public String[] getReservedFileNames() {
         return reservedFileNames;
     }
