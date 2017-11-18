@@ -204,7 +204,7 @@ public enum FileSystem {
     }
 
     /**
-     * Gets the illegal characters for this file system.
+     * Gets a cloned copy of the illegal characters for this file system.
      *
      * @return the illegal characters for this file system.
      */
@@ -231,7 +231,7 @@ public enum FileSystem {
     }
 
     /**
-     * Gets the reserved file names.
+     * Gets a cloned copy of the reserved file names.
      * 
      * @return the reserved file names.
      */
