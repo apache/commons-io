@@ -236,7 +236,7 @@ public enum FileSystem {
      * @return the reserved file names.
      */
     public String[] getReservedFileNames() {
-        return reservedFileNames;
+        return reservedFileNames.clone();
     }
 
     /**
