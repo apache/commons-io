@@ -74,7 +74,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * Only use the default if the files are known to always use the platform default.
  * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
- *
  */
 public class FileUtils {
 

@@ -51,7 +51,6 @@ import org.apache.commons.io.input.ClosedInputStream;
  * the contents don't have to be copied to the new buffer. This class is
  * designed to behave exactly like the original. The only exception is the
  * deprecated toString(int) method that has been ignored.
- *
  */
 public class ByteArrayOutputStream extends OutputStream {
 

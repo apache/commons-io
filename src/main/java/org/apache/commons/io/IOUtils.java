@@ -94,7 +94,6 @@ import org.apache.commons.io.output.StringBuilderWriter;
  * closing streams after use.
  * <p>
  * Origin of code: Excalibur.
- *
  */
 public class IOUtils {
     // NOTE: This class is focused on InputStream, OutputStream, Reader and
@@ -3173,6 +3172,7 @@ public class IOUtils {
      * @param buffer destination
      * @param offset initial offset into buffer
      * @param length length to read, must be &gt;= 0
+     *
      * @throws IOException              if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException             if the number of bytes read was incorrect
@@ -3194,6 +3194,7 @@ public class IOUtils {
      *
      * @param input where to read input from
      * @param buffer destination
+     *
      * @throws IOException              if there is a problem reading the file
      * @throws IllegalArgumentException if length is negative
      * @throws EOFException             if the number of bytes read was incorrect
