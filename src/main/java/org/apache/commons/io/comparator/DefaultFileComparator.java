@@ -53,6 +53,9 @@ public class DefaultFileComparator extends AbstractFileComparator implements Ser
     /** Singleton reverse default comparator instance */
     public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
 
+    /** Must not create instance of this class */
+    private DefaultFileComparator() {}
+    
     /**
      * Compare the two files using the {@link File#compareTo(File)} method.
      *
