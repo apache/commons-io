@@ -276,6 +276,25 @@ public class XmlStreamReaderTest {
         _testHttpLenient("text/html;charset=UTF-16BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
         _testHttpLenient("text/html;charset=UTF-32BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
     }
+    
+    /**
+     * Check lower case encoding names are properly handled. Should be successfull
+     * with any system default locale, notably with Turkish language
+     * (-Duser.language=tr JVM parameter), which has specific rules to convert dotted and dottless
+     * i character.
+     */
+    @Test
+    public void testLowerCaseEncoding() throws Exception {
+        final String[] encodings = { "iso8859-1", "us-ascii", "utf-8" };
+        for (final String encoding : encodings) {
+            final String xml = getXML("no-bom", XML3, encoding, encoding);
+            try (final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
+                    final XmlStreamReader xmlReader = new XmlStreamReader(is);) {
+                assertTrue("Check encoding : " + encoding, encoding.equalsIgnoreCase(xmlReader.getEncoding()));
+                assertEquals("Check content", xml, IOUtils.toString(xmlReader));
+            }
+        }
+    }
 
     @Test
     public void testRawContent() throws Exception {

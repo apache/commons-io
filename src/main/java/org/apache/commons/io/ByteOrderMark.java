@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
@@ -182,7 +183,7 @@ public class ByteOrderMark implements Serializable {
                 builder.append(",");
             }
             builder.append("0x");
-            builder.append(Integer.toHexString(0xFF & bytes[i]).toUpperCase());
+            builder.append(Integer.toHexString(0xFF & bytes[i]).toUpperCase(Locale.ROOT));
         }
         builder.append(']');
         return builder.toString();
