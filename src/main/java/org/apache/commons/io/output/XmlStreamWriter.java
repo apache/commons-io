@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -168,7 +169,7 @@ public class XmlStreamWriter extends Writer {
                     final Matcher m = ENCODING_PATTERN.matcher(xmlProlog.substring(0,
                             xmlPrologEnd));
                     if (m.find()) {
-                        encoding = m.group(1).toUpperCase();
+                        encoding = m.group(1).toUpperCase(Locale.ROOT);
                         encoding = encoding.substring(1, encoding.length() - 1);
                     } else {
                         // no encoding found in XML prolog: using default

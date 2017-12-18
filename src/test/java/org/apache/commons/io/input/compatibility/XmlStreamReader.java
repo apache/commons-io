@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -590,7 +591,7 @@ public class XmlStreamReader extends Reader {
                 final String postMime = httpContentType.substring(i + 1);
                 final Matcher m = CHARSET_PATTERN.matcher(postMime);
                 encoding = m.find() ? m.group(1) : null;
-                encoding = encoding != null ? encoding.toUpperCase() : null;
+                encoding = encoding != null ? encoding.toUpperCase(Locale.ROOT) : null;
             }
         }
         return encoding;
@@ -699,7 +700,7 @@ public class XmlStreamReader extends Reader {
                 }
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {
-                    encoding = m.group(1).toUpperCase();
+                    encoding = m.group(1).toUpperCase(Locale.ROOT);
                     encoding = encoding.substring(1, encoding.length() - 1);
                 }
             }
