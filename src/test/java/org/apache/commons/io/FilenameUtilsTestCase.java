@@ -246,6 +246,15 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.normalize("//server/../a"));
         assertEquals(null, FilenameUtils.normalize("//server/.."));
         assertEquals(SEP + SEP + "server" + SEP + "", FilenameUtils.normalize("//server/"));
+
+        assertEquals(SEP + SEP + "127.0.0.1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\127.0.0.1\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "::1" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\::1\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server.example.org" + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.example.org\\a\\b\\c.txt"));
+        assertEquals(SEP + SEP + "server." + SEP + "a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("\\\\server.\\a\\b\\c.txt"));
+
+        assertEquals(null, FilenameUtils.normalize("\\\\-server\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\.\\a\\b\\c.txt"));
+        assertEquals(null, FilenameUtils.normalize("\\\\..\\a\\b\\c.txt"));
     }
 
     @Test
@@ -562,6 +571,15 @@ public class FilenameUtilsTestCase {
         assertEquals(1, FilenameUtils.getPrefixLength("/:foo"));
         assertEquals(1, FilenameUtils.getPrefixLength("/:/"));
         assertEquals(1, FilenameUtils.getPrefixLength("/:::::::.txt"));
+
+        assertEquals(12, FilenameUtils.getPrefixLength("\\\\127.0.0.1\\a\\b\\c.txt"));
+        assertEquals(6, FilenameUtils.getPrefixLength("\\\\::1\\a\\b\\c.txt"));
+        assertEquals(21, FilenameUtils.getPrefixLength("\\\\server.example.org\\a\\b\\c.txt"));
+        assertEquals(10, FilenameUtils.getPrefixLength("\\\\server.\\a\\b\\c.txt"));
+
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\-server\\a\\b\\c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\.\\a\\b\\c.txt"));
+        assertEquals(-1, FilenameUtils.getPrefixLength("\\\\..\\a\\b\\c.txt"));
     }
 
     @Test
