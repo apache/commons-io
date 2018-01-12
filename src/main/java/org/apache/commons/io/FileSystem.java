@@ -194,8 +194,8 @@ public enum FileSystem {
      * @param reservedFileNames
      *            the reserved file names.
      */
-    private FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars,
-            final String[] reservedFileNames) {
+    FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars,
+               final String[] reservedFileNames) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
