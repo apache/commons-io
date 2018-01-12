@@ -200,7 +200,6 @@ public enum FileSystem {
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
         this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
-        ;
     }
 
     /**
