@@ -171,10 +171,7 @@ public enum FileSystem {
      * @return true if matches, or false if not or can't determine
      */
     private static boolean isOsNameMatch(final String osName, final String osNamePrefix) {
-        if (osName == null) {
-            return false;
-        }
-        return osName.startsWith(osNamePrefix);
+        return osName != null && osName.startsWith(osNamePrefix);
     }
 
     private final char[] illegalFileNameChars;
