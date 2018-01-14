@@ -1651,7 +1651,6 @@ public class IOUtils {
      * @param input the string to convert
      * @param encoding the encoding to use, null means platform default
      * @return an input stream
-     * @throws IOException                                  if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
