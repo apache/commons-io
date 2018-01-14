@@ -42,11 +42,10 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
      * @param classLoader  the ClassLoader from which classes should be loaded
      * @param inputStream  the InputStream to work on
      * @throws IOException in case of an I/O error
-     * @throws StreamCorruptedException if the stream is corrupted
      */
     public ClassLoaderObjectInputStream(
             final ClassLoader classLoader, final InputStream inputStream)
-            throws IOException, StreamCorruptedException {
+            throws IOException {
         super(inputStream);
         this.classLoader = classLoader;
     }
