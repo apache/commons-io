@@ -46,12 +46,12 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
         }
 
         @Override
-        void data(final int pByte) throws IOException {
+        void data(final int pByte) {
             md.update((byte) pByte);
         }
 
         @Override
-        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
+        void data(final byte[] pBuffer, final int pOffset, final int pLength) {
             md.update(pBuffer, pOffset, pLength);
         }
     }

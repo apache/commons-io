@@ -902,11 +902,10 @@ public class IOUtils {
      * @param input the <code>String</code> to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
      * @deprecated 2.5 Use {@link String#getBytes()} instead
      */
     @Deprecated
-    public static byte[] toByteArray(final String input) throws IOException {
+    public static byte[] toByteArray(final String input) {
         // make explicit the use of the default charset
         return input.getBytes(Charset.defaultCharset());
     }
@@ -1222,11 +1221,10 @@ public class IOUtils {
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
      * @deprecated 2.5 Use {@link String#String(byte[])} instead
      */
     @Deprecated
-    public static String toString(final byte[] input) throws IOException {
+    public static String toString(final byte[] input) {
         // make explicit the use of the default charset
         return new String(input, Charset.defaultCharset());
     }
@@ -1242,9 +1240,8 @@ public class IOUtils {
      * @param encoding the encoding to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
      */
-    public static String toString(final byte[] input, final String encoding) throws IOException {
+    public static String toString(final byte[] input, final String encoding) {
         return new String(input, Charsets.toCharset(encoding));
     }
 
@@ -1524,10 +1521,9 @@ public class IOUtils {
      * @param encoding the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
-     * @throws IOException              if an I/O error occurs, such as if the encoding is invalid
      * @since 2.3
      */
-    public static LineIterator lineIterator(final InputStream input, final Charset encoding) throws IOException {
+    public static LineIterator lineIterator(final InputStream input, final Charset encoding) {
         return new LineIterator(new InputStreamReader(input, Charsets.toCharset(encoding)));
     }
 
@@ -1607,13 +1603,12 @@ public class IOUtils {
      * @param input the CharSequence to convert
      * @param encoding the encoding to use, null means platform default
      * @return an input stream
-     * @throws IOException                                  if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 2.0
      */
-    public static InputStream toInputStream(final CharSequence input, final String encoding) throws IOException {
+    public static InputStream toInputStream(final CharSequence input, final String encoding) {
         return toInputStream(input, Charsets.toCharset(encoding));
     }
 
@@ -1662,7 +1657,7 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static InputStream toInputStream(final String input, final String encoding) throws IOException {
+    public static InputStream toInputStream(final String input, final String encoding) {
         final byte[] bytes = input.getBytes(Charsets.toCharset(encoding));
         return new ByteArrayInputStream(bytes);
     }

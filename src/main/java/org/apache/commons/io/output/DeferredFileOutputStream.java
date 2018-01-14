@@ -194,11 +194,9 @@ public class DeferredFileOutputStream
      * based, depending on the current state with respect to the threshold.
      *
      * @return The underlying output stream.
-     *
-     * @throws IOException if an error occurs.
      */
     @Override
-    protected OutputStream getStream() throws IOException
+    protected OutputStream getStream()
     {
         return currentOutputStream;
     }

@@ -270,10 +270,8 @@ public class FileAlterationObserver implements Serializable {
 
     /**
      * Initialize the observer.
-     *
-     * @throws Exception if an error occurs
      */
-    public void initialize() throws Exception {
+    public void initialize() {
         rootEntry.refresh(rootEntry.getFile());
         final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);
         rootEntry.setChildren(children);

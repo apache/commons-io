@@ -121,10 +121,9 @@ public class NullReader extends Reader {
      * Close this Reader - resets the internal state to
      * the initial values.
      *
-     * @throws IOException If an error occurs.
      */
     @Override
-    public void close() throws IOException {
+    public void close() {
         eof = false;
         position = 0;
         mark = -1;

@@ -156,11 +156,9 @@ public class SwappedDataInputStream extends ProxyInputStream
     /**
      * Not currently supported - throws {@link UnsupportedOperationException}.
      * @return the line read
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    public String readLine()
-        throws IOException {
+    public String readLine() {
         throw new UnsupportedOperationException(
                 "Operation not supported: readLine()" );
     }
@@ -179,7 +177,6 @@ public class SwappedDataInputStream extends ProxyInputStream
     /**
      * Delegates to {@link EndianUtils#readSwappedShort(InputStream)}.
      * @return the read long
-     * @throws IOException if an I/O error occurs
      */
     @Override
     public short readShort()
@@ -212,11 +209,9 @@ public class SwappedDataInputStream extends ProxyInputStream
     /**
      * Not currently supported - throws {@link UnsupportedOperationException}.
      * @return UTF String read
-     * @throws IOException if an I/O error occurs
      */
     @Override
-    public String readUTF()
-        throws IOException {
+    public String readUTF() {
         throw new UnsupportedOperationException(
                 "Operation not supported: readUTF()" );
     }
