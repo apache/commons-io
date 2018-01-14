@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -56,7 +55,7 @@ public class XmlStreamWriterTest {
         writer.write(xml);
         writer.close();
         final byte[] xmlContent = out.toByteArray();
-        assertEquals(encoding, writer.getEncoding());
+        assertTrue(encoding.equalsIgnoreCase(writer.getEncoding()));
         assertTrue(Arrays.equals(xml.getBytes(encoding), xmlContent));
 
     }
@@ -101,6 +100,19 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_UNICODE, null, "UTF-16");
         checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
         checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
+    }
+    
+    /**
+     * Check lower case encoding names are properly handled. Should be successfull
+     * with any system default locale, notably with Turkish language
+     * (-Duser.language=tr JVM parameter), which has specific rules to convert
+     * dotted and dottless i character.
+     */
+    @Test
+    public void testLowerCaseEncoding() throws IOException {
+        checkXmlWriter(TEXT_UNICODE, "utf-8");
+        checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
+        checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
     }
 
     @Test
