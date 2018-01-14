@@ -142,7 +142,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public boolean accept(final File file) {
         final boolean newer = FileUtils.isFileNewer(file, cutoff);
-        return acceptOlder ? !newer : newer;
+        return acceptOlder != newer;
     }
 
     /**
