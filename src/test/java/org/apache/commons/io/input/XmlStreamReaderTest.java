@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.testtools.SystemDefaults;
+import org.apache.commons.io.testtools.SystemDefaultsSwitch;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class XmlStreamReaderTest {
@@ -39,6 +42,9 @@ public class XmlStreamReaderTest {
     private static final String XML3 = "xml-prolog-encoding-double-quotes";
     private static final String XML2 = "xml-prolog";
     private static final String XML1 = "xml";
+
+    @Rule
+    public SystemDefaultsSwitch locale = new SystemDefaultsSwitch();
 
     protected void _testRawNoBomValid(final String encoding) throws Exception {
         InputStream is = getXmlStream("no-bom", XML1, encoding, encoding);
@@ -276,15 +282,11 @@ public class XmlStreamReaderTest {
         _testHttpLenient("text/html;charset=UTF-16BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
         _testHttpLenient("text/html;charset=UTF-32BE", "no-bom", "US-ASCII", "UTF-8", "UTF-8");
     }
-    
-    /**
-     * Check lower case encoding names are properly handled. Should be successfull
-     * with any system default locale, notably with Turkish language
-     * (-Duser.language=tr JVM parameter), which has specific rules to convert dotted and dottless
-     * i character.
-     */
+
+    // Turkish language has specific rules to convert dotted and dottless i character.
     @Test
-    public void testLowerCaseEncoding() throws Exception {
+    @SystemDefaults(locale="tr")
+    public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws Exception {
         final String[] encodings = { "iso8859-1", "us-ascii", "utf-8" };
         for (final String encoding : encodings) {
             final String xml = getXML("no-bom", XML3, encoding, encoding);

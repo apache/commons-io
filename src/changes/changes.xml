@@ -50,6 +50,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-553" dev="ggregory" type="add">
         Add org.apache.commons.io.FilenameUtils.isIllegalWindowsFileName(char).
       </action>
+      <action issue="IO-557" dev="pschumacher" type="fix" due-to="luccioman">
+        Perform locale independent upper case conversions.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

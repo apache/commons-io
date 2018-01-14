@@ -22,6 +22,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.io.testtools.SystemDefaults;
+import org.apache.commons.io.testtools.SystemDefaultsSwitch;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -39,6 +42,9 @@ public class XmlStreamWriterTest {
     /** Unicode: support everything */
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
+
+    @Rule
+    public SystemDefaultsSwitch locale = new SystemDefaultsSwitch();
 
     private static String createXmlContent(final String text, final String encoding) {
         String xmlDecl = "<?xml version=\"1.0\"?>";
@@ -101,15 +107,11 @@ public class XmlStreamWriterTest {
         checkXmlWriter(TEXT_UNICODE, null, "UTF-16BE");
         checkXmlWriter(TEXT_UNICODE, null, "ISO-8859-1");
     }
-    
-    /**
-     * Check lower case encoding names are properly handled. Should be successfull
-     * with any system default locale, notably with Turkish language
-     * (-Duser.language=tr JVM parameter), which has specific rules to convert
-     * dotted and dottless i character.
-     */
+
+    // Turkish language has specific rules to convert dotted and dottless i character.
     @Test
-    public void testLowerCaseEncoding() throws IOException {
+    @SystemDefaults(locale="tr")
+    public void testLowerCaseEncoding_IO_557() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "utf-8");
         checkXmlWriter(TEXT_LATIN1, "iso-8859-1");
         checkXmlWriter(TEXT_LATIN7, "iso-8859-7");
