@@ -716,14 +716,27 @@ public class FilenameUtils {
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
      * </p>
+     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * In this case, the name wouldn't be the name of a file, but the identifier of an
+     * alternate data stream (bar.txt) on the file foo.exe. The method used to return
+     * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
+     * at {@link NtfsAdsNameException} for names like this.
      *
      * @param filename
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
+     * @throws NtfsAdsNameException The filename argument 
      */
-    public static int indexOfExtension(final String filename) {
+    public static int indexOfExtension(final String filename) throws NtfsAdsNameException {
         if (filename == null) {
             return NOT_FOUND;
+        }
+        if (isSystemWindows()) {
+        	// Special handling for NTFS ADS: Don't accept colon in the filename.
+        	final int offset = filename.indexOf(':', getAdsCriticalOffset(filename));
+        	if (offset != -1) {
+        		throw new NtfsAdsNameException("NTFS ADS separator (':') in filename is forbidden.");
+        	}
         }
         final int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
         final int lastSeparator = indexOfLastSeparator(filename);
@@ -1027,12 +1040,19 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
+     * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
+     * In this case, the name wouldn't be the name of a file, but the identifier of an
+     * alternate data stream (bar.txt) on the file foo.exe. The method used to return
+     * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
+     * at {@link NtfsAdsNameException} for names like this.
      *
      * @param filename the filename to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the filename is {@code null}.
+     * @throws NtfsAdsNameException <b>Windows only:/b> The filename parameter is, in fact,
+     * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
-    public static String getExtension(final String filename) {
+    public static String getExtension(final String filename) throws NtfsAdsNameException {
         if (filename == null) {
             return null;
         }
@@ -1044,6 +1064,25 @@ public class FilenameUtils {
         }
     }
 
+    private static int getAdsCriticalOffset(String filename) {
+    	// Step 1: Remove leading path segments.
+    	int offset1 = filename.lastIndexOf(SYSTEM_SEPARATOR);
+    	int offset2 = filename.lastIndexOf(OTHER_SEPARATOR);
+    	if (offset1 == -1) {
+    		if (offset2 == -1) {
+    			return 0;
+    		} else {
+    			return offset2 + 1;
+    		}
+    	} else {
+    		if (offset2 == -1) {
+    			return offset1+1;
+    		} else {
+    			return Math.max(offset1, offset2)+1;
+    		}
+    	}
+    }
+    
     //-----------------------------------------------------------------------
     /**
      * Removes the extension from a filename.

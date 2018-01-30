@@ -35,6 +35,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import org.junit.Assert;
+
 /**
  * This is used to test FilenameUtils for correctness.
  *
@@ -580,6 +582,20 @@ public class FilenameUtilsTestCase {
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b\\c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a/b.notextension/c"));
         assertEquals(-1, FilenameUtils.indexOfExtension("a\\b.notextension\\c"));
+
+        if (FilenameUtils.isSystemWindows()) {
+            // Special case handling for NTFS ADS names
+        	try {
+        		FilenameUtils.indexOfExtension("foo.exe:bar.txt");
+        		throw new AssertionError("Expected Exception");
+        	} catch (IllegalArgumentException e) {
+        		assertEquals("NTFS ADS separator (':') in filename is forbidden.", e.getMessage());
+        	}
+        } else {
+        	// Upwards compatibility on other systems
+        	assertEquals(11, FilenameUtils.indexOfExtension("foo.exe:bar.txt"));
+        }
+
     }
 
     //-----------------------------------------------------------------------
@@ -862,6 +878,19 @@ public class FilenameUtilsTestCase {
         assertEquals("", FilenameUtils.getExtension("a\\b\\c"));
         assertEquals("", FilenameUtils.getExtension("C:\\temp\\foo.bar\\README"));
         assertEquals("ext", FilenameUtils.getExtension("../filename.ext"));
+
+        if (FilenameUtils.isSystemWindows()) {
+            // Special case handling for NTFS ADS names
+        	try {
+        		FilenameUtils.getExtension("foo.exe:bar.txt");
+        		throw new AssertionError("Expected Exception");
+        	} catch (IllegalArgumentException e) {
+        		assertEquals("NTFS ADS separator (':') in filename is forbidden.", e.getMessage());
+        	}
+        } else {
+        	// Upwards compatibility:
+        	assertEquals("txt", FilenameUtils.getExtension("foo.exe:bar.txt"));
+        }
     }
 
     @Test
@@ -1082,5 +1111,4 @@ public class FilenameUtilsTestCase {
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList(new String[]{"TXT"}))));
         assertFalse(FilenameUtils.isExtension("a.b\\file.txt", new ArrayList<>(Arrays.asList(new String[]{"TXT", "RTF"}))));
     }
-
 }
