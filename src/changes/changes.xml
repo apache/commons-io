@@ -140,6 +140,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-514" dev="pschumacher" type="remove">
         Remove org.apache.commons.io.Java7Support
       </action>
+      <action issue="IO-567" dev="jochen" type="fix">
+        Implement special case handling for NTFS ADS names: FilenameUtils.getExtension(String),
+        and FilenameUtils.indexOfExtension(String) are now throwing an IllegalArgumentException,
+        if the file name in question appears to identify an alternate data stream (Windows only).
+      </action>
     </release>
 
     <release version="2.5" date="2016-04-22" description="New features and bug fixes.">
