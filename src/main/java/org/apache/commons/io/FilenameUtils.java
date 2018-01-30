@@ -714,20 +714,22 @@ public class FilenameUtils {
      * {@link #indexOfLastSeparator(String)} which will handle a file in either Unix or Windows format.
      * </p>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the
+     * exception of a possible {@link IllegalArgumentException} on Windows (see below).
      * </p>
      * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
-     * at {@link NtfsAdsNameException} for names like this.
+     * an {@link IllegalArgumentException} for names like this.
      *
      * @param filename
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
-     * @throws NtfsAdsNameException The filename argument 
+     * @throws IllegalArgumentException <b>Windows only:/b> The filename parameter is, in fact,
+     * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
-    public static int indexOfExtension(final String filename) throws NtfsAdsNameException {
+    public static int indexOfExtension(final String filename) throws IllegalArgumentException {
         if (filename == null) {
             return NOT_FOUND;
         }
@@ -735,7 +737,7 @@ public class FilenameUtils {
         	// Special handling for NTFS ADS: Don't accept colon in the filename.
         	final int offset = filename.indexOf(':', getAdsCriticalOffset(filename));
         	if (offset != -1) {
-        		throw new NtfsAdsNameException("NTFS ADS separator (':') in filename is forbidden.");
+        		throw new IllegalArgumentException("NTFS ADS separator (':') in filename is forbidden.");
         	}
         }
         final int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
@@ -1039,20 +1041,23 @@ public class FilenameUtils {
      * a/b/c        --&gt; ""
      * </pre>
      * <p>
-     * The output will be the same irrespective of the machine that the code is running on.
+     * The output will be the same irrespective of the machine that the code is running on, with the
+     * exception of a possible {@link IllegalArgumentException} on Windows (see below).
+     * </p>
+     * <p>
      * <b>Note:</b> This method used to have a hidden problem for names like "foo.exe:bar.txt".
      * In this case, the name wouldn't be the name of a file, but the identifier of an
      * alternate data stream (bar.txt) on the file foo.exe. The method used to return
      * ".txt" here, which would be misleading. Commons IO 2.7, and later versions, are throwing
-     * at {@link NtfsAdsNameException} for names like this.
+     * an {@link IllegalArgumentException} for names like this.
      *
      * @param filename the filename to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the filename is {@code null}.
-     * @throws NtfsAdsNameException <b>Windows only:/b> The filename parameter is, in fact,
+     * @throws IllegalArgumentException <b>Windows only:/b> The filename parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
-    public static String getExtension(final String filename) throws NtfsAdsNameException {
+    public static String getExtension(final String filename) throws IllegalArgumentException {
         if (filename == null) {
             return null;
         }
