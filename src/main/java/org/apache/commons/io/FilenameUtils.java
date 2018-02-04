@@ -734,11 +734,11 @@ public class FilenameUtils {
             return NOT_FOUND;
         }
         if (isSystemWindows()) {
-        	// Special handling for NTFS ADS: Don't accept colon in the filename.
-        	final int offset = filename.indexOf(':', getAdsCriticalOffset(filename));
-        	if (offset != -1) {
-        		throw new IllegalArgumentException("NTFS ADS separator (':') in filename is forbidden.");
-        	}
+            // Special handling for NTFS ADS: Don't accept colon in the filename.
+            final int offset = filename.indexOf(':', getAdsCriticalOffset(filename));
+            if (offset != -1) {
+                throw new IllegalArgumentException("NTFS ADS separator (':') in filename is forbidden.");
+            }
         }
         final int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
         final int lastSeparator = indexOfLastSeparator(filename);
@@ -1070,24 +1070,24 @@ public class FilenameUtils {
     }
 
     private static int getAdsCriticalOffset(String filename) {
-    	// Step 1: Remove leading path segments.
-    	int offset1 = filename.lastIndexOf(SYSTEM_SEPARATOR);
-    	int offset2 = filename.lastIndexOf(OTHER_SEPARATOR);
-    	if (offset1 == -1) {
-    		if (offset2 == -1) {
-    			return 0;
-    		} else {
-    			return offset2 + 1;
-    		}
-    	} else {
-    		if (offset2 == -1) {
-    			return offset1+1;
-    		} else {
-    			return Math.max(offset1, offset2)+1;
-    		}
-    	}
+        // Step 1: Remove leading path segments.
+        int offset1 = filename.lastIndexOf(SYSTEM_SEPARATOR);
+        int offset2 = filename.lastIndexOf(OTHER_SEPARATOR);
+        if (offset1 == -1) {
+            if (offset2 == -1) {
+                return 0;
+            } else {
+                return offset2 + 1;
+            }
+        } else {
+            if (offset2 == -1) {
+                return offset1 + 1;
+            } else {
+                return Math.max(offset1, offset2) + 1;
+            }
+        }
     }
-    
+
     //-----------------------------------------------------------------------
     /**
      * Removes the extension from a filename.
