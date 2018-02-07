@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io.input;
 
-import static org.apache.commons.io.IOUtils.EOF;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import static org.apache.commons.io.IOUtils.EOF;
 
 /**
  * Proxy stream that closes and discards the underlying stream as soon as the
@@ -37,6 +37,8 @@ import java.io.InputStream;
  */
 public class AutoCloseInputStream extends ProxyInputStream {
 
+    private boolean marked;
+    
     /**
      * Creates an automatically closing proxy for the given input stream.
      *
@@ -66,7 +68,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
     }
 
     /**
-     * Automatically closes the stream if the end of stream was reached.
+     * Automatically closes the stream if the end of stream was reached unless the stream was marked.
      *
      * @param n number of bytes read, or -1 if no more bytes are available
      * @throws IOException if the stream could not be closed
@@ -74,9 +76,37 @@ public class AutoCloseInputStream extends ProxyInputStream {
      */
     @Override
     protected void afterRead(final int n) throws IOException {
-        if (n == EOF) {
+        if (n == EOF && !marked) {
             close();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Make sure to remember that the stream was makred to not close it when reaching the end.
+     * 
+     * @see org.apache.commons.io.input.ProxyInputStream#mark(int)
+     */
+    @Override
+    public synchronized void mark(int readlimit) {
+        super.mark(readlimit);
+
+        marked = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Reset the marked flag.
+     * 
+     * @see org.apache.commons.io.input.ProxyInputStream#reset()
+     */
+    @Override
+    public synchronized void reset() throws IOException {
+        super.reset();
+
+        marked = false;
     }
 
     /**

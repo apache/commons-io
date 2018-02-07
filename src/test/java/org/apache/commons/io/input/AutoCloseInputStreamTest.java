@@ -16,16 +16,16 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * JUnit Test Case for {@link AutoCloseInputStream}.
@@ -98,6 +98,42 @@ public class AutoCloseInputStreamTest {
         }
         assertTrue("closed", closed);
         assertEquals("read(b, off, len)", -1, stream.read(b, 0, b.length));
+    }
+
+    @Test
+    public void testMark() throws IOException
+    {
+        this.stream.mark(4);
+
+        assertEquals('x', this.stream.read());
+        assertEquals('y', this.stream.read());
+
+        this.stream.reset();
+
+        assertEquals('x', this.stream.read());
+        assertEquals('y', this.stream.read());
+    }
+
+    @Test
+    public void testMarkFullStream() throws IOException
+    {
+        this.stream.mark(4);
+
+        assertEquals('x', this.stream.read());
+        assertEquals('y', this.stream.read());
+        assertEquals('z', this.stream.read());
+        assertEquals(-1, this.stream.read());
+
+        assertFalse(closed);
+        
+        this.stream.reset();
+
+        assertEquals('x', this.stream.read());
+        assertEquals('y', this.stream.read());
+        assertEquals('z', this.stream.read());
+        assertEquals(-1, this.stream.read());
+
+        assertTrue(closed);
     }
 
 }
