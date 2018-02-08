@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.serialization.MockSerializedClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,8 @@ public class AutoCloseInputStreamTest {
 
     private byte[] data;
 
+    private InputStream targetStream;
+
     private InputStream stream;
 
     private boolean closed;
@@ -41,12 +44,13 @@ public class AutoCloseInputStreamTest {
     @Before
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
-        stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
+        targetStream = new ByteArrayInputStream(data) {
             @Override
             public void close() {
                 closed = true;
             }
-        });
+        };
+        stream = new AutoCloseInputStream(targetStream);
         closed = false;
     }
 
@@ -103,37 +107,18 @@ public class AutoCloseInputStreamTest {
     @Test
     public void testMark() throws IOException
     {
-        this.stream.mark(4);
+        assertTrue(targetStream.markSupported());
 
-        assertEquals('x', this.stream.read());
-        assertEquals('y', this.stream.read());
-
-        this.stream.reset();
-
-        assertEquals('x', this.stream.read());
-        assertEquals('y', this.stream.read());
-    }
-
-    @Test
-    public void testMarkFullStream() throws IOException
-    {
-        this.stream.mark(4);
-
-        assertEquals('x', this.stream.read());
-        assertEquals('y', this.stream.read());
-        assertEquals('z', this.stream.read());
-        assertEquals(-1, this.stream.read());
-
-        assertFalse(closed);
-        
-        this.stream.reset();
-
-        assertEquals('x', this.stream.read());
-        assertEquals('y', this.stream.read());
-        assertEquals('z', this.stream.read());
-        assertEquals(-1, this.stream.read());
-
-        assertTrue(closed);
+        // Make sure mark is disabled
+        assertFalse(stream.markSupported());
+        // Check that mark() does not fail
+        stream.mark(1);
+        // Check that reset() throw an exception
+        try {
+            stream.reset();
+        } catch (IOException expected) {
+            assertEquals("mark/reset not supported", expected.getMessage());
+        }
     }
 
 }
