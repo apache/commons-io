@@ -41,6 +41,10 @@ public class AutoCloseInputStreamTest {
 
     private boolean closed;
 
+    private boolean marked;
+
+    private boolean reseted;
+
     @Before
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
@@ -48,6 +52,16 @@ public class AutoCloseInputStreamTest {
             @Override
             public void close() {
                 closed = true;
+            }
+
+            @Override
+            public void mark(int readAheadLimit) {
+                marked = true;
+            }
+            
+            @Override
+            public synchronized void reset() {
+                reseted = true;
             }
         };
         stream = new AutoCloseInputStream(targetStream);
@@ -105,19 +119,20 @@ public class AutoCloseInputStreamTest {
     }
 
     @Test
-    public void testMark() throws IOException
-    {
+    public void testMark() {
         assertTrue(targetStream.markSupported());
 
         // Make sure mark is disabled
         assertFalse(stream.markSupported());
         // Check that mark() does not fail
         stream.mark(1);
+        assertFalse(marked);
         // Check that reset() throw an exception
         try {
             stream.reset();
         } catch (IOException expected) {
             assertEquals("mark/reset not supported", expected.getMessage());
+            assertFalse(reseted);
         }
     }
 
