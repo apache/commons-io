@@ -33,13 +33,16 @@ import java.io.InputStream;
  * closing the stream when no longer needed) or the underlying stream (by not
  * releasing resources once the last byte has been read) do not do that.
  * <p>
- * Since the only way to always close the stream when reaching the end and
- * respecting mark/reset contract, AutoCloseInputStream force disabling
- * mark/reset.
+ * Since there is no safe way to always close the stream when reaching the end and
+ * respecting mark/reset contract, it's possible to force disabled mark support.
+ * This is highly recommended when you don't know how the stream is going to be used
+ * (mark is not disabled by default for retro compatibility reasons).
  *
  * @since 1.4
  */
 public class AutoCloseInputStream extends ProxyInputStream {
+
+    private boolean markEnabled = true;
 
     /**
      * Creates an automatically closing proxy for the given input stream.
@@ -47,7 +50,18 @@ public class AutoCloseInputStream extends ProxyInputStream {
      * @param in underlying input stream
      */
     public AutoCloseInputStream(final InputStream in) {
+        this(in, true);
+    }
+
+    /**
+     * Creates an automatically closing proxy for the given input stream.
+     *
+     * @param in underlying input stream
+     */
+    public AutoCloseInputStream(final InputStream in, boolean markEnabled) {
         super(in);
+
+        this.markEnabled = markEnabled;
     }
 
     /**
@@ -83,42 +97,31 @@ public class AutoCloseInputStream extends ProxyInputStream {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * AutoCloseInputStream does not support mark/reset no matter what.
-     * 
-     * @see org.apache.commons.io.input.ProxyInputStream#mark(int)
-     */
     @Override
     public synchronized void mark(int readlimit) {
-        // Behave as standard InputStream not supporting mark/reset
+        if (this.markEnabled) {
+            super.mark(readlimit);
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * AutoCloseInputStream does not support mark/reset no matter what.
-     * 
-     * @see org.apache.commons.io.input.ProxyInputStream#reset()
-     */
     @Override
     public synchronized void reset() throws IOException {
-        // Behave as standard InputStream not supporting mark/reset
-        throw new IOException("mark/reset not supported");
+        if (this.markEnabled) {
+            super.reset();
+        } else {
+            // Behave as standard InputStream not supporting mark/reset
+            throw new IOException("mark/reset not supported");
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * AutoCloseInputStream does not support mark/reset no matter what.
-     * 
-     * @see org.apache.commons.io.input.ProxyInputStream#markSupported()
-     */
     @Override
     public boolean markSupported() {
-        // Behave as standard InputStream not supporting mark/reset
-        return false;
+        if (this.markEnabled) {
+            return super.markSupported();
+        } else {
+            // Behave as standard InputStream not supporting mark/reset
+            return false;
+        }
     }
 
     /**
