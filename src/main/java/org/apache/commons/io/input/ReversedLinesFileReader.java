@@ -35,6 +35,8 @@ import org.apache.commons.io.Charsets;
  */
 public class ReversedLinesFileReader implements Closeable {
 
+    private static final int DEFAULT_BLOCK_SIZE = 4096;
+    
     private final int blockSize;
     private final Charset encoding;
 
@@ -62,7 +64,7 @@ public class ReversedLinesFileReader implements Closeable {
      */
     @Deprecated
     public ReversedLinesFileReader(final File file) throws IOException {
-        this(file, 4096, Charset.defaultCharset());
+        this(file, DEFAULT_BLOCK_SIZE, Charset.defaultCharset());
     }
 
     /**
@@ -76,7 +78,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @since 2.5
      */
     public ReversedLinesFileReader(final File file, final Charset charset) throws IOException {
-        this(file, 4096, charset);
+        this(file, DEFAULT_BLOCK_SIZE, charset);
     }
 
     /**
