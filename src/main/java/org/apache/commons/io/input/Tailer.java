@@ -141,7 +141,7 @@ public class Tailer implements Runnable {
     /**
      * The character set that will be used to read the file.
      */
-    private final Charset cset;
+    private final Charset charset;
 
     /**
      * The amount of time to wait for the file to be updated.
@@ -241,14 +241,14 @@ public class Tailer implements Runnable {
     /**
      * Creates a Tailer for the given file, with a specified buffer size.
      * @param file the file to follow.
-     * @param cset the Charset to be used for reading the file
+     * @param charset the Charset to be used for reading the file
      * @param listener the TailerListener to use.
      * @param delayMillis the delay between checks of the file for new content in milliseconds.
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      * @param reOpen if true, close and reopen the file between reading chunks
      * @param bufSize Buffer size
      */
-    public Tailer(final File file, final Charset cset, final TailerListener listener, final long delayMillis,
+    public Tailer(final File file, final Charset charset, final TailerListener listener, final long delayMillis,
                   final boolean end, final boolean reOpen
             , final int bufSize) {
         this.file = file;
@@ -261,7 +261,7 @@ public class Tailer implements Runnable {
         this.listener = listener;
         listener.init(this);
         this.reOpen = reOpen;
-        this.cset = cset;
+        this.charset = charset;
     }
 
     /**
@@ -521,7 +521,7 @@ public class Tailer implements Runnable {
                     switch ( ch ) {
                         case '\n':
                             seenCR = false; // swallow CR before LF
-                            listener.handle(new String(lineBuf.toByteArray(), cset));
+                            listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
                             rePos = pos + i + 1;
                             break;
@@ -534,7 +534,7 @@ public class Tailer implements Runnable {
                         default:
                             if (seenCR) {
                                 seenCR = false; // swallow final CR
-                                listener.handle(new String(lineBuf.toByteArray(), cset));
+                                listener.handle(new String(lineBuf.toByteArray(), charset));
                                 lineBuf.reset();
                                 rePos = pos + i + 1;
                             }
