@@ -33,7 +33,7 @@ import java.io.Serializable;
  *
  * @since 1.3
  */
-public enum IOCase implements Serializable {
+public enum IOCase {
 
     /**
      * The constant for case sensitive regardless of operating system.
