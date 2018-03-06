@@ -500,9 +500,8 @@ public class FilenameUtils {
         final char ch = basePath.charAt(len - 1);
         if (isSeparator(ch)) {
             return normalize(basePath + fullFilenameToAdd);
-        } else {
-            return normalize(basePath + '/' + fullFilenameToAdd);
         }
+        return normalize(basePath + '/' + fullFilenameToAdd);
     }
 
     /**
@@ -586,9 +585,8 @@ public class FilenameUtils {
         }
         if (isSystemWindows()) {
             return separatorsToWindows(path);
-        } else {
-            return separatorsToUnix(path);
         }
+        return separatorsToUnix(path);
     }
 
     //-----------------------------------------------------------------------
@@ -647,42 +645,41 @@ public class FilenameUtils {
                 return 2;  // return a length greater than the input
             }
             return isSeparator(ch0) ? 1 : 0;
-        } else {
-            if (ch0 == '~') {
-                int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
-                int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
-                if (posUnix == NOT_FOUND && posWin == NOT_FOUND) {
-                    return len + 1;  // return a length greater than the input
-                }
-                posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
-                posWin = posWin == NOT_FOUND ? posUnix : posWin;
-                return Math.min(posUnix, posWin) + 1;
+        }
+        if (ch0 == '~') {
+            int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
+            int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
+            if (posUnix == NOT_FOUND && posWin == NOT_FOUND) {
+                return len + 1;  // return a length greater than the input
             }
-            final char ch1 = filename.charAt(1);
-            if (ch1 == ':') {
-                ch0 = Character.toUpperCase(ch0);
-                if (ch0 >= 'A' && ch0 <= 'Z') {
-                    if (len == 2 || isSeparator(filename.charAt(2)) == false) {
-                        return 2;
-                    }
-                    return 3;
-                } else if (ch0 == UNIX_SEPARATOR) {
-                    return 1;
+            posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+            posWin = posWin == NOT_FOUND ? posUnix : posWin;
+            return Math.min(posUnix, posWin) + 1;
+        }
+        final char ch1 = filename.charAt(1);
+        if (ch1 == ':') {
+            ch0 = Character.toUpperCase(ch0);
+            if (ch0 >= 'A' && ch0 <= 'Z') {
+                if (len == 2 || isSeparator(filename.charAt(2)) == false) {
+                    return 2;
                 }
-                return NOT_FOUND;
+                return 3;
+            } else if (ch0 == UNIX_SEPARATOR) {
+                return 1;
+            }
+            return NOT_FOUND;
 
-            } else if (isSeparator(ch0) && isSeparator(ch1)) {
-                int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
-                int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
-                if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
-                    return NOT_FOUND;
-                }
-                posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
-                posWin = posWin == NOT_FOUND ? posUnix : posWin;
-                return Math.min(posUnix, posWin) + 1;
-            } else {
-                return isSeparator(ch0) ? 1 : 0;
+        } else if (isSeparator(ch0) && isSeparator(ch1)) {
+            int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
+            int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
+            if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
+                return NOT_FOUND;
             }
+            posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+            posWin = posWin == NOT_FOUND ? posUnix : posWin;
+            return Math.min(posUnix, posWin) + 1;
+        } else {
+            return isSeparator(ch0) ? 1 : 0;
         }
     }
 
@@ -949,9 +946,8 @@ public class FilenameUtils {
         if (prefix >= filename.length()) {
             if (includeSeparator) {
                 return getPrefix(filename);  // add end slash if necessary
-            } else {
-                return filename;
             }
+            return filename;
         }
         final int index = indexOfLastSeparator(filename);
         if (index < 0) {
@@ -1064,9 +1060,8 @@ public class FilenameUtils {
         final int index = indexOfExtension(filename);
         if (index == NOT_FOUND) {
             return "";
-        } else {
-            return filename.substring(index + 1);
         }
+        return filename.substring(index + 1);
     }
 
     private static int getAdsCriticalOffset(String filename) {
@@ -1076,16 +1071,13 @@ public class FilenameUtils {
         if (offset1 == -1) {
             if (offset2 == -1) {
                 return 0;
-            } else {
-                return offset2 + 1;
             }
-        } else {
-            if (offset2 == -1) {
-                return offset1 + 1;
-            } else {
-                return Math.max(offset1, offset2) + 1;
-            }
+            return offset2 + 1;
         }
+        if (offset2 == -1) {
+            return offset1 + 1;
+        }
+        return Math.max(offset1, offset2) + 1;
     }
 
     //-----------------------------------------------------------------------
@@ -1115,9 +1107,8 @@ public class FilenameUtils {
         final int index = indexOfExtension(filename);
         if (index == NOT_FOUND) {
             return filename;
-        } else {
-            return filename.substring(0, index);
         }
+        return filename.substring(0, index);
     }
 
     //-----------------------------------------------------------------------
