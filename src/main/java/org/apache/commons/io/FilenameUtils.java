@@ -583,10 +583,7 @@ public class FilenameUtils {
         if (path == null) {
             return null;
         }
-        if (isSystemWindows()) {
-            return separatorsToWindows(path);
-        }
-        return separatorsToUnix(path);
+        return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
     }
 
     //-----------------------------------------------------------------------
