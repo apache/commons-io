@@ -81,6 +81,8 @@ import java.util.Stack;
  */
 public class FilenameUtils {
 
+    private static final String EMPTY_STRING = "";
+
     private static final int NOT_FOUND = -1;
 
     /**
@@ -430,7 +432,7 @@ public class FilenameUtils {
         }
 
         if (size <= 0) {  // should never be less than 0
-            return "";
+            return EMPTY_STRING;
         }
         if (size <= prefix) {  // should never be less than prefix
             return new String(array, 0, size);
@@ -859,7 +861,7 @@ public class FilenameUtils {
         final int index = indexOfLastSeparator(filename);
         final int endIndex = index+separatorAdd;
         if (prefix >= filename.length() || index < 0 || prefix >= endIndex) {
-            return "";
+            return EMPTY_STRING;
         }
         final String path = filename.substring(prefix, endIndex);
         failIfNullBytePresent(path);
@@ -1056,7 +1058,7 @@ public class FilenameUtils {
         }
         final int index = indexOfExtension(filename);
         if (index == NOT_FOUND) {
-            return "";
+            return EMPTY_STRING;
         }
         return filename.substring(index + 1);
     }
