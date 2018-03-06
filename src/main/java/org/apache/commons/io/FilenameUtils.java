@@ -726,7 +726,7 @@ public class FilenameUtils {
      * @param filename
      *            the filename to find the last extension separator in, null returns -1
      * @return the index of the last extension separator character, or -1 if there is no such character
-     * @throws IllegalArgumentException <b>Windows only:/b> The filename parameter is, in fact,
+     * @throws IllegalArgumentException <b>Windows only:</b> The filename parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static int indexOfExtension(final String filename) throws IllegalArgumentException {
@@ -1054,7 +1054,7 @@ public class FilenameUtils {
      * @param filename the filename to retrieve the extension of.
      * @return the extension of the file or an empty string if none exists or {@code null}
      * if the filename is {@code null}.
-     * @throws IllegalArgumentException <b>Windows only:/b> The filename parameter is, in fact,
+     * @throws IllegalArgumentException <b>Windows only:</b> The filename parameter is, in fact,
      * the identifier of an Alternate Data Stream, for example "foo.exe:bar.txt".
      */
     public static String getExtension(final String filename) throws IllegalArgumentException {
