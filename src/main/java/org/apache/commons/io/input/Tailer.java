@@ -449,25 +449,24 @@ public class Tailer implements Runnable {
                         Thread.sleep(delayMillis);
                     }
                     continue;
-                } else {
-                    // File was not rotated
-                    // See if the file needs to be read again
-                    if (length > position) {
-                        // The file has more content than it did last time
-                        position = readLines(reader);
-                        last = file.lastModified();
-                    } else if (newer) {
-                        /*
-                         * This can happen if the file is truncated or overwritten with the exact same length of
-                         * information. In cases like this, the file position needs to be reset
-                         */
-                        position = 0;
-                        reader.seek(position); // cannot be null here
+                }
+                // File was not rotated
+                // See if the file needs to be read again
+                if (length > position) {
+                    // The file has more content than it did last time
+                    position = readLines(reader);
+                    last = file.lastModified();
+                } else if (newer) {
+                    /*
+                     * This can happen if the file is truncated or overwritten with the exact same length of
+                     * information. In cases like this, the file position needs to be reset
+                     */
+                    position = 0;
+                    reader.seek(position); // cannot be null here
 
-                        // Now we can read new lines
-                        position = readLines(reader);
-                        last = file.lastModified();
-                    }
+                    // Now we can read new lines
+                    position = readLines(reader);
+                    last = file.lastModified();
                 }
                 if (reOpen && reader != null) {
                     reader.close();
