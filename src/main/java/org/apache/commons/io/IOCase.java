@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io;
 
-import java.io.Serializable;
-
 /**
  * Enumeration of IO case sensitivity.
  * <p>
