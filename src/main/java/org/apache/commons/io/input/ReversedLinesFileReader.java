@@ -35,6 +35,7 @@ import org.apache.commons.io.Charsets;
  */
 public class ReversedLinesFileReader implements Closeable {
 
+    private static final String EMPTY_STRING = "";
     private static final int DEFAULT_BLOCK_SIZE = 4096;
     
     private final int blockSize;
@@ -187,7 +188,7 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         // aligned behaviour with BufferedReader that doesn't return a last, empty line
-        if("".equals(line) && !trailingNewlineOfFileSkipped) {
+        if(EMPTY_STRING.equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
             line = readLine();
         }
