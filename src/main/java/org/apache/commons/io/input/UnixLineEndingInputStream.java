@@ -73,22 +73,20 @@ public class UnixLineEndingInputStream extends InputStream {
         if ( eofSeen ) {
             return eofGame(previousWasSlashR);
         }
-        else {
-            final int target = readWithUpdate();
-            if ( eofSeen ) {
-                return eofGame(previousWasSlashR);
-            }
-            if (slashRSeen)
-            {
-                return '\n';
-            }
-
-            if ( previousWasSlashR && slashNSeen){
-                return read();
-            }
-
-            return target;
+        final int target = readWithUpdate();
+        if ( eofSeen ) {
+            return eofGame(previousWasSlashR);
         }
+        if (slashRSeen)
+        {
+            return '\n';
+        }
+
+        if ( previousWasSlashR && slashNSeen){
+            return read();
+        }
+
+        return target;
     }
 
     /**
@@ -103,9 +101,8 @@ public class UnixLineEndingInputStream extends InputStream {
         if ( !slashNSeen ) {
             slashNSeen = true;
             return '\n';
-        } else {
-            return -1;
         }
+        return -1;
     }
 
     /**

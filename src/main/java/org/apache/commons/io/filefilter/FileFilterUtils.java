@@ -738,11 +738,7 @@ public class FileFilterUtils {
      * @since 1.1 (method existed but had bug in 1.0)
      */
     public static IOFileFilter makeCVSAware(final IOFileFilter filter) {
-        if (filter == null) {
-            return cvsFilter;
-        } else {
-            return and(filter, cvsFilter);
-        }
+        return filter == null ? cvsFilter : and(filter, cvsFilter);
     }
 
     /**
@@ -755,11 +751,7 @@ public class FileFilterUtils {
      * @since 1.1
      */
     public static IOFileFilter makeSVNAware(final IOFileFilter filter) {
-        if (filter == null) {
-            return svnFilter;
-        } else {
-            return and(filter, svnFilter);
-        }
+        return filter == null ? svnFilter : and(filter, svnFilter);
     }
 
     //-----------------------------------------------------------------------

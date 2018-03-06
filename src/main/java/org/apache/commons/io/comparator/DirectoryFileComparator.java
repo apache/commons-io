@@ -44,6 +44,10 @@ import java.util.Comparator;
  */
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final int TYPE_FILE = 2;
+
+    private static final int TYPE_DIRECTORY = 1;
+
     private static final long serialVersionUID = 296132640160964395L;
 
     /** Singleton default comparator instance */
@@ -72,10 +76,6 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
      * @return 1 for directories and 2 for files
      */
     private int getType(final File file) {
-        if (file.isDirectory()) {
-            return 1;
-        } else {
-            return 2;
-        }
+        return file.isDirectory() ? TYPE_DIRECTORY : TYPE_FILE;
     }
 }

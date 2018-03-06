@@ -256,14 +256,13 @@ public class ReversedLinesFileReader implements Closeable {
 
             if (no > 1) {
                 return new FilePart(no - 1, blockSize, leftOver);
-            } else {
-                // NO 1 was the last FilePart, we're finished
-                if (leftOver != null) {
-                    throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
-                            + new String(leftOver, encoding));
-                }
-                return null;
             }
+            // NO 1 was the last FilePart, we're finished
+            if (leftOver != null) {
+                throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
+                        + new String(leftOver, encoding));
+            }
+            return null;
         }
 
         /**

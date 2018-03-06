@@ -84,9 +84,8 @@ public class CharSequenceReader extends Reader implements Serializable {
     public int read() {
         if (idx >= charSequence.length()) {
             return EOF;
-        } else {
-            return charSequence.charAt(idx++);
         }
+        return charSequence.charAt(idx++);
     }
 
     /**

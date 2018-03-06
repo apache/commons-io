@@ -109,9 +109,8 @@ public class WindowsLineEndingInputStream  extends InputStream {
             slashRSeen = false;
             slashNSeen = true;
             return '\n';
-        } else {
-            return -1;
         }
+        return -1;
     }
 
     /**

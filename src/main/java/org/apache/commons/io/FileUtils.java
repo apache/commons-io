@@ -823,11 +823,10 @@ public class FileUtils {
     public static File toFile(final URL url) {
         if (url == null || !"file".equalsIgnoreCase(url.getProtocol())) {
             return null;
-        } else {
-            String filename = url.getFile().replace('/', File.separatorChar);
-            filename = decodeUrl(filename);
-            return new File(filename);
         }
+        String filename = url.getFile().replace('/', File.separatorChar);
+        filename = decodeUrl(filename);
+        return new File(filename);
     }
 
     /**
@@ -2542,9 +2541,8 @@ public class FileUtils {
 
         if (file.isDirectory()) {
             return sizeOfDirectory0(file); // private method; expects directory
-        } else {
-            return file.length();
         }
+        return file.length();
 
     }
 
@@ -2575,9 +2573,8 @@ public class FileUtils {
 
         if (file.isDirectory()) {
             return sizeOfDirectoryBig0(file); // internal method
-        } else {
-            return BigInteger.valueOf(file.length());
         }
+        return BigInteger.valueOf(file.length());
 
     }
 
@@ -2638,9 +2635,8 @@ public class FileUtils {
     private static long sizeOf0(final File file) {
         if (file.isDirectory()) {
             return sizeOfDirectory0(file);
-        } else {
-            return file.length(); // will be 0 if file does not exist
         }
+        return file.length(); // will be 0 if file does not exist
     }
 
     /**
@@ -2694,9 +2690,8 @@ public class FileUtils {
     private static BigInteger sizeOfBig0(final File fileOrDir) {
         if (fileOrDir.isDirectory()) {
             return sizeOfDirectoryBig0(fileOrDir);
-        } else {
-            return BigInteger.valueOf(fileOrDir.length());
         }
+        return BigInteger.valueOf(fileOrDir.length());
     }
 
     /**
