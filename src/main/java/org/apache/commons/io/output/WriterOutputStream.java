@@ -341,7 +341,7 @@ public class WriterOutputStream extends OutputStream {
         if (!TEST_STRING_2.equals(cb2.toString())){
             throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
                     "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
-        };
+        }
 
     }
 }
