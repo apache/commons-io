@@ -3060,10 +3060,11 @@ public class FileUtils {
      * <li>Throws {@link FileNotFoundException} if {@code src} does not exist</li>
      * </ul>
      *
-     * @param src           the file or directory to be moved
-     * @param dest          the destination file or directory
+     * @param src                       the file or directory to be moved
+     * @param dest                      the destination file or directory
+     * @throws FileNotFoundException    if {@code src} file does not exist
      */
-    private static void validateMoveParameters(final File src, final File dest) throws IOException {
+    private static void validateMoveParameters(final File src, final File dest) throws FileNotFoundException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
         }
