@@ -2899,15 +2899,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveDirectory(final File srcDir, final File destDir) throws IOException {
-        if (srcDir == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!srcDir.exists()) {
-            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
-        }
+        validateMoveParameters(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' is not a directory");
         }
@@ -2943,12 +2935,7 @@ public class FileUtils {
      */
     public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination directory must not be null");
-        }
+        validateMoveParameters(src, destDir);
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
         }
@@ -2960,7 +2947,6 @@ public class FileUtils {
             throw new IOException("Destination '" + destDir + "' is not a directory");
         }
         moveDirectory(src, new File(destDir, src.getName()));
-
     }
 
     /**
@@ -2977,15 +2963,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveFile(final File srcFile, final File destFile) throws IOException {
-        if (srcFile == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destFile == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!srcFile.exists()) {
-            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
-        }
+        validateMoveParameters(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' is a directory");
         }
@@ -3021,12 +2999,7 @@ public class FileUtils {
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (srcFile == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination directory must not be null");
-        }
+        validateMoveParameters(srcFile, destDir);
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
         }
@@ -3057,19 +3030,34 @@ public class FileUtils {
      */
     public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!src.exists()) {
-            throw new FileNotFoundException("Source '" + src + "' does not exist");
-        }
+        validateMoveParameters(src, destDir);
         if (src.isDirectory()) {
             moveDirectoryToDirectory(src, destDir, createDestDir);
         } else {
             moveFileToDirectory(src, destDir, createDestDir);
+        }
+    }
+
+    /**
+     * Validates the given arguments.
+     * <ul>
+     * <li>Throws {@link NullPointerException} if {@code src} is null</li>
+     * <li>Throws {@link NullPointerException} if {@code dest} is null</li>
+     * <li>Throws {@link FileNotFoundException} if {@code src} does not exist</li>
+     * </ul>
+     *
+     * @param src           the file or directory to be moved
+     * @param dest          the destination file or directory
+     */
+    private static void validateMoveParameters(final File src, final File dest) throws IOException {
+        if (src == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (dest == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (!src.exists()) {
+            throw new FileNotFoundException("Source '" + src + "' does not exist");
         }
     }
 
