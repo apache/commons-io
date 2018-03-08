@@ -1063,6 +1063,12 @@ public class FilenameUtils {
         return filename.substring(index + 1);
     }
 
+    /**
+     * Special handling for NTFS ADS: Don't accept colon in the filename.
+     * 
+     * @param filename a file name
+     * @return ADS offsets.
+     */
     private static int getAdsCriticalOffset(String filename) {
         // Step 1: Remove leading path segments.
         int offset1 = filename.lastIndexOf(SYSTEM_SEPARATOR);
