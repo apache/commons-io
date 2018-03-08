@@ -513,16 +513,7 @@ public class FileUtils {
      */
     public static Collection<File> listFiles(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        validateListFilesParameters(directory, fileFilter);
-
-        final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-        final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
-
-        //Find files
-        final Collection<File> files = new java.util.LinkedList<>();
-        innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), false);
-        return files;
+        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, false);
     }
 
     /**
@@ -586,6 +577,27 @@ public class FileUtils {
      */
     public static Collection<File> listFilesAndDirs(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, true);
+    }
+
+    /**
+     * Finds files within a given directory (and optionally its
+     * subdirectories). All files found are filtered by an IOFileFilter.
+     *
+     * @param directory             the directory to search in
+     * @param fileFilter            filter to apply when finding files.
+     * @param dirFilter             optional filter to apply when finding subdirectories.
+     *                              If this parameter is {@code null}, subdirectories will not be included in the
+     *                              search. Use TrueFileFilter.INSTANCE to match all directories.
+     * @param includeSubDirectories indicates if will include the subdirectories themselves
+     * @return a collection of java.io.File with the matching files
+     * @see org.apache.commons.io.FileUtils#listFiles
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     */
+    private static Collection<File> innerListFilesOrDirectories(
+            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
+            boolean includeSubDirectories) {
         validateListFilesParameters(directory, fileFilter);
 
         final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
@@ -593,9 +605,11 @@ public class FileUtils {
 
         //Find files
         final Collection<File> files = new java.util.LinkedList<>();
-        files.add(directory);
+        if (includeSubDirectories) {
+            files.add(directory);
+        }
         innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), true);
+                FileFilterUtils.or(effFileFilter, effDirFilter), includeSubDirectories);
         return files;
     }
 
