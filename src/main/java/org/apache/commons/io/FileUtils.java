@@ -593,9 +593,7 @@ public class FileUtils {
 
         //Find files
         final Collection<File> files = new java.util.LinkedList<>();
-        if (directory.isDirectory()) {
-            files.add(directory);
-        }
+        files.add(directory);
         innerListFiles(files, directory,
                 FileFilterUtils.or(effFileFilter, effDirFilter), true);
         return files;

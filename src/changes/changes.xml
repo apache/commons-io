@@ -56,6 +56,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-570" dev="ggregory" type="fix" due-to="Pranet Verma">
         Missing Javadoc in FilenameUtils causing Travis-CI build to fail.
       </action>
+      <action issue="IO-571" dev="ggregory" type="fix" due-to="pranet">
+        Remove redundant isDirectory() check in org.apache.commons.io.FileUtils.listFilesAndDirs(File, IOFileFilter, IOFileFilter).
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
