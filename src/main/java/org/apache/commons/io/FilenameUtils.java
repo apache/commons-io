@@ -481,29 +481,29 @@ public class FilenameUtils {
      * use {@link #getFullPath(String)} on the base path argument.
      *
      * @param basePath  the base path to attach to, always treated as a path
-     * @param fullFilenameToAdd  the fileName (or path) to attach to the base
+     * @param fullFileNameToAdd  the fileName (or path) to attach to the base
      * @return the concatenated path, or null if invalid.  Null bytes inside string will be removed
      */
-    public static String concat(final String basePath, final String fullFilenameToAdd) {
-        final int prefix = getPrefixLength(fullFilenameToAdd);
+    public static String concat(final String basePath, final String fullFileNameToAdd) {
+        final int prefix = getPrefixLength(fullFileNameToAdd);
         if (prefix < 0) {
             return null;
         }
         if (prefix > 0) {
-            return normalize(fullFilenameToAdd);
+            return normalize(fullFileNameToAdd);
         }
         if (basePath == null) {
             return null;
         }
         final int len = basePath.length();
         if (len == 0) {
-            return normalize(fullFilenameToAdd);
+            return normalize(fullFileNameToAdd);
         }
         final char ch = basePath.charAt(len - 1);
         if (isSeparator(ch)) {
-            return normalize(basePath + fullFilenameToAdd);
+            return normalize(basePath + fullFileNameToAdd);
         }
-        return normalize(basePath + '/' + fullFilenameToAdd);
+        return normalize(basePath + '/' + fullFileNameToAdd);
     }
 
     /**
