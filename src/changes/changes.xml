@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-557" dev="pschumacher" type="fix" due-to="luccioman">
         Perform locale independent upper case conversions.
       </action>
+      <action issue="IO-570" dev="ggregory" type="fix" due-to="Pranet Verma">
+        Missing Javadoc in FilenameUtils causing Travis-CI build to fail.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
