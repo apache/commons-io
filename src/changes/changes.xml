@@ -59,6 +59,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-571" dev="ggregory" type="fix" due-to="pranet">
         Remove redundant isDirectory() check in org.apache.commons.io.FileUtils.listFilesAndDirs(File, IOFileFilter, IOFileFilter).
       </action>
+      <action issue="IO-572" dev="ggregory" type="update" due-to="Pranet Verma">
+        Refactor duplicate code in org.apache.commons.io.FileUtils.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

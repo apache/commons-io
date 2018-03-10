@@ -513,16 +513,7 @@ public class FileUtils {
      */
     public static Collection<File> listFiles(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        validateListFilesParameters(directory, fileFilter);
-
-        final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-        final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
-
-        //Find files
-        final Collection<File> files = new java.util.LinkedList<>();
-        innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), false);
-        return files;
+        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, false);
     }
 
     /**
@@ -586,6 +577,27 @@ public class FileUtils {
      */
     public static Collection<File> listFilesAndDirs(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, true);
+    }
+
+    /**
+     * Finds files within a given directory (and optionally its
+     * subdirectories). All files found are filtered by an IOFileFilter.
+     *
+     * @param directory             the directory to search in
+     * @param fileFilter            filter to apply when finding files.
+     * @param dirFilter             optional filter to apply when finding subdirectories.
+     *                              If this parameter is {@code null}, subdirectories will not be included in the
+     *                              search. Use TrueFileFilter.INSTANCE to match all directories.
+     * @param includeSubDirectories indicates if will include the subdirectories themselves
+     * @return a collection of java.io.File with the matching files
+     * @see org.apache.commons.io.FileUtils#listFiles
+     * @see org.apache.commons.io.filefilter.FileFilterUtils
+     * @see org.apache.commons.io.filefilter.NameFileFilter
+     */
+    private static Collection<File> innerListFilesOrDirectories(
+            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
+            boolean includeSubDirectories) {
         validateListFilesParameters(directory, fileFilter);
 
         final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
@@ -593,9 +605,11 @@ public class FileUtils {
 
         //Find files
         final Collection<File> files = new java.util.LinkedList<>();
-        files.add(directory);
+        if (includeSubDirectories) {
+            files.add(directory);
+        }
         innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), true);
+                FileFilterUtils.or(effFileFilter, effDirFilter), includeSubDirectories);
         return files;
     }
 
@@ -2899,15 +2913,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveDirectory(final File srcDir, final File destDir) throws IOException {
-        if (srcDir == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!srcDir.exists()) {
-            throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
-        }
+        validateMoveParameters(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' is not a directory");
         }
@@ -2943,12 +2949,7 @@ public class FileUtils {
      */
     public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination directory must not be null");
-        }
+        validateMoveParameters(src, destDir);
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
         }
@@ -2960,7 +2961,6 @@ public class FileUtils {
             throw new IOException("Destination '" + destDir + "' is not a directory");
         }
         moveDirectory(src, new File(destDir, src.getName()));
-
     }
 
     /**
@@ -2977,15 +2977,7 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveFile(final File srcFile, final File destFile) throws IOException {
-        if (srcFile == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destFile == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!srcFile.exists()) {
-            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
-        }
+        validateMoveParameters(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' is a directory");
         }
@@ -3021,12 +3013,7 @@ public class FileUtils {
      */
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (srcFile == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination directory must not be null");
-        }
+        validateMoveParameters(srcFile, destDir);
         if (!destDir.exists() && createDestDir) {
             destDir.mkdirs();
         }
@@ -3057,19 +3044,35 @@ public class FileUtils {
      */
     public static void moveToDirectory(final File src, final File destDir, final boolean createDestDir)
             throws IOException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!src.exists()) {
-            throw new FileNotFoundException("Source '" + src + "' does not exist");
-        }
+        validateMoveParameters(src, destDir);
         if (src.isDirectory()) {
             moveDirectoryToDirectory(src, destDir, createDestDir);
         } else {
             moveFileToDirectory(src, destDir, createDestDir);
+        }
+    }
+
+    /**
+     * Validates the given arguments.
+     * <ul>
+     * <li>Throws {@link NullPointerException} if {@code src} is null</li>
+     * <li>Throws {@link NullPointerException} if {@code dest} is null</li>
+     * <li>Throws {@link FileNotFoundException} if {@code src} does not exist</li>
+     * </ul>
+     *
+     * @param src                       the file or directory to be moved
+     * @param dest                      the destination file or directory
+     * @throws FileNotFoundException    if {@code src} file does not exist
+     */
+    private static void validateMoveParameters(final File src, final File dest) throws FileNotFoundException {
+        if (src == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (dest == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (!src.exists()) {
+            throw new FileNotFoundException("Source '" + src + "' does not exist");
         }
     }
 
