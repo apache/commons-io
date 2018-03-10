@@ -18,6 +18,7 @@
 package org.apache.commons.io;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -76,7 +77,7 @@ public enum FileSystem {
      * The field will return {@code false} if {@code OS_NAME} is {@code null}.
      * </p>
      */
-    private static final boolean IS_OS_LINUX = getOsMatchesName("Linux") || getOsMatchesName("LINUX");
+    private static final boolean IS_OS_LINUX = getOsMatchesName("Linux");
 
     /**
      * <p>
@@ -174,7 +175,7 @@ public enum FileSystem {
         if (osName == null) {
             return false;
         }
-        return osName.startsWith(osNamePrefix);
+        return osName.toUpperCase(Locale.ROOT).startsWith(osNamePrefix.toUpperCase(Locale.ROOT));
     }
 
     private final char[] illegalFileNameChars;
