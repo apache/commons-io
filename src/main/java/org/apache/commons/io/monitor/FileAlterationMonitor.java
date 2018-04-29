@@ -166,8 +166,8 @@ public final class FileAlterationMonitor implements Runnable {
         try {
             thread.interrupt();
             thread.join(stopInterval);
+            thread.interrupt();
         } catch (final InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
         for (final FileAlterationObserver observer : observers) {
             observer.destroy();
