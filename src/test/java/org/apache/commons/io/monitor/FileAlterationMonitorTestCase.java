@@ -22,9 +22,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Test;
@@ -175,5 +177,39 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             TestUtils.sleepQuietly(pauseTime);
         }
         fail(label + " " + file + " not found");
+    }
+
+    /**
+     * Test case for IO-535
+     *
+     * Verify that {@link FileAlterationMonitor#stop()} stops the created thread
+     */
+    @Test
+    public void testStopWhileWaitingForNextInterval() throws Exception {
+        final Collection<Thread> createdThreads = new ArrayList<>(1);
+        final ThreadFactory threadFactory = new ThreadFactory() {
+            private final ThreadFactory delegate = Executors.defaultThreadFactory();
+
+            @Override
+            public Thread newThread(Runnable r) {
+                final Thread thread = delegate.newThread(r);
+                thread.setDaemon(true); //do not leak threads if the test fails
+                createdThreads.add(thread);
+                return thread;
+            }
+        };
+
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(1_000);
+        monitor.setThreadFactory(threadFactory);
+
+        monitor.start();
+        assertFalse(createdThreads.isEmpty());
+
+        Thread.sleep(10); // wait until the watcher thread enters Thread.sleep()
+        monitor.stop(100);
+
+        for (Thread thread : createdThreads) {
+            assertFalse("The FileAlterationMonitor did not stop the threads it created.", thread.isAlive());
+        }
     }
 }
