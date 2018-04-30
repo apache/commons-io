@@ -510,7 +510,13 @@ public class Tailer implements Runnable {
      * @throws java.io.IOException if an I/O error occurs.
      */
     private long readLines(final RandomAccessFile reader) throws IOException {
-        try (ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64)) {
+        try (ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(64) {
+            @Override
+            public synchronized String toString() {
+                // we could achieve further speed-up for ISO-8859-1 by calling the deprecated .toString(hibyte=0)
+                return new String(buf, 0, count, Tailer.this.charset);
+            }
+        }) {
             long pos = reader.getFilePointer();
             long rePos = pos; // position to re-read
             int num;
@@ -521,7 +527,7 @@ public class Tailer implements Runnable {
                     switch ( ch ) {
                         case '\n':
                             seenCR = false; // swallow CR before LF
-                            listener.handle(new String(lineBuf.toByteArray(), charset));
+                            listener.handle(lineBuf.toString()); // overridden
                             lineBuf.reset();
                             rePos = pos + i + 1;
                             break;
@@ -534,7 +540,7 @@ public class Tailer implements Runnable {
                         default:
                             if (seenCR) {
                                 seenCR = false; // swallow final CR
-                                listener.handle(new String(lineBuf.toByteArray(), charset));
+                                listener.handle(lineBuf.toString()); // overridden
                                 lineBuf.reset();
                                 rePos = pos + i + 1;
                             }
