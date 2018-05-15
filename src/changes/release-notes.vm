@@ -293,7 +293,7 @@ o Add new read method "toByteArray" to handle InputStream with known size.  Issu
 Fixed Bugs:
 o Dubious use of mkdirs() return code  Issue: IO-280. Thanks to sebb. 
 o ReaderInputStream enters infinite loop when it encounters an unmappable character  Issue: IO-277. 
-o FileUtils.moveFile() JavaDoc should specify FileExistsException thrown  Issue: IO-264. 
+o FileUtils.moveFile() Javadoc should specify FileExistsException thrown  Issue: IO-264. 
 o ClassLoaderObjectInputStream does not handle Proxy classes  Issue: IO-260. 
 o Tailer returning partial lines when reaching EOF before EOL  Issue: IO-274. Thanks to Frank Grimes. 
 o FileUtils.copyFile() throws IOException when copying large files to a shared directory (on Windows)  Issue: IO-266. Thanks to Igor Smereka. 

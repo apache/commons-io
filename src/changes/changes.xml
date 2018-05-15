@@ -366,7 +366,7 @@ The <action> type attribute can be add,update,fix,remove.
         Supply a hook method allowing Tailer actively determining stop condition.
       </action>
       <action issue="IO-436" dev="ggregory" type="fix" due-to="christoph.schneegans">
-        Improper JavaDoc comment for FilenameUtils.indexOfExtension.
+        Improper Javadoc comment for FilenameUtils.indexOfExtension.
       </action>
       <action issue="IO-437" dev="ggregory" type="add">
         Make IOUtils.EOF public and reuse it in various classes.
@@ -533,7 +533,7 @@ The <action> type attribute can be add,update,fix,remove.
         ReaderInputStream enters infinite loop when it encounters an unmappable character
       </action>
       <action type="fix" issue="IO-264">
-        FileUtils.moveFile() JavaDoc should specify FileExistsException thrown
+        FileUtils.moveFile() Javadoc should specify FileExistsException thrown
       </action>
       <action type="add" issue="IO-262">
         FileAlterationObserver has no getter for FileFilter

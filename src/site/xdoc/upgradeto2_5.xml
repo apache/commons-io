@@ -111,7 +111,7 @@ limitations under the License.
                     o IO-362:  IOUtils.contentEquals* methods returns false if input1 == input2, should return true. Thanks to mmadson, ggregory.
                     o IO-357:  [Tailer] InterruptedException while the thread is sleeping is silently ignored Thanks to mortenh.
                     o IO-352:  Spelling fixes. Thanks to scop.
-                    o IO-436:  Improper JavaDoc comment for FilenameUtils.indexOfExtension. Thanks to christoph.schneegans.
+                    o IO-436:  Improper Javadoc comment for FilenameUtils.indexOfExtension. Thanks to christoph.schneegans.
 
                     Changes:
                     o IO-433:  Converted all testcases to JUnit 4
