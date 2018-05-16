@@ -1516,6 +1516,12 @@ public class FilenameUtils {
         Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
     private static final int IPV4_MAX_OCTET_VALUE = 255;
 
+    /**
+     * Checks whether a given string represents a valid IPv4 address.
+     *
+     * @param name the name to validate
+     * @return true if the given name is a valid IPv4 address
+     */
     // mostly copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet4Address
     private static boolean isIPv4Address(String name) {
         Matcher m = IPV4_PATTERN.matcher(name);
@@ -1557,6 +1563,12 @@ public class FilenameUtils {
     private static final int BASE_16 = 16;
 
     // copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet6Address
+    /**
+     * Checks whether a given string represents a valid IPv6 address.
+     *
+     * @param inet6Address the name to validate
+     * @return true if the given name is a valid IPv6 address
+     */
     private static boolean isIPv6Address(String inet6Address) {
         boolean containsCompressedZeroes = inet6Address.contains("::");
         if (containsCompressedZeroes && (inet6Address.indexOf("::") != inet6Address.lastIndexOf("::"))) {
@@ -1622,6 +1634,14 @@ public class FilenameUtils {
 
     private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
 
+    /**
+     * Checks whether a given string is a valid host name according to
+     * RFC 3986 - not accepting IP addresses.
+     *
+     * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
+     * @param name the hostname to validate
+     * @return true if the given name is a valid host name
+     */
     private static boolean isRFC3986HostName(String name) {
         String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
