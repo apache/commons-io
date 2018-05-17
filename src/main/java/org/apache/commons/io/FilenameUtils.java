@@ -1530,20 +1530,9 @@ public class FilenameUtils {
         }
 
         // verify that address subgroups are legal
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i <= 4; i++) {
             String ipSegment = m.group(i);
-            if (ipSegment == null || ipSegment.length() == 0) {
-                return false;
-            }
-
-            int iIpSegment = 0;
-
-            try {
-                iIpSegment = Integer.parseInt(ipSegment);
-            } catch(NumberFormatException e) {
-                return false;
-            }
-
+            int iIpSegment = Integer.parseInt(ipSegment);
             if (iIpSegment > IPV4_MAX_OCTET_VALUE) {
                 return false;
             }
