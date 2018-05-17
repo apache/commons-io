@@ -1509,7 +1509,7 @@ public class FilenameUtils {
      * @return true if the given name is a valid host name
      */
     private static boolean isValidHostName(String name) {
-        return isIPv4Address(name) || isIPv6Address(name) || isRFC3986HostName(name);
+        return isIPv6Address(name) || isRFC3986HostName(name);
     }
 
     private static final Pattern IPV4_PATTERN =
