@@ -2474,7 +2474,7 @@ public class FileUtils {
      * Makes a directory, including any necessary but nonexistent parent
      * directories. If a file already exists with specified name but it is
      * not a directory then an IOException is thrown.
-     * If the directory cannot be created (or does not already exist)
+     * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
      *
      * @param directory directory to create, must not be {@code null}
