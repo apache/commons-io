@@ -65,6 +65,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-572" dev="ggregory" type="update" due-to="Pranet Verma">
         Refactor duplicate code in org.apache.commons.io.FileUtils.
       </action>
+      <action issue="IO-577" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add readers to filter out given characters: CharacterSetFilterReader and CharacterFilterReader.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
