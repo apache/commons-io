@@ -19,8 +19,12 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * General file name and file path manipulation utilities.
@@ -676,7 +680,9 @@ public class FilenameUtils {
             }
             posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
             posWin = posWin == NOT_FOUND ? posUnix : posWin;
-            return Math.min(posUnix, posWin) + 1;
+            int pos = Math.min(posUnix, posWin) + 1;
+            String hostnamePart = fileName.substring(2, pos - 1);
+            return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
         } else {
             return isSeparator(ch0) ? 1 : 0;
         }
@@ -1490,4 +1496,152 @@ public class FilenameUtils {
         return list.toArray( new String[ list.size() ] );
     }
 
+    /**
+     * Checks whether a given string is a valid host name according to
+     * RFC 3986.
+     *
+     * <p>Accepted are IP addresses (v4 and v6) as well as what the
+     * RFC calls a "reg-name". Percent encoded names don't seem to be
+     * valid names in UNC paths.</p>
+     *
+     * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
+     * @param name the hostname to validate
+     * @return true if the given name is a valid host name
+     */
+    private static boolean isValidHostName(String name) {
+        return isIPv6Address(name) || isRFC3986HostName(name);
+    }
+
+    private static final Pattern IPV4_PATTERN =
+        Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
+    private static final int IPV4_MAX_OCTET_VALUE = 255;
+
+    /**
+     * Checks whether a given string represents a valid IPv4 address.
+     *
+     * @param name the name to validate
+     * @return true if the given name is a valid IPv4 address
+     */
+    // mostly copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet4Address
+    private static boolean isIPv4Address(String name) {
+        Matcher m = IPV4_PATTERN.matcher(name);
+        if (!m.matches() || m.groupCount() != 4) {
+            return false;
+        }
+
+        // verify that address subgroups are legal
+        for (int i = 1; i <= 4; i++) {
+            String ipSegment = m.group(i);
+            int iIpSegment = Integer.parseInt(ipSegment);
+            if (iIpSegment > IPV4_MAX_OCTET_VALUE) {
+                return false;
+            }
+
+            if (ipSegment.length() > 1 && ipSegment.startsWith("0")) {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    private static final int IPV6_MAX_HEX_GROUPS = 8;
+    private static final int IPV6_MAX_HEX_DIGITS_PER_GROUP = 4;
+    private static final int MAX_UNSIGNED_SHORT = 0xffff;
+    private static final int BASE_16 = 16;
+
+    // copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet6Address
+    /**
+     * Checks whether a given string represents a valid IPv6 address.
+     *
+     * @param inet6Address the name to validate
+     * @return true if the given name is a valid IPv6 address
+     */
+    private static boolean isIPv6Address(String inet6Address) {
+        boolean containsCompressedZeroes = inet6Address.contains("::");
+        if (containsCompressedZeroes && (inet6Address.indexOf("::") != inet6Address.lastIndexOf("::"))) {
+            return false;
+        }
+        if ((inet6Address.startsWith(":") && !inet6Address.startsWith("::"))
+                || (inet6Address.endsWith(":") && !inet6Address.endsWith("::"))) {
+            return false;
+        }
+        String[] octets = inet6Address.split(":");
+        if (containsCompressedZeroes) {
+            List<String> octetList = new ArrayList<String>(Arrays.asList(octets));
+            if (inet6Address.endsWith("::")) {
+                // String.split() drops ending empty segments
+                octetList.add("");
+            } else if (inet6Address.startsWith("::") && !octetList.isEmpty()) {
+                octetList.remove(0);
+            }
+            octets = octetList.toArray(new String[octetList.size()]);
+        }
+        if (octets.length > IPV6_MAX_HEX_GROUPS) {
+            return false;
+        }
+        int validOctets = 0;
+        int emptyOctets = 0; // consecutive empty chunks
+        for (int index = 0; index < octets.length; index++) {
+            String octet = octets[index];
+            if (octet.length() == 0) {
+                emptyOctets++;
+                if (emptyOctets > 1) {
+                    return false;
+                }
+            } else {
+                emptyOctets = 0;
+                // Is last chunk an IPv4 address?
+                if (index == octets.length - 1 && octet.contains(".")) {
+                    if (!isIPv4Address(octet)) {
+                        return false;
+                    }
+                    validOctets += 2;
+                    continue;
+                }
+                if (octet.length() > IPV6_MAX_HEX_DIGITS_PER_GROUP) {
+                    return false;
+                }
+                int octetInt = 0;
+                try {
+                    octetInt = Integer.parseInt(octet, BASE_16);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                if (octetInt < 0 || octetInt > MAX_UNSIGNED_SHORT) {
+                    return false;
+                }
+            }
+            validOctets++;
+        }
+        if (validOctets > IPV6_MAX_HEX_GROUPS || (validOctets < IPV6_MAX_HEX_GROUPS && !containsCompressedZeroes)) {
+            return false;
+        }
+        return true;
+    }
+
+    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
+
+    /**
+     * Checks whether a given string is a valid host name according to
+     * RFC 3986 - not accepting IP addresses.
+     *
+     * @see "https://tools.ietf.org/html/rfc3986#section-3.2.2"
+     * @param name the hostname to validate
+     * @return true if the given name is a valid host name
+     */
+    private static boolean isRFC3986HostName(String name) {
+        String[] parts = name.split("\\.", -1);
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].length() == 0) {
+                // trailing dot is legal, otherwise we've hit a .. sequence
+                return i == parts.length - 1;
+            }
+            if (!REG_NAME_PART_PATTERN.matcher(parts[i]).matches()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
