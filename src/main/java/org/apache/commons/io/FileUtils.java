@@ -2951,7 +2951,9 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(src, destDir);
         if (!destDir.exists() && createDestDir) {
-            destDir.mkdirs();
+            if (!destDir.mkdirs()) {
+            	throw new IOException("Can not create temporary directory.");
+            }
         }
         if (!destDir.exists()) {
             throw new FileNotFoundException("Destination directory '" + destDir +
