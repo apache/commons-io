@@ -33,9 +33,15 @@ import java.util.Objects;
  */
 public enum FileSystem {
 
-    GENERIC(Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
+    /**
+     * Generic file system.
+     */
+    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
 
-    LINUX(255, 4096, new char[] {
+    /**
+     * Linux file system.
+     */
+    LINUX(true, true, 255, 4096, new char[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -44,7 +50,10 @@ public enum FileSystem {
             // @formatter:on
     }, new String[] {}),
 
-    MAC_OSX(255, 1024, new char[] {
+    /**
+     * MacOS file system.
+     */
+    MAC_OSX(true, true, 255, 1024, new char[] {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
@@ -54,18 +63,21 @@ public enum FileSystem {
             // @formatter:on
     }, new String[] {}),
 
-    WINDOWS(255, 32000, new char[] {
-            // KEEP THIS ARRAY SORTED!
-            // @formatter:off
-            // ASCII NUL
-            0,
-            // 1-31 may be allowed in file streams
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-            29, 30, 31,
-            '"', '*', '/', ':', '<', '>', '?', '\\', '|'
-            // @formatter:on
-    },
-            // KEEP THIS ARRAY SORTED!
+    /**
+     * Windows file system.
+     */
+    WINDOWS(false, true, 255,
+            32000, new char[] {
+                    // KEEP THIS ARRAY SORTED!
+                    // @formatter:off
+                    // ASCII NUL
+                    0,
+                    // 1-31 may be allowed in file streams
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                    29, 30, 31,
+                    '"', '*', '/', ':', '<', '>', '?', '\\', '|'
+                    // @formatter:on
+            }, // KEEP THIS ARRAY SORTED!
             new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
                     "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" });
 
@@ -178,6 +190,8 @@ public enum FileSystem {
         return osName.toUpperCase(Locale.ROOT).startsWith(osNamePrefix.toUpperCase(Locale.ROOT));
     }
 
+    private final boolean casePreserving;
+    private final boolean caseSensitive;
     private final char[] illegalFileNameChars;
     private final int maxFileNameLength;
     private final int maxPathLength;
@@ -186,21 +200,27 @@ public enum FileSystem {
     /**
      * Constructs a new instance.
      * 
+     * @param caseSensitive
+     *            Whether this file system is case sensitive.
+     * @param casePreserving
+     *            Whether this file system is case preserving.
      * @param maxFileLength
-     *            the maximum length for file names. The file name does not include folders.
+     *            The maximum length for file names. The file name does not include folders.
      * @param maxPathLength
-     *            the maximum length of the path to a file. This can include folders.
+     *            The maximum length of the path to a file. This can include folders.
      * @param illegalFileNameChars
-     *            illegal characters for this file system.
+     *            Illegal characters for this file system.
      * @param reservedFileNames
-     *            the reserved file names.
+     *            The reserved file names.
      */
-    FileSystem(final int maxFileLength, final int maxPathLength, final char[] illegalFileNameChars,
-               final String[] reservedFileNames) {
+    FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
+               final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
         this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
+        this.caseSensitive = caseSensitive;
+        this.casePreserving = casePreserving;
     }
 
     /**
@@ -232,7 +252,7 @@ public enum FileSystem {
 
     /**
      * Gets a cloned copy of the reserved file names.
-     * 
+     *
      * @return the reserved file names.
      */
     public String[] getReservedFileNames() {
@@ -240,8 +260,26 @@ public enum FileSystem {
     }
 
     /**
-     * Returns {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     * Whether this file system preserves case.
      * 
+     * @return Whether this file system preserves case.
+     */
+    public boolean isCasePreserving() {
+        return casePreserving;
+    }
+
+    /**
+     * Whether this file system is case-sensitive.
+     * 
+     * @return Whether this file system is case-sensitive.
+     */
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    /**
+     * Returns {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     *
      * @param c
      *            the character to test
      * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
@@ -276,7 +314,7 @@ public enum FileSystem {
 
     /**
      * Returns whether the given string is a reserved file name.
-     * 
+     *
      * @param candidate
      *            the string to test
      * @return {@code true} if the given string is a reserved file name.
