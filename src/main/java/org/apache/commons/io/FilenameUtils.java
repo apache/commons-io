@@ -1256,7 +1256,7 @@ public class FilenameUtils {
      * @return true if the fileName is one of the extensions
      * @throws java.lang.IllegalArgumentException if the supplied fileName contains null bytes
      */
-    public static boolean isExtension(final String fileName, final String[] extensions) {
+    public static boolean isExtension(final String fileName, final String... extensions) {
         if (fileName == null) {
             return false;
         }

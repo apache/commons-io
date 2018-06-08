@@ -1110,6 +1110,33 @@ public class FilenameUtilsTestCase {
     }
 
     @Test
+    public void testIsExtensionVarArgs() {
+        assertTrue(FilenameUtils.isExtension("file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("file", "rtf", ""));
+        assertTrue(FilenameUtils.isExtension("file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a/b/file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a/b/file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a.b/file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a.b/file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a\\b\\file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a\\b\\file.txt", "rtf", "txt"));
+
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", "txt"));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "rtf"));
+        assertTrue(FilenameUtils.isExtension("a.b\\file.txt", "rtf", "txt"));
+
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT"));
+        assertFalse(FilenameUtils.isExtension("a.b\\file.txt", "TXT", "RTF"));
+    }
+
+    @Test
     public void testIsExtensionCollection() {
         assertFalse(FilenameUtils.isExtension(null, (Collection<String>) null));
         assertFalse(FilenameUtils.isExtension("file.txt", (Collection<String>) null));

@@ -71,6 +71,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-559" type="fix">
         FilenameUtils.normalize now verifies hostname syntax in UNC path.
       </action>
+      <action issue="IO-580" dev="ggregory" type="update">
+        Update org.apache.commons.io.FilenameUtils.isExtension(String, String[]) to use var args.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
