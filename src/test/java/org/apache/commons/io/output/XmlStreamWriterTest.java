@@ -28,7 +28,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * @version $Id$
  */
 public class XmlStreamWriterTest {
     /** french */

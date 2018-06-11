@@ -25,7 +25,6 @@ import java.util.concurrent.ThreadFactory;
  * registered {@link FileAlterationObserver} at a specified interval.
  *
  * @see FileAlterationObserver
- * @version $Id$
  * @since 2.0
  */
 public final class FileAlterationMonitor implements Runnable {
