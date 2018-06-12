@@ -84,7 +84,7 @@ public class FileUtilsCopyToFileTestCase {
     private class CheckingInputStream extends ByteArrayInputStream {
         private boolean closed;
 
-        public CheckingInputStream(byte[] data) {
+        public CheckingInputStream(final byte[] data) {
             super(data);
             closed = false;
         }

@@ -597,7 +597,7 @@ public class FileUtils {
      */
     private static Collection<File> innerListFilesOrDirectories(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
-            boolean includeSubDirectories) {
+            final boolean includeSubDirectories) {
         validateListFilesParameters(directory, fileFilter);
 
         final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);

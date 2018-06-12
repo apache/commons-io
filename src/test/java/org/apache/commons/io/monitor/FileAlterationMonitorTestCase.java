@@ -191,7 +191,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             private final ThreadFactory delegate = Executors.defaultThreadFactory();
 
             @Override
-            public Thread newThread(Runnable r) {
+            public Thread newThread(final Runnable r) {
                 final Thread thread = delegate.newThread(r);
                 thread.setDaemon(true); //do not leak threads if the test fails
                 createdThreads.add(thread);
@@ -208,7 +208,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         Thread.sleep(10); // wait until the watcher thread enters Thread.sleep()
         monitor.stop(100);
 
-        for (Thread thread : createdThreads) {
+        for (final Thread thread : createdThreads) {
             assertFalse("The FileAlterationMonitor did not stop the threads it created.", thread.isAlive());
         }
     }

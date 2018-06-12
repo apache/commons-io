@@ -680,8 +680,8 @@ public class FilenameUtils {
             }
             posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
             posWin = posWin == NOT_FOUND ? posUnix : posWin;
-            int pos = Math.min(posUnix, posWin) + 1;
-            String hostnamePart = fileName.substring(2, pos - 1);
+            final int pos = Math.min(posUnix, posWin) + 1;
+            final String hostnamePart = fileName.substring(2, pos - 1);
             return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
         } else {
             return isSeparator(ch0) ? 1 : 0;
@@ -1075,10 +1075,10 @@ public class FilenameUtils {
      * @param fileName a file name
      * @return ADS offsets.
      */
-    private static int getAdsCriticalOffset(String fileName) {
+    private static int getAdsCriticalOffset(final String fileName) {
         // Step 1: Remove leading path segments.
-        int offset1 = fileName.lastIndexOf(SYSTEM_SEPARATOR);
-        int offset2 = fileName.lastIndexOf(OTHER_SEPARATOR);
+        final int offset1 = fileName.lastIndexOf(SYSTEM_SEPARATOR);
+        final int offset2 = fileName.lastIndexOf(OTHER_SEPARATOR);
         if (offset1 == -1) {
             if (offset2 == -1) {
                 return 0;
@@ -1508,7 +1508,7 @@ public class FilenameUtils {
      * @param name the hostname to validate
      * @return true if the given name is a valid host name
      */
-    private static boolean isValidHostName(String name) {
+    private static boolean isValidHostName(final String name) {
         return isIPv6Address(name) || isRFC3986HostName(name);
     }
 
@@ -1523,16 +1523,16 @@ public class FilenameUtils {
      * @return true if the given name is a valid IPv4 address
      */
     // mostly copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet4Address
-    private static boolean isIPv4Address(String name) {
-        Matcher m = IPV4_PATTERN.matcher(name);
+    private static boolean isIPv4Address(final String name) {
+        final Matcher m = IPV4_PATTERN.matcher(name);
         if (!m.matches() || m.groupCount() != 4) {
             return false;
         }
 
         // verify that address subgroups are legal
         for (int i = 1; i <= 4; i++) {
-            String ipSegment = m.group(i);
-            int iIpSegment = Integer.parseInt(ipSegment);
+            final String ipSegment = m.group(i);
+            final int iIpSegment = Integer.parseInt(ipSegment);
             if (iIpSegment > IPV4_MAX_OCTET_VALUE) {
                 return false;
             }
@@ -1558,8 +1558,8 @@ public class FilenameUtils {
      * @param inet6Address the name to validate
      * @return true if the given name is a valid IPv6 address
      */
-    private static boolean isIPv6Address(String inet6Address) {
-        boolean containsCompressedZeroes = inet6Address.contains("::");
+    private static boolean isIPv6Address(final String inet6Address) {
+        final boolean containsCompressedZeroes = inet6Address.contains("::");
         if (containsCompressedZeroes && (inet6Address.indexOf("::") != inet6Address.lastIndexOf("::"))) {
             return false;
         }
@@ -1569,7 +1569,7 @@ public class FilenameUtils {
         }
         String[] octets = inet6Address.split(":");
         if (containsCompressedZeroes) {
-            List<String> octetList = new ArrayList<>(Arrays.asList(octets));
+            final List<String> octetList = new ArrayList<>(Arrays.asList(octets));
             if (inet6Address.endsWith("::")) {
                 // String.split() drops ending empty segments
                 octetList.add("");
@@ -1584,7 +1584,7 @@ public class FilenameUtils {
         int validOctets = 0;
         int emptyOctets = 0; // consecutive empty chunks
         for (int index = 0; index < octets.length; index++) {
-            String octet = octets[index];
+            final String octet = octets[index];
             if (octet.length() == 0) {
                 emptyOctets++;
                 if (emptyOctets > 1) {
@@ -1606,7 +1606,7 @@ public class FilenameUtils {
                 int octetInt = 0;
                 try {
                     octetInt = Integer.parseInt(octet, BASE_16);
-                } catch (NumberFormatException e) {
+                } catch (final NumberFormatException e) {
                     return false;
                 }
                 if (octetInt < 0 || octetInt > MAX_UNSIGNED_SHORT) {
@@ -1631,8 +1631,8 @@ public class FilenameUtils {
      * @param name the hostname to validate
      * @return true if the given name is a valid host name
      */
-    private static boolean isRFC3986HostName(String name) {
-        String[] parts = name.split("\\.", -1);
+    private static boolean isRFC3986HostName(final String name) {
+        final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].length() == 0) {
                 // trailing dot is legal, otherwise we've hit a .. sequence
