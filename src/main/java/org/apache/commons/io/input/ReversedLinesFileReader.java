@@ -37,7 +37,7 @@ public class ReversedLinesFileReader implements Closeable {
 
     private static final String EMPTY_STRING = "";
     private static final int DEFAULT_BLOCK_SIZE = 4096;
-    
+
     private final int blockSize;
     private final Charset encoding;
 

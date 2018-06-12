@@ -112,10 +112,10 @@ public class TeeOutputStreamTest {
         expected.write(array, 5, 5);
         assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(), baos1.toByteArray());
         assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(), baos2.toByteArray());
-        
+
         expected.flush();
         expected.close();
-        
+
         tos.flush();
         tos.close();
     }

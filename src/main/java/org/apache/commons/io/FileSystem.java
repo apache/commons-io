@@ -199,7 +199,7 @@ public enum FileSystem {
 
     /**
      * Constructs a new instance.
-     * 
+     *
      * @param caseSensitive
      *            Whether this file system is case sensitive.
      * @param casePreserving
@@ -261,7 +261,7 @@ public enum FileSystem {
 
     /**
      * Whether this file system preserves case.
-     * 
+     *
      * @return Whether this file system preserves case.
      */
     public boolean isCasePreserving() {
@@ -270,7 +270,7 @@ public enum FileSystem {
 
     /**
      * Whether this file system is case-sensitive.
-     * 
+     *
      * @return Whether this file system is case-sensitive.
      */
     public boolean isCaseSensitive() {

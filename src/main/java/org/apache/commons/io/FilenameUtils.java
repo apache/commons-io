@@ -1071,7 +1071,7 @@ public class FilenameUtils {
 
     /**
      * Special handling for NTFS ADS: Don't accept colon in the fileName.
-     * 
+     *
      * @param fileName a file name
      * @return ADS offsets.
      */

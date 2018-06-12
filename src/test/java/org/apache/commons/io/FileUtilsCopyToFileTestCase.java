@@ -44,7 +44,7 @@ public class FileUtilsCopyToFileTestCase {
     public void setUp() throws Exception {
         testFile = new File(getTestDirectory(), "file1-test.txt");
         if(!testFile.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile + 
+            throw new IOException("Cannot create file " + testFile +
                 " as the parent directory does not exist");
         }
 
@@ -53,7 +53,7 @@ public class FileUtilsCopyToFileTestCase {
 
     /**
      * Tests that <code>copyToFile(InputStream, File)</code> does not close the input stream.
-     * 
+     *
      * @throws IOException
      * @see FileUtils#copyToFile(InputStream, File)
      * @see FileUtils#copyInputStreamToFile(InputStream, File)
@@ -68,7 +68,7 @@ public class FileUtilsCopyToFileTestCase {
 
     /**
      * Tests that <code>copyInputStreamToFile(InputStream, File)</code> closes the input stream.
-     * 
+     *
      * @throws IOException
      * @see FileUtils#copyInputStreamToFile(InputStream, File)
      * @see FileUtils#copyToFile(InputStream, File)

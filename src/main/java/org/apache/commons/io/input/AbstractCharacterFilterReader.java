@@ -46,7 +46,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
 
     /**
      * Returns true if the given character should be filtered out, false to keep the character.
-     * 
+     *
      * @param ch
      *            the character to test.
      * @return true if the given character should be filtered out, false to keep the character.
