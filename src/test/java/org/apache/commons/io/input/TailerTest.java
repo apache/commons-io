@@ -360,7 +360,7 @@ public class TailerTest {
     }
 
     /*
-     * Tests [IO-357][Tailer] InterruptedException while the thead is sleeping is silently ignored.
+     * Tests [IO-357][Tailer] InterruptedException while thead is sleeping is silently ignored.
      */
     @Test
     public void testInterrupt() throws Exception {
