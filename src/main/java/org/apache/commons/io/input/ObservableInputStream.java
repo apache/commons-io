@@ -44,7 +44,7 @@ public class ObservableInputStream extends ProxyInputStream {
          *    because, in that case, {@link #finished()} will be invoked instead.
          * @throws IOException if an i/o-error occurs
          */
-        void data(final int pByte) throws IOException {}
+        public void data(final int pByte) throws IOException {}
 
         /** Called to indicate, that {@link InputStream#read(byte[])}, or
          * {@link InputStream#read(byte[], int, int)} have been called, and are about to
@@ -55,7 +55,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * @param pLength The number of bytes, which have been stored in the byte array.
          * @throws IOException if an i/o-error occurs
          */
-        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {}
+        public void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {}
 
         /** Called to indicate, that EOF has been seen on the underlying stream.
          * This method may be called multiple times, if the reader keeps invoking
@@ -63,18 +63,18 @@ public class ObservableInputStream extends ProxyInputStream {
          * EOF.
          * @throws IOException if an i/o-error occurs
          */
-        void finished() throws IOException {}
+        public void finished() throws IOException {}
 
         /** Called to indicate, that the {@link ObservableInputStream} has been closed.
          * @throws IOException if an i/o-error occurs
          */
-        void closed() throws IOException {}
+        public void closed() throws IOException {}
 
         /**
          * Called to indicate, that an error occurred on the underlying stream.
          * @throws IOException if an i/o-error occurs
          */
-        void error(final IOException pException) throws IOException { throw pException; }
+        public void error(final IOException pException) throws IOException { throw pException; }
     }
 
     private final List<Observer> observers = new ArrayList<>();
