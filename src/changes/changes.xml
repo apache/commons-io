@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="tba" description="tba">
+      <action dev="jochen" type="add">
+        Adding the CircularBufferInputStream, and the PeekableInputStream.
+      </action>
       <action issue="IO-582" dev="jochen" type="fix" due-to="Bruno Palos">
         Make methods in ObservableInputStream.Obsever public.
       </action>
