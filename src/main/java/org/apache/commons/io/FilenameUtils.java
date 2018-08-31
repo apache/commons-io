@@ -18,11 +18,12 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1385,11 +1386,11 @@ public class FilenameUtils {
         boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        final Stack<int[]> backtrack = new Stack<>();
+        final Deque<int[]> backtrack = new ArrayDeque<>(wcs.length);
 
         // loop around a backtrack stack, to handle complex * matching
         do {
-            if (backtrack.size() > 0) {
+            if (!backtrack.isEmpty()) {
                 final int[] array = backtrack.pop();
                 wcsIdx = array[0];
                 textIdx = array[1];
@@ -1448,7 +1449,7 @@ public class FilenameUtils {
                 return true;
             }
 
-        } while (backtrack.size() > 0);
+        } while (!backtrack.isEmpty());
 
         return false;
     }
