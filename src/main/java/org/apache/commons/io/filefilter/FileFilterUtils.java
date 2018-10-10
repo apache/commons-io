@@ -89,7 +89,7 @@ public class FileFilterUtils {
                 acceptedFiles.add(file);
             }
         }
-        return acceptedFiles.toArray(new File[acceptedFiles.size()]);
+        return acceptedFiles.toArray(new File[0]);
     }
 
     /**
@@ -120,7 +120,7 @@ public class FileFilterUtils {
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
         final List<File> acceptedFiles = filterList(filter, files);
-        return acceptedFiles.toArray(new File[acceptedFiles.size()]);
+        return acceptedFiles.toArray(new File[0]);
     }
 
     /**

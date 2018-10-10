@@ -76,7 +76,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
             for (final Comparator<File> comparator : delegates) {
                 list.add(comparator);
             }
-            this.delegates = (Comparator<File>[]) list.toArray(new Comparator<?>[list.size()]); //2
+            this.delegates = (Comparator<File>[]) list.toArray(new Comparator<?>[0]); //2
         }
     }
 

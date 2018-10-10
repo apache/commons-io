@@ -454,7 +454,7 @@ public class FileUtils {
      * @return an array of java.io.File
      */
     public static File[] convertFileCollectionToFileArray(final Collection<File> files) {
-        return files.toArray(new File[files.size()]);
+        return files.toArray(new File[0]);
     }
 
     //-----------------------------------------------------------------------
