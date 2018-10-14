@@ -45,6 +45,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadMonitor;
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.After;
 import org.junit.Rule;
@@ -153,7 +154,7 @@ public class TailerTest {
             out.close(); // ensure data is written
 
            final long testDelayMillis = delay * 10;
-           TestUtils.sleep(testDelayMillis);
+           ThreadMonitor.sleep(testDelayMillis);
            final List<String> tailerlines = listener.getLines();
            assertEquals("line count",lines.size(),tailerlines.size());
            for(int i = 0,len = lines.size();i<len;i++){
@@ -182,12 +183,12 @@ public class TailerTest {
         // Write some lines to the file
         writeString(file, "Line");
 
-        TestUtils.sleep(delay * 2);
+        ThreadMonitor.sleep(delay * 2);
         List<String> lines = listener.getLines();
         assertEquals("1 line count", 0, lines.size());
 
         writeString(file, " one\n");
-        TestUtils.sleep(delay * 2);
+        ThreadMonitor.sleep(delay * 2);
         lines = listener.getLines();
 
         assertEquals("1 line count", 1, lines.size());
@@ -213,7 +214,7 @@ public class TailerTest {
         // Write some lines to the file
         write(file, "Line one", "Line two");
         final long testDelayMillis = delayMillis * 10;
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
         List<String> lines = listener.getLines();
         assertEquals("1 line count", 2, lines.size());
         assertEquals("1 line 1", "Line one", lines.get(0));
@@ -222,7 +223,7 @@ public class TailerTest {
 
         // Write another line to the file
         write(file, "Line three");
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("2 line count", 1, lines.size());
         assertEquals("2 line 3", "Line three", lines.get(0));
@@ -240,11 +241,11 @@ public class TailerTest {
         final boolean exists = file.exists();
         assertFalse("File should not exist", exists);
         createFile(file, 0);
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
 
         // Write another line
         write(file, "Line four");
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
         lines = listener.getLines();
         assertEquals("4 line count", 1, lines.size());
         assertEquals("4 line 3", "Line four", lines.get(0));
@@ -252,7 +253,7 @@ public class TailerTest {
 
         // Stop
         thread.interrupt();
-        TestUtils.sleep(testDelayMillis * 4);
+        ThreadMonitor.sleep(testDelayMillis * 4);
         write(file, "Line five");
         assertEquals("4 line count", 0, listener.getLines().size());
         assertNotNull("Missing InterruptedException", listener.exception);
@@ -278,15 +279,15 @@ public class TailerTest {
 
         // write a few lines
         write(file, "line1", "line2", "line3");
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
 
         // write a few lines
         write(file, "line4", "line5", "line6");
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
 
         // write a few lines
         write(file, "line7", "line8", "line9");
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
 
         // May be > 3 times due to underlying OS behaviour wrt streams
         assertTrue("end of file reached at least 3 times", listener.reachedEndOfFile >= 3);
@@ -313,7 +314,7 @@ public class TailerTest {
                 } catch (final FileNotFoundException ignore) {
                 }
                 try {
-                    TestUtils.sleep(200L);
+                   ThreadMonitor.sleep(200L);
                 } catch (final InterruptedException ignore) {
                     // ignore
                 }
@@ -349,9 +350,9 @@ public class TailerTest {
         final int delay = 100;
         final int idle = 50; // allow time for thread to work
         tailer = Tailer.create(file, listener, delay, false);
-        TestUtils.sleep(idle);
+        ThreadMonitor.sleep(idle);
         tailer.stop();
-        TestUtils.sleep(delay+idle);
+        ThreadMonitor.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
@@ -374,9 +375,9 @@ public class TailerTest {
         final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();
-        TestUtils.sleep(idle);
+        ThreadMonitor.sleep(idle);
         thread.interrupt();
-        TestUtils.sleep(delay + idle);
+        ThreadMonitor.sleep(delay + idle);
         assertNotNull("Missing InterruptedException", listener.exception);
         assertTrue("Unexpected Exception: " + listener.exception, listener.exception instanceof InterruptedException);
         assertEquals("Expected init to be called", 1, listener.initialised);
@@ -395,9 +396,9 @@ public class TailerTest {
         tailer = new Tailer(file, listener, delay, false);
         final Executor exec = new ScheduledThreadPoolExecutor(1);
         exec.execute(tailer);
-        TestUtils.sleep(idle);
+        ThreadMonitor.sleep(idle);
         tailer.stop();
-        TestUtils.sleep(delay+idle);
+        ThreadMonitor.sleep(delay+idle);
         assertNull("Should not generate Exception", listener.exception);
         assertEquals("Expected init to be called", 1 , listener.initialised);
         assertTrue("fileNotFound should be called", listener.notFound > 0);
@@ -419,7 +420,7 @@ public class TailerTest {
         // Write some lines to the file
         writeString(file, "CRLF\r\n", "LF\n", "CR\r", "CRCR\r\r", "trail");
         final long testDelayMillis = delayMillis * 10;
-        TestUtils.sleep(testDelayMillis);
+        ThreadMonitor.sleep(testDelayMillis);
         final List<String> lines = listener.getLines();
         assertEquals("line count", 4, lines.size());
         assertEquals("line 1", "CRLF", lines.get(0));
