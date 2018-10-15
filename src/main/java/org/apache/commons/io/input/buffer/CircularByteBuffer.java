@@ -31,6 +31,7 @@ public class CircularByteBuffer {
 
 	/**
 	 * Creates a new instance with the given buffer size.
+	 * @param pSize the size of buffer to create
 	 */
 	public CircularByteBuffer(int pSize) {
 		buffer = new byte[pSize];
@@ -128,9 +129,12 @@ public class CircularByteBuffer {
 	 * {@code pBuffer}, {@code pOffset}, and {@code pLength}. No bytes are being
 	 * removed from the buffer. If the result is true, then the following invocations
 	 * of {@link #read()} are guaranteed to return exactly those bytes.
+	 * @param pBuffer the buffer to compare against
+	 * @param pOffset start offset
+	 * @param pLength length to compare
 	 * @return True, if the next invocations of {@link #read()} will return the
 	 * bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-	 * @code{pOffset}+@code{pLength}-1 of byte array {@code pBuffer}.
+	 * {@code pOffset}+{@code pLength}-1 of byte array {@code pBuffer}.
 	 * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
 	 * @throws NullPointerException The byte array {@code pBuffer} is null.
 	 */
@@ -160,7 +164,10 @@ public class CircularByteBuffer {
 	/**
 	 * Adds the given bytes to the buffer. This is the same as invoking {@link #add(byte)}
 	 * for the bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-	 * @code{pOffset}+@code{pLength}-1 of byte array {@code pBuffer}.
+	 * {@code pOffset}+{@code pLength}-1 of byte array {@code pBuffer}.
+     * @param pBuffer the buffer to copy
+     * @param pOffset start offset
+     * @param pLength length to copy
 	 * @throws IllegalStateException The buffer doesn't have sufficient space. Use
 	 * {@link #getSpace()} to prevent this exception.
 	 * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
@@ -191,6 +198,7 @@ public class CircularByteBuffer {
 	 * Same as {@link #hasSpace(int) hasSpace(1)}.
 	 * @see #hasSpace(int)
 	 * @see #getSpace()
+	 * @return true if there is space for a byte
 	 */
 	public boolean hasSpace() {
 		return currentNumberOfBytes < buffer.length;
@@ -200,6 +208,8 @@ public class CircularByteBuffer {
 	 * Returns, whether there is currently room for the given number of bytes in the buffer.
 	 * @see #hasSpace()
 	 * @see #getSpace()
+	 * @param pBytes the byte count
+	 * @return true if there is space for the given number of bytes
 	 */
 	public boolean hasSpace(int pBytes) {
 		return currentNumberOfBytes+pBytes <= buffer.length;
@@ -207,6 +217,7 @@ public class CircularByteBuffer {
 
 	/**
 	 * Returns, whether the buffer is currently holding, at least, a single byte.
+	 * @return true if the buffer is not empty
 	 */
 	public boolean hasBytes() {
 		return currentNumberOfBytes > 0;
@@ -214,6 +225,7 @@ public class CircularByteBuffer {
 
 	/**
 	 * Returns the number of bytes, that can currently be added to the buffer.
+	 * @return the number of bytes that can be added
 	 */
 	public int getSpace() {
 		return buffer.length - currentNumberOfBytes;
@@ -221,6 +233,7 @@ public class CircularByteBuffer {
 
 	/**
 	 * Returns the number of bytes, that are currently present in the buffer.
+	 * @return the number of bytes
 	 */
 	public int getCurrentNumberOfBytes() {
 		return currentNumberOfBytes;

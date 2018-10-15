@@ -53,8 +53,6 @@ public class CircularBufferInputStream extends InputStream {
 	/** Creates a new instance, which filters the given input stream, and
 	 * uses a reasonable default buffer size (8192).
 	 * @param pIn The input stream, which is being buffered.
-	 * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
-	 * used internally.
 	 */
 	public CircularBufferInputStream(InputStream pIn) {
 		this(pIn, 8192);

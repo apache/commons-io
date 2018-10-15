@@ -39,8 +39,6 @@ public class PeekableInputStream extends CircularBufferInputStream {
 	/** Creates a new instance, which filters the given input stream, and
 	 * uses a reasonable default buffer size (8192).
 	 * @param pIn The input stream, which is being buffered.
-	 * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
-	 * used internally.
 	 */
 	public PeekableInputStream(InputStream pIn) {
 		super(pIn);
@@ -50,8 +48,8 @@ public class PeekableInputStream extends CircularBufferInputStream {
 	 * Returns, whether the next bytes in the buffer are as given by
 	 * {@code pBuffer}. This is equivalent to {@link #peek(byte[],int,int)}
 	 * with {@code pOffset} == 0, and {@code pLength} == {@code pBuffer.length}
-	 * @param pBuffer
-	 * @return
+	 * @param pBuffer the buffer to compare against
+	 * @return true if the next bytes are as given
 	 * @throws IOException Refilling the buffer failed.
 	 */
 	public boolean peek(byte[] pBuffer) throws IOException {
@@ -69,9 +67,11 @@ public class PeekableInputStream extends CircularBufferInputStream {
 	/**
 	 * Returns, whether the next bytes in the buffer are as given by
 	 * {@code pBuffer}, {code pOffset}, and {@code pLength}.
-	 * @param pBuffer
-	 * @return
-	 * @throws IOException
+	 * @param pBuffer the buffer to compare against
+	 * @param pOffset the start offset
+	 * @param pLength the length to compare
+	 * @return true if the next bytes in the buffer are as given
+	 * @throws IOException if there is a problem calling fillBuffer()
 	 */
 	public boolean peek(byte[] pBuffer, int pOffset, int pLength) throws IOException {
 		Objects.requireNonNull(pBuffer, "Buffer");
