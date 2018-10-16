@@ -47,6 +47,9 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="tba" description="tba">
+      <action issue="IO-589" dev="sebb" type="fix">
+        Some tests fail if the base path contains a space
+      </action>
       <action dev="jochen" type="add">
         Adding the CircularBufferInputStream, and the PeekableInputStream.
       </action>

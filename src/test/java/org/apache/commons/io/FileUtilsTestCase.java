@@ -668,17 +668,17 @@ public class FileUtilsTestCase {
 
         final URL urlCR = getClass().getResource("FileUtilsTestDataCR.dat");
         assertNotNull(urlCR);
-        final File cr = new File(urlCR.getPath());
+        final File cr = new File(urlCR.toURI());
         assertTrue(cr.exists());
 
         final URL urlCRLF = getClass().getResource("FileUtilsTestDataCRLF.dat");
         assertNotNull(urlCRLF);
-        final File crlf = new File(urlCRLF.getPath());
+        final File crlf = new File(urlCRLF.toURI());
         assertTrue(crlf.exists());
 
         final URL urlLF = getClass().getResource("FileUtilsTestDataLF.dat");
         assertNotNull(urlLF);
-        final File lf = new File(urlLF.getPath());
+        final File lf = new File(urlLF.toURI());
         assertTrue(lf.exists());
 
         assertTrue(FileUtils.contentEqualsIgnoreEOL(cr, cr, null));
