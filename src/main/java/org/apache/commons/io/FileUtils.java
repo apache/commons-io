@@ -51,6 +51,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.iterator.ListFilesIterator;
 import org.apache.commons.io.output.NullOutputStream;
 
 /**
@@ -643,7 +644,10 @@ public class FileUtils {
      */
     public static Iterator<File> iterateFiles(
             final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        return listFiles(directory, fileFilter, dirFilter).iterator();
+        final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
+        final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
+
+        return new ListFilesIterator(directory, effFileFilter, effDirFilter, false, true);
     }
 
     /**
@@ -670,7 +674,10 @@ public class FileUtils {
      */
     public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
                                                      final IOFileFilter dirFilter) {
-        return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
+        final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
+        final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
+
+        return new ListFilesIterator(directory, effFileFilter, effDirFilter, true, true);
     }
 
     //-----------------------------------------------------------------------
@@ -716,8 +723,7 @@ public class FileUtils {
     /**
      * Allows iteration over the files in a given directory (and optionally
      * its subdirectories) which match an array of extensions. This method
-     * is based on {@link #listFiles(File, String[], boolean)},
-     * which supports Iterable ('foreach' loop).
+     * is based on {@link ListFilesIterator}.
      *
      * @param directory  the directory to search in
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
@@ -728,7 +734,16 @@ public class FileUtils {
      */
     public static Iterator<File> iterateFiles(
             final File directory, final String[] extensions, final boolean recursive) {
-        return listFiles(directory, extensions, recursive).iterator();
+        IOFileFilter effFileFilter;
+        if (extensions == null) {
+            effFileFilter = TrueFileFilter.INSTANCE;
+        } else {
+            final String[] suffixes = toSuffixes(extensions);
+            effFileFilter = setUpEffectiveFileFilter(new SuffixFileFilter(suffixes));
+        }
+
+        final IOFileFilter effDirFilter = recursive ? DirectoryFileFilter.INSTANCE : FalseFileFilter.INSTANCE;
+        return new ListFilesIterator(directory, effFileFilter, effDirFilter, false, recursive);
     }
 
     //-----------------------------------------------------------------------

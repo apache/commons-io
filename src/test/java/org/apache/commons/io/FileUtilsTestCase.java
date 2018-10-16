@@ -1908,6 +1908,64 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testIterateFilesIgnoringDirs() throws Exception {
+        final File srcDir = temporaryFolder;
+
+        final File subDir1 = new File(srcDir, "subdir");
+        subDir1.mkdir();
+
+        final File subDir2 = new File(subDir1, "subdir2");
+        subDir2.mkdir();
+
+        final File someFileA = createTestFile(subDir2, "a.txt");
+        final File someFileB = createTestFile(subDir2, "b.txt");
+
+        final File subDir3 = new File(subDir2, "subdir3");
+        subDir3.mkdir();
+
+        final File someFileC = createTestFile(subDir3, "c.txt");
+
+        final File subDir4 = new File(subDir2, "subdir4");
+        subDir4.mkdir();
+
+        final File subDir5 = new File(subDir4, "subdir5");
+        subDir5.mkdir();
+
+        final File someFileD = createTestFile(subDir4, "d.txt");
+
+        final Collection<File> filesAndDirs = Arrays.asList(someFileA, someFileB, someFileC, someFileD);
+
+        int filesCount = 0;
+        final Iterator<File> files = FileUtils.iterateFiles(subDir1,
+                new WildcardFileFilter("*.*"),
+                new WildcardFileFilter("*"));
+        while (files.hasNext()) {
+            filesCount++;
+            final File file = files.next();
+            assertTrue(filesAndDirs.contains(file), "Should contain the directory/file");
+        }
+
+        assertEquals(filesCount, filesAndDirs.size());
+    }
+
+    private File createTestFile(File parent, String fileName) throws IOException {
+        final File someFile = new File(parent, fileName);
+        if (!someFile.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + someFile
+                    + " as the parent directory does not exist");
+        }
+        final BufferedOutputStream output =
+                new BufferedOutputStream(new FileOutputStream(someFile));
+        try {
+            TestUtils.generateTestData(output, 100);
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
+
+        return someFile;
+    }
+
+    @Test
     public void testIterateFilesAndDirs() throws IOException {
         final File srcDir = temporaryFolder;
 
