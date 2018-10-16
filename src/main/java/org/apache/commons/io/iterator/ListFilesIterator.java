@@ -41,6 +41,14 @@ public class ListFilesIterator implements Iterator<File> {
     private File next = null;
     private LinkedList<IteratorPosition> stack = new LinkedList<>();
 
+    /**
+     * Creates a new instance for traversing the given directory
+     * @param directory to be traversed
+     * @param effFileFilter the effective file filter to be used. Must be provided by {@link org.apache.commons.io.FileUtils}
+     * @param effDirFilter the effective directory filter to be used. Must be provided by {@link org.apache.commons.io.FileUtils}
+     * @param includeSubDirectories indicates if should include the directories
+     * @param recursive indicates if should process recursively
+     */
     public ListFilesIterator(final File directory, final IOFileFilter effFileFilter, final IOFileFilter effDirFilter,
                              final boolean includeSubDirectories, final boolean recursive) {
 
@@ -53,10 +61,10 @@ public class ListFilesIterator implements Iterator<File> {
         final File[] found = this.directory.listFiles((FileFilter) FileFilterUtils.or(effFileFilter, effDirFilter));
 
         if (includeSubDirectories) {
-            stack.push(new IteratorPosition(new File[] {directory}, 0));
+            stack.push(new IteratorPosition(new File[] {directory}));
         } else {
             if (found.length > 0) {
-                stack.push(new IteratorPosition(found, 0));
+                stack.push(new IteratorPosition(found));
             }
         }
     }
@@ -93,8 +101,10 @@ public class ListFilesIterator implements Iterator<File> {
         return true;
     }
 
-    /*
-     * Remove from stack when there is no more elements to process
+    /**
+     * Remove item from stack when there is no more elements to process
+     * @param iteratorPosition the current position on the stack
+     * @return the item to be processed or null if the process is finished
      */
     private IteratorPosition removeFinishedDirs(IteratorPosition iteratorPosition) {
         while (iteratorPosition != null && iteratorPosition.hasNext()) {
@@ -107,8 +117,9 @@ public class ListFilesIterator implements Iterator<File> {
         return iteratorPosition;
     }
 
-    /*
+    /**
      * Moves to the next element and if it's a directory updates the stack
+     * @param iteratorPosition the current position on the stack
      */
     private void moveNext(IteratorPosition iteratorPosition) {
         this.next = iteratorPosition.next();
@@ -116,7 +127,7 @@ public class ListFilesIterator implements Iterator<File> {
             final File[] found = this.next.listFiles((FileFilter) FileFilterUtils.or(effFileFilter, effDirFilter));
 
             if (found.length > 0) {
-                stack.push(new IteratorPosition(found, 0));
+                stack.push(new IteratorPosition(found));
             }
         }
     }
@@ -134,22 +145,33 @@ public class ListFilesIterator implements Iterator<File> {
         throw new UnsupportedOperationException("remove");
     }
 
-    /*
+    /**
      * Utility class representing the actual stack's position
      */
     private static class IteratorPosition {
         public File[] found;
-        public int nextIndex;
+        public int nextIndex = 0;
 
-        public IteratorPosition(File[] found, int nextIndex) {
+        /**
+         * Creates a new item for the stack
+         * @param found the array of files found
+         */
+        public IteratorPosition(File[] found) {
             this.found = found;
-            this.nextIndex = nextIndex;
         }
 
+        /**
+         * Checks if the current item has more files to be processed
+         * @return true if there are more items to process or false otherwise
+         */
         public boolean hasNext() {
             return this.nextIndex >= this.found.length;
         }
 
+        /**
+         * Returns the next file for this item
+         * @return
+         */
         public File next() {
             return found[this.nextIndex++];
         }
