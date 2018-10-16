@@ -170,7 +170,7 @@ public class ListFilesIterator implements Iterator<File> {
 
         /**
          * Returns the next file for this item
-         * @return
+         * @return the next file for this item
          */
         public File next() {
             return found[this.nextIndex++];
