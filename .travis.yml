@@ -20,7 +20,7 @@ jdk:
   - openjdk7
   - oraclejdk8
   - oraclejdk9
-  - oraclejdk10
+  - openjdk10
 
 script:
   - mvn
