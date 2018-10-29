@@ -41,7 +41,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ReversedLinesFileReaderTestParamFile {
 
-    @Parameters(name = "{0}, charset={1}")
+    @Parameters(name = "{0}, charset={1}, {2}")
     public static Collection<Object[]> blockSizes() {
         return Arrays.asList(new Object[][]{
                 {"test-file-20byteslength.bin", "ISO_8859_1", null},
