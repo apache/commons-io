@@ -68,23 +68,8 @@ public class DeferredFileOutputStreamTest
      * is therefore confined to memory.
      */
     @Test
-    public void testBelowThreshold()
-    {
-        final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize, null);
-        try
-        {
-            dfos.write(testBytes, 0, testBytes.length);
-            dfos.close();
-        }
-        catch (final IOException e) {
-            fail("Unexpected IOException");
-        }
-        assertTrue(dfos.isInMemory());
-
-        final byte[] resultBytes = dfos.getData();
-        assertEquals(testBytes.length, resultBytes.length);
-        assertTrue(Arrays.equals(resultBytes, testBytes));
+    public void testBelowThreshold() {
+        this.testThresholdTemplate(testBytes.length + 42);
     }
 
     /**
@@ -94,21 +79,7 @@ public class DeferredFileOutputStreamTest
      */
     @Test
     public void testAtThreshold() {
-        final DeferredFileOutputStream dfos =
-                new DeferredFileOutputStream(testBytes.length, initialBufferSize, null);
-        try
-        {
-            dfos.write(testBytes, 0, testBytes.length);
-            dfos.close();
-        }
-        catch (final IOException e) {
-            fail("Unexpected IOException");
-        }
-        assertTrue(dfos.isInMemory());
-
-        final byte[] resultBytes = dfos.getData();
-        assertEquals(testBytes.length, resultBytes.length);
-        assertTrue(Arrays.equals(resultBytes, testBytes));
+        this.testThresholdTemplate(testBytes.length);
     }
 
     /**
@@ -394,5 +365,19 @@ public class DeferredFileOutputStreamTest
         catch (final IOException e) {
             fail("Unexpected IOException");
         }
+    }
+
+    private void testThresholdTemplate(int i1) {
+        final DeferredFileOutputStream dfos = new DeferredFileOutputStream(i1, initialBufferSize, null);
+        try {
+            dfos.write(testBytes, 0, testBytes.length);
+            dfos.close();
+        } catch (final IOException e) {
+            fail("Unexpected IOException");
+        }
+        assertTrue(dfos.isInMemory());
+        final byte[] resultBytes = dfos.getData();
+        assertEquals(testBytes.length, resultBytes.length);
+        assertTrue(Arrays.equals(resultBytes, testBytes));
     }
 }
