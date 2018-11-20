@@ -45,8 +45,7 @@ public class InfiniteCircularInputStream extends InputStream {
     @Override
     public int read() {
         position = (position + 1) % repeatedContent.length;
-        return repeatedContent[position] & 0xff; // copied from
-                                                 // java.io.ByteArrayInputStream.read()
+        return repeatedContent[position] & 0xff;
     }
 
 }
