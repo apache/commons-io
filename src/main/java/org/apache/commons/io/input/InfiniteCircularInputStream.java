@@ -22,10 +22,10 @@ import java.io.InputStream;
  *
  * An {@link InputStream} that infinitely repeats provided bytes.
  * <p>
- * Closing a <tt>InfiniteCircularInputStream</tt> has no effect. The methods in
+ * Closing a <code>InfiniteCircularInputStream</code> has no effect. The methods in
  * this class can be called after the stream has been closed without generating
- * an <tt>IOException</tt>.
- *
+ * an <code>IOException</code>.
+ * </p>
  */
 public class InfiniteCircularInputStream extends InputStream {
 
