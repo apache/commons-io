@@ -18,7 +18,6 @@ package org.apache.commons.io;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 /**
@@ -38,6 +38,9 @@ public class FileUtilsDirectoryContainsTestCase {
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private File directory1;
     private File directory2;
@@ -116,31 +119,35 @@ public class FileUtilsDirectoryContainsTestCase {
     }
 
     @Test
-    public void testDirectoryDoesNotExist() throws IOException {
-        final File dir = new File("DOESNOTEXIST");
-        assertFalse(dir.exists());
-        try {
-            assertFalse(FileUtils.directoryContains(dir, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+    public void testDirectoryContainsForNull() throws IOException {
+        assertFalse(FileUtils.directoryContains(directory1, null));
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Directory must not be null");
+        FileUtils.directoryContains(null, file1);
     }
 
     @Test
-    public void testSameFile() throws IOException {
-        try {
-            assertTrue(FileUtils.directoryContains(file1, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
+    public void testDirectoryDoesNotExist() throws IOException {
+        final File dir = new File("DOESNOTEXIST");
+        assertFalse(dir.exists());
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Not a directory: " + dir);
+        FileUtils.directoryContains(dir, file1);
+    }
+
+    @Test
+    public void testSameDirectory() throws IOException {
+        assertFalse(FileUtils.directoryContains(directory1, directory1));
+        assertFalse(FileUtils.directoryContains(directory2, directory2));
+        assertFalse(FileUtils.directoryContains(directory3, directory3));
     }
 
     @Test
     public void testIO466() throws IOException {
-            final File fooFile = new File(directory1.getParent(), "directory1.txt");
-            assertFalse(FileUtils.directoryContains(directory1, fooFile));
+        final File fooFile = new File(directory1.getParent(), "directory1.txt");
+        assertFalse(FileUtils.directoryContains(directory1, fooFile));
     }
 
     @Test
@@ -161,18 +168,5 @@ public class FileUtilsDirectoryContainsTestCase {
         assertTrue("Check directory exists", top.exists());
         assertFalse("Check file does not exist", file.exists());
         assertFalse("Direcory does not contain unrealized file", FileUtils.directoryContains(top, file));
-    }
-
-    @Test
-    public void testUnrealizedContainment() throws IOException {
-        final File dir = new File("DOESNOTEXIST");
-        final File file = new File(dir, "DOESNOTEXIST2");
-        assertFalse(dir.exists());
-        assertFalse(file.exists());
-        try {
-            assertTrue(FileUtils.directoryContains(dir, file));
-        } catch (final IllegalArgumentException e) {
-            // expected
-        }
     }
 }
