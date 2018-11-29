@@ -26,62 +26,62 @@ import java.util.Objects;
  * scanners, lexers, parsers, or the like.
  */
 public class PeekableInputStream extends CircularBufferInputStream {
-	/** Creates a new instance, which filters the given input stream, and
-	 * uses the given buffer size.
-	 * @param pIn The input stream, which is being buffered.
-	 * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
-	 * used internally.
-	 */
-	public PeekableInputStream(InputStream pIn, int pBufferSize) {
-		super(pIn, pBufferSize);
-	}
+    /** Creates a new instance, which filters the given input stream, and
+     * uses the given buffer size.
+     * @param pIn The input stream, which is being buffered.
+     * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
+     * used internally.
+     */
+    public PeekableInputStream(InputStream pIn, int pBufferSize) {
+        super(pIn, pBufferSize);
+    }
 
-	/** Creates a new instance, which filters the given input stream, and
-	 * uses a reasonable default buffer size (8192).
-	 * @param pIn The input stream, which is being buffered.
-	 */
-	public PeekableInputStream(InputStream pIn) {
-		super(pIn);
-	}
+    /** Creates a new instance, which filters the given input stream, and
+     * uses a reasonable default buffer size (8192).
+     * @param pIn The input stream, which is being buffered.
+     */
+    public PeekableInputStream(InputStream pIn) {
+        super(pIn);
+    }
 
-	/**
-	 * Returns, whether the next bytes in the buffer are as given by
-	 * {@code pBuffer}. This is equivalent to {@link #peek(byte[],int,int)}
-	 * with {@code pOffset} == 0, and {@code pLength} == {@code pBuffer.length}
-	 * @param pBuffer the buffer to compare against
-	 * @return true if the next bytes are as given
-	 * @throws IOException Refilling the buffer failed.
-	 */
-	public boolean peek(byte[] pBuffer) throws IOException {
-		Objects.requireNonNull(pBuffer, "Buffer");
-		if (pBuffer.length > bufferSize) {
-			throw new IllegalArgumentException("Peek request size of " + pBuffer.length
-					                           + " bytes exceeds buffer size of " + bufferSize + " bytes");
-		}
-		if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
-			fillBuffer();
-		}
-		return buffer.peek(pBuffer, 0, pBuffer.length);
-	}
+    /**
+     * Returns, whether the next bytes in the buffer are as given by
+     * {@code pBuffer}. This is equivalent to {@link #peek(byte[],int,int)}
+     * with {@code pOffset} == 0, and {@code pLength} == {@code pBuffer.length}
+     * @param pBuffer the buffer to compare against
+     * @return true if the next bytes are as given
+     * @throws IOException Refilling the buffer failed.
+     */
+    public boolean peek(byte[] pBuffer) throws IOException {
+        Objects.requireNonNull(pBuffer, "Buffer");
+        if (pBuffer.length > bufferSize) {
+            throw new IllegalArgumentException("Peek request size of " + pBuffer.length
+                                               + " bytes exceeds buffer size of " + bufferSize + " bytes");
+        }
+        if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
+            fillBuffer();
+        }
+        return buffer.peek(pBuffer, 0, pBuffer.length);
+    }
 
-	/**
-	 * Returns, whether the next bytes in the buffer are as given by
-	 * {@code pBuffer}, {code pOffset}, and {@code pLength}.
-	 * @param pBuffer the buffer to compare against
-	 * @param pOffset the start offset
-	 * @param pLength the length to compare
-	 * @return true if the next bytes in the buffer are as given
-	 * @throws IOException if there is a problem calling fillBuffer()
-	 */
-	public boolean peek(byte[] pBuffer, int pOffset, int pLength) throws IOException {
-		Objects.requireNonNull(pBuffer, "Buffer");
-		if (pBuffer.length > bufferSize) {
-			throw new IllegalArgumentException("Peek request size of " + pBuffer.length
-					                           + " bytes exceeds buffer size of " + bufferSize + " bytes");
-		}
-		if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
-			fillBuffer();
-		}
-		return buffer.peek(pBuffer, pOffset, pLength);
-	}
+    /**
+     * Returns, whether the next bytes in the buffer are as given by
+     * {@code pBuffer}, {code pOffset}, and {@code pLength}.
+     * @param pBuffer the buffer to compare against
+     * @param pOffset the start offset
+     * @param pLength the length to compare
+     * @return true if the next bytes in the buffer are as given
+     * @throws IOException if there is a problem calling fillBuffer()
+     */
+    public boolean peek(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+        Objects.requireNonNull(pBuffer, "Buffer");
+        if (pBuffer.length > bufferSize) {
+            throw new IllegalArgumentException("Peek request size of " + pBuffer.length
+                                               + " bytes exceeds buffer size of " + bufferSize + " bytes");
+        }
+        if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
+            fillBuffer();
+        }
+        return buffer.peek(pBuffer, pOffset, pLength);
+    }
 }
