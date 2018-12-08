@@ -40,6 +40,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
@@ -973,6 +974,28 @@ public class IOUtils {
     }
 
     /**
+     * Copies chars from a <code>Reader</code> to a <code>Appendable</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     * Large streams (over 2GB) will return a chars copied value of
+     * <code>-1</code> after the copy has completed since the correct
+     * number of chars cannot be returned as an int. For large streams
+     * use the <code>copyLarge(Reader, Writer)</code> method.
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output) throws IOException {
+        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+    }
+
+    /**
      * Copies chars from a <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1129,6 +1152,51 @@ public class IOUtils {
     }
 
     /**
+     * Copies chars from a large (over 2GB) <code>Reader</code> to an <code>Appendable</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * </p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to append to
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copyLarge(final Reader input, final Appendable output) throws IOException {
+        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+    }
+
+    /**
+     * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * </p>
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @param buffer the buffer to be used for the copy
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output, final CharBuffer buffer) throws IOException {
+        long count = 0;
+        int n;
+        while (EOF != (n = input.read(buffer))) {
+            buffer.flip();
+            output.append(buffer, 0, n);
+            count += n;
+        }
+        return count;
+    }
+
+    /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1146,6 +1214,9 @@ public class IOUtils {
     public static long copyLarge(final Reader input, final Writer output) throws IOException {
         return copyLarge(input, output, new char[DEFAULT_BUFFER_SIZE]);
     }
+
+    // read toString
+    //-----------------------------------------------------------------------
 
     /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
@@ -1195,9 +1266,6 @@ public class IOUtils {
             throws IOException {
         return copyLarge(input, output, inputOffset, length, new char[DEFAULT_BUFFER_SIZE]);
     }
-
-    // read toString
-    //-----------------------------------------------------------------------
 
     /**
      * Copies some or all chars from a large (over 2GB) <code>InputStream</code> to an

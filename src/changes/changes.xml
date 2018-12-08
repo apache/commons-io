@@ -86,6 +86,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-554" dev="ggregory" type="fix" due-to="Michele Mariotti">
         FileUtils.copyToFile(InputStream source, File destination) should not close input stream.
       </action>
+      <action issue="IO-594" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOUtils copy methods with java.lang.Appendable as the target.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
