@@ -1152,25 +1152,6 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a large (over 2GB) <code>Reader</code> to an <code>Appendable</code>.
-     * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
-     * </p>
-     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
-     *
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Appendable</code> to append to
-     * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
-     * @since 2.7
-     */
-    public static long copyLarge(final Reader input, final Appendable output) throws IOException {
-        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
-    }
-
-    /**
      * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
      * <p>
      * This method uses the provided buffer, so there is no need to use a
