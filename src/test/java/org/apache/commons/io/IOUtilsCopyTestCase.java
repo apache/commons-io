@@ -254,7 +254,7 @@ public class IOUtilsCopyTestCase {
     public void testCopy_readerToAppendable_IO84() throws Exception {
         final long size = (long) Integer.MAX_VALUE + (long) 1;
         final Reader reader = new NullReader(size);
-        final Appendable writer = new NullWriter();
+        final NullWriter writer = new NullWriter();
 
         // Test copy() method
         assertEquals(size, IOUtils.copy(reader, writer));
