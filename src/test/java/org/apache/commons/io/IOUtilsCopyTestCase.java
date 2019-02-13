@@ -257,7 +257,7 @@ public class IOUtilsCopyTestCase {
         final NullWriter writer = new NullWriter();
 
         // Test copy() method
-        assertEquals(size, IOUtils.copy(reader, writer));
+        assertEquals(size, IOUtils.copy(reader, (Appendable) writer));
 
         // reset the input
         reader.close();
