@@ -36,15 +36,15 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * The following sections describe:
  *   <ul>
- *      <li><a href="#example">1. Example Implementation</a> - example
+ *      <li><a href="#DirectoryWalker_example">1. Example Implementation</a> - example
  *          <code>FileCleaner</code> implementation.</li>
- *      <li><a href="#filter">2. Filter Example</a> - using
+ *      <li><a href="#DirectoryWalker_filter">2. Filter Example</a> - using
  *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
- *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
+ *      <li><a href="#DirectoryWalker_cancel">3. Cancellation</a> - how to implement cancellation
  *          behaviour.</li>
  *   </ul>
  *
- * <a name="example"></a>
+ * <a id="DirectoryWalker_example"></a>
  * <h3>1. Example Implementation</h3>
  *
  * There are many possible extensions, for example, to delete all
@@ -81,7 +81,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <a name="filter"></a>
+ * <a id="DirectoryWalker_filter"></a>
  * <h3>2. Filter Example</h3>
  *
  * Choosing which directories and files to process can be a key aspect
@@ -148,7 +148,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * This is much simpler than the previous example, and is why it is the preferred
  * option for filtering.
  *
- * <a name="cancel"></a>
+ * <a id="DirectoryWalker_cancel"></a>
  * <h3>3. Cancellation</h3>
  *
  * The DirectoryWalker contains some of the logic required for cancel processing.
@@ -172,16 +172,16 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * Two possible scenarios are envisaged for cancellation:
  * <ul>
- *    <li><a href="#external">3.1 External / Multi-threaded</a> - cancellation being
+ *    <li><a href="#DirectoryWalker_external">3.1 External / Multi-threaded</a> - cancellation being
  *        decided/initiated by an external process.</li>
- *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated
+ *    <li><a href="#DirectoryWalker_internal">3.2 Internal</a> - cancellation being decided/initiated
  *        from within a DirectoryWalker implementation.</li>
  * </ul>
  * <p>
  * The following sections provide example implementations for these two different
  * scenarios.
  *
- * <a name="external"></a>
+ * <a id="DirectoryWalker_external"></a>
  * <h4>3.1 External / Multi-threaded</h4>
  *
  * This example provides a public <code>cancel()</code> method that can be
@@ -213,7 +213,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <a name="internal"></a>
+ * <a id="DirectoryWalker_internal"></a>
  * <h4>3.2 Internal</h4>
  *
  * This shows an example of how internal cancellation processing could be implemented.
