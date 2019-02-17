@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>46</version>
+    <version>47</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -348,6 +348,18 @@ file comparators, endian transformation classes, and much more.
           <ignorePathsToDelete>
             <ignorePathToDelete>javadocs</ignorePathToDelete>
           </ignorePathsToDelete>
+        </configuration>
+      </plugin>
+      <!--
+       Fix for https://bugs.openjdk.java.net/browse/JDK-8212233
+       which is addressed in maven-javadoc-plugin:3.1.0, see https://issues.apache.org/jira/browse/MJAVADOC-562
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${commons.javadoc.version}</version>
+        <configuration>
+          <source>7</source>
         </configuration>
       </plugin>
     </plugins>

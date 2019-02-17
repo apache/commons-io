@@ -36,16 +36,15 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * The following sections describe:
  *   <ul>
- *      <li><a href="#DirectoryWalker_example">1. Example Implementation</a> - example
+ *      <li><a href="#example">1. Example Implementation</a> - example
  *          <code>FileCleaner</code> implementation.</li>
- *      <li><a href="#DirectoryWalker_filter">2. Filter Example</a> - using
+ *      <li><a href="#filter">2. Filter Example</a> - using
  *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
- *      <li><a href="#DirectoryWalker_cancel">3. Cancellation</a> - how to implement cancellation
+ *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
  *          behaviour.</li>
  *   </ul>
  *
- * <a id="DirectoryWalker_example"></a>
- * <h3>1. Example Implementation</h3>
+ * <h3 id="example">1. Example Implementation</h3>
  *
  * There are many possible extensions, for example, to delete all
  * files and '.svn' directories, and return a list of deleted files:
@@ -81,8 +80,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <a id="DirectoryWalker_filter"></a>
- * <h3>2. Filter Example</h3>
+ * <h3 id="filter">2. Filter Example</h3>
  *
  * Choosing which directories and files to process can be a key aspect
  * of using this class. This information can be setup in three ways,
@@ -148,8 +146,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * This is much simpler than the previous example, and is why it is the preferred
  * option for filtering.
  *
- * <a id="DirectoryWalker_cancel"></a>
- * <h3>3. Cancellation</h3>
+ * <h3 id="cancel">3. Cancellation</h3>
  *
  * The DirectoryWalker contains some of the logic required for cancel processing.
  * Subclasses must complete the implementation.
@@ -172,17 +169,16 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * Two possible scenarios are envisaged for cancellation:
  * <ul>
- *    <li><a href="#DirectoryWalker_external">3.1 External / Multi-threaded</a> - cancellation being
+ *    <li><a href="#external">3.1 External / Multi-threaded</a> - cancellation being
  *        decided/initiated by an external process.</li>
- *    <li><a href="#DirectoryWalker_internal">3.2 Internal</a> - cancellation being decided/initiated
+ *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated
  *        from within a DirectoryWalker implementation.</li>
  * </ul>
  * <p>
  * The following sections provide example implementations for these two different
  * scenarios.
  *
- * <a id="DirectoryWalker_external"></a>
- * <h4>3.1 External / Multi-threaded</h4>
+ * <h4 id="external">3.1 External / Multi-threaded</h4>
  *
  * This example provides a public <code>cancel()</code> method that can be
  * called by another thread to stop the processing. A typical example use-case
@@ -213,8 +209,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <a id="DirectoryWalker_internal"></a>
- * <h4>3.2 Internal</h4>
+ * <h4 id="internal">3.2 Internal</h4>
  *
  * This shows an example of how internal cancellation processing could be implemented.
  * <b>Note</b> the decision logic and throwing a {@link CancelException} could be implemented
