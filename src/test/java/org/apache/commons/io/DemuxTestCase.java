@@ -102,39 +102,13 @@ public class DemuxTestCase {
     }
 
     @Test
-    public void testOutputStream()
-            throws Exception {
-        final DemuxOutputStream output = new DemuxOutputStream();
-        startWriter(T1, DATA1, output);
-        startWriter(T2, DATA2, output);
-        startWriter(T3, DATA3, output);
-        startWriter(T4, DATA4, output);
-
-        doStart();
-        doJoin();
-
-        assertEquals("Data1", DATA1, getOutput(T1));
-        assertEquals("Data2", DATA2, getOutput(T2));
-        assertEquals("Data3", DATA3, getOutput(T3));
-        assertEquals("Data4", DATA4, getOutput(T4));
+    public void testOutputStream() throws Exception {
+        this.testStreamTemplate(new OutputStreamAdapter(), DemuxOutputStream.class);
     }
 
     @Test
-    public void testInputStream()
-            throws Exception {
-        final DemuxInputStream input = new DemuxInputStream();
-        startReader(T1, DATA1, input);
-        startReader(T2, DATA2, input);
-        startReader(T3, DATA3, input);
-        startReader(T4, DATA4, input);
-
-        doStart();
-        doJoin();
-
-        assertEquals("Data1", DATA1, getInput(T1));
-        assertEquals("Data2", DATA2, getInput(T2));
-        assertEquals("Data3", DATA3, getInput(T3));
-        assertEquals("Data4", DATA4, getInput(T4));
+    public void testInputStream() throws Exception {
+        this.testStreamTemplate(new InputStreamAdapter(), DemuxInputStream.class);
     }
 
     private static class ReaderThread
@@ -204,6 +178,46 @@ public class DemuxTestCase {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private <TDemuxStream> void testStreamTemplate(
+        TestStreamAdapter<TDemuxStream> adapter, Class<TDemuxStream> clazzTDemuxStream) throws Exception {
+        final TDemuxStream v1 = clazzTDemuxStream.newInstance();
+        adapter.start(T1, DATA1, v1);
+        adapter.start(T2, DATA2, v1);
+        adapter.start(T3, DATA3, v1);
+        adapter.start(T4, DATA4, v1);
+
+        doStart();
+        doJoin();
+
+        assertEquals("Data1", DATA1, adapter.get(T1));
+        assertEquals("Data2", DATA2, adapter.get(T2));
+        assertEquals("Data3", DATA3, adapter.get(T3));
+        assertEquals("Data4", DATA4, adapter.get(T4));
+    }
+
+    interface TestStreamAdapter<TDemuxStream> {
+        void start(String string1, String string2, TDemuxStream tDemuxStream1) throws Exception;
+        String get(String string1);
+    }
+
+    class OutputStreamAdapter implements TestStreamAdapter<DemuxOutputStream> {
+        public void start(String string1, String string2, DemuxOutputStream output) throws Exception {
+            startWriter(string1, string2, output);
+        }
+        public String get(String string1) {
+            return getOutput(string1);
+        }
+    }
+
+    class InputStreamAdapter implements TestStreamAdapter<DemuxInputStream> {
+        public void start(String string1, String string2, DemuxInputStream input) throws Exception {
+            startReader(string1, string2, input);
+        }
+        public String get(String string1) {
+            return getInput(string1);
         }
     }
 }
