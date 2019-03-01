@@ -16,13 +16,15 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.io.testtools.TestUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +37,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,19 +47,12 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import static org.junit.Assert.*;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -359,6 +355,94 @@ public class FileUtilsTestCase {
         assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)), "63 KB");
         assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)), "31 KB");
         assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)), "1 GB");
+    }
+
+    @Test
+    public void testByteCountToDisplayRoundedSize() {
+        final BigInteger b1023 = BigInteger.valueOf(1023);
+        final BigInteger b1025 = BigInteger.valueOf(1025);
+        final BigInteger KB1 = BigInteger.valueOf(1024);
+        final BigInteger MB1 = KB1.multiply(KB1);
+        final BigInteger GB1 = MB1.multiply(KB1);
+        final BigInteger GB2 = GB1.add(GB1);
+        final BigInteger TB1 = GB1.multiply(KB1);
+        final BigInteger PB1 = TB1.multiply(KB1);
+        final BigInteger EB1 = PB1.multiply(KB1);
+
+        final BigInteger b1600 = BigInteger.valueOf(1600);
+        final long b1600Long = b1600.longValue();
+        final Locale localeHungary = new Locale("hu", "HU");
+        final char defaultDecimalSeparator = ((DecimalFormat)DecimalFormat.getInstance(Locale.getDefault())).getDecimalFormatSymbols().getDecimalSeparator();
+
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.ZERO), "0 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.ZERO.longValue()), "0 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.ONE), "1 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.ONE.longValue()), "1 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1023), "1023 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1023.longValue()), "1023 bytes");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(KB1), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(KB1.longValue()), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1025), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1025.longValue()), "1 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1.subtract(BigInteger.ONE)), "1024 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1.subtract(BigInteger.ONE).longValue()), "1024 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1.longValue()), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1.add(BigInteger.ONE)), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(MB1.add(BigInteger.ONE).longValue()), "1 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1.subtract(BigInteger.ONE)), "1024 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1.subtract(BigInteger.ONE).longValue()), "1024 MB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1.longValue()), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1.add(BigInteger.ONE)), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB1.add(BigInteger.ONE).longValue()), "1 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB2), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB2.longValue()), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB2.subtract(BigInteger.ONE)), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(GB2.subtract(BigInteger.ONE).longValue()), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(TB1), "1 TB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(TB1.longValue()), "1 TB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(PB1), "1 PB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(PB1.longValue()), "1 PB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(EB1), "1 EB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(EB1.longValue()), "1 EB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Long.MAX_VALUE)), "8 EB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(Long.MAX_VALUE), "8 EB");
+        // Other MAX_VALUEs
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Character.MAX_VALUE)), "64 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Character.MAX_VALUE).longValue()), "64 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Short.MAX_VALUE)), "32 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Short.MAX_VALUE).longValue()), "32 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Integer.MAX_VALUE)), "2 GB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(BigInteger.valueOf(Integer.MAX_VALUE).longValue()), "2 GB");
+
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600), "2 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long), "2 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 4, Locale.CANADA), "1.5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 4, Locale.CANADA), "1.5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 4, localeHungary), "1,5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 4, localeHungary), "1,5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 3, Locale.CANADA), "1.563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 3, Locale.CANADA), "1.563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 3, localeHungary), "1,563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 3, localeHungary), "1,563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 2, Locale.CANADA), "1.56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 2, Locale.CANADA), "1.56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 2, localeHungary), "1,56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 2, localeHungary), "1,56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 1, Locale.CANADA), "1.6 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 1, Locale.CANADA), "1.6 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 1, localeHungary), "1,6 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 1, localeHungary), "1,6 KB");
+
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 4), "1" + defaultDecimalSeparator + "5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 4), "1" + defaultDecimalSeparator + "5625 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 3), "1" + defaultDecimalSeparator + "563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 3), "1" + defaultDecimalSeparator + "563 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 2), "1" + defaultDecimalSeparator + "56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 2), "1" + defaultDecimalSeparator + "56 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600, 1), "1" + defaultDecimalSeparator + "6 KB");
+        assertEquals(FileUtils.byteCountToDisplayRoundedSize(b1600Long, 1), "1" + defaultDecimalSeparator + "6 KB");
     }
 
     @SuppressWarnings("NumericOverflow")
