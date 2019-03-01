@@ -407,7 +407,13 @@ public class FileUtils {
         }
 
         final DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
-        return displaySize.replaceFirst("[" + decimalFormat.getDecimalFormatSymbols().getDecimalSeparator() + "]" + new String(new char[places]).replace('\0', '0') + " "," ");
+        return displaySize.replaceFirst(new StringBuilder("[")
+                .append(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator())
+                .append("]")
+                .append(new String(new char[places]).replace('\0', '0'))
+                .append(" ")
+                .toString()
+                ," ");
     }
 
     /**
