@@ -228,7 +228,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openInputStream_existsButIsDirectory() throws Exception {
+    public void test_openInputStream_existsButIsDirectory() {
         final File directory = new File(getTestDirectory(), "subdir");
         directory.mkdirs();
         try (FileInputStream in = FileUtils.openInputStream(directory)) {
@@ -239,9 +239,27 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openInputStream_notExists() throws Exception {
+    public void test_openInputStream_notExists() {
         final File directory = new File(getTestDirectory(), "test.txt");
         try (FileInputStream in = FileUtils.openInputStream(directory)) {
+            fail();
+        } catch (final IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void openInputStreamCannotReadFile() throws Exception {
+        final File file = new File(getTestDirectory(), "test.txt") {
+            @Override
+            public boolean canRead() {
+                return false;
+            }
+        };
+        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+
+        try {
+            FileUtils.openInputStream(file);
             fail();
         } catch (final IOException ioe) {
             // expected
@@ -321,6 +339,24 @@ public class FileUtilsTestCase {
         try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             fail();
         } catch (final IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void openOutputStreamCannotWriteFile() throws Exception {
+        final File file = new File(getTestDirectory(), "test.txt") {
+            @Override
+            public boolean canWrite() {
+                return false;
+            }
+        };
+        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+
+        try {
+            FileUtils.openOutputStream(file);
+            fail();
+        } catch (IOException ioe) {
             // expected
         }
     }
@@ -1252,6 +1288,28 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void destFileExistsButIsReadOnly() throws Exception {
+        File parentDirectory = getTestDirectory();
+        String filename = "copy1.txt";
+
+        FileUtils.copyFile(testFile1, new File(parentDirectory, filename));
+
+        final File destination = new File(parentDirectory, filename) {
+            @Override
+            public boolean canWrite() {
+                return false;
+            }
+        };
+
+        try {
+            FileUtils.copyFile(testFile1, destination);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
     public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
@@ -1490,6 +1548,60 @@ public class FileUtilsTestCase {
         dir.mkdirs();
         FileUtils.copyDirectoryToDirectory(dir, dir);
         assertEquals(1, LIST_WALKER.list(dir).size());
+    }
+
+    @Test
+    public void testCopyDirectoryFromNullSrcDir() throws IOException {
+        final File destDir = new File(getTestDirectory(), "dest");
+
+        try {
+            FileUtils.copyDirectoryToDirectory(null, destDir);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryToDirectoryWhenSrcIsAFile() throws IOException {
+        final File srcFile = new File(getTestDirectory(), "src.txt");
+        FileUtils.writeStringToFile(srcFile, "HELLO WORLD", "UTF8");
+
+        try {
+            FileUtils.copyDirectoryToDirectory(srcFile, null);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryToNullDestDir() throws IOException {
+        final File srcDir = new File(getTestDirectory(), "src");
+        srcDir.mkdirs();
+
+        try {
+            FileUtils.copyDirectoryToDirectory(srcDir, null);
+            fail();
+        } catch (IllegalArgumentException npe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryToDirectoryWhenDstIsAFile() throws IOException {
+        final File srcDir = new File(getTestDirectory(), "src");
+        srcDir.mkdirs();
+
+        final File dstAsFile = new File(getTestDirectory(), "dst.txt");
+        FileUtils.writeStringToFile(dstAsFile, "HELLO WORLD", "UTF8");
+
+        try {
+            FileUtils.copyDirectoryToDirectory(srcDir, dstAsFile);
+            fail();
+        } catch (IllegalArgumentException iae) {
+            // expected
+        }
     }
 
     private void createFilesForTestCopyDirectory(final File grandParentDir, final File parentDir, final File childDir) throws Exception {

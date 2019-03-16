@@ -350,7 +350,7 @@ public class FileUtils {
             if (file.isDirectory()) {
                 throw new IOException("File '" + file + "' exists but is a directory");
             }
-            if (file.canWrite() == false) {
+            if (!file.canWrite()) {
                 throw new IOException("File '" + file + "' cannot be written to");
             }
         } else {
@@ -1071,18 +1071,20 @@ public class FileUtils {
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' exists but is a directory");
         }
+
         if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
             throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
         }
+
         final File parentFile = destFile.getParentFile();
-        if (parentFile != null) {
-            if (!parentFile.mkdirs() && !parentFile.isDirectory()) {
-                throw new IOException("Destination '" + parentFile + "' directory cannot be created");
-            }
+        if (parentFile != null && !parentFile.mkdirs() && !parentFile.isDirectory()) {
+            throw new IOException("Destination '" + parentFile + "' directory cannot be created");
         }
-        if (destFile.exists() && destFile.canWrite() == false) {
+
+        if (destFile.exists() && !destFile.canWrite()) {
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
         }
+
         doCopyFile(srcFile, destFile, preserveFileDate);
     }
 
@@ -1176,20 +1178,20 @@ public class FileUtils {
      * @param srcDir  an existing directory to copy, must not be {@code null}
      * @param destDir the directory to place the copy in, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is {@code null}
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
      * @since 1.2
      */
     public static void copyDirectoryToDirectory(final File srcDir, final File destDir) throws IOException {
         if (srcDir == null) {
-            throw new NullPointerException("Source must not be null");
+            throw new IllegalArgumentException("Source must not be null");
         }
         if (srcDir.exists() && srcDir.isDirectory() == false) {
             throw new IllegalArgumentException("Source '" + destDir + "' is not a directory");
         }
         if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
+            throw new IllegalArgumentException("Destination must not be null");
         }
         if (destDir.exists() && destDir.isDirectory() == false) {
             throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
