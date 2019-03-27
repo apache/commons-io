@@ -79,7 +79,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         // Add Observer
         final FileAlterationObserver observer = new FileAlterationObserver("foo");
         monitor.addObserver(observer);
-        final Iterator<FileAlterationObserver> it = monitor.getObservers().iterator();
+        final Iterator<IFileAlterationObserver> it = monitor.getObservers().iterator();
         assertTrue("Observers[4]", it.hasNext());
         assertEquals("Added", observer, it.next());
         assertFalse("Observers[5]", it.hasNext());
