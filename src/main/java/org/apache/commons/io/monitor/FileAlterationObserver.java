@@ -19,14 +19,8 @@ package org.apache.commons.io.monitor;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.comparator.NameFileComparator;
 
 /**
  * FileAlterationObserver represents the state of files below a root directory,
@@ -119,13 +113,9 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *
  * @since 2.0
  */
-public class FileAlterationObserver implements Serializable {
+public class FileAlterationObserver extends AbstractFileAlterationObserver<File, File> implements Serializable {
 
     private static final long serialVersionUID = 1185122225658782848L;
-    private final List<FileAlterationListener> listeners = new CopyOnWriteArrayList<>();
-    private final FileEntry rootEntry;
-    private final FileFilter fileFilter;
-    private final Comparator<File> comparator;
 
     /**
      * Constructs an observer for the specified directory.
@@ -187,7 +177,7 @@ public class FileAlterationObserver implements Serializable {
      * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
      */
     public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase caseSensitivity) {
-        this(new FileEntry(directory), fileFilter, caseSensitivity);
+        this(new FileEntry(new FileAdapter(directory)), fileFilter, caseSensitivity);
     }
 
     /**
@@ -200,21 +190,7 @@ public class FileAlterationObserver implements Serializable {
      */
     protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter,
                                      final IOCase caseSensitivity) {
-        if (rootEntry == null) {
-            throw new IllegalArgumentException("Root entry is missing");
-        }
-        if (rootEntry.getFile() == null) {
-            throw new IllegalArgumentException("Root directory is missing");
-        }
-        this.rootEntry = rootEntry;
-        this.fileFilter = fileFilter;
-        if (caseSensitivity == null || caseSensitivity.equals(IOCase.SYSTEM)) {
-            this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;
-        } else if (caseSensitivity.equals(IOCase.INSENSITIVE)) {
-            this.comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-        } else {
-            this.comparator = NameFileComparator.NAME_COMPARATOR;
-        }
+        super(rootEntry, fileFilter, caseSensitivity);
     }
 
     /**
@@ -223,50 +199,19 @@ public class FileAlterationObserver implements Serializable {
      * @return the directory being observed
      */
     public File getDirectory() {
-        return rootEntry.getFile();
+    	return unwrapDirectory(rootEntry.getFile());
     }
 
     /**
-     * Returns the fileFilter.
-     *
-     * @return the fileFilter
-     * @since 2.1
+     * 
+     * @param wrapper
+     * @return the underlying {@link File} object
      */
-    public FileFilter getFileFilter() {
-        return fileFilter;
-    }
-
-    /**
-     * Adds a file system listener.
-     *
-     * @param listener The file system listener
-     */
-    public void addListener(final FileAlterationListener listener) {
-        if (listener != null) {
-            listeners.add(listener);
-        }
-    }
-
-    /**
-     * Removes a file system listener.
-     *
-     * @param listener The file system listener
-     */
-    public void removeListener(final FileAlterationListener listener) {
-        if (listener != null) {
-            while (listeners.remove(listener)) {
-                // empty
-            }
-        }
-    }
-
-    /**
-     * Returns the set of registered file system listeners.
-     *
-     * @return The file system listeners
-     */
-    public Iterable<FileAlterationListener> getListeners() {
-        return listeners;
+    protected File unwrapFile(IFile wrapper) {
+    	if(wrapper instanceof FileAdapter) {
+    		return ((FileAdapter) wrapper).getFile();
+    	}
+    	return null;
     }
 
     /**
@@ -297,164 +242,28 @@ public class FileAlterationObserver implements Serializable {
     public void checkAndNotify() {
 
         /* fire onStart() */
-        for (final FileAlterationListener listener : listeners) {
-            listener.onStart(this);
+        for (final FileAlterationListener<File, File> listener : listeners) {
+            listener.onStart((IFileAlterationObserver<File, File>) this);
         }
 
         /* fire directory/file events */
-        final File rootFile = rootEntry.getFile();
+        final IFile rootFile = rootEntry.getFile();
         if (rootFile.exists()) {
             checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
         } else if (rootEntry.isExists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
+            checkAndNotify(rootEntry, rootEntry.getChildren(), EMPTY_FILE_ARRAY);
         } else {
             // Didn't exist and still doesn't
         }
 
         /* fire onStop() */
-        for (final FileAlterationListener listener : listeners) {
-            listener.onStop(this);
+        for (final FileAlterationListener<File, File> listener : listeners) {
+            listener.onStop((IFileAlterationObserver<File, File>) this);
         }
     }
 
     /**
-     * Compares two file lists for files which have been created, modified or deleted.
-     *
-     * @param parent The parent entry
-     * @param previous The original list of files
-     * @param files  The current list of files
-     */
-    private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {
-        int c = 0;
-        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        for (final FileEntry entry : previous) {
-            while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
-                current[c] = createFileEntry(parent, files[c]);
-                doCreate(current[c]);
-                c++;
-            }
-            if (c < files.length && comparator.compare(entry.getFile(), files[c]) == 0) {
-                doMatch(entry, files[c]);
-                checkAndNotify(entry, entry.getChildren(), listFiles(files[c]));
-                current[c] = entry;
-                c++;
-            } else {
-                checkAndNotify(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);
-                doDelete(entry);
-            }
-        }
-        for (; c < files.length; c++) {
-            current[c] = createFileEntry(parent, files[c]);
-            doCreate(current[c]);
-        }
-        parent.setChildren(current);
-    }
-
-    /**
-     * Creates a new file entry for the specified file.
-     *
-     * @param parent The parent file entry
-     * @param file The file to create an entry for
-     * @return A new file entry
-     */
-    private FileEntry createFileEntry(final FileEntry parent, final File file) {
-        final FileEntry entry = parent.newChildInstance(file);
-        entry.refresh(file);
-        final FileEntry[] children = doListFiles(file, entry);
-        entry.setChildren(children);
-        return entry;
-    }
-
-    /**
-     * Lists the files
-     * @param file The file to list files for
-     * @param entry the parent entry
-     * @return The child files
-     */
-    private FileEntry[] doListFiles(final File file, final FileEntry entry) {
-        final File[] files = listFiles(file);
-        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
-        for (int i = 0; i < files.length; i++) {
-            children[i] = createFileEntry(entry, files[i]);
-        }
-        return children;
-    }
-
-    /**
-     * Fires directory/file created events to the registered listeners.
-     *
-     * @param entry The file entry
-     */
-    private void doCreate(final FileEntry entry) {
-        for (final FileAlterationListener listener : listeners) {
-            if (entry.isDirectory()) {
-                listener.onDirectoryCreate(entry.getFile());
-            } else {
-                listener.onFileCreate(entry.getFile());
-            }
-        }
-        final FileEntry[] children = entry.getChildren();
-        for (final FileEntry aChildren : children) {
-            doCreate(aChildren);
-        }
-    }
-
-    /**
-     * Fires directory/file change events to the registered listeners.
-     *
-     * @param entry The previous file system entry
-     * @param file The current file
-     */
-    private void doMatch(final FileEntry entry, final File file) {
-        if (entry.refresh(file)) {
-            for (final FileAlterationListener listener : listeners) {
-                if (entry.isDirectory()) {
-                    listener.onDirectoryChange(file);
-                } else {
-                    listener.onFileChange(file);
-                }
-            }
-        }
-    }
-
-    /**
-     * Fires directory/file delete events to the registered listeners.
-     *
-     * @param entry The file entry
-     */
-    private void doDelete(final FileEntry entry) {
-        for (final FileAlterationListener listener : listeners) {
-            if (entry.isDirectory()) {
-                listener.onDirectoryDelete(entry.getFile());
-            } else {
-                listener.onFileDelete(entry.getFile());
-            }
-        }
-    }
-
-    /**
-     * Lists the contents of a directory
-     *
-     * @param file The file to list the contents of
-     * @return the directory contents or a zero length array if
-     * the empty or the file is not a directory
-     */
-    private File[] listFiles(final File file) {
-        File[] children = null;
-        if (file.isDirectory()) {
-            children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);
-        }
-        if (children == null) {
-            children = FileUtils.EMPTY_FILE_ARRAY;
-        }
-        if (comparator != null && children.length > 1) {
-            Arrays.sort(children, comparator);
-        }
-        return children;
-    }
-
-    /**
-     * Returns a String representation of this observer.
+     * Provide a String representation of this observer.
      *
      * @return a String representation of this observer
      */
@@ -474,5 +283,10 @@ public class FileAlterationObserver implements Serializable {
         builder.append("]");
         return builder.toString();
     }
+
+	@Override
+	protected File unwrapDirectory(IFile directory){
+		return unwrapFile(directory);
+	}
 
 }

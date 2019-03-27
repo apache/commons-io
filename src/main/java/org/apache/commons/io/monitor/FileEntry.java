@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io.monitor;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 
@@ -48,11 +46,11 @@ public class FileEntry implements Serializable {
 
     private static final long serialVersionUID = -2505664948818681153L;
 
-    static final FileEntry[] EMPTY_FILE_ENTRY_ARRAY = {};
+    public static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
 
     private final FileEntry parent;
     private FileEntry[] children;
-    private final File file;
+    private final IFile file;
     private String name;
     private boolean exists;
     private boolean directory;
@@ -64,7 +62,7 @@ public class FileEntry implements Serializable {
      *
      * @param file The file being monitored
      */
-    public FileEntry(final File file) {
+    public FileEntry(final IFile file) {
         this(null, file);
     }
 
@@ -74,7 +72,7 @@ public class FileEntry implements Serializable {
      * @param parent The parent
      * @param file The file being monitored
      */
-    public FileEntry(final FileEntry parent, final File file) {
+    public FileEntry(final FileEntry parent, final IFile file) {
         if (file == null) {
             throw new IllegalArgumentException("File is missing");
         }
@@ -97,7 +95,8 @@ public class FileEntry implements Serializable {
      * @param file the file instance to compare to
      * @return {@code true} if the file has changed, otherwise {@code false}
      */
-    public boolean refresh(final File file) {
+    public boolean refresh(final IFile file) {
+
         // cache original values
         final boolean origExists = exists;
         final long origLastModified = lastModified;
@@ -129,7 +128,7 @@ public class FileEntry implements Serializable {
      * @param file The child file
      * @return a new child instance
      */
-    public FileEntry newChildInstance(final File file) {
+    public FileEntry newChildInstance(final IFile file) {
         return new FileEntry(this, file);
     }
 
@@ -176,7 +175,7 @@ public class FileEntry implements Serializable {
      *
      * @return the file being monitored
      */
-    public File getFile() {
+    public IFile getFile() {
         return file;
     }
 

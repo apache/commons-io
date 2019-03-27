@@ -35,8 +35,8 @@ public final class FileAlterationMonitor implements Runnable {
     private static final FileAlterationObserver[] EMPTY_ARRAY = {};
 
     private final long interval;
-    private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
-    private Thread thread;
+    private final List<IFileAlterationObserver> observers = new CopyOnWriteArrayList<>();
+    private Thread thread = null;
     private ThreadFactory threadFactory;
     private volatile boolean running;
 
@@ -83,10 +83,10 @@ public final class FileAlterationMonitor implements Runnable {
      * checks of the file system.
      * @param observers The set of observers to add to the monitor.
      */
-    public FileAlterationMonitor(final long interval, final FileAlterationObserver... observers) {
+    public FileAlterationMonitor(final long interval, final IFileAlterationObserver... observers) {
         this(interval);
         if (observers != null) {
-            for (final FileAlterationObserver observer : observers) {
+            for (final IFileAlterationObserver observer : observers) {
                 addObserver(observer);
             }
         }
@@ -115,7 +115,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param observer The file system observer to add
      */
-    public void addObserver(final FileAlterationObserver observer) {
+    public void addObserver(final IFileAlterationObserver observer) {
         if (observer != null) {
             observers.add(observer);
         }
@@ -126,7 +126,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @param observer The file system observer to remove
      */
-    public void removeObserver(final FileAlterationObserver observer) {
+    public void removeObserver(final IFileAlterationObserver observer) {
         if (observer != null) {
             while (observers.remove(observer)) {
                 // empty
@@ -140,7 +140,7 @@ public final class FileAlterationMonitor implements Runnable {
      *
      * @return The set of {@link FileAlterationObserver}
      */
-    public Iterable<FileAlterationObserver> getObservers() {
+    public Iterable<IFileAlterationObserver> getObservers() {
         return observers;
     }
 
@@ -153,7 +153,7 @@ public final class FileAlterationMonitor implements Runnable {
         if (running) {
             throw new IllegalStateException("Monitor is already running");
         }
-        for (final FileAlterationObserver observer : observers) {
+        for (final IFileAlterationObserver observer : observers) {
             observer.initialize();
         }
         running = true;
@@ -193,7 +193,7 @@ public final class FileAlterationMonitor implements Runnable {
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        for (final FileAlterationObserver observer : observers) {
+        for (final IFileAlterationObserver observer : observers) {
             observer.destroy();
         }
     }
@@ -204,7 +204,7 @@ public final class FileAlterationMonitor implements Runnable {
     @Override
     public void run() {
         while (running) {
-            for (final FileAlterationObserver observer : observers) {
+            for (final IFileAlterationObserver observer : observers) {
                 observer.checkAndNotify();
             }
             if (!running) {

@@ -58,10 +58,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
         // Add Listener
         final FileAlterationListenerAdaptor listener = new FileAlterationListenerAdaptor();
         observer.addListener(listener);
-        final Iterator<FileAlterationListener> it = observer.getListeners().iterator();
-        assertTrue(it.hasNext(), "Listeners[3]");
-        assertEquals(listener, it.next(), "Added");
-        assertFalse(it.hasNext(), "Listeners[4]");
+        final Iterator<FileAlterationListener<File, File>> it = observer.getListeners().iterator();
+        assertTrue("Listeners[3]", it.hasNext());
+        assertEquals("Added", listener, it.next());
+        assertFalse("Listeners[4]", it.hasNext());
 
         // Remove Listener
         observer.removeListener(listener);

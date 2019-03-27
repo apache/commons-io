@@ -25,7 +25,7 @@ import java.util.Collection;
  * {@link FileAlterationListener} implementation that adds created, changed and deleted
  * files/directories to a set of {@link Collection}s.
  */
-public class CollectionFileListener implements FileAlterationListener, Serializable {
+public class CollectionFileListener implements FileAlterationListener<File, File>, Serializable {
 
     private static final long serialVersionUID = 939724715678693963L;
     private final boolean clearOnStart;
@@ -51,7 +51,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * @param observer The file system observer
      */
     @Override
-    public void onStart(final FileAlterationObserver observer) {
+    public void onStart(final IFileAlterationObserver<File, File> observer) {
         if (clearOnStart) {
             clear();
         }
@@ -189,8 +189,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      * @param observer The file system observer
      */
     @Override
-    public void onStop(final FileAlterationObserver observer) {
-        // noop
+    public void onStop(final IFileAlterationObserver<File, File> observer) {
     }
 
 }

@@ -16,8 +16,6 @@
  */
 package org.apache.commons.io.monitor;
 
-import java.io.File;
-
 /**
  * Convenience {@link FileAlterationListener} implementation that does nothing.
  *
@@ -25,7 +23,7 @@ import java.io.File;
  *
  * @since 2.0
  */
-public class FileAlterationListenerAdaptor implements FileAlterationListener {
+public class FileAlterationListenerAdaptor<F, D> implements FileAlterationListener<F, D> {
 
     /**
      * File system observer started checking event.
@@ -33,8 +31,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param observer The file system observer (ignored)
      */
     @Override
-    public void onStart(final FileAlterationObserver observer) {
-        // noop
+    public void onStart(final IFileAlterationObserver<F, D> observer) {
     }
 
     /**
@@ -43,8 +40,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param directory The directory created (ignored)
      */
     @Override
-    public void onDirectoryCreate(final File directory) {
-        // noop
+    public void onDirectoryCreate(final D directory) {
     }
 
     /**
@@ -53,8 +49,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param directory The directory changed (ignored)
      */
     @Override
-    public void onDirectoryChange(final File directory) {
-        // noop
+    public void onDirectoryChange(final D directory) {
     }
 
     /**
@@ -63,8 +58,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param directory The directory deleted (ignored)
      */
     @Override
-    public void onDirectoryDelete(final File directory) {
-        // noop
+    public void onDirectoryDelete(final D directory) {
     }
 
     /**
@@ -73,8 +67,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param file The file created (ignored)
      */
     @Override
-    public void onFileCreate(final File file) {
-        // noop
+    public void onFileCreate(final F file) {
     }
 
     /**
@@ -83,8 +76,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param file The file changed (ignored)
      */
     @Override
-    public void onFileChange(final File file) {
-        // noop
+    public void onFileChange(final F file) {
     }
 
     /**
@@ -93,8 +85,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param file The file deleted (ignored)
      */
     @Override
-    public void onFileDelete(final File file) {
-        // noop
+    public void onFileDelete(final F file) {
     }
 
     /**
@@ -103,8 +94,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      * @param observer The file system observer (ignored)
      */
     @Override
-    public void onStop(final FileAlterationObserver observer) {
-        // noop
+    public void onStop(final IFileAlterationObserver<F, D> observer) {
     }
 
 }
