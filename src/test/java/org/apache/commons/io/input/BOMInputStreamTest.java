@@ -197,177 +197,177 @@ public class BOMInputStreamTest {
     @Test
     public void testAvailableWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        assertEquals(7, in.available());
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            assertEquals(7, in.available());
+        }
     }
 
     @Test
     public void testAvailableWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertEquals(4, in.available());
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertEquals(4, in.available());
+        }
     }
 
     @Test
     // this is here for coverage
     public void testClose() throws Exception {
-        final ExpectCloseInputStream del = new ExpectCloseInputStream();
-        final InputStream in = new BOMInputStream(del);
-
-        in.close();
-        del.assertCloseCalled();
-        del.close();
+        try (final ExpectCloseInputStream del = new ExpectCloseInputStream()) {
+            try (final InputStream in = new BOMInputStream(del)) {
+                // nothing
+            }
+            del.assertCloseCalled();
+        }
     }
 
     @Test
     public void testEmptyBufferWithBOM() throws Exception {
         final byte[] data = new byte[] {};
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        final byte[] buf = new byte[1024];
-        assertEquals(-1, in.read(buf));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            final byte[] buf = new byte[1024];
+            assertEquals(-1, in.read(buf));
+        }
     }
 
     @Test
     public void testEmptyBufferWithoutBOM() throws Exception {
         final byte[] data = new byte[] {};
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        final byte[] buf = new byte[1024];
-        assertEquals(-1, in.read(buf));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            final byte[] buf = new byte[1024];
+            assertEquals(-1, in.read(buf));
+        }
     }
 
     @Test
     public void testGetBOMFirstThenRead() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+        }
     }
 
     @Test
     public void testGetBOMFirstThenReadInclude() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), true);
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-        assertEquals(0xEF, in.read());
-        assertEquals(0xBB, in.read());
-        assertEquals(0xBF, in.read());
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), true)) {
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertEquals(0xEF, in.read());
+            assertEquals(0xBB, in.read());
+            assertEquals(0xBF, in.read());
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+        }
     }
 
     @Test
     public void testLargeBufferWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        final byte[] buf = new byte[1024];
-        assertData(data, buf, in.read(buf));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            final byte[] buf = new byte[1024];
+            assertData(data, buf, in.read(buf));
+        }
     }
 
     @Test
     public void testLargeBufferWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        final byte[] buf = new byte[1024];
-        assertData(data, buf, in.read(buf));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            final byte[] buf = new byte[1024];
+            assertData(data, buf, in.read(buf));
+        }
     }
 
     @Test
     public void testLeadingNonBOMBufferedRead() throws Exception {
         final byte[] data = new byte[] { (byte) 0xEF, (byte) 0xAB, (byte) 0xCD };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        final byte[] buf = new byte[1024];
-        assertData(data, buf, in.read(buf));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            final byte[] buf = new byte[1024];
+            assertData(data, buf, in.read(buf));
+        }
     }
 
     @Test
     public void testLeadingNonBOMSingleRead() throws Exception {
         final byte[] data = new byte[] { (byte) 0xEF, (byte) 0xAB, (byte) 0xCD };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertEquals(0xEF, in.read());
-        assertEquals(0xAB, in.read());
-        assertEquals(0xCD, in.read());
-        assertEquals(-1, in.read());
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertEquals(0xEF, in.read());
+            assertEquals(0xAB, in.read());
+            assertEquals(0xCD, in.read());
+            assertEquals(-1, in.read());
+        }
     }
 
     @Test
     public void testMarkResetAfterReadWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        assertTrue(in.markSupported());
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            assertTrue(in.markSupported());
 
-        in.read();
-        in.mark(10);
+            in.read();
+            in.mark(10);
 
-        in.read();
-        in.read();
-        in.reset();
-        assertEquals('B', in.read());
-        in.close();
+            in.read();
+            in.read();
+            in.reset();
+            assertEquals('B', in.read());
+        }
     }
 
     @Test
     public void testMarkResetAfterReadWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertTrue(in.markSupported());
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertTrue(in.markSupported());
 
-        in.read();
-        in.mark(10);
+            in.read();
+            in.mark(10);
 
-        in.read();
-        in.read();
-        in.reset();
-        assertEquals('B', in.read());
-        in.close();
+            in.read();
+            in.read();
+            in.reset();
+            assertEquals('B', in.read());
+        }
     }
 
     @Test
     public void testMarkResetBeforeReadWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        assertTrue(in.markSupported());
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            assertTrue(in.markSupported());
 
-        in.mark(10);
+            in.mark(10);
 
-        in.read();
-        in.read();
-        in.reset();
-        assertEquals('A', in.read());
-        in.close();
+            in.read();
+            in.read();
+            in.reset();
+            assertEquals('A', in.read());
+        }
     }
 
     @Test
     public void testMarkResetBeforeReadWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertTrue(in.markSupported());
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertTrue(in.markSupported());
 
-        in.mark(10);
+            in.mark(10);
 
-        in.read();
-        in.read();
-        in.reset();
-        assertEquals('A', in.read());
-        in.close();
+            in.read();
+            in.read();
+            in.reset();
+            assertEquals('A', in.read());
+        }
     }
 
     @Test
@@ -394,25 +394,25 @@ public class BOMInputStreamTest {
     @Test
     public void testReadEmpty() throws Exception {
         final byte[] data = new byte[] {};
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertEquals(-1, in.read());
-        assertFalse("hasBOM()", in.hasBOM());
-        assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertNull("getBOM", in.getBOM());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertEquals(-1, in.read());
+            assertFalse("hasBOM()", in.hasBOM());
+            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertNull("getBOM", in.getBOM());
+        }
     }
 
     @Test
     public void testReadSmall() throws Exception {
         final byte[] data = new byte[] { 'A', 'B' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals(-1, in.read());
-        assertFalse("hasBOM()", in.hasBOM());
-        assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertNull("getBOM", in.getBOM());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals(-1, in.read());
+            assertFalse("hasBOM()", in.hasBOM());
+            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertNull("getBOM", in.getBOM());
+        }
     }
 
     @Test
@@ -428,174 +428,178 @@ public class BOMInputStreamTest {
     @Test
     public void testReadWithBOMInclude() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), true);
-        assertEquals(0xEF, in.read());
-        assertEquals(0xBB, in.read());
-        assertEquals(0xBF, in.read());
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), true)) {
+            assertEquals(0xEF, in.read());
+            assertEquals(0xBB, in.read());
+            assertEquals(0xBF, in.read());
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+        }
     }
 
     @Test
     public void testReadWithBOMUtf16Be() throws Exception {
         final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16BE);
-        final BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE);
-        assertEquals(0, in.read());
-        assertEquals('A', in.read());
-        assertEquals(0, in.read());
-        assertEquals('B', in.read());
-        assertEquals(0, in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
-        assertEquals("getBOM", ByteOrderMark.UTF_16BE, in.getBOM());
-        try {
-            in.hasBOM(ByteOrderMark.UTF_16LE);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected - not configured for UTF-16LE
+        try (final BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true),
+                ByteOrderMark.UTF_16BE)) {
+            assertEquals(0, in.read());
+            assertEquals('A', in.read());
+            assertEquals(0, in.read());
+            assertEquals('B', in.read());
+            assertEquals(0, in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
+            assertEquals("getBOM", ByteOrderMark.UTF_16BE, in.getBOM());
+            try {
+                in.hasBOM(ByteOrderMark.UTF_16LE);
+                fail("Expected IllegalArgumentException");
+            } catch (final IllegalArgumentException e) {
+                // expected - not configured for UTF-16LE
+            }
         }
-        in.close();
     }
 
     @Test
     public void testReadWithBOMUtf16Le() throws Exception {
         final byte[] data = "ABC".getBytes(StandardCharsets.UTF_16LE);
-        final BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE);
-        assertEquals('A', in.read());
-        assertEquals(0, in.read());
-        assertEquals('B', in.read());
-        assertEquals(0, in.read());
-        assertEquals('C', in.read());
-        assertEquals(0, in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-16LE)", in.hasBOM(ByteOrderMark.UTF_16LE));
-        assertEquals("getBOM", ByteOrderMark.UTF_16LE, in.getBOM());
-        try {
-            in.hasBOM(ByteOrderMark.UTF_16BE);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected - not configured for UTF-16BE
+        try (final BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true),
+                ByteOrderMark.UTF_16LE)) {
+            assertEquals('A', in.read());
+            assertEquals(0, in.read());
+            assertEquals('B', in.read());
+            assertEquals(0, in.read());
+            assertEquals('C', in.read());
+            assertEquals(0, in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-16LE)", in.hasBOM(ByteOrderMark.UTF_16LE));
+            assertEquals("getBOM", ByteOrderMark.UTF_16LE, in.getBOM());
+            try {
+                in.hasBOM(ByteOrderMark.UTF_16BE);
+                fail("Expected IllegalArgumentException");
+            } catch (final IllegalArgumentException e) {
+                // expected - not configured for UTF-16BE
+            }
         }
-        in.close();
     }
 
     @Test
     public void testReadWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
         final byte[] data = "ABC".getBytes("UTF_32BE");
-        final BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE);
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals('A', in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals('B', in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-32BE)", in.hasBOM(ByteOrderMark.UTF_32BE));
-        assertEquals("getBOM", ByteOrderMark.UTF_32BE, in.getBOM());
-        try {
-            in.hasBOM(ByteOrderMark.UTF_32LE);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected - not configured for UTF-32LE
+        try (final BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true),
+                ByteOrderMark.UTF_32BE)) {
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals('A', in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals('B', in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-32BE)", in.hasBOM(ByteOrderMark.UTF_32BE));
+            assertEquals("getBOM", ByteOrderMark.UTF_32BE, in.getBOM());
+            try {
+                in.hasBOM(ByteOrderMark.UTF_32LE);
+                fail("Expected IllegalArgumentException");
+            } catch (final IllegalArgumentException e) {
+                // expected - not configured for UTF-32LE
+            }
         }
-        in.close();
     }
 
     @Test
     public void testReadWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
         final byte[] data = "ABC".getBytes("UTF_32LE");
-        final BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE);
-        assertEquals('A', in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals('B', in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals('C', in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(0, in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-32LE)", in.hasBOM(ByteOrderMark.UTF_32LE));
-        assertEquals("getBOM", ByteOrderMark.UTF_32LE, in.getBOM());
-        try {
-            in.hasBOM(ByteOrderMark.UTF_32BE);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected - not configured for UTF-32BE
+        try (final BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true),
+                ByteOrderMark.UTF_32LE)) {
+            assertEquals('A', in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals('B', in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals('C', in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(0, in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-32LE)", in.hasBOM(ByteOrderMark.UTF_32LE));
+            assertEquals("getBOM", ByteOrderMark.UTF_32LE, in.getBOM());
+            try {
+                in.hasBOM(ByteOrderMark.UTF_32BE);
+                fail("Expected IllegalArgumentException");
+            } catch (final IllegalArgumentException e) {
+                // expected - not configured for UTF-32BE
+            }
         }
-        in.close();
     }
 
     @Test
     public void testReadWithBOMUtf8() throws Exception {
         final byte[] data = "ABC".getBytes(StandardCharsets.UTF_8);
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), ByteOrderMark.UTF_8);
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-        try {
-            in.hasBOM(ByteOrderMark.UTF_16BE);
-            fail("Expected IllegalArgumentException");
-        } catch (final IllegalArgumentException e) {
-            // expected - not configured for UTF-16BE
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), ByteOrderMark.UTF_8)) {
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            try {
+                in.hasBOM(ByteOrderMark.UTF_16BE);
+                fail("Expected IllegalArgumentException");
+            } catch (final IllegalArgumentException e) {
+                // expected - not configured for UTF-16BE
+            }
         }
-        in.close();
     }
 
     @Test
     public void testReadWithMultipleBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true),
-                                            ByteOrderMark.UTF_16BE, ByteOrderMark.UTF_8);
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertTrue("hasBOM()", in.hasBOM());
-        assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertFalse("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
-        assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), ByteOrderMark.UTF_16BE,
+                ByteOrderMark.UTF_8)) {
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertTrue("hasBOM()", in.hasBOM());
+            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertFalse("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
+            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+        }
     }
 
     @Test
     public void testReadWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        assertEquals('A', in.read());
-        assertEquals('B', in.read());
-        assertEquals('C', in.read());
-        assertEquals(-1, in.read());
-        assertFalse("hasBOM()", in.hasBOM());
-        assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-        assertNull("getBOM", in.getBOM());
-        in.close();
+        try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            assertEquals('A', in.read());
+            assertEquals('B', in.read());
+            assertEquals('C', in.read());
+            assertEquals(-1, in.read());
+            assertFalse("hasBOM()", in.hasBOM());
+            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertNull("getBOM", in.getBOM());
+        }
     }
 
     @Test
@@ -680,76 +684,75 @@ public class BOMInputStreamTest {
     @Test
     public void testSkipWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        in.skip(2L);
-        assertEquals('C', in.read());
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            in.skip(2L);
+            assertEquals('C', in.read());
+        }
     }
 
     @Test
     public void testSkipWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C', 'D' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        in.skip(2L);
-        assertEquals('C', in.read());
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            in.skip(2L);
+            assertEquals('C', in.read());
+        }
     }
 
 
     @Test
     public void skipReturnValueWithBom() throws IOException {
-        final byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
-        final BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true));
-        assertEquals(2, is1.skip(2));
-        assertEquals((byte) 0x33, is1.read());
-        is1.close();
+        final byte[] baseData = new byte[] { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
+        try (final BOMInputStream is1 = new BOMInputStream(createUtf8DataStream(baseData, true))) {
+            assertEquals(2, is1.skip(2));
+            assertEquals((byte) 0x33, is1.read());
+        }
     }
 
     @Test
     public void skipReturnValueWithoutBom() throws IOException {
-        final byte[] baseData = new byte[]{(byte) 0x31, (byte) 0x32, (byte) 0x33};
-        final BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false));
-        assertEquals(2, is2.skip(2)); // IO-428
-        assertEquals((byte) 0x33, is2.read());
-        is2.close();
+        final byte[] baseData = new byte[] { (byte) 0x31, (byte) 0x32, (byte) 0x33 };
+        try (final BOMInputStream is2 = new BOMInputStream(createUtf8DataStream(baseData, false))) {
+            assertEquals(2, is2.skip(2)); // IO-428
+            assertEquals((byte) 0x33, is2.read());
+        }
     }
 
     @Test
     public void testSmallBufferWithBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, true));
-        final byte[] buf = new byte[1024];
-        assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
-        assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            final byte[] buf = new byte[1024];
+            assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
+            assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
+        }
     }
 
     @Test
     public void testSmallBufferWithoutBOM() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
-        final InputStream in = new BOMInputStream(createUtf8DataStream(data, false));
-        final byte[] buf = new byte[1024];
-        assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
-        assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
-        in.close();
+        try (final InputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
+            final byte[] buf = new byte[1024];
+            assertData(new byte[] { 'A', 'B' }, buf, in.read(buf, 0, 2));
+            assertData(new byte[] { 'C' }, buf, in.read(buf, 0, 2));
+        }
     }
 
     @Test
     // make sure that our support code works as expected
     public void testSupportCode() throws Exception {
-        final InputStream in = createUtf8DataStream(new byte[] { 'A', 'B' }, true);
-        final byte[] buf = new byte[1024];
-        final int len = in.read(buf);
-        assertEquals(5, len);
-        assertEquals(0xEF, buf[0] & 0xFF);
-        assertEquals(0xBB, buf[1] & 0xFF);
-        assertEquals(0xBF, buf[2] & 0xFF);
-        assertEquals('A', buf[3] & 0xFF);
-        assertEquals('B', buf[4] & 0xFF);
+        try (final InputStream in = createUtf8DataStream(new byte[] { 'A', 'B' }, true)) {
+            final byte[] buf = new byte[1024];
+            final int len = in.read(buf);
+            assertEquals(5, len);
+            assertEquals(0xEF, buf[0] & 0xFF);
+            assertEquals(0xBB, buf[1] & 0xFF);
+            assertEquals(0xBF, buf[2] & 0xFF);
+            assertEquals('A', buf[3] & 0xFF);
+            assertEquals('B', buf[4] & 0xFF);
 
-        assertData(
-                new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'A', 'B' },
-                buf, len);
+            assertData(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF, 'A', 'B' }, buf, len);
+        }
     }
 
     private boolean jvmAndSaxBothSupportCharset(final String charSetName) throws ParserConfigurationException, SAXException, IOException {

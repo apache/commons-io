@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * <p>
  * This output stream has no destination (file/socket etc.) and all
  * bytes written to it are ignored and lost.
- *</p>
+ * </p>
  * @version $Id$
  */
 public class NullOutputStream extends OutputStream {

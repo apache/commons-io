@@ -37,149 +37,148 @@ public class BoundedReaderTest
 
     @Test
     public void readTillEnd() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.read();
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.read();
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void shortReader() throws IOException {
-        final BoundedReader mr = new BoundedReader( shortReader, 3 );
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(shortReader, 3)) {
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void readMulti() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        final char[] cbuf = new char[4];
-        for ( int i = 0; i < cbuf.length; i++ )
-        {
-            cbuf[i] = 'X';
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            final char[] cbuf = new char[4];
+            for (int i = 0; i < cbuf.length; i++) {
+                cbuf[i] = 'X';
+            }
+            final int read = mr.read(cbuf, 0, 4);
+            assertEquals(3, read);
+            assertEquals('0', cbuf[0]);
+            assertEquals('1', cbuf[1]);
+            assertEquals('2', cbuf[2]);
+            assertEquals('X', cbuf[3]);
         }
-        final int read = mr.read( cbuf, 0, 4 );
-        assertEquals( 3, read );
-        assertEquals( '0', cbuf[0] );
-        assertEquals( '1', cbuf[1] );
-        assertEquals( '2', cbuf[2] );
-        assertEquals( 'X', cbuf[3] );
-        mr.close();
     }
 
     @Test
     public void readMultiWithOffset() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        final char[] cbuf = new char[4];
-        for ( int i = 0; i < cbuf.length; i++ ) {
-            cbuf[i] = 'X';
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            final char[] cbuf = new char[4];
+            for (int i = 0; i < cbuf.length; i++) {
+                cbuf[i] = 'X';
+            }
+            final int read = mr.read(cbuf, 1, 2);
+            assertEquals(2, read);
+            assertEquals('X', cbuf[0]);
+            assertEquals('0', cbuf[1]);
+            assertEquals('1', cbuf[2]);
+            assertEquals('X', cbuf[3]);
         }
-        final int read = mr.read( cbuf, 1, 2 );
-        assertEquals( 2, read );
-        assertEquals( 'X', cbuf[0] );
-        assertEquals( '0', cbuf[1] );
-        assertEquals( '1', cbuf[2] );
-        assertEquals( 'X', cbuf[3] );
-        mr.close();
     }
 
     @Test
     public void markReset() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.mark( 3 );
-        mr.read();
-        mr.read();
-        mr.read();
-        mr.reset();
-        mr.read();
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.mark(3);
+            mr.read();
+            mr.read();
+            mr.read();
+            mr.reset();
+            mr.read();
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
 
     @Test
     public void markResetWithMarkOutsideBoundedReaderMax() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.mark( 4 );
-        mr.read();
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.mark(4);
+            mr.read();
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void markResetWithMarkOutsideBoundedReaderMaxAndInitialOffset() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.read();
-        mr.mark( 3 );
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.read();
+            mr.mark(3);
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void markResetFromOffset1() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.mark( 3 );
-        mr.read();
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.reset();
-        mr.mark( 1 );
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.mark(3);
+            mr.read();
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+            mr.reset();
+            mr.mark(1);
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void markResetMarkMore() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.mark( 4 );
-        mr.read();
-        mr.read();
-        mr.read();
-        mr.reset();
-        mr.read();
-        mr.read();
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.mark(4);
+            mr.read();
+            mr.read();
+            mr.read();
+            mr.reset();
+            mr.read();
+            mr.read();
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void skipTest() throws IOException {
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.skip( 2 );
-        mr.read();
-        assertEquals( -1, mr.read() );
-        mr.close();
+        try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+            mr.skip(2);
+            mr.read();
+            assertEquals(-1, mr.read());
+        }
     }
 
     @Test
     public void closeTest() throws IOException {
-        final AtomicBoolean closed = new AtomicBoolean( false );
-        final Reader sr = new BufferedReader( new StringReader( "01234567890" ) ) {
+        final AtomicBoolean closed = new AtomicBoolean(false);
+        try (final Reader sr = new BufferedReader(new StringReader("01234567890")) {
             @Override
-            public void close()
-                throws IOException
-            {
-                closed.set( true );
+            public void close() throws IOException {
+                closed.set(true);
                 super.close();
             }
-        };
+        }) {
 
-        final BoundedReader mr = new BoundedReader( sr, 3 );
-        mr.close();
-        assertTrue( closed.get() );
+            try (final BoundedReader mr = new BoundedReader(sr, 3)) {
+                // nothing
+            }
+        }
+        assertTrue(closed.get());
     }
 
     @Test(timeout = 5000)

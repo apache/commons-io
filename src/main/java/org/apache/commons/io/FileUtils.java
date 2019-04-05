@@ -31,7 +31,6 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -109,11 +108,6 @@ public class FileUtils {
      * @since 2.4
      */
     public static final BigInteger ONE_MB_BI = ONE_KB_BI.multiply(ONE_KB_BI);
-
-    /**
-     * The file copy buffer size (30 MB)
-     */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The number of bytes in a gigabyte.

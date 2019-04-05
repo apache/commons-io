@@ -65,16 +65,15 @@ public class CharSequenceInputStreamTest {
                 if (read == -1) {
                     assertEquals("EOF: offset should equal length for charset " + charsetName, expected.length, offset);
                     break;
-                } else {
-                    assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
-                    while (read > 0) {
-                        assertTrue("offset for " + charsetName + " " + offset + " < " + expected.length, offset <
-                                expected.length);
-                        assertEquals("bytes should agree for " + charsetName, expected[offset], buffer[bufferOffset]);
-                        offset++;
-                        bufferOffset++;
-                        read--;
-                    }
+                }
+                assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
+                while (read > 0) {
+                    assertTrue("offset for " + charsetName + " " + offset + " < " + expected.length, offset <
+                            expected.length);
+                    assertEquals("bytes should agree for " + charsetName, expected[offset], buffer[bufferOffset]);
+                    offset++;
+                    bufferOffset++;
+                    read--;
                 }
             }
         }
