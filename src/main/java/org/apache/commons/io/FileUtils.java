@@ -35,6 +35,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -1107,7 +1109,7 @@ public class FileUtils {
 
     /**
      * Internal copy file method.
-     * This caches the original file length, and throws an IOException
+     * This uses the original file length, and throws an IOException
      * if the output file length is different from the current input file length.
      * So it may fail if the file changes size.
      * It may also fail with "IllegalArgumentException: Negative size" if the input file is truncated part way
@@ -1128,32 +1130,24 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        try (FileInputStream fis = new FileInputStream(srcFile);
-             FileChannel input = fis.getChannel();
-             FileOutputStream fos = new FileOutputStream(destFile);
-             FileChannel output = fos.getChannel()) {
-            final long size = input.size(); // TODO See IO-386
-            long pos = 0;
-            long count = 0;
-            while (pos < size) {
-                final long remain = size - pos;
-                count = remain > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : remain;
-                final long bytesCopied = output.transferFrom(input, pos, count);
-                if (bytesCopied == 0) { // IO-385 - can happen if file is truncated after caching the size
-                    break; // ensure we don't loop forever
-                }
-                pos += bytesCopied;
-            }
-        }
+        Path srcPath = srcFile.toPath();
+        Path destPath = destFile.toPath();
+        final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
+        Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
 
-        final long srcLen = srcFile.length(); // TODO See IO-386
-        final long dstLen = destFile.length(); // TODO See IO-386
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
+
+        destFile.setLastModified(newLastModifed);
+    }
+
+    private static void checkEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
+            throws IOException {
         if (srcLen != dstLen) {
-            throw new IOException("Failed to copy full contents from '" +
-                    srcFile + "' to '" + destFile + "' Expected length: " + srcLen + " Actual: " + dstLen);
-        }
-        if (preserveFileDate) {
-            destFile.setLastModified(srcFile.lastModified());
+            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
+                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
         }
     }
 
