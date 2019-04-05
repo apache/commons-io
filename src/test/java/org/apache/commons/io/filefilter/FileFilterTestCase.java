@@ -940,6 +940,22 @@ public class FileFilterTestCase {
     }
 
     @Test
+    public void testCanExecute() throws Exception {
+        final File executableFile = File.createTempFile(getClass().getSimpleName(), ".temp");
+        try {
+            try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(executableFile))) {
+                TestUtils.generateTestData(output, 32);
+            }
+            executableFile.setExecutable(true);
+            assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executableFile, true);
+            executableFile.setExecutable(false);
+            assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executableFile, false);
+        } finally {
+            executableFile.delete();
+        }
+    }
+
+    @Test
     public void testCanRead() throws Exception {
         final File readOnlyFile = new File(getTestDirectory(), "read-only-file1.txt");
         if (!readOnlyFile.getParentFile().exists()) {
