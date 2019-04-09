@@ -23,12 +23,12 @@ import java.io.Reader;
 
 /**
  * A reader that imposes a limit to the number of characters that can be read from
- * an underlying reader, returning eof when this limit is reached -regardless of state of
+ * an underlying reader, returning EOF when this limit is reached, regardless of state of
  * underlying reader.
  *
  * <p>
  * One use case is to avoid overrunning the readAheadLimit supplied to
- * java.io.Reader#mark(int), since reading too many characters removes the
+ * {@link java.io.Reader#mark(int)}, since reading too many characters removes the
  * ability to do a successful reset.
  * </p>
  *
