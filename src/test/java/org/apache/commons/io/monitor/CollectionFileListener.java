@@ -190,6 +190,7 @@ public class CollectionFileListener implements FileAlterationListener, Serializa
      */
     @Override
     public void onStop(final FileAlterationObserver observer) {
+        // noop
     }
 
 }

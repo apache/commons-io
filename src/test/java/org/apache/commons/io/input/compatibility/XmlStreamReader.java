@@ -182,9 +182,8 @@ public class XmlStreamReader extends Reader {
         } catch (final XmlStreamReaderException ex) {
             if (!lenient) {
                 throw ex;
-            } else {
-                doLenientDetection(null, ex);
             }
+            doLenientDetection(null, ex);
         }
     }
 
@@ -319,9 +318,8 @@ public class XmlStreamReader extends Reader {
         } catch (final XmlStreamReaderException ex) {
             if (!lenient) {
                 throw ex;
-            } else {
-                doLenientDetection(httpContentType, ex);
             }
+            doLenientDetection(httpContentType, ex);
         }
     }
 
@@ -681,11 +679,10 @@ public class XmlStreamReader extends Reader {
             if (firstGT == -1) {
                 if (c == -1) {
                     throw new IOException("Unexpected end of XML stream");
-                } else {
-                    throw new IOException(
-                            "XML prolog or ROOT element not found on first "
-                                    + offset + " bytes");
                 }
+                throw new IOException(
+                        "XML prolog or ROOT element not found on first "
+                                + offset + " bytes");
             }
             final int bytesRead = offset;
             if (bytesRead > 0) {

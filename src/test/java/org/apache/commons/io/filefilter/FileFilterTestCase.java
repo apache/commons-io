@@ -43,6 +43,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -941,12 +944,13 @@ public class FileFilterTestCase {
 
     @Test
     public void testCanExecute() throws Exception {
+        Assume.assumeTrue(SystemUtils.IS_OS_WINDOWS);
         final File executableFile = File.createTempFile(getClass().getSimpleName(), ".temp");
         try {
             try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(executableFile))) {
                 TestUtils.generateTestData(output, 32);
             }
-            executableFile.setExecutable(true);
+            Assert.assertTrue(executableFile.setExecutable(true));
             assertFiltering(CanExecuteFileFilter.CAN_EXECUTE, executableFile, true);
             executableFile.setExecutable(false);
             assertFiltering(CanExecuteFileFilter.CANNOT_EXECUTE, executableFile, false);
@@ -966,7 +970,7 @@ public class FileFilterTestCase {
                 new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
             TestUtils.generateTestData(output, 32);
         }
-        readOnlyFile.setReadOnly();
+        Assert.assertTrue(readOnlyFile.setReadOnly());
         assertFiltering(CanReadFileFilter.CAN_READ,  readOnlyFile, true);
         assertFiltering(CanReadFileFilter.CANNOT_READ,  readOnlyFile, false);
         assertFiltering(CanReadFileFilter.READ_ONLY, readOnlyFile, true);
@@ -984,7 +988,7 @@ public class FileFilterTestCase {
                 new BufferedOutputStream(new FileOutputStream(readOnlyFile))){
             TestUtils.generateTestData(output, 32);
         }
-        readOnlyFile.setReadOnly();
+        Assert.assertTrue(readOnlyFile.setReadOnly());
         assertFiltering(CanWriteFileFilter.CAN_WRITE,    getTestDirectory(), true);
         assertFiltering(CanWriteFileFilter.CANNOT_WRITE, getTestDirectory(), false);
         assertFiltering(CanWriteFileFilter.CAN_WRITE,    readOnlyFile, false);

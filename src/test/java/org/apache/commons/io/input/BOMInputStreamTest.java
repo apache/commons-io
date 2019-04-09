@@ -609,7 +609,9 @@ public class BOMInputStreamTest {
         // UCS-2 is BE.
         Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
-        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
+        try (BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE)) {
+            parseXml(in);
+        }
         parseXml(createUtf16BeDataStream(data, true));
     }
 
@@ -620,23 +622,29 @@ public class BOMInputStreamTest {
         Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-4\"?><X/>".getBytes("ISO-10646-UCS-4");
         // XML parser does not know what to do with UTF-32
-        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
-        // XML parser does not know what to do with UTF-32
-        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
+            parseXml(in);
+            // XML parser does not know what to do with UTF-32
+            Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        }
         parseXml(createUtf32BeDataStream(data, true));
     }
 
     @Test
     public void testReadXmlWithBOMUtf16Be() throws Exception {
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16BE\"?><X/>".getBytes(StandardCharsets.UTF_16BE);
-        parseXml(new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE));
+        try (BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE)) {
+            parseXml(in);
+        }
         parseXml(createUtf16BeDataStream(data, true));
     }
 
     @Test
     public void testReadXmlWithBOMUtf16Le() throws Exception {
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-16LE\"?><X/>".getBytes(StandardCharsets.UTF_16LE);
-        parseXml(new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE));
+        try (BOMInputStream in = new BOMInputStream(createUtf16LeDataStream(data, true), ByteOrderMark.UTF_16LE)) {
+            parseXml(in);
+        }
         parseXml(createUtf16LeDataStream(data, true));
     }
 
@@ -644,24 +652,34 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUtf32Be() throws Exception {
         Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
-        parseXml(new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE));
+        try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
+            parseXml(in);
+        }
         // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
-        parseXml(new XmlStreamReader(createUtf32BeDataStream(data, true)));
+        try (XmlStreamReader in = new XmlStreamReader(createUtf32BeDataStream(data, true))) {
+            parseXml(in);
+        }
     }
 
     @Test
     public void testReadXmlWithBOMUtf32Le() throws Exception {
         Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
-        parseXml(new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE));
+        try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE)) {
+            parseXml(in);
+        }
         // XML parser does not know what to do with UTF-32, so we warp the input stream with a XmlStreamReader
-        parseXml(new XmlStreamReader(createUtf32LeDataStream(data, true)));
+        try (XmlStreamReader in = new XmlStreamReader(createUtf32LeDataStream(data, true))) {
+            parseXml(in);
+        }
     }
 
     @Test
     public void testReadXmlWithBOMUtf8() throws Exception {
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><X/>".getBytes(StandardCharsets.UTF_8);
-        parseXml(new BOMInputStream(createUtf8DataStream(data, true)));
+        try (BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
+            parseXml(in);
+        }
         parseXml(createUtf8DataStream(data, true));
     }
 
@@ -669,7 +687,9 @@ public class BOMInputStreamTest {
     public void testReadXmlWithoutBOMUtf32Be() throws Exception {
         Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF_32BE\"?><X/>".getBytes("UTF_32BE");
-        parseXml(new BOMInputStream(createUtf32BeDataStream(data, false)));
+        try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, false))) {
+            parseXml(in);
+        }
         parseXml(createUtf32BeDataStream(data, false));
     }
 
@@ -677,7 +697,9 @@ public class BOMInputStreamTest {
     public void testReadXmlWithoutBOMUtf32Le() throws Exception {
         Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
-        parseXml(new BOMInputStream(createUtf32LeDataStream(data, false)));
+        try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, false))) {
+            parseXml(in);
+        }
         parseXml(createUtf32BeDataStream(data, false));
     }
 

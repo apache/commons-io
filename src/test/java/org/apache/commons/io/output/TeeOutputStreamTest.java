@@ -88,36 +88,38 @@ public class TeeOutputStreamTest {
         final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         final ByteArrayOutputStream expected = new ByteArrayOutputStream();
 
-        final TeeOutputStream tos = new TeeOutputStream(baos1, baos2);
-        for (int i = 0; i < 20; i++) {
-            tos.write(i);
-            expected.write(i);
+        try (final TeeOutputStream tos = new TeeOutputStream(baos1, baos2)) {
+            for (int i = 0; i < 20; i++) {
+                tos.write(i);
+                expected.write(i);
+            }
+            assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos1.toByteArray());
+            assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos2.toByteArray());
+
+            final byte[] array = new byte[10];
+            for (int i = 20; i < 30; i++) {
+                array[i - 20] = (byte) i;
+            }
+            tos.write(array);
+            expected.write(array);
+            assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos1.toByteArray());
+            assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos2.toByteArray());
+
+            for (int i = 25; i < 35; i++) {
+                array[i - 25] = (byte) i;
+            }
+            tos.write(array, 5, 5);
+            expected.write(array, 5, 5);
+            assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(),
+                    baos1.toByteArray());
+            assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(),
+                    baos2.toByteArray());
+
+            expected.flush();
+            expected.close();
+
+            tos.flush();
         }
-        assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos1.toByteArray());
-        assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos2.toByteArray());
-
-        final byte[] array = new byte[10];
-        for (int i = 20; i < 30; i++) {
-            array[i - 20] = (byte) i;
-        }
-        tos.write(array);
-        expected.write(array);
-        assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos1.toByteArray());
-        assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos2.toByteArray());
-
-        for (int i = 25; i < 35; i++) {
-            array[i - 25] = (byte) i;
-        }
-        tos.write(array, 5, 5);
-        expected.write(array, 5, 5);
-        assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(), baos1.toByteArray());
-        assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(), baos2.toByteArray());
-
-        expected.flush();
-        expected.close();
-
-        tos.flush();
-        tos.close();
     }
 
     private void assertByteArrayEquals(final String msg, final byte[] array1, final byte[] array2) {

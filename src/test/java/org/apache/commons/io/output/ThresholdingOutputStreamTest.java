@@ -29,10 +29,11 @@ public class ThresholdingOutputStreamTest {
     @Test
     public void testSetByteCount() throws Exception {
         final AtomicBoolean reached = new AtomicBoolean(false);
-        final ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(3) {
             {
                 setByteCount(2);
             }
+
             @Override
             protected OutputStream getStream() throws IOException {
                 return new ByteArrayOutputStream(4);
@@ -40,14 +41,13 @@ public class ThresholdingOutputStreamTest {
 
             @Override
             protected void thresholdReached() throws IOException {
-                reached.set( true);
+                reached.set(true);
             }
-        };
-
-        tos.write(12);
-        assertFalse( reached.get());
-        tos.write(12);
-        assertTrue(reached.get());
-        tos.close();
+        }) {
+            tos.write(12);
+            assertFalse(reached.get());
+            tos.write(12);
+            assertTrue(reached.get());
+        }
     }
 }
