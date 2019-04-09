@@ -30,6 +30,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void init(final Tailer tailer) {
+        // noop
     }
 
     /**
@@ -37,6 +38,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void fileNotFound() {
+        // noop
     }
 
     /**
@@ -47,6 +49,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void fileRotated() {
+        // noop
     }
 
     /**
@@ -55,6 +58,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void handle(final String line) {
+        // noop
     }
 
     /**
@@ -63,6 +67,7 @@ public class TailerListenerAdapter implements TailerListener {
      */
     @Override
     public void handle(final Exception ex) {
+        // noop
     }
 
     /**
@@ -76,5 +81,6 @@ public class TailerListenerAdapter implements TailerListener {
      * @since 2.5
      */
     public void endOfFileReached() {
+        // noop
     }
 }

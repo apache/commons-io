@@ -222,6 +222,7 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if the pre-processing fails
      */
     protected void beforeRead(final int n) throws IOException {
+        // noop
     }
 
     /**
@@ -242,6 +243,7 @@ public abstract class ProxyReader extends FilterReader {
      * @throws IOException if the post-processing fails
      */
     protected void afterRead(final int n) throws IOException {
+        // noop
     }
 
     /**

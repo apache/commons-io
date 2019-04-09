@@ -133,6 +133,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if the pre-processing fails
      */
     protected void beforeWrite(final int n) throws IOException {
+        // noop
     }
 
     /**
@@ -150,6 +151,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @throws IOException if the post-processing fails
      */
     protected void afterWrite(final int n) throws IOException {
+        // noop
     }
 
     /**

@@ -285,6 +285,7 @@ public class FileAlterationObserver implements Serializable {
      * @throws Exception if an error occurs
      */
     public void destroy() throws Exception {
+        // noop
     }
 
     /**
