@@ -1137,6 +1137,15 @@ public class FileUtils {
         destFile.setLastModified(newLastModifed);
     }
 
+    /**
+     * Checks that two file lengths are equal.
+     * 
+     * @param srcFile Source file.
+     * @param destFile Destination file.
+     * @param srcLen Source file length.
+     * @param dstLen Destination file length
+     * @throws IOException Thrown when the given sizes are not equal.
+     */
     private static void checkEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
             throws IOException {
         if (srcLen != dstLen) {
