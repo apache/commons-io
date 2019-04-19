@@ -28,14 +28,17 @@ import org.apache.commons.io.IOCase;
  * <p>
  * This filter selects files and directories based on one or more wildcards.
  * Testing is case-sensitive by default, but this can be configured.
+ * </p>
  * <p>
  * The wildcard matcher uses the characters '?' and '*' to represent a
  * single or multiple wildcard characters.
  * This is the same as often found on Dos/Unix command lines.
  * The check is case-sensitive by default.
- * See {@link FilenameUtils#wildcardMatchOnSystem} for more information.
+ * See {@link FilenameUtils#wildcardMatchOnSystem(String,String)} for more information.
+ * </p>
  * <p>
  * For example:
+ * </p>
  * <pre>
  * File dir = new File(".");
  * FileFilter fileFilter = new WildcardFileFilter("*test*.java~*~");
