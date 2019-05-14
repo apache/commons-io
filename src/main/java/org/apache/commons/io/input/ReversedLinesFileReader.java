@@ -44,7 +44,6 @@ public class ReversedLinesFileReader implements Closeable {
     private final RandomAccessFile randomAccessFile;
 
     private final long totalByteLength;
-    private final long totalBlockCount;
 
     private final byte[][] newLineSequences;
     private final int avoidNewlineSplitBufferSize;
@@ -137,17 +136,35 @@ public class ReversedLinesFileReader implements Closeable {
         // Open file
         randomAccessFile = new RandomAccessFile(file, "r");
         totalByteLength = randomAccessFile.length();
-        int lastBlockLength = (int) (totalByteLength % blockSize);
-        if (lastBlockLength > 0) {
-            totalBlockCount = totalByteLength / blockSize + 1;
+        seek (totalByteLength);
+
+    }
+    /**
+     *
+     * @return Returns the current offset in this file.
+     */
+    public long getFilePointer() {
+        return currentFilePart.getFilePointer();
+    }
+
+    /**
+     *
+     * @param pos  the offset position, measured in bytes from the beginning of the file, at which to set the file pointer.
+     * @throws IOException if pos is less than 0 or if an I/O error occurs.
+     */
+    public void seek (long pos)  throws IOException{
+        randomAccessFile.seek(pos);
+        int blockLength = (int) (pos % blockSize);
+        long blockNumber;
+        if (blockLength  > 0) {
+            blockNumber = pos / blockSize + 1;
         } else {
-            totalBlockCount = totalByteLength / blockSize;
-            if (totalByteLength > 0) {
-                lastBlockLength = blockSize;
+            blockNumber= pos / blockSize;
+            if (pos > 0) {
+                blockLength  = blockSize;
             }
         }
-        currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
-
+        currentFilePart = new FilePart(blockNumber, blockLength , null);
     }
 
     /**
@@ -214,6 +231,8 @@ public class ReversedLinesFileReader implements Closeable {
         private byte[] leftOver;
 
         private int currentLastBytePos;
+        private int mappedFilePointer; // store file pointer position according to currentLastBytePos but take
+                                       // into account new lines size encountered when file was read.
 
         /**
          * ctor
@@ -240,6 +259,7 @@ public class ReversedLinesFileReader implements Closeable {
             if (leftOverOfLastFilePart != null) {
                 System.arraycopy(leftOverOfLastFilePart, 0, data, length, leftOverOfLastFilePart.length);
             }
+            this.mappedFilePointer = data.length;
             this.currentLastBytePos = data.length - 1;
             this.leftOver = null;
         }
@@ -305,6 +325,7 @@ public class ReversedLinesFileReader implements Closeable {
                     line = new String(lineData, encoding);
 
                     currentLastBytePos = i - newLineMatchByteCount;
+                    mappedFilePointer=i;
                     break; // found line
                 }
 
@@ -341,6 +362,7 @@ public class ReversedLinesFileReader implements Closeable {
                 leftOver = null;
             }
             currentLastBytePos = -1;
+            mappedFilePointer=0;
         }
 
         /**
@@ -362,6 +384,13 @@ public class ReversedLinesFileReader implements Closeable {
                 }
             }
             return 0;
+        }
+
+        /**
+         * @return Returns the current offset in this file
+         */
+        public long getFilePointer(){
+          return (no - 1) * blockSize +mappedFilePointer;
         }
     }
 
