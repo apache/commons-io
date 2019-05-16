@@ -25,7 +25,7 @@ import java.io.Serializable;
  * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
  *
  * @since 1.0
- * @version $Id$
+ *
  *
  * @see FileFilterUtils#asFileFilter(FileFilter)
  * @see FileFilterUtils#asFileFilter(FilenameFilter)

@@ -23,7 +23,7 @@ import java.io.Serializable;
  * A file filter that always returns false.
  *
  * @since 1.0
- * @version $Id$
+ *
  *
  * @see FileFilterUtils#falseFileFilter()
  */

@@ -51,7 +51,7 @@ import java.util.TreeMap;
  *
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
- * @version $Id$
+ *
  */
 public class Charsets {
     //

@@ -60,7 +60,7 @@ import java.io.Reader;
  * </pre>
  *
  * @since 1.3
- * @version $Id$
+ *
  */
 public class NullReader extends Reader {
 

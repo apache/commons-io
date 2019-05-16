@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * passed to a component that wants to explicitly close the stream even if
  * other components would still use the stream for output.
  * </p>
- * @version $Id$
+ *
  * @since 1.4
  */
 public class CloseShieldOutputStream extends ProxyOutputStream {

@@ -46,7 +46,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since 2.7
- * @version $Id$
+ *
  */
 public class CanExecuteFileFilter extends AbstractFileFilter implements Serializable {
 
