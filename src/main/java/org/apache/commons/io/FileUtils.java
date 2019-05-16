@@ -1654,6 +1654,7 @@ public class FileUtils {
                 cleanDirectory(file);
             }
         } catch (final Exception ignored) {
+            // ignore
         }
 
         try {
