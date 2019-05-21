@@ -22,21 +22,17 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * A reader that imposes a limit to the number of characters that can be read from
- * an underlying reader, returning eof when this limit is reached -regardless of state of
- * underlying reader.
+ * A reader that imposes a limit to the number of characters that can be read from an underlying reader, returning EOF
+ * when this limit is reached, regardless of state of underlying reader.
  *
  * <p>
- * One use case is to avoid overrunning the readAheadLimit supplied to
- * java.io.Reader#mark(int), since reading too many characters removes the
- * ability to do a successful reset.
+ * One use case is to avoid overrunning the readAheadLimit supplied to {@link java.io.Reader#mark(int)}, since reading
+ * too many characters removes the ability to do a successful reset.
  * </p>
  *
  * @since 2.5
  */
-public class BoundedReader
-    extends Reader
-{
+public class BoundedReader extends Reader {
 
     private static final int INVALID = -1;
 
@@ -57,7 +53,7 @@ public class BoundedReader
      * @param maxCharsFromTargetReader The maximum number of characters that can be read from target
      * @throws IOException if mark fails
      */
-    public BoundedReader( final Reader target, final int maxCharsFromTargetReader ) throws IOException {
+    public BoundedReader(final Reader target, final int maxCharsFromTargetReader) throws IOException {
         this.target = target;
         this.maxCharsFromTargetReader = maxCharsFromTargetReader;
     }
@@ -87,23 +83,20 @@ public class BoundedReader
     /**
      * marks the target stream
      *
-     * @param readAheadLimit The number of characters that can be read while
-     *                       still retaining the ability to do #reset().
-     *                       Note that this parameter is not validated with respect to
-     *                       maxCharsFromTargetReader. There is no way to pass
-     *                       past maxCharsFromTargetReader, even if this value is
-     *                       greater.
+     * @param readAheadLimit The number of characters that can be read while still retaining the ability to do #reset().
+     *                       Note that this parameter is not validated with respect to maxCharsFromTargetReader. There
+     *                       is no way to pass past maxCharsFromTargetReader, even if this value is greater.
      *
      * @throws IOException If an I/O error occurs while calling the underlying reader's mark method
      * @see java.io.Reader#mark(int)
      */
     @Override
-    public void mark( final int readAheadLimit ) throws IOException {
+    public void mark(final int readAheadLimit) throws IOException {
         this.readAheadLimit = readAheadLimit - charsRead;
 
         markedAt = charsRead;
 
-        target.mark( readAheadLimit );
+        target.mark(readAheadLimit);
     }
 
     /**
@@ -116,11 +109,11 @@ public class BoundedReader
     @Override
     public int read() throws IOException {
 
-        if ( charsRead >= maxCharsFromTargetReader ) {
+        if (charsRead >= maxCharsFromTargetReader) {
             return -1;
         }
 
-        if ( markedAt >= 0 && ( charsRead - markedAt ) >= readAheadLimit ) {
+        if (markedAt >= 0 && (charsRead - markedAt) >= readAheadLimit) {
             return -1;
         }
         charsRead++;
@@ -138,11 +131,11 @@ public class BoundedReader
      * @see java.io.Reader#read(char[], int, int)
      */
     @Override
-    public int read( final char[] cbuf, final int off, final int len ) throws IOException {
+    public int read(final char[] cbuf, final int off, final int len) throws IOException {
         int c;
-        for ( int i = 0; i < len; i++ ) {
+        for (int i = 0; i < len; i++) {
             c = read();
-            if ( c == -1 ) {
+            if (c == -1) {
                 return i == 0 ? -1 : i;
             }
             cbuf[off + i] = (char) c;

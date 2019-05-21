@@ -23,7 +23,7 @@ import java.io.File;
  * Register {@link FileAlterationListener}s with a {@link FileAlterationObserver}.
  *
  * @see FileAlterationObserver
- * @version $Id$
+ *
  * @since 2.0
  */
 public interface FileAlterationListener {

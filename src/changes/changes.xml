@@ -89,6 +89,18 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-594" dev="ggregory" type="add" due-to="Gary Gregory">
         Add IOUtils copy methods with java.lang.Appendable as the target.
       </action>
+      <action issue="IO-604" dev="ggregory" type="fix" due-to="Gary Gregory">
+        FileUtils.doCopyFile(File, File, boolean) can throw ClosedByInterruptException.
+      </action>
+      <action issue="IO-605" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add class CanExecuteFileFilter.
+      </action>
+      <action issue="IO-701" dev="ggregory" type="update" due-to="Raymond Tan">
+        Make array declaration in ThresholdingOutputStream consistent with other array declarations in the library #77.
+      </action>
+      <action issue="IO-578" dev="ggregory" type="add" due-to="Mark Chesney">
+        Support java.nio.Path and non-default file systems for ReversedLinesFileReader (#62)
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

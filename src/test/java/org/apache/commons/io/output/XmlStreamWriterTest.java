@@ -89,13 +89,13 @@ public class XmlStreamWriterTest {
     @Test
     public void testEmpty() throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XmlStreamWriter writer = new XmlStreamWriter(out);
-        writer.flush();
-        writer.write("");
-        writer.flush();
-        writer.write(".");
-        writer.flush();
-        writer.close();
+        try (final XmlStreamWriter writer = new XmlStreamWriter(out)) {
+            writer.flush();
+            writer.write("");
+            writer.flush();
+            writer.write(".");
+            writer.flush();
+        }
     }
 
     @Test

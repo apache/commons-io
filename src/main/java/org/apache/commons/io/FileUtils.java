@@ -39,11 +39,12 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -58,6 +59,7 @@ import java.util.zip.Checksum;
  * General file manipulation utilities.
  * <p>
  * Facilities are provided in the following areas:
+ * </p>
  * <ul>
  * <li>writing to a file
  * <li>reading from a file
@@ -74,8 +76,10 @@ import java.util.zip.Checksum;
  * Note that a specific charset should be specified whenever possible.
  * Relying on the platform default means that the code is Locale-dependent.
  * Only use the default if the files are known to always use the platform default.
+ * </p>
  * <p>
  * Origin of code: Excalibur, Alexandria, Commons-Utils
+ * </p>
  */
 public class FileUtils {
 
@@ -109,11 +113,6 @@ public class FileUtils {
      * @since 2.4
      */
     public static final BigInteger ONE_MB_BI = ONE_KB_BI.multiply(ONE_KB_BI);
-
-    /**
-     * The file copy buffer size (30 MB)
-     */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The number of bytes in a gigabyte.
@@ -274,10 +273,12 @@ public class FileUtils {
      * <p>
      * At the end of the method either the stream will be successfully opened,
      * or an exception will have been thrown.
+     * </p>
      * <p>
      * An exception is thrown if the file does not exist.
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be read.
+     * </p>
      *
      * @param file the file to open for input, must not be {@code null}
      * @return a new {@link FileInputStream} for the specified file
@@ -307,12 +308,14 @@ public class FileUtils {
      * <p>
      * At the end of the method either the stream will be successfully opened,
      * or an exception will have been thrown.
+     * </p>
      * <p>
      * The parent directory will be created if it does not exist.
      * The file will be created if it does not exist.
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
+     * </p>
      *
      * @param file the file to open for output, must not be {@code null}
      * @return a new {@link FileOutputStream} for the specified file
@@ -331,12 +334,14 @@ public class FileUtils {
      * <p>
      * At the end of the method either the stream will be successfully opened,
      * or an exception will have been thrown.
+     * </p>
      * <p>
      * The parent directory will be created if it does not exist.
      * The file will be created if it does not exist.
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
+     * </p>
      *
      * @param file   the file to open for output, must not be {@code null}
      * @param append if {@code true}, then bytes will be added to the
@@ -554,6 +559,7 @@ public class FileUtils {
      * NOTE: As from v1.3, this method throws an IOException if the last
      * modified date of the file cannot be set. Also, as from v1.3 this method
      * creates parent directories if they do not exist.
+     * </p>
      *
      * @param file the File to touch
      * @throws IOException If an I/O problem occurs
@@ -617,13 +623,16 @@ public class FileUtils {
      * an IOFileFilter for directories. You don't need to bind a
      * DirectoryFileFilter (via logical AND) to this filter. This method does
      * that for you.
+     * </p>
      * <p>
      * An example: If you want to search through all directories called
      * "temp" you pass in <code>FileFilterUtils.NameFileFilter("temp")</code>
+     * </p>
      * <p>
      * Another common usage of this method is find files in a directory
      * tree but ignoring the directories generated CVS. You can simply pass
      * in <code>FileFilterUtils.makeCVSAware(null)</code>.
+     * </p>
      *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files. Must not be {@code null},
@@ -686,7 +695,7 @@ public class FileUtils {
      * <p>
      * The resulting collection includes the starting directory and
      * any subdirectories that match the directory filter.
-     * <p>
+     * </p>
      *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files.
@@ -744,7 +753,8 @@ public class FileUtils {
      * All files found are filtered by an IOFileFilter. This method is
      * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)},
      * which supports Iterable ('foreach' loop).
-     * <p>
+     * </p>
+     * 
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
@@ -767,8 +777,10 @@ public class FileUtils {
      * All files found are filtered by an IOFileFilter. This method is
      * based on {@link #listFilesAndDirs(File, IOFileFilter, IOFileFilter)},
      * which supports Iterable ('foreach' loop).
+     * </p>
      * <p>
      * The resulting iterator includes the subdirectories themselves.
+     * </p>
      *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files.
@@ -850,8 +862,10 @@ public class FileUtils {
      * This method checks to see if the two files are different lengths
      * or if they point to the same file, before resorting to byte-by-byte
      * comparison of the contents.
+     * </p>
      * <p>
      * Code origin: Avalon
+     * </p>
      *
      * @param file1 the first file
      * @param file2 the second file
@@ -897,7 +911,7 @@ public class FileUtils {
      * <p>
      * This method checks to see if the two files point to the same file,
      * before resorting to line-by-line comparison of the contents.
-     * <p>
+     * </p>
      *
      * @param file1       the first file
      * @param file2       the second file
@@ -951,6 +965,7 @@ public class FileUtils {
      * 1.5, this method uses UTF-8 to decode percent-encoded octets to characters.
      * Additionally, malformed percent-encoded octets are handled leniently by
      * passing them through literally.
+     * </p>
      *
      * @param url the file URL to convert, {@code null} returns {@code null}
      * @return the equivalent <code>File</code> object, or {@code null}
@@ -1019,10 +1034,12 @@ public class FileUtils {
      * If the input is {@code null}, an empty array is returned.
      * If the input contains {@code null}, the output array contains {@code null} at the same
      * index.
+     * </p>
      * <p>
      * This method will decode the URL.
      * Syntax such as <code>file:///my%20docs/file.txt</code> will be
      * correctly decoded to <code>/my docs/file.txt</code>.
+     * </p>
      *
      * @param urls the file URLs to convert, {@code null} returns empty array
      * @return a non-{@code null} array of Files matching the input, with a {@code null} item
@@ -1053,6 +1070,7 @@ public class FileUtils {
      * Converts each of an array of <code>File</code> to a <code>URL</code>.
      * <p>
      * Returns an array of the same size as the input.
+     * </p>
      *
      * @param files the files to convert, must not be {@code null}
      * @return an array of URLs matching the input
@@ -1077,11 +1095,13 @@ public class FileUtils {
      * to a file of the same name in the specified destination directory.
      * The destination directory is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcFile an existing file to copy, must not be {@code null}
      * @param destDir the directory to place the copy in, must not be {@code null}
@@ -1102,12 +1122,14 @@ public class FileUtils {
      * to a file of the same name in the specified destination directory.
      * The destination directory is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * </p>
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
      * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcFile          an existing file to copy, must not be {@code null}
      * @param destDir          the directory to place the copy in, must not be {@code null}
@@ -1141,11 +1163,13 @@ public class FileUtils {
      * specified destination file. The directory holding the destination file is
      * created if it does not exist. If the destination file exists, then this
      * method will overwrite it.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcFile  an existing file to copy, must not be {@code null}
      * @param destFile the new file, must not be {@code null}
@@ -1169,12 +1193,14 @@ public class FileUtils {
      * to the specified destination file.
      * The directory holding the destination file is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * </p>
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
      * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcFile          an existing file to copy, must not be {@code null}
      * @param destFile         the new file, must not be {@code null}
@@ -1231,7 +1257,7 @@ public class FileUtils {
 
     /**
      * Internal copy file method.
-     * This caches the original file length, and throws an IOException
+     * This uses the original file length, and throws an IOException
      * if the output file length is different from the current input file length.
      * So it may fail if the file changes size.
      * It may also fail with "IllegalArgumentException: Negative size" if the input file is truncated part way
@@ -1252,32 +1278,33 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        try (FileInputStream fis = new FileInputStream(srcFile);
-             FileChannel input = fis.getChannel();
-             FileOutputStream fos = new FileOutputStream(destFile);
-             FileChannel output = fos.getChannel()) {
-            final long size = input.size(); // TODO See IO-386
-            long pos = 0;
-            long count = 0;
-            while (pos < size) {
-                final long remain = size - pos;
-                count = remain > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : remain;
-                final long bytesCopied = output.transferFrom(input, pos, count);
-                if (bytesCopied == 0) { // IO-385 - can happen if file is truncated after caching the size
-                    break; // ensure we don't loop forever
-                }
-                pos += bytesCopied;
-            }
-        }
+        Path srcPath = srcFile.toPath();
+        Path destPath = destFile.toPath();
+        final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
+        Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
 
-        final long srcLen = srcFile.length(); // TODO See IO-386
-        final long dstLen = destFile.length(); // TODO See IO-386
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
+        // TODO IO-386: Do we still need this check?
+        checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
+
+        destFile.setLastModified(newLastModifed);
+    }
+
+    /**
+     * Checks that two file lengths are equal.
+     * 
+     * @param srcFile Source file.
+     * @param destFile Destination file.
+     * @param srcLen Source file length.
+     * @param dstLen Destination file length
+     * @throws IOException Thrown when the given sizes are not equal.
+     */
+    private static void checkEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
+            throws IOException {
         if (srcLen != dstLen) {
-            throw new IOException("Failed to copy full contents from '" +
-                    srcFile + "' to '" + destFile + "' Expected length: " + srcLen + " Actual: " + dstLen);
-        }
-        if (preserveFileDate) {
-            destFile.setLastModified(srcFile.lastModified());
+            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
+                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
         }
     }
 
@@ -1287,15 +1314,18 @@ public class FileUtils {
      * <p>
      * This method copies the source directory and all its contents to a
      * directory of the same name in the specified destination directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcDir  an existing directory to copy, must not be {@code null}
      * @param destDir the directory to place the copy in, must not be {@code null}
@@ -1327,15 +1357,18 @@ public class FileUtils {
      * This method copies the specified directory and all its child
      * directories and files to the specified destination.
      * The destination is the new location and name of the directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcDir  an existing directory to copy, must not be {@code null}
      * @param destDir the new directory, must not be {@code null}
@@ -1354,16 +1387,19 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
      * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcDir           an existing directory to copy, must not be {@code null}
      * @param destDir          the new directory, must not be {@code null}
@@ -1385,10 +1421,12 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
@@ -1434,10 +1472,12 @@ public class FileUtils {
      * <p>
      * This method copies the contents of the specified source directory
      * to within the specified destination directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
      * {@code true} tries to preserve the files' last modified
@@ -1501,7 +1541,8 @@ public class FileUtils {
     }
 
     /**
-     * checks requirements for file copy
+     * Checks requirements for file copy.
+     * 
      * @param src the source file
      * @param dest the destination
      * @throws FileNotFoundException if the destination does not exist
@@ -1576,6 +1617,7 @@ public class FileUtils {
      * Warning: this method does not set a connection or read timeout and thus
      * might block forever. Use {@link #copyURLToFile(URL, File, int, int)}
      * with reasonable timeouts to prevent this.
+     * </p>
      *
      * @param source      the <code>URL</code> to copy bytes from, must not be {@code null}
      * @param destination the non-directory <code>File</code> to write bytes to
@@ -1669,15 +1711,18 @@ public class FileUtils {
      * <p>
      * This method copies the source file or directory, along all its contents, to a
      * directory of the same name in the specified destination directory.
+     * </p>
      * <p>
      * The destination directory is created if it does not exist.
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param src      an existing file or directory to copy, must not be {@code null}
      * @param destDir  the directory to place the copy in, must not be {@code null}
@@ -1709,11 +1754,13 @@ public class FileUtils {
      * to a file of the same name in the specified destination directory.
      * The destination directory is created if it does not exist.
      * If the destination file exists, then this method will overwrite it.
+     * </p>
      * <p>
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
+     * </p>
      *
      * @param srcs     a existing files to copy, must not be {@code null}
      * @param destDir  the directory to place the copy in, must not be {@code null}
@@ -1761,6 +1808,7 @@ public class FileUtils {
      * Deletes a file, never throwing an exception. If file is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
+     * </p>
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
      * <li>No exceptions are thrown when a file or directory cannot be deleted.</li>
@@ -1781,6 +1829,7 @@ public class FileUtils {
                 cleanDirectory(file);
             }
         } catch (final Exception ignored) {
+            // ignore
         }
 
         try {
@@ -1863,7 +1912,8 @@ public class FileUtils {
     }
 
     /**
-     * Lists files in a directory, asserting that the supplied directory satisfies exists and is a directory
+     * Lists files in a directory, asserting that the supplied directory satisfies exists and is a directory.
+     * 
      * @param directory The directory to list
      * @return The files in the directory, never null.
      * @throws IOException if an I/O error occurs
@@ -1892,6 +1942,7 @@ public class FileUtils {
      * <p>
      * This method repeatedly tests {@link File#exists()} until it returns
      * true up to the maximum time specified in seconds.
+     * </p>
      *
      * @param file    the file to check, must not be {@code null}
      * @param seconds the maximum time in seconds to wait
@@ -2042,8 +2093,10 @@ public class FileUtils {
      * to free internal resources. This can be done by calling the
      * {@link LineIterator#close()} or
      * {@link LineIterator#closeQuietly(LineIterator)} method.
+     * </p>
      * <p>
      * The recommended usage pattern is:
+     * </p>
      * <pre>
      * LineIterator it = FileUtils.lineIterator(file, "UTF-8");
      * try {
@@ -2058,6 +2111,7 @@ public class FileUtils {
      * <p>
      * If an exception occurs during the creation of the iterator, the
      * underlying stream is closed.
+     * </p>
      *
      * @param file     the file to open for input, must not be {@code null}
      * @param encoding the encoding to use, {@code null} means platform default
@@ -2103,6 +2157,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
+     * </p>
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -2121,6 +2176,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
+     * </p>
      *
      * @param file     the file to write
      * @param data     the content to write to the file
@@ -2294,6 +2350,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
+     * </p>
      *
      * @param file the file to write to
      * @param data the content to write to the file
@@ -2364,6 +2421,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
+     * </p>
      *
      * @param file     the file to write to
      * @param encoding the encoding to use, {@code null} means platform default
@@ -2433,6 +2491,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created
      * if they do not exist.
+     * </p>
      *
      * @param file       the file to write to
      * @param encoding   the encoding to use, {@code null} means platform default
@@ -2508,6 +2567,7 @@ public class FileUtils {
      * Deletes a file. If file is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
+     * </p>
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
      * <li>You get exceptions when a file or directory cannot be deleted.
@@ -2655,6 +2715,7 @@ public class FileUtils {
      * Note that overflow is not detected, and the return value may be negative if
      * overflow occurs. See {@link #sizeOfAsBigInteger(File)} for an alternative
      * method that does not overflow.
+     * </p>
      *
      * @param file the regular file or directory to return the size
      *             of (must not be {@code null}).
@@ -2719,6 +2780,7 @@ public class FileUtils {
      * Note that overflow is not detected, and the return value may be negative if
      * overflow occurs. See {@link #sizeOfDirectoryAsBigInteger(File)} for an alternative
      * method that does not overflow.
+     * </p>
      *
      * @param directory directory to inspect, must not be {@code null}
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
@@ -3026,6 +3088,7 @@ public class FileUtils {
      * Moves a directory.
      * <p>
      * When the destination directory is on another file system, do a "copy and delete".
+     * </p>
      *
      * @param srcDir  the directory to be moved
      * @param destDir the destination directory
@@ -3090,6 +3153,7 @@ public class FileUtils {
      * Moves a file.
      * <p>
      * When the destination file is on another file system, do a "copy and delete".
+     * </p>
      *
      * @param srcFile  the file to be moved
      * @param destFile the destination file
@@ -3154,6 +3218,7 @@ public class FileUtils {
      * Moves a file or directory to the destination directory.
      * <p>
      * When the destination is on another file system, do a "copy and delete".
+     * </p>
      *
      * @param src           the file or directory to be moved
      * @param destDir       the destination directory
@@ -3204,14 +3269,19 @@ public class FileUtils {
      * <p>
      * Will not return true if there is a Symbolic Link anywhere in the path,
      * only if the specific file is.
+     * </p>
      * <p>
      * When using jdk1.7, this method delegates to {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
+     * </p>
      *
+     * <p>
      * <b>Note:</b> the current implementation always returns {@code false} if running on
      * jkd1.6 and the system is detected as Windows using {@link FilenameUtils#isSystemWindows()}
+     * </p>
      * <p>
      * For code that runs on Java 1.7 or later, use the following method instead:
-     * <br>
+     * </p>
+     * 
      * {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
      * @param file the file to check
      * @return true if the file is a Symbolic Link

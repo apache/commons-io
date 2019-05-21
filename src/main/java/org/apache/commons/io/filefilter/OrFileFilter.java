@@ -30,7 +30,7 @@ import java.util.List;
  * {@code true}.
  *
  * @since 1.0
- * @version $Id$
+ *
  * @see FileFilterUtils#or(IOFileFilter...)
  */
 public class OrFileFilter

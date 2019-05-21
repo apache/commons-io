@@ -22,13 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Data written to this stream is forwarded to a stream that has been associated
- * with this thread.
+ * Data written to this stream is forwarded to a stream that has been associated with this thread.
  *
  */
-public class DemuxInputStream
-    extends InputStream
-{
+public class DemuxInputStream extends InputStream {
     private final InheritableThreadLocal<InputStream> m_streams = new InheritableThreadLocal<>();
 
     /**
@@ -37,10 +34,9 @@ public class DemuxInputStream
      * @param input the stream to bind
      * @return the InputStream that was previously active
      */
-    public InputStream bindStream( final InputStream input )
-    {
+    public InputStream bindStream(final InputStream input) {
         final InputStream oldValue = m_streams.get();
-        m_streams.set( input );
+        m_streams.set(input);
         return oldValue;
     }
 
@@ -50,12 +46,9 @@ public class DemuxInputStream
      * @throws IOException if an error occurs
      */
     @Override
-    public void close()
-        throws IOException
-    {
+    public void close() throws IOException {
         final InputStream input = m_streams.get();
-        if( null != input )
-        {
+        if (null != input) {
             input.close();
         }
     }
@@ -67,12 +60,9 @@ public class DemuxInputStream
      * @throws IOException if an error occurs
      */
     @Override
-    public int read()
-        throws IOException
-    {
+    public int read() throws IOException {
         final InputStream input = m_streams.get();
-        if( null != input )
-        {
+        if (null != input) {
             return input.read();
         }
         return EOF;

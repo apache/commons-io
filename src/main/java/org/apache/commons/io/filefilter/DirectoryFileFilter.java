@@ -34,7 +34,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @since 1.0
- * @version $Id$
+ *
  *
  * @see FileFilterUtils#directoryFileFilter()
  */

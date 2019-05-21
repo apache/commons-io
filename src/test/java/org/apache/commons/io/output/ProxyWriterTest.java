@@ -33,233 +33,240 @@ public class ProxyWriterTest {
 
     @Test
     public void appendCharSequence() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.append("ABC");
-        assertEquals("ABC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.append("ABC");
+            assertEquals("ABC", writer.toString());
+        }
     }
 
     @Test
     public void appendCharSequence_with_offset() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.append("ABC", 1, 3);
-        proxy.flush();
-        assertEquals("BC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.append("ABC", 1, 3);
+            proxy.flush();
+            assertEquals("BC", writer.toString());
+        }
     }
 
     @Test
     public void appendChar() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.append('c');
-        assertEquals("c", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.append('c');
+            assertEquals("c", writer.toString());
+        }
     }
 
     @Test
     public void writeString() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.write("ABC");
-        assertEquals("ABC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.write("ABC");
+            assertEquals("ABC", writer.toString());
+        }
     }
 
     @Test
     public void writeStringPartial() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.write("ABC", 1, 2);
-        assertEquals("BC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.write("ABC", 1, 2);
+            assertEquals("BC", writer.toString());
+        }
     }
 
     @Test
     public void writeCharArray() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.write(new char[]{'A', 'B', 'C'});
-        assertEquals("ABC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.write(new char[] { 'A', 'B', 'C' });
+            assertEquals("ABC", writer.toString());
+        }
     }
 
     @Test
     public void writeInt() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.write(65);
-        assertEquals("A", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.write(65);
+            assertEquals("A", writer.toString());
+        }
     }
 
     @Test
     public void writeCharArrayPartial() throws Exception {
-        final StringBuilderWriter writer = new StringBuilderWriter();
-        final ProxyWriter proxy = new ProxyWriter(writer);
-        proxy.write(new char[]{'A', 'B', 'C'}, 1, 2);
-        assertEquals("BC", writer.toString());
-        proxy.close();
+        try (final StringBuilderWriter writer = new StringBuilderWriter();
+                final ProxyWriter proxy = new ProxyWriter(writer)) {
+            proxy.write(new char[] { 'A', 'B', 'C' }, 1, 2);
+            assertEquals("BC", writer.toString());
+        }
     }
 
     @Test
     public void nullString() throws Exception {
-
-        final ProxyWriter proxy = new ProxyWriter(new NullWriter());
-
-        proxy.write((String) null);
-        proxy.write((String) null, 0, 0);
-        proxy.close();
+        try (final ProxyWriter proxy = new ProxyWriter(new NullWriter())) {
+            proxy.write((String) null);
+            proxy.write((String) null, 0, 0);
+            proxy.close();
+        }
     }
 
     @Test
     public void nullCharArray() throws Exception {
-
-        final ProxyWriter proxy = new ProxyWriter(new NullWriter());
-
-        proxy.write((char[]) null);
-
-        proxy.write((char[]) null, 0, 0);
-        proxy.close();
+        try (final ProxyWriter proxy = new ProxyWriter(new NullWriter())) {
+            proxy.write((char[]) null);
+            proxy.write((char[]) null, 0, 0);
+        }
     }
 
     @Test
     public void nullCharSequencec() throws Exception {
-
-        final ProxyWriter proxy = new ProxyWriter(new NullWriter());
-
-        proxy.append(null);
-        proxy.close();
+        try (final ProxyWriter proxy = new ProxyWriter(new NullWriter())) {
+            proxy.append(null);
+            proxy.close();
+        }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_append_char() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
-            @Override
-            public void write(final int c) throws IOException {
-                throw new UnsupportedEncodingException("Bah");
+        try (final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                final OutputStreamWriter osw = new OutputStreamWriter(baos) {
+                    @Override
+                    public void write(final int c) throws IOException {
+                        throw new UnsupportedEncodingException("Bah");
+                    }
+                }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.append('c');
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.append('c');
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_append_charSequence() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public Writer append(final CharSequence csq) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.append("ABCE");
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.append("ABCE");
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_append_charSequence_offset() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public Writer append(final CharSequence csq, final int start, final int end) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.append("ABCE", 1, 2);
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.append("ABCE", 1, 2);
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_write_int() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final int c) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write('a');
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.write('a');
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_write_char_array() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final char[] cbuf) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write("ABCE".toCharArray());
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.write("ABCE".toCharArray());
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_write_offset_char_array() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final char[] cbuf, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write("ABCE".toCharArray(), 2, 3);
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.write("ABCE".toCharArray(), 2, 3);
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_write_string() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final String str) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write("ABCE");
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.write("ABCE");
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_write_string_offset() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void write(final String str, final int off, final int len) throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.write("ABCE", 1, 3);
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.write("ABCE", 1, 3);
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_flush() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void flush() throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        try (ProxyWriter proxy = new ProxyWriter(osw)) {
-            proxy.flush();
+        }) {
+            try (ProxyWriter proxy = new ProxyWriter(osw)) {
+                proxy.flush();
+            }
         }
     }
 
     @Test(expected = UnsupportedEncodingException.class)
     public void exceptions_in_close() throws IOException {
-        final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
+        try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
             @Override
             public void close() throws IOException {
                 throw new UnsupportedEncodingException("Bah");
             }
-        };
-        final ProxyWriter proxy = new ProxyWriter(osw);
-        proxy.close();
+        }) {
+            try (final ProxyWriter proxy = new ProxyWriter(osw)) {
+                // noop
+            }
+        }
     }
 }

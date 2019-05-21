@@ -25,7 +25,7 @@ import org.apache.commons.io.IOCase;
 /**
  * Filters files using supplied regular expression(s).
  * <p>
- * See java.util.regex.Pattern for regex matching rules
+ * See java.util.regex.Pattern for regex matching rules.
  * </p>
  *
  * <p>

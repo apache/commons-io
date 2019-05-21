@@ -30,7 +30,7 @@ import org.junit.Test;
 
 
 /**
- * @version $Id$
+ *
  */
 
 public class CountingOutputStreamTest {
@@ -39,39 +39,38 @@ public class CountingOutputStreamTest {
     @Test
     public void testCounting() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final CountingOutputStream cos = new CountingOutputStream(baos);
+        try (final CountingOutputStream cos = new CountingOutputStream(baos)) {
 
-        for(int i = 0; i < 20; i++) {
-            cos.write(i);
+            for (int i = 0; i < 20; i++) {
+                cos.write(i);
+            }
+            assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 0, 20);
+            assertEquals("CountingOutputStream.getCount()", cos.getCount(), 20);
+
+            final byte[] array = new byte[10];
+            for (int i = 20; i < 30; i++) {
+                array[i - 20] = (byte) i;
+            }
+            cos.write(array);
+            assertByteArrayEquals("CountingOutputStream.write(byte[])", baos.toByteArray(), 0, 30);
+            assertEquals("CountingOutputStream.getCount()", cos.getCount(), 30);
+
+            for (int i = 25; i < 35; i++) {
+                array[i - 25] = (byte) i;
+            }
+            cos.write(array, 5, 5);
+            assertByteArrayEquals("CountingOutputStream.write(byte[], int, int)", baos.toByteArray(), 0, 35);
+            assertEquals("CountingOutputStream.getCount()", cos.getCount(), 35);
+
+            final int count = cos.resetCount();
+            assertEquals("CountingOutputStream.resetCount()", count, 35);
+
+            for (int i = 0; i < 10; i++) {
+                cos.write(i);
+            }
+            assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
+            assertEquals("CountingOutputStream.getCount()", cos.getCount(), 10);
         }
-        assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 0, 20);
-        assertEquals("CountingOutputStream.getCount()", cos.getCount(), 20);
-
-        final byte[] array = new byte[10];
-        for(int i = 20; i < 30; i++) {
-            array[i-20] = (byte)i;
-        }
-        cos.write(array);
-        assertByteArrayEquals("CountingOutputStream.write(byte[])", baos.toByteArray(), 0, 30);
-        assertEquals("CountingOutputStream.getCount()", cos.getCount(), 30);
-
-        for(int i = 25; i < 35; i++) {
-            array[i-25] = (byte)i;
-        }
-        cos.write(array, 5, 5);
-        assertByteArrayEquals("CountingOutputStream.write(byte[], int, int)", baos.toByteArray(), 0, 35);
-        assertEquals("CountingOutputStream.getCount()", cos.getCount(), 35);
-
-        final int count = cos.resetCount();
-        assertEquals("CountingOutputStream.resetCount()", count, 35);
-
-        for(int i = 0; i < 10; i++) {
-            cos.write(i);
-        }
-        assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
-        assertEquals("CountingOutputStream.getCount()", cos.getCount(), 10);
-
-        cos.close();
     }
 
     /*

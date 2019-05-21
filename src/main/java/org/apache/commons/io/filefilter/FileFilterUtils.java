@@ -35,7 +35,7 @@ import org.apache.commons.io.IOCase;
  * every class you use.
  *
  * @since 1.0
- * @version $Id$
+ *
  */
 public class FileFilterUtils {
 

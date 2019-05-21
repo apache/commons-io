@@ -116,7 +116,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  *
  * @see FileAlterationListener
  * @see FileAlterationMonitor
- * @version $Id$
+ *
  * @since 2.0
  */
 public class FileAlterationObserver implements Serializable {
@@ -285,6 +285,7 @@ public class FileAlterationObserver implements Serializable {
      * @throws Exception if an error occurs
      */
     public void destroy() throws Exception {
+        // noop
     }
 
     /**

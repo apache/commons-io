@@ -27,9 +27,9 @@ public class ClosedInputStreamTest {
 
     @Test
     public void testRead() throws Exception {
-        final ClosedInputStream cis = new ClosedInputStream();
-        assertEquals("read()", -1, cis.read());
-        cis.close();
+        try (final ClosedInputStream cis = new ClosedInputStream()) {
+            assertEquals("read()", -1, cis.read());
+        }
     }
 
 }

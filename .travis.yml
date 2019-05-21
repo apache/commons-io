@@ -18,11 +18,11 @@ sudo: false
 
 jdk:
   - openjdk7
-  - openjdk10
+  - openjdk8
   - openjdk11
   - openjdk12
+  - openjdk-ea
   - oraclejdk8
-  - oraclejdk9
   - oraclejdk11
 
 script:

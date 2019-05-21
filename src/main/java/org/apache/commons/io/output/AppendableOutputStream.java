@@ -28,7 +28,7 @@ import java.io.OutputStream;
  *
  * @since 2.5
  * @see java.lang.Appendable
- * @version $Id$
+ *
  * @param <T> The type of the {@link Appendable} wrapped by this AppendableOutputStream.
  */
 public class AppendableOutputStream <T extends Appendable> extends OutputStream {

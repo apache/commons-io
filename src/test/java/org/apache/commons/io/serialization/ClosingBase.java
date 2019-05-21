@@ -48,6 +48,7 @@ public class ClosingBase {
             try {
                 c.close();
             } catch (final IOException ignored) {
+                // ignore
             }
         }
     }

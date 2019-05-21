@@ -113,7 +113,7 @@ import org.apache.commons.io.FileUtils;
  * <p>The file is read using the default charset; this can be overridden if necessary</p>
  * @see TailerListener
  * @see TailerListenerAdapter
- * @version $Id$
+ *
  * @since 2.0
  * @since 2.5 Updated behavior and documentation for {@link Thread#interrupt()}
  */

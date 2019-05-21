@@ -35,14 +35,13 @@ public class TaggedOutputStreamTest  {
 
     @Test
     public void testNormalStream() {
-        try {
-            final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            final OutputStream stream = new TaggedOutputStream(buffer);
-            stream.write('a');
-            stream.write(new byte[] { 'b' });
-            stream.write(new byte[] { 'c' }, 0, 1);
-            stream.flush();
-            stream.close();
+        try (final ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            try (final OutputStream stream = new TaggedOutputStream(buffer)) {
+                stream.write('a');
+                stream.write(new byte[] { 'b' });
+                stream.write(new byte[] { 'c' }, 0, 1);
+                stream.flush();
+            }
             assertEquals(3, buffer.size());
             assertEquals('a', buffer.toByteArray()[0]);
             assertEquals('b', buffer.toByteArray()[1]);
@@ -104,26 +103,24 @@ public class TaggedOutputStreamTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        final OutputStream closed = new ClosedOutputStream();
-        final TaggedOutputStream stream = new TaggedOutputStream(closed);
+        try (final OutputStream closed = new ClosedOutputStream();
+                final TaggedOutputStream stream = new TaggedOutputStream(closed)) {
 
-        assertFalse(stream.isCauseOf(exception));
-        assertFalse(stream.isCauseOf(
-                new TaggedIOException(exception, UUID.randomUUID())));
+            assertFalse(stream.isCauseOf(exception));
+            assertFalse(stream.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
 
-        try {
-            stream.throwIfCauseOf(exception);
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
+            try {
+                stream.throwIfCauseOf(exception);
+            } catch (final IOException e) {
+                fail("Unexpected exception thrown");
+            }
+
+            try {
+                stream.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
+            } catch (final IOException e) {
+                fail("Unexpected exception thrown");
+            }
         }
-
-        try {
-            stream.throwIfCauseOf(
-                    new TaggedIOException(exception, UUID.randomUUID()));
-        } catch (final IOException e) {
-            fail("Unexpected exception thrown");
-        }
-        stream.close();
     }
 
 }

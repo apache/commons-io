@@ -32,15 +32,16 @@ public class NullOutputStreamTest {
 
     @Test
     public void testNull() throws IOException {
-        final NullOutputStream nos = new NullOutputStream();
-        nos.write("string".getBytes());
-        nos.write("some string".getBytes(), 3, 5);
-        nos.write(1);
-        nos.write(0x0f);
-        nos.flush();
-        nos.close();
-        nos.write("allowed".getBytes());
-        nos.write(255);
+        try (final NullOutputStream nos = new NullOutputStream()) {
+            nos.write("string".getBytes());
+            nos.write("some string".getBytes(), 3, 5);
+            nos.write(1);
+            nos.write(0x0f);
+            nos.flush();
+            nos.close();
+            nos.write("allowed".getBytes());
+            nos.write(255);
+        }
     }
 
 }

@@ -41,23 +41,24 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testMarkSupported() throws Exception {
-        final Reader reader = new CharSequenceReader("FooBar");
-        assertTrue(reader.markSupported());
-        reader.close();
+        try (final Reader reader = new CharSequenceReader("FooBar")) {
+            assertTrue(reader.markSupported());
+        }
     }
 
     @Test
     public void testMark() throws IOException {
-        final Reader reader = new CharSequenceReader("FooBar");
-        checkRead(reader, "Foo");
-        reader.mark(0);
-        checkRead(reader, "Bar");
-        reader.reset();
-        checkRead(reader, "Bar");
-        reader.close();
-        checkRead(reader, "Foo");
-        reader.reset();
-        checkRead(reader, "Foo");
+        try (final Reader reader = new CharSequenceReader("FooBar")) {
+            checkRead(reader, "Foo");
+            reader.mark(0);
+            checkRead(reader, "Bar");
+            reader.reset();
+            checkRead(reader, "Bar");
+            reader.close();
+            checkRead(reader, "Foo");
+            reader.reset();
+            checkRead(reader, "Foo");
+        }
     }
 
     @Test
@@ -77,41 +78,41 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testRead() throws IOException {
-        final Reader reader = new CharSequenceReader("Foo");
-        assertEquals('F', reader.read());
-        assertEquals('o', reader.read());
-        assertEquals('o', reader.read());
-        assertEquals(-1, reader.read());
-        assertEquals(-1, reader.read());
-        reader.close();
+        try (final Reader reader = new CharSequenceReader("Foo")) {
+            assertEquals('F', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
+        }
     }
 
     @Test
     public void testReadCharArray() throws IOException {
-        final Reader reader = new CharSequenceReader("FooBar");
-        char[] chars = new char[2];
-        assertEquals(2, reader.read(chars));
-        checkArray(new char[] {'F', 'o'}, chars);
-        chars = new char[3];
-        assertEquals(3, reader.read(chars));
-        checkArray(new char[] {'o', 'B', 'a'}, chars);
-        chars = new char[3];
-        assertEquals(1, reader.read(chars));
-        checkArray(new char[] {'r', NONE, NONE}, chars);
-        assertEquals(-1, reader.read(chars));
-        reader.close();
+        try (final Reader reader = new CharSequenceReader("FooBar")) {
+            char[] chars = new char[2];
+            assertEquals(2, reader.read(chars));
+            checkArray(new char[] { 'F', 'o' }, chars);
+            chars = new char[3];
+            assertEquals(3, reader.read(chars));
+            checkArray(new char[] { 'o', 'B', 'a' }, chars);
+            chars = new char[3];
+            assertEquals(1, reader.read(chars));
+            checkArray(new char[] { 'r', NONE, NONE }, chars);
+            assertEquals(-1, reader.read(chars));
+        }
     }
 
     @Test
     public void testReadCharArrayPortion() throws IOException {
         final char[] chars = new char[10];
-        final Reader reader = new CharSequenceReader("FooBar");
-        assertEquals(3, reader.read(chars, 3, 3));
-        checkArray(new char[] {NONE, NONE, NONE, 'F', 'o', 'o'}, chars);
-        assertEquals(3, reader.read(chars, 0, 3));
-        checkArray(new char[] {'B', 'a', 'r', 'F', 'o', 'o', NONE}, chars);
-        assertEquals(-1, reader.read(chars));
-        reader.close();
+        try (final Reader reader = new CharSequenceReader("FooBar")) {
+            assertEquals(3, reader.read(chars, 3, 3));
+            checkArray(new char[] { NONE, NONE, NONE, 'F', 'o', 'o' }, chars);
+            assertEquals(3, reader.read(chars, 0, 3));
+            checkArray(new char[] { 'B', 'a', 'r', 'F', 'o', 'o', NONE }, chars);
+            assertEquals(-1, reader.read(chars));
+        }
     }
 
     private void checkRead(final Reader reader, final String expected) throws IOException {

@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>47</version>
+    <version>48</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -232,15 +232,31 @@ file comparators, endian transformation classes, and much more.
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.google.jimfs</groupId>
+      <artifactId>jimfs</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <!-- 3.9 requires Java 8 -->
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <!--  version 4.0.0 requires Java 8 -->
+    <commons.felix.version>3.5.1</commons.felix.version>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
-    <commons.release.version>2.6</commons.release.version>
+    <commons.bc.version>2.6</commons.bc.version>
+    <commons.release.version>2.7</commons.release.version>
     <commons.release.desc>(requires JDK 1.7+)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -263,6 +279,8 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+
+    <japicmp.skip>false</japicmp.skip>
   </properties>
 
   <build>

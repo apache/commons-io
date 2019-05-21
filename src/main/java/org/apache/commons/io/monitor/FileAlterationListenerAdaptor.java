@@ -22,7 +22,7 @@ import java.io.File;
  * Convenience {@link FileAlterationListener} implementation that does nothing.
  *
  * @see FileAlterationObserver
- * @version $Id$
+ *
  * @since 2.0
  */
 public class FileAlterationListenerAdaptor implements FileAlterationListener {
@@ -34,6 +34,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onStart(final FileAlterationObserver observer) {
+        // noop
     }
 
     /**
@@ -43,6 +44,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onDirectoryCreate(final File directory) {
+        // noop
     }
 
     /**
@@ -52,6 +54,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onDirectoryChange(final File directory) {
+        // noop
     }
 
     /**
@@ -61,6 +64,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onDirectoryDelete(final File directory) {
+        // noop
     }
 
     /**
@@ -70,6 +74,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onFileCreate(final File file) {
+        // noop
     }
 
     /**
@@ -79,6 +84,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onFileChange(final File file) {
+        // noop
     }
 
     /**
@@ -88,6 +94,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onFileDelete(final File file) {
+        // noop
     }
 
     /**
@@ -97,6 +104,7 @@ public class FileAlterationListenerAdaptor implements FileAlterationListener {
      */
     @Override
     public void onStop(final FileAlterationObserver observer) {
+        // noop
     }
 
 }
