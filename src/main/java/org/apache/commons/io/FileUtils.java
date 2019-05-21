@@ -42,9 +42,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.text.DecimalFormat;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -391,6 +391,10 @@ public class FileUtils {
     public static String byteCountToDisplayRoundedSize(final BigInteger size, final int places, final Locale locale) {
         String displaySize;
 
+        if(size == null) {
+            return null;
+        }
+
         final long sizeInLong = size.longValue();
 
         final String formatPattern = "%." + places + "f";
@@ -436,7 +440,11 @@ public class FileUtils {
      * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      */
-    public static String byteCountToDisplayRoundedSize(final long size, final int places, final Locale locale) {
+    public static String byteCountToDisplayRoundedSize(final Long size, final int places, final Locale locale) {
+        if(size == null) {
+            return null;
+        }
+
         return byteCountToDisplayRoundedSize(BigInteger.valueOf(size), places, locale);
     }
 
@@ -464,7 +472,7 @@ public class FileUtils {
      * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      */
-    public static String byteCountToDisplayRoundedSize(final long size, final int places) {
+    public static String byteCountToDisplayRoundedSize(final Long size, final int places) {
         return byteCountToDisplayRoundedSize(size, places, Locale.getDefault());
     }
 
@@ -490,7 +498,7 @@ public class FileUtils {
      * @return a human-readable display value (includes units - EB, PB, TB, GB, MB, KB or bytes)
      * @see <a href="https://issues.apache.org/jira/browse/IO-226">IO-226 - should the rounding be changed?</a>
      */
-    public static String byteCountToDisplayRoundedSize(final long size) {
+    public static String byteCountToDisplayRoundedSize(final Long size) {
         return byteCountToDisplayRoundedSize(size, 0);
     }
 
@@ -512,6 +520,10 @@ public class FileUtils {
     // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
     public static String byteCountToDisplaySize(final BigInteger size) {
         String displaySize;
+
+        if(size == null) {
+            return null;
+        }
 
         if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
             displaySize = String.valueOf(size.divide(ONE_EB_BI)) + " EB";
