@@ -23,24 +23,32 @@ import org.junit.Test;
 
 
 /**
- * Really not a lot to do here, but checking that no
- * Exceptions are thrown.
- *
+ * Really not a lot to do here, but checking that no Exceptions are thrown.
  */
-
 public class NullOutputStreamTest {
 
+    private void process(final NullOutputStream nos) throws IOException {
+        nos.write("string".getBytes());
+        nos.write("some string".getBytes(), 3, 5);
+        nos.write(1);
+        nos.write(0x0f);
+        nos.flush();
+        nos.close();
+        nos.write("allowed".getBytes());
+        nos.write(255);
+    }
+
     @Test
-    public void testNull() throws IOException {
+    public void testNewInstance() throws IOException {
         try (final NullOutputStream nos = new NullOutputStream()) {
-            nos.write("string".getBytes());
-            nos.write("some string".getBytes(), 3, 5);
-            nos.write(1);
-            nos.write(0x0f);
-            nos.flush();
-            nos.close();
-            nos.write("allowed".getBytes());
-            nos.write(255);
+            process(nos);
+        }
+    }
+
+    @Test
+    public void testSingleton() throws IOException {
+        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
+            process(nos);
         }
     }
 
