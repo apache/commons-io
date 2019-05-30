@@ -30,7 +30,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
 
 /**
  * FileAlterationObserver represents the state of files below a root directory,
- * checking the filesystem and notifying listeners of create, change or
+ * checking the file system and notifying listeners of create, change or
  * delete events.
  * <p>
  * To use this implementation:
