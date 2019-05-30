@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 /**
- * Filters files based on the suffix (what the filename ends with).
+ * Filters files based on the suffix (what the file name ends with).
  * This is used in retrieving all the files of a particular type.
  * <p>
  * For example, to retrieve and print all <code>*.java</code> files
@@ -46,7 +46,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     private static final long serialVersionUID = -3389157631240246157L;
 
-    /** The filename suffixes to search for */
+    /** The file name suffixes to search for */
     private final String[] suffixes;
 
     /** Whether the comparison is case sensitive. */
@@ -140,10 +140,10 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename ends with the suffix.
+     * Checks to see if the file name ends with the suffix.
      *
      * @param file  the File to check
-     * @return true if the filename ends with one of our suffixes
+     * @return true if the file name ends with one of our suffixes
      */
     @Override
     public boolean accept(final File file) {
@@ -157,11 +157,11 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename ends with the suffix.
+     * Checks to see if the file name ends with the suffix.
      *
      * @param file  the File directory
-     * @param name  the filename
-     * @return true if the filename ends with one of our suffixes
+     * @param name  the file name
+     * @return true if the file name ends with one of our suffixes
      */
     @Override
     public boolean accept(final File file, final String name) {

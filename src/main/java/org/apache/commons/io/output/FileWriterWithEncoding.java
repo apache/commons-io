@@ -56,79 +56,79 @@ public class FileWriterWithEncoding extends Writer {
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final String encoding) throws IOException {
-        this(new File(filename), encoding, false);
+    public FileWriterWithEncoding(final String fileName, final String encoding) throws IOException {
+        this(new File(fileName), encoding, false);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @param append  true if content should be appended, false to overwrite
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final String encoding, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final String encoding, final boolean append)
             throws IOException {
-        this(new File(filename), encoding, append);
+        this(new File(fileName), encoding, append);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final Charset encoding) throws IOException {
-        this(new File(filename), encoding, false);
+    public FileWriterWithEncoding(final String fileName, final Charset encoding) throws IOException {
+        this(new File(fileName), encoding, false);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @param append  true if content should be appended, false to overwrite
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final Charset encoding, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final Charset encoding, final boolean append)
             throws IOException {
-        this(new File(filename), encoding, append);
+        this(new File(fileName), encoding, append);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding) throws IOException {
-        this(new File(filename), encoding, false);
+    public FileWriterWithEncoding(final String fileName, final CharsetEncoder encoding) throws IOException {
+        this(new File(fileName), encoding, false);
     }
 
     /**
      * Constructs a FileWriterWithEncoding with a file encoding.
      *
-     * @param filename  the name of the file to write to, not null
+     * @param fileName  the name of the file to write to, not null
      * @param encoding  the encoding to use, not null
      * @param append  true if content should be appended, false to overwrite
      * @throws NullPointerException if the file name or encoding is null
      * @throws IOException in case of an I/O error
      */
-    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding, final boolean append)
+    public FileWriterWithEncoding(final String fileName, final CharsetEncoder encoding, final boolean append)
             throws IOException {
-        this(new File(filename), encoding, append);
+        this(new File(fileName), encoding, append);
     }
 
     /**

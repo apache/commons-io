@@ -60,7 +60,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * Returns the logical NOT of the underlying filter's return value for the same arguments.
      *
      * @param file  the File directory
-     * @param name  the filename
+     * @param name  the file name
      * @return true if the filter returns false
      */
     @Override

@@ -46,7 +46,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * Defined in {@link java.io.FilenameFilter}.
      *
      * @param dir  the directory File to check
-     * @param name  the filename within the directory to check
+     * @param name  the file name within the directory to check
      * @return true if this file matches the test
      */
     @Override

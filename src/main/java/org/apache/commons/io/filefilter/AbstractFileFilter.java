@@ -45,7 +45,7 @@ public abstract class AbstractFileFilter implements IOFileFilter {
      * Checks to see if the File should be accepted by this filter.
      *
      * @param dir  the directory File to check
-     * @param name  the filename within the directory to check
+     * @param name  the file name within the directory to check
      * @return true if this file matches the test
      */
     @Override

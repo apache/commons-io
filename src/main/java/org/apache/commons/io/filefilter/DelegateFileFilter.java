@@ -82,7 +82,7 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
      * Checks the filter.
      *
      * @param dir  the directory
-     * @param name  the filename in the directory
+     * @param name  the file name in the directory
      * @return true if the filter matches
      */
     @Override
