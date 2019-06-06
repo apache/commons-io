@@ -41,7 +41,7 @@ The <action> type attribute can be add,update,fix,remove.
 
 <document>
   <properties>
-    <title>Release Notes</title>
+    <title>Apache Commons IO Release Notes</title>
   </properties>
 
   <body>
@@ -103,6 +103,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-608" dev="ggregory" type="add" due-to="Gary Gregory">
         Add a convenience NullPrintStream.
+      </action>
+      <action issue="IO-607" dev="ggregory" type="update" due-to="Gary Gregory">
+        Update from Java 7 to Java 8.
       </action>
     </release>
 
