@@ -1009,7 +1009,7 @@ public class FileUtilsTestCase {
 
         do {
             try {
-                TestUtils.sleep(1000);
+               ThreadMonitor.sleep(1000);
             } catch (final InterruptedException ie) {
                 // ignore
             }
@@ -1031,7 +1031,7 @@ public class FileUtilsTestCase {
 
         do {
             try {
-                TestUtils.sleep(1000);
+               ThreadMonitor.sleep(1000);
             } catch (final InterruptedException ie) {
                 // ignore
             }

@@ -37,7 +37,7 @@ package org.apache.commons.io;
  * </pre>
  *
  */
-class ThreadMonitor implements Runnable {
+public class ThreadMonitor implements Runnable {
 
     private final Thread thread;
     private final long timeout;
@@ -121,7 +121,7 @@ class ThreadMonitor implements Runnable {
      * @param ms the number of milliseconds to sleep for
      * @throws InterruptedException if interrupted
      */
-    private static void sleep(final long ms) throws InterruptedException {
+    public static void sleep(final long ms) throws InterruptedException {
         final long finishAt = System.currentTimeMillis() + ms;
         long remaining = ms;
         do {

@@ -42,6 +42,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.ThreadMonitor;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assert;
@@ -812,7 +813,7 @@ public class FileFilterTestCase {
 
         do {
             try {
-                TestUtils.sleep(1000);
+               ThreadMonitor.sleep(1000);
             } catch(final InterruptedException ie) {
                 // ignore
             }
@@ -831,7 +832,7 @@ public class FileFilterTestCase {
 
         do {
             try {
-                TestUtils.sleep(1000);
+               ThreadMonitor.sleep(1000);
             } catch(final InterruptedException ie) {
                 // ignore
             }

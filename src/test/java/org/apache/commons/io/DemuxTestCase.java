@@ -166,7 +166,7 @@ public class DemuxTestCase {
                     m_buffer.append((char) ch);
 
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
-                    TestUtils.sleep(sleepTime);
+                    ThreadMonitor.sleep(sleepTime);
                     ch = m_demux.read();
                 }
             } catch (final Exception e) {
@@ -199,7 +199,7 @@ public class DemuxTestCase {
                     //System.out.println( "Writing: " + (char)m_data[ i ] );
                     m_demux.write(element);
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
-                    TestUtils.sleep(sleepTime);
+                    ThreadMonitor.sleep(sleepTime);
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }

@@ -34,6 +34,7 @@ import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.ThreadMonitor;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import junit.framework.AssertionFailedError;
@@ -213,27 +214,9 @@ public abstract class TestUtils {
         }
     }
 
-    /**
-     * Sleep for a guaranteed number of milliseconds unless interrupted.
-     *
-     * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
-     * it deems appropriate. Read the docs on Thread.sleep for further details.
-     *
-     * @param ms the number of milliseconds to sleep for
-     * @throws InterruptedException if interrupted
-     */
-    public static void sleep(final long ms) throws InterruptedException {
-        final long finishAt = System.currentTimeMillis() + ms;
-        long remaining = ms;
-        do {
-            Thread.sleep(remaining);
-            remaining = finishAt - System.currentTimeMillis();
-        } while (remaining > 0);
-    }
-
     public static void sleepQuietly(final long ms) {
         try {
-            sleep(ms);
+            ThreadMonitor.sleep(ms);
         } catch (final InterruptedException ignored){
         }
     }
