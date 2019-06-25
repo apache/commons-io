@@ -29,8 +29,14 @@ import java.io.PrintStream;
  */
 public class NullPrintStream extends PrintStream {
 
+    /**
+     * The singleton instance.
+     */
     public static final NullPrintStream NULL_PRINT_STREAM = new NullPrintStream();
 
+    /**
+     * Constructs an instance.
+     */
     @SuppressWarnings("resource")
     public NullPrintStream() {
         super(new NullOutputStream());
