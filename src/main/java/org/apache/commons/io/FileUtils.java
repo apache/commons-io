@@ -2683,15 +2683,11 @@ public class FileUtils {
         long size = 0;
 
         for (final File file : files) {
-            try {
-                if (!isSymlink(file)) {
-                    size += sizeOf0(file); // internal method
-                    if (size < 0) {
-                        break;
-                    }
+            if (!isSymlink(file)) {
+                size += sizeOf0(file); // internal method
+                if (size < 0) {
+                    break;
                 }
-            } catch (final IOException ioe) {
-                // Ignore exceptions caught when asking if a File is a symlink.
             }
         }
 
@@ -2741,12 +2737,8 @@ public class FileUtils {
         BigInteger size = BigInteger.ZERO;
 
         for (final File file : files) {
-            try {
-                if (!isSymlink(file)) {
-                    size = size.add(sizeOfBig0(file));
-                }
-            } catch (final IOException ioe) {
-                // Ignore exceptions caught when asking if a File is a symlink.
+            if (!isSymlink(file)) {
+                size = size.add(sizeOfBig0(file));
             }
         }
 
