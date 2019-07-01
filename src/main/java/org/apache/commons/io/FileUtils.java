@@ -2683,15 +2683,11 @@ public class FileUtils {
         long size = 0;
 
         for (final File file : files) {
-            try {
-                if (!isSymlink(file)) {
-                    size += sizeOf0(file); // internal method
-                    if (size < 0) {
-                        break;
-                    }
+            if (!isSymlink(file)) {
+                size += sizeOf0(file); // internal method
+                if (size < 0) {
+                    break;
                 }
-            } catch (final IOException ioe) {
-                // Ignore exceptions caught when asking if a File is a symlink.
             }
         }
 
@@ -2741,12 +2737,8 @@ public class FileUtils {
         BigInteger size = BigInteger.ZERO;
 
         for (final File file : files) {
-            try {
-                if (!isSymlink(file)) {
-                    size = size.add(sizeOfBig0(file));
-                }
-            } catch (final IOException ioe) {
-                // Ignore exceptions caught when asking if a File is a symlink.
+            if (!isSymlink(file)) {
+                size = size.add(sizeOfBig0(file));
             }
         }
 
@@ -3161,10 +3153,9 @@ public class FileUtils {
      * {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
      * @param file the file to check
      * @return true if the file is a Symbolic Link
-     * @throws IOException if an IO error occurs while checking the file
      * @since 2.0
      */
-    public static boolean isSymlink(final File file) throws IOException {
+    public static boolean isSymlink(final File file) {
         if (file == null) {
             throw new NullPointerException("File must not be null");
         }
