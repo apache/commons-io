@@ -48,6 +48,7 @@ public class MoreComplexObjectTest extends ClosingBase {
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
         oos.writeObject(original);
+        oos.close();
         inputStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
     }
 
