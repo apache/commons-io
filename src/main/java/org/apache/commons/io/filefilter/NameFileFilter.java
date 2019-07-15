@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 /**
- * Filters filenames for a certain name.
+ * Filters file names for a certain name.
  * <p>
  * For example, to print all files and directories in the
  * current directory whose name is <code>Test</code>:
@@ -44,7 +44,7 @@ import org.apache.commons.io.IOCase;
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 176844364689077340L;
-    /** The filenames to search for */
+    /** The file names to search for */
     private final String[] names;
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
@@ -132,10 +132,10 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     //-----------------------------------------------------------------------
     /**
-     * Checks to see if the filename matches.
+     * Checks to see if the file name matches.
      *
      * @param file  the File to check
-     * @return true if the filename matches
+     * @return true if the file name matches
      */
     @Override
     public boolean accept(final File file) {
@@ -149,11 +149,11 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the filename matches.
+     * Checks to see if the file name matches.
      *
      * @param dir  the File directory (ignored)
-     * @param name  the filename
-     * @return true if the filename matches
+     * @param name  the file name
+     * @return true if the file name matches
      */
     @Override
     public boolean accept(final File dir, final String name) {

@@ -284,9 +284,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename starts with the specified text.
+     * Returns a filter that returns true if the file name starts with the specified text.
      *
-     * @param prefix  the filename prefix
+     * @param prefix  the file name prefix
      * @return a prefix checking filter
      * @see PrefixFileFilter
      */
@@ -295,9 +295,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename starts with the specified text.
+     * Returns a filter that returns true if the file name starts with the specified text.
      *
-     * @param prefix  the filename prefix
+     * @param prefix  the file name prefix
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a prefix checking filter
      * @see PrefixFileFilter
@@ -308,9 +308,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
+     * Returns a filter that returns true if the file name ends with the specified text.
      *
-     * @param suffix  the filename suffix
+     * @param suffix  the file name suffix
      * @return a suffix checking filter
      * @see SuffixFileFilter
      */
@@ -319,9 +319,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename ends with the specified text.
+     * Returns a filter that returns true if the file name ends with the specified text.
      *
-     * @param suffix  the filename suffix
+     * @param suffix  the file name suffix
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a suffix checking filter
      * @see SuffixFileFilter
@@ -332,9 +332,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename matches the specified text.
+     * Returns a filter that returns true if the file name matches the specified text.
      *
-     * @param name  the filename
+     * @param name  the file name
      * @return a name checking filter
      * @see NameFileFilter
      */
@@ -343,9 +343,9 @@ public class FileFilterUtils {
     }
 
     /**
-     * Returns a filter that returns true if the filename matches the specified text.
+     * Returns a filter that returns true if the file name matches the specified text.
      *
-     * @param name  the filename
+     * @param name  the file name
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @return a name checking filter
      * @see NameFileFilter

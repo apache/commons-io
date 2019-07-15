@@ -133,7 +133,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * Accept the wildcard specified classes for deserialization,
      * unless they are otherwise rejected.
      *
-     * @param patterns Wildcard filename patterns as defined by
+     * @param patterns Wildcard file name patterns as defined by
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
      */
@@ -148,7 +148,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * Reject the wildcard specified classes for deserialization,
      * even if they are otherwise accepted.
      *
-     * @param patterns Wildcard filename patterns as defined by
+     * @param patterns Wildcard file name patterns as defined by
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
      */

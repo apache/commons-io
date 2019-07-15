@@ -63,7 +63,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
      * Returns true.
      *
      * @param dir  the directory to check (ignored)
-     * @param name  the filename (ignored)
+     * @param name  the file name (ignored)
      * @return true
      */
     @Override

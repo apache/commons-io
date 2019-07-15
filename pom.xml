@@ -33,11 +33,11 @@ The Apache Commons IO library contains utility classes, stream implementations, 
 file comparators, endian transformation classes, and much more.
   </description>
 
-  <url>http://commons.apache.org/proper/commons-io/</url>
+  <url>https://commons.apache.org/proper/commons-io/</url>
 
   <issueManagement>
     <system>jira</system>
-    <url>http://issues.apache.org/jira/browse/IO</url>
+    <url>https://issues.apache.org/jira/browse/IO</url>
   </issueManagement>
 
   <distributionManagement>
@@ -241,23 +241,20 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <!-- 3.9 requires Java 8 -->
-      <version>3.8.1</version>
+      <version>3.9</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <!--  version 4.0.0 requires Java 8 -->
-    <commons.felix.version>3.5.1</commons.felix.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.bc.version>2.6</commons.bc.version>
     <commons.release.version>2.7</commons.release.version>
-    <commons.release.desc>(requires JDK 1.7+)</commons.release.desc>
+    <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
     <commons.osgi.export>
@@ -376,7 +373,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${commons.javadoc.version}</version>
         <configuration>
           <source>7</source>
         </configuration>

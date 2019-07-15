@@ -25,9 +25,9 @@ import org.junit.Test;
 /**
  * Really not a lot to do here, but checking that no Exceptions are thrown.
  */
-public class NullOutputStreamTest {
+public class NullPrintStreamTest {
 
-    private void process(final NullOutputStream nos) throws IOException {
+    private void process(final NullPrintStream nos) throws IOException {
         nos.write("string".getBytes());
         nos.write("some string".getBytes(), 3, 5);
         nos.write(1);
@@ -39,15 +39,15 @@ public class NullOutputStreamTest {
     }
 
     @Test
-    public void testNewInstance() throws IOException {
-        try (final NullOutputStream nos = new NullOutputStream()) {
+    public void testNullNewInstance() throws IOException {
+        try (final NullPrintStream nos = new NullPrintStream()) {
             process(nos);
         }
     }
 
     @Test
-    public void testSingleton() throws IOException {
-        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
+    public void testNullSingleton() throws IOException {
+        try (final NullPrintStream nos = NullPrintStream.NULL_PRINT_STREAM) {
             process(nos);
         }
     }

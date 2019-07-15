@@ -25,7 +25,7 @@
     <body>
         <menu name="Commons IO">
             <item name="Overview"             href="/index.html"/>
-            <item name="Download"             href="http://commons.apache.org/io/download_io.cgi"/>
+            <item name="Download"             href="https://commons.apache.org/io/download_io.cgi"/>
             <item name="User guide"           href="/description.html"/>
             <item name="Best practices"       href="/bestpractices.html"/>
             <item name="Javadoc 2.6"          href="/javadocs/api-release/index.html"/>

@@ -64,7 +64,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
      * Returns false.
      *
      * @param dir  the directory to check (ignored)
-     * @param name  the filename (ignored)
+     * @param name  the file name (ignored)
      * @return false
      */
     @Override

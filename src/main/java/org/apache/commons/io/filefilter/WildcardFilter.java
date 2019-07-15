@@ -52,7 +52,7 @@ import org.apache.commons.io.FilenameUtils;
 public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -5037645902506953517L;
-    /** The wildcards that will be used to match filenames. */
+    /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
 
     /**
@@ -98,11 +98,11 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     //-----------------------------------------------------------------------
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param dir  the file directory
-     * @param name  the filename
-     * @return true if the filename matches one of the wildcards
+     * @param name  the file name
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File dir, final String name) {
@@ -120,10 +120,10 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Checks to see if the filename matches one of the wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
      * @param file the file to check
-     * @return true if the filename matches one of the wildcards
+     * @return true if the file name matches one of the wildcards
      */
     @Override
     public boolean accept(final File file) {

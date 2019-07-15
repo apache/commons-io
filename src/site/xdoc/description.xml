@@ -52,7 +52,7 @@ limitations under the License.
             </p>
 
             <source>
- InputStream in = new URL( "http://commons.apache.org" ).openStream();
+ InputStream in = new URL( "https://commons.apache.org" ).openStream();
  try {
    InputStreamReader inR = new InputStreamReader( in );
    BufferedReader buf = new BufferedReader( inR );
@@ -69,7 +69,7 @@ limitations under the License.
             </p>
 
             <source>
- InputStream in = new URL( "http://commons.apache.org" ).openStream();
+ InputStream in = new URL( "https://commons.apache.org" ).openStream();
  try {
    System.out.println( IOUtils.toString( in ) );
  } finally {

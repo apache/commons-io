@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.io.IOCase;
 
 /**
- * Filters filenames for a certain prefix.
+ * Filters file names for a certain prefix.
  * <p>
  * For example, to print all files and directories in the
  * current directory whose name starts with <code>Test</code>:
@@ -45,7 +45,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
 
     private static final long serialVersionUID = 8533897440809599867L;
 
-    /** The filename prefixes to search for */
+    /** The file name prefixes to search for */
     private final String[] prefixes;
 
     /** Whether the comparison is case sensitive. */
@@ -139,10 +139,10 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename starts with the prefix.
+     * Checks to see if the file name starts with the prefix.
      *
      * @param file  the File to check
-     * @return true if the filename starts with one of our prefixes
+     * @return true if the file name starts with one of our prefixes
      */
     @Override
     public boolean accept(final File file) {
@@ -156,11 +156,11 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
     }
 
     /**
-     * Checks to see if the filename starts with the prefix.
+     * Checks to see if the file name starts with the prefix.
      *
      * @param file  the File directory
-     * @param name  the filename
-     * @return true if the filename starts with one of our prefixes
+     * @param name  the file name
+     * @return true if the file name starts with one of our prefixes
      */
     @Override
     public boolean accept(final File file, final String name) {
