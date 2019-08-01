@@ -16,37 +16,43 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.InputStream;
+import static org.apache.commons.io.IOUtils.EOF;
+
+import java.io.IOException;
+import java.io.Reader;
 
 /**
- * Proxy stream that prevents the underlying input stream from being closed.
+ * Closed reader. This reader returns EOF to all attempts to read
+ * something from it.
  * <p>
- * This class is typically used in cases where an input stream needs to be
- * passed to a component that wants to explicitly close the stream even if
- * more input would still be available to other components.
+ * Typically uses of this class include testing for corner cases in methods
+ * that accept readers and acting as a sentinel value instead of a
+ * {@code null} reader.
  *
- * @since 1.4
+ * @since 2.7
  */
-public class CloseShieldInputStream extends ProxyInputStream {
+public class ClosedReader extends Reader {
 
     /**
-     * Creates a proxy that shields the given input stream from being
-     * closed.
-     *
-     * @param in underlying input stream
+     * A singleton.
      */
-    public CloseShieldInputStream(final InputStream in) {
-        super(in);
-    }
+    public static final ClosedReader CLOSED_READER = new ClosedReader();
 
     /**
-     * Replaces the underlying input stream with a {@link ClosedInputStream}
-     * sentinel. The original input stream will remain open, but this proxy
-     * will appear closed.
+     * Returns -1 to indicate that the stream is closed.
+     *
+     * @param cbuf ignored
+     * @param off ignored
+     * @param len ignored
+     * @return always -1
      */
     @Override
-    public void close() {
-        in = ClosedInputStream.CLOSED_INPUT_STREAM;
+    public int read(char[] cbuf, int off, int len) {
+	return EOF;
+    }
+
+    @Override
+    public void close() throws IOException {
     }
 
 }
