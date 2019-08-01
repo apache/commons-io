@@ -58,6 +58,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.output.AppendableWriter;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.testtools.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -1514,6 +1516,33 @@ public class IOUtilsTestCase {
         assertSame(bw, IOUtils.buffer(bw, 1024));
     }
 
+    @Test
+    public void testAsWriterNull() {
+        try {
+            IOUtils.writer(null);
+            fail("Expected NullPointerException");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testAsWriterStringBuilder() {
+        final Appendable a = new StringBuilder();
+        final Writer w = IOUtils.writer(a);
+        assertNotSame(w, a);
+        assertEquals(StringBuilderWriter.class, w.getClass());
+        assertSame(w, IOUtils.writer(w));
+    }
+
+    @Test
+    public void testAsWriterAppendable() {
+        final Appendable a = new StringBuffer();
+        final Writer w = IOUtils.writer(a);
+        assertNotSame(w, a);
+        assertEquals(AppendableWriter.class, w.getClass());
+        assertSame(w, IOUtils.writer(w));
+    }
 
     @Test
     public void testCopyLarge_SkipWithInvalidOffset() throws IOException {
