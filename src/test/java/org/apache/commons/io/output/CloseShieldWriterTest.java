@@ -16,43 +16,52 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.io.Writer;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * JUnit Test Case for {@link ClosedOutputStream}.
+ * JUnit Test Case for {@link CloseShieldWriter}.
  */
-public class ClosedOutputStreamTest {
+public class CloseShieldWriterTest {
 
-    /**
-     * Test the <code>write(b)</code> method.
-     * @throws Exception
-     */
-    @Test
-    public void testWrite() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.write('x');
-            fail("write(b)");
-        } catch (final IOException e) {
-            // expected
-        }
+    private StringBuilderWriter original;
+
+    private Writer shielded;
+
+    private boolean closed;
+
+    @Before
+    public void setUp() {
+        original = new StringBuilderWriter() {
+            @Override
+            public void close() {
+                closed = true;
+            }
+        };
+        shielded = new CloseShieldWriter(original);
+        closed = false;
     }
 
-    /**
-     * Test the <code>flush()</code> method.
-     * @throws Exception
-     */
     @Test
-    public void testFlush() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.flush();
-            fail("flush()");
-        } catch (final IOException e) {
+    public void testClose() throws IOException {
+        shielded.close();
+        assertFalse("closed", closed);
+        try {
+            shielded.write('x');
+            fail("write(c)");
+        } catch (final IOException ignore) {
             // expected
         }
+        original.write('y');
+        assertEquals(1, original.getBuilder().length());
+        assertEquals('y', original.toString().charAt(0));
     }
 
 }

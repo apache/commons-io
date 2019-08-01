@@ -23,19 +23,19 @@ import java.io.IOException;
 import org.junit.Test;
 
 /**
- * JUnit Test Case for {@link ClosedOutputStream}.
+ * JUnit Test Case for {@link ClosedWriter}.
  */
-public class ClosedOutputStreamTest {
+public class ClosedWriterTest {
 
     /**
-     * Test the <code>write(b)</code> method.
+     * Test the <code>write(cbuf, off, len)</code> method.
      * @throws Exception
      */
     @Test
     public void testWrite() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.write('x');
-            fail("write(b)");
+        try (ClosedWriter cw = new ClosedWriter()) {
+            cw.write(new char[0], 0, 0);
+            fail("write(cbuf, off, len)");
         } catch (final IOException e) {
             // expected
         }
@@ -47,8 +47,8 @@ public class ClosedOutputStreamTest {
      */
     @Test
     public void testFlush() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.flush();
+        try (ClosedWriter cw = new ClosedWriter()) {
+            cw.flush();
             fail("flush()");
         } catch (final IOException e) {
             // expected
