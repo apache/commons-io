@@ -45,7 +45,7 @@ public class ClosedWriter extends Writer {
      * @throws IOException always thrown
      */
     @Override
-    public void write(char[] cbuf, int off, int len) throws IOException {
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
         throw new IOException("write(" + new String(cbuf) + ", " + off + ", " + len + ") failed: stream is closed");
     }
 
