@@ -59,7 +59,7 @@ import org.apache.commons.io.TaggedIOException;
  * </pre>
  *
  * @see TaggedIOException
- * @since 2.0
+ * @since 2.7
  */
 public class TaggedReader extends ProxyReader {
 
