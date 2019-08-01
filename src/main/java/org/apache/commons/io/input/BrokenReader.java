@@ -61,7 +61,7 @@ public class BrokenReader extends Reader {
      * @throws IOException always thrown
      */
     @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
+    public int read(final char[] cbuf, final int off, final int len) throws IOException {
         throw exception;
     }
 
@@ -95,7 +95,7 @@ public class BrokenReader extends Reader {
      * @throws IOException always thrown
      */
     @Override
-    public void mark(int readAheadLimit) throws IOException {
+    public void mark(final int readAheadLimit) throws IOException {
         throw exception;
     }
 

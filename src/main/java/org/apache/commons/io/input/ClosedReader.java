@@ -47,7 +47,7 @@ public class ClosedReader extends Reader {
      * @return always -1
      */
     @Override
-    public int read(char[] cbuf, int off, int len) {
+    public int read(final char[] cbuf, final int off, final int len) {
 	return EOF;
     }
 
