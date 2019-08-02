@@ -43,7 +43,7 @@ import org.apache.commons.io.ByteOrderMark;
  * </ul>
  *
  *
- * <h3>Example 1 - Detect and exclude a UTF-8 BOM</h3>
+ * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
  *
  * <pre>
  * BOMInputStream bomIn = new BOMInputStream(in);
@@ -52,7 +52,7 @@ import org.apache.commons.io.ByteOrderMark;
  * }
  * </pre>
  *
- * <h3>Example 2 - Detect a UTF-8 BOM (but don't exclude it)</h3>
+ * <h2>Example 2 - Detect a UTF-8 BOM (but don't exclude it)</h2>
  *
  * <pre>
  * boolean include = true;
@@ -62,7 +62,7 @@ import org.apache.commons.io.ByteOrderMark;
  * }
  * </pre>
  *
- * <h3>Example 3 - Detect Multiple BOMs</h3>
+ * <h2>Example 3 - Detect Multiple BOMs</h2>
  *
  * <pre>
  * BOMInputStream bomIn = new BOMInputStream(in,
