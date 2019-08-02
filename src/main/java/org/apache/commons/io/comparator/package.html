@@ -20,7 +20,7 @@ limitations under the License.
 <p>This package provides various {@link java.util.Comparator} implementations
 for {@link java.io.File}s.
 </p>
-<h3>Sorting</h3>
+<h2>Sorting</h2>
 <p>
   All the compartors include <i>convenience</i> utility <code>sort(File...)</code> and
   <code>sort(List)</code> methods.
@@ -39,7 +39,7 @@ for {@link java.io.File}s.
       File[] files = NameFileComparator.NAME_COMPARATOR.sort(dir.listFiles());
 </pre>
 
-<h3>Composite Comparator</h3>
+<h2>Composite Comparator</h2>
 <p>
   The <a href="CompositeFileComparator.html">CompositeFileComparator</a> can be used
   to compare (and sort lists or arrays of files) by combining a number other comparators.
@@ -57,7 +57,7 @@ for {@link java.io.File}s.
       comparator.sort(files);
 </pre>
 
-<h3>Singleton Instances (thread-safe)</h3>
+<h2>Singleton Instances (thread-safe)</h2>
 <p>
  The {@link java.util.Comparator} implementations have some <i>convenience</i>
  singleton(<i>thread-safe</i>) instances ready to use:
