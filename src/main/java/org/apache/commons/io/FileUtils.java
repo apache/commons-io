@@ -1309,13 +1309,13 @@ public class FileUtils {
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
      * </p>
-     * <h3>Example: Copy directories only</h3>
+     * <h4>Example: Copy directories only</h4>
      * <pre>
      *  // only copy the directory structure
      *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY);
      *  </pre>
      *
-     * <h3>Example: Copy directories and txt files</h3>
+     * <h4>Example: Copy directories and txt files</h4>
      * <pre>
      *  // Create a filter for ".txt" files
      *  IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
@@ -1361,13 +1361,13 @@ public class FileUtils {
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
      * </p>
-     * <h3>Example: Copy directories only</h3>
+     * <h4>Example: Copy directories only</h4>
      * <pre>
      *  // only copy the directory structure
      *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
      *  </pre>
      *
-     * <h3>Example: Copy directories and txt files</h3>
+     * <h4>Example: Copy directories and txt files</h4>
      * <pre>
      *  // Create a filter for ".txt" files
      *  IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
