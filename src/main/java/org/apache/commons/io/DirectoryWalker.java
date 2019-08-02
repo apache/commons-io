@@ -46,7 +46,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *          behaviour.</li>
  *   </ul>
  *
- * <h3 id="example">1. Example Implementation</h3>
+ * <h2 id="example">1. Example Implementation</h2>
  *
  * There are many possible extensions, for example, to delete all
  * files and '.svn' directories, and return a list of deleted files:
@@ -82,7 +82,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <h3 id="filter">2. Filter Example</h3>
+ * <h2 id="filter">2. Filter Example</h2>
  *
  * <p>
  * Choosing which directories and files to process can be a key aspect
@@ -157,7 +157,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * option for filtering.
  * </p>
  *
- * <h3 id="cancel">3. Cancellation</h3>
+ * <h2 id="cancel">3. Cancellation</h2>
  *
  * <p>
  * The DirectoryWalker contains some of the logic required for cancel processing.
@@ -195,7 +195,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * scenarios.
  * </p>
  *
- * <h4 id="external">3.1 External / Multi-threaded</h4>
+ * <h3 id="external">3.1 External / Multi-threaded</h3>
  *
  * <p>
  * This example provides a public <code>cancel()</code> method that can be
@@ -228,7 +228,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <h4 id="internal">3.2 Internal</h4>
+ * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
  * This shows an example of how internal cancellation processing could be implemented.
