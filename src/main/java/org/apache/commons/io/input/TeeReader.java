@@ -30,8 +30,9 @@ import java.nio.CharBuffer;
  * characters from the reader being skipped or duplicated in the writer.
  * <p>
  * The proxied reader is closed when the {@link #close()} method is
- * called on this proxy. It is configurable whether the associated writer
- * will also closed.
+ * called on this proxy. You may configure whether the reader closes the
+ * writer.
+ * </p>
  *
  * @since 2.7
  */
@@ -44,8 +45,7 @@ public class TeeReader extends ProxyReader {
     private final Writer branch;
 
     /**
-     * Flag for closing also the associated writer when this
-     * reader is closed.
+     * Flag for closing the associated writer when this reader is closed.
      */
     private final boolean closeBranch;
 
@@ -126,7 +126,7 @@ public class TeeReader extends ProxyReader {
     @Override
     public int read(final char[] chr, final int st, final int end) throws IOException {
         final int n = super.read(chr, st, end);
-        if (n != -1) {
+        if (n != EOF) {
             branch.write(chr, st, n);
         }
         return n;
