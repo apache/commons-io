@@ -28,24 +28,24 @@ import junit.framework.AssertionFailedError;
  */
 public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
 
-    private boolean yellForFlush;
-    private boolean yellForClose;
+    private boolean yellOnFlush;
+    private boolean yellOnClose;
 
     /**
      * @param proxy OutputStream to delegate to.
-     * @param yellForFlush True if flush() is forbidden
-     * @param yellForClose True if close() is forbidden
+     * @param yellOnFlush True if flush() is forbidden
+     * @param yellOnClose True if close() is forbidden
      */
-    public YellOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean yellForFlush, final boolean yellForClose) {
+    public YellOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean yellOnFlush, final boolean yellOnClose) {
         super(proxy);
-        this.yellForFlush = yellForFlush;
-        this.yellForClose = yellForClose;
+        this.yellOnFlush = yellOnFlush;
+        this.yellOnClose = yellOnClose;
     }
 
     /** @see java.io.OutputStream#flush() */
     @Override
     public void flush() throws IOException {
-        if (yellForFlush) {
+        if (yellOnFlush) {
             throw new AssertionFailedError("flush() was called on OutputStream");
         }
         super.flush();
@@ -54,15 +54,15 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
-        if (yellForClose) {
+        if (yellOnClose) {
             throw new AssertionFailedError("close() was called on OutputStream");
         }
         super.close();
     }
 
     public void off() {
-        yellForFlush = false;
-        yellForClose = false;
+        yellOnFlush = false;
+        yellOnClose = false;
     }
 
 }
