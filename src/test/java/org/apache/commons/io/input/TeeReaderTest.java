@@ -18,10 +18,14 @@ package org.apache.commons.io.input;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.CharBuffer;
 
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +33,54 @@ import org.junit.Test;
  * JUnit Test Case for {@link TeeReader}.
  */
 public class TeeReaderTest  {
+
+    // Cannot use StringReader or CharSequenceReader as super class because these removed the throws clause from close()
+    private static class ExceptionOnCloseReader extends Reader {
+
+        @Override
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            return 0;
+        }
+
+        @Override
+        public void close() throws IOException {
+            throw new IOException();
+        }
+    }
+
+    private static class RecordCloseStringReader extends StringReader {
+
+        boolean closed;
+
+        public RecordCloseStringReader() {
+            super("");
+        }
+
+        @Override
+        public void close() {
+            super.close();
+            closed = true;
+        }
+    }
+
+    private static class ExceptionOnCloseStringWriter extends StringWriter {
+
+        @Override
+        public void close() throws IOException {
+            throw new IOException();
+        }
+    }
+
+    private static class RecordCloseStringWriter extends StringWriter {
+
+        boolean closed;
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+            closed = true;
+        }
+    }
 
     private Reader tee;
 
@@ -117,6 +169,54 @@ public class TeeReaderTest  {
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
         assertEquals("abbc", output.toString());
+    }
+
+    /**
+     * Tests that the main {@code Reader} is closed when closing the branch {@code Writer} throws an
+     * exception on {@link TeeReader#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseBranchIOException() throws Exception {
+        final RecordCloseStringReader goodR = new RecordCloseStringReader();
+        final StringWriter badW = new ExceptionOnCloseStringWriter();
+
+        final TeeReader nonClosingTr = new TeeReader(goodR, badW, false);
+        nonClosingTr.close();
+        Assert.assertTrue(goodR.closed);
+
+        final TeeReader closingTr = new TeeReader(goodR, badW, true);
+        try {
+            closingTr.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertTrue(goodR.closed);
+        }
+    }
+
+    /**
+     * Tests that the branch {@code Writer} is closed when closing the main {@code Reader} throws an
+     * exception on {@link TeeReader#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseMainIOException() {
+        final Reader badR = new ExceptionOnCloseReader();
+        final RecordCloseStringWriter goodW = new RecordCloseStringWriter();
+
+        final TeeReader nonClosingTr = new TeeReader(badR, goodW, false);
+        try {
+            nonClosingTr.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertFalse(goodW.closed);
+        }
+
+        final TeeReader closingTr = new TeeReader(badR, goodW, true);
+        try {
+            closingTr.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertTrue(goodW.closed);
+        }
     }
 
 }

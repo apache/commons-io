@@ -20,8 +20,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,6 +31,52 @@ import org.junit.Test;
  * JUnit Test Case for {@link TeeInputStream}.
  */
 public class TeeInputStreamTest  {
+
+    private static class ExceptionOnCloseByteArrayInputStream extends ByteArrayInputStream {
+
+        public ExceptionOnCloseByteArrayInputStream() {
+            super(new byte[0]);
+        }
+
+        @Override
+        public void close() throws IOException {
+            throw new IOException();
+        }
+    }
+
+    private static class RecordCloseByteArrayInputStream extends ByteArrayInputStream {
+
+        boolean closed;
+
+        public RecordCloseByteArrayInputStream() {
+            super(new byte[0]);
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+            closed = true;
+        }
+    }
+
+    private static class ExceptionOnCloseByteArrayOutputStream extends ByteArrayOutputStream {
+
+        @Override
+        public void close() throws IOException {
+            throw new IOException();
+        }
+    }
+
+    private static class RecordCloseByteArrayOutputStream extends ByteArrayOutputStream {
+
+        boolean closed;
+
+        @Override
+        public void close() throws IOException {
+            super.close();
+            closed = true;
+        }
+    }
 
     private final String ASCII = "US-ASCII";
 
@@ -104,6 +152,54 @@ public class TeeInputStreamTest  {
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
         assertEquals("abbc", new String(output.toString(ASCII)));
+    }
+
+    /**
+     * Tests that the main {@code InputStream} is closed when closing the branch {@code OutputStream} throws an
+     * exception on {@link TeeInputStream#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseBranchIOException() throws Exception {
+        final RecordCloseByteArrayInputStream goodIs = new RecordCloseByteArrayInputStream();
+        final ByteArrayOutputStream badOs = new ExceptionOnCloseByteArrayOutputStream();
+
+        final TeeInputStream nonClosingTis = new TeeInputStream(goodIs, badOs, false);
+        nonClosingTis.close();
+        Assert.assertTrue(goodIs.closed);
+
+        final TeeInputStream closingTis = new TeeInputStream(goodIs, badOs, true);
+        try {
+            closingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertTrue(goodIs.closed);
+        }
+    }
+
+    /**
+     * Tests that the branch {@code OutputStream} is closed when closing the main {@code InputStream} throws an
+     * exception on {@link TeeInputStream#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseMainIOException() {
+        final ByteArrayInputStream badIs = new ExceptionOnCloseByteArrayInputStream();
+        final RecordCloseByteArrayOutputStream goodOs = new RecordCloseByteArrayOutputStream();
+
+        final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);
+        try {
+            nonClosingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertFalse(goodOs.closed);
+        }
+
+        final TeeInputStream closingTis = new TeeInputStream(badIs, goodOs, true);
+        try {
+            closingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            Assert.assertTrue(goodOs.closed);
+        }
     }
 
 }
