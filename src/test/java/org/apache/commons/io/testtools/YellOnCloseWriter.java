@@ -17,32 +17,31 @@
 package org.apache.commons.io.testtools;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Writer;
 
-import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.io.output.NullWriter;
+import org.apache.commons.io.output.ProxyWriter;
 
 /**
- * Helper class for checking behavior of IO classes.
+ * Helper class for checking behaviour of IO classes.
  */
-public class YellOnCloseInputStream extends ProxyInputStream {
+public class YellOnCloseWriter extends ProxyWriter {
 
     /**
      * Default ctor.
      */
-    @SuppressWarnings("resource")
-    public YellOnCloseInputStream() {
-        super(new NullInputStream());
+    public YellOnCloseWriter() {
+        super(NullWriter.NULL_WRITER);
     }
 
     /**
-     * @param proxy InputStream to delegate to.
+     * @param proxy Writer to delegate to.
      */
-    public YellOnCloseInputStream(final InputStream proxy) {
+    public YellOnCloseWriter(final Writer proxy) {
         super(proxy);
     }
 
-    /** @see java.io.InputStream#close() */
+    /** @see java.io.Writer#close() */
     @Override
     public void close() throws IOException {
         throw new IOException("close() was called on OutputStream");
