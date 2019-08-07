@@ -30,8 +30,9 @@ import java.io.OutputStream;
  * stream.
  * <p>
  * The proxied input stream is closed when the {@link #close()} method is
- * called on this proxy. It is configurable whether the associated output
- * stream will also closed.
+ * called on this proxy. You may configure whether the input stream closes the
+ * output stream.
+ * </p>
  *
  * @since 1.4
  * @see ObservableInputStream
@@ -45,8 +46,7 @@ public class TeeInputStream extends ProxyInputStream {
     private final OutputStream branch;
 
     /**
-     * Flag for closing also the associated output stream when this
-     * stream is closed.
+     * Flag for closing the associated output stream when this stream is closed.
      */
     private final boolean closeBranch;
 
@@ -127,7 +127,7 @@ public class TeeInputStream extends ProxyInputStream {
     @Override
     public int read(final byte[] bts, final int st, final int end) throws IOException {
         final int n = super.read(bts, st, end);
-        if (n != -1) {
+        if (n != EOF) {
             branch.write(bts, st, n);
         }
         return n;

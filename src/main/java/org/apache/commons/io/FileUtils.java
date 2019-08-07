@@ -630,7 +630,7 @@ public class FileUtils {
      * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)},
      * which supports Iterable ('foreach' loop).
      * </p>
-     * 
+     *
      * @param directory  the directory to search in
      * @param fileFilter filter to apply when finding files.
      * @param dirFilter  optional filter to apply when finding subdirectories.
@@ -1169,7 +1169,7 @@ public class FileUtils {
 
     /**
      * Checks that two file lengths are equal.
-     * 
+     *
      * @param srcFile Source file.
      * @param destFile Destination file.
      * @param srcLen Source file length.
@@ -1418,7 +1418,7 @@ public class FileUtils {
 
     /**
      * Checks requirements for file copy.
-     * 
+     *
      * @param src the source file
      * @param dest the destination
      * @throws FileNotFoundException if the destination does not exist
@@ -1789,7 +1789,7 @@ public class FileUtils {
 
     /**
      * Lists files in a directory, asserting that the supplied directory satisfies exists and is a directory.
-     * 
+     *
      * @param directory The directory to list
      * @return The files in the directory, never null.
      * @throws IOException if an I/O error occurs
@@ -3149,7 +3149,7 @@ public class FileUtils {
      * <p>
      * For code that runs on Java 1.7 or later, use the following method instead:
      * </p>
-     * 
+     *
      * {@code boolean java.nio.file.Files.isSymbolicLink(Path path)}
      * @param file the file to check
      * @return true if the file is a Symbolic Link

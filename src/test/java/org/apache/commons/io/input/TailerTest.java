@@ -98,7 +98,7 @@ public class TailerTest {
         while (lines.isEmpty() || !lines.get(lines.size() - 1).equals("SBTOURIST")) {
             lines = listener.getLines();
         }
-        System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
+        // System.out.println("Elapsed: " + (System.currentTimeMillis() - start));
 
         listener.clear();
     }
@@ -127,7 +127,7 @@ public class TailerTest {
 
     @Test
     public void testMultiByteBreak() throws Exception {
-        System.out.println("testMultiByteBreak() Default charset: "+Charset.defaultCharset().displayName());
+        // System.out.println("testMultiByteBreak() Default charset: " + Charset.defaultCharset().displayName());
         final long delay = 50;
         final File origin = new File(this.getClass().getResource("/test-file-utf8.bin").toURI());
         final File file = new File(getTestDirectory(), "testMultiByteBreak.txt");
