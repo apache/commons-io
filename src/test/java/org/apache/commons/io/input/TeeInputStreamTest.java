@@ -17,12 +17,19 @@
 package org.apache.commons.io.input;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.commons.io.testtools.YellOnCloseInputStream;
+import org.apache.commons.io.testtools.YellOnCloseOutputStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,52 +38,6 @@ import org.junit.Test;
  * JUnit Test Case for {@link TeeInputStream}.
  */
 public class TeeInputStreamTest  {
-
-    private static class ExceptionOnCloseByteArrayInputStream extends ByteArrayInputStream {
-
-        public ExceptionOnCloseByteArrayInputStream() {
-            super(new byte[0]);
-        }
-
-        @Override
-        public void close() throws IOException {
-            throw new IOException();
-        }
-    }
-
-    private static class RecordCloseByteArrayInputStream extends ByteArrayInputStream {
-
-        boolean closed;
-
-        public RecordCloseByteArrayInputStream() {
-            super(new byte[0]);
-        }
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            closed = true;
-        }
-    }
-
-    private static class ExceptionOnCloseByteArrayOutputStream extends ByteArrayOutputStream {
-
-        @Override
-        public void close() throws IOException {
-            throw new IOException();
-        }
-    }
-
-    private static class RecordCloseByteArrayOutputStream extends ByteArrayOutputStream {
-
-        boolean closed;
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            closed = true;
-        }
-    }
 
     private final String ASCII = "US-ASCII";
 
@@ -160,19 +121,19 @@ public class TeeInputStreamTest  {
      */
     @Test
     public void testCloseBranchIOException() throws Exception {
-        final RecordCloseByteArrayInputStream goodIs = new RecordCloseByteArrayInputStream();
-        final ByteArrayOutputStream badOs = new ExceptionOnCloseByteArrayOutputStream();
+        final ByteArrayInputStream goodIs = mock(ByteArrayInputStream.class);
+        final OutputStream badOs = new YellOnCloseOutputStream();
 
         final TeeInputStream nonClosingTis = new TeeInputStream(goodIs, badOs, false);
         nonClosingTis.close();
-        Assert.assertTrue(goodIs.closed);
+        verify(goodIs).close();
 
         final TeeInputStream closingTis = new TeeInputStream(goodIs, badOs, true);
         try {
             closingTis.close();
             Assert.fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
-            Assert.assertTrue(goodIs.closed);
+            verify(goodIs, times(2)).close();
         }
     }
 
@@ -181,16 +142,16 @@ public class TeeInputStreamTest  {
      * exception on {@link TeeInputStream#close()}, if specified to do so.
      */
     @Test
-    public void testCloseMainIOException() {
-        final ByteArrayInputStream badIs = new ExceptionOnCloseByteArrayInputStream();
-        final RecordCloseByteArrayOutputStream goodOs = new RecordCloseByteArrayOutputStream();
+    public void testCloseMainIOException() throws IOException {
+        final InputStream badIs = new YellOnCloseInputStream();
+        final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
 
         final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);
         try {
             nonClosingTis.close();
             Assert.fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
-            Assert.assertFalse(goodOs.closed);
+            verify(goodOs, never()).close();
         }
 
         final TeeInputStream closingTis = new TeeInputStream(badIs, goodOs, true);
@@ -198,7 +159,7 @@ public class TeeInputStreamTest  {
             closingTis.close();
             Assert.fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
-            Assert.assertTrue(goodOs.closed);
+            verify(goodOs).close();
         }
     }
 
