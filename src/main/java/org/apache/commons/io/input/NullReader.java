@@ -77,7 +77,7 @@ public class NullReader extends Reader {
     /**
      * Creates a {@link Reader} that emulates a size 0 reader
      * which supports marking and does not throw EOFException.
-     * 
+     *
      * @since 2.7
      */
     public NullReader() {

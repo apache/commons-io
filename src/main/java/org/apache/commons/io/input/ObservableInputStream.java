@@ -68,7 +68,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * @throws IOException if an i/o-error occurs
          */
         public void finished() throws IOException {
-            // noop            
+            // noop
         }
 
         /** Called to indicate, that the {@link ObservableInputStream} has been closed.

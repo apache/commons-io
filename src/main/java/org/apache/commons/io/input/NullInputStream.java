@@ -75,7 +75,7 @@ public class NullInputStream extends InputStream {
     /**
      * Create an {@link InputStream} that emulates a size 0 stream
      * which supports marking and does not throw EOFException.
-     * 
+     *
      * @since 2.7
      */
     public NullInputStream() {
