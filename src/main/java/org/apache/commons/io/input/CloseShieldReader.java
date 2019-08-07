@@ -16,38 +16,38 @@
  */
 package org.apache.commons.io.input;
 
-import java.io.InputStream;
+import java.io.Reader;
 
 /**
- * Proxy stream that prevents the underlying input stream from being closed.
+ * Proxy stream that prevents the underlying reader from being closed.
  * <p>
- * This class is typically used in cases where an input stream needs to be
- * passed to a component that wants to explicitly close the stream even if
+ * This class is typically used in cases where a reader needs to be
+ * passed to a component that wants to explicitly close the reader even if
  * more input would still be available to other components.
- * </p>
+ * <p>
  *
- * @since 1.4
+ * @since 2.7
  */
-public class CloseShieldInputStream extends ProxyInputStream {
+public class CloseShieldReader extends ProxyReader {
 
     /**
-     * Creates a proxy that shields the given input stream from being
+     * Creates a proxy that shields the given reader from being
      * closed.
      *
-     * @param in underlying input stream
+     * @param in underlying reader
      */
-    public CloseShieldInputStream(final InputStream in) {
+    public CloseShieldReader(final Reader in) {
         super(in);
     }
 
     /**
-     * Replaces the underlying input stream with a {@link ClosedInputStream}
-     * sentinel. The original input stream will remain open, but this proxy
+     * Replaces the underlying reader with a {@link ClosedReader}
+     * sentinel. The original reader will remain open, but this proxy
      * will appear closed.
      */
     @Override
     public void close() {
-        in = ClosedInputStream.CLOSED_INPUT_STREAM;
+        in = ClosedReader.CLOSED_READER;
     }
 
 }
