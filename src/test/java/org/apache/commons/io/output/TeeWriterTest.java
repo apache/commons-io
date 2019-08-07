@@ -16,10 +16,16 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 
-import org.junit.Assert;
+import org.apache.commons.io.testtools.YellOnCloseWriter;
 import org.junit.Test;
 
 /**
@@ -27,39 +33,20 @@ import org.junit.Test;
  */
 public class TeeWriterTest {
 
-    private static class ExceptionOnCloseStringWriter extends StringWriter {
-
-        @Override
-        public void close() throws IOException {
-            throw new IOException();
-        }
-    }
-
-    private static class RecordCloseStringWriter extends StringWriter {
-
-        boolean closed;
-
-        @Override
-        public void close() throws IOException {
-            super.close();
-            closed = true;
-        }
-    }
-
     /**
      * Tests that the branch {@code Writer} is closed when closing the main {@code Writer} throws an
      * exception on {@link TeeWriter#close()}.
      */
     @Test
-    public void testCloseBranchIOException() {
-        final StringWriter badW = new ExceptionOnCloseStringWriter();
-        final RecordCloseStringWriter goodW = new RecordCloseStringWriter();
+    public void testCloseBranchIOException() throws IOException {
+        final Writer badW = new YellOnCloseWriter();
+        final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW);
         try {
             tw.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
-            Assert.assertTrue(goodW.closed);
+            verify(goodW).close();
         }
     }
 
@@ -68,15 +55,15 @@ public class TeeWriterTest {
      * exception on {@link TeeWriter#close()}.
      */
     @Test
-    public void testCloseMainIOException() {
-        final StringWriter badW = new ExceptionOnCloseStringWriter();
-        final RecordCloseStringWriter goodW = new RecordCloseStringWriter();
+    public void testCloseMainIOException() throws IOException {
+        final Writer badW = new YellOnCloseWriter();
+        final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW);
         try {
             tw.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
-            Assert.assertTrue(goodW.closed);
+            verify(goodW).close();
         }
     }
 
@@ -91,8 +78,8 @@ public class TeeWriterTest {
                 tw.write(i);
                 expected.write(i);
             }
-            Assert.assertEquals("TeeWriter.write(int)", expected.toString(), sbw1.toString());
-            Assert.assertEquals("TeeWriter.write(int)", expected.toString(), sbw2.toString());
+            assertEquals("TeeWriter.write(int)", expected.toString(), sbw1.toString());
+            assertEquals("TeeWriter.write(int)", expected.toString(), sbw2.toString());
 
             final char[] array = new char[10];
             for (int i = 20; i < 30; i++) {
@@ -100,42 +87,42 @@ public class TeeWriterTest {
             }
             tw.write(array);
             expected.write(array);
-            Assert.assertEquals("TeeWriter.write(char[])", expected.toString(), sbw1.toString());
-            Assert.assertEquals("TeeWriter.write(char[])", expected.toString(), sbw2.toString());
+            assertEquals("TeeWriter.write(char[])", expected.toString(), sbw1.toString());
+            assertEquals("TeeWriter.write(char[])", expected.toString(), sbw2.toString());
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.write(array, 5, 5);
             expected.write(array, 5, 5);
-            Assert.assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(),
+            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(),
                     sbw1.toString());
-            Assert.assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(),
+            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(),
                     sbw2.toString());
 
             for (int i = 0; i < 20; i++) {
                 tw.append((char) i);
                 expected.append((char) i);
             }
-            Assert.assertEquals("TeeWriter.append(char)", expected.toString(), sbw1.toString());
-            Assert.assertEquals("TeeWriter.append(char)", expected.toString(), sbw2.toString());
+            assertEquals("TeeWriter.append(char)", expected.toString(), sbw1.toString());
+            assertEquals("TeeWriter.append(char)", expected.toString(), sbw2.toString());
 
             for (int i = 20; i < 30; i++) {
                 array[i - 20] = (char) i;
             }
             tw.append(new String(array));
             expected.append(new String(array));
-            Assert.assertEquals("TeeWriter.append(CharSequence)", expected.toString(), sbw1.toString());
-            Assert.assertEquals("TeeWriter.write(CharSequence)", expected.toString(), sbw2.toString());
+            assertEquals("TeeWriter.append(CharSequence)", expected.toString(), sbw1.toString());
+            assertEquals("TeeWriter.write(CharSequence)", expected.toString(), sbw2.toString());
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.append(new String(array), 5, 5);
             expected.append(new String(array), 5, 5);
-            Assert.assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(),
+            assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(),
                     sbw1.toString());
-            Assert.assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(),
+            assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(),
                     sbw2.toString());
 
             expected.flush();
