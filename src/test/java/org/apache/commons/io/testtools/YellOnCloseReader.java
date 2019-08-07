@@ -17,32 +17,32 @@
 package org.apache.commons.io.testtools;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
-import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.io.input.NullReader;
+import org.apache.commons.io.input.ProxyReader;
 
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseInputStream extends ProxyInputStream {
+public class YellOnCloseReader extends ProxyReader {
 
     /**
      * Default ctor.
      */
     @SuppressWarnings("resource")
-    public YellOnCloseInputStream() {
-        super(new NullInputStream());
+    public YellOnCloseReader() {
+        super(new NullReader());
     }
 
     /**
-     * @param proxy InputStream to delegate to.
+     * @param proxy Reader to delegate to.
      */
-    public YellOnCloseInputStream(final InputStream proxy) {
+    public YellOnCloseReader(final Reader proxy) {
         super(proxy);
     }
 
-    /** @see java.io.InputStream#close() */
+    /** @see java.io.Reader#close() */
     @Override
     public void close() throws IOException {
         throw new IOException("close() was called on OutputStream");

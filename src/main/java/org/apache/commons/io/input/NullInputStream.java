@@ -73,6 +73,16 @@ public class NullInputStream extends InputStream {
     private final boolean markSupported;
 
     /**
+     * Create an {@link InputStream} that emulates a size 0 stream
+     * which supports marking and does not throw EOFException.
+     * 
+     * @since 2.7
+     */
+    public NullInputStream() {
+       this(0, true, false);
+    }
+
+    /**
      * Create an {@link InputStream} that emulates a specified size
      * which supports marking and does not throw EOFException.
      *

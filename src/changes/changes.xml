@@ -110,6 +110,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-610" dev="ggregory" type="update" due-to="Sebastian">
         Remove throws IOException in method isSymlink() #80.
       </action>
+      <action issue="IO-612" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add class TeeReader.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

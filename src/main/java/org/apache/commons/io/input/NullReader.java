@@ -45,7 +45,7 @@ import java.io.Reader;
  * <code>processChars()</code> methods can be implemented to generate
  * data, for example:
  * </p>
- * 
+ *
  * <pre>
  *  public class TestReader extends NullReader {
  *      public TestReader(int size) {
@@ -63,7 +63,6 @@ import java.io.Reader;
  * </pre>
  *
  * @since 1.3
- *
  */
 public class NullReader extends Reader {
 
@@ -74,6 +73,16 @@ public class NullReader extends Reader {
     private boolean eof;
     private final boolean throwEofException;
     private final boolean markSupported;
+
+    /**
+     * Creates a {@link Reader} that emulates a size 0 reader
+     * which supports marking and does not throw EOFException.
+     * 
+     * @since 2.7
+     */
+    public NullReader() {
+       this(0, true, false);
+    }
 
     /**
      * Creates a {@link Reader} that emulates a specified size
