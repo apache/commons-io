@@ -17,8 +17,10 @@
 package org.apache.commons.io.output;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -35,24 +37,16 @@ public class CloseShieldWriterTest {
 
     private Writer shielded;
 
-    private boolean closed;
-
     @Before
     public void setUp() {
-        original = new StringBuilderWriter() {
-            @Override
-            public void close() {
-                closed = true;
-            }
-        };
+        original = spy(new StringBuilderWriter());
         shielded = new CloseShieldWriter(original);
-        closed = false;
     }
 
     @Test
     public void testClose() throws IOException {
         shielded.close();
-        assertFalse("closed", closed);
+        verify(original, never()).close();
         try {
             shielded.write('x');
             fail("write(c)");
