@@ -29,12 +29,14 @@ import java.io.Reader;
  * This implementation provides a light weight
  * object for testing with an {@link Reader}
  * where the contents don't matter.
+ * </p>
  * <p>
  * One use case would be for testing the handling of
  * large {@link Reader} as it can emulate that
  * scenario without the overhead of actually processing
  * large numbers of characters - significantly speeding up
  * test execution times.
+ * </p>
  * <p>
  * This implementation returns a space from the method that
  * reads a character and leaves the array unchanged in the read
@@ -42,6 +44,7 @@ import java.io.Reader;
  * If alternative data is required the <code>processChar()</code> and
  * <code>processChars()</code> methods can be implemented to generate
  * data, for example:
+ * </p>
  *
  * <pre>
  *  public class TestReader extends NullReader {
@@ -60,7 +63,6 @@ import java.io.Reader;
  * </pre>
  *
  * @since 1.3
- *
  */
 public class NullReader extends Reader {
 
@@ -73,7 +75,17 @@ public class NullReader extends Reader {
     private final boolean markSupported;
 
     /**
-     * Create a {@link Reader} that emulates a specified size
+     * Creates a {@link Reader} that emulates a size 0 reader
+     * which supports marking and does not throw EOFException.
+     *
+     * @since 2.7
+     */
+    public NullReader() {
+       this(0, true, false);
+    }
+
+    /**
+     * Creates a {@link Reader} that emulates a specified size
      * which supports marking and does not throw EOFException.
      *
      * @param size The size of the reader to emulate.
@@ -83,7 +95,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Create a {@link Reader} that emulates a specified
+     * Creates a {@link Reader} that emulates a specified
      * size with option settings.
      *
      * @param size The size of the reader to emulate.
@@ -100,7 +112,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Return the current position.
+     * Returns the current position.
      *
      * @return the current position.
      */
@@ -109,7 +121,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Return the size this {@link Reader} emulates.
+     * Returns the size this {@link Reader} emulates.
      *
      * @return The size of the reader to emulate.
      */
@@ -118,7 +130,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Close this Reader - resets the internal state to
+     * Closes this Reader - resets the internal state to
      * the initial values.
      *
      * @throws IOException If an error occurs.
@@ -131,7 +143,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Mark the current position.
+     * Marks the current position.
      *
      * @param readlimit The number of characters before this marked position
      * is invalid.
@@ -157,7 +169,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Read a character.
+     * Reads a character.
      *
      * @return Either The character value returned by <code>processChar()</code>
      * or <code>-1</code> if the end of file has been reached and
@@ -179,7 +191,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Read some characters into the specified array.
+     * Reads some characters into the specified array.
      *
      * @param chars The character array to read into
      * @return The number of characters read or <code>-1</code>
@@ -195,7 +207,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Read the specified number characters into an array.
+     * Reads the specified number characters into an array.
      *
      * @param chars The character array to read into.
      * @param offset The offset to start reading characters into.
@@ -226,7 +238,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Reset the stream to the point when mark was last called.
+     * Resets the stream to the point when mark was last called.
      *
      * @throws UnsupportedOperationException if mark is not supported.
      * @throws IOException If no position has been marked
@@ -251,7 +263,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Skip a specified number of characters.
+     * Skips a specified number of characters.
      *
      * @param numberOfChars The number of characters to skip.
      * @return The number of characters skipped or <code>-1</code>
@@ -279,9 +291,10 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Return a character value for the  <code>read()</code> method.
+     * Returns a character value for the  <code>read()</code> method.
      * <p>
      * This implementation returns zero.
+     * </p>
      *
      * @return This implementation always returns zero.
      */
@@ -295,6 +308,7 @@ public class NullReader extends Reader {
      * method.
      * <p>
      * This implementation leaves the character array unchanged.
+     * </p>
      *
      * @param chars The character array
      * @param offset The offset to start at.
@@ -305,7 +319,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Handle End of File.
+     * Handles End of File.
      *
      * @return <code>-1</code> if <code>throwEofException</code> is
      * set to {@code false}
