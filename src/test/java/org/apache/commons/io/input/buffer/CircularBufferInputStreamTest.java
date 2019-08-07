@@ -71,7 +71,7 @@ public class CircularBufferInputStreamTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Create a large, but random input buffer.
 	 */
