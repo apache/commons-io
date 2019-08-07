@@ -17,11 +17,20 @@
 package org.apache.commons.io.input;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
+import org.apache.commons.io.testtools.YellOnCloseInputStream;
+import org.apache.commons.io.testtools.YellOnCloseOutputStream;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -104,6 +113,54 @@ public class TeeInputStreamTest  {
         assertEquals('c', tee.read());
         assertEquals(-1, tee.read());
         assertEquals("abbc", new String(output.toString(ASCII)));
+    }
+
+    /**
+     * Tests that the main {@code InputStream} is closed when closing the branch {@code OutputStream} throws an
+     * exception on {@link TeeInputStream#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseBranchIOException() throws Exception {
+        final ByteArrayInputStream goodIs = mock(ByteArrayInputStream.class);
+        final OutputStream badOs = new YellOnCloseOutputStream();
+
+        final TeeInputStream nonClosingTis = new TeeInputStream(goodIs, badOs, false);
+        nonClosingTis.close();
+        verify(goodIs).close();
+
+        final TeeInputStream closingTis = new TeeInputStream(goodIs, badOs, true);
+        try {
+            closingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            verify(goodIs, times(2)).close();
+        }
+    }
+
+    /**
+     * Tests that the branch {@code OutputStream} is closed when closing the main {@code InputStream} throws an
+     * exception on {@link TeeInputStream#close()}, if specified to do so.
+     */
+    @Test
+    public void testCloseMainIOException() throws IOException {
+        final InputStream badIs = new YellOnCloseInputStream();
+        final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
+
+        final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);
+        try {
+            nonClosingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            verify(goodOs, never()).close();
+        }
+
+        final TeeInputStream closingTis = new TeeInputStream(badIs, goodOs, true);
+        try {
+            closingTis.close();
+            Assert.fail("Expected " + IOException.class.getName());
+        } catch (final IOException e) {
+            verify(goodOs).close();
+        }
     }
 
 }
