@@ -17,7 +17,9 @@
 package org.apache.commons.io.input;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -36,25 +38,17 @@ public class CloseShieldReaderTest {
 
     private Reader shielded;
 
-    private boolean closed;
-
     @Before
     public void setUp() {
         data = "xyz";
-        original = new CharSequenceReader(data) {
-            @Override
-            public void close() {
-                closed = true;
-            }
-        };
+        original = spy(new CharSequenceReader(data));
         shielded = new CloseShieldReader(original);
-        closed = false;
     }
 
     @Test
     public void testClose() throws IOException {
         shielded.close();
-        assertFalse("closed", closed);
+        verify(original, never()).close();
         char[] cbuf = new char[10];
         assertEquals("read(cbuf, off, len)", -1, shielded.read(cbuf, 0, 10));
         assertEquals("read(cbuf, off, len)", data.length(), original.read(cbuf, 0, 10));
