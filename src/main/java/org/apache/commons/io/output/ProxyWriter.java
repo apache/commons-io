@@ -122,19 +122,19 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Invokes the delegate's <code>write(char[])</code> method.
-     * @param chr the characters to write
+     * @param cbuf the characters to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(final char[] chr) throws IOException {
+    public void write(final char[] cbuf) throws IOException {
         try {
             int len = 0;
-            if (chr != null) {
-                len = chr.length;
+            if (cbuf != null) {
+                len = cbuf.length;
             }
 
             beforeWrite(len);
-            out.write(chr);
+            out.write(cbuf);
             afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
