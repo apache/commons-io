@@ -27,7 +27,6 @@ import java.io.Writer;
  * to increase reusability, because FilterWriter changes the
  * methods being called, such as write(char[]) to write(char[], int, int)
  * and write(String) to write(String, int, int).
- *
  */
 public class ProxyWriter extends FilterWriter {
 
@@ -107,14 +106,14 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Invokes the delegate's <code>write(int)</code> method.
-     * @param idx the character to write
+     * @param c the character to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(final int idx) throws IOException {
+    public void write(final int c) throws IOException {
         try {
             beforeWrite(1);
-            out.write(idx);
+            out.write(c);
             afterWrite(1);
         } catch (final IOException e) {
             handleIOException(e);
@@ -144,16 +143,16 @@ public class ProxyWriter extends FilterWriter {
 
     /**
      * Invokes the delegate's <code>write(char[], int, int)</code> method.
-     * @param chr the characters to write
-     * @param st The start offset
+     * @param cbuf the characters to write
+     * @param off The start offset
      * @param len The number of characters to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(final char[] chr, final int st, final int len) throws IOException {
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
         try {
             beforeWrite(len);
-            out.write(chr, st, len);
+            out.write(cbuf, off, len);
             afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
@@ -184,15 +183,15 @@ public class ProxyWriter extends FilterWriter {
     /**
      * Invokes the delegate's <code>write(String)</code> method.
      * @param str the string to write
-     * @param st The start offset
+     * @param off The start offset
      * @param len The number of characters to write
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void write(final String str, final int st, final int len) throws IOException {
+    public void write(final String str, final int off, final int len) throws IOException {
         try {
             beforeWrite(len);
-            out.write(str, st, len);
+            out.write(str, off, len);
             afterWrite(len);
         } catch (final IOException e) {
             handleIOException(e);
