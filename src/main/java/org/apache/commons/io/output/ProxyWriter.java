@@ -92,7 +92,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(final CharSequence csq) throws IOException {
         try {
-            int len = IOUtils.length(csq);
+            final int len = IOUtils.length(csq);
             beforeWrite(len);
             out.append(csq);
             afterWrite(len);
@@ -126,7 +126,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(final char[] cbuf) throws IOException {
         try {
-            int len = IOUtils.length(cbuf);
+            final int len = IOUtils.length(cbuf);
             beforeWrite(len);
             out.write(cbuf);
             afterWrite(len);
@@ -161,7 +161,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(final String str) throws IOException {
         try {
-            int len = IOUtils.length(str);
+            final int len = IOUtils.length(str);
             beforeWrite(len);
             out.write(str);
             afterWrite(len);
