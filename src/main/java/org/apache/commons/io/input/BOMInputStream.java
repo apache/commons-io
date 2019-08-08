@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.IOUtils;
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
@@ -164,7 +165,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public BOMInputStream(final InputStream delegate, final boolean include, final ByteOrderMark... boms) {
         super(delegate);
-        if (boms == null || boms.length == 0) {
+        if (IOUtils.length(boms) == 0) {
             throw new IllegalArgumentException("No BOMs specified");
         }
         this.include = include;

@@ -20,6 +20,8 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A Proxy stream which acts as expected, that is it passes the method
  * calls on to the proxied stream and doesn't change which methods are
@@ -66,7 +68,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     @Override
     public void write(final byte[] bts) throws IOException {
         try {
-            final int len = bts != null ? bts.length : 0;
+            final int len = IOUtils.length(bts);
             beforeWrite(len);
             out.write(bts);
             afterWrite(len);

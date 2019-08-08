@@ -20,6 +20,8 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A Proxy stream which acts as expected, that is it passes the method
  * calls on to the proxied stream and doesn't change which methods are
@@ -90,11 +92,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public Writer append(final CharSequence csq) throws IOException {
         try {
-            int len = 0;
-            if (csq != null) {
-                len = csq.length();
-            }
-
+            int len = IOUtils.length(csq);
             beforeWrite(len);
             out.append(csq);
             afterWrite(len);
@@ -128,11 +126,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(final char[] cbuf) throws IOException {
         try {
-            int len = 0;
-            if (cbuf != null) {
-                len = cbuf.length;
-            }
-
+            int len = IOUtils.length(cbuf);
             beforeWrite(len);
             out.write(cbuf);
             afterWrite(len);
@@ -167,11 +161,7 @@ public class ProxyWriter extends FilterWriter {
     @Override
     public void write(final String str) throws IOException {
         try {
-            int len = 0;
-            if (str != null) {
-                len = str.length();
-            }
-
+            int len = IOUtils.length(str);
             beforeWrite(len);
             out.write(str);
             afterWrite(len);

@@ -3290,4 +3290,48 @@ public class IOUtils {
         super();
     }
 
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length or null if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final byte[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length or null if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final char[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given CharSequence in a null-safe manner.
+     *
+     * @param csq a CharSequence or null
+     * @return the CharSequence length or null if the given CharSequence is null.
+     * @since 2.7
+     */
+    public static int length(final CharSequence csq) {
+        return csq == null ? 0 : csq.length();
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length or null if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final Object[] array) {
+        return array == null ? 0 : array.length;
+    }
+
 }
