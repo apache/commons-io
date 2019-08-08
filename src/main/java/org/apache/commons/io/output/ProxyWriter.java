@@ -233,12 +233,14 @@ public class ProxyWriter extends FilterWriter {
      * Subclasses can override this method to add common pre-processing
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
+     * </p>
      *
      * @since 2.0
      * @param n number of chars to be written
      * @throws IOException if the pre-processing fails
      */
     protected void beforeWrite(final int n) throws IOException {
+        // noop
     }
 
     /**
@@ -250,12 +252,14 @@ public class ProxyWriter extends FilterWriter {
      * Subclasses can override this method to add common post-processing
      * functionality without having to override all the write methods.
      * The default implementation does nothing.
+     * </p>
      *
      * @since 2.0
      * @param n number of chars written
      * @throws IOException if the post-processing fails
      */
     protected void afterWrite(final int n) throws IOException {
+        // noop
     }
 
     /**
@@ -263,6 +267,8 @@ public class ProxyWriter extends FilterWriter {
      * <p>
      * This method provides a point to implement custom exception
      * handling. The default behaviour is to re-throw the exception.
+     * </p>
+     *
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
      * @since 2.0
