@@ -116,6 +116,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-613" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
         Add classes ClosedReader and CloseShieldReader. #84.
       </action>
+      <action issue="IO-614" dev="ggregory" type="add" due-to="Rob Spoor">
+        Add classes TaggedWriter, ClosedWriter and BrokenWriter. #86.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
