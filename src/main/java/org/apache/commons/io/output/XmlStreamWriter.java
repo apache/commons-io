@@ -93,6 +93,7 @@ public class XmlStreamWriter extends Writer {
      * @throws FileNotFoundException if there is an error creating or
      * opening the file
      */
+    @SuppressWarnings("resource")
     public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
         this(new FileOutputStream(file), defaultEncoding);
     }
