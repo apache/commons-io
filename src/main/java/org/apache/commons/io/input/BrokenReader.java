@@ -25,6 +25,7 @@ import java.io.Reader;
  * <p>
  * This class is mostly useful for testing error handling in code that uses a
  * reader.
+ * </p>
  *
  * @since 2.7
  */

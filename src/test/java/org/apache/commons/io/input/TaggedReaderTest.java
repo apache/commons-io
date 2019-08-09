@@ -32,7 +32,7 @@ import org.junit.Test;
 /**
  * JUnit Test Case for {@link TaggedReader}.
  */
-public class TaggedReaderTest  {
+public class TaggedReaderTest {
 
     @Test
     public void testEmptyReader() throws IOException {
@@ -61,8 +61,7 @@ public class TaggedReaderTest  {
     @Test
     public void testBrokenReader() {
         final IOException exception = new IOException("test exception");
-        final TaggedReader reader =
-            new TaggedReader(new BrokenReader(exception));
+        final TaggedReader reader = new TaggedReader(new BrokenReader(exception));
 
         // Test the ready() method
         try {
@@ -114,13 +113,11 @@ public class TaggedReaderTest  {
         final TaggedReader reader = new TaggedReader(closed);
 
         assertFalse(reader.isCauseOf(exception));
-        assertFalse(reader.isCauseOf(
-                new TaggedIOException(exception, UUID.randomUUID())));
+        assertFalse(reader.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
 
         reader.throwIfCauseOf(exception);
 
-        reader.throwIfCauseOf(
-                    new TaggedIOException(exception, UUID.randomUUID()));
+        reader.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
         reader.close();
     }
 
