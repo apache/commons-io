@@ -61,5 +61,6 @@ public class ClosedWriter extends Writer {
 
     @Override
     public void close() throws IOException {
+        // noop
     }
 }
