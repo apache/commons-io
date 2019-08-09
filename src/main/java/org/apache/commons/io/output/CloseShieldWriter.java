@@ -16,38 +16,35 @@
  */
 package org.apache.commons.io.output;
 
-import java.io.OutputStream;
+import java.io.Writer;
 
 /**
- * Proxy stream that prevents the underlying output stream from being closed.
+ * Proxy stream that prevents the underlying writer from being closed.
  * <p>
- * This class is typically used in cases where an output stream needs to be
- * passed to a component that wants to explicitly close the stream even if
- * other components would still use the stream for output.
+ * This class is typically used in cases where a writer needs to be passed to a component that wants to explicitly close
+ * the writer even if other components would still use the writer for output.
  * </p>
  *
- * @since 1.4
+ * @since 2.7
  */
-public class CloseShieldOutputStream extends ProxyOutputStream {
+public class CloseShieldWriter extends ProxyWriter {
 
     /**
-     * Creates a proxy that shields the given output stream from being
-     * closed.
+     * Creates a proxy that shields the given writer from being closed.
      *
-     * @param out underlying output stream
+     * @param out underlying writer
      */
-    public CloseShieldOutputStream(final OutputStream out) {
+    public CloseShieldWriter(final Writer out) {
         super(out);
     }
 
     /**
-     * Replaces the underlying output stream with a {@link ClosedOutputStream}
-     * sentinel. The original output stream will remain open, but this proxy
-     * will appear closed.
+     * Replaces the underlying writer with a {@link ClosedWriter} sentinel. The original writer will remain open, but
+     * this proxy will appear closed.
      */
     @Override
     public void close() {
-        out = ClosedOutputStream.CLOSED_OUTPUT_STREAM;
+        out = ClosedWriter.CLOSED_WRITER;
     }
 
 }
