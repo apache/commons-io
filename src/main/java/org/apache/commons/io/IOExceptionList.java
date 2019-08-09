@@ -49,6 +49,7 @@ public class IOExceptionList extends IOException {
     /**
      * Gets the cause list.
      * 
+     * @param <T> type of exception to return.
      * @return The list of causes.
      */
     public <T extends Throwable> List<T> getCauseList() {
@@ -58,6 +59,7 @@ public class IOExceptionList extends IOException {
     /**
      * Gets the cause list.
      * 
+     * @param <T> type of exception to return.
      * @param index index in the cause list.
      * @return The list of causes.
      */
@@ -68,7 +70,9 @@ public class IOExceptionList extends IOException {
     /**
      * Gets the cause list.
      * 
+     * @param <T> type of exception to return.
      * @param index index in the cause list.
+     * @param clazz type of exception to return.
      * @return The list of causes.
      */
     public <T extends Throwable> T getCause(final int index, Class<T> clazz) {
@@ -78,7 +82,7 @@ public class IOExceptionList extends IOException {
     /**
      * Works around Throwable and Generics, may fail at runtime depending on the argument value.
      * 
-     * @param <T>   the target type
+     * @param <T> type of exception to return.
      * @param clazz the target type
      * @return The list of causes.
      */
