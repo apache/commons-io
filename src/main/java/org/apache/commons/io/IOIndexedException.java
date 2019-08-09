@@ -40,6 +40,13 @@ public class IOIndexedException extends IOException {
         this.index = index;
     }
 
+    /**
+     * Converts input to a suitable Stirng for exception message.
+     * 
+     * @param index An index into a source collection.
+     * @param cause A cause.
+     * @return A message.
+     */
     protected static String toMessage(final int index, final Throwable cause) {
         // Letting index be any int
         final String unspecified = "Null";
