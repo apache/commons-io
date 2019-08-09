@@ -94,7 +94,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    private static enum E {A, B, C}
+    private enum E {A, B, C}
 
     private static class Test implements Serializable {
         private static final long serialVersionUID = 1L;
