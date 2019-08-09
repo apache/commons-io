@@ -34,7 +34,7 @@ public class CircularByteBuffer {
      *
      * @param pSize the size of buffer to create
      */
-    public CircularByteBuffer(int pSize) {
+    public CircularByteBuffer(final int pSize) {
         buffer = new byte[pSize];
         startOffset = 0;
         endOffset = 0;
@@ -82,7 +82,7 @@ public class CircularByteBuffer {
      *                                  of bytes. Use {@link #getCurrentNumberOfBytes()} to prevent this
      *                                  exception.
      */
-    public void read(byte[] pBuffer, int pOffset, int pLength) {
+    public void read(final byte[] pBuffer, final int pOffset, final int pLength) {
         Objects.requireNonNull(pBuffer);
         if (pOffset < 0 || pOffset >= pBuffer.length) {
             throw new IllegalArgumentException("Invalid offset: " + pOffset);
@@ -117,7 +117,7 @@ public class CircularByteBuffer {
      * @throws IllegalStateException The buffer is full. Use {@link #hasSpace()},
      *                               or {@link #getSpace()}, to prevent this exception.
      */
-    public void add(byte pByte) {
+    public void add(final byte pByte) {
         if (currentNumberOfBytes >= buffer.length) {
             throw new IllegalStateException("No space available");
         }
@@ -143,7 +143,7 @@ public class CircularByteBuffer {
      * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
-    public boolean peek(byte[] pBuffer, int pOffset, int pLength) {
+    public boolean peek(final byte[] pBuffer, final int pOffset, final int pLength) {
         Objects.requireNonNull(pBuffer, "Buffer");
         if (pOffset < 0 || pOffset >= pBuffer.length) {
             throw new IllegalArgumentException("Invalid offset: " + pOffset);
@@ -179,7 +179,7 @@ public class CircularByteBuffer {
      * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
-    public void add(byte[] pBuffer, int pOffset, int pLength) {
+    public void add(final byte[] pBuffer, final int pOffset, final int pLength) {
         Objects.requireNonNull(pBuffer, "Buffer");
         if (pOffset < 0 || pOffset >= pBuffer.length) {
             throw new IllegalArgumentException("Invalid offset: " + pOffset);
@@ -219,7 +219,7 @@ public class CircularByteBuffer {
      * @see #hasSpace()
      * @see #getSpace()
      */
-    public boolean hasSpace(int pBytes) {
+    public boolean hasSpace(final int pBytes) {
         return currentNumberOfBytes + pBytes <= buffer.length;
     }
 

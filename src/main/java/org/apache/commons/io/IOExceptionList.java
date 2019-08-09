@@ -40,7 +40,7 @@ public class IOExceptionList extends IOException {
      *
      * @param causeList a list of cause exceptions.
      */
-    public IOExceptionList(List<? extends Throwable> causeList) {
+    public IOExceptionList(final List<? extends Throwable> causeList) {
         super(String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList),
                 causeList == null ? null : causeList.get(0));
         this.causeList = causeList == null ? Collections.emptyList() : causeList;
@@ -75,7 +75,7 @@ public class IOExceptionList extends IOException {
      * @param clazz type of exception to return.
      * @return The list of causes.
      */
-    public <T extends Throwable> T getCause(final int index, Class<T> clazz) {
+    public <T extends Throwable> T getCause(final int index, final Class<T> clazz) {
         return (T) causeList.get(index);
     }
 
@@ -86,7 +86,7 @@ public class IOExceptionList extends IOException {
      * @param clazz the target type
      * @return The list of causes.
      */
-    public <T extends Throwable> List<T> getCauseList(Class<T> clazz) {
+    public <T extends Throwable> List<T> getCauseList(final Class<T> clazz) {
         return (List<T>) causeList;
     }
 

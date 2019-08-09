@@ -1154,8 +1154,8 @@ public class FileUtils {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
-        Path srcPath = srcFile.toPath();
-        Path destPath = destFile.toPath();
+        final Path srcPath = srcFile.toPath();
+        final Path destPath = destFile.toPath();
         final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
         Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
 

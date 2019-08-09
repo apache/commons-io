@@ -49,7 +49,7 @@ public class CloseShieldReaderTest {
     public void testClose() throws IOException {
         shielded.close();
         verify(original, never()).close();
-        char[] cbuf = new char[10];
+        final char[] cbuf = new char[10];
         assertEquals("read(cbuf, off, len)", -1, shielded.read(cbuf, 0, 10));
         assertEquals("read(cbuf, off, len)", data.length(), original.read(cbuf, 0, 10));
         assertEquals(data, new String(cbuf, 0, data.length()));
