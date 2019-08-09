@@ -23,12 +23,10 @@ import java.io.Writer;
 import org.apache.commons.io.IOUtils;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method
- * calls on to the proxied stream and doesn't change which methods are
- * being called. It is an alternative base class to FilterWriter
- * to increase reusability, because FilterWriter changes the
- * methods being called, such as write(char[]) to write(char[], int, int)
- * and write(String) to write(String, int, int).
+ * A Proxy stream which acts as expected, that is it passes the method calls on to the proxied stream and doesn't
+ * change which methods are being called. It is an alternative base class to FilterWriter to increase reusability,
+ * because FilterWriter changes the methods being called, such as {@code write(char[]) to write(char[], int, int)}
+ * and {@code write(String) to write(String, int, int)}.
  */
 public class ProxyWriter extends FilterWriter {
 
