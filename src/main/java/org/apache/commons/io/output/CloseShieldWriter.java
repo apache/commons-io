@@ -14,40 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.input;
+package org.apache.commons.io.output;
 
-import java.io.InputStream;
+import java.io.Writer;
 
 /**
- * Proxy stream that prevents the underlying input stream from being closed.
+ * Proxy stream that prevents the underlying writer from being closed.
  * <p>
- * This class is typically used in cases where an input stream needs to be
- * passed to a component that wants to explicitly close the stream even if
- * more input would still be available to other components.
+ * This class is typically used in cases where a writer needs to be passed to a component that wants to explicitly close
+ * the writer even if other components would still use the writer for output.
  * </p>
  *
- * @since 1.4
+ * @since 2.7
  */
-public class CloseShieldInputStream extends ProxyInputStream {
+public class CloseShieldWriter extends ProxyWriter {
 
     /**
-     * Creates a proxy that shields the given input stream from being
-     * closed.
+     * Creates a proxy that shields the given writer from being closed.
      *
-     * @param in underlying input stream
+     * @param out underlying writer
      */
-    public CloseShieldInputStream(final InputStream in) {
-        super(in);
+    public CloseShieldWriter(final Writer out) {
+        super(out);
     }
 
     /**
-     * Replaces the underlying input stream with a {@link ClosedInputStream}
-     * sentinel. The original input stream will remain open, but this proxy
-     * will appear closed.
+     * Replaces the underlying writer with a {@link ClosedWriter} sentinel. The original writer will remain open, but
+     * this proxy will appear closed.
      */
     @Override
     public void close() {
-        in = ClosedInputStream.CLOSED_INPUT_STREAM;
+        out = ClosedWriter.CLOSED_WRITER;
     }
 
 }

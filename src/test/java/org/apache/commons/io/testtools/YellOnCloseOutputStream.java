@@ -44,7 +44,7 @@ public class YellOnCloseOutputStream extends ProxyOutputStream {
     /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
-        throw new IOException("close() was called on OutputStream");
+        throw new IOException(getClass().getSimpleName() + ".close() called.");
     }
 
 }

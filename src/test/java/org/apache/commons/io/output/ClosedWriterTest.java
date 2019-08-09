@@ -16,24 +16,42 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+
 import org.junit.Test;
 
 /**
- * Really not a lot to do here, but checking that no
- * Exceptions are thrown.
+ * JUnit Test Case for {@link ClosedWriter}.
  */
-public class NullWriterTest {
+public class ClosedWriterTest {
 
+    /**
+     * Test the <code>write(cbuf, off, len)</code> method.
+     * @throws Exception
+     */
     @Test
-    public void testNull() {
-        final char[] chars = new char[] { 'A', 'B', 'C' };
-        try (final NullWriter writer = NullWriter.NULL_WRITER) {
-            writer.write(1);
-            writer.write(chars);
-            writer.write(chars, 1, 1);
-            writer.write("some string");
-            writer.write("some string", 2, 2);
-            writer.flush();
+    public void testWrite() throws Exception {
+        try (ClosedWriter cw = new ClosedWriter()) {
+            cw.write(new char[0], 0, 0);
+            fail("write(cbuf, off, len)");
+        } catch (final IOException e) {
+            // expected
+        }
+    }
+
+    /**
+     * Test the <code>flush()</code> method.
+     * @throws Exception
+     */
+    @Test
+    public void testFlush() throws Exception {
+        try (ClosedWriter cw = new ClosedWriter()) {
+            cw.flush();
+            fail("flush()");
+        } catch (final IOException e) {
+            // expected
         }
     }
 

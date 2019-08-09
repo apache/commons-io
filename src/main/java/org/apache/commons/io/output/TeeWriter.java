@@ -14,27 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.commons.io.output;
 
-import org.junit.Test;
+import java.io.Writer;
+import java.util.Collection;
 
 /**
- * Really not a lot to do here, but checking that no
- * Exceptions are thrown.
+ * Classic splitter of {@link Writer}. Named after the Unix 'tee' command. It allows a stream to be branched off so
+ * there are now two streams.
+ * <p>
+ * This currently a only convenience class with the proper name "TeeWriter".
+ * </p>
+ * 
+ * @since 2.7
  */
-public class NullWriterTest {
+public class TeeWriter extends ProxyCollectionWriter {
 
-    @Test
-    public void testNull() {
-        final char[] chars = new char[] { 'A', 'B', 'C' };
-        try (final NullWriter writer = NullWriter.NULL_WRITER) {
-            writer.write(1);
-            writer.write(chars);
-            writer.write(chars, 1, 1);
-            writer.write("some string");
-            writer.write("some string", 2, 2);
-            writer.flush();
-        }
+    /**
+     * Creates a new filtered collection writer.
+     *
+     * @param writers Writers to provide the underlying targets.
+     */
+    public TeeWriter(final Collection<Writer> writers) {
+        super(writers);
     }
 
+    /**
+     * Creates a new filtered collection writer.
+     *
+     * @param writers Writers to provide the underlying targets.
+     */
+    public TeeWriter(final Writer... writers) {
+        super(writers);
+    }
 }

@@ -14,47 +14,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.input;
-
-import static org.apache.commons.io.IOUtils.EOF;
+package org.apache.commons.io.output;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.Writer;
 
 /**
- * Closed reader. This reader returns EOF to all attempts to read
- * something from it.
+ * Closed writer. This writer throws an exception on all attempts to
+ * write something to it.
  * <p>
  * Typically uses of this class include testing for corner cases in methods
- * that accept readers and acting as a sentinel value instead of a
- * {@code null} reader.
- * </p>
+ * that accept a writer and acting as a sentinel value instead of
+ * a {@code null} writer.
  *
  * @since 2.7
  */
-public class ClosedReader extends Reader {
+public class ClosedWriter extends Writer {
 
     /**
      * A singleton.
      */
-    public static final ClosedReader CLOSED_READER = new ClosedReader();
+    public static final ClosedWriter CLOSED_WRITER = new ClosedWriter();
 
     /**
-     * Returns -1 to indicate that the stream is closed.
+     * Throws an {@link IOException} to indicate that the writer is closed.
      *
      * @param cbuf ignored
      * @param off ignored
      * @param len ignored
-     * @return always -1
+     * @throws IOException always thrown
      */
     @Override
-    public int read(final char[] cbuf, final int off, final int len) {
-        return EOF;
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        throw new IOException("write(" + new String(cbuf) + ", " + off + ", " + len + ") failed: stream is closed");
+    }
+
+    /**
+     * Throws an {@link IOException} to indicate that the stream is closed.
+     *
+     * @throws IOException always thrown
+     */
+    @Override
+    public void flush() throws IOException {
+        throw new IOException("flush() failed: stream is closed");
     }
 
     @Override
     public void close() throws IOException {
         // noop
     }
-
 }

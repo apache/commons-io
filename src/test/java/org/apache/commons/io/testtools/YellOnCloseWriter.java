@@ -44,7 +44,7 @@ public class YellOnCloseWriter extends ProxyWriter {
     /** @see java.io.Writer#close() */
     @Override
     public void close() throws IOException {
-        throw new IOException("close() was called on OutputStream");
+        throw new IOException(getClass().getSimpleName() + ".close() called.");
     }
 
 }

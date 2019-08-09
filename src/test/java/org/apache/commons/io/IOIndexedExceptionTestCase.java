@@ -14,27 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.output;
 
+package org.apache.commons.io;
+
+import java.io.EOFException;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Really not a lot to do here, but checking that no
- * Exceptions are thrown.
+ * Tests {@link IOIndexedException}.
+ *
+ * @since 2.7
  */
-public class NullWriterTest {
+public class IOIndexedExceptionTestCase {
 
     @Test
-    public void testNull() {
-        final char[] chars = new char[] { 'A', 'B', 'C' };
-        try (final NullWriter writer = NullWriter.NULL_WRITER) {
-            writer.write(1);
-            writer.write(chars);
-            writer.write(chars, 1, 1);
-            writer.write("some string");
-            writer.write("some string", 2, 2);
-            writer.flush();
-        }
+    public void testEdge() {
+        final IOIndexedException exception = new IOIndexedException(-1, null);
+        Assert.assertEquals(-1, exception.getIndex());
+        Assert.assertEquals(null, exception.getCause());
+        Assert.assertNotNull(exception.getMessage());
     }
 
+    @Test
+    public void testPlain() {
+        final EOFException e = new EOFException("end");
+        final IOIndexedException exception = new IOIndexedException(0, e);
+        Assert.assertEquals(0, exception.getIndex());
+        Assert.assertEquals(e, exception.getCause());
+        Assert.assertNotNull(exception.getMessage());
+    }
 }

@@ -45,7 +45,7 @@ public class YellOnCloseReader extends ProxyReader {
     /** @see java.io.Reader#close() */
     @Override
     public void close() throws IOException {
-        throw new IOException("close() was called on OutputStream");
+        throw new IOException(getClass().getSimpleName() + ".close() called.");
     }
 
 }
