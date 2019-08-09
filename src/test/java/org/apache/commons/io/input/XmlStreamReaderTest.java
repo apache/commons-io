@@ -76,7 +76,7 @@ public class XmlStreamReaderTest {
     protected void _testRawNoBomInvalid(final String encoding) throws Exception {
         final InputStream is = getXmlStream("no-bom", XML3, encoding, encoding);
         try {
-            (new XmlStreamReader(is, false)).close();;
+            (new XmlStreamReader(is, false)).close();
             fail("It should have failed");
         } catch (final IOException ex) {
             assertTrue(ex.getMessage().contains("Invalid encoding,"));
@@ -360,7 +360,7 @@ public class XmlStreamReaderTest {
         final InputStream is = getXmlStream(bomEnc,
                 prologEnc == null ? XML2 : XML3, streamEnc, prologEnc);
         try {
-            (new XmlStreamReader(is, cT, false)).close();;
+            (new XmlStreamReader(is, cT, false)).close();
             fail("It should have failed for HTTP Content-type " + cT + ", BOM "
                     + bomEnc + ", streamEnc " + streamEnc + " and prologEnc "
                     + prologEnc);

@@ -215,7 +215,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
             protected void invalidClassNameFound(final String className) throws InvalidClassException {
                 throw new RuntimeException("Custom exception");
             }
-        };
+        }
 
         assertSerialization(
                 willClose(new CustomVOIS(testStream))
