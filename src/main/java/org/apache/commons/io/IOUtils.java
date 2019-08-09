@@ -47,7 +47,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
+import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 
@@ -293,6 +295,26 @@ public class IOUtils {
      */
     public static BufferedWriter buffer(final Writer writer, final int size) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer, size);
+    }
+
+    /**
+     * Returns the given Appendable if it is already a {@link Writer}, otherwise creates a Writer wrapper around the
+     * given Appendable.
+     *
+     * @param appendable the Appendable to wrap or return (not null)
+     * @return  the given Appendable or a Writer wrapper around the given Appendable
+     * @throws NullPointerException if the input parameter is null
+     * @since 2.7
+     */
+    public static Writer writer(final Appendable appendable) {
+        Objects.requireNonNull(appendable, "appendable");
+        if (appendable instanceof Writer) {
+            return (Writer) appendable;
+        }
+        if (appendable instanceof StringBuilder) {
+            return new StringBuilderWriter((StringBuilder) appendable);
+        }
+        return new AppendableWriter<>(appendable);
     }
 
     /**
