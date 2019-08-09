@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Classic splitter of OutputStream. Named after the Unix 'tee' command. It allows a stream to be branched off so there
+ * Classic splitter of {@link OutputStream}. Named after the Unix 'tee' command. It allows a stream to be branched off so there
  * are now two streams.
  */
 public class TeeOutputStream extends ProxyOutputStream {
