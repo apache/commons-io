@@ -40,7 +40,7 @@ import org.apache.commons.io.IOIndexedException;
  * The class {@link Writer} defines method signatures with {@code throws} {@link IOException}, which in this class are
  * actually {@link IOExceptionList} containing a list of {@link IOIndexedException}.
  * </p>
- * 
+ *
  * @since 2.7
  */
 public class FilterCollectionWriter extends Writer {

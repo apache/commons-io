@@ -27,7 +27,7 @@ import org.apache.commons.io.TaggedIOException;
  * A reader decorator that tags potential exceptions so that the reader that caused the exception can easily be
  * identified. This is done by using the {@link TaggedIOException} class to wrap all thrown {@link IOException}s. See
  * below for an example of using this class.
- * 
+ *
  * <pre>
  * TaggedReader reader = new TaggedReader(...);
  * try {
@@ -47,7 +47,7 @@ import org.apache.commons.io.TaggedIOException;
  * Alternatively, the {@link #throwIfCauseOf(Throwable)} method can be used to let higher levels of code handle the
  * exception caused by this reader while other processing errors are being taken care of at this lower level.
  * </p>
- * 
+ *
  * <pre>
  * TaggedReader reader = new TaggedReader(...);
  * try {

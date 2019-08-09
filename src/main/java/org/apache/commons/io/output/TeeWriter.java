@@ -26,7 +26,7 @@ import java.util.Collection;
  * <p>
  * This currently a only convenience class with the proper name "TeeWriter".
  * </p>
- * 
+ *
  * @since 2.7
  */
 public class TeeWriter extends ProxyCollectionWriter {
