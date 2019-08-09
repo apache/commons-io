@@ -26,6 +26,7 @@ import java.util.Objects;
  * <p>
  * For example, can be used with a {@link java.lang.StringBuilder}
  * or {@link java.lang.StringBuffer}.
+ * </p>
  *
  * @since 2.7
  * @see java.lang.Appendable
@@ -37,7 +38,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     private final T appendable;
 
     /**
-     * Construct a new instance with the specified appendable.
+     * Constructs a new instance with the specified appendable.
      *
      * @param appendable the appendable to write to
      */
@@ -46,49 +47,16 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     }
 
     /**
-     * Write a character to the underlying appendable.
+     * Appends the specified character to the underlying appendable.
      *
-     * @param c the character to write
+     * @param c the character to append
+     * @return this writer
      * @throws IOException upon error
      */
     @Override
-    public void write(final int c) throws IOException {
-        appendable.append((char)c);
-    }
-
-    /**
-     * Writes a portion of an array of characters to the underlying appendable.
-     *
-     * @param cbuf an array with the characters to write
-     * @param off offset from which to start writing characters
-     * @param len number of characters to write
-     * @throws IOException upon error
-     */
-    @Override
-    public void write(final char[] cbuf, final int off, final int len) throws IOException {
-        Objects.requireNonNull(cbuf, "Character array is missing");
-        if (len < 0 || (off + len) > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length +
-                    ", offset=" + off + ", length=" + len);
-        }
-        for (int i = 0; i < len; i++) {
-            appendable.append(cbuf[off + i]);
-        }
-    }
-
-    /**
-     * Writes a portion of a String to the underlying appendable.
-     *
-     * @param str a string
-     * @param off offset from which to start writing characters
-     * @param len number of characters to write
-     * @throws IOException upon error
-     */
-    @Override
-    public void write(final String str, final int off, final int len) throws IOException {
-        // appendable.append will add "null" for a null String; add an explicit null check
-        Objects.requireNonNull(str, "String is missing");
-        appendable.append(str, off, off + len);
+    public Writer append(final char c) throws IOException {
+        appendable.append(c);
+        return this;
     }
 
     /**
@@ -120,16 +88,13 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     }
 
     /**
-     * Appends the specified character to the underlying appendable.
+     * Closes the stream. This implementation does nothing.
      *
-     * @param c the character to append
-     * @return this writer
      * @throws IOException upon error
      */
     @Override
-    public Writer append(final char c) throws IOException {
-        appendable.append(c);
-        return this;
+    public void close() throws IOException {
+        // noop
     }
 
     /**
@@ -139,15 +104,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
      */
     @Override
     public void flush() throws IOException {
-    }
-
-    /**
-     * Closes the stream. This implementation does nothing.
-     *
-     * @throws IOException upon error
-     */
-    @Override
-    public void close() throws IOException {
+        // noop
     }
 
     /**
@@ -157,6 +114,52 @@ public class AppendableWriter <T extends Appendable> extends Writer {
      */
     public T getAppendable() {
         return appendable;
+    }
+
+    /**
+     * Writes a portion of an array of characters to the underlying appendable.
+     *
+     * @param cbuf an array with the characters to write
+     * @param off offset from which to start writing characters
+     * @param len number of characters to write
+     * @throws IOException upon error
+     */
+    @Override
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
+        Objects.requireNonNull(cbuf, "Character array is missing");
+        if (len < 0 || (off + len) > cbuf.length) {
+            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length +
+                    ", offset=" + off + ", length=" + len);
+        }
+        for (int i = 0; i < len; i++) {
+            appendable.append(cbuf[off + i]);
+        }
+    }
+
+    /**
+     * Writes a character to the underlying appendable.
+     *
+     * @param c the character to write
+     * @throws IOException upon error
+     */
+    @Override
+    public void write(final int c) throws IOException {
+        appendable.append((char)c);
+    }
+
+    /**
+     * Writes a portion of a String to the underlying appendable.
+     *
+     * @param str a string
+     * @param off offset from which to start writing characters
+     * @param len number of characters to write
+     * @throws IOException upon error
+     */
+    @Override
+    public void write(final String str, final int off, final int len) throws IOException {
+        // appendable.append will add "null" for a null String; add an explicit null check
+        Objects.requireNonNull(str, "String is missing");
+        appendable.append(str, off, off + len);
     }
 
 }
