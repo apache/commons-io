@@ -18,10 +18,16 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +44,11 @@ public class CharSequenceReaderTest {
         checkRead(reader, "Foo");
         reader.close();
         checkRead(reader, "Foo");
+
+        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
+        checkRead(subReader, "Foo");
+        subReader.close();
+        checkRead(subReader, "Foo");
     }
 
     @Test
@@ -60,6 +71,17 @@ public class CharSequenceReaderTest {
             reader.reset();
             checkRead(reader, "Foo");
         }
+        try (final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7)) {
+            checkRead(subReader, "Foo");
+            subReader.mark(0);
+            checkRead(subReader, "Bar");
+            subReader.reset();
+            checkRead(subReader, "Bar");
+            subReader.close();
+            checkRead(subReader, "Foo");
+            subReader.reset();
+            checkRead(subReader, "Foo");
+        }
     }
 
     @Test
@@ -75,6 +97,18 @@ public class CharSequenceReaderTest {
         reader.close();
         assertEquals(6, reader.skip(20));
         assertEquals(-1, reader.read());
+
+        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
+        assertEquals(3, subReader.skip(3));
+        checkRead(subReader, "Bar");
+        assertEquals(-1, subReader.skip(3));
+        subReader.reset();
+        assertEquals(2, subReader.skip(2));
+        assertEquals(4, subReader.skip(10));
+        assertEquals(-1, subReader.skip(1));
+        subReader.close();
+        assertEquals(6, subReader.skip(20));
+        assertEquals(-1, subReader.read());
     }
 
     @Test
@@ -89,6 +123,12 @@ public class CharSequenceReaderTest {
     private void testRead(final CharSequence charSequence) throws IOException {
         try (final Reader reader = new CharSequenceReader(charSequence)) {
             assertEquals('F', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
+        }
+        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
             assertEquals('o', reader.read());
             assertEquals('o', reader.read());
             assertEquals(-1, reader.read());
@@ -118,6 +158,18 @@ public class CharSequenceReaderTest {
             checkArray(new char[] { 'r', NONE, NONE }, chars);
             assertEquals(-1, reader.read(chars));
         }
+        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
+            char[] chars = new char[2];
+            assertEquals(2, reader.read(chars));
+            checkArray(new char[] { 'o', 'o' }, chars);
+            chars = new char[3];
+            assertEquals(2, reader.read(chars));
+            checkArray(new char[] { 'B', 'a', NONE }, chars);
+            chars = new char[3];
+            assertEquals(-1, reader.read(chars));
+            checkArray(new char[] { NONE, NONE, NONE }, chars);
+            assertEquals(-1, reader.read(chars));
+        }
     }
 
     @Test
@@ -138,6 +190,14 @@ public class CharSequenceReaderTest {
             checkArray(new char[] { 'B', 'a', 'r', 'F', 'o', 'o', NONE }, chars);
             assertEquals(-1, reader.read(chars));
         }
+        Arrays.fill(chars, NONE);
+        try (final Reader reader = new CharSequenceReader(charSequence, 1, 5)) {
+            assertEquals(2, reader.read(chars, 3, 2));
+            checkArray(new char[] { NONE, NONE, NONE, 'o', 'o', NONE }, chars);
+            assertEquals(2, reader.read(chars, 0, 3));
+            checkArray(new char[] { 'B', 'a', NONE, 'o', 'o', NONE }, chars);
+            assertEquals(-1, reader.read(chars));
+        }
     }
 
     private void checkRead(final Reader reader, final String expected) throws IOException {
@@ -149,6 +209,75 @@ public class CharSequenceReaderTest {
     private void checkArray(final char[] expected, final char[] actual) {
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i], actual[i], "Compare[" +i + "]");
+        }
+    }
+
+    @Test
+    public void testConstructor() {
+        try {
+            new CharSequenceReader("FooBar", -1, 6);
+            fail("Expected exception not thrown for negative start.");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            new CharSequenceReader("FooBar", 1, 0);
+            fail("Expected exception not thrown for end before start.");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testToString() {
+        assertEquals("FooBar", new CharSequenceReader("FooBar").toString());
+        assertEquals("FooBar", new CharSequenceReader("xFooBarx", 1, 7).toString());
+    }
+
+    @Test
+    public void testSerialization() throws IOException, ClassNotFoundException {
+        /*
+         * File CharSequenceReader.bin contains a CharSequenceReader that was serialized before
+         * the start and end fields were added. Its CharSequecne is "FooBar".
+         * This part of the test will test that adding the fields does not break any existing
+         * serialized CharSequenceReaders.
+         */
+        try (ObjectInputStream ois = new ObjectInputStream(getClass().getResourceAsStream("CharSequenceReader.bin"))) {
+            final CharSequenceReader reader = (CharSequenceReader) ois.readObject();
+            assertEquals('F', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('B', reader.read());
+            assertEquals('a', reader.read());
+            assertEquals('r', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            final CharSequenceReader reader = new CharSequenceReader("xFooBarx", 1, 7);
+            oos.writeObject(reader);
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()))) {
+            final CharSequenceReader reader = (CharSequenceReader) ois.readObject();
+            assertEquals('F', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('B', reader.read());
+            assertEquals('a', reader.read());
+            assertEquals('r', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
+            reader.reset();
+            assertEquals('F', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('o', reader.read());
+            assertEquals('B', reader.read());
+            assertEquals('a', reader.read());
+            assertEquals('r', reader.read());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 }
