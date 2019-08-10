@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.CharBuffer;
 
 import org.junit.Test;
 
@@ -78,7 +79,15 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testRead() throws IOException {
-        try (final Reader reader = new CharSequenceReader("Foo")) {
+        final String value = "Foo";
+        testRead(value);
+        testRead(new StringBuilder(value));
+        testRead(new StringBuffer(value));
+        testRead(CharBuffer.wrap(value));
+    }
+
+    private void testRead(final CharSequence charSequence) throws IOException {
+        try (final Reader reader = new CharSequenceReader(charSequence)) {
             assertEquals('F', reader.read());
             assertEquals('o', reader.read());
             assertEquals('o', reader.read());
@@ -89,7 +98,15 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testReadCharArray() throws IOException {
-        try (final Reader reader = new CharSequenceReader("FooBar")) {
+        final String value = "FooBar";
+        testReadCharArray(value);
+        testReadCharArray(new StringBuilder(value));
+        testReadCharArray(new StringBuffer(value));
+        testReadCharArray(CharBuffer.wrap(value));
+    }
+
+    private void testReadCharArray(final CharSequence charSequence) throws IOException {
+        try (final Reader reader = new CharSequenceReader(charSequence)) {
             char[] chars = new char[2];
             assertEquals(2, reader.read(chars));
             checkArray(new char[] { 'F', 'o' }, chars);
@@ -105,8 +122,16 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testReadCharArrayPortion() throws IOException {
+        final String value = "FooBar";
+        testReadCharArrayPortion(value);
+        testReadCharArrayPortion(new StringBuilder(value));
+        testReadCharArrayPortion(new StringBuffer(value));
+        testReadCharArrayPortion(CharBuffer.wrap(value));
+    }
+
+    private void testReadCharArrayPortion(final CharSequence charSequence) throws IOException {
         final char[] chars = new char[10];
-        try (final Reader reader = new CharSequenceReader("FooBar")) {
+        try (final Reader reader = new CharSequenceReader(charSequence)) {
             assertEquals(3, reader.read(chars, 3, 3));
             checkArray(new char[] { NONE, NONE, NONE, 'F', 'o', 'o' }, chars);
             assertEquals(3, reader.read(chars, 0, 3));
