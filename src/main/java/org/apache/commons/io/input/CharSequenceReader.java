@@ -69,6 +69,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param charSequence The character sequence, may be {@code null}
      * @param start The start index in the character sequence, inclusive
      * @throws IllegalArgumentException if the start index is negative
+     * @since 2.7
      */
     public CharSequenceReader(final CharSequence charSequence, int start) {
         this(charSequence, start, Integer.MAX_VALUE);
@@ -90,6 +91,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @param start The start index in the character sequence, inclusive
      * @param end The start index in the character sequence, exclusive
      * @throws IllegalArgumentException if the start index is negative, or if the end index is smaller than the start index
+     * @since 2.7
      */
     public CharSequenceReader(final CharSequence charSequence, int start, int end) {
         if (start < 0) {
