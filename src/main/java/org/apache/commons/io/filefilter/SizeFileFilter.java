@@ -90,7 +90,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public boolean accept(final File file) {
         final boolean smaller = file.length() < size;
-        return acceptLarger ? !smaller : smaller;
+        return acceptLarger != smaller;
     }
 
     /**
