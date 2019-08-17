@@ -782,7 +782,7 @@ public class IOUtils {
             line1 = br1.readLine();
             line2 = br2.readLine();
         }
-        return line1 == null && line2 == null;
+        return line1.equals(line2);
     }
 
     /**
