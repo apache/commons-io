@@ -782,7 +782,7 @@ public class IOUtils {
             line1 = br1.readLine();
             line2 = br2.readLine();
         }
-        return line1.equals(line2);
+        return Objects.equals(line1, line2);
     }
 
     /**
