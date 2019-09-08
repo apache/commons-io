@@ -1207,6 +1207,7 @@ public class FileUtils {
      * @param destDir the directory to place the copy in, must not be {@code null}
      *
      * @throws NullPointerException if source or destination is {@code null}
+     * @throws IllegalArgumentException if {@code srcDir} or {@code destDir} is not a directory
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
      * @since 1.2
@@ -1216,7 +1217,7 @@ public class FileUtils {
             throw new NullPointerException("Source must not be null");
         }
         if (srcDir.exists() && srcDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Source '" + destDir + "' is not a directory");
+            throw new IllegalArgumentException("Source '" + srcDir + "' is not a directory");
         }
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
