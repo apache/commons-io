@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * This class ensure the correctness of {@link FileUtils#copyDirectoryToDirectory(File, File)} (File,File)}.
+ * This class ensure the correctness of {@link FileUtils#copyDirectoryToDirectory(File, File)}.
  * TODO: currently does not cover happy cases
  *
  * @see FileUtils#copyDirectoryToDirectory(File, File)
@@ -35,50 +35,49 @@ import static org.junit.Assert.fail;
 public class FileUtilsCopyDirectoryToDirectoryTestCase {
 
     @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory() throws IOException {
-        File srcDir = temporaryFolder.newFile("notadirectory");
-        File destDir = temporaryFolder.newFolder("destinationDirectory");
-        String expectedMessage = String.format("Source '%s' is not a directory", srcDir);
+        final File srcDir = temporaryFolder.newFile("notadirectory");
+        final File destDir = temporaryFolder.newFolder("destinationDirectory");
+        final String expectedMessage = String.format("Source '%s' is not a directory", srcDir);
         assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
     }
 
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory() throws IOException {
-        File srcDir = temporaryFolder.newFolder("sourceDirectory");
-        File destDir =  temporaryFolder.newFile("notadirectory");
+        final File srcDir = temporaryFolder.newFolder("sourceDirectory");
+        final File destDir =  temporaryFolder.newFile("notadirectory");
         String expectedMessage = String.format("Destination '%s' is not a directory", destDir);
         assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
     }
 
     @Test
     public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() throws IOException {
-        File srcDir = null;
-        File destinationDirectory =  temporaryFolder.newFolder("destinationDirectory");
-        String expectedMessage = "Source must not be null";
+        final File srcDir = null;
+        final File destinationDirectory =  temporaryFolder.newFolder("destinationDirectory");
+        final String expectedMessage = "Source must not be null";
         assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class,  expectedMessage);
     }
 
     @Test
     public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() throws IOException {
-        File srcDir = temporaryFolder.newFolder("sourceDirectory");
-        File destDir =  null;
-        String expectedMessage = "Destination must not be null";
+        final File srcDir = temporaryFolder.newFolder("sourceDirectory");
+        final File destDir =  null;
+        final String expectedMessage = "Destination must not be null";
         assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, expectedMessage);
     }
 
-    private static void assertExceptionTypeAndMessage(File srcDir, File destDir, Class expectedExceptionType, String expectedMessage) {
+    private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir, final Class expectedExceptionType, final String expectedMessage) {
         try {
             FileUtils.copyDirectoryToDirectory(srcDir, destDir);
-        } catch (Exception e) {
-            String msg = e.getMessage();
+        } catch (final Exception e) {
+            final String msg = e.getMessage();
             assertEquals(expectedExceptionType, e.getClass());
             assertEquals(expectedMessage, msg);
             return;
         }
         fail();
-
     }
 }
