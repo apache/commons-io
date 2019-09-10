@@ -471,7 +471,7 @@ public class FilenameUtils {
      * /foo + /bar          --&gt;   /bar
      * /foo + C:/bar        --&gt;   C:/bar
      * /foo + C:bar         --&gt;   C:bar (*)
-     * /foo/a/ + ../bar     --&gt;   foo/bar
+     * /foo/a/ + ../bar     --&gt;   /foo/bar
      * /foo/ + ../../bar    --&gt;   null
      * /foo/ + /bar         --&gt;   /bar
      * /foo/.. + /bar       --&gt;   /bar
