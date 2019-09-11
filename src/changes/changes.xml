@@ -134,7 +134,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-625" dev="ggregory" type="fix" due-to="Mikko Maunu">
         Corrected misleading exception message for FileUtils.copyDirectoryToDirectory.
       </action>
-      <action issue="IO-626" dev="Yuji Konishi" type="fix" due-to="Yuji Konishi">
+      <action issue="IO-626" dev="ggregory" type="fix" due-to="Yuji Konishi">
         A mistake in the FilenameUtils.concat()'s Javadoc about an absolute path.
       </action>
     </release>
