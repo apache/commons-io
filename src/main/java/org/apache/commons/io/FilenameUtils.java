@@ -466,17 +466,17 @@ public class FilenameUtils {
      * The output will be the same on both Unix and Windows except
      * for the separator character.
      * <pre>
-     * /foo/ + bar          --&gt;   /foo/bar
-     * /foo + bar           --&gt;   /foo/bar
-     * /foo + /bar          --&gt;   /bar
-     * /foo + C:/bar        --&gt;   C:/bar
-     * /foo + C:bar         --&gt;   C:bar (*)
-     * /foo/a/ + ../bar     --&gt;   /foo/bar
-     * /foo/ + ../../bar    --&gt;   null
-     * /foo/ + /bar         --&gt;   /bar
-     * /foo/.. + /bar       --&gt;   /bar
-     * /foo + bar/c.txt     --&gt;   /foo/bar/c.txt
-     * /foo/c.txt + bar     --&gt;   /foo/c.txt/bar (!)
+     * /foo/      + bar        --&gt;  /foo/bar
+     * /foo       + bar        --&gt;  /foo/bar
+     * /foo       + /bar       --&gt;  /bar
+     * /foo       + C:/bar     --&gt;  C:/bar
+     * /foo       + C:bar      --&gt;  C:bar (*)
+     * /foo/a/    + ../bar     --&gt;  /foo/bar
+     * /foo/      + ../../bar  --&gt;  null
+     * /foo/      + /bar       --&gt;  /bar
+     * /foo/..    + /bar       --&gt;  /bar
+     * /foo       + bar/c.txt  --&gt;  /foo/bar/c.txt
+     * /foo/c.txt + bar        --&gt;  /foo/c.txt/bar (!)
      * </pre>
      * (*) Note that the Windows relative drive prefix is unreliable when
      * used with this method.
