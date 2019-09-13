@@ -42,7 +42,7 @@ public class IOIndexedException extends IOException {
 
     /**
      * Converts input to a suitable Stirng for exception message.
-     * 
+     *
      * @param index An index into a source collection.
      * @param cause A cause.
      * @return A message.

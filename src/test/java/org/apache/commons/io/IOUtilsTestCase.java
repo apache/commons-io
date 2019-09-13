@@ -142,21 +142,15 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testCloseQuietly_AllCloseableIOException() {
-        final Closeable closeable = new Closeable() {
-            @Override
-            public void close() throws IOException {
-                throw new IOException();
-            }
+        final Closeable closeable = () -> {
+            throw new IOException();
         };
         IOUtils.closeQuietly(closeable, null, closeable);
     }
 
     @Test public void testCloseQuietly_CloseableIOException() {
-        IOUtils.closeQuietly(new Closeable() {
-            @Override
-            public void close() throws IOException {
-                throw new IOException();
-            }
+        IOUtils.closeQuietly((Closeable) () -> {
+            throw new IOException();
         });
     }
 
