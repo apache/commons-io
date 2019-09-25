@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -61,7 +62,6 @@ import java.util.List;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -975,9 +975,9 @@ public class IOUtilsTestCase {
         final String charsetName = "UTF-8";
         final byte[] expecteds = charsetName.getBytes(charsetName);
         byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
-        Assert.assertArrayEquals(expecteds, actuals);
+        assertArrayEquals(expecteds, actuals);
         actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
-        Assert.assertArrayEquals(expecteds, actuals);
+        assertArrayEquals(expecteds, actuals);
     }
 
     @Test public void testToByteArray_String() throws Exception {

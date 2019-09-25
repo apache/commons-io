@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -51,7 +52,6 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -1175,7 +1175,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFile(testFile1, destination);
         assertEquals("Check Full copy size", testFile1Size, destination.size());
         final byte[] expected = FileUtils.readFileToByteArray(testFile1);
-        Assert.assertArrayEquals("Check Full copy", expected, destination.toByteArray());
+        assertArrayEquals("Check Full copy", expected, destination.toByteArray());
     }
 
     @Test

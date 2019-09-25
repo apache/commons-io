@@ -35,7 +35,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
-import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -175,7 +174,7 @@ public class BOMInputStreamTest {
 
     private void readBOMInputStreamTwice(final String resource) throws Exception {
         final InputStream inputStream = this.getClass().getResourceAsStream(resource);
-        Assert.assertNotNull(inputStream);
+        assertNotNull(inputStream);
         final BOMInputStream bomInputStream = new BOMInputStream(inputStream);
         bomInputStream.mark(1000000);
 

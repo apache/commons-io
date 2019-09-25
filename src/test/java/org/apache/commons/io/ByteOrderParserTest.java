@@ -16,9 +16,10 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertEquals;
+
 import java.nio.ByteOrder;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class ByteOrderParserTest {
@@ -29,12 +30,12 @@ public class ByteOrderParserTest {
 
     @Test
     public void testParseBig() {
-        Assert.assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG_ENDIAN"));
+        assertEquals(ByteOrder.BIG_ENDIAN, parseByteOrder("BIG_ENDIAN"));
     }
 
     @Test
     public void testParseLittle() {
-        Assert.assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
+        assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
     }
 
     @Test(expected = IllegalArgumentException.class)

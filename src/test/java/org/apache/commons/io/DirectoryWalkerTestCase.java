@@ -32,7 +32,6 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.OrFileFilter;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -395,7 +394,7 @@ public class DirectoryWalkerTestCase {
            try {
                walk(startDirectory, results);
            } catch(final IOException ex) {
-               Assert.fail(ex.toString());
+               fail(ex.toString());
            }
            return results;
         }
@@ -558,7 +557,7 @@ public class DirectoryWalkerTestCase {
            try {
                walk(startDirectory, results);
            } catch(final IOException ex) {
-               Assert.fail(ex.toString());
+               fail(ex.toString());
            }
            return results;
         }

@@ -12,12 +12,14 @@
  * limitations under the License. */
 package org.apache.commons.io;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,7 +64,7 @@ public class FileUtilsCopyToFileTestCase {
     public void testCopyToFile() throws IOException {
         try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyToFile(inputStream, testFile);
-            Assert.assertFalse("inputStream should NOT be closed", inputStream.isClosed());
+            assertFalse("inputStream should NOT be closed", inputStream.isClosed());
         }
     }
 
@@ -77,7 +79,7 @@ public class FileUtilsCopyToFileTestCase {
     public void testCopyInputStreamToFile() throws IOException {
         try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyInputStreamToFile(inputStream, testFile);
-            Assert.assertTrue("inputStream should be closed", inputStream.isClosed());
+            assertTrue("inputStream should be closed", inputStream.isClosed());
         }
     }
 

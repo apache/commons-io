@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
@@ -28,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -60,7 +60,7 @@ public class FileSystemUtilsTestCase {
             boolean kilobyteBlock = true;
             try (BufferedReader r = new BufferedReader(new InputStreamReader(proc.getInputStream()))){
                 final String line = r.readLine();
-                Assert.assertNotNull("Unexpected null line", line);
+                assertNotNull("Unexpected null line", line);
                 if (line.contains("512")) {
                     kilobyteBlock = false;
                 }
