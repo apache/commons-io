@@ -18,6 +18,7 @@ package org.apache.commons.io.testtools;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -35,8 +36,6 @@ import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * Base class for testcases doing tests with files.
@@ -188,10 +187,7 @@ public abstract class TestUtils {
         try {
             new java.io.PrintStream(output).write(0);
         } catch (final Throwable t) {
-            throw new AssertionFailedError(
-                    "The copy() method closed the stream "
-                            + "when it shouldn't have. "
-                            + t.getMessage());
+            fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }
     }
 
@@ -199,10 +195,7 @@ public abstract class TestUtils {
         try {
             new java.io.PrintWriter(output).write('a');
         } catch (final Throwable t) {
-            throw new AssertionFailedError(
-                    "The copy() method closed the stream "
-                            + "when it shouldn't have. "
-                            + t.getMessage());
+            fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }
     }
 
