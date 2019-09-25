@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -44,7 +45,6 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -943,7 +943,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testCanExecute() throws Exception {
-        Assume.assumeTrue(SystemUtils.IS_OS_WINDOWS);
+        assumeTrue(SystemUtils.IS_OS_WINDOWS);
         final File executableFile = File.createTempFile(getClass().getSimpleName(), ".temp");
         try {
             try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(executableFile))) {

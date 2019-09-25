@@ -22,6 +22,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,7 +37,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
-import org.junit.Assume;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -491,7 +492,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf32Be() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
+        assumeTrue(Charset.isSupported("UTF_32BE"));
         final byte[] data = "ABC".getBytes("UTF_32BE");
         try (final BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true),
                 ByteOrderMark.UTF_32BE)) {
@@ -522,7 +523,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf32Le() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        assumeTrue(Charset.isSupported("UTF_32LE"));
         final byte[] data = "ABC".getBytes("UTF_32LE");
         try (final BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true),
                 ByteOrderMark.UTF_32LE)) {
@@ -603,10 +604,10 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUcs2() throws Exception {
-        Assume.assumeFalse("This test does not pass on some IBM VMs xml parsers", System.getProperty("java.vendor").contains("IBM"));
+        assumeFalse("This test does not pass on some IBM VMs xml parsers", System.getProperty("java.vendor").contains("IBM"));
 
         // UCS-2 is BE.
-        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
+        assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
         try (BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE)) {
             parseXml(in);
@@ -618,13 +619,13 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUcs4() throws Exception {
         // UCS-4 is BE or LE?
         // Hm: ISO-10646-UCS-4 is not supported on Oracle 1.6.0_31
-        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
+        assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-4\"?><X/>".getBytes("ISO-10646-UCS-4");
         // XML parser does not know what to do with UTF-32
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
             parseXml(in);
             // XML parser does not know what to do with UTF-32
-            Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+            assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         }
         parseXml(createUtf32BeDataStream(data, true));
     }
@@ -649,7 +650,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Be() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
+        assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
             parseXml(in);
@@ -662,7 +663,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Le() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE)) {
             parseXml(in);
@@ -684,7 +685,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithoutBOMUtf32Be() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
+        assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF_32BE\"?><X/>".getBytes("UTF_32BE");
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, false))) {
             parseXml(in);
@@ -694,7 +695,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithoutBOMUtf32Le() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, false))) {
             parseXml(in);
