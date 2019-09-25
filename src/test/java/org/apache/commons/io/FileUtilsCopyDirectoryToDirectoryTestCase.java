@@ -16,15 +16,14 @@
  */
 package org.apache.commons.io;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * This class ensure the correctness of {@link FileUtils#copyDirectoryToDirectory(File, File)}.
@@ -34,21 +33,24 @@ import static org.junit.Assert.fail;
  */
 public class FileUtilsCopyDirectoryToDirectoryTestCase {
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory() throws IOException {
-        final File srcDir = temporaryFolder.newFile("notadirectory");
-        final File destDir = temporaryFolder.newFolder("destinationDirectory");
+        final File srcDir = File.createTempFile("notadireotry", null, temporaryFolder);
+        final File destDir = new File(temporaryFolder, "destinationDirectory");
+        destDir.mkdirs();
         final String expectedMessage = String.format("Source '%s' is not a directory", srcDir);
         assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
     }
 
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory() throws IOException {
-        final File srcDir = temporaryFolder.newFolder("sourceDirectory");
-        final File destDir =  temporaryFolder.newFile("notadirectory");
+        final File srcDir = new File(temporaryFolder, "sourceDirectory");
+        srcDir.mkdir();
+        final File destDir = new File(temporaryFolder, "notadirectory");
+        destDir.createNewFile();
         String expectedMessage = String.format("Destination '%s' is not a directory", destDir);
         assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
     }
@@ -56,14 +58,16 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     @Test
     public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() throws IOException {
         final File srcDir = null;
-        final File destinationDirectory =  temporaryFolder.newFolder("destinationDirectory");
+        final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
+        destinationDirectory.mkdir();
         final String expectedMessage = "Source must not be null";
         assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class,  expectedMessage);
     }
 
     @Test
     public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() throws IOException {
-        final File srcDir = temporaryFolder.newFolder("sourceDirectory");
+        final File srcDir = new File(temporaryFolder, "sourceDirectory");
+        srcDir.mkdir();
         final File destDir =  null;
         final String expectedMessage = "Destination must not be null";
         assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, expectedMessage);

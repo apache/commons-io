@@ -16,12 +16,13 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the chunked output stream
@@ -38,10 +39,10 @@ public class ChunkedOutputStreamTest {
         chunked.close();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void negative_chunksize_not_permitted() throws Exception{
-        final ChunkedOutputStream chunked = new ChunkedOutputStream(new ByteArrayOutputStream(), 0);
-        chunked.close();
+    @Test
+    public void negative_chunksize_not_permitted() {
+        assertThrows(IllegalArgumentException.class,
+               () -> new ChunkedOutputStream(new ByteArrayOutputStream(), 0));
     }
 
     @Test

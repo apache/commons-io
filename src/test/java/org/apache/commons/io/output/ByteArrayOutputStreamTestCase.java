@@ -16,16 +16,16 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementation.
@@ -89,7 +89,7 @@ public class ByteArrayOutputStreamTestCase {
     private void checkStreams(
             final ByteArrayOutputStream actual,
             final java.io.ByteArrayOutputStream expected) {
-        assertEquals("Sizes are not equal", expected.size(), actual.size());
+        assertEquals(expected.size(), actual.size(), "Sizes are not equal");
         final byte[] buf = actual.toByteArray();
         final byte[] refbuf = expected.toByteArray();
         checkByteArrays(buf, refbuf);
@@ -207,7 +207,7 @@ public class ByteArrayOutputStreamTestCase {
         //Testing toString(String)
         final String baoutString = baout.toString("ASCII");
         final String refString = ref.toString("ASCII");
-        assertEquals("ASCII decoded String must be equal", refString, baoutString);
+        assertEquals(refString, baoutString, "ASCII decoded String must be equal");
 
         //Make sure that empty ByteArrayOutputStreams really don't create garbage
         //on toByteArray()

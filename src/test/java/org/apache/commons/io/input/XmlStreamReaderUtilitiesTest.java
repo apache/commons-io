@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the Encoding Utilities part of {@link XmlStreamReader}.
@@ -67,7 +67,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     private void checkContentTypeEncoding(final String expected, final String httpContentType) {
-        assertEquals("ContentTypeEncoding=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeEncoding(httpContentType));
+        assertEquals(expected, XmlStreamReader.getContentTypeEncoding(httpContentType), "ContentTypeEncoding=[" + httpContentType + "]");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     private void checkContentTypeMime(final String expected, final String httpContentType) {
-        assertEquals("ContentTypeMime=[" + httpContentType + "]", expected, XmlStreamReader.getContentTypeMime(httpContentType));
+        assertEquals(expected, XmlStreamReader.getContentTypeMime(httpContentType), "ContentTypeMime=[" + httpContentType + "]");
     }
 
     @Test
@@ -102,7 +102,7 @@ public class XmlStreamReaderUtilitiesTest {
 
     @SuppressWarnings("boxing")
     private void checkAppXml(final boolean expected, final String mime) {
-        assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isAppXml(mime));
+        assertEquals(expected, XmlStreamReader.isAppXml(mime), "Mime=[" + mime + "]");
     }
 
     @Test
@@ -120,7 +120,7 @@ public class XmlStreamReaderUtilitiesTest {
 
     @SuppressWarnings("boxing")
     private void checkTextXml(final boolean expected, final String mime) {
-        assertEquals("Mime=[" + mime + "]", expected, XmlStreamReader.isTextXml(mime));
+        assertEquals(expected, XmlStreamReader.isTextXml(mime), "Mime=[" + mime + "]");
     }
 
     @Test
@@ -150,7 +150,6 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    //@Ignore
     public void testCalculateRawEncodingStandardUtf32() throws IOException {
         // Standard BOM Checks           BOM         Other       Default
         testCalculateRawEncodingStandard("UTF-8",    "UTF-32BE", "UTF-32LE");
@@ -210,7 +209,7 @@ public class XmlStreamReaderUtilitiesTest {
         builder.append("xmlEnc=[").append(xmlEnc).append("], ");
         builder.append("defaultEncoding=[").append(defaultEncoding).append("],");
         final String encoding = calculateRawEncoding(bomEnc,xmlGuessEnc,xmlEnc, defaultEncoding);
-        assertEquals(builder.toString(), expected, encoding);
+        assertEquals(expected, encoding, builder.toString());
     }
 
     protected String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc, final String xmlEnc,
@@ -227,13 +226,13 @@ public class XmlStreamReaderUtilitiesTest {
             checkRawEncoding("XmlStreamReaderException", bomEnc, xmlGuessEnc, xmlEnc, defaultEncoding);
             fail("Expected XmlStreamReaderException");
         } catch (final XmlStreamReaderException e) {
-            assertTrue("Msg Start: " + e.getMessage(), e.getMessage().startsWith("Invalid encoding"));
-            assertTrue("Msg End: "   + e.getMessage(), e.getMessage().endsWith(msgSuffix));
-            assertEquals("bomEnc",      bomEnc,      e.getBomEncoding());
-            assertEquals("xmlGuessEnc", xmlGuessEnc, e.getXmlGuessEncoding());
-            assertEquals("xmlEnc",      xmlEnc,      e.getXmlEncoding());
-            assertNull("ContentTypeEncoding", e.getContentTypeEncoding());
-            assertNull("ContentTypeMime",     e.getContentTypeMime());
+            assertTrue(e.getMessage().startsWith("Invalid encoding"), "Msg Start: " + e.getMessage());
+            assertTrue(e.getMessage().endsWith(msgSuffix), "Msg End: "   + e.getMessage());
+            assertEquals(bomEnc, e.getBomEncoding(), "bomEnc");
+            assertEquals(xmlGuessEnc, e.getXmlGuessEncoding(), "xmlGuessEnc");
+            assertEquals(xmlEnc, e.getXmlEncoding(), "xmlEnc");
+            assertNull(e.getContentTypeEncoding(), "ContentTypeEncoding");
+            assertNull(e.getContentTypeMime(), "ContentTypeMime");
         } catch (final Exception e) {
             fail("Expected XmlStreamReaderException, but threw " + e);
         }
@@ -292,7 +291,7 @@ public class XmlStreamReaderUtilitiesTest {
         builder.append("xmlEnc=[").append(xmlEnc).append("], ");
         builder.append("defaultEncoding=[").append(defaultEncoding).append("],");
         final String encoding = calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient, defaultEncoding);
-        assertEquals(builder.toString(), expected, encoding);
+        assertEquals(expected, encoding, builder.toString());
     }
 
     protected String calculateHttpEncoding(final String httpContentType, final String bomEnc, final String xmlGuessEnc,
@@ -309,15 +308,14 @@ public class XmlStreamReaderUtilitiesTest {
             checkHttpEncoding("XmlStreamReaderException", lenient, httpContentType, bomEnc, xmlGuessEnc, xmlEnc, defaultEncoding);
             fail("Expected XmlStreamReaderException");
         } catch (final XmlStreamReaderException e) {
-            assertTrue("Msg Start: " + e.getMessage(), e.getMessage().startsWith("Invalid encoding"));
-            assertTrue("Msg End: "   + e.getMessage(), e.getMessage().endsWith(msgSuffix));
-            assertEquals("bomEnc",      bomEnc,      e.getBomEncoding());
-            assertEquals("xmlGuessEnc", xmlGuessEnc, e.getXmlGuessEncoding());
-            assertEquals("xmlEnc",      xmlEnc,      e.getXmlEncoding());
-            assertEquals("ContentTypeEncoding", XmlStreamReader.getContentTypeEncoding(httpContentType),
-                                                e.getContentTypeEncoding());
-            assertEquals("ContentTypeMime", XmlStreamReader.getContentTypeMime(httpContentType),
-                                            e.getContentTypeMime());
+            assertTrue(e.getMessage().startsWith("Invalid encoding"), "Msg Start: " + e.getMessage());
+            assertTrue(e.getMessage().endsWith(msgSuffix), "Msg End: " + e.getMessage());
+            assertEquals(bomEnc, e.getBomEncoding(), "bomEnc");
+            assertEquals(xmlGuessEnc, e.getXmlGuessEncoding(), "xmlGuessEnc");
+            assertEquals(xmlEnc, e.getXmlEncoding(), "xmlEnc");
+            assertEquals(XmlStreamReader.getContentTypeEncoding(httpContentType), e.getContentTypeEncoding(),
+                    "ContentTypeEncoding");
+            assertEquals(XmlStreamReader.getContentTypeMime(httpContentType), e.getContentTypeMime(), "ContentTypeMime");
         } catch (final Exception e) {
             fail("Expected XmlStreamReaderException, but threw " + e);
         }

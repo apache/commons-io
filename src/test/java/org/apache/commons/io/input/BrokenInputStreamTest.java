@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link BrokenInputStream}.
@@ -35,7 +35,7 @@ public class BrokenInputStreamTest {
 
     private InputStream stream;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         exception = new IOException("test exception");
         stream = new BrokenInputStream(exception);

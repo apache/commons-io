@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link BrokenWriter}.
@@ -34,7 +34,7 @@ public class BrokenWriterTest {
 
     private Writer writer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         exception = new IOException("test exception");
         writer = new BrokenWriter(exception);

@@ -16,11 +16,12 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.ByteOrder;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ByteOrderParserTest {
 
@@ -38,8 +39,8 @@ public class ByteOrderParserTest {
         assertEquals(ByteOrder.LITTLE_ENDIAN, parseByteOrder("LITTLE_ENDIAN"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testThrowsException() throws Exception {
-        parseByteOrder("some value");
+    @Test
+    public void testThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> parseByteOrder("some value"));
     }
 }

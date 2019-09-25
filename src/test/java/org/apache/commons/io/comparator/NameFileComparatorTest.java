@@ -16,20 +16,20 @@
  */
 package org.apache.commons.io.comparator;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Comparator;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link NameFileComparator}.
  */
 public class NameFileComparatorTest extends ComparatorAbstractTestCase {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
         reverse = NameFileComparator.NAME_REVERSE;
@@ -44,14 +44,14 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
     public void testCaseSensitivity() {
         final File file3 = new File("a/FOO.txt");
         final Comparator<File> sensitive = new NameFileComparator(null); /* test null as well */
-        assertTrue("sensitive file1 & file2 = 0", sensitive.compare(equalFile1, equalFile2) == 0);
-        assertTrue("sensitive file1 & file3 > 0", sensitive.compare(equalFile1, file3) > 0);
-        assertTrue("sensitive file1 & less  > 0", sensitive.compare(equalFile1, lessFile) > 0);
+        assertTrue(sensitive.compare(equalFile1, equalFile2) == 0, "sensitive file1 & file2 = 0");
+        assertTrue(sensitive.compare(equalFile1, file3) > 0, "sensitive file1 & file3 > 0");
+        assertTrue(sensitive.compare(equalFile1, lessFile) > 0, "sensitive file1 & less  > 0");
 
         final Comparator<File> insensitive = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-        assertTrue("insensitive file1 & file2 = 0", insensitive.compare(equalFile1, equalFile2) == 0);
-        assertTrue("insensitive file1 & file3 = 0", insensitive.compare(equalFile1, file3) == 0);
-        assertTrue("insensitive file1 & file4 > 0", insensitive.compare(equalFile1, lessFile) > 0);
-        assertTrue("insensitive file3 & less  > 0", insensitive.compare(file3, lessFile) > 0);
+        assertTrue(insensitive.compare(equalFile1, equalFile2) == 0, "insensitive file1 & file2 = 0");
+        assertTrue(insensitive.compare(equalFile1, file3) == 0, "insensitive file1 & file3 = 0");
+        assertTrue(insensitive.compare(equalFile1, lessFile) > 0, "insensitive file1 & file4 > 0");
+        assertTrue(insensitive.compare(file3, lessFile) > 0, "insensitive file3 & less  > 0");
     }
 }

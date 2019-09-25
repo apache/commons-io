@@ -16,17 +16,16 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This class ensure the correctness of {@link FileUtils#directoryContains(File,File)}.
@@ -36,9 +35,6 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsDirectoryContainsTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     private File directory1;
     private File directory2;
     private File directory3;
@@ -47,13 +43,13 @@ public class FileUtilsDirectoryContainsTestCase {
     private File file2;
     private File file2ByRelativeDirectory1;
     private File file3;
-    private File top;
+
+    @TempDir
+    public File top;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        top = temporaryFolder.getRoot();
-
         directory1 = new File(top, "directory1");
         directory2 = new File(top, "directory2");
         directory3 = new File(directory2, "directory3");
@@ -158,9 +154,9 @@ public class FileUtilsDirectoryContainsTestCase {
     @Test
     public void testFileDoesNotExistBug() throws IOException {
         final File file = new File(top, "DOESNOTEXIST");
-        assertTrue("Check directory exists", top.exists());
-        assertFalse("Check file does not exist", file.exists());
-        assertFalse("Direcory does not contain unrealized file", FileUtils.directoryContains(top, file));
+        assertTrue(top.exists(), "Check directory exists");
+        assertFalse(file.exists(), "Check file does not exist");
+        assertFalse(FileUtils.directoryContains(top, file), "Direcory does not contain unrealized file");
     }
 
     @Test

@@ -17,11 +17,11 @@
 
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FileSystemTestCase {
 
@@ -30,7 +30,7 @@ public class FileSystemTestCase {
         for (final FileSystem fs : FileSystem.values()) {
             final char[] chars = fs.getIllegalFileNameChars();
             for (int i = 0; i < chars.length - 1; i++) {
-                assertTrue(fs.name(), chars[i] < chars[i + 1]);
+                assertTrue(chars[i] < chars[i + 1], fs.name());
             }
         }
     }
@@ -60,10 +60,10 @@ public class FileSystemTestCase {
     @Test
     public void testIsLegalName() {
         for (final FileSystem fs : FileSystem.values()) {
-            assertFalse(fs.name(), fs.isLegalFileName("")); // Empty is always illegal
-            assertFalse(fs.name(), fs.isLegalFileName(null)); // null is always illegal
-            assertFalse(fs.name(), fs.isLegalFileName("\0")); // Assume NUL is always illegal
-            assertTrue(fs.name(), fs.isLegalFileName("0")); // Assume simple name always legal
+            assertFalse(fs.isLegalFileName(""), fs.name()); // Empty is always illegal
+            assertFalse(fs.isLegalFileName(null), fs.name()); // null is always illegal
+            assertFalse(fs.isLegalFileName("\0"), fs.name()); // Assume NUL is always illegal
+            assertTrue(fs.isLegalFileName("0"), fs.name()); // Assume simple name always legal
             for (final String candidate : fs.getReservedFileNames()) {
                 // Reserved file names are not legal
                 assertFalse(fs.isLegalFileName(candidate));
@@ -86,7 +86,7 @@ public class FileSystemTestCase {
             try {
                 fs.toLegalFileName("Test", '\0'); // Assume NUL is always illegal
             } catch (final IllegalArgumentException iae) {
-                assertTrue(iae.getMessage(), iae.getMessage().startsWith("The replacement character '\\0'"));
+                assertTrue(iae.getMessage().startsWith("The replacement character '\\0'"), iae.getMessage());
             }
         }
     }

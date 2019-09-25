@@ -12,18 +12,17 @@
  * limitations under the License. */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 
 /**
@@ -31,20 +30,16 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsCopyToFileTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     private File testFile;
 
     private byte[] testData;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        testFile = new File(getTestDirectory(), "file1-test.txt");
+        testFile = new File(temporaryFolder, "file1-test.txt");
         if(!testFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile +
                 " as the parent directory does not exist");
@@ -64,7 +59,7 @@ public class FileUtilsCopyToFileTestCase {
     public void testCopyToFile() throws IOException {
         try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyToFile(inputStream, testFile);
-            assertFalse("inputStream should NOT be closed", inputStream.isClosed());
+            assertFalse(inputStream.isClosed(), "inputStream should NOT be closed");
         }
     }
 
@@ -79,7 +74,7 @@ public class FileUtilsCopyToFileTestCase {
     public void testCopyInputStreamToFile() throws IOException {
         try(CheckingInputStream inputStream = new CheckingInputStream(testData)) {
             FileUtils.copyInputStreamToFile(inputStream, testFile);
-            assertTrue("inputStream should be closed", inputStream.isClosed());
+            assertTrue(inputStream.isClosed(), "inputStream should be closed");
         }
     }
 

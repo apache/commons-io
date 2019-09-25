@@ -16,13 +16,14 @@
  */
 package org.apache.commons.io.filefilter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -45,21 +46,16 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Used to test FileFilterUtils.
  */
 public class FileFilterTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     /**
      * The subversion directory name.
@@ -71,18 +67,15 @@ public class FileFilterTestCase {
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
-        assertEquals(
-            "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
-            expected, filter.accept(file));
+        assertEquals(expected, filter.accept(file),
+                "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
-            assertEquals(
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                expected, filter.accept(file.getParentFile(), file.getName()));
+            assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
-                expected, filter.accept(file));
+            assertEquals(expected, filter.accept(file),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
         assertNotNull(filter.toString());
     }
@@ -401,17 +394,15 @@ public class FileFilterTestCase {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNameFilterNullArrayArgument() throws Exception {
-        new NameFileFilter((String[]) null);
-        fail( "constructing a NameFileFilter with a null String[] argument should fail.");
+    @Test
+    public void testNameFilterNullArrayArgument() {
+        assertThrows(IllegalArgumentException.class, () -> new NameFileFilter((String[]) null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testNameFilterNullListArgument() throws Exception {
+    @Test
+    public void testNameFilterNullListArgument() {
         final List<String> test = null;
-        new NameFileFilter(test);
-        fail("constructing a NameFileFilter with a null List argument should fail.");
+        assertThrows(IllegalArgumentException.class, () -> new NameFileFilter(test));
     }
 
     @Test
@@ -432,13 +423,13 @@ public class FileFilterTestCase {
         assertSame(FalseFileFilter.FALSE, FalseFileFilter.INSTANCE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNot() throws Exception {
         final IOFileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.trueFileFilter());
         assertFiltering(filter, new File("foo.test"), false);
         assertFiltering(filter, new File("foo"), false);
         assertFiltering(filter, null, false);
-        new NotFileFilter(null);
+        assertThrows(IllegalArgumentException.class, () -> new NotFileFilter(null));
     }
 
     @Test
@@ -702,13 +693,13 @@ public class FileFilterTestCase {
         final IOFileFilter filter2 = FileFilterUtils.makeCVSAware(FileFilterUtils
             .nameFileFilter("test-file1.txt"));
 
-        File file = new File(getTestDirectory(), "CVS");
+        File file = new File(temporaryFolder, "CVS");
         file.mkdirs();
         assertFiltering(filter1, file, false);
         assertFiltering(filter2, file, false);
         FileUtils.deleteDirectory(file);
 
-        file = new File(getTestDirectory(), "test-file1.txt");
+        file = new File(temporaryFolder, "test-file1.txt");
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -720,7 +711,7 @@ public class FileFilterTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
 
-        file = new File(getTestDirectory(), "test-file2.log");
+        file = new File(temporaryFolder, "test-file2.log");
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -732,7 +723,7 @@ public class FileFilterTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
 
-        file = new File(getTestDirectory(), "CVS");
+        file = new File(temporaryFolder, "CVS");
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -751,13 +742,13 @@ public class FileFilterTestCase {
         final IOFileFilter filter2 = FileFilterUtils.makeSVNAware(FileFilterUtils
             .nameFileFilter("test-file1.txt"));
 
-        File file = new File(getTestDirectory(), SVN_DIR_NAME);
+        File file = new File(temporaryFolder, SVN_DIR_NAME);
         file.mkdirs();
         assertFiltering(filter1, file, false);
         assertFiltering(filter2, file, false);
         FileUtils.deleteDirectory(file);
 
-        file = new File(getTestDirectory(), "test-file1.txt");
+        file = new File(temporaryFolder, "test-file1.txt");
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -769,7 +760,7 @@ public class FileFilterTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, true);
 
-        file = new File(getTestDirectory(), "test-file2.log");
+        file = new File(temporaryFolder, "test-file2.log");
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -781,7 +772,7 @@ public class FileFilterTestCase {
         assertFiltering(filter1, file, true);
         assertFiltering(filter2, file, false);
 
-        file = new File(getTestDirectory(), SVN_DIR_NAME);
+        file = new File(temporaryFolder, SVN_DIR_NAME);
         if (!file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file
                     + " as the parent directory does not exist");
@@ -796,9 +787,9 @@ public class FileFilterTestCase {
 
     @Test
     public void testAgeFilter() throws Exception {
-        final File oldFile = new File(getTestDirectory(), "old.txt");
-        final File reference = new File(getTestDirectory(), "reference.txt");
-        final File newFile = new File(getTestDirectory(), "new.txt");
+        final File oldFile = new File(temporaryFolder, "old.txt");
+        final File reference = new File(temporaryFolder, "reference.txt");
+        final File newFile = new File(temporaryFolder, "new.txt");
 
         if (!oldFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + oldFile
@@ -876,7 +867,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testSizeFilter() throws Exception {
-        final File smallFile = new File(getTestDirectory(), "small.txt");
+        final File smallFile = new File(temporaryFolder, "small.txt");
         if (!smallFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + smallFile
                     + " as the parent directory does not exist");
@@ -885,7 +876,7 @@ public class FileFilterTestCase {
                 new BufferedOutputStream(new FileOutputStream(smallFile))) {
             TestUtils.generateTestData(output1, 32);
         }
-        final File largeFile = new File(getTestDirectory(), "large.txt");
+        final File largeFile = new File(temporaryFolder, "large.txt");
         if (!largeFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
@@ -937,8 +928,8 @@ public class FileFilterTestCase {
             assertFiltering(HiddenFileFilter.HIDDEN,  hiddenDir, hiddenDir.isHidden());
             assertFiltering(HiddenFileFilter.VISIBLE, hiddenDir, !hiddenDir.isHidden());
         }
-        assertFiltering(HiddenFileFilter.HIDDEN,  getTestDirectory(), false);
-        assertFiltering(HiddenFileFilter.VISIBLE, getTestDirectory(), true);
+        assertFiltering(HiddenFileFilter.HIDDEN,  temporaryFolder, false);
+        assertFiltering(HiddenFileFilter.VISIBLE, temporaryFolder, true);
     }
 
     @Test
@@ -960,7 +951,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testCanRead() throws Exception {
-        final File readOnlyFile = new File(getTestDirectory(), "read-only-file1.txt");
+        final File readOnlyFile = new File(temporaryFolder, "read-only-file1.txt");
         if (!readOnlyFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + readOnlyFile
                     + " as the parent directory does not exist");
@@ -978,7 +969,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testCanWrite() throws Exception {
-        final File readOnlyFile = new File(getTestDirectory(), "read-only-file2.txt");
+        final File readOnlyFile = new File(temporaryFolder, "read-only-file2.txt");
         if (!readOnlyFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + readOnlyFile
                     + " as the parent directory does not exist");
@@ -988,8 +979,8 @@ public class FileFilterTestCase {
             TestUtils.generateTestData(output, 32);
         }
         assertTrue(readOnlyFile.setReadOnly());
-        assertFiltering(CanWriteFileFilter.CAN_WRITE,    getTestDirectory(), true);
-        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, getTestDirectory(), false);
+        assertFiltering(CanWriteFileFilter.CAN_WRITE,    temporaryFolder, true);
+        assertFiltering(CanWriteFileFilter.CANNOT_WRITE, temporaryFolder, false);
         assertFiltering(CanWriteFileFilter.CAN_WRITE,    readOnlyFile, false);
         assertFiltering(CanWriteFileFilter.CANNOT_WRITE, readOnlyFile, true);
         readOnlyFile.delete();
@@ -999,7 +990,7 @@ public class FileFilterTestCase {
     public void testEmpty() throws Exception {
 
         // Empty Dir
-        final File emptyDir  = new File(getTestDirectory(), "empty-dir");
+        final File emptyDir  = new File(temporaryFolder, "empty-dir");
         emptyDir.mkdirs();
         assertFiltering(EmptyFileFilter.EMPTY, emptyDir, true);
         assertFiltering(EmptyFileFilter.NOT_EMPTY, emptyDir, false);
@@ -1044,8 +1035,8 @@ public class FileFilterTestCase {
         final IOFileFilter filter = FileFilterUtils.makeDirectoryOnly(
                 FileFilterUtils.nameFileFilter("B"));
 
-        final File fileA = new File(getTestDirectory(), "A");
-        final File fileB = new File(getTestDirectory(), "B");
+        final File fileA = new File(temporaryFolder, "A");
+        final File fileB = new File(temporaryFolder, "B");
 
         fileA.mkdirs();
         fileB.mkdirs();
@@ -1088,8 +1079,8 @@ public class FileFilterTestCase {
         final IOFileFilter filter = FileFilterUtils.makeFileOnly(
                 FileFilterUtils.nameFileFilter("B"));
 
-        final File fileA = new File(getTestDirectory(), "A");
-        final File fileB = new File(getTestDirectory(), "B");
+        final File fileA = new File(temporaryFolder, "A");
+        final File fileB = new File(temporaryFolder, "B");
 
         fileA.mkdirs();
         fileB.mkdirs();
@@ -1133,10 +1124,10 @@ public class FileFilterTestCase {
         final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" +
             "<element>text</element>";
 
-        final File classFileA = new File(getTestDirectory(), "A.class");
-        final File xmlFileB = new File(getTestDirectory(), "B.xml");
-        final File emptyFile = new File(getTestDirectory(), "C.xml");
-        final File dir = new File(getTestDirectory(), "D");
+        final File classFileA = new File(temporaryFolder, "A.class");
+        final File xmlFileB = new File(temporaryFolder, "B.xml");
+        final File emptyFile = new File(temporaryFolder, "C.xml");
+        final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
         final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
@@ -1168,9 +1159,9 @@ public class FileFilterTestCase {
         final byte[] tarMagicNumber = new byte[] {0x75, 0x73, 0x74, 0x61, 0x72};
         final long tarMagicNumberOffset = 257;
 
-        final File tarFileA = new File(getTestDirectory(), "A.tar");
-        final File randomFileB = new File(getTestDirectory(), "B.txt");
-        final File dir = new File(getTestDirectory(), "D");
+        final File tarFileA = new File(temporaryFolder, "A.tar");
+        final File randomFileB = new File(temporaryFolder, "B.txt");
+        final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
         final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
@@ -1210,9 +1201,9 @@ public class FileFilterTestCase {
             "<element>text</element>";
         final String xmlMagicNumber = "<?xml version=\"1.0\"";
 
-        final File classFileA = new File(getTestDirectory(), "A.class");
-        final File xmlFileB = new File(getTestDirectory(), "B.xml");
-        final File dir = new File(getTestDirectory(), "D");
+        final File classFileA = new File(temporaryFolder, "A.class");
+        final File xmlFileB = new File(temporaryFolder, "B.xml");
+        final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
         final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
@@ -1240,9 +1231,9 @@ public class FileFilterTestCase {
         final String tarMagicNumber = "ustar";
         final long tarMagicNumberOffset = 257;
 
-        final File tarFileA = new File(getTestDirectory(), "A.tar");
-        final File randomFileB = new File(getTestDirectory(), "B.txt");
-        final File dir = new File(getTestDirectory(), "D");
+        final File tarFileA = new File(temporaryFolder, "A.tar");
+        final File randomFileB = new File(temporaryFolder, "B.txt");
+        final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
         final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
@@ -1320,8 +1311,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterArray() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
 
@@ -1337,8 +1328,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterArray_fromList() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final List<File> fileList = Arrays.asList(fileA, fileB);
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
@@ -1356,8 +1347,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterArrayNullParameters() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
         try {
             FileFilterUtils.filter(null, fileA, fileB);
             fail();
@@ -1383,8 +1374,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterList() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final List<File> fileList = Arrays.asList(fileA, fileB);
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
@@ -1401,8 +1392,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterList_fromArray() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
 
@@ -1444,8 +1435,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterSet() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
         final Set<File> fileList = new HashSet<>(Arrays.asList(fileA, fileB));
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
@@ -1462,8 +1453,8 @@ public class FileFilterTestCase {
      */
     @Test
     public void testFilterSet_fromArray() throws Exception {
-        final File fileA = TestUtils.newFile(getTestDirectory(), "A");
-        final File fileB = TestUtils.newFile(getTestDirectory(), "B");
+        final File fileA = TestUtils.newFile(temporaryFolder, "A");
+        final File fileB = TestUtils.newFile(temporaryFolder, "B");
 
         final IOFileFilter filter = FileFilterUtils.nameFileFilter("A");
 

@@ -22,18 +22,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Test case for {@link LastModifiedFileComparator}.
  */
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LASTMODIFIED_REVERSE;
-        final File dir = getTestDirectory();
         final File olderFile = new File(dir, "older.txt");
         if (!olderFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + olderFile

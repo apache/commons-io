@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -78,11 +78,9 @@ public class HexDumpTest {
         }
         byte[] actualOutput = stream.toByteArray();
 
-        assertEquals("array size mismatch", outputArray.length,
-                actualOutput.length);
+        assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
         for (int j = 0; j < outputArray.length; j++) {
-            assertEquals("array[ " + j + "] mismatch", outputArray[j],
-                    actualOutput[j]);
+            assertEquals(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
         }
 
         // verify proper behavior with non-zero offset
@@ -113,11 +111,9 @@ public class HexDumpTest {
                     HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
-        assertEquals("array size mismatch", outputArray.length,
-                actualOutput.length);
+        assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
         for (int j = 0; j < outputArray.length; j++) {
-            assertEquals("array[ " + j + "] mismatch", outputArray[j],
-                    actualOutput[j]);
+            assertEquals(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
         }
 
         // verify proper behavior with negative offset
@@ -148,11 +144,9 @@ public class HexDumpTest {
                     HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
-        assertEquals("array size mismatch", outputArray.length,
-                actualOutput.length);
+        assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
         for (int j = 0; j < outputArray.length; j++) {
-            assertEquals("array[ " + j + "] mismatch", outputArray[j],
-                    actualOutput[j]);
+            assertEquals(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
         }
 
         // verify proper behavior with non-zero index
@@ -194,11 +188,9 @@ public class HexDumpTest {
                     HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
-        assertEquals("array size mismatch", outputArray.length,
-                actualOutput.length);
+        assertEquals(outputArray.length, actualOutput.length, "array size mismatch");
         for (int j = 0; j < outputArray.length; j++) {
-            assertEquals("array[ " + j + "] mismatch", outputArray[j],
-                    actualOutput[j]);
+            assertEquals(outputArray[j], actualOutput[j], "array[ " + j + "] mismatch");
         }
 
         // verify proper behavior with negative index

@@ -19,7 +19,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**

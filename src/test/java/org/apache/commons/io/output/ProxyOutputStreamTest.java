@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link CloseShieldOutputStream}.
@@ -33,7 +33,7 @@ public class ProxyOutputStreamTest {
 
     private OutputStream proxied;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         original = new ByteArrayOutputStream(){
             @Override

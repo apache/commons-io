@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link CloseShieldOutputStream}.
@@ -37,7 +37,7 @@ public class CloseShieldOutputStreamTest {
 
     private boolean closed;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         original = new ByteArrayOutputStream() {
             @Override
@@ -52,7 +52,7 @@ public class CloseShieldOutputStreamTest {
     @Test
     public void testClose() throws IOException {
         shielded.close();
-        assertFalse("closed", closed);
+        assertFalse(closed, "closed");
         try {
             shielded.write('x');
             fail("write(b)");

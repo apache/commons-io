@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +29,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link ProxyCollectionWriter}.
@@ -395,8 +395,8 @@ public class ProxyCollectionWriterTest {
                 tw.write(i);
                 expected.write(i);
             }
-            assertEquals("ProxyCollectionWriter.write(int)", expected.toString(), sbw1.toString());
-            assertEquals("ProxyCollectionWriter.write(int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "ProxyCollectionWriter.write(int)");
+            assertEquals(expected.toString(), sbw2.toString(), "ProxyCollectionWriter.write(int)");
 
             final char[] array = new char[10];
             for (int i = 20; i < 30; i++) {
@@ -404,39 +404,39 @@ public class ProxyCollectionWriterTest {
             }
             tw.write(array);
             expected.write(array);
-            assertEquals("ProxyCollectionWriter.write(char[])", expected.toString(), sbw1.toString());
-            assertEquals("ProxyCollectionWriter.write(char[])", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "ProxyCollectionWriter.write(char[])");
+            assertEquals(expected.toString(), sbw2.toString(), "ProxyCollectionWriter.write(char[])");
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.write(array, 5, 5);
             expected.write(array, 5, 5);
-            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(), sbw1.toString());
-            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeOutputStream.write(byte[], int, int)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeOutputStream.write(byte[], int, int)");
 
             for (int i = 0; i < 20; i++) {
                 tw.append((char) i);
                 expected.append((char) i);
             }
-            assertEquals("ProxyCollectionWriter.append(char)", expected.toString(), sbw1.toString());
-            assertEquals("ProxyCollectionWriter.append(char)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "ProxyCollectionWriter.append(char)");
+            assertEquals(expected.toString(), sbw2.toString(), "ProxyCollectionWriter.append(char)");
 
             for (int i = 20; i < 30; i++) {
                 array[i - 20] = (char) i;
             }
             tw.append(new String(array));
             expected.append(new String(array));
-            assertEquals("ProxyCollectionWriter.append(CharSequence)", expected.toString(), sbw1.toString());
-            assertEquals("ProxyCollectionWriter.write(CharSequence)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "ProxyCollectionWriter.append(CharSequence)");
+            assertEquals(expected.toString(), sbw2.toString(), "ProxyCollectionWriter.write(CharSequence)");
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.append(new String(array), 5, 5);
             expected.append(new String(array), 5, 5);
-            assertEquals("ProxyCollectionWriter.append(CharSequence, int, int)", expected.toString(), sbw1.toString());
-            assertEquals("ProxyCollectionWriter.append(CharSequence, int, int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "ProxyCollectionWriter.append(CharSequence, int, int)");
+            assertEquals(expected.toString(), sbw2.toString(), "ProxyCollectionWriter.append(CharSequence, int, int)");
 
             expected.flush();
             expected.close();

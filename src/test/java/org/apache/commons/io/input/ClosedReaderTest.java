@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link ClosedReader}.
@@ -28,7 +28,7 @@ public class ClosedReaderTest {
     @Test
     public void testRead() throws Exception {
         try (final ClosedReader cr = new ClosedReader()) {
-            assertEquals("read(cbuf, off, len)", -1, cr.read(new char[10], 0, 10));
+            assertEquals(-1, cr.read(new char[10], 0, 10), "read(cbuf, off, len)");
         }
     }
 

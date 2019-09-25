@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /** Test base class that keeps track of Closeable objects
  *  and cleans them up.
@@ -37,12 +37,12 @@ public class ClosingBase {
         return t;
     }
 
-    @Before
+    @BeforeEach
     public void setup() throws IOException {
         toClose.clear();
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         for (final Closeable c : toClose) {
             try {
