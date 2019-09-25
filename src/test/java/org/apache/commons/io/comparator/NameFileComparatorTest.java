@@ -29,7 +29,6 @@ import org.junit.Test;
  */
 public class NameFileComparatorTest extends ComparatorAbstractTestCase {
 
-    /** @see junit.framework.TestCase#setUp() */
     @Before
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_COMPARATOR;

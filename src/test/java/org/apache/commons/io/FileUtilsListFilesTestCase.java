@@ -45,9 +45,6 @@ public class FileUtilsListFilesTestCase {
         return temporaryFolder.getRoot();
     }
 
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Before
     public void setUp() throws Exception {

@@ -39,7 +39,6 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
     private File smallerFile;
     private File largerFile;
 
-    /** @see junit.framework.TestCase#setUp() */
     @Before
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR;
