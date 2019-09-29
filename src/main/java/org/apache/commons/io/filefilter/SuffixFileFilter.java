@@ -88,7 +88,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * @param suffixes  the suffixes to allow, must not be null
      * @throws IllegalArgumentException if the suffix array is null
      */
-    public SuffixFileFilter(final String[] suffixes) {
+    public SuffixFileFilter(final String... suffixes) {
         this(suffixes, IOCase.SENSITIVE);
     }
 

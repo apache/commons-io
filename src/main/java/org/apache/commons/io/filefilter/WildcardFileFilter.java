@@ -90,7 +90,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFileFilter(final String[] wildcards) {
+    public WildcardFileFilter(final String... wildcards) {
         this(wildcards, IOCase.SENSITIVE);
     }
 

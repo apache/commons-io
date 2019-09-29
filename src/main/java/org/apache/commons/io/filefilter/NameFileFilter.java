@@ -83,7 +83,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
-    public NameFileFilter(final String[] names) {
+    public NameFileFilter(final String... names) {
         this(names, null);
     }
 

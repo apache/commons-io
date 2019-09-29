@@ -681,7 +681,7 @@ public class FileUtils {
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
-    private static String[] toSuffixes(final String[] extensions) {
+    private static String[] toSuffixes(final String... extensions) {
         final String[] suffixes = new String[extensions.length];
         for (int i = 0; i < extensions.length; i++) {
             suffixes[i] = "." + extensions[i];
@@ -924,7 +924,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if any file is incorrectly encoded
      * @since 1.1
      */
-    public static File[] toFiles(final URL[] urls) {
+    public static File[] toFiles(final URL... urls) {
         if (urls == null || urls.length == 0) {
             return EMPTY_FILE_ARRAY;
         }
@@ -953,7 +953,7 @@ public class FileUtils {
      * @throws IOException          if a file cannot be converted
      * @throws NullPointerException if the parameter is null
      */
-    public static URL[] toURLs(final File[] files) throws IOException {
+    public static URL[] toURLs(final File... files) throws IOException {
         final URL[] urls = new URL[files.length];
 
         for (int i = 0; i < urls.length; i++) {

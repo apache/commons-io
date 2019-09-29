@@ -87,7 +87,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
      */
-    public PrefixFileFilter(final String[] prefixes) {
+    public PrefixFileFilter(final String... prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 

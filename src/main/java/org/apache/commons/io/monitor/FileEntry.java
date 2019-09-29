@@ -162,7 +162,7 @@ public class FileEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(final FileEntry[] children) {
+    public void setChildren(final FileEntry... children) {
         this.children = children;
     }
 

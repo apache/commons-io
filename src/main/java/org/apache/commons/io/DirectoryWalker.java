@@ -550,7 +550,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+    protected File[] filterDirectoryContents(final File directory, final int depth, final File... files) throws
             IOException {
         return files;
     }
