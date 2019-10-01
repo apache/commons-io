@@ -291,6 +291,7 @@ file comparators, endian transformation classes, and much more.
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.1</commons.japicmp.version>
     <japicmp.skip>false</japicmp.skip>
+    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
   </properties>
 
   <build>
