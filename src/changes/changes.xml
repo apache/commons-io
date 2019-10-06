@@ -137,6 +137,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-626" dev="ggregory" type="fix" due-to="Yuji Konishi">
         A mistake in the FilenameUtils.concat()'s Javadoc about an absolute path.
       </action>
+      <action issue="IO-628" dev="ggregory" type="update" due-to="Allon Mureinik">
+        Migration to JUnit Jupiter #97.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
