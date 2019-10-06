@@ -16,13 +16,15 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -61,11 +63,9 @@ import java.util.List;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test IOUtils for correctness. The following checks are performed:
@@ -80,12 +80,8 @@ import org.junit.rules.TemporaryFolder;
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
 public class IOUtilsTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
@@ -105,13 +101,13 @@ public class IOUtilsTestCase {
 
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(final byte[] b0, final byte[] b1) {
-        assertTrue("Content not equal according to java.util.Arrays#equals()", Arrays.equals(b0, b1));
+        assertTrue(Arrays.equals(b0, b1), "Content not equal according to java.util.Arrays#equals()");
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         try {
-            m_testFile = new File(getTestDirectory(), "file2-test.txt");
+            m_testFile = new File(temporaryFolder, "file2-test.txt");
 
             if (!m_testFile.getParentFile().exists()) {
                 throw new IOException("Cannot create file " + m_testFile
@@ -304,7 +300,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testCopy_ByteArray_OutputStream() throws Exception {
-        final File destination = TestUtils.newFile(getTestDirectory(), "copy8.txt");
+        final File destination = TestUtils.newFile(temporaryFolder, "copy8.txt");
         byte[] in;
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
@@ -323,7 +319,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testCopy_ByteArray_Writer() throws Exception {
-        final File destination = TestUtils.newFile(getTestDirectory(), "copy7.txt");
+        final File destination = TestUtils.newFile(temporaryFolder, "copy7.txt");
         byte[] in;
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             // Create our byte[]. Rely on testInputStreamToByteArray() to make sure this is valid.
@@ -340,7 +336,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testCopy_String_Writer() throws Exception {
-        final File destination = TestUtils.newFile(getTestDirectory(), "copy6.txt");
+        final File destination = TestUtils.newFile(temporaryFolder, "copy6.txt");
         String str;
         try (FileReader fin = new FileReader(m_testFile)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
@@ -717,7 +713,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testReadLines_InputStream() throws Exception {
-        final File file = TestUtils.newFile(getTestDirectory(), "lines.txt");
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
             final String[] data = new String[] { "hello", "world", "", "this is", "some text" };
@@ -734,7 +730,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testReadLines_InputStream_String() throws Exception {
-        final File file = TestUtils.newFile(getTestDirectory(), "lines.txt");
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
             final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
@@ -751,7 +747,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testReadLines_Reader() throws Exception {
-        final File file = TestUtils.newFile(getTestDirectory(), "lines.txt");
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         Reader in = null;
         try {
             final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
@@ -862,7 +858,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testStringToOutputStream() throws Exception {
-        final File destination = TestUtils.newFile(getTestDirectory(), "copy5.txt");
+        final File destination = TestUtils.newFile(temporaryFolder, "copy5.txt");
         String str;
         try (FileReader fin = new FileReader(m_testFile)) {
             // Create our String. Rely on testReaderToString() to make sure this is valid.
@@ -889,8 +885,8 @@ public class IOUtilsTestCase {
             final InputStream in = IOUtils.toBufferedInputStream(fin);
             final byte[] out = IOUtils.toByteArray(in);
             assertNotNull(out);
-            assertEquals("Not all bytes were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all bytes were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -900,8 +896,8 @@ public class IOUtilsTestCase {
             final InputStream in = IOUtils.toBufferedInputStream(fin, 2048);
             final byte[] out = IOUtils.toByteArray(in);
             assertNotNull(out);
-            assertEquals("Not all bytes were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all bytes were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -910,8 +906,8 @@ public class IOUtilsTestCase {
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final byte[] out = IOUtils.toByteArray(fin);
             assertNotNull(out);
-            assertEquals("Not all bytes were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all bytes were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -922,8 +918,8 @@ public class IOUtilsTestCase {
             IOUtils.toByteArray(fin, -1);
             fail("IllegalArgumentException expected");
         } catch (final IllegalArgumentException exc) {
-            assertTrue("Exception message does not start with \"Size must be equal or greater than zero\"", exc
-                    .getMessage().startsWith("Size must be equal or greater than zero"));
+            assertTrue(exc.getMessage().startsWith("Size must be equal or greater than zero"),
+                    "Exception message does not start with \"Size must be equal or greater than zero\"");
         }
 
     }
@@ -932,8 +928,8 @@ public class IOUtilsTestCase {
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final byte[] out = IOUtils.toByteArray(fin, m_testFile.length());
             assertNotNull(out);
-            assertEquals("Not all bytes were read", 0, fin.available());
-            assertEquals("Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE, FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all bytes were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size: out.length=" + out.length + "!=" + FILE_SIZE);
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -944,8 +940,8 @@ public class IOUtilsTestCase {
             IOUtils.toByteArray(fin, m_testFile.length() + 1);
             fail("IOException expected");
         } catch (final IOException exc) {
-            assertTrue("Exception message does not start with \"Unexpected read size\"",
-                    exc.getMessage().startsWith("Unexpected read size"));
+            assertTrue(exc.getMessage().startsWith("Unexpected read size"),
+                    "Exception message does not start with \"Unexpected read size\"");
         }
 
     }
@@ -956,8 +952,8 @@ public class IOUtilsTestCase {
             IOUtils.toByteArray(fin, (long) Integer.MAX_VALUE + 1);
             fail("IOException expected");
         } catch (final IllegalArgumentException exc) {
-            assertTrue("Exception message does not start with \"Size cannot be greater than Integer max value\"", exc
-                    .getMessage().startsWith("Size cannot be greater than Integer max value"));
+            assertTrue(exc.getMessage().startsWith("Size cannot be greater than Integer max value"),
+                    "Exception message does not start with \"Size cannot be greater than Integer max value\"");
         }
 
     }
@@ -966,8 +962,8 @@ public class IOUtilsTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final byte[] out = IOUtils.toByteArray(fin, 0);
-            assertNotNull("Out cannot be null", out);
-            assertEquals("Out length must be 0", 0, out.length);
+            assertNotNull(out, "Out cannot be null");
+            assertEquals(0, out.length, "Out length must be 0");
         }
     }
 
@@ -975,9 +971,9 @@ public class IOUtilsTestCase {
         final String charsetName = "UTF-8";
         final byte[] expecteds = charsetName.getBytes(charsetName);
         byte[] actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)));
-        Assert.assertArrayEquals(expecteds, actuals);
+        assertArrayEquals(expecteds, actuals);
         actuals = IOUtils.toByteArray(new InputStreamReader(new ByteArrayInputStream(expecteds)), charsetName);
-        Assert.assertArrayEquals(expecteds, actuals);
+        assertArrayEquals(expecteds, actuals);
     }
 
     @Test public void testToByteArray_String() throws Exception {
@@ -1017,8 +1013,8 @@ public class IOUtilsTestCase {
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final char[] out = IOUtils.toCharArray(fin);
             assertNotNull(out);
-            assertEquals("Not all chars were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all chars were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -1027,8 +1023,8 @@ public class IOUtilsTestCase {
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final char[] out = IOUtils.toCharArray(fin, "UTF-8");
             assertNotNull(out);
-            assertEquals("Not all chars were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(0, fin.available(), "Not all chars were read");
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -1037,7 +1033,7 @@ public class IOUtilsTestCase {
         try (FileReader fr = new FileReader(m_testFile)) {
             final char[] out = IOUtils.toCharArray(fr);
             assertNotNull(out);
-            assertEquals("Wrong output size", FILE_SIZE, out.length);
+            assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, m_testFile);
         }
     }
@@ -1099,8 +1095,8 @@ public class IOUtilsTestCase {
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             final String out = IOUtils.toString(fin);
             assertNotNull(out);
-            assertEquals("Not all bytes were read", 0, fin.available());
-            assertEquals("Wrong output size", FILE_SIZE, out.length());
+            assertEquals(0, fin.available(), "Not all bytes were read");
+            assertEquals(FILE_SIZE, out.length(), "Wrong output size");
         }
     }
 
@@ -1108,7 +1104,7 @@ public class IOUtilsTestCase {
         try (FileReader fin = new FileReader(m_testFile)) {
             final String out = IOUtils.toString(fin);
             assertNotNull(out);
-            assertEquals("Wrong output size", FILE_SIZE, out.length());
+            assertEquals(FILE_SIZE, out.length(), "Wrong output size");
         }
     }
 
@@ -1116,14 +1112,14 @@ public class IOUtilsTestCase {
         final URI url = m_testFile.toURI();
         final String out = IOUtils.toString(url);
         assertNotNull(out);
-        assertEquals("Wrong output size", FILE_SIZE, out.length());
+        assertEquals(FILE_SIZE, out.length(), "Wrong output size");
     }
 
     private void testToString_URI(final String encoding) throws Exception {
         final URI uri = m_testFile.toURI();
         final String out = IOUtils.toString(uri, encoding);
         assertNotNull(out);
-        assertEquals("Wrong output size", FILE_SIZE, out.length());
+        assertEquals(FILE_SIZE, out.length(), "Wrong output size");
     }
 
     @Test public void testToString_URI_CharsetName() throws Exception {
@@ -1138,14 +1134,14 @@ public class IOUtilsTestCase {
         final URL url = m_testFile.toURI().toURL();
         final String out = IOUtils.toString(url);
         assertNotNull(out);
-        assertEquals("Wrong output size", FILE_SIZE, out.length());
+        assertEquals(FILE_SIZE, out.length(), "Wrong output size");
     }
 
     private void testToString_URL(final String encoding) throws Exception {
         final URL url = m_testFile.toURI().toURL();
         final String out = IOUtils.toString(url, encoding);
         assertNotNull(out);
-        assertEquals("Wrong output size", FILE_SIZE, out.length());
+        assertEquals(FILE_SIZE, out.length(), "Wrong output size");
     }
 
     @Test public void testToString_URL_CharsetName() throws Exception {
@@ -1196,12 +1192,14 @@ public class IOUtilsTestCase {
         assertEquals(fileSize, content.getBytes().length);
     }
 
-    @Test(expected = IOException.class) public void testResourceToString_NonExistingResource() throws Exception {
-        IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8);
+    @Test public void testResourceToString_NonExistingResource() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8));
     }
 
-    @Test(expected = IOException.class) public void testResourceToString_NonExistingResource_WithClassLoader() throws Exception {
-        IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
+    @Test public void testResourceToString_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testResourceToString_NullResource() throws Exception {
@@ -1268,12 +1266,13 @@ public class IOUtilsTestCase {
         assertEquals(fileSize, bytes.length);
     }
 
-    @Test(expected = IOException.class) public void testResourceToByteArray_NonExistingResource() throws Exception {
-        IOUtils.resourceToByteArray("/non-existing-file.bin");
+    @Test public void testResourceToByteArray_NonExistingResource() {
+        assertThrows(IOException.class, () -> IOUtils.resourceToByteArray("/non-existing-file.bin"));
     }
 
-    @Test(expected = IOException.class) public void testResourceToByteArray_NonExistingResource_WithClassLoader() throws Exception {
-        IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader());
+    @Test public void testResourceToByteArray_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testResourceToByteArray_Null() throws Exception {
@@ -1332,12 +1331,13 @@ public class IOUtilsTestCase {
         assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
     }
 
-    @Test(expected = IOException.class) public void testResourceToURL_NonExistingResource() throws Exception {
-        IOUtils.resourceToURL("/non-existing-file.bin");
+    @Test public void testResourceToURL_NonExistingResource() {
+        assertThrows(IOException.class, () -> IOUtils.resourceToURL("/non-existing-file.bin"));
     }
 
-    @Test(expected = IOException.class) public void testResourceToURL_NonExistingResource_WithClassLoader() throws Exception {
-        IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader());
+    @Test public void testResourceToURL_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testResourceToURL_Null() throws Exception {

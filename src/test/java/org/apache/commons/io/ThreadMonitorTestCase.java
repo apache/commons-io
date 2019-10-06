@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link ThreadMonitor}.
@@ -65,7 +65,7 @@ public class ThreadMonitorTestCase {
         // timeout = -1
         try {
             final Thread monitor = ThreadMonitor.start(-1);
-            assertNull("Timeout -1, Monitor should be null", monitor);
+            assertNull(monitor,"Timeout -1, Monitor should be null");
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {
@@ -75,7 +75,7 @@ public class ThreadMonitorTestCase {
         // timeout = 0
         try {
             final Thread monitor = ThreadMonitor.start(0);
-            assertNull("Timeout 0, Monitor should be null", monitor);
+            assertNull(monitor, "Timeout 0, Monitor should be null");
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final Exception e) {

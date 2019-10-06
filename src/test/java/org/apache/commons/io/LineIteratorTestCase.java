@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,10 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test LineIterator for correctness.
@@ -45,20 +43,16 @@ import org.junit.rules.TemporaryFolder;
  */
 public class LineIteratorTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     private void assertLines(final List<String> lines, final LineIterator iterator) {
         try {
             for (int i = 0; i < lines.size(); i++) {
                 final String line = iterator.nextLine();
-                assertEquals("nextLine() line " + i, lines.get(i), line);
+                assertEquals(lines.get(i), line, "nextLine() line " + i);
             }
-            assertFalse("No more expected", iterator.hasNext());
+            assertFalse(iterator.hasNext(), "No more expected");
         } finally {
             LineIterator.closeQuietly(iterator);
         }
@@ -107,15 +101,6 @@ public class LineIteratorTestCase {
         return lines;
     }
 
-    @Before
-    public void setUp() throws Exception {
-        final File dir = getTestDirectory();
-        if (dir.exists()) {
-            FileUtils.deleteDirectory(dir);
-        }
-        dir.mkdirs();
-
-    }
 
     // -----------------------------------------------------------------------
 
@@ -151,7 +136,7 @@ public class LineIteratorTestCase {
 
     @Test
     public void testMissingFile() throws Exception {
-        final File testFile = new File(getTestDirectory(), "dummy-missing-file.txt");
+        final File testFile = new File(temporaryFolder, "dummy-missing-file.txt");
 
         LineIterator iterator = null;
         try {
@@ -168,7 +153,7 @@ public class LineIteratorTestCase {
     public void testValidEncoding() throws Exception {
         final String encoding = "UTF-8";
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-validEncoding.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-validEncoding.txt");
         createLinesFile(testFile, encoding, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
@@ -188,7 +173,7 @@ public class LineIteratorTestCase {
     public void testInvalidEncoding() throws Exception {
         final String encoding = "XXXXXXXX";
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-invalidEncoding.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-invalidEncoding.txt");
         createLinesFile(testFile, "UTF-8", 3);
 
         LineIterator iterator = null;
@@ -204,7 +189,7 @@ public class LineIteratorTestCase {
 
     @Test
     public void testNextLineOnlyDefaultEncoding() throws Exception {
-        final File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile);
@@ -215,7 +200,7 @@ public class LineIteratorTestCase {
     public void testNextLineOnlyNullEncoding() throws Exception {
         final String encoding = null;
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
@@ -226,7 +211,7 @@ public class LineIteratorTestCase {
     public void testNextLineOnlyUtf8Encoding() throws Exception {
         final String encoding = "UTF-8";
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
@@ -237,16 +222,16 @@ public class LineIteratorTestCase {
     public void testNextOnly() throws Exception {
         final String encoding = null;
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-nextOnly.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             for (int i = 0; i < lines.size(); i++) {
                 final String line = iterator.next();
-                assertEquals("next() line " + i, lines.get(i), line);
+                assertEquals(lines.get(i), line, "next() line " + i);
             }
-            assertEquals("No more expected", false, iterator.hasNext());
+            assertEquals(false, iterator.hasNext(), "No more expected");
         } finally {
             LineIterator.closeQuietly(iterator);
         }
@@ -272,18 +257,18 @@ public class LineIteratorTestCase {
     public void testCloseEarly() throws Exception {
         final String encoding = "UTF-8";
 
-        final File testFile = new File(getTestDirectory(), "LineIterator-closeEarly.txt");
+        final File testFile = new File(temporaryFolder, "LineIterator-closeEarly.txt");
         createLinesFile(testFile, encoding, 3);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
         try {
             // get
             assertNotNull("Line expected", iterator.next());
-            assertTrue("More expected", iterator.hasNext());
+            assertTrue(iterator.hasNext(), "More expected");
 
             // close
             iterator.close();
-            assertFalse("No more expected", iterator.hasNext());
+            assertFalse(iterator.hasNext(), "No more expected");
             try {
                 iterator.next();
                 fail();
@@ -327,7 +312,7 @@ public class LineIteratorTestCase {
         final String encoding = "UTF-8";
 
         final String fileName = "LineIterator-" + lineCount + "-test.txt";
-        final File testFile = new File(getTestDirectory(), fileName);
+        final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, lineCount);
 
         final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
@@ -342,11 +327,11 @@ public class LineIteratorTestCase {
             int idx = 0;
             while (iterator.hasNext()) {
                 final String line = iterator.next();
-                assertEquals("Comparing line " + idx, lines.get(idx), line);
-                assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());
+                assertEquals(lines.get(idx), line, "Comparing line " + idx);
+                assertTrue(idx < lines.size(), "Exceeded expected idx=" + idx + " size=" + lines.size());
                 idx++;
             }
-            assertEquals("Line Count doesn't match", idx, lines.size());
+            assertEquals(idx, lines.size(), "Line Count doesn't match");
 
             // try calling next() after file processed
             try {
@@ -372,7 +357,7 @@ public class LineIteratorTestCase {
         final String encoding = "UTF-8";
 
         final String fileName = "LineIterator-Filter-test.txt";
-        final File testFile = new File(getTestDirectory(), fileName);
+        final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
         final Reader reader = new FileReader(testFile);
@@ -384,7 +369,7 @@ public class LineIteratorTestCase {
         final String encoding = "UTF-8";
 
         final String fileName = "LineIterator-Filter-test.txt";
-        final File testFile = new File(getTestDirectory(), fileName);
+        final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
         final Reader reader = new BufferedReader(new FileReader(testFile));
@@ -412,16 +397,16 @@ public class LineIteratorTestCase {
             while (iterator.hasNext()) {
                 final String line = iterator.next();
                 actualLines++;
-                assertEquals("Comparing line " + idx, lines.get(idx), line);
-                assertTrue("Exceeded expected idx=" + idx + " size=" + lines.size(), idx < lines.size());
+                assertEquals(lines.get(idx), line, "Comparing line " + idx);
+                assertTrue(idx < lines.size(), "Exceeded expected idx=" + idx + " size=" + lines.size());
                 idx++;
                 if (idx % 3 == 1) {
                     idx++;
                 }
             }
-            assertEquals("Line Count doesn't match", 9, lines.size());
-            assertEquals("Line Count doesn't match", 9, idx);
-            assertEquals("Line Count doesn't match", 6, actualLines);
+            assertEquals(9, lines.size(), "Line Count doesn't match");
+            assertEquals(9, idx, "Line Count doesn't match");
+            assertEquals(6, actualLines, "Line Count doesn't match");
 
             // try calling next() after file processed
             try {

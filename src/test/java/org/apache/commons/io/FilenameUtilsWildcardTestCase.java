@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Locale;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FilenameUtilsWildcardTestCase {
 
@@ -134,7 +134,7 @@ public class FilenameUtilsWildcardTestCase {
     }
 
     private void assertMatch(final String text, final String wildcard, final boolean expected) {
-        assertEquals(text + " " + wildcard, expected, FilenameUtils.wildcardMatch(text, wildcard));
+        assertEquals(expected, FilenameUtils.wildcardMatch(text, wildcard), text + " " + wildcard);
     }
 
     // A separate set of tests, added to this batch
@@ -233,9 +233,9 @@ public class FilenameUtilsWildcardTestCase {
             for (int i = 0; i < data.length; i++) {
                 for (final Locale locale : locales) {
                     Locale.setDefault(locale);
-                    assertTrue("Test data corrupt: " + i, data[i][0].equalsIgnoreCase(data[i][1]));
+                    assertTrue(data[i][0].equalsIgnoreCase(data[i][1]), "Test data corrupt: " + i);
                     final boolean match = FilenameUtils.wildcardMatch(data[i][0], data[i][1], IOCase.INSENSITIVE);
-                    assertTrue(Locale.getDefault().toString() + ": " + i, match);
+                    assertTrue(match, Locale.getDefault().toString() + ": " + i);
                 }
             }
         } finally {

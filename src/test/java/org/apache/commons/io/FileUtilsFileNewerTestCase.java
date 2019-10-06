@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -26,22 +26,17 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test FileUtils for correctness.
  */
 public class FileUtilsFileNewerTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     // Test data
     private static final int FILE1_SIZE = 1;
@@ -50,10 +45,10 @@ public class FileUtilsFileNewerTestCase {
     private File m_testFile1;
     private File m_testFile2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        m_testFile1 = new File(getTestDirectory(), "file1-test.txt");
-        m_testFile2 = new File(getTestDirectory(), "file2-test.txt");
+        m_testFile1 = new File(temporaryFolder, "file1-test.txt");
+        m_testFile2 = new File(temporaryFolder, "file2-test.txt");
         if (!m_testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + m_testFile1
                     + " as the parent directory does not exist");
@@ -102,7 +97,7 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerImaginaryFile() {
-        final File imaginaryFile = new File(getTestDirectory(), "imaginaryFile");
+        final File imaginaryFile = new File(temporaryFolder, "imaginaryFile");
         if (imaginaryFile.exists()) {
             throw new IllegalStateException("The imaginary File exists");
         }
@@ -134,14 +129,14 @@ public class FileUtilsFileNewerTestCase {
      * @see FileUtils#isFileNewer(File, File)
      */
     protected void testIsFileNewer(final String description, final File file, final long time, final boolean wantedResult)  {
-        assertEquals(description + " - time", wantedResult, FileUtils.isFileNewer(file, time));
-        assertEquals(description + " - date", wantedResult, FileUtils.isFileNewer(file, new Date(time)));
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, time), description + " - time");
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, new Date(time)), description + " - date");
 
         final File temporaryFile = m_testFile2;
 
         temporaryFile.setLastModified(time);
-        assertEquals("The temporary file hasn't the right last modification date", time, temporaryFile.lastModified());
-        assertEquals(description + " - file", wantedResult, FileUtils.isFileNewer(file, temporaryFile));
+        assertEquals(time, temporaryFile.lastModified(), "The temporary file hasn't the right last modification date");
+        assertEquals(wantedResult, FileUtils.isFileNewer(file, temporaryFile), description + " - file");
     }
 
     /**
@@ -149,10 +144,10 @@ public class FileUtilsFileNewerTestCase {
      * <br>
      * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsFileNewerNoFile() {
-        FileUtils.isFileNewer(null,0);
-        fail("File not specified");
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(null,0),
+                "File not specified");
     }
 
     /**
@@ -160,10 +155,10 @@ public class FileUtilsFileNewerTestCase {
      * <br>
      * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsFileNewerNoDate() {
-        FileUtils.isFileNewer(m_testFile1, (Date) null);
-        fail("Date not specified");
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(m_testFile1, (Date) null),
+                "Date not specified");
     }
 
     /**
@@ -171,9 +166,9 @@ public class FileUtilsFileNewerTestCase {
      * <br>
      * The test is successful if the method throws an <code>IllegalArgumentException</code>.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIsFileNewerNoFileReference() {
-        FileUtils.isFileNewer(m_testFile1, (File) null);
-        fail("Reference file not specified");
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(m_testFile1, (File) null),
+                "Reference file is not specified");
     }
 }

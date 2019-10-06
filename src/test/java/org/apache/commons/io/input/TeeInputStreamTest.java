@@ -16,7 +16,8 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -30,9 +31,8 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnCloseOutputStream;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link TeeInputStream}.
@@ -45,7 +45,7 @@ public class TeeInputStreamTest  {
 
     private ByteArrayOutputStream output;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final InputStream input = new ByteArrayInputStream("abc".getBytes(ASCII));
         output = new ByteArrayOutputStream();
@@ -131,7 +131,7 @@ public class TeeInputStreamTest  {
         final TeeInputStream closingTis = new TeeInputStream(goodIs, badOs, true);
         try {
             closingTis.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             verify(goodIs, times(2)).close();
         }
@@ -149,7 +149,7 @@ public class TeeInputStreamTest  {
         final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);
         try {
             nonClosingTis.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             verify(goodOs, never()).close();
         }
@@ -157,7 +157,7 @@ public class TeeInputStreamTest  {
         final TeeInputStream closingTis = new TeeInputStream(badIs, goodOs, true);
         try {
             closingTis.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             verify(goodOs).close();
         }

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -27,10 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 /**
  * Test for FileDeleteStrategy.
  *
@@ -38,17 +36,13 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileDeleteStrategyTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     //-----------------------------------------------------------------------
     @Test
     public void testDeleteNormal() throws Exception {
-        final File baseDir = getTestDirectory();
+        final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");
@@ -86,7 +80,7 @@ public class FileDeleteStrategyTestCase {
 
     @Test
     public void testDeleteQuietlyNormal() throws Exception {
-        final File baseDir = getTestDirectory();
+        final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");
@@ -119,7 +113,7 @@ public class FileDeleteStrategyTestCase {
 
     @Test
     public void testDeleteForce() throws Exception {
-        final File baseDir = getTestDirectory();
+        final File baseDir = temporaryFolder;
         final File subDir = new File(baseDir, "test");
         assertTrue(subDir.mkdir());
         final File subFile = new File(subDir, "a.txt");

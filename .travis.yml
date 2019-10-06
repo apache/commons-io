@@ -23,6 +23,14 @@ jdk:
   - openjdk-ea
   - oraclejdk11
 
+matrix:
+  exclude:
+    - jdk: openjdk-ea
+  include:
+    - jdk: openjdk-ea
+      env: JACOCO_SKIP=true
+
+
 script:
   - mvn
 

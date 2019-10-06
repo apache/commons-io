@@ -16,12 +16,14 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,9 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.ByteOrderMark;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -76,9 +76,9 @@ public class BOMInputStreamTest {
 
     private void assertData(final byte[] expected, final byte[] actual, final int len)
         throws Exception {
-        assertEquals("length", expected.length, len);
+        assertEquals(expected.length, len, "length");
         for (int ii = 0; ii < expected.length; ii++) {
-            assertEquals("byte " + ii, expected[ii], actual[ii]);
+            assertEquals(expected[ii], actual[ii], "byte " + ii);
         }
     }
 
@@ -175,7 +175,7 @@ public class BOMInputStreamTest {
 
     private void readBOMInputStreamTwice(final String resource) throws Exception {
         final InputStream inputStream = this.getClass().getResourceAsStream(resource);
-        Assert.assertNotNull(inputStream);
+        assertNotNull(inputStream);
         final BOMInputStream bomInputStream = new BOMInputStream(inputStream);
         bomInputStream.mark(1000000);
 
@@ -243,9 +243,9 @@ public class BOMInputStreamTest {
     public void testGetBOMFirstThenRead() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
         try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true))) {
-            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
+            assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
             assertEquals('A', in.read());
             assertEquals('B', in.read());
             assertEquals('C', in.read());
@@ -257,9 +257,9 @@ public class BOMInputStreamTest {
     public void testGetBOMFirstThenReadInclude() throws Exception {
         final byte[] data = new byte[] { 'A', 'B', 'C' };
         try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, true), true)) {
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
             assertEquals(0xEF, in.read());
             assertEquals(0xBB, in.read());
             assertEquals(0xBF, in.read());
@@ -396,9 +396,9 @@ public class BOMInputStreamTest {
         final byte[] data = new byte[] {};
         try (final BOMInputStream in = new BOMInputStream(createUtf8DataStream(data, false))) {
             assertEquals(-1, in.read());
-            assertFalse("hasBOM()", in.hasBOM());
-            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertNull("getBOM", in.getBOM());
+            assertFalse(in.hasBOM(), "hasBOM()");
+            assertFalse(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertNull(in.getBOM(), "getBOM");
         }
     }
 
@@ -409,9 +409,9 @@ public class BOMInputStreamTest {
             assertEquals('A', in.read());
             assertEquals('B', in.read());
             assertEquals(-1, in.read());
-            assertFalse("hasBOM()", in.hasBOM());
-            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertNull("getBOM", in.getBOM());
+            assertFalse(in.hasBOM(), "hasBOM()");
+            assertFalse(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertNull(in.getBOM(), "getBOM");
         }
     }
 
@@ -436,9 +436,9 @@ public class BOMInputStreamTest {
             assertEquals('B', in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
         }
     }
 
@@ -454,9 +454,9 @@ public class BOMInputStreamTest {
             assertEquals(0, in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
-            assertEquals("getBOM", ByteOrderMark.UTF_16BE, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_16BE), "hasBOM(UTF-16BE)");
+            assertEquals(ByteOrderMark.UTF_16BE, in.getBOM(), "getBOM");
             try {
                 in.hasBOM(ByteOrderMark.UTF_16LE);
                 fail("Expected IllegalArgumentException");
@@ -478,9 +478,9 @@ public class BOMInputStreamTest {
             assertEquals('C', in.read());
             assertEquals(0, in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-16LE)", in.hasBOM(ByteOrderMark.UTF_16LE));
-            assertEquals("getBOM", ByteOrderMark.UTF_16LE, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_16LE), "hasBOM(UTF-16LE)");
+            assertEquals(ByteOrderMark.UTF_16LE, in.getBOM(), "getBOM");
             try {
                 in.hasBOM(ByteOrderMark.UTF_16BE);
                 fail("Expected IllegalArgumentException");
@@ -492,7 +492,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf32Be() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32BE"));
+        assumeTrue(Charset.isSupported("UTF_32BE"));
         final byte[] data = "ABC".getBytes("UTF_32BE");
         try (final BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true),
                 ByteOrderMark.UTF_32BE)) {
@@ -509,9 +509,9 @@ public class BOMInputStreamTest {
             assertEquals(0, in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-32BE)", in.hasBOM(ByteOrderMark.UTF_32BE));
-            assertEquals("getBOM", ByteOrderMark.UTF_32BE, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_32BE), "hasBOM(UTF-32BE)");
+            assertEquals(ByteOrderMark.UTF_32BE, in.getBOM(), "getBOM");
             try {
                 in.hasBOM(ByteOrderMark.UTF_32LE);
                 fail("Expected IllegalArgumentException");
@@ -523,7 +523,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadWithBOMUtf32Le() throws Exception {
-        Assume.assumeTrue(Charset.isSupported("UTF_32LE"));
+        assumeTrue(Charset.isSupported("UTF_32LE"));
         final byte[] data = "ABC".getBytes("UTF_32LE");
         try (final BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true),
                 ByteOrderMark.UTF_32LE)) {
@@ -540,9 +540,9 @@ public class BOMInputStreamTest {
             assertEquals(0, in.read());
             assertEquals(0, in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-32LE)", in.hasBOM(ByteOrderMark.UTF_32LE));
-            assertEquals("getBOM", ByteOrderMark.UTF_32LE, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_32LE), "hasBOM(UTF-32LE)");
+            assertEquals(ByteOrderMark.UTF_32LE, in.getBOM(), "getBOM");
             try {
                 in.hasBOM(ByteOrderMark.UTF_32BE);
                 fail("Expected IllegalArgumentException");
@@ -560,9 +560,9 @@ public class BOMInputStreamTest {
             assertEquals('B', in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
             try {
                 in.hasBOM(ByteOrderMark.UTF_16BE);
                 fail("Expected IllegalArgumentException");
@@ -581,10 +581,10 @@ public class BOMInputStreamTest {
             assertEquals('B', in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertTrue("hasBOM()", in.hasBOM());
-            assertTrue("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertFalse("hasBOM(UTF-16BE)", in.hasBOM(ByteOrderMark.UTF_16BE));
-            assertEquals("getBOM", ByteOrderMark.UTF_8, in.getBOM());
+            assertTrue(in.hasBOM(), "hasBOM()");
+            assertTrue(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertFalse(in.hasBOM(ByteOrderMark.UTF_16BE), "hasBOM(UTF-16BE)");
+            assertEquals(ByteOrderMark.UTF_8, in.getBOM(), "getBOM");
         }
     }
 
@@ -596,18 +596,18 @@ public class BOMInputStreamTest {
             assertEquals('B', in.read());
             assertEquals('C', in.read());
             assertEquals(-1, in.read());
-            assertFalse("hasBOM()", in.hasBOM());
-            assertFalse("hasBOM(UTF-8)", in.hasBOM(ByteOrderMark.UTF_8));
-            assertNull("getBOM", in.getBOM());
+            assertFalse(in.hasBOM(), "hasBOM()");
+            assertFalse(in.hasBOM(ByteOrderMark.UTF_8), "hasBOM(UTF-8)");
+            assertNull(in.getBOM(), "getBOM");
         }
     }
 
     @Test
     public void testReadXmlWithBOMUcs2() throws Exception {
-        Assume.assumeFalse("This test does not pass on some IBM VMs xml parsers", System.getProperty("java.vendor").contains("IBM"));
+        assumeFalse(System.getProperty("java.vendor").contains("IBM"), "This test does not pass on some IBM VMs xml parsers");
 
         // UCS-2 is BE.
-        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
+        assumeTrue(Charset.isSupported("ISO-10646-UCS-2"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-2\"?><X/>".getBytes("ISO-10646-UCS-2");
         try (BOMInputStream in = new BOMInputStream(createUtf16BeDataStream(data, true), ByteOrderMark.UTF_16BE)) {
             parseXml(in);
@@ -619,13 +619,13 @@ public class BOMInputStreamTest {
     public void testReadXmlWithBOMUcs4() throws Exception {
         // UCS-4 is BE or LE?
         // Hm: ISO-10646-UCS-4 is not supported on Oracle 1.6.0_31
-        Assume.assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
+        assumeTrue(Charset.isSupported("ISO-10646-UCS-4"));
         final byte[] data = "<?xml version=\"1.0\" encoding=\"ISO-10646-UCS-4\"?><X/>".getBytes("ISO-10646-UCS-4");
         // XML parser does not know what to do with UTF-32
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
             parseXml(in);
             // XML parser does not know what to do with UTF-32
-            Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+            assumeTrue(jvmAndSaxBothSupportCharset("UTF_32LE"), "JVM and SAX need to support UTF_32LE for this");
         }
         parseXml(createUtf32BeDataStream(data, true));
     }
@@ -650,7 +650,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Be() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
+        assumeTrue(jvmAndSaxBothSupportCharset("UTF_32BE"), "JVM and SAX need to support UTF_32BE for this");
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32BE\"?><X/>".getBytes("UTF_32BE");
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, true), ByteOrderMark.UTF_32BE)) {
             parseXml(in);
@@ -663,7 +663,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithBOMUtf32Le() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        assumeTrue(jvmAndSaxBothSupportCharset("UTF_32LE"), "JVM and SAX need to support UTF_32LE for this");
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, true), ByteOrderMark.UTF_32LE)) {
             parseXml(in);
@@ -685,7 +685,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithoutBOMUtf32Be() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32BE for this", jvmAndSaxBothSupportCharset("UTF_32BE"));
+        assumeTrue(jvmAndSaxBothSupportCharset("UTF_32BE"), "JVM and SAX need to support UTF_32BE for this");
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF_32BE\"?><X/>".getBytes("UTF_32BE");
         try (BOMInputStream in = new BOMInputStream(createUtf32BeDataStream(data, false))) {
             parseXml(in);
@@ -695,7 +695,7 @@ public class BOMInputStreamTest {
 
     @Test
     public void testReadXmlWithoutBOMUtf32Le() throws Exception {
-        Assume.assumeTrue("JVM and SAX need to support UTF_32LE for this", jvmAndSaxBothSupportCharset("UTF_32LE"));
+        assumeTrue(jvmAndSaxBothSupportCharset("UTF_32LE"), "JVM and SAX need to support UTF_32LE for this");
         final byte[] data = "<?xml version=\"1.0\" encoding=\"UTF-32LE\"?><X/>".getBytes("UTF_32LE");
         try (BOMInputStream in = new BOMInputStream(createUtf32LeDataStream(data, false))) {
             parseXml(in);

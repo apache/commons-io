@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.comparator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -26,8 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link SizeFileComparator}.
@@ -39,12 +39,10 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
     private File smallerFile;
     private File largerFile;
 
-    /** @see junit.framework.TestCase#setUp() */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR;
         reverse = SizeFileComparator.SIZE_REVERSE;
-        final File dir = getTestDirectory();
         smallerDir = new File(dir, "smallerdir");
         largerDir = new File(dir, "largerdir");
         smallerFile = new File(smallerDir, "smaller.txt");
@@ -89,7 +87,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
     public void testNonexistantFile() {
         final File nonexistantFile = new File(new File("."), "nonexistant.txt");
         assertFalse(nonexistantFile.exists());
-        assertTrue("less",  comparator.compare(nonexistantFile, moreFile) < 0);
+        assertTrue(comparator.compare(nonexistantFile, moreFile) < 0, "less");
     }
 
     /**
@@ -97,8 +95,8 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
      */
     @Test
     public void testCompareDirectorySizes() {
-        assertEquals("sumDirectoryContents=false", 0, comparator.compare(smallerDir, largerDir));
-        assertEquals("less", -1, SizeFileComparator.SIZE_SUMDIR_COMPARATOR.compare(smallerDir, largerDir));
-        assertEquals("less", 1,  SizeFileComparator.SIZE_SUMDIR_REVERSE.compare(smallerDir, largerDir));
+        assertEquals(0, comparator.compare(smallerDir, largerDir), "sumDirectoryContents=false");
+        assertEquals(-1, SizeFileComparator.SIZE_SUMDIR_COMPARATOR.compare(smallerDir, largerDir), "less");
+        assertEquals(1, SizeFileComparator.SIZE_SUMDIR_REVERSE.compare(smallerDir, largerDir), "less");
     }
 }

@@ -19,7 +19,7 @@ package org.apache.commons.io.filefilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase {
 
@@ -86,7 +86,7 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     return WORKING_PATH_NAME_PROPERTY_KEY;
   }
 
-  @Before
+  @BeforeEach
   public void setUpTestFilters() {
     // filters
     //tests

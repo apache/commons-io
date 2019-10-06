@@ -16,14 +16,14 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link CharSequenceReader}.
@@ -142,14 +142,13 @@ public class CharSequenceReaderTest {
 
     private void checkRead(final Reader reader, final String expected) throws IOException {
         for (int i = 0; i < expected.length(); i++) {
-            assertEquals("Read[" + i + "] of '" + expected + "'",
-                    expected.charAt(i), (char)reader.read());
+            assertEquals(expected.charAt(i), (char)reader.read(), "Read[" + i + "] of '" + expected + "'");
         }
     }
 
     private void checkArray(final char[] expected, final char[] actual) {
         for (int i = 0; i < expected.length; i++) {
-            assertEquals("Compare[" +i + "]", expected[i], actual[i]);
+            assertEquals(expected[i], actual[i], "Compare[" +i + "]");
         }
     }
 }

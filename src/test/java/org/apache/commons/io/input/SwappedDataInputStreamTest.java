@@ -17,15 +17,15 @@
 package org.apache.commons.io.input;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -39,7 +39,7 @@ public class SwappedDataInputStreamTest {
     private SwappedDataInputStream sdis;
     private byte[] bytes;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         bytes = new byte[] {
             0x01,
@@ -55,7 +55,7 @@ public class SwappedDataInputStreamTest {
         this.sdis = new SwappedDataInputStream( bais );
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         this.sdis = null;
     }
@@ -109,10 +109,10 @@ public class SwappedDataInputStreamTest {
         assertEquals( 0x04030201, this.sdis.readInt() );
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testReadLine() throws IOException {
-        this.sdis.readLine();
-        fail("readLine should be unsupported. ");
+    @Test
+    public void testReadLine() {
+        assertThrows(UnsupportedOperationException.class, () ->  this.sdis.readLine(),
+                "readLine should be unsupported. ");
     }
 
     @Test
@@ -135,10 +135,10 @@ public class SwappedDataInputStreamTest {
         assertEquals( (short) 0x0201, this.sdis.readUnsignedShort() );
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testReadUTF() throws IOException {
-        this.sdis.readUTF();
-        fail("readUTF should be unsupported. ");
+        assertThrows(UnsupportedOperationException.class, () ->  this.sdis.readUTF(),
+                "readUTF should be unsupported. ");
     }
 
     @Test

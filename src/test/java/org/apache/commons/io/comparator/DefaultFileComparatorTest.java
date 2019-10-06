@@ -18,14 +18,14 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Test case for {@link DefaultFileComparator}.
  */
 public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;

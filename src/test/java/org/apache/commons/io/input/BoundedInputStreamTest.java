@@ -16,12 +16,12 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link BoundedInputStream}.
@@ -38,23 +38,23 @@ public class BoundedInputStreamTest {
         // limit = length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
         for (int i = 0; i < helloWorld.length; i++) {
-            assertEquals("limit = length byte[" + i + "]", helloWorld[i], bounded.read());
+            assertEquals(helloWorld[i], bounded.read(), "limit = length byte[" + i + "]");
         }
-        assertEquals("limit = length end", -1, bounded.read());
+        assertEquals(-1, bounded.read(), "limit = length end");
 
         // limit > length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length + 1);
         for (int i = 0; i < helloWorld.length; i++) {
-            assertEquals("limit > length byte[" + i + "]", helloWorld[i], bounded.read());
+            assertEquals(helloWorld[i], bounded.read(), "limit > length byte[" + i + "]");
         }
-        assertEquals("limit > length end", -1, bounded.read());
+        assertEquals(-1, bounded.read(), "limit > length end");
 
         // limit < length
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), hello.length);
         for (int i = 0; i < hello.length; i++) {
-            assertEquals("limit < length byte[" + i + "]", hello[i], bounded.read());
+            assertEquals(hello[i], bounded.read(), "limit < length byte[" + i + "]");
         }
-        assertEquals("limit < length end", -1, bounded.read());
+        assertEquals(-1, bounded.read(), "limit < length end");
     }
 
     @Test
@@ -81,9 +81,9 @@ public class BoundedInputStreamTest {
     }
 
     private void compare(final String msg, final byte[] expected, final byte[] actual) {
-        assertEquals(msg + " length", expected.length, actual.length);
+        assertEquals(expected.length, actual.length, msg + " length");
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(msg + " byte[" + i + "]", expected[i], actual[i]);
+            assertEquals(expected[i], actual[i], msg + " byte[" + i + "]");
         }
     }
 }

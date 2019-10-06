@@ -17,8 +17,8 @@
 package org.apache.commons.io.monitor;
 
 import static org.apache.commons.io.testtools.TestUtils.sleepQuietly;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -27,17 +27,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * {@link FileAlterationObserver} Test Case.
  */
 public abstract class AbstractMonitorTestCase {
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /** File observer */
     protected FileAlterationObserver observer;
@@ -46,15 +42,14 @@ public abstract class AbstractMonitorTestCase {
     protected CollectionFileListener listener;
 
     /** Directory for test files */
+    @TempDir
     protected File testDir;
 
     /** Time in milliseconds to pause in tests */
     protected long pauseTime = 100L;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        testDir = temporaryFolder.getRoot();
-
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
         final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
@@ -118,12 +113,12 @@ public abstract class AbstractMonitorTestCase {
                         " " + listener.getCreatedFiles().size() +
                         " " + listener.getChangedFiles().size() +
                         " " + listener.getDeletedFiles().size() + "]";
-        assertEquals(label + ": No. of directories created",  dirCreate,  listener.getCreatedDirectories().size());
-        assertEquals(label + ": No. of directories changed",  dirChange,  listener.getChangedDirectories().size());
-        assertEquals(label + ": No. of directories deleted",  dirDelete,  listener.getDeletedDirectories().size());
-        assertEquals(label + ": No. of files created", fileCreate, listener.getCreatedFiles().size());
-        assertEquals(label + ": No. of files changed", fileChange, listener.getChangedFiles().size());
-        assertEquals(label + ": No. of files deleted", fileDelete, listener.getDeletedFiles().size());
+        assertEquals(dirCreate, listener.getCreatedDirectories().size(), label + ": No. of directories created");
+        assertEquals(dirChange, listener.getChangedDirectories().size(), label + ": No. of directories changed");
+        assertEquals(dirDelete, listener.getDeletedDirectories().size(), label + ": No. of directories deleted");
+        assertEquals(fileCreate, listener.getCreatedFiles().size(), label + ": No. of files created");
+        assertEquals(fileChange, listener.getChangedFiles().size(), label + ": No. of files changed");
+        assertEquals(fileDelete, listener.getDeletedFiles().size(), label + ": No. of files deleted");
     }
 
     /**

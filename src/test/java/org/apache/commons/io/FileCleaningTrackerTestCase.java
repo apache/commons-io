@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -31,11 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test {@link FileCleaningTracker} for correctness.
@@ -44,12 +43,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileCleaningTrackerTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     protected FileCleaningTracker newInstance() {
         return new FileCleaningTracker();
@@ -58,13 +53,13 @@ public class FileCleaningTrackerTestCase {
     private File testFile;
     private FileCleaningTracker theInstance;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        testFile = new File(getTestDirectory(), "file-test.txt");
+        testFile = new File(temporaryFolder, "file-test.txt");
         theInstance = newInstance();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
 
         // reset file cleaner class, so as not to break other tests
@@ -108,18 +103,18 @@ public class FileCleaningTrackerTestCase {
         pauseForDeleteToComplete(new File(path));
 
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(showFailures(), false, new File(path).exists());
+        assertEquals(false, new File(path).exists(), showFailures());
     }
 
     @Test
     public void testFileCleanerDirectory() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
-        assertTrue(getTestDirectory().exists());
+        assertTrue(temporaryFolder.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(getTestDirectory(), obj);
+        theInstance.track(temporaryFolder, obj);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -135,11 +130,11 @@ public class FileCleaningTrackerTestCase {
     public void testFileCleanerDirectory_NullStrategy() throws Exception {
         TestUtils.createFile(testFile, 100);
         assertTrue(testFile.exists());
-        assertTrue(getTestDirectory().exists());
+        assertTrue(temporaryFolder.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(getTestDirectory(), obj, null);
+        theInstance.track(temporaryFolder, obj, null);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -162,11 +157,11 @@ public class FileCleaningTrackerTestCase {
             TestUtils.generateTestData(output, 100);
         }
         assertTrue(testFile.exists());
-        assertTrue(getTestDirectory().exists());
+        assertTrue(temporaryFolder.exists());
 
         Object obj = new Object();
         assertEquals(0, theInstance.getTrackCount());
-        theInstance.track(getTestDirectory(), obj, FileDeleteStrategy.FORCE);
+        theInstance.track(temporaryFolder, obj, FileDeleteStrategy.FORCE);
         assertEquals(1, theInstance.getTrackCount());
 
         obj = null;
@@ -175,8 +170,8 @@ public class FileCleaningTrackerTestCase {
         pauseForDeleteToComplete(testFile.getParentFile());
 
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(showFailures(), false, new File(testFile.getPath()).exists());
-        assertEquals(showFailures(), false, testFile.getParentFile().exists());
+        assertEquals(false, new File(testFile.getPath()).exists(), showFailures());
+        assertEquals(false, testFile.getParentFile().exists(), showFailures());
     }
 
     @Test
@@ -244,20 +239,20 @@ public class FileCleaningTrackerTestCase {
     public void testFileCleanerExitWhenFinished1() throws Exception {
         final String path = testFile.getPath();
 
-        assertEquals("1-testFile exists: " + testFile, false, testFile.exists());
+        assertEquals(false, testFile.exists(), "1-testFile exists: " + testFile);
         RandomAccessFile r = new RandomAccessFile(testFile, "rw");
-        assertEquals("2-testFile exists", true, testFile.exists());
+        assertEquals(true, testFile.exists(), "2-testFile exists");
 
-        assertEquals("3-Track Count", 0, theInstance.getTrackCount());
+        assertEquals(0, theInstance.getTrackCount(), "3-Track Count");
         theInstance.track(path, r);
-        assertEquals("4-Track Count", 1, theInstance.getTrackCount());
-        assertEquals("5-exitWhenFinished", false, theInstance.exitWhenFinished);
-        assertEquals("6-reaper.isAlive", true, theInstance.reaper.isAlive());
+        assertEquals(1, theInstance.getTrackCount(), "4-Track Count");
+        assertEquals(false, theInstance.exitWhenFinished, "5-exitWhenFinished");
+        assertEquals(true, theInstance.reaper.isAlive(), "6-reaper.isAlive");
 
-        assertEquals("7-exitWhenFinished", false, theInstance.exitWhenFinished);
+        assertEquals(false, theInstance.exitWhenFinished, "7-exitWhenFinished");
         theInstance.exitWhenFinished();
-        assertEquals("8-exitWhenFinished", true, theInstance.exitWhenFinished);
-        assertEquals("9-reaper.isAlive", true, theInstance.reaper.isAlive());
+        assertEquals(true, theInstance.exitWhenFinished, "8-exitWhenFinished");
+        assertEquals(true, theInstance.reaper.isAlive(), "9-reaper.isAlive");
 
         r.close();
         testFile = null;
@@ -266,10 +261,10 @@ public class FileCleaningTrackerTestCase {
         waitUntilTrackCount();
         pauseForDeleteToComplete(new File(path));
 
-        assertEquals("10-Track Count", 0, theInstance.getTrackCount());
-        assertEquals("11-testFile exists " + showFailures(), false, new File(path).exists());
-        assertEquals("12-exitWhenFinished", true, theInstance.exitWhenFinished);
-        assertEquals("13-reaper.isAlive", false, theInstance.reaper.isAlive());
+        assertEquals(0, theInstance.getTrackCount(), "10-Track Count");
+        assertEquals(false, new File(path).exists(), "11-testFile exists " + showFailures());
+        assertEquals(true, theInstance.exitWhenFinished, "12-exitWhenFinished");
+        assertEquals(false, theInstance.reaper.isAlive(), "13-reaper.isAlive");
     }
 
     @Test
@@ -294,7 +289,7 @@ public class FileCleaningTrackerTestCase {
         pauseForDeleteToComplete(new File(path));
 
         assertEquals(0, theInstance.getTrackCount());
-        assertEquals(showFailures(), false, new File(path).exists());
+        assertEquals(false, new File(path).exists(), showFailures());
         assertFalse(theInstance.exitWhenFinished);
         assertTrue(theInstance.reaper.isAlive());
 

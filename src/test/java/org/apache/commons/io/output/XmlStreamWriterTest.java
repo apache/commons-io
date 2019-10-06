@@ -16,16 +16,14 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.commons.io.testtools.SystemDefaults;
-import org.apache.commons.io.testtools.SystemDefaultsSwitch;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.DefaultLocale;
 
 /**
  */
@@ -41,9 +39,6 @@ public class XmlStreamWriterTest {
     /** Unicode: support everything */
     private static final String TEXT_UNICODE = TEXT_LATIN1 + ", " + TEXT_LATIN7
             + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
-
-    @Rule
-    public SystemDefaultsSwitch locale = new SystemDefaultsSwitch();
 
     private static String createXmlContent(final String text, final String encoding) {
         String xmlDecl = "<?xml version=\"1.0\"?>";
@@ -109,7 +104,7 @@ public class XmlStreamWriterTest {
 
     // Turkish language has specific rules to convert dotted and dottless i character.
     @Test
-    @SystemDefaults(locale="tr")
+    @DefaultLocale(language = "tr")
     public void testLowerCaseEncodingWithTurkishLocale_IO_557() throws IOException {
         checkXmlWriter(TEXT_UNICODE, "utf-8");
         checkXmlWriter(TEXT_LATIN1, "iso-8859-1");

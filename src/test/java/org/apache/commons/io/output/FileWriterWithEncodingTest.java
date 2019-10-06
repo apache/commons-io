@@ -17,9 +17,9 @@
 package org.apache.commons.io.output;
 
 import static org.apache.commons.io.testtools.TestUtils.checkFile;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,10 +31,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests that the encoding is actually set and used.
@@ -42,12 +41,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileWriterWithEncodingTest {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     private String defaultEncoding;
     private File file1;
@@ -55,14 +50,14 @@ public class FileWriterWithEncodingTest {
     private String textContent;
     private final char[] anotherTestContent = new char[]{'f', 'z', 'x'};
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        final File encodingFinder = new File(getTestDirectory(), "finder.txt");
+        final File encodingFinder = new File(temporaryFolder, "finder.txt");
         try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(encodingFinder))) {
             defaultEncoding = out.getEncoding();
         }
-        file1 = new File(getTestDirectory(), "testfile1.txt");
-        file2 = new File(getTestDirectory(), "testfile2.txt");
+        file1 = new File(temporaryFolder, "testfile1.txt");
+        file2 = new File(temporaryFolder, "testfile2.txt");
         final char[] arr = new char[1024];
         final char[] chars = "ABCDEFGHIJKLMNOPQabcdefgihklmnopq".toCharArray();
         for (int i = 0; i < arr.length; i++) {
@@ -207,7 +202,7 @@ public class FileWriterWithEncodingTest {
     public void constructor_File_directory() {
         Writer writer = null;
         try {
-            writer = new FileWriterWithEncoding(getTestDirectory(), defaultEncoding);
+            writer = new FileWriterWithEncoding(temporaryFolder, defaultEncoding);
             fail();
         } catch (final IOException ex) {
             // expected

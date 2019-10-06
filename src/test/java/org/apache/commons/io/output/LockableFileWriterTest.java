@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +26,9 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests that files really lock, although no writing is done as
@@ -38,12 +37,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class LockableFileWriterTest {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File temporaryFolder;
 
     private File file;
     private File lockDir;
@@ -51,12 +46,12 @@ public class LockableFileWriterTest {
     private File altLockDir;
     private File altLockFile;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        file = new File(getTestDirectory(), "testlockfile");
+        file = new File(temporaryFolder, "testlockfile");
         lockDir = new File(System.getProperty("java.io.tmpdir"));
         lockFile = new File(lockDir, file.getName() + ".lck");
-        altLockDir = getTestDirectory();
+        altLockDir = temporaryFolder;
         altLockFile = new File(altLockDir, file.getName() + ".lck");
     }
 
@@ -73,8 +68,8 @@ public class LockableFileWriterTest {
                 fail("Somehow able to open a locked file. ");
             } catch(final IOException ioe) {
                 final String msg = ioe.getMessage();
-                assertTrue( "Exception message does not start correctly. ",
-                            msg.startsWith("Can't write file, lock ") );
+                assertTrue(msg.startsWith("Can't write file, lock "),
+                        "Exception message does not start correctly. ");
                 assertTrue(file.exists());
                 assertTrue(lockFile.exists());
             }
@@ -84,8 +79,8 @@ public class LockableFileWriterTest {
                 fail("Somehow able to open a locked file. ");
             } catch(final IOException ioe) {
                 final String msg = ioe.getMessage();
-                assertTrue( "Exception message does not start correctly. ",
-                            msg.startsWith("Can't write file, lock ") );
+                assertTrue(msg.startsWith("Can't write file, lock "),
+                        "Exception message does not start correctly. ");
                 assertTrue(file.exists());
                 assertTrue(lockFile.exists());
             }
@@ -106,8 +101,8 @@ public class LockableFileWriterTest {
                 fail("Somehow able to open a locked file. ");
             } catch(final IOException ioe) {
                 final String msg = ioe.getMessage();
-                assertTrue( "Exception message does not start correctly. ",
-                            msg.startsWith("Can't write file, lock ") );
+                assertTrue(msg.startsWith("Can't write file, lock "),
+                        "Exception message does not start correctly. ");
                 assertTrue(file.exists());
                 assertTrue(altLockFile.exists());
             }
@@ -150,7 +145,7 @@ public class LockableFileWriterTest {
 
     //-----------------------------------------------------------------------
     @Test public void testConstructor_File_directory() {
-        try (Writer writer = new LockableFileWriter(getTestDirectory())) {
+        try (Writer writer = new LockableFileWriter(temporaryFolder)) {
             fail();
         } catch (final IOException ex) {
             // expected

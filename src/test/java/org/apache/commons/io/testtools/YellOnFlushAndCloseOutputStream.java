@@ -16,12 +16,12 @@
  */
 package org.apache.commons.io.testtools;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.io.output.ProxyOutputStream;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * Helper class for checking behaviour of IO classes.
@@ -46,7 +46,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     @Override
     public void flush() throws IOException {
         if (yellOnFlush) {
-            throw new AssertionFailedError(getClass().getSimpleName() + ".flush() called.");
+            fail(getClass().getSimpleName() + ".flush() called.");
         }
         super.flush();
     }
@@ -55,7 +55,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     @Override
     public void close() throws IOException {
         if (yellOnClose) {
-            throw new AssertionFailedError(getClass().getSimpleName() + ".close() called.");
+            fail(getClass().getSimpleName() + ".close() called.");
         }
         super.close();
     }

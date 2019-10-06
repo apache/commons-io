@@ -17,12 +17,15 @@
 
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.EOFException;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class IOExceptionListTestCase {
 
@@ -31,21 +34,21 @@ public class IOExceptionListTestCase {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);
-        Assert.assertEquals(cause, sqlExceptionList.getCause());
-        Assert.assertEquals(cause, sqlExceptionList.getCause(0));
-        Assert.assertEquals(list, sqlExceptionList.getCauseList());
-        Assert.assertEquals(list, sqlExceptionList.getCauseList(EOFException.class));
-        Assert.assertEquals(cause, sqlExceptionList.getCause(0, EOFException.class));
+        assertEquals(cause, sqlExceptionList.getCause());
+        assertEquals(cause, sqlExceptionList.getCause(0));
+        assertEquals(list, sqlExceptionList.getCauseList());
+        assertEquals(list, sqlExceptionList.getCauseList(EOFException.class));
+        assertEquals(cause, sqlExceptionList.getCause(0, EOFException.class));
         // No CCE:
         final List<EOFException> causeList = sqlExceptionList.getCauseList();
-        Assert.assertEquals(list, causeList);
+        assertEquals(list, causeList);
     }
 
     @Test
     public void testNullCause() {
         final IOExceptionList sqlExceptionList = new IOExceptionList(null);
-        Assert.assertNull(sqlExceptionList.getCause());
-        Assert.assertTrue(sqlExceptionList.getCauseList().isEmpty());
+        assertNull(sqlExceptionList.getCause());
+        assertTrue(sqlExceptionList.getCauseList().isEmpty());
     }
 
     @Test

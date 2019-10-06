@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -29,8 +29,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link TeeWriter}.
@@ -48,8 +47,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -64,8 +63,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -80,8 +79,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -96,8 +95,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -112,8 +111,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -128,8 +127,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).append(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -143,8 +142,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).close();
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -158,8 +157,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).close();
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -173,8 +172,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).flush();
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -188,8 +187,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).flush();
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -204,8 +203,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -220,8 +219,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -236,8 +235,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -252,8 +251,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -268,8 +267,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -283,8 +282,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(32);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
         }
     }
@@ -300,8 +299,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -316,8 +315,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
         }
     }
@@ -333,8 +332,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(0, e.getCause(0, IOIndexedException.class).getIndex());
         }
     }
 
@@ -349,8 +348,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).write(data, 0, 0);
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
         }
     }
@@ -365,8 +364,8 @@ public class TeeWriterTest {
             fail("Expected " + IOException.class.getName());
         } catch (final IOExceptionList e) {
             verify(goodW).close();
-            Assert.assertEquals(1, e.getCauseList().size());
-            Assert.assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
+            assertEquals(1, e.getCauseList().size());
+            assertEquals(1, e.getCause(0, IOIndexedException.class).getIndex());
 
         }
     }
@@ -396,8 +395,8 @@ public class TeeWriterTest {
                 tw.write(i);
                 expected.write(i);
             }
-            assertEquals("TeeWriter.write(int)", expected.toString(), sbw1.toString());
-            assertEquals("TeeWriter.write(int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeWriter.write(int)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeWriter.write(int)");
 
             final char[] array = new char[10];
             for (int i = 20; i < 30; i++) {
@@ -405,39 +404,39 @@ public class TeeWriterTest {
             }
             tw.write(array);
             expected.write(array);
-            assertEquals("TeeWriter.write(char[])", expected.toString(), sbw1.toString());
-            assertEquals("TeeWriter.write(char[])", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeWriter.write(char[])");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeWriter.write(char[])");
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.write(array, 5, 5);
             expected.write(array, 5, 5);
-            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(), sbw1.toString());
-            assertEquals("TeeOutputStream.write(byte[], int, int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeOutputStream.write(byte[], int, int)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeOutputStream.write(byte[], int, int)");
 
             for (int i = 0; i < 20; i++) {
                 tw.append((char) i);
                 expected.append((char) i);
             }
-            assertEquals("TeeWriter.append(char)", expected.toString(), sbw1.toString());
-            assertEquals("TeeWriter.append(char)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeWriter.append(char)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeWriter.append(char)");
 
             for (int i = 20; i < 30; i++) {
                 array[i - 20] = (char) i;
             }
             tw.append(new String(array));
             expected.append(new String(array));
-            assertEquals("TeeWriter.append(CharSequence)", expected.toString(), sbw1.toString());
-            assertEquals("TeeWriter.write(CharSequence)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeWriter.append(CharSequence)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeWriter.append(CharSequence)");
 
             for (int i = 25; i < 35; i++) {
                 array[i - 25] = (char) i;
             }
             tw.append(new String(array), 5, 5);
             expected.append(new String(array), 5, 5);
-            assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(), sbw1.toString());
-            assertEquals("TeeWriter.append(CharSequence, int, int)", expected.toString(), sbw2.toString());
+            assertEquals(expected.toString(), sbw1.toString(), "TeeWriter.append(CharSequence, int, int)");
+            assertEquals(expected.toString(), sbw2.toString(), "TeeWriter.append(CharSequence, int, int)");
 
             expected.flush();
             expected.close();

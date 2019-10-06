@@ -16,12 +16,13 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CharacterFilterReaderTest {
 
@@ -31,7 +32,7 @@ public class CharacterFilterReaderTest {
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('a'));
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'A')) {
-            Assert.assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 
@@ -39,7 +40,7 @@ public class CharacterFilterReaderTest {
     public void testInputSize1FilterSize1() throws IOException {
         try (StringReader input = new StringReader("a");
                 CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
-            Assert.assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 
@@ -47,7 +48,7 @@ public class CharacterFilterReaderTest {
     public void testInputSize2FilterSize1FilterAll() throws IOException {
         final StringReader input = new StringReader("aa");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
-            Assert.assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 
@@ -55,8 +56,8 @@ public class CharacterFilterReaderTest {
     public void testInputSize2FilterSize1FilterFirst() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
-            Assert.assertEquals('b', reader.read());
-            Assert.assertEquals(-1, reader.read());
+            assertEquals('b', reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 
@@ -64,8 +65,8 @@ public class CharacterFilterReaderTest {
     public void testInputSize2FilterSize1FilterLast() throws IOException {
         final StringReader input = new StringReader("ab");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
-            Assert.assertEquals('a', reader.read());
-            Assert.assertEquals(-1, reader.read());
+            assertEquals('a', reader.read());
+            assertEquals(-1, reader.read());
         }
     }
 

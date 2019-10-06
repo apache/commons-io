@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.security.MessageDigest;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MessageDigestCalculatingInputStreamTest {
     public static byte[] generateRandomByteStream(final int pSize) {

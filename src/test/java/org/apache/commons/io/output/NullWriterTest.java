@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.output;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Really not a lot to do here, but checking that no

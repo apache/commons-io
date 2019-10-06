@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -25,8 +25,8 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link CloseShieldWriter}.
@@ -37,7 +37,7 @@ public class CloseShieldWriterTest {
 
     private Writer shielded;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         original = spy(new StringBuilderWriter());
         shielded = new CloseShieldWriter(original);

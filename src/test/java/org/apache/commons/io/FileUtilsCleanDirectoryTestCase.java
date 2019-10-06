@@ -16,19 +16,20 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method.
@@ -36,15 +37,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsCleanDirectoryTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File top;
-
-    @Before
-    public void setUp() throws Exception {
-        top = temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File top;
 
     //-----------------------------------------------------------------------
     @Test
@@ -83,13 +77,12 @@ public class FileUtilsCleanDirectoryTestCase {
         assertEquals(0, top.list().length);
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void testThrowsOnNullList() throws Exception {
-        if (System.getProperty("os.name").startsWith("Win")  ||  !chmod(top, 0, false)) {
-            // test wont work if we can't restrict permissions on the
-            // directory, so skip it.
-            return;
-        }
+        // test wont work if we can't restrict permissions on the
+        // directory, so skip it.
+        assumeTrue(chmod(top, 0, false));
 
         try {
             FileUtils.cleanDirectory(top);
@@ -97,19 +90,18 @@ public class FileUtilsCleanDirectoryTestCase {
         } catch (final IOException e) {
             assertEquals("Failed to list contents of " +
                     top.getAbsolutePath(), e.getMessage());
+        } finally {
+            chmod(top, 755, false);
         }
     }
 
+    @DisabledOnOs(OS.WINDOWS)
     @Test
     public void testThrowsOnCannotDeleteFile() throws Exception {
         final File file = new File(top, "restricted");
         FileUtils.touch(file);
 
-        if (System.getProperty("os.name").startsWith("Win")  ||  !chmod(top, 500, false)) {
-            // test wont work if we can't restrict permissions on the
-            // directory, so skip it.
-            return;
-        }
+        assumeTrue(chmod(top, 500, false));
 
         try {
             FileUtils.cleanDirectory(top);
@@ -117,6 +109,8 @@ public class FileUtilsCleanDirectoryTestCase {
         } catch (final IOException e) {
             assertEquals("Unable to delete file: " +
                     file.getAbsolutePath(), e.getMessage());
+        } finally {
+            chmod(top, 755, false);
         }
     }
 

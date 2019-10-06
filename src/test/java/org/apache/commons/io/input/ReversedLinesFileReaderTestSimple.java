@@ -17,21 +17,22 @@
 package org.apache.commons.io.input;
 
 import static org.apache.commons.io.input.ReversedLinesFileReaderTestParamBlockSize.assertEqualsAndNoLineBreaks;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 
 public class ReversedLinesFileReaderTestSimple {
 
     private ReversedLinesFileReader reversedLinesFileReader;
 
-    @After
+    @AfterEach
     public void closeReader() {
         try {
             reversedLinesFileReader.close();
@@ -50,16 +51,18 @@ public class ReversedLinesFileReaderTestSimple {
         assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
     }
 
-    @Test(expected=UnsupportedEncodingException.class)
-    public void testUnsupportedEncodingUTF16() throws URISyntaxException, IOException {
+    @Test
+    public void testUnsupportedEncodingUTF16() throws URISyntaxException {
         final File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-        new ReversedLinesFileReader(testFileEmpty, 4096, "UTF-16").close();
+        assertThrows(UnsupportedEncodingException.class,
+                () -> new ReversedLinesFileReader(testFileEmpty, 4096, "UTF-16").close());
     }
 
-    @Test(expected=UnsupportedEncodingException.class)
-    public void testUnsupportedEncodingBig5() throws URISyntaxException, IOException {
+    @Test
+    public void testUnsupportedEncodingBig5() throws URISyntaxException {
         final File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
-        new ReversedLinesFileReader(testFileEncodingBig5, 4096, "Big5").close();
+        assertThrows(UnsupportedEncodingException.class,
+                () -> new ReversedLinesFileReader(testFileEncodingBig5, 4096, "Big5").close());
     }
 
 

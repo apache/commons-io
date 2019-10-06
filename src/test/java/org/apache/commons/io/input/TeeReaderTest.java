@@ -16,7 +16,8 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -32,9 +33,8 @@ import java.nio.CharBuffer;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.testtools.YellOnCloseReader;
 import org.apache.commons.io.testtools.YellOnCloseWriter;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link TeeReader}.
@@ -45,7 +45,7 @@ public class TeeReaderTest  {
 
     private Reader tee;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final Reader input = new CharSequenceReader("abc");
         output = new StringBuilderWriter();
@@ -68,7 +68,7 @@ public class TeeReaderTest  {
         final TeeReader closingTr = new TeeReader(goodR, badW, true);
         try {
             closingTr.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             verify(goodR, times(2)).close();
         }
@@ -86,7 +86,7 @@ public class TeeReaderTest  {
         final TeeReader nonClosingTr = new TeeReader(badR, goodW, false);
         try {
             nonClosingTr.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             verify(goodW, never()).close();
         }
@@ -94,7 +94,7 @@ public class TeeReaderTest  {
         final TeeReader closingTr = new TeeReader(badR, goodW, true);
         try {
             closingTr.close();
-            Assert.fail("Expected " + IOException.class.getName());
+            fail("Expected " + IOException.class.getName());
         } catch (final IOException e) {
             //Assert.assertTrue(goodW.closed);
             verify(goodW).close();

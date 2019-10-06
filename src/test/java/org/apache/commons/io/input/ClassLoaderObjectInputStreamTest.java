@@ -16,9 +16,9 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,7 +39,7 @@ public class ClassLoaderObjectInputStreamTest {
      */
 
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testExpected() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -57,7 +57,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -75,7 +75,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testPrimitiveLong() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -134,7 +134,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testObject1() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -153,7 +153,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testObject2() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -172,7 +172,7 @@ public class ClassLoaderObjectInputStreamTest {
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testResolveProxyClass() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -184,11 +184,11 @@ public class ClassLoaderObjectInputStreamTest {
                 bais)) {
             final String[] interfaces = new String[] { Comparable.class.getName() };
             final Class<?> result = clois.resolveProxyClass(interfaces);
-            assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
+            assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");
         }
     }
 
-    @org.junit.Test
+    @org.junit.jupiter.api.Test
     public void testResolveProxyClassWithMultipleInterfaces() throws Exception {
 
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -201,10 +201,10 @@ public class ClassLoaderObjectInputStreamTest {
             final String[] interfaces = new String[] { Comparable.class.getName(), Serializable.class.getName(),
                     Runnable.class.getName() };
             final Class<?> result = clois.resolveProxyClass(interfaces);
-            assertTrue("Assignable", Comparable.class.isAssignableFrom(result));
-            assertTrue("Assignable", Runnable.class.isAssignableFrom(result));
-            assertTrue("Assignable", Serializable.class.isAssignableFrom(result));
-            assertFalse("Not Assignable", Flushable.class.isAssignableFrom(result));
+            assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");
+            assertTrue(Runnable.class.isAssignableFrom(result), "Assignable");
+            assertTrue(Serializable.class.isAssignableFrom(result), "Assignable");
+            assertFalse(Flushable.class.isAssignableFrom(result), "Not Assignable");
         }
     }
 }

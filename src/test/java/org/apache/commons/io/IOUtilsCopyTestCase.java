@@ -16,8 +16,9 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,7 +37,7 @@ import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit tests for IOUtils copy methods.
@@ -69,9 +70,9 @@ public class IOUtilsCopyTestCase {
 
         final int count = IOUtils.copy(in, out);
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
         assertEquals(inData.length,count);
     }
 
@@ -91,19 +92,19 @@ public class IOUtilsCopyTestCase {
         in.close();
 
         // Test copyLarge() method
-        assertEquals("copyLarge()", size, IOUtils.copyLarge(in, out));
+        assertEquals(size, IOUtils.copyLarge(in, out), "copyLarge()");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToOutputStream_nullIn() throws Exception {
         final OutputStream out = new ByteArrayOutputStream();
-        IOUtils.copy((InputStream) null, out);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy((InputStream) null, out));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToOutputStream_nullOut() throws Exception {
         final InputStream in = new ByteArrayInputStream(inData);
-        IOUtils.copy(in, (OutputStream) null);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(in, (OutputStream) null));
     }
 
     @Test
@@ -135,9 +136,9 @@ public class IOUtilsCopyTestCase {
 
         final long count = IOUtils.copy(in, out, bufferSize);
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
         assertEquals(inData.length,count);
     }
 
@@ -156,9 +157,9 @@ public class IOUtilsCopyTestCase {
         out.off();
         writer.flush();
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     //-----------------------------------------------------------------------
@@ -176,10 +177,10 @@ public class IOUtilsCopyTestCase {
         out.off();
         writer.flush();
 
-        assertEquals("Not all bytes were read", 0, in.available());
+        assertEquals(0, in.available(), "Not all bytes were read");
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF8").getBytes("US-ASCII");
-        assertTrue("Content differs", Arrays.equals(inData, bytes));
+        assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -196,39 +197,39 @@ public class IOUtilsCopyTestCase {
         out.off();
         writer.flush();
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToWriter_Encoding_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
-        IOUtils.copy(null, writer, "UTF8");
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(null, writer, "UTF8"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToWriter_Encoding_nullOut() throws Exception {
         final InputStream in = new ByteArrayInputStream(inData);
-        IOUtils.copy(in, null, "UTF8");
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(in, null, "UTF8"));
     }
 
     @SuppressWarnings("deprecation") // deliberately testing deprecated method
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToWriter_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
-        IOUtils.copy((InputStream) null, writer);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy((InputStream) null, writer));
     }
 
     @SuppressWarnings("deprecation") // deliberately testing deprecated method
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_inputStreamToWriter_nullOut() throws Exception {
         final InputStream in = new ByteArrayInputStream(inData);
-        IOUtils.copy(in, (Writer) null); // deliberately testing deprecated method
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(in, (Writer) null)); // deliberately testing deprecated method
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -245,9 +246,9 @@ public class IOUtilsCopyTestCase {
         final long count = IOUtils.copy(reader, (Appendable) writer);
         out.off();
         writer.flush();
-        assertEquals("The number of characters returned by copy is wrong", inData.length, count);
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -263,25 +264,25 @@ public class IOUtilsCopyTestCase {
         reader.close();
 
         // Test copyLarge() method
-        assertEquals("copy()", size, IOUtils.copyLarge(reader, writer));
+        assertEquals(size, IOUtils.copyLarge(reader, writer), "copy()");
 
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToAppendable_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Appendable writer = new OutputStreamWriter(out, "US-ASCII");
-        IOUtils.copy((Reader) null, writer);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy((Reader) null, writer));
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToAppendable_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        IOUtils.copy(reader, (Appendable) null);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (Appendable) null));
     }
 
     //-----------------------------------------------------------------------
@@ -303,8 +304,8 @@ public class IOUtilsCopyTestCase {
         //  out = fout;
 
         // Note: rely on the method to flush
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     //-----------------------------------------------------------------------
@@ -324,7 +325,7 @@ public class IOUtilsCopyTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
-        assertTrue("Content differs", Arrays.equals(inData, bytes));
+        assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -341,41 +342,41 @@ public class IOUtilsCopyTestCase {
         // note: this method *does* flush.
         // note: we don't flush here; this IOUtils method does it for us
 
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToOutputStream_Encoding_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        IOUtils.copy(null, out, "UTF16");
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(null, out, "UTF16"));
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToOutputStream_Encoding_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        IOUtils.copy(reader, null, "UTF16");
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, null, "UTF16"));
     }
 
     @SuppressWarnings("deprecation")
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToOutputStream_nullIn() throws Exception { // deliberately testing deprecated method
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
-        IOUtils.copy((Reader) null, out);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy((Reader) null, out));
     }
 
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToOutputStream_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        IOUtils.copy(reader, (OutputStream) null); // deliberately testing deprecated method
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (OutputStream) null)); // deliberately testing deprecated method
     }
 
     //-----------------------------------------------------------------------
@@ -393,9 +394,9 @@ public class IOUtilsCopyTestCase {
         final int count = IOUtils.copy(reader, writer);
         out.off();
         writer.flush();
-        assertEquals("The number of characters returned by copy is wrong", inData.length, count);
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     /*
@@ -414,25 +415,25 @@ public class IOUtilsCopyTestCase {
         reader.close();
 
         // Test copyLarge() method
-        assertEquals("copyLarge()", size, IOUtils.copyLarge(reader, writer));
+        assertEquals(size, IOUtils.copyLarge(reader, writer), "copyLarge()");
 
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToWriter_nullIn() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
-        IOUtils.copy((Reader) null, writer);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy((Reader) null, writer));
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCopy_readerToWriter_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
-        IOUtils.copy(reader, (Writer) null);
+        assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (Writer) null));
     }
 
 }

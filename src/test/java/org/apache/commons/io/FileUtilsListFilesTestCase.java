@@ -16,10 +16,10 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,30 +28,22 @@ import java.util.Iterator;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test cases for FileUtils.listFiles() methods.
  */
 public class FileUtilsListFilesTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
-    private File getLocalTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
-
-    /**
-     * @see junit.framework.TestCase#setUp()
-     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        File dir = getLocalTestDirectory();
+        File dir = temporaryFolder;
         File file = new File(dir, "dummy-build.xml");
         FileUtils.touch(file);
         file = new File(dir, "README");
@@ -100,20 +92,20 @@ public class FileUtilsListFilesTestCase {
     public void testIterateFilesByExtension() throws Exception {
         final String[] extensions = { "xml", "txt" };
 
-        Iterator<File> files = FileUtils.iterateFiles(getLocalTestDirectory(), extensions, false);
+        Iterator<File> files = FileUtils.iterateFiles(temporaryFolder, extensions, false);
         Collection<String> filenames = filesToFilenames(files);
         assertEquals(1, filenames.size());
         assertTrue(filenames.contains("dummy-build.xml"));
         assertFalse(filenames.contains("README"));
         assertFalse(filenames.contains("dummy-file.txt"));
 
-        files = FileUtils.iterateFiles(getLocalTestDirectory(), extensions, true);
+        files = FileUtils.iterateFiles(temporaryFolder, extensions, true);
         filenames = filesToFilenames(files);
         assertEquals(4, filenames.size());
         assertTrue(filenames.contains("dummy-file.txt"));
         assertFalse(filenames.contains("dummy-index.html"));
 
-        files = FileUtils.iterateFiles(getLocalTestDirectory(), null, false);
+        files = FileUtils.iterateFiles(temporaryFolder, null, false);
         filenames = filesToFilenames(files);
         assertEquals(2, filenames.size());
         assertTrue(filenames.contains("dummy-build.xml"));
@@ -125,20 +117,20 @@ public class FileUtilsListFilesTestCase {
     public void testListFilesByExtension() throws Exception {
         final String[] extensions = {"xml", "txt"};
 
-        Collection<File> files = FileUtils.listFiles(getLocalTestDirectory(), extensions, false);
+        Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, false);
         assertEquals(1, files.size());
         Collection<String> filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
         assertFalse(filenames.contains("README"));
         assertFalse(filenames.contains("dummy-file.txt"));
 
-        files = FileUtils.listFiles(getLocalTestDirectory(), extensions, true);
+        files = FileUtils.listFiles(temporaryFolder, extensions, true);
         filenames = filesToFilenames(files);
         assertEquals(4, filenames.size());
         assertTrue(filenames.contains("dummy-file.txt"));
         assertFalse(filenames.contains("dummy-index.html"));
 
-        files = FileUtils.listFiles(getLocalTestDirectory(), null, false);
+        files = FileUtils.listFiles(temporaryFolder, null, false);
         assertEquals(2, files.size());
         filenames = filesToFilenames(files);
         assertTrue(filenames.contains("dummy-build.xml"));
@@ -155,42 +147,42 @@ public class FileUtilsListFilesTestCase {
 
         //First, find non-recursively
         fileFilter = FileFilterUtils.trueFileFilter();
-        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, null);
+        files = FileUtils.listFiles(temporaryFolder, fileFilter, null);
         filenames = filesToFilenames(files);
-        assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
-        assertFalse("'dummy-index.html' shouldn't be found", filenames.contains("dummy-index.html"));
-        assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
+        assertTrue(filenames.contains("dummy-build.xml"), "'dummy-build.xml' is missing");
+        assertFalse(filenames.contains("dummy-index.html"), "'dummy-index.html' shouldn't be found");
+        assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
         //Second, find recursively
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter("CVS"));
-        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, dirFilter);
+        files = FileUtils.listFiles(temporaryFolder, fileFilter, dirFilter);
         filenames = filesToFilenames(files);
-        assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
-        assertTrue("'dummy-index.html' is missing", filenames.contains("dummy-index.html"));
-        assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
+        assertTrue(filenames.contains("dummy-build.xml"), "'dummy-build.xml' is missing");
+        assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
+        assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
         //Do the same as above but now with the filter coming from FileFilterUtils
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.makeCVSAware(null);
-        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, dirFilter);
+        files = FileUtils.listFiles(temporaryFolder, fileFilter, dirFilter);
         filenames = filesToFilenames(files);
-        assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
-        assertTrue("'dummy-index.html' is missing", filenames.contains("dummy-index.html"));
-        assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
+        assertTrue(filenames.contains("dummy-build.xml"), "'dummy-build.xml' is missing");
+        assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
+        assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
         //Again with the CVS filter but now with a non-null parameter
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.prefixFileFilter("sub");
         dirFilter = FileFilterUtils.makeCVSAware(dirFilter);
-        files = FileUtils.listFiles(getLocalTestDirectory(), fileFilter, dirFilter);
+        files = FileUtils.listFiles(temporaryFolder, fileFilter, dirFilter);
         filenames = filesToFilenames(files);
-        assertTrue("'dummy-build.xml' is missing", filenames.contains("dummy-build.xml"));
-        assertTrue("'dummy-index.html' is missing", filenames.contains("dummy-index.html"));
-        assertFalse("'Entries' shouldn't be found", filenames.contains("Entries"));
+        assertTrue(filenames.contains("dummy-build.xml"), "'dummy-build.xml' is missing");
+        assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
+        assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
         try {
-            FileUtils.listFiles(getLocalTestDirectory(), null, null);
+            FileUtils.listFiles(temporaryFolder, null, null);
             fail("Expected error about null parameter");
         } catch (final NullPointerException e) {
             // expected

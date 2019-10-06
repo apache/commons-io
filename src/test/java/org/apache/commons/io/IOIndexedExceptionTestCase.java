@@ -17,10 +17,12 @@
 
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.EOFException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests {@link IOIndexedException}.
@@ -32,17 +34,17 @@ public class IOIndexedExceptionTestCase {
     @Test
     public void testEdge() {
         final IOIndexedException exception = new IOIndexedException(-1, null);
-        Assert.assertEquals(-1, exception.getIndex());
-        Assert.assertEquals(null, exception.getCause());
-        Assert.assertNotNull(exception.getMessage());
+        assertEquals(-1, exception.getIndex());
+        assertEquals(null, exception.getCause());
+        assertNotNull(exception.getMessage());
     }
 
     @Test
     public void testPlain() {
         final EOFException e = new EOFException("end");
         final IOIndexedException exception = new IOIndexedException(0, e);
-        Assert.assertEquals(0, exception.getIndex());
-        Assert.assertEquals(e, exception.getCause());
-        Assert.assertNotNull(exception.getMessage());
+        assertEquals(0, exception.getIndex());
+        assertEquals(e, exception.getCause());
+        assertNotNull(exception.getMessage());
     }
 }
