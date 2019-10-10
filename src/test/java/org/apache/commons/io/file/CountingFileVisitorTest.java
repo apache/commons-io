@@ -43,7 +43,7 @@ public class CountingFileVisitorTest {
             Assertions.assertEquals(0, visitor.getFileCount());
             Assertions.assertEquals(0, visitor.getByteCount());
         } finally {
-            Files.delete(tempDirectory);
+            Files.deleteIfExists(tempDirectory);
         }
     }
 
@@ -81,5 +81,10 @@ public class CountingFileVisitorTest {
         Assertions.assertEquals(3, visitor.getDirectoryCount());
         Assertions.assertEquals(2, visitor.getFileCount());
         Assertions.assertEquals(2, visitor.getByteCount());
+    }
+    
+    @Test void testToString() {
+        // Make sure it does not blow up
+        new CountingFileVisitor().toString();
     }
 }
