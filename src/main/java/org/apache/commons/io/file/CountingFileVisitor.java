@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.
+ * 
+ * @since 2.7
  */
 public class CountingFileVisitor extends SimpleFileVisitor<Path> {
 
