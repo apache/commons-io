@@ -146,6 +146,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-631" dev="ggregory" type="add" due-to="Gary Gregory">
         Add a CountingFileVisitor (as the basis for a forthcoming DeletingFileVisitor).
       </action>
+      <action issue="IO-632" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils for operations on NIO Path.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
