@@ -47,6 +47,12 @@ public class DeletingFileVisitor extends CountingFileVisitor {
         this.skip = temp;
     }
 
+    /**
+     * Returns true to process the given path, false if not.
+     * 
+     * @param path the path to test.
+     * @return true to process the given path, false if not.
+     */
     private boolean accept(final Path path) {
         return Arrays.binarySearch(skip, path.getFileName().toString()) < 0;
     }
