@@ -140,6 +140,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-628" dev="ggregory" type="update" due-to="Allon Mureinik">
         Migration to JUnit Jupiter #97.
       </action>
+      <action issue="IO-630" dev="ggregory" type="update" due-to="Gary Gregory">
+        Deprecate `org.apache.commons.io.output.NullOutputStream.NullOutputStream()` in favor of `org.apache.commons.io.output.NullOutputStream.NULL_OUTPUT_STREAM`.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

@@ -37,9 +37,8 @@ public class NullPrintStream extends PrintStream {
     /**
      * Constructs an instance.
      */
-    @SuppressWarnings("resource")
     public NullPrintStream() {
-        super(new NullOutputStream());
+        super(NullOutputStream.NULL_OUTPUT_STREAM);
     }
 
 }

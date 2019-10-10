@@ -40,7 +40,7 @@ public class NullOutputStreamTest {
 
     @Test
     public void testNewInstance() throws IOException {
-        try (final NullOutputStream nos = new NullOutputStream()) {
+        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
             process(nos);
         }
     }

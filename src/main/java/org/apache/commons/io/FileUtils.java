@@ -298,7 +298,7 @@ public class FileUtils {
             throw new IllegalArgumentException("Checksums can't be computed on directories");
         }
         try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
-            IOUtils.copy(in, new NullOutputStream());
+            IOUtils.copy(in, NullOutputStream.NULL_OUTPUT_STREAM);
         }
         return checksum;
     }

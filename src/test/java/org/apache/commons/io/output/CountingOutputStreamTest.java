@@ -81,7 +81,7 @@ public class CountingOutputStreamTest {
         final long size = (long)Integer.MAX_VALUE + (long)1;
 
         final NullInputStream mock     = new NullInputStream(size);
-        final OutputStream nos         = new NullOutputStream();
+        final OutputStream nos         = NullOutputStream.NULL_OUTPUT_STREAM;
         final CountingOutputStream cos = new CountingOutputStream(nos);
 
         // Test integer methods
