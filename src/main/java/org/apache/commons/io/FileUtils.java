@@ -34,6 +34,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -1335,13 +1336,14 @@ public class FileUtils {
             deleteDirectory(file);
         } else {
             final boolean filePresent = file.exists();
-            if (!file.delete()) {
-                if (!filePresent) {
-                    throw new FileNotFoundException("File does not exist: " + file);
-                }
-                final String message =
-                        "Unable to delete file: " + file;
-                throw new IOException(message);
+            try {
+                Files.delete(file.toPath());
+            } catch (NoSuchFileException e) {
+                // Throw FileNotFoundException for backwards compatibility.
+                throw new FileNotFoundException("File does not exist: " + file);
+            } catch (IOException e) {
+                final String message = "Unable to delete file: " + file;
+                throw new IOException(message, e);
             }
         }
     }
