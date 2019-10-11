@@ -1320,9 +1320,9 @@ public class FileUtils {
      * The difference between File.delete() and this method are:
      * </p>
      * <ul>
-     * <li>A directory to be deleted does not have to be empty.</li>
-     * <li>You get exceptions when a file or directory cannot be deleted.
-     * (java.io.File methods returns a boolean)</li>
+     * <li>The directory does not have to be empty.</li>
+     * <li>You get exceptions when a file or directory cannot be delete; 
+     * {@link java.io.File#delete()} returns a boolean.</li>
      * </ul>
      *
      * @param file file or directory to delete, must not be {@code null}
