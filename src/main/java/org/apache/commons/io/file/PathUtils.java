@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io;
+package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
