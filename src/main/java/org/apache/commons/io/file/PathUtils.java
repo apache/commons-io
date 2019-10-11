@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 
 /**
@@ -37,10 +38,52 @@ public final class PathUtils {
      * @return The visitor used to count the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
-    public static CountingPathFileVisitor countDirectory(final Path directory) throws IOException {
-        return visitFileTree(directory, new CountingPathFileVisitor());
+    public static PathCounts countDirectory(final Path directory) throws IOException {
+        return visitFileTree(directory, new CountingPathFileVisitor()).getPathCounts();
     }
-    
+
+    /**
+     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * </p>
+     * <ul>
+     * <li>A directory to delete does not have to be empty.</li>
+     * <li>You get exceptions when a file or directory cannot be deleted; {@link java.io.File#delete()} returns a
+     * boolean.
+     * </ul>
+     *
+     * @param path file or directory to delete, must not be {@code null}
+     * @return The visitor used to delete the given directory.
+     * @throws NullPointerException if the directory is {@code null}
+     * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
+     */
+    public static PathCounts delete(final Path path) throws IOException {
+        return Files.isDirectory(path) ? deleteDirectory(path) : deleteFile(path);
+    }
+
+    /**
+     * Deletes the given file.
+     *
+     * @param file The file to delete.
+     * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
+     * @throws IOException if an I/O error occurs.
+     * @throws NotDirectoryException if the file is a directory.
+     */
+    public static PathCounts deleteFile(final Path file) throws IOException {
+        if (Files.isDirectory(file)) {
+            throw new NotDirectoryException(file.toString());
+        }
+        final PathCounts pathCounts = new PathCounts();
+        final long size = Files.exists(file) ? Files.size(file) : 0;
+        if (Files.deleteIfExists(file)) {
+            pathCounts.fileCount.set(1);
+            pathCounts.directoryCount.set(0);
+            pathCounts.byteCount.set(size);
+        }
+        return pathCounts;
+    }
+
     /**
      * Deletes a directory including sub-directories.
      *
@@ -48,8 +91,8 @@ public final class PathUtils {
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
-    public static DeletingPathFileVisitor deleteDirectory(final Path directory) throws IOException {
-        return visitFileTree(directory, new DeletingPathFileVisitor());
+    public static PathCounts deleteDirectory(final Path directory) throws IOException {
+        return visitFileTree(directory, new DeletingPathFileVisitor()).getPathCounts();
     }
 
     /**
@@ -108,6 +151,9 @@ public final class PathUtils {
         return visitor;
     }
 
+    /**
+     * Does allow to instantiate.
+     */
     private PathUtils() {
         // do not instantiate.
     }

@@ -17,20 +17,18 @@
 
 package org.apache.commons.io.file;
 
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.
  *
  * @since 2.7
  */
-public class CountingPathFileVisitor extends SimplePathFileVisitor {
+public class PathCounts {
 
-    private final PathCounts pathCounts = new PathCounts();
+    final AtomicLong byteCount = new AtomicLong();
+    final AtomicLong directoryCount = new AtomicLong();
+    final AtomicLong fileCount = new AtomicLong();
 
     /**
      * Gets the byte count of visited files.
@@ -38,7 +36,7 @@ public class CountingPathFileVisitor extends SimplePathFileVisitor {
      * @return the byte count of visited files.
      */
     public long getByteCount() {
-        return this.pathCounts.byteCount.get();
+        return this.byteCount.get();
     }
 
     /**
@@ -47,7 +45,7 @@ public class CountingPathFileVisitor extends SimplePathFileVisitor {
      * @return the count of visited directories.
      */
     public long getDirectoryCount() {
-        return this.pathCounts.directoryCount.get();
+        return this.directoryCount.get();
     }
 
     /**
@@ -56,36 +54,13 @@ public class CountingPathFileVisitor extends SimplePathFileVisitor {
      * @return the byte count of visited files.
      */
     public long getFileCount() {
-        return this.pathCounts.fileCount.get();
-    }
-
-    /**
-     * Gets the visitation counts.
-     *
-     * @return the visitation counts.
-     */
-    public PathCounts getPathCounts() {
-        return pathCounts;
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        pathCounts.directoryCount.incrementAndGet();
-        return FileVisitResult.CONTINUE;
+        return this.fileCount.get();
     }
 
     @Override
     public String toString() {
-        return pathCounts.toString();
-    }
-
-    @Override
-    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        if (Files.exists(file)) {
-            pathCounts.fileCount.incrementAndGet();
-            pathCounts.byteCount.addAndGet(attrs.size());
-        }
-        return FileVisitResult.CONTINUE;
+        return String.format("%,d files, %,d directories, %,d bytes", Long.valueOf(fileCount.longValue()),
+                Long.valueOf(directoryCount.longValue()), Long.valueOf(byteCount.longValue()));
     }
 
 }
