@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -27,7 +28,29 @@ import java.nio.file.Path;
  *
  * @since 2.7
  */
-public class PathUtils {
+public final class PathUtils {
+
+    /**
+     * Counts aspects of a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @return The visitor used to count the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static CountingPathFileVisitor countDirectory(final Path directory) throws IOException {
+        return visitFileTree(directory, new CountingPathFileVisitor());
+    }
+    
+    /**
+     * Deletes a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @return The visitor used to delete the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static DeletingPathFileVisitor deleteDirectory(final Path directory) throws IOException {
+        return visitFileTree(directory, new DeletingPathFileVisitor());
+    }
 
     /**
      * Returns whether the given file or directory is empty.
@@ -65,6 +88,28 @@ public class PathUtils {
      */
     public static boolean isEmptyFile(final Path file) throws IOException {
         return Files.size(file) <= 0;
+    }
+
+    /**
+     * Performs {@link Files#walkFileTree(Path,FileVisitor)} and returns the given visitor.
+     *
+     * Note that {@link Files#walkFileTree(Path,FileVisitor)} returns the given path.
+     *
+     * @param directory See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @param visitor See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @return the given visitor.
+     *
+     * @throws IOException if an I/O error is thrown by a visitor method
+     */
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final Path directory, final T visitor)
+            throws IOException {
+        Files.walkFileTree(directory, visitor);
+        return visitor;
+    }
+
+    private PathUtils() {
+        // do not instantiate.
     }
 
 }

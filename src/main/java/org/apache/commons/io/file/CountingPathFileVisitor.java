@@ -22,60 +22,65 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Deletes files and directories as a visit proceeds.
- * 
+ * Counts files, directories, and sizes, as a visit proceeds.
+ *
  * @since 2.7
  */
-public class DeletingFileVisitor extends CountingFileVisitor {
+public class CountingPathFileVisitor extends SimplePathFileVisitor {
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
-    private final String[] skip;
+    private final AtomicLong byteCount = new AtomicLong();
+    private final AtomicLong directoryCount = new AtomicLong();
+    private final AtomicLong fileCount = new AtomicLong();
 
     /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
-     * 
-     * @param skip The files to skip deleting.
+     * Gets the byte count of visited files.
+     *
+     * @return the byte count of visited files.
      */
-    public DeletingFileVisitor(final String... skip) {
-        final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
-        Arrays.sort(temp);
-        this.skip = temp;
+    public long getByteCount() {
+        return this.byteCount.get();
     }
 
     /**
-     * Returns true to process the given path, false if not.
-     * 
-     * @param path the path to test.
-     * @return true to process the given path, false if not.
+     * Gets the count of visited directories.
+     *
+     * @return the count of visited directories.
      */
-    private boolean accept(final Path path) {
-        return Arrays.binarySearch(skip, path.getFileName().toString()) < 0;
+    public long getDirectoryCount() {
+        return this.directoryCount.get();
+    }
+
+    /**
+     * Gets the count of visited files.
+     *
+     * @return the byte count of visited files.
+     */
+    public long getFileCount() {
+        return this.fileCount.get();
     }
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        super.postVisitDirectory(dir, exc);
-        if (PathUtils.isEmptyDirectory(dir)) {
-            Files.deleteIfExists(dir);
-        }
+        directoryCount.incrementAndGet();
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-        super.preVisitDirectory(dir, attrs);
-        return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
+    public String toString() {
+        return String.format("%,d files in %,d directories for %,d bytes", Long.valueOf(fileCount.longValue()),
+                Long.valueOf(directoryCount.longValue()), Long.valueOf(byteCount.longValue()));
     }
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        super.visitFile(file, attrs);
-        if (accept(file) && Files.exists(file)) {
-            Files.deleteIfExists(file);
+        if (Files.exists(file)) {
+            fileCount.incrementAndGet();
+            byteCount.addAndGet(attrs.size());
         }
         return FileVisitResult.CONTINUE;
     }
+
 }

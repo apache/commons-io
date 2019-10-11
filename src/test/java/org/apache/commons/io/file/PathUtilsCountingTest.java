@@ -22,13 +22,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link CountingPathFileVisitor}.
+ * Tests {@link PathUtils}.
  */
-public class CountingFileVisitorTest {
+public class PathUtilsCountingTest {
+
+    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
+
+    private static final Path FILE_SIZE_0 = Paths
+            .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/file-size-0.bin");
+
+    private static final Path FILE_SIZE_1 = Paths
+            .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
 
     /**
      * Tests an empty folder.
@@ -37,8 +46,7 @@ public class CountingFileVisitorTest {
     public void testCountEmptyFolder() throws IOException {
         final Path tempDirectory = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            final CountingPathFileVisitor visitor = new CountingPathFileVisitor();
-            Files.walkFileTree(tempDirectory, visitor);
+            final CountingPathFileVisitor visitor = PathUtils.countDirectory(tempDirectory);
             Assertions.assertEquals(1, visitor.getDirectoryCount());
             Assertions.assertEquals(0, visitor.getFileCount());
             Assertions.assertEquals(0, visitor.getByteCount());
@@ -52,8 +60,8 @@ public class CountingFileVisitorTest {
      */
     @Test
     public void testCountFolders1FileSize0() throws IOException {
-        final CountingPathFileVisitor visitor = new CountingPathFileVisitor();
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), visitor);
+        final CountingPathFileVisitor visitor = PathUtils
+                .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"));
         Assertions.assertEquals(1, visitor.getDirectoryCount());
         Assertions.assertEquals(1, visitor.getFileCount());
         Assertions.assertEquals(0, visitor.getByteCount());
@@ -64,8 +72,8 @@ public class CountingFileVisitorTest {
      */
     @Test
     public void testCountFolders1FileSize1() throws IOException {
-        final CountingPathFileVisitor visitor = new CountingPathFileVisitor();
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), visitor);
+        final CountingPathFileVisitor visitor = PathUtils
+                .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"));
         Assertions.assertEquals(1, visitor.getDirectoryCount());
         Assertions.assertEquals(1, visitor.getFileCount());
         Assertions.assertEquals(1, visitor.getByteCount());
@@ -76,16 +84,10 @@ public class CountingFileVisitorTest {
      */
     @Test
     public void testCountFolders2FileSize2() throws IOException {
-        final CountingPathFileVisitor visitor = new CountingPathFileVisitor();
-        Files.walkFileTree(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), visitor);
+        final CountingPathFileVisitor visitor = PathUtils
+                .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
         Assertions.assertEquals(3, visitor.getDirectoryCount());
         Assertions.assertEquals(2, visitor.getFileCount());
         Assertions.assertEquals(2, visitor.getByteCount());
-    }
-
-    @Test
-    void testToString() {
-        // Make sure it does not blow up
-        new CountingPathFileVisitor().toString();
     }
 }

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests {@link DeletingPathFileVisitor}.
  */
-public class DeletingFileVisitorTest {
+public class PathUtilsDeletingFileVisitorTest {
 
     private Path tempDirectory;
 
@@ -53,26 +53,15 @@ public class DeletingFileVisitorTest {
      */
     @Test
     public void testDeleteEmptyDirectory() throws IOException {
-        testDeleteEmptyDirectory(new DeletingPathFileVisitor());
+        testDeleteEmptyDirectory(PathUtils.deleteDirectory(tempDirectory));
         // This will throw if not empty.
         Files.deleteIfExists(tempDirectory);
     }
 
     private void testDeleteEmptyDirectory(final DeletingPathFileVisitor visitor) throws IOException {
-        Files.walkFileTree(tempDirectory, visitor);
         Assertions.assertEquals(1, visitor.getDirectoryCount());
         Assertions.assertEquals(0, visitor.getFileCount());
         Assertions.assertEquals(0, visitor.getByteCount());
-    }
-
-    /**
-     * Tests an empty folder.
-     */
-    @Test
-    public void testDeleteEmptyDirectoryNullCtorArg() throws IOException {
-        testDeleteEmptyDirectory(new DeletingPathFileVisitor((String[]) null));
-        // This will throw if not empty.
-        Files.deleteIfExists(tempDirectory);
     }
 
     /**
@@ -82,8 +71,7 @@ public class DeletingFileVisitorTest {
     public void testDeleteFolders1FileSize0() throws IOException {
         FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile(),
                 tempDirectory.toFile());
-        final CountingPathFileVisitor visitor = new DeletingPathFileVisitor();
-        Files.walkFileTree(tempDirectory, visitor);
+        final CountingPathFileVisitor visitor = PathUtils.deleteDirectory(tempDirectory);
         Assertions.assertEquals(1, visitor.getDirectoryCount());
         Assertions.assertEquals(1, visitor.getFileCount());
         Assertions.assertEquals(0, visitor.getByteCount());
@@ -98,31 +86,12 @@ public class DeletingFileVisitorTest {
     public void testDeleteFolders1FileSize1() throws IOException {
         FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile(),
                 tempDirectory.toFile());
-        final CountingPathFileVisitor visitor = new DeletingPathFileVisitor();
-        Files.walkFileTree(tempDirectory, visitor);
+        final CountingPathFileVisitor visitor = PathUtils.deleteDirectory(tempDirectory);
         Assertions.assertEquals(1, visitor.getDirectoryCount());
         Assertions.assertEquals(1, visitor.getFileCount());
         Assertions.assertEquals(1, visitor.getByteCount());
         // This will throw if not empty.
         Files.deleteIfExists(tempDirectory);
-    }
-
-    /**
-     * Tests a directory with one file of size 1 but skip that file.
-     */
-    @Test
-    public void testDeleteFolders1FileSize1Skip() throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile(),
-                tempDirectory.toFile());
-        final String skipFileName = "file-size-1.bin";
-        final CountingPathFileVisitor visitor = new DeletingPathFileVisitor(skipFileName);
-        Files.walkFileTree(tempDirectory, visitor);
-        Assertions.assertEquals(1, visitor.getDirectoryCount());
-        Assertions.assertEquals(1, visitor.getFileCount());
-        Assertions.assertEquals(1, visitor.getByteCount());
-        final Path skippedFile = tempDirectory.resolve(skipFileName);
-        Assertions.assertTrue(Files.exists(skippedFile));
-        Files.delete(skippedFile);
     }
 
     /**
@@ -132,8 +101,7 @@ public class DeletingFileVisitorTest {
     public void testDeleteFolders2FileSize2() throws IOException {
         FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile(),
                 tempDirectory.toFile());
-        final CountingPathFileVisitor visitor = new DeletingPathFileVisitor();
-        Files.walkFileTree(tempDirectory, visitor);
+        final CountingPathFileVisitor visitor = PathUtils.deleteDirectory(tempDirectory);
         Assertions.assertEquals(3, visitor.getDirectoryCount());
         Assertions.assertEquals(2, visitor.getFileCount());
         Assertions.assertEquals(2, visitor.getByteCount());
