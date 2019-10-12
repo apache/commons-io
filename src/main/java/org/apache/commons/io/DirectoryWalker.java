@@ -260,7 +260,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *    }
  *  }
  * </pre>
- * 
+ *
  * @param <T> The result type, like {@link File}.
  * @since 1.3
  *

@@ -1321,7 +1321,7 @@ public class FileUtils {
      * </p>
      * <ul>
      * <li>The directory does not have to be empty.</li>
-     * <li>You get exceptions when a file or directory cannot be delete; 
+     * <li>You get exceptions when a file or directory cannot be delete;
      * {@link java.io.File#delete()} returns a boolean.</li>
      * </ul>
      *
