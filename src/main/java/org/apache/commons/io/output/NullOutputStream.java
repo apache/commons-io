@@ -29,10 +29,10 @@ import java.io.OutputStream;
 public class NullOutputStream extends OutputStream {
 
     /**
-     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}. 
-     * 
+     * Deprecated in favor of {@link #NULL_OUTPUT_STREAM}.
+     *
      * TODO: Will be private in 3.0.
-     * 
+     *
      * @deprecated Use {@link #NULL_OUTPUT_STREAM}.
      */
     @Deprecated
