@@ -111,19 +111,19 @@ public class CharSequenceReader extends Reader implements Serializable {
         }
 
         if (charSequence instanceof String) {
-            int count = Math.min(length, charSequence.length() - idx);
+            final int count = Math.min(length, charSequence.length() - idx);
             ((String) charSequence).getChars(idx, idx + count, array, offset);
             idx += count;
             return count;
         }
         if (charSequence instanceof StringBuilder) {
-            int count = Math.min(length, charSequence.length() - idx);
+            final int count = Math.min(length, charSequence.length() - idx);
             ((StringBuilder) charSequence).getChars(idx, idx + count, array, offset);
             idx += count;
             return count;
         }
         if (charSequence instanceof StringBuffer) {
-            int count = Math.min(length, charSequence.length() - idx);
+            final int count = Math.min(length, charSequence.length() - idx);
             ((StringBuffer) charSequence).getChars(idx, idx + count, array, offset);
             idx += count;
             return count;
