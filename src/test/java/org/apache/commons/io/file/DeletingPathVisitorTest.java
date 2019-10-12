@@ -47,6 +47,11 @@ public class DeletingPathVisitorTest extends TestArguments {
         }
     }
 
+    private void applyDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
+        Files.walkFileTree(tempDir, visitor);
+        assertCounts(1, 0, 0, visitor);
+    }
+
     @BeforeEach
     public void beforeEach() throws IOException {
         tempDir = Files.createTempDirectory(getClass().getCanonicalName());
@@ -61,11 +66,6 @@ public class DeletingPathVisitorTest extends TestArguments {
         applyDeleteEmptyDirectory(visitor);
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
-    }
-
-    private void applyDeleteEmptyDirectory(final DeletingPathVisitor visitor) throws IOException {
-        Files.walkFileTree(tempDir, visitor);
-        assertCounts(1, 0, 0, visitor);
     }
 
     /**

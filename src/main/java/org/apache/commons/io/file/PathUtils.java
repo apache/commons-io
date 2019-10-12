@@ -36,6 +36,17 @@ import org.apache.commons.io.file.Counters.PathCounters;
 public final class PathUtils {
 
     /**
+     * Cleans a directory including sub-directories without deleting directories.
+     *
+     * @param directory directory to clean.
+     * @return The visitor used to clean the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static PathCounters cleanDirectory(final Path directory) throws IOException {
+        return visitFileTree(CleaningPathVisitor.withLongCounters(), directory).getPathCounters();
+    }
+
+    /**
      * Counts aspects of a directory including sub-directories.
      *
      * @param directory directory to delete.
@@ -74,7 +85,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters deleteDirectory(final Path directory) throws IOException {
-        return visitFileTree(new DeletingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
+        return visitFileTree(DeletingPathVisitor.withLongCounters(), directory).getPathCounters();
     }
 
     /**
@@ -168,8 +179,8 @@ public final class PathUtils {
      *
      * @throws IOException if an I/O error is thrown by a visitor method
      */
-    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more)
-            throws IOException {
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first,
+            final String... more) throws IOException {
         return visitFileTree(visitor, Paths.get(first, more));
     }
 

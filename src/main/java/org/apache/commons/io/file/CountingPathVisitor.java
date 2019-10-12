@@ -87,7 +87,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     /**
      * Updates the counters for visiting the given file.
-     * 
+     *
      * @param file the visited file.
      * @param attrs the visited file attributes.
      */

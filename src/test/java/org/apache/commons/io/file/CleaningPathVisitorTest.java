@@ -50,6 +50,11 @@ public class CleaningPathVisitorTest extends TestArguments {
         }
     }
 
+    private void applyCleanEmptyDirectory(final CleaningPathVisitor visitor) throws IOException {
+        Files.walkFileTree(tempDir, visitor);
+        assertCounts(1, 0, 0, visitor);
+    }
+
     @BeforeEach
     public void beforeEach() throws IOException {
         tempDir = Files.createTempDirectory(getClass().getCanonicalName());
@@ -62,11 +67,6 @@ public class CleaningPathVisitorTest extends TestArguments {
     @MethodSource("cleaningPathVisitors")
     public void testCleanEmptyDirectory(final CleaningPathVisitor visitor) throws IOException {
         applyCleanEmptyDirectory(visitor);
-    }
-
-    private void applyCleanEmptyDirectory(final CleaningPathVisitor visitor) throws IOException {
-        Files.walkFileTree(tempDir, visitor);
-        assertCounts(1, 0, 0, visitor);
     }
 
     /**

@@ -23,11 +23,11 @@ import org.junit.jupiter.params.provider.Arguments;
 
 class TestArguments {
 
-    static Stream<Arguments> numberCounters() {
+    static Stream<Arguments> cleaningPathVisitors() {
         // @formatter:off
         return Stream.of(
-          Arguments.of(Counters.longCounter()),
-          Arguments.of(Counters.bigIntegerCounter()));
+          Arguments.of(CleaningPathVisitor.withBigIntegerCounters()),
+          Arguments.of(CleaningPathVisitor.withLongCounters()));
         // @formatter:on
     }
 
@@ -39,19 +39,19 @@ class TestArguments {
         // @formatter:on
     }
 
-    static Stream<Arguments> cleaningPathVisitors() {
-        // @formatter:off
-        return Stream.of(
-          Arguments.of(CleaningPathVisitor.withBigIntegerCounters()),
-          Arguments.of(CleaningPathVisitor.withLongCounters()));
-        // @formatter:on
-    }
-
     static Stream<Arguments> deletingPathVisitors() {
         // @formatter:off
         return Stream.of(
           Arguments.of(DeletingPathVisitor.withBigIntegerCounters()),
           Arguments.of(DeletingPathVisitor.withLongCounters()));
+        // @formatter:on
+    }
+
+    static Stream<Arguments> numberCounters() {
+        // @formatter:off
+        return Stream.of(
+          Arguments.of(Counters.longCounter()),
+          Arguments.of(Counters.bigIntegerCounter()));
         // @formatter:on
     }
 

@@ -37,7 +37,7 @@ public class Counters {
 
         /**
          * Constructs a new instance.
-         * 
+         *
          * @param byteCounter the byte counter.
          * @param directoryCounter the directory counter.
          * @param fileCounter the file counter.
