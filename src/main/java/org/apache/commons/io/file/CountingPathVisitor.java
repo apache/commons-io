@@ -22,41 +22,47 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
+
+import org.apache.commons.io.file.Counters.PathCounters;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.
  *
  * @since 2.7
  */
-public class CountingPathFileVisitor extends SimplePathFileVisitor {
+public class CountingPathVisitor extends SimplePathVisitor {
 
-    private final PathCounts pathCounts = new PathCounts();
+    static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
-     * Gets the byte count of visited files.
+     * Creates a new instance configured with a BigInteger {@link PathCounters}.
      *
-     * @return the byte count of visited files.
+     * @return a new instance configured with a BigInteger {@link PathCounters}.
      */
-    public long getByteCount() {
-        return this.pathCounts.byteCount.get();
+    public static CountingPathVisitor withBigIntegerCounters() {
+        return new CountingPathVisitor(Counters.bigIntegerPathCounters());
     }
 
     /**
-     * Gets the count of visited directories.
+     * Creates a new instance configured with a long {@link PathCounters}.
      *
-     * @return the count of visited directories.
+     * @return a new instance configured with a long {@link PathCounters}.
      */
-    public long getDirectoryCount() {
-        return this.pathCounts.directoryCount.get();
+    public static CountingPathVisitor withLongCounters() {
+        return new CountingPathVisitor(Counters.longPathCounters());
     }
 
+    private final PathCounters pathCounters;
+
     /**
-     * Gets the count of visited files.
+     * Constructs a new instance.
      *
-     * @return the byte count of visited files.
+     * @param pathCounter How to count path visits.
      */
-    public long getFileCount() {
-        return this.pathCounts.fileCount.get();
+    public CountingPathVisitor(final PathCounters pathCounter) {
+        super();
+        this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
     }
 
     /**
@@ -64,26 +70,36 @@ public class CountingPathFileVisitor extends SimplePathFileVisitor {
      *
      * @return the visitation counts.
      */
-    public PathCounts getPathCounts() {
-        return pathCounts;
+    public PathCounters getPathCounters() {
+        return pathCounters;
     }
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        pathCounts.directoryCount.incrementAndGet();
+        pathCounters.getDirectoryCounter().increment();
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public String toString() {
-        return pathCounts.toString();
+        return pathCounters.toString();
+    }
+
+    /**
+     * Updates the counters for visiting the given file.
+     * 
+     * @param file the visited file.
+     * @param attrs the visited file attributes.
+     */
+    protected void updateFileCounters(final Path file, final BasicFileAttributes attrs) {
+        pathCounters.getFileCounter().increment();
+        pathCounters.getByteCounter().add(attrs.size());
     }
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         if (Files.exists(file)) {
-            pathCounts.fileCount.incrementAndGet();
-            pathCounts.byteCount.addAndGet(attrs.size());
+            updateFileCounters(file, attrs);
         }
         return FileVisitResult.CONTINUE;
     }

@@ -17,13 +17,14 @@
 
 package org.apache.commons.io.file;
 
+import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.file.PathUtils;
-import org.junit.jupiter.api.Assertions;
+import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -31,27 +32,17 @@ import org.junit.jupiter.api.Test;
  */
 public class PathUtilsCountingTest {
 
-    private static final Path DIR_SIZE_1 = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1");
-
-    private static final Path FILE_SIZE_0 = Paths
-            .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/file-size-0.bin");
-
-    private static final Path FILE_SIZE_1 = Paths
-            .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
-
     /**
      * Tests an empty folder.
      */
     @Test
     public void testCountEmptyFolder() throws IOException {
-        final Path tempDirectory = Files.createTempDirectory(getClass().getCanonicalName());
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            final PathCounts pathCounts = PathUtils.countDirectory(tempDirectory);
-            Assertions.assertEquals(1, pathCounts.getDirectoryCount());
-            Assertions.assertEquals(0, pathCounts.getFileCount());
-            Assertions.assertEquals(0, pathCounts.getByteCount());
+            final PathCounters pathCounts = PathUtils.countDirectory(tempDir);
+            assertCounts(1, 0, 0, pathCounts);
         } finally {
-            Files.deleteIfExists(tempDirectory);
+            Files.deleteIfExists(tempDir);
         }
     }
 
@@ -60,11 +51,9 @@ public class PathUtilsCountingTest {
      */
     @Test
     public void testCountFolders1FileSize0() throws IOException {
-        final PathCounts pathCounts = PathUtils
+        final PathCounters pathCounts = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"));
-        Assertions.assertEquals(1, pathCounts.getDirectoryCount());
-        Assertions.assertEquals(1, pathCounts.getFileCount());
-        Assertions.assertEquals(0, pathCounts.getByteCount());
+        assertCounts(1, 1, 0, pathCounts);
     }
 
     /**
@@ -72,11 +61,9 @@ public class PathUtilsCountingTest {
      */
     @Test
     public void testCountFolders1FileSize1() throws IOException {
-        final PathCounts visitor = PathUtils
+        final PathCounters visitor = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"));
-        Assertions.assertEquals(1, visitor.getDirectoryCount());
-        Assertions.assertEquals(1, visitor.getFileCount());
-        Assertions.assertEquals(1, visitor.getByteCount());
+        assertCounts(1, 1, 1, visitor);
     }
 
     /**
@@ -84,10 +71,8 @@ public class PathUtilsCountingTest {
      */
     @Test
     public void testCountFolders2FileSize2() throws IOException {
-        final PathCounts pathCounts = PathUtils
+        final PathCounters pathCounts = PathUtils
                 .countDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
-        Assertions.assertEquals(3, pathCounts.getDirectoryCount());
-        Assertions.assertEquals(2, pathCounts.getFileCount());
-        Assertions.assertEquals(2, pathCounts.getByteCount());
+        assertCounts(3, 2, 2, pathCounts);
     }
 }

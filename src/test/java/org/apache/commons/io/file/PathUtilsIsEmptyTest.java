@@ -22,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -43,22 +42,22 @@ public class PathUtilsIsEmptyTest {
     public void testIsEmpty() throws IOException {
         Assertions.assertTrue(PathUtils.isEmpty(FILE_SIZE_0));
         Assertions.assertFalse(PathUtils.isEmpty(FILE_SIZE_1));
-        final Path tempDirectory = Files.createTempDirectory(getClass().getCanonicalName());
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            Assertions.assertTrue(PathUtils.isEmpty(tempDirectory));
+            Assertions.assertTrue(PathUtils.isEmpty(tempDir));
         } finally {
-            Files.delete(tempDirectory);
+            Files.delete(tempDir);
         }
         Assertions.assertFalse(PathUtils.isEmpty(DIR_SIZE_1));
     }
 
     @Test
     public void testisEmptyDirectory() throws IOException {
-        final Path tempDirectory = Files.createTempDirectory(getClass().getCanonicalName());
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDirectory));
+            Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir));
         } finally {
-            Files.delete(tempDirectory);
+            Files.delete(tempDir);
         }
         Assertions.assertFalse(PathUtils.isEmptyDirectory(DIR_SIZE_1));
     }

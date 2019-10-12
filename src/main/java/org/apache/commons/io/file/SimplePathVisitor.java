@@ -17,22 +17,21 @@
 
 package org.apache.commons.io.file;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 
-public class PathCountsTest {
+/**
+ * A {@link SimpleFileVisitor} typed to a {@link Path}.
+ *
+ * @since 2.7
+ */
+public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> {
 
-    @Test
-    public void testCtor() {
-        final PathCounts pathCounts = new PathCounts();
-        Assertions.assertEquals(pathCounts.getByteCount(), 0);
-        Assertions.assertEquals(pathCounts.getDirectoryCount(), 0);
-        Assertions.assertEquals(pathCounts.getFileCount(), 0);
+    /**
+     * Constructs a new instance.
+     */
+    protected SimplePathVisitor() {
+        super();
     }
 
-    @Test
-    public void testToString() {
-        // Does not blow up
-        new PathCounts().toString();
-    }
 }

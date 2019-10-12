@@ -24,22 +24,43 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
+import org.apache.commons.io.file.Counters.PathCounters;
+
 /**
- * Deletes files and directories as a visit proceeds.
+ * Deletes files but not directories as a visit proceeds.
  *
  * @since 2.7
  */
-public class DeletingPathFileVisitor extends CountingPathFileVisitor {
+public class CleaningPathVisitor extends CountingPathVisitor {
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    /**
+     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     *
+     * @return a new instance configured with a BigInteger {@link PathCounters}.
+     */
+    public static CountingPathVisitor withBigIntegerCounters() {
+        return new CleaningPathVisitor(Counters.bigIntegerPathCounters());
+    }
+
+    /**
+     * Creates a new instance configured with a long {@link PathCounters}.
+     *
+     * @return a new instance configured with a long {@link PathCounters}.
+     */
+    public static CountingPathVisitor withLongCounters() {
+        return new CleaningPathVisitor(Counters.longPathCounters());
+    }
+
     private final String[] skip;
 
     /**
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
+     * @param pathCounter How to count visits.
      * @param skip The files to skip deleting.
      */
-    public DeletingPathFileVisitor(final String... skip) {
+    public CleaningPathVisitor(final PathCounters pathCounter, final String... skip) {
+        super(pathCounter);
         final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
         Arrays.sort(temp);
         this.skip = temp;
@@ -56,15 +77,6 @@ public class DeletingPathFileVisitor extends CountingPathFileVisitor {
     }
 
     @Override
-    public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        super.postVisitDirectory(dir, exc);
-        if (PathUtils.isEmptyDirectory(dir)) {
-            Files.deleteIfExists(dir);
-        }
-        return FileVisitResult.CONTINUE;
-    }
-
-    @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         super.preVisitDirectory(dir, attrs);
         return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
@@ -72,10 +84,10 @@ public class DeletingPathFileVisitor extends CountingPathFileVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        super.visitFile(file, attrs);
         if (accept(file) && Files.exists(file)) {
             Files.deleteIfExists(file);
         }
+        updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;
     }
 }

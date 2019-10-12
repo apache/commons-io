@@ -18,11 +18,15 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.commons.io.file.Counters.PathCounters;
 
 /**
  * NIO Path utilities.
@@ -38,8 +42,8 @@ public final class PathUtils {
      * @return The visitor used to count the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
-    public static PathCounts countDirectory(final Path directory) throws IOException {
-        return visitFileTree(directory, new CountingPathFileVisitor()).getPathCounts();
+    public static PathCounters countDirectory(final Path directory) throws IOException {
+        return visitFileTree(new CountingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
     }
 
     /**
@@ -58,8 +62,19 @@ public final class PathUtils {
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
      */
-    public static PathCounts delete(final Path path) throws IOException {
+    public static PathCounters delete(final Path path) throws IOException {
         return Files.isDirectory(path) ? deleteDirectory(path) : deleteFile(path);
+    }
+
+    /**
+     * Deletes a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @return The visitor used to delete the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static PathCounters deleteDirectory(final Path directory) throws IOException {
+        return visitFileTree(new DeletingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
     }
 
     /**
@@ -70,29 +85,17 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs.
      * @throws NotDirectoryException if the file is a directory.
      */
-    public static PathCounts deleteFile(final Path file) throws IOException {
+    public static PathCounters deleteFile(final Path file) throws IOException {
         if (Files.isDirectory(file)) {
             throw new NotDirectoryException(file.toString());
         }
-        final PathCounts pathCounts = new PathCounts();
+        final PathCounters pathCounts = Counters.longPathCounters();
         final long size = Files.exists(file) ? Files.size(file) : 0;
         if (Files.deleteIfExists(file)) {
-            pathCounts.fileCount.set(1);
-            pathCounts.directoryCount.set(0);
-            pathCounts.byteCount.set(size);
+            pathCounts.getFileCounter().increment();
+            pathCounts.getByteCounter().add(size);
         }
         return pathCounts;
-    }
-
-    /**
-     * Deletes a directory including sub-directories.
-     *
-     * @param directory directory to delete.
-     * @return The visitor used to delete the given directory.
-     * @throws IOException if an I/O error is thrown by a visitor method.
-     */
-    public static PathCounts deleteDirectory(final Path directory) throws IOException {
-        return visitFileTree(directory, new DeletingPathFileVisitor()).getPathCounts();
     }
 
     /**
@@ -138,17 +141,53 @@ public final class PathUtils {
      *
      * Note that {@link Files#walkFileTree(Path,FileVisitor)} returns the given path.
      *
-     * @param directory See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @param visitor See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @param directory See {@link Files#walkFileTree(Path,FileVisitor)}.
+     *
      * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
      * @return the given visitor.
      *
      * @throws IOException if an I/O error is thrown by a visitor method
      */
-    public static <T extends FileVisitor<? super Path>> T visitFileTree(final Path directory, final T visitor)
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path directory)
             throws IOException {
         Files.walkFileTree(directory, visitor);
         return visitor;
+    }
+
+    /**
+     * Performs {@link Files#walkFileTree(Path,FileVisitor)} and returns the given visitor.
+     *
+     * Note that {@link Files#walkFileTree(Path,FileVisitor)} returns the given path.
+     *
+     * @param visitor See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @param first See {@link Paths#get(String,String[])}.
+     * @param more See {@link Paths#get(String,String[])}.
+     * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @return the given visitor.
+     *
+     * @throws IOException if an I/O error is thrown by a visitor method
+     */
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first, final String... more)
+            throws IOException {
+        return visitFileTree(visitor, Paths.get(first, more));
+    }
+
+    /**
+     * Performs {@link Files#walkFileTree(Path,FileVisitor)} and returns the given visitor.
+     *
+     * Note that {@link Files#walkFileTree(Path,FileVisitor)} returns the given path.
+     *
+     * @param visitor See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @param uri See {@link Paths#get(URI)}.
+     * @param <T> See {@link Files#walkFileTree(Path,FileVisitor)}.
+     * @return the given visitor.
+     *
+     * @throws IOException if an I/O error is thrown by a visitor method
+     */
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri)
+            throws IOException {
+        return visitFileTree(visitor, Paths.get(uri));
     }
 
     /**
