@@ -57,8 +57,7 @@ public class PathUtilsCleanDirectoryTest {
      */
     @Test
     public void testCleanDirectory1FileSize0() throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
         assertCounts(1, 1, 0, PathUtils.cleanDirectory(tempDir));
     }
 
@@ -67,8 +66,7 @@ public class PathUtilsCleanDirectoryTest {
      */
     @Test
     public void testCleanDirectory1FileSize1() throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         assertCounts(1, 1, 1, PathUtils.cleanDirectory(tempDir));
     }
 
@@ -77,8 +75,7 @@ public class PathUtilsCleanDirectoryTest {
      */
     @Test
     public void testCleanDirectory2FileSize2() throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
         assertCounts(3, 2, 2, PathUtils.cleanDirectory(tempDir));
     }
 

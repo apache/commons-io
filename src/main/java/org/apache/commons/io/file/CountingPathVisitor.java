@@ -89,17 +89,17 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * Updates the counters for visiting the given file.
      *
      * @param file the visited file.
-     * @param attrs the visited file attributes.
+     * @param attributes the visited file attributes.
      */
-    protected void updateFileCounters(final Path file, final BasicFileAttributes attrs) {
+    protected void updateFileCounters(final Path file, final BasicFileAttributes attributes) {
         pathCounters.getFileCounter().increment();
-        pathCounters.getByteCounter().add(attrs.size());
+        pathCounters.getByteCounter().add(attributes.size());
     }
 
     @Override
-    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
         if (Files.exists(file)) {
-            updateFileCounters(file, attrs);
+            updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;
     }

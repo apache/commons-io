@@ -84,8 +84,7 @@ public class CleaningPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders1FileSize0(final CleaningPathVisitor visitor) throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
         assertCounts(1, 1, 0, PathUtils.visitFileTree(visitor, tempDir));
     }
 
@@ -95,8 +94,7 @@ public class CleaningPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders1FileSize1(final CleaningPathVisitor visitor) throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDir));
     }
 
@@ -106,8 +104,7 @@ public class CleaningPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("pathCounters")
     public void testCleanFolders1FileSize1Skip(final PathCounters pathCounters) throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1"), tempDir);
         final String skipFileName = "file-size-1.bin";
         final CountingPathVisitor visitor = new CleaningPathVisitor(pathCounters, skipFileName);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor, tempDir));
@@ -122,8 +119,7 @@ public class CleaningPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("cleaningPathVisitors")
     public void testCleanFolders2FileSize2(final CleaningPathVisitor visitor) throws IOException {
-        FileUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2").toFile(),
-                tempDir.toFile());
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2"), tempDir);
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor, tempDir));
     }
 }

@@ -30,7 +30,7 @@ public class CountersTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("numberCounters")
     public void testInitialValue(final Counter counter) {
-        assertCounter(0, counter);
+        assertCounter(0, counter, "");
     }
 
     @ParameterizedTest

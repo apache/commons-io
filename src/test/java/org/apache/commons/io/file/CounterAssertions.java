@@ -26,20 +26,22 @@ import org.apache.commons.io.file.Counters.PathCounters;
 
 class CounterAssertions {
 
-    static void assertCounter(final long expected, final Counter actual) {
-        assertEquals(expected, actual.get());
-        assertEquals(Long.valueOf(expected), actual.getLong());
-        assertEquals(BigInteger.valueOf(expected), actual.getBigInteger());
+    static void assertCounter(final long expected, final Counter actual, String message) {
+        assertEquals(expected, actual.get(), message);
+        assertEquals(Long.valueOf(expected), actual.getLong(), message);
+        assertEquals(BigInteger.valueOf(expected), actual.getBigInteger(), message);
     }
 
-    static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount, final CountingPathVisitor actualVisitor) {
+    static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount,
+            final CountingPathVisitor actualVisitor) {
         assertCounts(expectedDirCount, expectedFileCount, expectedByteCount, actualVisitor.getPathCounters());
     }
 
-    static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount, final PathCounters actualPathCounters) {
-        assertCounter(expectedDirCount, actualPathCounters.getDirectoryCounter());
-        assertCounter(expectedFileCount, actualPathCounters.getFileCounter());
-        assertCounter(expectedByteCount, actualPathCounters.getByteCounter());
+    static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount,
+            final PathCounters actualPathCounters) {
+        assertCounter(expectedDirCount, actualPathCounters.getDirectoryCounter(), "getDirectoryCounter");
+        assertCounter(expectedFileCount, actualPathCounters.getFileCounter(), "getFileCounter");
+        assertCounter(expectedByteCount, actualPathCounters.getByteCounter(), "getByteCounter");
     }
 
 }

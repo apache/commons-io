@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -39,11 +40,27 @@ public final class PathUtils {
      * Cleans a directory including sub-directories without deleting directories.
      *
      * @param directory directory to clean.
-     * @return The visitor used to clean the given directory.
+     * @return The visitation path counters.
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters cleanDirectory(final Path directory) throws IOException {
         return visitFileTree(CleaningPathVisitor.withLongCounters(), directory).getPathCounters();
+    }
+
+    /**
+     * Copies a source directory to a target directory.
+     *
+     * @param sourceDirectory The source directory
+     * @param targetDirectory The target directory
+     * @param copyOptions Specifies how the copying should be done.
+     * @return The visitation path counters.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory,
+            final CopyOption... copyOptions) throws IOException {
+        return visitFileTree(
+                new CopyDirectoryVisitor(Counters.longPathCounters(), sourceDirectory, targetDirectory, copyOptions),
+                sourceDirectory).getPathCounters();
     }
 
     /**

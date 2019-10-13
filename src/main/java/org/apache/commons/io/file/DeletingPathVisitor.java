@@ -83,8 +83,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
         if (PathUtils.isEmptyDirectory(dir)) {
             Files.deleteIfExists(dir);
         }
-        super.postVisitDirectory(dir, exc);
-        return FileVisitResult.CONTINUE;
+        return super.postVisitDirectory(dir, exc);
     }
 
     @Override

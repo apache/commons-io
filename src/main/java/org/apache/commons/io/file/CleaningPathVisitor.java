@@ -77,17 +77,17 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-        super.preVisitDirectory(dir, attrs);
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
+        super.preVisitDirectory(dir, attributes);
         return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
     }
 
     @Override
-    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
         if (accept(file) && Files.exists(file)) {
             Files.deleteIfExists(file);
         }
-        updateFileCounters(file, attrs);
+        updateFileCounters(file, attributes);
         return FileVisitResult.CONTINUE;
     }
 }
