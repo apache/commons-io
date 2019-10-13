@@ -48,10 +48,10 @@ public final class PathUtils {
     }
 
     /**
-     * Copies a source directory to a target directory.
+     * Copies a directory to another directory.
      *
-     * @param sourceDirectory The source directory
-     * @param targetDirectory The target directory
+     * @param sourceDirectory The source directory.
+     * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.
      * @return The visitation path counters.
      * @throws IOException if an I/O error is thrown by a visitor method.
@@ -61,6 +61,22 @@ public final class PathUtils {
         return visitFileTree(
                 new CopyDirectoryVisitor(Counters.longPathCounters(), sourceDirectory, targetDirectory, copyOptions),
                 sourceDirectory).getPathCounters();
+    }
+
+    /**
+     * Copies a file to a directory.
+     * 
+     * @param sourceFile The source file
+     * @param targetDirectory The target directory.
+     * @param copyOptions Specifies how the copying should be done.
+     * @return The target file
+     * @throws IOException if an I/O error occurs
+     * @see Files#copy(Path, Path, CopyOption...)
+     */
+    public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory,
+            final CopyOption... copyOptions) throws IOException {
+        return Files.copy(sourceFile, targetDirectory.resolve(sourceFile.getFileName()), copyOptions);
+
     }
 
     /**

@@ -25,7 +25,6 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -58,9 +57,8 @@ public class PathUtilsDeleteFileTest {
     @Test
     public void testDeleteFileDirectory1FileSize0() throws IOException {
         final String fileName = "file-size-0.bin";
-        FileUtils.copyFileToDirectory(
-                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName).toFile(),
-                tempDir.toFile());
+        PathUtils.copyFileToDirectory(
+                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0/" + fileName), tempDir);
         assertCounts(0, 1, 0, PathUtils.deleteFile(tempDir.resolve(fileName)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
@@ -72,9 +70,8 @@ public class PathUtilsDeleteFileTest {
     @Test
     public void testDeleteFileDirectory1FileSize1() throws IOException {
         final String fileName = "file-size-1.bin";
-        FileUtils.copyFileToDirectory(
-                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName).toFile(),
-                tempDir.toFile());
+        PathUtils.copyFileToDirectory(
+                Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
         assertCounts(0, 1, 1, PathUtils.deleteFile(tempDir.resolve(fileName)));
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
