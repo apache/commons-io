@@ -34,7 +34,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
+import org.apache.commons.io.file.Counters;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -1332,19 +1333,17 @@ public class FileUtils {
      * @throws IOException           in case deletion is unsuccessful
      */
     public static void forceDelete(final File file) throws IOException {
-        if (file.isDirectory()) {
-            deleteDirectory(file);
-        } else {
-            final boolean filePresent = file.exists();
-            try {
-                Files.delete(file.toPath());
-            } catch (NoSuchFileException e) {
-                // Throw FileNotFoundException for backwards compatibility.
-                throw new FileNotFoundException("File does not exist: " + file);
-            } catch (IOException e) {
-                final String message = "Unable to delete file: " + file;
-                throw new IOException(message, e);
-            }
+        Counters.PathCounters deleteCounter;
+        try {
+            deleteCounter = PathUtils.delete(file.toPath());
+        } catch (IOException e) {
+            final String message = "Unable to delete file: " + file;
+            throw new IOException(message, e);
+        }
+
+        if(deleteCounter.getFileCounter().get() < 1 && deleteCounter.getDirectoryCounter().get() < 1) {
+            // didn't find a file to delete.
+            throw new FileNotFoundException("File does not exist: " + file);
         }
     }
 
