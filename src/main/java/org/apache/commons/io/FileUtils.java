@@ -1333,15 +1333,14 @@ public class FileUtils {
      * @throws IOException           in case deletion is unsuccessful
      */
     public static void forceDelete(final File file) throws IOException {
-        Counters.PathCounters deleteCounter;
+        final Counters.PathCounters deleteCounters;
         try {
-            deleteCounter = PathUtils.delete(file.toPath());
+            deleteCounters = PathUtils.delete(file.toPath());
         } catch (IOException e) {
-            final String message = "Unable to delete file: " + file;
-            throw new IOException(message, e);
+            throw new IOException("Unable to delete file: " + file, e);
         }
 
-        if(deleteCounter.getFileCounter().get() < 1 && deleteCounter.getDirectoryCounter().get() < 1) {
+        if (deleteCounters.getFileCounter().get() < 1 && deleteCounters.getDirectoryCounter().get() < 1) {
             // didn't find a file to delete.
             throw new FileNotFoundException("File does not exist: " + file);
         }
