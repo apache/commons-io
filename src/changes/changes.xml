@@ -155,6 +155,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-629" dev="ggregory" type="update" due-to="Ian Springer, Ian Springer, Gary Gregory">
         FileUtils#forceDelete should use Files#delete rather than File#delete so exception messages includes reason for failure.
       </action>
+      <action issue="IO-634" dev="ggregory" type="update" due-to="Václav Haisman, Bruno P. Kinoshita, Gary Gregory">
+        Make getCause synchronized and use a Deque instead of a Stack #64.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
