@@ -104,54 +104,52 @@ public class IOUtils {
     // or return one of them.
 
     /**
-     * Represents the end-of-file (or stream).
-     * @since 2.5 (made public)
-     */
-    public static final int EOF = -1;
-
-    /**
-     * The Unix directory separator character.
-     */
-    public static final char DIR_SEPARATOR_UNIX = '/';
-    /**
-     * The Windows directory separator character.
-     */
-    public static final char DIR_SEPARATOR_WINDOWS = '\\';
-    /**
-     * The system directory separator character.
-     */
-    public static final char DIR_SEPARATOR = File.separatorChar;
-    /**
-     * The Unix line separator string.
-     */
-    public static final String LINE_SEPARATOR_UNIX = "\n";
-    /**
-     * The Windows line separator string.
-     */
-    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
-    /**
-     * The system line separator string.
-     */
-    public static final String LINE_SEPARATOR;
-
-    static {
-        // avoid security issues
-        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
-                final PrintWriter out = new PrintWriter(buf)) {
-            out.println();
-            LINE_SEPARATOR = buf.toString();
-        }
-    }
-
-    /**
      * The default buffer size ({@value}) to use in copy methods.
      */
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     /**
+     * The system directory separator character.
+     */
+    public static final char DIR_SEPARATOR = File.separatorChar;
+    
+    /**
+     * The Unix directory separator character.
+     */
+    public static final char DIR_SEPARATOR_UNIX = '/';
+    
+    /**
+     * The Windows directory separator character.
+     */
+    public static final char DIR_SEPARATOR_WINDOWS = '\\';
+    
+    /**
+     * Represents the end-of-file (or stream).
+     * @since 2.5 (made public)
+     */
+    public static final int EOF = -1;
+    
+    /**
+     * The system line separator string.
+     */
+    public static final String LINE_SEPARATOR;
+    
+    /**
+     * The Unix line separator string.
+     */
+    public static final String LINE_SEPARATOR_UNIX = "\n";
+
+    /**
+     * The Windows line separator string.
+     */
+    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+
+    /**
      * The default buffer size to use for the skip() methods.
      */
     private static final int SKIP_BUFFER_SIZE = 2048;
+
+    private static byte[] SKIP_BYTE_BUFFER;
 
     // Allocated in the relevant skip method if necessary.
     /*
@@ -165,7 +163,15 @@ public class IOUtils {
      * did not create a smaller one)
      */
     private static char[] SKIP_CHAR_BUFFER;
-    private static byte[] SKIP_BYTE_BUFFER;
+    
+    static {
+        // avoid security issues
+        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
+                final PrintWriter out = new PrintWriter(buf)) {
+            out.println();
+            LINE_SEPARATOR = buf.toString();
+        }
+    }
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -184,8 +190,6 @@ public class IOUtils {
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
-
-    //-----------------------------------------------------------------------
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -295,26 +299,6 @@ public class IOUtils {
      */
     public static BufferedWriter buffer(final Writer writer, final int size) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer, size);
-    }
-
-    /**
-     * Returns the given Appendable if it is already a {@link Writer}, otherwise creates a Writer wrapper around the
-     * given Appendable.
-     *
-     * @param appendable the Appendable to wrap or return (not null)
-     * @return  the given Appendable or a Writer wrapper around the given Appendable
-     * @throws NullPointerException if the input parameter is null
-     * @since 2.7
-     */
-    public static Writer writer(final Appendable appendable) {
-        Objects.requireNonNull(appendable, "appendable");
-        if (appendable instanceof Writer) {
-            return (Writer) appendable;
-        }
-        if (appendable instanceof StringBuilder) {
-            return new StringBuilderWriter((StringBuilder) appendable);
-        }
-        return new AppendableWriter<>(appendable);
     }
 
     /**
@@ -832,9 +816,6 @@ public class IOUtils {
         return copyLarge(input, output, new byte[bufferSize]);
     }
 
-    // read toByteArray
-    //-----------------------------------------------------------------------
-
     /**
      * Copies bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the default character encoding of the platform.
@@ -904,6 +885,54 @@ public class IOUtils {
     public static void copy(final InputStream input, final Writer output, final String inputEncoding)
             throws IOException {
         copy(input, output, Charsets.toCharset(inputEncoding));
+    }
+
+    /**
+     * Copies chars from a <code>Reader</code> to a <code>Appendable</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     * Large streams (over 2GB) will return a chars copied value of
+     * <code>-1</code> after the copy has completed since the correct
+     * number of chars cannot be returned as an int. For large streams
+     * use the <code>copyLarge(Reader, Writer)</code> method.
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output) throws IOException {
+        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+    }
+
+    /**
+     * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * </p>
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @param buffer the buffer to be used for the copy
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output, final CharBuffer buffer) throws IOException {
+        long count = 0;
+        int n;
+        while (EOF != (n = input.read(buffer))) {
+            buffer.flip();
+            output.append(buffer, 0, n);
+            count += n;
+        }
+        return count;
     }
 
     /**
@@ -993,28 +1022,6 @@ public class IOUtils {
     public static void copy(final Reader input, final OutputStream output, final String outputEncoding)
             throws IOException {
         copy(input, output, Charsets.toCharset(outputEncoding));
-    }
-
-    /**
-     * Copies chars from a <code>Reader</code> to a <code>Appendable</code>.
-     * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
-     * <p>
-     * Large streams (over 2GB) will return a chars copied value of
-     * <code>-1</code> after the copy has completed since the correct
-     * number of chars cannot be returned as an int. For large streams
-     * use the <code>copyLarge(Reader, Writer)</code> method.
-     *
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Appendable</code> to write to
-     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
-     * @since 2.7
-     */
-    public static long copy(final Reader input, final Appendable output) throws IOException {
-        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
     }
 
     /**
@@ -1120,9 +1127,6 @@ public class IOUtils {
         return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);
     }
 
-    // read char[]
-    //-----------------------------------------------------------------------
-
     /**
      * Copies some or all bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input bytes.
@@ -1174,32 +1178,6 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
-     * <p>
-     * This method uses the provided buffer, so there is no need to use a
-     * <code>BufferedReader</code>.
-     * </p>
-     *
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Appendable</code> to write to
-     * @param buffer the buffer to be used for the copy
-     * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
-     * @since 2.7
-     */
-    public static long copy(final Reader input, final Appendable output, final CharBuffer buffer) throws IOException {
-        long count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            buffer.flip();
-            output.append(buffer, 0, n);
-            count += n;
-        }
-        return count;
-    }
-
-    /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1217,9 +1195,6 @@ public class IOUtils {
     public static long copyLarge(final Reader input, final Writer output) throws IOException {
         return copyLarge(input, output, new char[DEFAULT_BUFFER_SIZE]);
     }
-
-    // read toString
-    //-----------------------------------------------------------------------
 
     /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
@@ -1313,6 +1288,50 @@ public class IOUtils {
             }
         }
         return totalRead;
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final byte[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final char[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given CharSequence in a null-safe manner.
+     *
+     * @param csq a CharSequence or null
+     * @return the CharSequence length -- or 0 if the given CharSequence is null.
+     * @since 2.7
+     */
+    public static int length(final CharSequence csq) {
+        return csq == null ? 0 : csq.length();
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final Object[] array) {
+        return array == null ? 0 : array.length;
     }
 
     /**
@@ -1597,9 +1616,6 @@ public class IOUtils {
         return buffer;
     }
 
-    // resources
-    //-----------------------------------------------------------------------
-
     /**
      * Reads the requested number of bytes or fail if there are not enough left.
      * <p>
@@ -1722,9 +1738,6 @@ public class IOUtils {
         return readLines(input, Charsets.toCharset(encoding));
     }
 
-    // readLines
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of a <code>Reader</code> as a list of Strings,
      * one entry per line.
@@ -1806,9 +1819,6 @@ public class IOUtils {
         return resourceToString(name, encoding, null);
     }
 
-    // lineIterator
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of a classpath resource as a String using the
      * specified character encoding.
@@ -1874,8 +1884,6 @@ public class IOUtils {
 
         return resource;
     }
-
-    //-----------------------------------------------------------------------
 
     /**
      * Skips bytes from an input byte stream.
@@ -1997,8 +2005,6 @@ public class IOUtils {
         return toSkip - remain;
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Skips the requested number of bytes or fail if there are not enough left.
      * <p>
@@ -2073,9 +2079,6 @@ public class IOUtils {
             throw new EOFException("Chars to skip: " + toSkip + " actual: " + skipped);
         }
     }
-
-    // write byte[]
-    //-----------------------------------------------------------------------
 
     /**
      * Fetches entire contents of an <code>InputStream</code> and represent
@@ -2174,9 +2177,6 @@ public class IOUtils {
             return output.toByteArray();
         }
     }
-
-    // write char[]
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
@@ -2305,9 +2305,6 @@ public class IOUtils {
         return toByteArray(input, Charsets.toCharset(encoding));
     }
 
-    // write CharSequence
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of a <code>String</code> as a <code>byte[]</code>
      * using the default character encoding of the platform.
@@ -2371,9 +2368,6 @@ public class IOUtils {
             return IOUtils.toByteArray(inputStream);
         }
     }
-
-    // write String
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of an <code>InputStream</code> as a character array
@@ -2457,9 +2451,6 @@ public class IOUtils {
         return sw.toCharArray();
     }
 
-    // write StringBuffer
-    //-----------------------------------------------------------------------
-
     /**
      * Converts the specified CharSequence to an input stream, encoded as bytes
      * using the default character encoding of the platform.
@@ -2506,9 +2497,6 @@ public class IOUtils {
     public static InputStream toInputStream(final CharSequence input, final String encoding) throws IOException {
         return toInputStream(input, Charsets.toCharset(encoding));
     }
-
-    // writeLines
-    //-----------------------------------------------------------------------
 
     /**
      * Converts the specified string to an input stream, encoded as bytes
@@ -2573,9 +2561,6 @@ public class IOUtils {
         // make explicit the use of the default charset
         return new String(input, Charset.defaultCharset());
     }
-
-    // copy from InputStream
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of a <code>byte[]</code> as a String
@@ -2733,9 +2718,6 @@ public class IOUtils {
         return toString(url, Charset.defaultCharset());
     }
 
-    // copy from Reader
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents at the given URL.
      *
@@ -2889,9 +2871,6 @@ public class IOUtils {
         }
     }
 
-    // content equals
-    //-----------------------------------------------------------------------
-
     /**
      * Writes chars from a <code>char[]</code> to bytes on an
      * <code>OutputStream</code> using the specified character encoding.
@@ -3011,6 +2990,7 @@ public class IOUtils {
         }
     }
 
+
     /**
      * Writes chars from a <code>String</code> to bytes on an
      * <code>OutputStream</code> using the default character encoding of the
@@ -3072,7 +3052,6 @@ public class IOUtils {
             throws IOException {
         write(data, output, Charsets.toCharset(encoding));
     }
-
 
     /**
      * Writes chars from a <code>String</code> to a <code>Writer</code>.
@@ -3306,54 +3285,30 @@ public class IOUtils {
     }
 
     /**
+     * Returns the given Appendable if it is already a {@link Writer}, otherwise creates a Writer wrapper around the
+     * given Appendable.
+     *
+     * @param appendable the Appendable to wrap or return (not null)
+     * @return  the given Appendable or a Writer wrapper around the given Appendable
+     * @throws NullPointerException if the input parameter is null
+     * @since 2.7
+     */
+    public static Writer writer(final Appendable appendable) {
+        Objects.requireNonNull(appendable, "appendable");
+        if (appendable instanceof Writer) {
+            return (Writer) appendable;
+        }
+        if (appendable instanceof StringBuilder) {
+            return new StringBuilderWriter((StringBuilder) appendable);
+        }
+        return new AppendableWriter<>(appendable);
+    }
+
+    /**
      * Instances should NOT be constructed in standard programming.
      */
     public IOUtils() {
         super();
-    }
-
-    /**
-     * Returns the length of the given array in a null-safe manner.
-     *
-     * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
-     * @since 2.7
-     */
-    public static int length(final byte[] array) {
-        return array == null ? 0 : array.length;
-    }
-
-    /**
-     * Returns the length of the given array in a null-safe manner.
-     *
-     * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
-     * @since 2.7
-     */
-    public static int length(final char[] array) {
-        return array == null ? 0 : array.length;
-    }
-
-    /**
-     * Returns the length of the given CharSequence in a null-safe manner.
-     *
-     * @param csq a CharSequence or null
-     * @return the CharSequence length -- or 0 if the given CharSequence is null.
-     * @since 2.7
-     */
-    public static int length(final CharSequence csq) {
-        return csq == null ? 0 : csq.length();
-    }
-
-    /**
-     * Returns the length of the given array in a null-safe manner.
-     *
-     * @param array an array or null
-     * @return the array length -- or 0 if the given array is null.
-     * @since 2.7
-     */
-    public static int length(final Object[] array) {
-        return array == null ? 0 : array.length;
     }
 
 }
