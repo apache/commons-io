@@ -252,7 +252,7 @@ public abstract class ProxyReader extends FilterReader {
      * Handle any IOExceptions thrown.
      * <p>
      * This method provides a point to implement custom exception
-     * handling. The default behaviour is to re-throw the exception.
+     * handling. The default behavior is to re-throw the exception.
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
      * @since 2.0

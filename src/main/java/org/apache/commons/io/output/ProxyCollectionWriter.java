@@ -175,7 +175,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
     /**
      * Handle any IOExceptions thrown.
      * <p>
-     * This method provides a point to implement custom exception handling. The default behaviour is to re-throw the
+     * This method provides a point to implement custom exception handling. The default behavior is to re-throw the
      * exception.
      * </p>
      *

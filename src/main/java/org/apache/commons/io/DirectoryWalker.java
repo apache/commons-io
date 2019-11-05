@@ -27,7 +27,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Abstract class that walks through a directory hierarchy and provides
- * subclasses with convenient hooks to add specific behaviour.
+ * subclasses with convenient hooks to add specific behavior.
  * <p>
  * This class operates with a {@link FileFilter} and maximum depth to
  * limit the files and directories visited.
@@ -43,7 +43,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      <li><a href="#filter">2. Filter Example</a> - using
  *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
  *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
- *          behaviour.</li>
+ *          behavior.</li>
  *   </ul>
  *
  * <h2 id="example">1. Example Implementation</h2>

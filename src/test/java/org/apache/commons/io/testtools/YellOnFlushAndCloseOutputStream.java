@@ -24,7 +24,7 @@ import java.io.OutputStream;
 import org.apache.commons.io.output.ProxyOutputStream;
 
 /**
- * Helper class for checking behaviour of IO classes.
+ * Helper class for checking behavior of IO classes.
  */
 public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
 

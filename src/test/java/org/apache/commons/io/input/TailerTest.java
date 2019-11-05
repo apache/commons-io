@@ -283,7 +283,7 @@ public class TailerTest {
         write(file, "line7", "line8", "line9");
         TestUtils.sleep(testDelayMillis);
 
-        // May be > 3 times due to underlying OS behaviour wrt streams
+        // May be > 3 times due to underlying OS behavior wrt streams
         assertTrue(listener.reachedEndOfFile >= 3, "end of file reached at least 3 times");
     }
 
@@ -401,7 +401,7 @@ public class TailerTest {
     }
 
     @Test
-    public void testIO335() throws Exception { // test CR behaviour
+    public void testIO335() throws Exception { // test CR behavior
         // Create & start the Tailer
         final long delayMillis = 50;
         final File file = new File(temporaryFolder, "tailer-testio334.txt");

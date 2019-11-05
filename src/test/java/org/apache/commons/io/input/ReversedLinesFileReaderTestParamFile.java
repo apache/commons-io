@@ -33,7 +33,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Test checks symmetric behaviour with  BufferedReader
+ * Test checks symmetric behavior with  BufferedReader
  */
 public class ReversedLinesFileReaderTestParamFile {
     public static Stream<Arguments> testDataIntegrityWithBufferedReader() {

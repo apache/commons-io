@@ -23,7 +23,7 @@ import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.io.output.ProxyWriter;
 
 /**
- * Helper class for checking behaviour of IO classes.
+ * Helper class for checking behavior of IO classes.
  */
 public class YellOnCloseWriter extends ProxyWriter {
 
