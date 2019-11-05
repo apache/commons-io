@@ -205,11 +205,7 @@ public class ProxyWriter extends FilterWriter {
      */
     @Override
     public void close() throws IOException {
-        try {
-            out.close();
-        } catch (final IOException e) {
-            handleIOException(e);
-        }
+        IOUtils.close(out, e -> handleIOException(e));
     }
 
     /**

@@ -1847,7 +1847,7 @@ public class FileUtils {
             inputStream = openInputStream(file);
             return IOUtils.lineIterator(inputStream, encoding);
         } catch (final IOException | RuntimeException ex) {
-            IOUtils.close(inputStream, e -> ex.addSuppressed(e));
+            IOUtils.closeQuietly(inputStream, e -> ex.addSuppressed(e));
             throw ex;
         }
     }

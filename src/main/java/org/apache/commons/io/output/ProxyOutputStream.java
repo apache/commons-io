@@ -114,11 +114,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      */
     @Override
     public void close() throws IOException {
-        try {
-            out.close();
-        } catch (final IOException e) {
-            handleIOException(e);
-        }
+        IOUtils.close(out, e -> handleIOException(e));
     }
 
     /**

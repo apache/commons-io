@@ -65,7 +65,7 @@ public final class PathUtils {
 
     /**
      * Copies a file to a directory.
-     * 
+     *
      * @param sourceFile The source file
      * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.

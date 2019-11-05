@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
@@ -113,28 +114,28 @@ public class IOUtils {
      * The system directory separator character.
      */
     public static final char DIR_SEPARATOR = File.separatorChar;
-    
+
     /**
      * The Unix directory separator character.
      */
     public static final char DIR_SEPARATOR_UNIX = '/';
-    
+
     /**
      * The Windows directory separator character.
      */
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
-    
+
     /**
      * Represents the end-of-file (or stream).
      * @since 2.5 (made public)
      */
     public static final int EOF = -1;
-    
+
     /**
      * The system line separator string.
      */
     public static final String LINE_SEPARATOR;
-    
+
     /**
      * The Unix line separator string.
      */
@@ -164,7 +165,7 @@ public class IOUtils {
      * did not create a smaller one)
      */
     private static char[] SKIP_CHAR_BUFFER;
-    
+
     static {
         // avoid security issues
         try (final StringBuilderWriter buf = new StringBuilderWriter(4);
@@ -343,7 +344,26 @@ public class IOUtils {
      */
     @Deprecated
     public static void closeQuietly(final Closeable closeable) {
-        close(closeable, null);
+        closeQuietly(closeable, (Consumer<IOException>) null);
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
+     * @since 2.7
+     */
+    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
     }
 
     /**
@@ -364,9 +384,10 @@ public class IOUtils {
      *
      * @param closeable The resource to close, may be null.
      * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @throws IOException if an I/O error occurs.
      * @since 2.7
      */
-    public static void close(final Closeable closeable, final Consumer<IOException> consumer) {
+    public static void close(final Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
         if (closeable != null) {
             try {
                 closeable.close();
