@@ -302,18 +302,6 @@ public class IOUtils {
     }
 
     /**
-     * Closes a URLConnection.
-     *
-     * @param conn the connection to close.
-     * @since 2.4
-     */
-    public static void close(final URLConnection conn) {
-        if (conn instanceof HttpURLConnection) {
-            ((HttpURLConnection) conn).disconnect();
-        }
-    }
-
-    /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
@@ -355,11 +343,34 @@ public class IOUtils {
     @Deprecated
     public static void closeQuietly(final Closeable closeable) {
         try {
-            if (closeable != null) {
-                closeable.close();
-            }
+            close(closeable);
         } catch (final IOException ioe) {
             // ignore
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable) throws IOException {
+        if (closeable != null) {
+            closeable.close();
+        }
+    }
+
+    /**
+     * Closes a URLConnection.
+     *
+     * @param conn the connection to close.
+     * @since 2.4
+     */
+    public static void close(final URLConnection conn) {
+        if (conn instanceof HttpURLConnection) {
+            ((HttpURLConnection) conn).disconnect();
         }
     }
 
@@ -546,13 +557,7 @@ public class IOUtils {
      */
     @Deprecated
     public static void closeQuietly(final Selector selector) {
-        if (selector != null) {
-            try {
-                selector.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+        closeQuietly((Closeable) selector);
     }
 
     /**
@@ -575,7 +580,7 @@ public class IOUtils {
      *   }
      * </pre>
      *
-     * @param sock the ServerSocket to close, may be null or already closed
+     * @param serverSocket the ServerSocket to close, may be null or already closed
      * @since 2.2
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
@@ -583,14 +588,8 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final ServerSocket sock) {
-        if (sock != null) {
-            try {
-                sock.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+    public static void closeQuietly(final ServerSocket serverSocket) {
+        closeQuietly((Closeable) serverSocket);
     }
 
     /**
@@ -613,7 +612,7 @@ public class IOUtils {
      *   }
      * </pre>
      *
-     * @param sock the Socket to close, may be null or already closed
+     * @param socket the Socket to close, may be null or already closed
      * @since 2.0
      *
      * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
@@ -621,14 +620,8 @@ public class IOUtils {
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final Socket sock) {
-        if (sock != null) {
-            try {
-                sock.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+    public static void closeQuietly(final Socket socket) {
+        closeQuietly((Closeable) socket);
     }
 
     /**
