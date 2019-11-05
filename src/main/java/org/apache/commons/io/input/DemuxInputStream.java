@@ -21,6 +21,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Data written to this stream is forwarded to a stream that has been associated with this thread.
  *
@@ -47,10 +49,7 @@ public class DemuxInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-        final InputStream input = m_streams.get();
-        if (null != input) {
-            input.close();
-        }
+        IOUtils.close(m_streams.get());
     }
 
     /**

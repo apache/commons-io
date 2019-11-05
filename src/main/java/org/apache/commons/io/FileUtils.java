@@ -1842,15 +1842,13 @@ public class FileUtils {
      * @since 1.2
      */
     public static LineIterator lineIterator(final File file, final String encoding) throws IOException {
-        InputStream in = null;
+        InputStream inputStream = null;
         try {
-            in = openInputStream(file);
-            return IOUtils.lineIterator(in, encoding);
+            inputStream = openInputStream(file);
+            return IOUtils.lineIterator(inputStream, encoding);
         } catch (final IOException | RuntimeException ex) {
             try {
-                if (in != null) {
-                    in.close();
-                }
+                IOUtils.close(inputStream);
             }
             catch (final IOException e) {
                 ex.addSuppressed(e);

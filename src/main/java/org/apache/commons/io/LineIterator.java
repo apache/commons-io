@@ -162,9 +162,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     public void close() throws IOException {
         finished = true;
         cachedLine = null;
-        if (this.bufferedReader != null) {
-            this.bufferedReader.close();
-        }
+        IOUtils.close(bufferedReader);
     }
 
     /**
@@ -188,13 +186,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      */
     @Deprecated
     public static void closeQuietly(final LineIterator iterator) {
-        try {
-            if (iterator != null) {
-                iterator.close();
-            }
-        } catch(final IOException e) {
-            // Suppressed.
-        }
+        IOUtils.closeQuietly(iterator);
     }
 
 }

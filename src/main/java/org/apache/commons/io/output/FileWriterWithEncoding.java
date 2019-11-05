@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Writer of files that allows the encoding to be set.
@@ -242,9 +243,7 @@ public class FileWriterWithEncoding extends Writer {
             }
         } catch (final IOException | RuntimeException ex) {
             try {
-                if (stream != null) {
-                    stream.close();
-                }
+                IOUtils.close(stream);
             } catch (final IOException e) {
                 ex.addSuppressed(e);
             }
