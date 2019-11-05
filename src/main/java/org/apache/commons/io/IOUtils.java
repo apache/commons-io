@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -342,11 +343,7 @@ public class IOUtils {
      */
     @Deprecated
     public static void closeQuietly(final Closeable closeable) {
-        try {
-            close(closeable);
-        } catch (final IOException ioe) {
-            // ignore
-        }
+        close(closeable, null);
     }
 
     /**
@@ -359,6 +356,25 @@ public class IOUtils {
     public static void close(final Closeable closeable) throws IOException {
         if (closeable != null) {
             closeable.close();
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable, final Consumer<IOException> consumer) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
         }
     }
 
