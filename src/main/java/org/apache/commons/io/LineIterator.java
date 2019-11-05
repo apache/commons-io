@@ -176,7 +176,7 @@ public class LineIterator implements Iterator<String>, Closeable {
      * Closes a {@code LineIterator} quietly.
      *
      * @param iterator The iterator to close, or {@code null}.
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */

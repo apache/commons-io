@@ -338,7 +338,7 @@ public class IOUtils {
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -454,7 +454,7 @@ public class IOUtils {
      * @see #closeQuietly(Closeable)
      * @since 2.5
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -491,7 +491,7 @@ public class IOUtils {
      *
      * @param input the InputStream to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -524,7 +524,7 @@ public class IOUtils {
      *
      * @param output the OutputStream to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -556,7 +556,7 @@ public class IOUtils {
      *
      * @param input the Reader to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -588,7 +588,7 @@ public class IOUtils {
      * @param selector the Selector to close, may be null or already closed
      * @since 2.2
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -620,7 +620,7 @@ public class IOUtils {
      * @param serverSocket the ServerSocket to close, may be null or already closed
      * @since 2.2
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -652,7 +652,7 @@ public class IOUtils {
      * @param socket the Socket to close, may be null or already closed
      * @since 2.0
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -683,7 +683,7 @@ public class IOUtils {
      *
      * @param output the Writer to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
