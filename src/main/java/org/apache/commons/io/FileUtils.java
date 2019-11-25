@@ -34,6 +34,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -386,6 +387,7 @@ public class FileUtils {
      * @return true if the content of the files are equal or they both don't
      * exist, false otherwise
      * @throws IOException in case of an I/O error
+     * @see org.apache.commons.io.file.PathUtils#fileContentEquals(Path,Path,OpenOption...)
      */
     public static boolean contentEquals(final File file1, final File file2) throws IOException {
         if (file1 == null && file2 == null) {
@@ -471,12 +473,8 @@ public class FileUtils {
             return true;
         }
 
-        try (Reader input1 = charsetName == null
-                                 ? new InputStreamReader(new FileInputStream(file1), Charset.defaultCharset())
-                                 : new InputStreamReader(new FileInputStream(file1), charsetName);
-             Reader input2 = charsetName == null
-                                 ? new InputStreamReader(new FileInputStream(file2), Charset.defaultCharset())
-                                 : new InputStreamReader(new FileInputStream(file2), charsetName)) {
+        try (Reader input1 = new InputStreamReader(new FileInputStream(file1), Charsets.toCharset(charsetName));
+             Reader input2 = new InputStreamReader(new FileInputStream(file2), Charsets.toCharset(charsetName))) {
             return IOUtils.contentEqualsIgnoreEOL(input1, input2);
         }
     }
