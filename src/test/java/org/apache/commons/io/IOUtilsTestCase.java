@@ -231,6 +231,18 @@ public class IOUtilsTestCase {
     @Test public void testContentEquals_InputStream_InputStream() throws Exception {
         {
             final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            assertTrue(IOUtils.contentEquals((InputStream) null, null));
+        }
+        {
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            assertFalse(IOUtils.contentEquals(input1, null));
+        }
+        {
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            assertFalse(IOUtils.contentEquals(null, input1));
+        }
+        {
+            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         {

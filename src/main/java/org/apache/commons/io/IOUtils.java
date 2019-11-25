@@ -712,6 +712,9 @@ public class IOUtils {
         if (input1 == input2) {
             return true;
         }
+        if (input1 == null ^ input2 == null) {
+            return false;
+        }
         final BufferedInputStream bufferedInput1 = buffer(input1);
         final BufferedInputStream bufferedInput2 = buffer(input2);
         int ch = bufferedInput1.read();
@@ -740,25 +743,26 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
-    public static boolean contentEquals(Reader input1, Reader input2)
+    @SuppressWarnings("resource")
+    public static boolean contentEquals(final Reader input1, final Reader input2)
             throws IOException {
         if (input1 == input2) {
             return true;
         }
 
-        input1 = toBufferedReader(input1);
-        input2 = toBufferedReader(input2);
+        BufferedReader bufferedInput1 = toBufferedReader(input1);
+        BufferedReader bufferedInput2 = toBufferedReader(input2);
 
-        int ch = input1.read();
+        int ch = bufferedInput1.read();
         while (EOF != ch) {
-            final int ch2 = input2.read();
+            final int ch2 = bufferedInput2.read();
             if (ch != ch2) {
                 return false;
             }
-            ch = input1.read();
+            ch = bufferedInput1.read();
         }
 
-        final int ch2 = input2.read();
+        final int ch2 = bufferedInput2.read();
         return ch2 == EOF;
     }
 
@@ -776,6 +780,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.2
      */
+    @SuppressWarnings("resource")
     public static boolean contentEqualsIgnoreEOL(final Reader input1, final Reader input2)
             throws IOException {
         if (input1 == input2) {
