@@ -571,6 +571,9 @@ public class FileUtilsTestCase {
         // Non-existent files
         final File file = new File(temporaryFolder, getName());
         final File file2 = new File(temporaryFolder, getName() + "2");
+        assertTrue(FileUtils.contentEquals(null, null));
+        assertFalse(FileUtils.contentEquals(null, file));
+        assertFalse(FileUtils.contentEquals(file, null));
         // both don't  exist
         assertTrue(FileUtils.contentEquals(file, file));
         assertTrue(FileUtils.contentEquals(file, file2));

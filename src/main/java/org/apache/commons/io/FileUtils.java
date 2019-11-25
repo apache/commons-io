@@ -388,6 +388,12 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      */
     public static boolean contentEquals(final File file1, final File file2) throws IOException {
+        if (file1 == null && file2 == null) {
+            return true;
+        }
+        if (file1 == null ^ file2 == null) {
+            return false;
+        }
         final boolean file1Exists = file1.exists();
         if (file1Exists != file2.exists()) {
             return false;
