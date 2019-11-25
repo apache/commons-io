@@ -706,29 +706,23 @@ public class IOUtils {
      * @throws NullPointerException if either input is null
      * @throws IOException          if an I/O error occurs
      */
-    public static boolean contentEquals(InputStream input1, InputStream input2)
+    @SuppressWarnings("resource")
+    public static boolean contentEquals(final InputStream input1, final InputStream input2)
             throws IOException {
         if (input1 == input2) {
             return true;
         }
-        if (!(input1 instanceof BufferedInputStream)) {
-            input1 = new BufferedInputStream(input1);
-        }
-        if (!(input2 instanceof BufferedInputStream)) {
-            input2 = new BufferedInputStream(input2);
-        }
-
-        int ch = input1.read();
+        final BufferedInputStream bufferedInput1 = buffer(input1);
+        final BufferedInputStream bufferedInput2 = buffer(input2);
+        int ch = bufferedInput1.read();
         while (EOF != ch) {
-            final int ch2 = input2.read();
+            final int ch2 = bufferedInput2.read();
             if (ch != ch2) {
                 return false;
             }
-            ch = input1.read();
+            ch = bufferedInput1.read();
         }
-
-        final int ch2 = input2.read();
-        return ch2 == EOF;
+        return bufferedInput2.read() == EOF;
     }
 
     /**
