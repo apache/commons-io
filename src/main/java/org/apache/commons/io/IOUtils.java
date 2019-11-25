@@ -789,6 +789,9 @@ public class IOUtils {
         if (input1 == input2) {
             return true;
         }
+        if (input1 == null ^ input2 == null) {
+            return false;
+        }
         final BufferedReader br1 = toBufferedReader(input1);
         final BufferedReader br2 = toBufferedReader(input2);
 

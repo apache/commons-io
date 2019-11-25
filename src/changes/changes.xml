@@ -167,9 +167,12 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-640" dev="ggregory" type="add" due-to="Gary Gregory">
         NPE in org.apache.commons.io.IOUtils.contentEquals(InputStream, InputStream) when only one input is null.
-      </action>
+      </action>"src/changes/changes.xml"
       <action issue="IO-641" dev="ggregory" type="add" due-to="Gary Gregory">
         NPE in org.apache.commons.io.IOUtils.contentEquals(Reader, Reader) when only one input is null.
+      </action>
+      <action issue="IO-642" dev="ggregory" type="add" due-to="Gary Gregory">
+        NPE in org.apache.commons.io.IOUtils.contentEqualsIgnoreEOL(Reader, Reader) when only one input is null.
       </action>
     </release>
 

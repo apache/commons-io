@@ -292,6 +292,18 @@ public class IOUtilsTestCase {
     @Test public void testContentEqualsIgnoreEOL() throws Exception {
         {
             final Reader input1 = new CharArrayReader("".toCharArray());
+            assertTrue(IOUtils.contentEqualsIgnoreEOL((Reader) null, null));
+        }
+        {
+            final Reader input1 = new CharArrayReader("".toCharArray());
+            assertFalse(IOUtils.contentEqualsIgnoreEOL(null, input1));
+        }
+        {
+            final Reader input1 = new CharArrayReader("".toCharArray());
+            assertFalse(IOUtils.contentEqualsIgnoreEOL(input1, null));
+        }
+        {
+            final Reader input1 = new CharArrayReader("".toCharArray());
             assertTrue(IOUtils.contentEqualsIgnoreEOL(input1, input1));
         }
         {
