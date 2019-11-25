@@ -318,9 +318,7 @@ public class FileUtils {
      * @since 1.3
      */
     public static long checksumCRC32(final File file) throws IOException {
-        final CRC32 crc = new CRC32();
-        checksum(file, crc);
-        return crc.getValue();
+        return checksum(file, new CRC32()).getValue();
     }
 
     /**
