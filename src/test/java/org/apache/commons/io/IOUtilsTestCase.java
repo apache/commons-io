@@ -264,6 +264,18 @@ public class IOUtilsTestCase {
     @Test public void testContentEquals_Reader_Reader() throws Exception {
         {
             final StringReader input1 = new StringReader("");
+            assertTrue(IOUtils.contentEquals((Reader) null, null));
+        }
+        {
+            final StringReader input1 = new StringReader("");
+            assertFalse(IOUtils.contentEquals(null, input1));
+        }
+        {
+            final StringReader input1 = new StringReader("");
+            assertFalse(IOUtils.contentEquals(input1, null));
+        }
+        {
+            final StringReader input1 = new StringReader("");
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         {

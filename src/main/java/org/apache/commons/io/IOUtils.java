@@ -698,6 +698,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally using
      * <code>BufferedInputStream</code> if they are not already buffered.
+     * </p>
      *
      * @param input1 the first stream
      * @param input2 the second stream
@@ -734,6 +735,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally using
      * <code>BufferedReader</code> if they are not already buffered.
+     * </p>
      *
      * @param input1 the first reader
      * @param input2 the second reader
@@ -749,9 +751,11 @@ public class IOUtils {
         if (input1 == input2) {
             return true;
         }
-
-        BufferedReader bufferedInput1 = toBufferedReader(input1);
-        BufferedReader bufferedInput2 = toBufferedReader(input2);
+        if (input1 == null ^ input2 == null) {
+            return false;
+        }
+        final BufferedReader bufferedInput1 = toBufferedReader(input1);
+        final BufferedReader bufferedInput2 = toBufferedReader(input2);
 
         int ch = bufferedInput1.read();
         while (EOF != ch) {
@@ -762,8 +766,7 @@ public class IOUtils {
             ch = bufferedInput1.read();
         }
 
-        final int ch2 = bufferedInput2.read();
-        return ch2 == EOF;
+        return bufferedInput2.read() == EOF;
     }
 
     /**
