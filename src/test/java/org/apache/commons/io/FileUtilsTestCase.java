@@ -630,6 +630,9 @@ public class FileUtilsTestCase {
         // Non-existent files
         final File file1 = new File(temporaryFolder, getName());
         final File file2 = new File(temporaryFolder, getName() + "2");
+        assertTrue(FileUtils.contentEqualsIgnoreEOL(null, null, null));
+        assertFalse(FileUtils.contentEqualsIgnoreEOL(null, file1, null));
+        assertFalse(FileUtils.contentEqualsIgnoreEOL(file1, null, null));
         // both don't  exist
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file1, null));
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file1, file2, null));
