@@ -116,11 +116,11 @@ public class Counters {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof BigIntegerCounter)) {
+            if (!(obj instanceof Counter)) {
                 return false;
             }
-            BigIntegerCounter other = (BigIntegerCounter) obj;
-            return Objects.equals(value, other.value);
+            Counter other = (Counter) obj;
+            return Objects.equals(value, other.getBigInteger());
         }
 
         @Override
@@ -226,11 +226,11 @@ public class Counters {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof LongCounter)) {
+            if (!(obj instanceof Counter)) {
                 return false;
             }
-            LongCounter other = (LongCounter) obj;
-            return value == other.value;
+            Counter other = (Counter) obj;
+            return value == other.get();
         }
 
         @Override

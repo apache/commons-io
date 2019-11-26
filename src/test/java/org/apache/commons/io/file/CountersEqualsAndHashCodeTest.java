@@ -88,6 +88,12 @@ public class CountersEqualsAndHashCodeTest {
     }
 
     @Test
+    public void testLongCounterMixEquals() {
+        testEquals(Counters.longCounter(), Counters.bigIntegerCounter());
+        testEquals(Counters.bigIntegerCounter(), Counters.longCounter());
+    }
+
+    @Test
     public void testLongCounterHashCodes() {
         testHashCodes(Counters.longCounter(), Counters.longCounter());
     }
@@ -110,5 +116,10 @@ public class CountersEqualsAndHashCodeTest {
     @Test
     public void testLongPathCountersHashCodeFileCounters() {
         testHashCodeFileCounters(Counters.longPathCounters(), Counters.longPathCounters());
+    }
+
+    @Test
+    public void testMix() {
+        testHashCodeFileCounters(Counters.longPathCounters(), Counters.bigIntegerPathCounters());
     }
 }
