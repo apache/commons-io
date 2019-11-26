@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -37,6 +38,7 @@ public class CountingPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
     public void testCountEmptyFolder(final CountingPathVisitor visitor) throws IOException {
+        checkZeroCounts(visitor);
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
             assertCounts(1, 0, 0, PathUtils.visitFileTree(visitor, tempDir));
@@ -51,6 +53,7 @@ public class CountingPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
     public void testCountFolders1FileSize0(final CountingPathVisitor visitor) throws IOException {
+        checkZeroCounts(visitor);
         assertCounts(1, 1, 0, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-1-file-size-0"));
     }
@@ -61,6 +64,7 @@ public class CountingPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
     public void testCountFolders1FileSize1(final CountingPathVisitor visitor) throws IOException {
+        checkZeroCounts(visitor);
         assertCounts(1, 1, 1, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-1-file-size-1"));
     }
@@ -71,8 +75,14 @@ public class CountingPathVisitorTest extends TestArguments {
     @ParameterizedTest
     @MethodSource("countingPathVisitors")
     public void testCountFolders2FileSize2(final CountingPathVisitor visitor) throws IOException {
+        checkZeroCounts(visitor);
         assertCounts(3, 2, 2, PathUtils.visitFileTree(visitor,
                 "src/test/resources/org/apache/commons/io/dirs-2-file-size-2"));
+    }
+
+    private void checkZeroCounts(final CountingPathVisitor visitor) {
+        Assertions.assertEquals(CountingPathVisitor.withLongCounters(), visitor);
+        Assertions.assertEquals(CountingPathVisitor.withBigIntegerCounters(), visitor);
     }
 
     @ParameterizedTest

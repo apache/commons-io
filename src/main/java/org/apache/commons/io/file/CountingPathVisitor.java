@@ -65,6 +65,18 @@ public class CountingPathVisitor extends SimplePathVisitor {
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CountingPathVisitor)) {
+            return false;
+        }
+        CountingPathVisitor other = (CountingPathVisitor) obj;
+        return Objects.equals(pathCounters, other.pathCounters);
+    }
+
     /**
      * Gets the visitation counts.
      *
@@ -72,6 +84,11 @@ public class CountingPathVisitor extends SimplePathVisitor {
      */
     public PathCounters getPathCounters() {
         return pathCounters;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pathCounters);
     }
 
     @Override
