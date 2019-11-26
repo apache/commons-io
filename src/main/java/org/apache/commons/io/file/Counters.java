@@ -18,6 +18,7 @@
 package org.apache.commons.io.file;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * Provides counters for files, directories, and sizes, as a visit proceeds.
@@ -51,6 +52,20 @@ public class Counters {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof AbstractPathCounters)) {
+                return false;
+            }
+            AbstractPathCounters other = (AbstractPathCounters) obj;
+            return Objects.equals(byteCounter, other.byteCounter)
+                    && Objects.equals(directoryCounter, other.directoryCounter)
+                    && Objects.equals(fileCounter, other.fileCounter);
+        }
+
+        @Override
         public Counter getByteCounter() {
             return byteCounter;
         }
@@ -68,6 +83,11 @@ public class Counters {
         @Override
         public Counter getFileCounter() {
             return this.fileCounter;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(byteCounter, directoryCounter, fileCounter);
         }
 
         @Override
@@ -92,6 +112,18 @@ public class Counters {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof BigIntegerCounter)) {
+                return false;
+            }
+            BigIntegerCounter other = (BigIntegerCounter) obj;
+            return Objects.equals(value, other.value);
+        }
+
+        @Override
         public long get() {
             return value.longValueExact();
         }
@@ -104,6 +136,11 @@ public class Counters {
         @Override
         public Long getLong() {
             return Long.valueOf(value.longValueExact());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
         }
 
         @Override
@@ -185,6 +222,18 @@ public class Counters {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof LongCounter)) {
+                return false;
+            }
+            LongCounter other = (LongCounter) obj;
+            return value == other.value;
+        }
+
+        @Override
         public long get() {
             return value;
         }
@@ -197,6 +246,11 @@ public class Counters {
         @Override
         public Long getLong() {
             return Long.valueOf(value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
         }
 
         @Override
