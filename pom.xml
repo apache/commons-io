@@ -304,6 +304,7 @@ file comparators, endian transformation classes, and much more.
           <configuration>
             <excludes>
               <exclude>src/test/resources/**/*.bin</exclude>
+              <exclude>src/test/resources/dir-equals-tests/**</exclude>
               <exclude>test/**</exclude>
             </excludes>
           </configuration>

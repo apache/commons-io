@@ -386,7 +386,7 @@ public class FileUtils {
      * @return true if the content of the files are equal or they both don't
      * exist, false otherwise
      * @throws IOException in case of an I/O error
-     * @see org.apache.commons.io.file.PathUtils#fileContentEquals(Path,Path,java.nio.file.OpenOption...)
+     * @see org.apache.commons.io.file.PathUtils#fileContentEquals(Path,Path,java.nio.file.LinkOption[],java.nio.file.OpenOption...)
      */
     public static boolean contentEquals(final File file1, final File file2) throws IOException {
         if (file1 == null && file2 == null) {
