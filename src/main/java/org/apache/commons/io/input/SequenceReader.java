@@ -41,7 +41,7 @@ public class SequenceReader extends Reader {
      */
     public SequenceReader(final Iterable<? extends Reader> readers) {
         this.readers = Objects.requireNonNull(readers, "readers").iterator();
-        this.reader = this.readers.hasNext() ? this.readers.next() : null;
+        this.reader = nextReader();
     }
 
     /**
@@ -64,6 +64,10 @@ public class SequenceReader extends Reader {
         this.reader = null;
     }
 
+    private Reader nextReader() {
+        return this.readers.hasNext() ? this.readers.next() : null;
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -75,7 +79,7 @@ public class SequenceReader extends Reader {
         while (reader != null) {
             c = reader.read();
             if (c == EOF) {
-                reader = readers.hasNext() ? readers.next() : null;
+                reader = nextReader();
             } else {
                 break;
             }
@@ -98,7 +102,7 @@ public class SequenceReader extends Reader {
         while (reader != null) {
             final int readLen = reader.read(cbuf, off, len);
             if (readLen == EOF) {
-                reader = readers.hasNext() ? readers.next() : null;
+                reader = nextReader();
             } else {
                 count += readLen;
                 off += readLen;
