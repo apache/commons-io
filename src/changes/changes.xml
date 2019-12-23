@@ -180,6 +180,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-645" dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.file.PathUtils.fileContentEquals(Path, Path, OpenOption...).
       </action>
+      <action issue="IO-458" dev="ggregory" type="add" due-to="Gary Gregory, Joshua Gitlin">
+        Add a SequenceReader similar to java.io.SequenceInputStream.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
