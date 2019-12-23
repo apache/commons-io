@@ -64,6 +64,11 @@ public class SequenceReader extends Reader {
         this.reader = null;
     }
 
+    /**
+     * Returns the next available reader or null if done.
+     *
+     * @return the next available reader or null
+     */
     private Reader nextReader() {
         return this.readers.hasNext() ? this.readers.next() : null;
     }
