@@ -105,6 +105,8 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
+    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
     /**
      * The default buffer size ({@value}) to use in copy methods.
      */
@@ -2233,7 +2235,7 @@ public class IOUtils {
         }
 
         if (size == 0) {
-            return new byte[0];
+            return EMPTY_BYTE_ARRAY;
         }
 
         final byte[] data = new byte[size];
