@@ -86,6 +86,8 @@ import java.util.regex.Pattern;
  */
 public class FilenameUtils {
 
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     private static final String EMPTY_STRING = "";
 
     private static final int NOT_FOUND = -1;
@@ -1494,7 +1496,7 @@ public class FilenameUtils {
             list.add(buffer.toString());
         }
 
-        return list.toArray(new String[0]);
+        return list.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -1577,7 +1579,7 @@ public class FilenameUtils {
             } else if (inet6Address.startsWith("::") && !octetList.isEmpty()) {
                 octetList.remove(0);
             }
-            octets = octetList.toArray(new String[0]);
+            octets = octetList.toArray(EMPTY_STRING_ARRAY);
         }
         if (octets.length > IPV6_MAX_HEX_GROUPS) {
             return false;

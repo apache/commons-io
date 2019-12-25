@@ -93,7 +93,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = wildcards.toArray(new String[0]);
+        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
     }
 
     //-----------------------------------------------------------------------

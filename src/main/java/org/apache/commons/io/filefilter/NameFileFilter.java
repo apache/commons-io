@@ -126,7 +126,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         if (names == null) {
             throw new IllegalArgumentException("The list of names must not be null");
         }
-        this.names = names.toArray(new String[0]);
+        this.names = names.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

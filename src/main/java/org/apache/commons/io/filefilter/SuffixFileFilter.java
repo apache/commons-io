@@ -135,7 +135,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         if (suffixes == null) {
             throw new IllegalArgumentException("The list of suffixes must not be null");
         }
-        this.suffixes = suffixes.toArray(new String[0]);
+        this.suffixes = suffixes.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
