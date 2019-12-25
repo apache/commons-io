@@ -1494,7 +1494,7 @@ public class FilenameUtils {
             list.add(buffer.toString());
         }
 
-        return list.toArray( new String[ 0 ] );
+        return list.toArray(new String[0]);
     }
 
     /**
