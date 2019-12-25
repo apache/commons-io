@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 
 /**
@@ -78,7 +79,7 @@ public class FileFilterUtils {
             throw new IllegalArgumentException("file filter is null");
         }
         if (files == null) {
-            return new File[0];
+            return FileUtils.EMPTY_FILE_ARRAY;
         }
         final List<File> acceptedFiles = new ArrayList<>();
         for (final File file : files) {
@@ -89,7 +90,7 @@ public class FileFilterUtils {
                 acceptedFiles.add(file);
             }
         }
-        return acceptedFiles.toArray(new File[0]);
+        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
@@ -120,7 +121,7 @@ public class FileFilterUtils {
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
         final List<File> acceptedFiles = filterList(filter, files);
-        return acceptedFiles.toArray(new File[0]);
+        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
