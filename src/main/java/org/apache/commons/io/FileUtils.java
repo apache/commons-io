@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
@@ -262,19 +263,15 @@ public class FileUtils {
     /**
      * Checks requirements for file copy.
      *
-     * @param src the source file
-     * @param dest the destination
+     * @param source the source file
+     * @param destination the destination
      * @throws FileNotFoundException if the destination does not exist
      */
-    private static void checkFileRequirements(final File src, final File dest) throws FileNotFoundException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (dest == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!src.exists()) {
-            throw new FileNotFoundException("Source '" + src + "' does not exist");
+    private static void checkFileRequirements(final File source, final File destination) throws FileNotFoundException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "target");
+        if (!source.exists()) {
+            throw new FileNotFoundException("Source '" + source + "' does not exist");
         }
     }
 
@@ -699,8 +696,8 @@ public class FileUtils {
      * If the modification operation fails, no indication is provided.
      * </p>
      *
-     * @param srcDir  an existing directory to copy, must not be {@code null}
-     * @param destDir the directory to place the copy in, must not be {@code null}
+     * @param sourceDir  an existing directory to copy, must not be {@code null}
+     * @param destinationDir the directory to place the copy in, must not be {@code null}
      *
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IllegalArgumentException if {@code srcDir} or {@code destDir} is not a directory
@@ -708,20 +705,16 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs during copying
      * @since 1.2
      */
-    public static void copyDirectoryToDirectory(final File srcDir, final File destDir) throws IOException {
-        if (srcDir == null) {
-            throw new NullPointerException("Source must not be null");
+    public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
+        Objects.requireNonNull(sourceDir, "sourceDir");
+        if (sourceDir.exists() && sourceDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Source '" + sourceDir + "' is not a directory");
         }
-        if (srcDir.exists() && srcDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Source '" + srcDir + "' is not a directory");
+        Objects.requireNonNull(destinationDir, "destinationDir");
+        if (destinationDir.exists() && destinationDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
         }
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (destDir.exists() && destDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
-        }
-        copyDirectory(srcDir, new File(destDir, srcDir.getName()), true);
+        copyDirectory(sourceDir, new File(destinationDir, sourceDir.getName()), true);
     }
 
     /**
@@ -867,8 +860,8 @@ public class FileUtils {
      * If the modification operation fails, no indication is provided.
      * </p>
      *
-     * @param srcFile          an existing file to copy, must not be {@code null}
-     * @param destDir          the directory to place the copy in, must not be {@code null}
+     * @param sourceFile          an existing file to copy, must not be {@code null}
+     * @param destinationDir          the directory to place the copy in, must not be {@code null}
      * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      *
@@ -880,16 +873,14 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean)
      * @since 1.3
      */
-    public static void copyFileToDirectory(final File srcFile, final File destDir, final boolean preserveFileDate)
+    public static void copyFileToDirectory(final File sourceFile, final File destinationDir, final boolean preserveFileDate)
             throws IOException {
-        if (destDir == null) {
-            throw new NullPointerException("Destination must not be null");
+        Objects.requireNonNull(destinationDir, "destinationDir");
+        if (destinationDir.exists() && destinationDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
         }
-        if (destDir.exists() && destDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
-        }
-        final File destFile = new File(destDir, srcFile.getName());
-        copyFile(srcFile, destFile, preserveFileDate);
+        final File destFile = new File(destinationDir, sourceFile.getName());
+        copyFile(sourceFile, destFile, preserveFileDate);
     }
 
     /**
@@ -933,8 +924,8 @@ public class FileUtils {
      * If the modification operation fails, no indication is provided.
      * </p>
      *
-     * @param src      an existing file or directory to copy, must not be {@code null}
-     * @param destDir  the directory to place the copy in, must not be {@code null}
+     * @param sourceFile      an existing file or directory to copy, must not be {@code null}
+     * @param destinationDir  the directory to place the copy in, must not be {@code null}
      *
      * @throws NullPointerException if source or destination is {@code null}
      * @throws IOException if source or destination is invalid
@@ -943,16 +934,14 @@ public class FileUtils {
      * @see #copyFileToDirectory(File, File)
      * @since 2.6
      */
-    public static void copyToDirectory(final File src, final File destDir) throws IOException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (src.isFile()) {
-            copyFileToDirectory(src, destDir);
-        } else if (src.isDirectory()) {
-            copyDirectoryToDirectory(src, destDir);
+    public static void copyToDirectory(final File sourceFile, final File destinationDir) throws IOException {
+        Objects.requireNonNull(sourceFile, "sourceFile");
+        if (sourceFile.isFile()) {
+            copyFileToDirectory(sourceFile, destinationDir);
+        } else if (sourceFile.isDirectory()) {
+            copyDirectoryToDirectory(sourceFile, destinationDir);
         } else {
-            throw new IOException("The source " + src + " does not exist");
+            throw new IOException("The source " + sourceFile + " does not exist");
         }
     }
 
@@ -972,8 +961,8 @@ public class FileUtils {
      * If the modification operation fails, no indication is provided.
      * </p>
      *
-     * @param srcs     a existing files to copy, must not be {@code null}
-     * @param destDir  the directory to place the copy in, must not be {@code null}
+     * @param sourceIterable     a existing files to copy, must not be {@code null}
+     * @param destinationDir  the directory to place the copy in, must not be {@code null}
      *
      * @throws NullPointerException if source or destination is null
      * @throws IOException if source or destination is invalid
@@ -981,12 +970,10 @@ public class FileUtils {
      * @see #copyFileToDirectory(File, File)
      * @since 2.6
      */
-    public static void copyToDirectory(final Iterable<File> srcs, final File destDir) throws IOException {
-        if (srcs == null) {
-            throw new NullPointerException("Sources must not be null");
-        }
-        for (final File src : srcs) {
-            copyFileToDirectory(src, destDir);
+    public static void copyToDirectory(final Iterable<File> sourceIterable, final File destinationDir) throws IOException {
+        Objects.requireNonNull(sourceIterable, "sourceIterable");
+        for (final File src : sourceIterable) {
+            copyFileToDirectory(src, destinationDir);
         }
     }
 
@@ -1430,12 +1417,8 @@ public class FileUtils {
      * @since 2.1
      */
     public static File getFile(final File directory, final String... names) {
-        if (directory == null) {
-            throw new NullPointerException("directory must not be null");
-        }
-        if (names == null) {
-            throw new NullPointerException("names must not be null");
-        }
+        Objects.requireNonNull(directory, "directory");
+        Objects.requireNonNull(names, "names");
         File file = directory;
         for (final String name : names) {
             file = new File(file, name);
@@ -1451,9 +1434,7 @@ public class FileUtils {
      * @since 2.1
      */
     public static File getFile(final String... names) {
-        if (names == null) {
-            throw new NullPointerException("names must not be null");
-        }
+        Objects.requireNonNull(names, "names");
         File file = null;
         for (final String name : names) {
             if (file == null) {
@@ -1726,9 +1707,7 @@ public class FileUtils {
      * @since 2.0
      */
     public static boolean isSymlink(final File file) {
-        if (file == null) {
-            throw new NullPointerException("File must not be null");
-        }
+        Objects.requireNonNull(file, "file");
         return Files.isSymbolicLink(file.toPath());
     }
 
@@ -2645,9 +2624,7 @@ public class FileUtils {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Parameter 'directory' is not a directory: " + directory);
         }
-        if (fileFilter == null) {
-            throw new NullPointerException("Parameter 'fileFilter' is null");
-        }
+        Objects.requireNonNull(fileFilter, "fileFilter");
     }
 
     /**
@@ -2658,19 +2635,15 @@ public class FileUtils {
      * <li>Throws {@link FileNotFoundException} if {@code src} does not exist</li>
      * </ul>
      *
-     * @param src                       the file or directory to be moved
-     * @param dest                      the destination file or directory
+     * @param source                       the file or directory to be moved
+     * @param destination                      the destination file or directory
      * @throws FileNotFoundException    if {@code src} file does not exist
      */
-    private static void validateMoveParameters(final File src, final File dest) throws FileNotFoundException {
-        if (src == null) {
-            throw new NullPointerException("Source must not be null");
-        }
-        if (dest == null) {
-            throw new NullPointerException("Destination must not be null");
-        }
-        if (!src.exists()) {
-            throw new FileNotFoundException("Source '" + src + "' does not exist");
+    private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "destination");
+        if (!source.exists()) {
+            throw new FileNotFoundException("Source '" + source + "' does not exist");
         }
     }
 

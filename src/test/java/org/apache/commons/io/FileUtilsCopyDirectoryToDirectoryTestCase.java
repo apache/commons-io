@@ -60,8 +60,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         final File srcDir = null;
         final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
         destinationDirectory.mkdir();
-        final String expectedMessage = "Source must not be null";
-        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class,  expectedMessage);
+        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class,  "sourceDir");
     }
 
     @Test
@@ -69,8 +68,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
         final File destDir =  null;
-        final String expectedMessage = "Destination must not be null";
-        assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, expectedMessage);
+        assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, "destinationDir");
     }
 
     private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir, final Class expectedExceptionType, final String expectedMessage) {

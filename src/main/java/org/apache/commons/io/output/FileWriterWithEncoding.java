@@ -24,6 +24,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -224,12 +225,8 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException if an error occurs
      */
      private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {
-        if (file == null) {
-            throw new NullPointerException("File is missing");
-        }
-        if (encoding == null) {
-            throw new NullPointerException("Encoding is missing");
-        }
+        Objects.requireNonNull(file, "file");
+        Objects.requireNonNull(encoding, "encoding");
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {

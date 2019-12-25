@@ -188,9 +188,8 @@ public class IOUtils {
      */
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
-        if (inputStream == null) { // not checked by BufferedInputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
@@ -207,9 +206,8 @@ public class IOUtils {
      */
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
-        if (inputStream == null) { // not checked by BufferedInputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
@@ -225,9 +223,8 @@ public class IOUtils {
      */
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
-        if (outputStream == null) { // not checked by BufferedOutputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
@@ -244,9 +241,8 @@ public class IOUtils {
      */
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
-        if (outputStream == null) { // not checked by BufferedOutputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }

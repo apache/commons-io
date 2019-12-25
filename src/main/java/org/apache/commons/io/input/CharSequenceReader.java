@@ -20,6 +20,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -102,9 +103,7 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (idx >= charSequence.length()) {
             return EOF;
         }
-        if (array == null) {
-            throw new NullPointerException("Character array is missing");
-        }
+        Objects.requireNonNull(array, "array");
         if (length < 0 || offset < 0 || offset + length > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + offset + ", length=" + length);

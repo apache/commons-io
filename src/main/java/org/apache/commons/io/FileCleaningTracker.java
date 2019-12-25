@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Keeps track of files awaiting deletion, and deletes them when an associated
@@ -90,9 +91,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the file is null
      */
     public void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
-        if (file == null) {
-            throw new NullPointerException("The file must not be null");
-        }
+        Objects.requireNonNull(file, "file");
         addTracker(file.getPath(), marker, deleteStrategy);
     }
 
@@ -120,9 +119,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the path is null
      */
     public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
-        if (path == null) {
-            throw new NullPointerException("The path must not be null");
-        }
+        Objects.requireNonNull(path, "path");
         addTracker(path, marker, deleteStrategy);
     }
 

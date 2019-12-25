@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Objects;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -348,9 +349,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      */
     protected final void walk(final File startDirectory, final Collection<T> results) throws IOException {
-        if (startDirectory == null) {
-            throw new NullPointerException("Start Directory is null");
-        }
+        Objects.requireNonNull(startDirectory, "startDirectory");
         try {
             handleStart(startDirectory, results);
             walk(startDirectory, 0, results);

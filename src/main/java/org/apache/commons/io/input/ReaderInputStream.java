@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.util.Objects;
 
 /**
  * {@link InputStream} implementation that reads a character stream from a {@link Reader}
@@ -215,7 +216,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Read the specified number of bytes into an array.
      *
-     * @param b the byte array to read into
+     * @param array the byte array to read into
      * @param off the offset to start reading bytes into
      * @param len the number of bytes to read
      * @return the number of bytes read or <code>-1</code>
@@ -223,12 +224,10 @@ public class ReaderInputStream extends InputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public int read(final byte[] b, int off, int len) throws IOException {
-        if (b == null) {
-            throw new NullPointerException("Byte array must not be null");
-        }
-        if (len < 0 || off < 0 || (off + len) > b.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + b.length +
+    public int read(final byte[] array, int off, int len) throws IOException {
+        Objects.requireNonNull(array, "array");
+        if (len < 0 || off < 0 || (off + len) > array.length) {
+            throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + off + ", length=" + len);
         }
         int read = 0;
@@ -238,7 +237,7 @@ public class ReaderInputStream extends InputStream {
         while (len > 0) {
             if (encoderOut.hasRemaining()) {
                 final int c = Math.min(encoderOut.remaining(), len);
-                encoderOut.get(b, off, c);
+                encoderOut.get(array, off, c);
                 off += c;
                 len -= c;
                 read += c;
