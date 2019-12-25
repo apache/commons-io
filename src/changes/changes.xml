@@ -183,6 +183,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-458" dev="ggregory" type="add" due-to="Gary Gregory, Joshua Gitlin">
         Add a SequenceReader similar to java.io.SequenceInputStream.
       </action>
+      <action issue="IO-648" dev="ggregory" type="add" due-to="Gary Gregory">
+        Implement directory content equality. 100#.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
