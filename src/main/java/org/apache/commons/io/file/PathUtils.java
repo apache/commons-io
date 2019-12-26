@@ -62,7 +62,7 @@ public final class PathUtils {
      * @return file tree information.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
-            final LinkOption[] linkOptions, final FileVisitOption... fileVisitOptions) throws IOException {
+            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
         return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
                 toFileVisitOptionSet(fileVisitOptions), maxDepth);
     }
@@ -90,7 +90,7 @@ public final class PathUtils {
          * @throws IOException if an I/O error is thrown by a visitor method.
          */
         private RelativeSortedPaths(final Path dir1, final Path dir2, final int maxDepth,
-                final LinkOption[] linkOptions, final FileVisitOption... fileVisitOptions) throws IOException {
+                final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
             List<Path> tmpRelativeDirList1 = null;
             List<Path> tmpRelativeDirList2 = null;
             List<Path> tmpRelativeFileList1 = null;
@@ -313,7 +313,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2,
-            final LinkOption[] linkOptions, final OpenOption[] openOptions, final FileVisitOption... fileVisitOption)
+            final LinkOption[] linkOptions, final OpenOption[] openOptions, final FileVisitOption[] fileVisitOption)
             throws IOException {
         // First walk both file trees and gather normalized paths.
         if (path1 == null && path2 == null) {
@@ -374,7 +374,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2, final int maxDepth,
-            LinkOption[] linkOptions, FileVisitOption... fileVisitOptions) throws IOException {
+            LinkOption[] linkOptions, FileVisitOption[] fileVisitOptions) throws IOException {
         return new RelativeSortedPaths(path1, path2, maxDepth, linkOptions, fileVisitOptions).equals;
     }
 
@@ -411,7 +411,7 @@ public final class PathUtils {
      * @see org.apache.commons.io.FileUtils#contentEquals(java.io.File, java.io.File)
      */
     public static boolean fileContentEquals(final Path path1, final Path path2, final LinkOption[] linkOptions,
-            final OpenOption... openOptions) throws IOException {
+            final OpenOption[] openOptions) throws IOException {
         if (path1 == null && path2 == null) {
             return true;
         }
