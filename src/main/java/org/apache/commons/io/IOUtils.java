@@ -45,6 +45,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -108,9 +109,9 @@ public class IOUtils {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /**
-     * The default buffer size ({@value}) to use in copy methods.
+     * The default buffer size ({@value}) to use in copy and contentEquals methods.
      */
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+    public static final int DEFAULT_BUFFER_SIZE = 8192;
 
     /**
      * The system directory separator character.
@@ -691,80 +692,128 @@ public class IOUtils {
     }
 
     /**
-     * Compares the contents of two Streams to determine if they are equal or
-     * not.
+     * Compares the contents of two Streams to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using
-     * <code>BufferedInputStream</code> if they are not already buffered.
-     * </p>
+     * This method buffers the input internally using {@link #DEFAULT_BUFFER_SIZE} sized buffers.
      *
      * @param input1 the first stream
      * @param input2 the second stream
      * @return true if the content of the streams are equal or they both don't
      * exist, false otherwise
-     * @throws NullPointerException if either input is null
      * @throws IOException          if an I/O error occurs
      */
     @SuppressWarnings("resource")
     public static boolean contentEquals(final InputStream input1, final InputStream input2)
             throws IOException {
+        return contentEquals(input1, input2, DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Compares the contents of two Streams to determine if they are equal or not.
+     * <p>
+     * This method buffers the input internally.
+     *
+     * @param input1 the first stream
+     * @param input2 the second stream
+     * @param bufferSize the size of the internal buffer to use.
+     * @return true if the content of the streams are equal or they both don't
+     * exist, false otherwise
+     * @throws IllegalArgumentException if bufferSize is less than or equal to zero.
+     * @throws IOException              if an I/O error occurs
+     * @since 2.7
+     */
+    @SuppressWarnings("resource")
+    private static boolean contentEquals(final InputStream input1, final InputStream input2, final int bufferSize)
+            throws IOException {
+        if (bufferSize <= 0) {
+            throw new IllegalArgumentException("Buffer size must be positive: " + bufferSize);
+        }
+
         if (input1 == input2) {
             return true;
         }
         if (input1 == null ^ input2 == null) {
             return false;
         }
-        final BufferedInputStream bufferedInput1 = buffer(input1);
-        final BufferedInputStream bufferedInput2 = buffer(input2);
-        int ch = bufferedInput1.read();
-        while (EOF != ch) {
-            final int ch2 = bufferedInput2.read();
-            if (ch != ch2) {
+
+        int input1NumBytesRead = 0;
+        int input2NumBytesRead = 0;
+        final byte[] input1Buffer = new byte[bufferSize];
+        final byte[] input2Buffer = new byte[bufferSize];
+        do {
+            input1NumBytesRead = read(input1, input1Buffer);
+            input2NumBytesRead = read(input2, input2Buffer);
+
+            if (input2NumBytesRead != input1NumBytesRead || !Arrays.equals(input1Buffer, input2Buffer)) {
                 return false;
             }
-            ch = bufferedInput1.read();
-        }
-        return bufferedInput2.read() == EOF;
+        } while (input1NumBytesRead == bufferSize && input2NumBytesRead == bufferSize);
+
+        return input1.read() == EOF && input2.read() == EOF;
     }
 
     /**
-     * Compares the contents of two Readers to determine if they are equal or
-     * not.
+     * Compares the contents of two Readers to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using
-     * <code>BufferedReader</code> if they are not already buffered.
+     * This method buffers the input internally using {@link #DEFAULT_BUFFER_SIZE} sized buffers.
      * </p>
      *
      * @param input1 the first reader
      * @param input2 the second reader
      * @return true if the content of the readers are equal or they both don't
      * exist, false otherwise
-     * @throws NullPointerException if either input is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
     @SuppressWarnings("resource")
     public static boolean contentEquals(final Reader input1, final Reader input2)
             throws IOException {
+        return contentEquals(input1, input2, DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Compares the contents of two Readers to determine if they are equal or not.
+     * <p>
+     * This method buffers the input internally.
+     * </p>
+     *
+     * @param input1 the first reader
+     * @param input2 the second reader
+     * @param bufferSize the size of the internal buffer to use.
+     * @return true if the content of the readers are equal or they both don't
+     * exist, false otherwise
+     * @throws IllegalArgumentException if bufferSize is less than or equal to zero.
+     * @throws IOException              if an I/O error occurs
+     * @since 2.7
+     */
+    @SuppressWarnings("resource")
+    private static boolean contentEquals(final Reader input1, final Reader input2, final int bufferSize)
+            throws IOException {
+        if (bufferSize <= 0) {
+            throw new IllegalArgumentException("Buffer size must be positive: " + bufferSize);
+        }
+
         if (input1 == input2) {
             return true;
         }
         if (input1 == null ^ input2 == null) {
             return false;
         }
-        final BufferedReader bufferedInput1 = toBufferedReader(input1);
-        final BufferedReader bufferedInput2 = toBufferedReader(input2);
 
-        int ch = bufferedInput1.read();
-        while (EOF != ch) {
-            final int ch2 = bufferedInput2.read();
-            if (ch != ch2) {
+        int input1NumCharsRead = 0;
+        int input2NumCharsRead = 0;
+        final char[] input1Buffer = new char[bufferSize];
+        final char[] input2Buffer = new char[bufferSize];
+        do {
+            input1NumCharsRead = read(input1, input1Buffer);
+            input2NumCharsRead = read(input2, input2Buffer);
+
+            if (input2NumCharsRead != input1NumCharsRead || !Arrays.equals(input1Buffer, input2Buffer)) {
                 return false;
             }
-            ch = bufferedInput1.read();
-        }
+        } while (input1NumCharsRead == bufferSize && input2NumCharsRead == bufferSize);
 
-        return bufferedInput2.read() == EOF;
+        return input1.read() == EOF && input2.read() == EOF;
     }
 
     /**

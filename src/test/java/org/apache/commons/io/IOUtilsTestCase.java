@@ -229,6 +229,7 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testContentEquals_InputStream_InputStream() throws Exception {
+
         {
             final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
             assertTrue(IOUtils.contentEquals((InputStream) null, null));
@@ -259,6 +260,70 @@ public class IOUtilsTestCase {
                 new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
         assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
                 new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8))));
+
+        {
+            // Test behavior at DEFAULT_BUFFER_SIZE - 1
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE - 1];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(bytes);
+            ByteArrayInputStream input2 = new ByteArrayInputStream(bytes);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE - 1
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(bytes);
+            ByteArrayInputStream input2 = new ByteArrayInputStream(Arrays.copyOf(bytes, bytes.length - 1));
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE - 1
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(Arrays.copyOf(bytes, bytes.length - 1));
+            ByteArrayInputStream input2 = new ByteArrayInputStream(bytes);
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE + 1
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(bytes);
+            ByteArrayInputStream input2 = new ByteArrayInputStream(Arrays.copyOf(bytes, bytes.length - 1));
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE +1
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE + 1];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(Arrays.copyOf(bytes, bytes.length - 1));
+            ByteArrayInputStream input2 = new ByteArrayInputStream(bytes);
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior at DEFAULT_BUFFER_SIZE
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(bytes);
+            ByteArrayInputStream input2 = new ByteArrayInputStream(bytes);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior at a multiple of DEFAULT_BUFFER_SIZE
+            byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 3];
+            Arrays.fill(bytes, (byte)'A');
+            ByteArrayInputStream input1 = new ByteArrayInputStream(bytes);
+            ByteArrayInputStream input2 = new ByteArrayInputStream(bytes);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
     }
 
     @Test public void testContentEquals_Reader_Reader() throws Exception {
@@ -287,6 +352,77 @@ public class IOUtilsTestCase {
         assertTrue(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABCD"), new StringReader("ABC")));
         assertFalse(IOUtils.contentEquals(new StringReader("ABC"), new StringReader("ABCD")));
+
+        {
+            // Test behavior at DEFAULT_BUFFER_SIZE - 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE - 1];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string);
+            Reader input2 = new StringReader(string);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE - 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string);
+            Reader input2 = new StringReader(string.substring(0, string.length() - 1));
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE - 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string.substring(0, string.length() - 1));
+            Reader input2 = new StringReader(string);
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE + 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE + 1];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string);
+            Reader input2 = new StringReader(string.substring(0, string.length() - 1));
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior of DEFAULT_BUFFER_SIZE vs DEFAULT_BUFFER_SIZE + 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE + 1];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string.substring(0, string.length() - 1));
+            Reader input2 = new StringReader(string);
+
+            assertFalse(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior at DEFAULT_BUFFER_SIZE
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string);
+            Reader input2 = new StringReader(string);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
+        {
+            // Test behavior at DEFAULT_BUFFER_SIZE - 1
+            char[] chars = new char[IOUtils.DEFAULT_BUFFER_SIZE * 3];
+            Arrays.fill(chars, 'A');
+            String string = new String(chars);
+            Reader input1 = new StringReader(string);
+            Reader input2 = new StringReader(string);
+
+            assertTrue(IOUtils.contentEquals(input1, input2));
+        }
     }
 
     @Test public void testContentEqualsIgnoreEOL() throws Exception {
