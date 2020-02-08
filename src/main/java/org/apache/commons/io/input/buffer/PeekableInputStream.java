@@ -35,7 +35,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
      *                    used internally.
      */
-    public PeekableInputStream(InputStream pIn, int pBufferSize) {
+    public PeekableInputStream(final InputStream pIn, final int pBufferSize) {
         super(pIn, pBufferSize);
     }
 
@@ -45,7 +45,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      *
      * @param pIn The input stream, which is being buffered.
      */
-    public PeekableInputStream(InputStream pIn) {
+    public PeekableInputStream(final InputStream pIn) {
         super(pIn);
     }
 
@@ -58,7 +58,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * @return true if the next bytes are as given
      * @throws IOException Refilling the buffer failed.
      */
-    public boolean peek(byte[] pBuffer) throws IOException {
+    public boolean peek(final byte[] pBuffer) throws IOException {
         Objects.requireNonNull(pBuffer, "Buffer");
         if (pBuffer.length > bufferSize) {
             throw new IllegalArgumentException("Peek request size of " + pBuffer.length
@@ -80,7 +80,7 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * @return true if the next bytes in the buffer are as given
      * @throws IOException if there is a problem calling fillBuffer()
      */
-    public boolean peek(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+    public boolean peek(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
         Objects.requireNonNull(pBuffer, "Buffer");
         if (pBuffer.length > bufferSize) {
             throw new IllegalArgumentException("Peek request size of " + pBuffer.length

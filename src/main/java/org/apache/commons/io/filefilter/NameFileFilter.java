@@ -83,7 +83,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
-    public NameFileFilter(final String[] names) {
+    public NameFileFilter(final String... names) {
         this(names, null);
     }
 
@@ -126,7 +126,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         if (names == null) {
             throw new IllegalArgumentException("The list of names must not be null");
         }
-        this.names = names.toArray(new String[names.size()]);
+        this.names = names.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

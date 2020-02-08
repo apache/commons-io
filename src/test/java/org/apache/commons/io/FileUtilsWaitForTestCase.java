@@ -16,13 +16,13 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is used to test FileUtils.waitFor() method for correctness.
@@ -44,13 +44,10 @@ public class FileUtilsWaitForTestCase {
     public void testWaitForInterrupted() throws InterruptedException {
         final AtomicBoolean wasInterrupted = new AtomicBoolean(false);
         final CountDownLatch started = new CountDownLatch(1);
-        final Runnable thread = new Runnable() {
-            @Override
-            public void run() {
-                started.countDown();
-                FileUtils.waitFor(new File(""), 2);
-                wasInterrupted.set( Thread.currentThread().isInterrupted());
-            }
+        final Runnable thread = () -> {
+            started.countDown();
+            FileUtils.waitFor(new File(""), 2);
+            wasInterrupted.set( Thread.currentThread().isInterrupted());
         };
         final Thread thread1 = new Thread(thread);
         thread1.start();

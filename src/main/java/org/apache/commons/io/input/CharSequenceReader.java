@@ -20,6 +20,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * {@link Reader} implementation that can read from String, StringBuffer,
@@ -102,13 +103,31 @@ public class CharSequenceReader extends Reader implements Serializable {
         if (idx >= charSequence.length()) {
             return EOF;
         }
-        if (array == null) {
-            throw new NullPointerException("Character array is missing");
-        }
+        Objects.requireNonNull(array, "array");
         if (length < 0 || offset < 0 || offset + length > array.length) {
             throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + offset + ", length=" + length);
         }
+
+        if (charSequence instanceof String) {
+            final int count = Math.min(length, charSequence.length() - idx);
+            ((String) charSequence).getChars(idx, idx + count, array, offset);
+            idx += count;
+            return count;
+        }
+        if (charSequence instanceof StringBuilder) {
+            final int count = Math.min(length, charSequence.length() - idx);
+            ((StringBuilder) charSequence).getChars(idx, idx + count, array, offset);
+            idx += count;
+            return count;
+        }
+        if (charSequence instanceof StringBuffer) {
+            final int count = Math.min(length, charSequence.length() - idx);
+            ((StringBuffer) charSequence).getChars(idx, idx + count, array, offset);
+            idx += count;
+            return count;
+        }
+
         int count = 0;
         for (int i = 0; i < length; i++) {
             final int c = read();

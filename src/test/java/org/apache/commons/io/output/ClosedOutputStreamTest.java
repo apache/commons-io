@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link ClosedOutputStream}.
@@ -32,7 +32,7 @@ public class ClosedOutputStreamTest {
      * @throws Exception
      */
     @Test
-    public void testRead() throws Exception {
+    public void testWrite() throws Exception {
         try (ClosedOutputStream cos = new ClosedOutputStream()) {
             cos.write('x');
             fail("write(b)");

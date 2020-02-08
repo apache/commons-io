@@ -105,7 +105,7 @@ import java.nio.charset.Charset;
  *
  * @deprecated Use IOUtils. Will be removed in 2.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().
- *  Null handling behaviour changed in IOUtils (null data does not
+ *  Null handling behavior changed in IOUtils (null data does not
  *  throw NullPointerException).
  */
 @Deprecated

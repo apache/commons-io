@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the CountingInputStream.
@@ -76,7 +76,7 @@ public class CountingInputStreamTest {
         final long size = (long)Integer.MAX_VALUE + (long)1;
         final NullInputStream mock    = new NullInputStream(size);
         final CountingInputStream cis = new CountingInputStream(mock);
-        final OutputStream out        = new NullOutputStream();
+        final OutputStream out        = NullOutputStream.NULL_OUTPUT_STREAM;
 
         // Test integer methods
         IOUtils.copyLarge(cis, out);
@@ -97,8 +97,8 @@ public class CountingInputStreamTest {
 
         // Test long methods
         IOUtils.copyLarge(cis, out);
-        assertEquals("getByteCount()",   size, cis.getByteCount());
-        assertEquals("resetByteCount()", size, cis.resetByteCount());
+        assertEquals(size, cis.getByteCount(), "getByteCount()");
+        assertEquals(size, cis.resetByteCount(), "resetByteCount()");
     }
 
     @Test

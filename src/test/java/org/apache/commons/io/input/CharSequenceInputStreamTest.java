@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +29,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.io.Charsets;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class CharSequenceInputStreamTest {
 
@@ -57,20 +57,19 @@ public class CharSequenceInputStreamTest {
         final byte[] expected = testString.getBytes(charsetName);
         try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
             final byte[] buffer = new byte[128];
-            int offset = 0;
-            while (true) {
+            int offset = 0;            while (true) {
                 int bufferOffset = random.nextInt(64);
                 final int bufferLength = random.nextInt(64);
                 int read = in.read(buffer, bufferOffset, bufferLength);
                 if (read == -1) {
-                    assertEquals("EOF: offset should equal length for charset " + charsetName, expected.length, offset);
+                    assertEquals(expected.length, offset, "EOF: offset should equal length for charset " + charsetName);
                     break;
                 }
-                assertTrue("Read " + read + " <= " + bufferLength, read <= bufferLength);
+                assertTrue(read <= bufferLength, "Read " + read + " <= " + bufferLength);
                 while (read > 0) {
-                    assertTrue("offset for " + charsetName + " " + offset + " < " + expected.length, offset <
-                            expected.length);
-                    assertEquals("bytes should agree for " + charsetName, expected[offset], buffer[bufferOffset]);
+                    assertTrue(offset < expected.length,
+                            "offset for " + charsetName + " " + offset + " < " + expected.length);
+                    assertEquals(expected[offset], buffer[bufferOffset], "bytes should agree for " + charsetName);
                     offset++;
                     bufferOffset++;
                     read--;
@@ -151,7 +150,7 @@ public class CharSequenceInputStreamTest {
         is.close();
 
         // data buffers should be identical
-        assertArrayEquals("bufferSize=" + bufferSize + " dataSize=" + dataSize, data1, data2);
+        assertArrayEquals(data1, data2, "bufferSize=" + bufferSize + " dataSize=" + dataSize);
     }
 
     @Test
@@ -236,20 +235,20 @@ public class CharSequenceInputStreamTest {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(2, r.skip(2));
             r.mark(0);
-            assertEquals(csName, 's', r.read());
-            assertEquals(csName, 't', r.read());
-            assertEquals(csName, -1, r.read());
+            assertEquals('s', r.read(), csName);
+            assertEquals('t', r.read(), csName);
+            assertEquals(-1, r.read(), csName);
             r.reset();
-            assertEquals(csName, 's', r.read());
-            assertEquals(csName, 't', r.read());
-            assertEquals(csName, -1, r.read());
+            assertEquals('s', r.read(), csName);
+            assertEquals('t', r.read(), csName);
+            assertEquals(-1, r.read(), csName);
             r.reset();
             r.reset();
         }
     }
 
     @Test
-    @Ignore // Test broken for charsets that create multiple bytes for a single char
+    @Disabled // Test broken for charsets that create multiple bytes for a single char
     public void testMarkReset_RequiredCharsets() throws Exception {
         for (final String csName : getRequiredCharsetNames()) {
             testMarkReset(csName);
@@ -300,9 +299,9 @@ public class CharSequenceInputStreamTest {
         try (InputStream in = new CharSequenceInputStream(testString, charsetName, 512)) {
             for (final byte b : bytes) {
                 final int read = in.read();
-                assertTrue("read " + read + " >=0 ", read >= 0);
-                assertTrue("read " + read + " <= 255", read <= 255);
-                assertEquals("Should agree with input", b, (byte) read);
+                assertTrue(read >= 0, "read " + read + " >=0 ");
+                assertTrue(read <= 255, "read " + read + " <= 255");
+                assertEquals(b, (byte) read, "Should agree with input");
             }
             assertEquals(-1, in.read());
         }
@@ -330,14 +329,14 @@ public class CharSequenceInputStreamTest {
         try (InputStream r = new CharSequenceInputStream("test", csName)) {
             assertEquals(1, r.skip(1));
             assertEquals(2, r.skip(2));
-            assertEquals(csName, 't', r.read());
+            assertEquals('t', r.read(), csName);
             r.skip(100);
-            assertEquals(csName, -1, r.read());
+            assertEquals(-1, r.read(), csName);
         }
     }
 
     @Test
-    @Ignore // test is broken for charsets that generate multiple bytes per char.
+    @Disabled // test is broken for charsets that generate multiple bytes per char.
     public void testSkip_RequiredCharsets() throws Exception {
         for (final String csName : getRequiredCharsetNames()) {
             testSkip(csName);
@@ -356,7 +355,7 @@ public class CharSequenceInputStreamTest {
 
     private int checkAvail(final InputStream is, final int min) throws Exception {
         final int available = is.available();
-        assertTrue("avail should be >= " + min + ", but was " + available, available >= min);
+        assertTrue(available >= min, "avail should be >= " + min + ", but was " + available);
         return available;
     }
 

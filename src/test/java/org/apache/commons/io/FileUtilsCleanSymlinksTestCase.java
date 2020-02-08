@@ -16,18 +16,16 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test cases for FileUtils.cleanDirectory() method that involve symlinks.
@@ -35,15 +33,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FileUtilsCleanSymlinksTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File top;
-
-    @Before
-    public void setUp() throws Exception {
-        top = temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File top;
 
     @Test
     public void testCleanDirWithSymlinkFile() throws Exception {
@@ -112,7 +103,7 @@ public class FileUtilsCleanSymlinksTestCase {
         assertEquals(0, realOuter.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals("Contents of sym link should not have been removed", 1, randomDirectory.list().length);
+        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
     }
 
     @Test
@@ -151,7 +142,7 @@ public class FileUtilsCleanSymlinksTestCase {
         assertEquals(0, realParent.list().length);
 
         // ensure that the contents of the symlink were NOT removed.
-        assertEquals("Contents of sym link should not have been removed", 1, randomDirectory.list().length);
+        assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
     }
 
     @Test

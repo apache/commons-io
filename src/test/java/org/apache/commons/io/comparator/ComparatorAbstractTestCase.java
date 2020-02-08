@@ -16,32 +16,27 @@
  */
 package org.apache.commons.io.comparator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Base Test case for Comparator implementations.
  */
 public abstract class ComparatorAbstractTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    protected File getTestDirectory() {
-        return temporaryFolder.getRoot();
-    }
+    @TempDir
+    public File dir;
 
     /** comparator instance */
     protected AbstractFileComparator comparator;
@@ -66,9 +61,9 @@ public abstract class ComparatorAbstractTestCase {
      */
     @Test
     public void testComparator() {
-        assertEquals("equal", 0, comparator.compare(equalFile1, equalFile2));
-        assertTrue("less",  comparator.compare(lessFile, moreFile) < 0);
-        assertTrue("more",  comparator.compare(moreFile, lessFile) > 0);
+        assertEquals(0, comparator.compare(equalFile1, equalFile2), "equal");
+        assertTrue(comparator.compare(lessFile, moreFile) < 0, "less");
+        assertTrue(comparator.compare(moreFile, lessFile) > 0, "more");
     }
 
     /**
@@ -76,9 +71,9 @@ public abstract class ComparatorAbstractTestCase {
      */
     @Test
     public void testReverseComparator() {
-        assertEquals("equal", 0, reverse.compare(equalFile1, equalFile2));
-        assertTrue("less",  reverse.compare(moreFile, lessFile) < 0);
-        assertTrue("more",  reverse.compare(lessFile, moreFile) > 0);
+        assertEquals(0, reverse.compare(equalFile1, equalFile2), "equal");
+        assertTrue(reverse.compare(moreFile, lessFile) < 0, "less");
+        assertTrue(reverse.compare(lessFile, moreFile) > 0, "more");
     }
 
     /**
@@ -99,9 +94,9 @@ public abstract class ComparatorAbstractTestCase {
         files[1] = moreFile;
         files[2] = lessFile;
         comparator.sort(files);
-        assertSame("equal", lessFile, files[0]);
-        assertSame("less",  equalFile1, files[1]);
-        assertSame("more",  moreFile, files[2]);
+        assertSame(lessFile, files[0], "equal");
+        assertSame(equalFile1, files[1], "less");
+        assertSame(moreFile, files[2], "more");
     }
 
     /**
@@ -114,9 +109,9 @@ public abstract class ComparatorAbstractTestCase {
         files.add(moreFile);
         files.add(lessFile);
         comparator.sort(files);
-        assertSame("equal", lessFile, files.get(0));
-        assertSame("less",  equalFile1, files.get(1));
-        assertSame("more",  moreFile, files.get(2));
+        assertSame(lessFile, files.get(0), "equal");
+        assertSame(equalFile1, files.get(1), "less");
+        assertSame(moreFile, files.get(2), "more");
     }
 
     /**
@@ -132,7 +127,7 @@ public abstract class ComparatorAbstractTestCase {
      */
     @Test
     public void testToString() {
-        assertNotNull("comparator", comparator.toString());
-        assertTrue("reverse", reverse.toString().startsWith("ReverseComparator["));
+        assertNotNull(comparator.toString(), "comparator");
+        assertTrue(reverse.toString().startsWith("ReverseComparator["), "reverse");
     }
 }

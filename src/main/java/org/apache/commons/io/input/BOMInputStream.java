@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.IOUtils;
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
@@ -43,7 +44,7 @@ import org.apache.commons.io.ByteOrderMark;
  * </ul>
  *
  *
- * <h3>Example 1 - Detect and exclude a UTF-8 BOM</h3>
+ * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
  *
  * <pre>
  * BOMInputStream bomIn = new BOMInputStream(in);
@@ -52,7 +53,7 @@ import org.apache.commons.io.ByteOrderMark;
  * }
  * </pre>
  *
- * <h3>Example 2 - Detect a UTF-8 BOM (but don't exclude it)</h3>
+ * <h2>Example 2 - Detect a UTF-8 BOM (but don't exclude it)</h2>
  *
  * <pre>
  * boolean include = true;
@@ -62,7 +63,7 @@ import org.apache.commons.io.ByteOrderMark;
  * }
  * </pre>
  *
- * <h3>Example 3 - Detect Multiple BOMs</h3>
+ * <h2>Example 3 - Detect Multiple BOMs</h2>
  *
  * <pre>
  * BOMInputStream bomIn = new BOMInputStream(in,
@@ -136,20 +137,16 @@ public class BOMInputStream extends ProxyInputStream {
     /**
      * Compares ByteOrderMark objects in descending length order.
      */
-    private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = new Comparator<ByteOrderMark>() {
-
-        @Override
-        public int compare(final ByteOrderMark bom1, final ByteOrderMark bom2) {
-            final int len1 = bom1.length();
-            final int len2 = bom2.length();
-            if (len1 > len2) {
-                return EOF;
-            }
-            if (len2 > len1) {
-                return 1;
-            }
-            return 0;
+    private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = (bom1, bom2) -> {
+        final int len1 = bom1.length();
+        final int len2 = bom2.length();
+        if (len1 > len2) {
+            return EOF;
         }
+        if (len2 > len1) {
+            return 1;
+        }
+        return 0;
     };
 
     /**
@@ -164,7 +161,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     public BOMInputStream(final InputStream delegate, final boolean include, final ByteOrderMark... boms) {
         super(delegate);
-        if (boms == null || boms.length == 0) {
+        if (IOUtils.length(boms) == 0) {
             throw new IllegalArgumentException("No BOMs specified");
         }
         this.include = include;

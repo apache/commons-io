@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io.comparator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -28,22 +28,21 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link CompositeFileComparator}.
  */
 public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = new CompositeFileComparator(
                 new AbstractFileComparator[] {
                     (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR,
                     (AbstractFileComparator) ExtensionFileComparator.EXTENSION_COMPARATOR});
         reverse = new ReverseComparator(comparator);
-        final File dir = getTestDirectory();
         lessFile   = new File(dir, "xyz.txt");
         equalFile1 = new File(dir, "foo.txt");
         equalFile2 = new File(dir, "bar.txt");
@@ -93,9 +92,9 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         list.add(ExtensionFileComparator.EXTENSION_COMPARATOR);
         final Comparator<File> c = new CompositeFileComparator(list);
 
-        assertEquals("equal", 0, c.compare(equalFile1, equalFile2));
-        assertTrue("less",  c.compare(lessFile, moreFile) < 0);
-        assertTrue("more",  c.compare(moreFile, lessFile) > 0);
+        assertEquals(0, c.compare(equalFile1, equalFile2), "equal");
+        assertTrue(c.compare(lessFile, moreFile) < 0, "less");
+        assertTrue(c.compare(moreFile, lessFile) > 0, "more");
     }
 
     /**
@@ -104,9 +103,9 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
     @Test
     public void constructorIterable_Null() {
         final Comparator<File> c = new CompositeFileComparator((Iterable<Comparator<File>>)null);
-        assertEquals("less,more", 0, c.compare(lessFile, moreFile));
-        assertEquals("more,less", 0, c.compare(moreFile, lessFile));
-        assertEquals("toString", "CompositeFileComparator{}", c.toString());
+        assertEquals(0, c.compare(lessFile, moreFile), "less,more");
+        assertEquals(0, c.compare(moreFile, lessFile), "more,less");
+        assertEquals("CompositeFileComparator{}", c.toString(), "toString");
     }
 
     /**
@@ -115,8 +114,8 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
     @Test
     public void constructorArray_Null() {
         final Comparator<File> c = new CompositeFileComparator((Comparator<File>[])null);
-        assertEquals("less,more", 0, c.compare(lessFile, moreFile));
-        assertEquals("more,less", 0, c.compare(moreFile, lessFile));
-        assertEquals("toString", "CompositeFileComparator{}", c.toString());
+        assertEquals(0, c.compare(lessFile, moreFile), "less,more");
+        assertEquals(0, c.compare(moreFile, lessFile), "more,less");
+        assertEquals("CompositeFileComparator{}", c.toString(), "toString");
     }
 }

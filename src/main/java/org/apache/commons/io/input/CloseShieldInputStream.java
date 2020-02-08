@@ -24,6 +24,7 @@ import java.io.InputStream;
  * This class is typically used in cases where an input stream needs to be
  * passed to a component that wants to explicitly close the stream even if
  * more input would still be available to other components.
+ * </p>
  *
  * @since 1.4
  */
@@ -46,7 +47,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
      */
     @Override
     public void close() {
-        in = new ClosedInputStream();
+        in = ClosedInputStream.CLOSED_INPUT_STREAM;
     }
 
 }

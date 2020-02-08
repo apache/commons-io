@@ -16,10 +16,11 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,10 +31,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * This is used to test FilenameUtils for correctness.
@@ -42,8 +42,8 @@ import org.junit.rules.TemporaryFolder;
  */
 public class FilenameUtilsTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     private static final String SEP = "" + File.separatorChar;
     private static final boolean WINDOWS = File.separatorChar == '\\';
@@ -54,10 +54,10 @@ public class FilenameUtilsTestCase {
     private int testFile1Size;
     private int testFile2Size;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        testFile1 = temporaryFolder.newFile("file1-test.txt");
-        testFile2 = temporaryFolder.newFile("file1a-test.txt");
+        testFile1 = File.createTempFile("test", "1", temporaryFolder);
+        testFile2 = File.createTempFile("test", "2", temporaryFolder);
 
         testFile1Size = (int) testFile1.length();
         testFile2Size = (int) testFile2.length();
@@ -718,9 +718,9 @@ public class FilenameUtilsTestCase {
         assertEquals("a/b/", FilenameUtils.getPath("~user/a/b/c.txt"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetPath_with_nullbyte() {
-        assertEquals("a/b/", FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
+        assertThrows(IllegalArgumentException.class, () -> FilenameUtils.getPath("~user/a/\u0000b/c.txt"));
     }
 
 

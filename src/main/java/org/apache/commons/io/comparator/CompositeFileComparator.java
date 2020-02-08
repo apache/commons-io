@@ -43,6 +43,7 @@ import java.util.List;
  */
 public class CompositeFileComparator extends AbstractFileComparator implements Serializable {
 
+    private static final Comparator<?>[] EMPTY_COMPARATOR_ARRAY = new Comparator<?>[0];
     private static final long serialVersionUID = -2224170307287243428L;
     private static final Comparator<?>[] NO_COMPARATORS = {};
     private final Comparator<File>[] delegates;
@@ -76,7 +77,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
             for (final Comparator<File> comparator : delegates) {
                 list.add(comparator);
             }
-            this.delegates = (Comparator<File>[]) list.toArray(new Comparator<?>[list.size()]); //2
+            this.delegates = (Comparator<File>[]) list.toArray(EMPTY_COMPARATOR_ARRAY); //2
         }
     }
 

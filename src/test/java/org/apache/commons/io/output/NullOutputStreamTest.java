@@ -19,7 +19,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -40,7 +40,7 @@ public class NullOutputStreamTest {
 
     @Test
     public void testNewInstance() throws IOException {
-        try (final NullOutputStream nos = new NullOutputStream()) {
+        try (final NullOutputStream nos = NullOutputStream.NULL_OUTPUT_STREAM) {
             process(nos);
         }
     }

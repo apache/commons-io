@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * JUnit Test Case for {@link CloseShieldInputStream}.
@@ -39,7 +39,7 @@ public class CloseShieldInputStreamTest {
 
     private boolean closed;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         data = new byte[] { 'x', 'y', 'z' };
         original = new ByteArrayInputStream(data) {
@@ -55,9 +55,9 @@ public class CloseShieldInputStreamTest {
     @Test
     public void testClose() throws IOException {
         shielded.close();
-        assertFalse("closed", closed);
-        assertEquals("read()", -1, shielded.read());
-        assertEquals("read()", data[0], original.read());
+        assertFalse(closed, "closed");
+        assertEquals(-1, shielded.read(), "read()");
+        assertEquals(data[0], original.read(), "read()");
     }
 
 }

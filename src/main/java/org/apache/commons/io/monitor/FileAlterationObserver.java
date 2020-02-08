@@ -82,7 +82,7 @@ import org.apache.commons.io.comparator.NameFileComparator;
  * that are of interest. This makes it more efficient and reduces the
  * noise from <i>unwanted</i> file system events.
  * <p>
- * <a href="http://commons.apache.org/io/">Commons IO</a> has a good range of
+ * <a href="https://commons.apache.org/io/">Commons IO</a> has a good range of
  * useful, ready made
  * <a href="../filefilter/package-summary.html">File Filter</a>
  * implementations for this purpose.

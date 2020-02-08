@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link ProxyReader}.

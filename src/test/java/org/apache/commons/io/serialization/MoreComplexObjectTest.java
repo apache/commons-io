@@ -18,7 +18,7 @@
  */
 package org.apache.commons.io.serialization;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,8 +29,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /** This is more an example than a test - deserialize our {@link MoreComplexObject}
  *  to verify which settings it requires, as the object uses a number of primitive
@@ -42,7 +42,7 @@ public class MoreComplexObjectTest extends ClosingBase {
     private MoreComplexObject original;
 
     @Override
-    @Before
+    @BeforeEach
     public void setup() throws IOException {
         original = new MoreComplexObject();
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
@@ -53,7 +53,7 @@ public class MoreComplexObjectTest extends ClosingBase {
 
     private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         final MoreComplexObject copy = (MoreComplexObject) (ois.readObject());
-        assertEquals("Expecting same data after deserializing", original.toString(), copy.toString());
+        assertEquals(original.toString(), copy.toString(), "Expecting same data after deserializing");
     }
 
     /** Trusting java.lang.* and the array variants of that means we have

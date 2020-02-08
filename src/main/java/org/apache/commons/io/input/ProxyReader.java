@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.CharBuffer;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A Proxy stream which acts as expected, that is it passes the method
  * calls on to the proxied stream and doesn't change which methods are
@@ -72,7 +74,7 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(final char[] chr) throws IOException {
         try {
-            beforeRead(chr != null ? chr.length : 0);
+            beforeRead(IOUtils.length(chr));
             final int n = in.read(chr);
             afterRead(n);
             return n;
@@ -113,7 +115,7 @@ public abstract class ProxyReader extends FilterReader {
     @Override
     public int read(final CharBuffer target) throws IOException {
         try {
-            beforeRead(target != null ? target.length() : 0);
+            beforeRead(IOUtils.length(target));
             final int n = in.read(target);
             afterRead(n);
             return n;
@@ -250,7 +252,7 @@ public abstract class ProxyReader extends FilterReader {
      * Handle any IOExceptions thrown.
      * <p>
      * This method provides a point to implement custom exception
-     * handling. The default behaviour is to re-throw the exception.
+     * handling. The default behavior is to re-throw the exception.
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
      * @since 2.0

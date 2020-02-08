@@ -74,7 +74,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
-    public WildcardFilter(final String[] wildcards) {
+    public WildcardFilter(final String... wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
         }
@@ -93,7 +93,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
         }
-        this.wildcards = wildcards.toArray(new String[wildcards.size()]);
+        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
     }
 
     //-----------------------------------------------------------------------

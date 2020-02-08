@@ -18,12 +18,13 @@
  */
 package org.apache.commons.io.serialization;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RegexpClassNameMatcherTest {
 
@@ -49,13 +50,13 @@ public class RegexpClassNameMatcherTest {
         assertFalse(ca.matches("zoo.should.not.match"));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testNullStringPattern() {
-        new RegexpClassNameMatcher((String)null);
+        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((String)null));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testNullPatternPattern() {
-        new RegexpClassNameMatcher((Pattern)null);
+        assertThrows(IllegalArgumentException.class, () -> new RegexpClassNameMatcher((Pattern)null));
     }
 }

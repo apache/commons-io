@@ -19,14 +19,21 @@ package org.apache.commons.io.testtools;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.ProxyInputStream;
 
-import junit.framework.AssertionFailedError;
-
 /**
- * Helper class for checking behaviour of IO classes.
+ * Helper class for checking behavior of IO classes.
  */
 public class YellOnCloseInputStream extends ProxyInputStream {
+
+    /**
+     * Default ctor.
+     */
+    @SuppressWarnings("resource")
+    public YellOnCloseInputStream() {
+        super(new NullInputStream());
+    }
 
     /**
      * @param proxy InputStream to delegate to.
@@ -38,7 +45,7 @@ public class YellOnCloseInputStream extends ProxyInputStream {
     /** @see java.io.InputStream#close() */
     @Override
     public void close() throws IOException {
-        throw new AssertionFailedError("close() was called on OutputStream");
+        throw new IOException(getClass().getSimpleName() + ".close() called.");
     }
 
 }

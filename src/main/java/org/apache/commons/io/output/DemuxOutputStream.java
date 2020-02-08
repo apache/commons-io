@@ -19,6 +19,8 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Forwards data to a stream that has been associated with this thread.
  *
@@ -47,10 +49,7 @@ public class DemuxOutputStream extends OutputStream {
      */
     @Override
     public void close() throws IOException {
-        final OutputStream output = outputStreamThreadLocal.get();
-        if (null != output) {
-            output.close();
-        }
+        IOUtils.close(outputStreamThreadLocal.get());
     }
 
     /**

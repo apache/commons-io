@@ -31,7 +31,6 @@ limitations under the License.
     <property name="fileExtensions" value="java,xml"/>
   </module>
   <module name="TreeWalker">
-    <property name="cacheFile" value="target/cachefile"/>
     <module name="AvoidStarImport"/>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>

@@ -87,7 +87,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      * @param prefixes  the prefixes to allow, must not be null
      * @throws IllegalArgumentException if the prefix array is null
      */
-    public PrefixFileFilter(final String[] prefixes) {
+    public PrefixFileFilter(final String... prefixes) {
         this(prefixes, IOCase.SENSITIVE);
     }
 
@@ -134,7 +134,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         if (prefixes == null) {
             throw new IllegalArgumentException("The list of prefixes must not be null");
         }
-        this.prefixes = prefixes.toArray(new String[prefixes.size()]);
+        this.prefixes = prefixes.toArray(EMPTY_STRING_ARRAY);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

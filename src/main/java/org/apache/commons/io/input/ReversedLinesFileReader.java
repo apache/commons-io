@@ -78,7 +78,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file
      *            the file to be read
-     * @param charset the encoding to use
+     * @param charset the charset to use
      * @throws IOException  if an I/O error occurs
      * @since 2.5
      */
@@ -92,7 +92,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file
      *            the file to be read
-     * @param charset the encoding to use
+     * @param charset the charset to use
      * @throws IOException  if an I/O error occurs
      * @since 2.7
      */
@@ -211,15 +211,15 @@ public class ReversedLinesFileReader implements Closeable {
      * @param blockSize
      *            size of the internal buffer (for ideal performance this should
      *            match with the block size of the underlying file system).
-     * @param encoding
+     * @param charsetName
      *            the encoding of the file
      * @throws IOException  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link UnsupportedEncodingException} in
      * version 2.2 if the encoding is not supported.
      * @since 2.7
      */
-    public ReversedLinesFileReader(final Path file, final int blockSize, final String encoding) throws IOException {
-        this(file, blockSize, Charsets.toCharset(encoding));
+    public ReversedLinesFileReader(final Path file, final int blockSize, final String charsetName) throws IOException {
+        this(file, blockSize, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -241,7 +241,7 @@ public class ReversedLinesFileReader implements Closeable {
             }
         }
 
-        // aligned behaviour with BufferedReader that doesn't return a last, empty line
+        // aligned behavior with BufferedReader that doesn't return a last, empty line
         if(EMPTY_STRING.equals(line) && !trailingNewlineOfFileSkipped) {
             trailingNewlineOfFileSkipped = true;
             line = readLine();

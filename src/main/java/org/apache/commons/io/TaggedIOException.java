@@ -129,7 +129,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * @return wrapped exception
      */
     @Override
-    public IOException getCause() {
+    public synchronized IOException getCause() {
         return (IOException) super.getCause();
     }
 

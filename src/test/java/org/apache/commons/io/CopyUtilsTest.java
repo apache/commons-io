@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -31,7 +31,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.testtools.TestUtils;
 import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
 
@@ -70,8 +70,8 @@ public class CopyUtilsTest {
 
         CopyUtils.copy(inData, out);
 
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -83,8 +83,8 @@ public class CopyUtilsTest {
         CopyUtils.copy(inData, writer);
         writer.flush();
 
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -107,9 +107,9 @@ public class CopyUtilsTest {
 
         final int count = CopyUtils.copy(in, out);
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
         assertEquals(inData.length, count);
     }
 
@@ -126,9 +126,9 @@ public class CopyUtilsTest {
         CopyUtils.copy(in, writer);
         writer.flush();
 
-        assertEquals("Not all bytes were read", 0, in.available());
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(0, in.available(), "Not all bytes were read");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -158,8 +158,8 @@ public class CopyUtilsTest {
         //  out = fout;
 
         // Note: rely on the method to flush
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -175,12 +175,9 @@ public class CopyUtilsTest {
 
         final int count = CopyUtils.copy(reader, writer);
         writer.flush();
-        assertEquals(
-            "The number of characters returned by copy is wrong",
-            inData.length,
-            count);
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -198,8 +195,8 @@ public class CopyUtilsTest {
         //  out = fout;
         // note: we don't flush here; this IOUtils method does it for us
 
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
     @Test
@@ -213,8 +210,8 @@ public class CopyUtilsTest {
         CopyUtils.copy(str, writer);
         writer.flush();
 
-        assertEquals("Sizes differ", inData.length, baout.size());
-        assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
+        assertEquals(inData.length, baout.size(), "Sizes differ");
+        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
 } // CopyUtilsTest

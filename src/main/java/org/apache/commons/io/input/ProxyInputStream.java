@@ -22,6 +22,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A Proxy stream which acts as expected, that is it passes the method
  * calls on to the proxied stream and doesn't change which methods are
@@ -74,7 +76,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     @Override
     public int read(final byte[] bts) throws IOException {
         try {
-            beforeRead(bts != null ? bts.length : 0);
+            beforeRead(IOUtils.length(bts));
             final int n = in.read(bts);
             afterRead(n);
             return n;
@@ -142,11 +144,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public void close() throws IOException {
-        try {
-            in.close();
-        } catch (final IOException e) {
-            handleIOException(e);
-        }
+        IOUtils.close(in, e -> handleIOException(e));
     }
 
     /**
@@ -227,7 +225,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Handle any IOExceptions thrown.
      * <p>
      * This method provides a point to implement custom exception
-     * handling. The default behaviour is to re-throw the exception.
+     * handling. The default behavior is to re-throw the exception.
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
      * @since 2.0

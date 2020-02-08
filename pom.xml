@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>48</version>
+    <version>50</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
@@ -33,11 +33,11 @@ The Apache Commons IO library contains utility classes, stream implementations, 
 file comparators, endian transformation classes, and much more.
   </description>
 
-  <url>http://commons.apache.org/proper/commons-io/</url>
+  <url>https://commons.apache.org/proper/commons-io/</url>
 
   <issueManagement>
     <system>jira</system>
-    <url>http://issues.apache.org/jira/browse/IO</url>
+    <url>https://issues.apache.org/jira/browse/IO</url>
   </issueManagement>
 
   <distributionManagement>
@@ -227,9 +227,21 @@ file comparators, endian transformation classes, and much more.
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.5.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit-pioneer</groupId>
+      <artifactId>junit-pioneer</artifactId>
+      <version>0.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>3.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -241,23 +253,20 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <!-- 3.9 requires Java 8 -->
-      <version>3.8.1</version>
+      <version>3.9</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <!--  version 4.0.0 requires Java 8 -->
-    <commons.felix.version>3.5.1</commons.felix.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.bc.version>2.6</commons.bc.version>
     <commons.release.version>2.7</commons.release.version>
-    <commons.release.desc>(requires JDK 1.7+)</commons.release.desc>
+    <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
     <commons.osgi.export>
@@ -275,12 +284,14 @@ file comparators, endian transformation classes, and much more.
         org.apache.commons.io.output;
         org.apache.commons.io.*;version=${project.version};-noimport:=true
     </commons.osgi.export>
-
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
-
+    <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
+    <commons.jacoco.version>0.8.4</commons.jacoco.version>
+    <commons.surefire.version>2.22.2</commons.surefire.version>
+    <commons.japicmp.version>0.14.1</commons.japicmp.version>
     <japicmp.skip>false</japicmp.skip>
+    <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
   </properties>
 
   <build>
@@ -293,6 +304,7 @@ file comparators, endian transformation classes, and much more.
           <configuration>
             <excludes>
               <exclude>src/test/resources/**/*.bin</exclude>
+              <exclude>src/test/resources/dir-equals-tests/**</exclude>
               <exclude>test/**</exclude>
             </excludes>
           </configuration>
@@ -328,7 +340,7 @@ file comparators, endian transformation classes, and much more.
           <forkCount>1</forkCount>
           <reuseForks>false</reuseForks>
           <!-- limit memory size see IO-161 -->
-          <argLine>-Xmx25M</argLine>
+          <argLine>${argLine} -Xmx25M</argLine>
           <includes>
             <!-- Only include test classes, not test data -->
             <include>**/*Test*.class</include>
@@ -369,27 +381,11 @@ file comparators, endian transformation classes, and much more.
           </ignorePathsToDelete>
         </configuration>
       </plugin>
-      <!--
-       Fix for https://bugs.openjdk.java.net/browse/JDK-8212233
-       which is addressed in maven-javadoc-plugin:3.1.0, see https://issues.apache.org/jira/browse/MJAVADOC-562
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${commons.javadoc.version}</version>
-        <configuration>
-          <source>7</source>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
   <reporting>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -402,6 +398,7 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
+        <version>3.0.5</version>
         <configuration>
           <threshold>Normal</threshold>
           <effort>Default</effort>

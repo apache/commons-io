@@ -19,7 +19,7 @@ package org.apache.commons.io.input.buffer;
 import java.io.ByteArrayInputStream;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class CircularBufferInputStreamTest {
@@ -71,7 +71,7 @@ public class CircularBufferInputStreamTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Create a large, but random input buffer.
 	 */

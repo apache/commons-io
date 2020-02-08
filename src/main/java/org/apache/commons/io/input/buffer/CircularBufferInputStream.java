@@ -40,7 +40,7 @@ public class CircularBufferInputStream extends InputStream {
      * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
      *                    used internally.
      */
-    public CircularBufferInputStream(InputStream pIn, int pBufferSize) {
+    public CircularBufferInputStream(final InputStream pIn, final int pBufferSize) {
         Objects.requireNonNull(pIn, "InputStream");
         if (pBufferSize <= 0) {
             throw new IllegalArgumentException("Invalid buffer size: " + pBufferSize);
@@ -57,7 +57,7 @@ public class CircularBufferInputStream extends InputStream {
      *
      * @param pIn The input stream, which is being buffered.
      */
-    public CircularBufferInputStream(InputStream pIn) {
+    public CircularBufferInputStream(final InputStream pIn) {
         this(pIn, 8192);
     }
 
@@ -91,7 +91,7 @@ public class CircularBufferInputStream extends InputStream {
      * @return true if the buffer has bytes
      * @throws IOException in case of an error while reading from the input stream.
      */
-    protected boolean haveBytes(int pNumber) throws IOException {
+    protected boolean haveBytes(final int pNumber) throws IOException {
         if (buffer.getCurrentNumberOfBytes() < pNumber) {
             fillBuffer();
         }
@@ -107,12 +107,12 @@ public class CircularBufferInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte[] pBuffer) throws IOException {
+    public int read(final byte[] pBuffer) throws IOException {
         return read(pBuffer, 0, pBuffer.length);
     }
 
     @Override
-    public int read(byte[] pBuffer, int pOffset, int pLength) throws IOException {
+    public int read(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
         Objects.requireNonNull(pBuffer, "Buffer");
         if (pOffset < 0) {
             throw new IllegalArgumentException("Offset must not be negative");

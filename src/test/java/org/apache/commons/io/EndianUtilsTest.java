@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -306,11 +306,11 @@ public class EndianUtilsTest  {
         final long expected = 0x80000000L;
 
         long actual = EndianUtils.readSwappedUnsignedInteger(target, 0);
-        assertEquals("readSwappedUnsignedInteger(byte[], int) was incorrect", expected, actual);
+        assertEquals(expected, actual, "readSwappedUnsignedInteger(byte[], int) was incorrect");
 
         final ByteArrayInputStream in = new ByteArrayInputStream(target);
         actual = EndianUtils.readSwappedUnsignedInteger(in);
-        assertEquals("readSwappedUnsignedInteger(InputStream) was incorrect", expected, actual);
+        assertEquals(expected, actual, "readSwappedUnsignedInteger(InputStream) was incorrect");
     }
 
 }

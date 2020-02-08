@@ -137,42 +137,42 @@ public class LockableFileWriter extends Writer {
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charset  the charset to use, null means platform default
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(final File file, final Charset encoding) throws IOException {
-        this(file, encoding, false, null);
+    public LockableFileWriter(final File file, final Charset charset) throws IOException {
+        this(file, charset, false, null);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charsetName  the name of the requested charset, null means platform default
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @throws java.nio.charset.UnsupportedCharsetException
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final String encoding) throws IOException {
-        this(file, encoding, false, null);
+    public LockableFileWriter(final File file, final String charsetName) throws IOException {
+        this(file, charsetName, false, null);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charset  the name of the requested charset, null means platform default
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public LockableFileWriter(File file, final Charset encoding, final boolean append,
+    public LockableFileWriter(File file, final Charset charset, final boolean append,
             String lockDir) throws IOException {
         super();
         // init file to create/append
@@ -197,14 +197,14 @@ public class LockableFileWriter extends Writer {
         createLock();
 
         // init wrapped writer
-        out = initWriter(file, encoding, append);
+        out = initWriter(file, charset, append);
     }
 
     /**
      * Constructs a LockableFileWriter with a file encoding.
      *
      * @param file  the file to write to, not null
-     * @param encoding  the encoding to use, null means platform default
+     * @param charsetName  the encoding to use, null means platform default
      * @param append  true if content should be appended, false to overwrite
      * @param lockDir  the directory in which the lock file should be held
      * @throws NullPointerException if the file is null
@@ -213,9 +213,9 @@ public class LockableFileWriter extends Writer {
      *             thrown instead of {@link java.io.UnsupportedEncodingException} in version 2.2 if the encoding is not
      *             supported.
      */
-    public LockableFileWriter(final File file, final String encoding, final boolean append,
+    public LockableFileWriter(final File file, final String charsetName, final boolean append,
             final String lockDir) throws IOException {
-        this(file, Charsets.toCharset(encoding), append, lockDir);
+        this(file, Charsets.toCharset(charsetName), append, lockDir);
     }
 
     //-----------------------------------------------------------------------
@@ -257,16 +257,16 @@ public class LockableFileWriter extends Writer {
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed
-     * @param encoding  the encoding to use
+     * @param charset  the charset to use
      * @param append  true to append
      * @return The initialised writer
      * @throws IOException if an error occurs
      */
-    private Writer initWriter(final File file, final Charset encoding, final boolean append) throws IOException {
+    private Writer initWriter(final File file, final Charset charset, final boolean append) throws IOException {
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),
-                                          Charsets.toCharset(encoding));
+                                          Charsets.toCharset(charset));
 
         } catch (final IOException | RuntimeException ex) {
             FileUtils.deleteQuietly(lockFile);

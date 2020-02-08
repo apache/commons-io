@@ -17,13 +17,19 @@ language: java
 sudo: false
 
 jdk:
-  - openjdk7
   - openjdk8
   - openjdk11
-  - openjdk12
+  - openjdk13
   - openjdk-ea
-  - oraclejdk8
   - oraclejdk11
+
+matrix:
+  exclude:
+    - jdk: openjdk-ea
+  include:
+    - jdk: openjdk-ea
+      env: JACOCO_SKIP=true
+
 
 script:
   - mvn

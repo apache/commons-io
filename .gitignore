@@ -16,3 +16,4 @@ site-content
 ### Ignore IntelliJ files
 /.idea/
 *.iml
+/bin/

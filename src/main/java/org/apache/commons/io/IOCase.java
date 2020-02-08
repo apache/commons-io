@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io;
 
+import java.util.Objects;
+
 /**
  * Enumeration of IO case sensitivity.
  * <p>
@@ -139,9 +141,8 @@ public enum IOCase {
      * @throws NullPointerException if either string is null
      */
     public int checkCompareTo(final String str1, final String str2) {
-        if (str1 == null || str2 == null) {
-            throw new NullPointerException("The strings must not be null");
-        }
+        Objects.requireNonNull(str1, "str1");
+        Objects.requireNonNull(str2, "str2");
         return sensitive ? str1.compareTo(str2) : str1.compareToIgnoreCase(str2);
     }
 
@@ -157,9 +158,8 @@ public enum IOCase {
      * @throws NullPointerException if either string is null
      */
     public boolean checkEquals(final String str1, final String str2) {
-        if (str1 == null || str2 == null) {
-            throw new NullPointerException("The strings must not be null");
-        }
+        Objects.requireNonNull(str1, "str1");
+        Objects.requireNonNull(str2, "str2");
         return sensitive ? str1.equals(str2) : str1.equalsIgnoreCase(str2);
     }
 

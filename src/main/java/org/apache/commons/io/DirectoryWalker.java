@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Objects;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -27,7 +28,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Abstract class that walks through a directory hierarchy and provides
- * subclasses with convenient hooks to add specific behaviour.
+ * subclasses with convenient hooks to add specific behavior.
  * <p>
  * This class operates with a {@link FileFilter} and maximum depth to
  * limit the files and directories visited.
@@ -43,10 +44,10 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *      <li><a href="#filter">2. Filter Example</a> - using
  *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
  *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
- *          behaviour.</li>
+ *          behavior.</li>
  *   </ul>
  *
- * <h3 id="example">1. Example Implementation</h3>
+ * <h2 id="example">1. Example Implementation</h2>
  *
  * There are many possible extensions, for example, to delete all
  * files and '.svn' directories, and return a list of deleted files:
@@ -82,7 +83,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <h3 id="filter">2. Filter Example</h3>
+ * <h2 id="filter">2. Filter Example</h2>
  *
  * <p>
  * Choosing which directories and files to process can be a key aspect
@@ -157,7 +158,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * option for filtering.
  * </p>
  *
- * <h3 id="cancel">3. Cancellation</h3>
+ * <h2 id="cancel">3. Cancellation</h2>
  *
  * <p>
  * The DirectoryWalker contains some of the logic required for cancel processing.
@@ -195,7 +196,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * scenarios.
  * </p>
  *
- * <h4 id="external">3.1 External / Multi-threaded</h4>
+ * <h3 id="external">3.1 External / Multi-threaded</h3>
  *
  * <p>
  * This example provides a public <code>cancel()</code> method that can be
@@ -228,7 +229,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
- * <h4 id="internal">3.2 Internal</h4>
+ * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
  * This shows an example of how internal cancellation processing could be implemented.
@@ -261,6 +262,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  }
  * </pre>
  *
+ * @param <T> The result type, like {@link File}.
  * @since 1.3
  *
  */
@@ -347,9 +349,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      */
     protected final void walk(final File startDirectory, final Collection<T> results) throws IOException {
-        if (startDirectory == null) {
-            throw new NullPointerException("Start Directory is null");
-        }
+        Objects.requireNonNull(startDirectory, "startDirectory");
         try {
             handleStart(startDirectory, results);
             walk(startDirectory, 0, results);
@@ -549,7 +549,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
-    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+    protected File[] filterDirectoryContents(final File directory, final int depth, final File... files) throws
             IOException {
         return files;
     }

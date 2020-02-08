@@ -18,15 +18,15 @@ package org.apache.commons.io.comparator;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link DirectoryFileComparator}.
  */
 public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         comparator = (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR;
         reverse = DirectoryFileComparator.DIRECTORY_REVERSE;

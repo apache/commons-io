@@ -16,15 +16,15 @@
  */
 package org.apache.commons.io.input;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.input.ObservableInputStream.Observer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ObservableInputStreamTest {
     private static class LastByteKeepingObserver extends Observer {

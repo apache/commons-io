@@ -16,40 +16,32 @@
  */
 package org.apache.commons.io.filefilter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
 
 /**
  * Used to test RegexFileFilterUtils.
  */
 public class RegexFileFilterTestCase {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
-        assertEquals(
-            "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
-            expected, filter.accept(file));
+        assertEquals(expected, filter.accept(file),
+                "Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
-            assertEquals(
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                expected, filter.accept(file.getParentFile(), file.getName()));
+            assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(
-                "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
-                expected, filter.accept(file));
+            assertEquals(expected, filter.accept(file),
+                    "Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
     }
 

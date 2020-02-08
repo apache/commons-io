@@ -48,7 +48,7 @@ The <action> type attribute can be add,update,fix,remove.
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="tba" description="tba">
       <action issue="IO-589" dev="sebb" type="fix">
-        Some tests fail if the base path contains a space
+        Some tests fail if the base path contains a space.
       </action>
       <action dev="jochen" type="add">
         Adding the CircularBufferInputStream, and the PeekableInputStream.
@@ -57,7 +57,7 @@ The <action> type attribute can be add,update,fix,remove.
         Make methods in ObservableInputStream.Obsever public.
       </action>
       <action issue="IO-535" dev="pschumacher" type="fix" due-to="Svetlin Zarev, Anthony Raymond">
-        Thread bug in FileAlterationMonitor#stop(int)
+        Thread bug in FileAlterationMonitor#stop(int).
       </action>
       <action issue="IO-553" dev="ggregory" type="add">
         Add org.apache.commons.io.FilenameUtils.isIllegalWindowsFileName(char).
@@ -99,13 +99,92 @@ The <action> type attribute can be add,update,fix,remove.
         Make array declaration in ThresholdingOutputStream consistent with other array declarations in the library #77.
       </action>
       <action issue="IO-578" dev="ggregory" type="add" due-to="Mark Chesney">
-        Support java.nio.Path and non-default file systems for ReversedLinesFileReader (#62)
+        Support java.nio.Path and non-default file systems for ReversedLinesFileReader (#62).
       </action>
       <action issue="IO-608" dev="ggregory" type="add" due-to="Gary Gregory">
         Add a convenience NullPrintStream.
       </action>
       <action issue="IO-607" dev="ggregory" type="update" due-to="Gary Gregory">
         Update from Java 7 to Java 8.
+      </action>
+      <action issue="IO-610" dev="ggregory" type="update" due-to="Sebastian">
+        Remove throws IOException in method isSymlink() #80.
+      </action>
+      <action issue="IO-612" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add class TeeReader.
+      </action>
+      <action issue="IO-613" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add classes ClosedReader and CloseShieldReader. #84.
+      </action>
+      <action issue="IO-614" dev="ggregory" type="add" due-to="Rob Spoor">
+        Add classes TaggedWriter, ClosedWriter and BrokenWriter. #86.
+      </action>
+      <action issue="IO-615" dev="ggregory" type="add" due-to="Gary Gregory, Rob Spoor">
+        Add classes TeeWriter, FilterCollectionWriter, ProxyCollectionWriter, IOExceptionList, IOIndexedException.
+      </action>
+      <action issue="IO-616" dev="ggregory" type="add" due-to="Rob Spoor">
+        Add class AppendableWriter. #87.
+      </action>
+      <action issue="IO-617" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add class CloseShieldWriter. #83.
+      </action>
+      <action issue="IO-617" dev="ggregory" type="add" due-to="Rob Spoor">
+        Add classes Added TaggedReader, ClosedReader and BrokenReader. #85.
+      </action>
+      <action issue="IO-625" dev="ggregory" type="fix" due-to="Mikko Maunu">
+        Corrected misleading exception message for FileUtils.copyDirectoryToDirectory.
+      </action>
+      <action issue="IO-626" dev="ggregory" type="fix" due-to="Yuji Konishi">
+        A mistake in the FilenameUtils.concat()'s Javadoc about an absolute path.
+      </action>
+      <action issue="IO-628" dev="ggregory" type="update" due-to="Allon Mureinik">
+        Migration to JUnit Jupiter #97.
+      </action>
+      <action issue="IO-630" dev="ggregory" type="update" due-to="Gary Gregory">
+        Deprecate org.apache.commons.io.output.NullOutputStream.NullOutputStream() in favor of org.apache.commons.io.output.NullOutputStream.NULL_OUTPUT_STREAM.
+      </action>
+      <action issue="IO-631" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add a CountingFileVisitor (as the basis for a forthcoming DeletingFileVisitor).
+      </action>
+      <action issue="IO-632" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils for operations on NIO Path.
+      </action>
+      <action issue="IO-633" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add DeletingFileVisitor.
+      </action>
+      <action issue="IO-629" dev="ggregory" type="update" due-to="Ian Springer, Ian Springer, Gary Gregory">
+        FileUtils#forceDelete should use Files#delete rather than File#delete so exception messages includes reason for failure.
+      </action>
+      <action issue="IO-634" dev="ggregory" type="update" due-to="Václav Haisman, Bruno P. Kinoshita, Gary Gregory">
+        Make getCause synchronized and use a Deque instead of a Stack #64.
+      </action>
+      <action issue="IO-635" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.IOUtils.close(Closeable).
+      </action>
+      <action issue="IO-636" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and reuse org.apache.commons.io.IOUtils.closeQuitely(Closeable, Consumer&lt;IOException&gt;).
+        Add and reuse org.apache.commons.io.IOUtils.close(Closeable, IOConsumer&lt;IOException&gt;).
+      </action>
+      <action issue="IO-640" dev="ggregory" type="fix" due-to="Gary Gregory">
+        NPE in org.apache.commons.io.IOUtils.contentEquals(InputStream, InputStream) when only one input is null.
+      </action>
+      <action issue="IO-641" dev="ggregory" type="fix" due-to="Gary Gregory">
+        NPE in org.apache.commons.io.IOUtils.contentEquals(Reader, Reader) when only one input is null.
+      </action>
+      <action issue="IO-643" dev="ggregory" type="fix" due-to="Gary Gregory">
+        NPE in org.apache.commons.io.IOUtils.contentEqualsIgnoreEOL(Reader, Reader) when only one input is null.
+      </action>
+      <action issue="IO-644" dev="ggregory" type="fix" due-to="Gary Gregory">
+        NPE in org.apache.commons.io.FileUtils.contentEqualsIgnoreEOL(File, File) when only one input is null.
+      </action>
+      <action issue="IO-645" dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.file.PathUtils.fileContentEquals(Path, Path, OpenOption...).
+      </action>
+      <action issue="IO-458" dev="ggregory" type="add" due-to="Gary Gregory, Joshua Gitlin">
+        Add a SequenceReader similar to java.io.SequenceInputStream.
+      </action>
+      <action issue="IO-648" dev="ggregory" type="add" due-to="Gary Gregory">
+        Implement directory content equality. 100#.
       </action>
     </release>
 

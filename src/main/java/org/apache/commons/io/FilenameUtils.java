@@ -18,11 +18,13 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +86,8 @@ import java.util.regex.Pattern;
  * @since 1.1
  */
 public class FilenameUtils {
+
+    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     private static final String EMPTY_STRING = "";
 
@@ -468,17 +472,17 @@ public class FilenameUtils {
      * The output will be the same on both Unix and Windows except
      * for the separator character.
      * <pre>
-     * /foo/ + bar          --&gt;   /foo/bar
-     * /foo + bar           --&gt;   /foo/bar
-     * /foo + /bar          --&gt;   /bar
-     * /foo + C:/bar        --&gt;   C:/bar
-     * /foo + C:bar         --&gt;   C:bar (*)
-     * /foo/a/ + ../bar     --&gt;   foo/bar
-     * /foo/ + ../../bar    --&gt;   null
-     * /foo/ + /bar         --&gt;   /bar
-     * /foo/.. + /bar       --&gt;   /bar
-     * /foo + bar/c.txt     --&gt;   /foo/bar/c.txt
-     * /foo/c.txt + bar     --&gt;   /foo/c.txt/bar (!)
+     * /foo/      + bar        --&gt;  /foo/bar
+     * /foo       + bar        --&gt;  /foo/bar
+     * /foo       + /bar       --&gt;  /bar
+     * /foo       + C:/bar     --&gt;  C:/bar
+     * /foo       + C:bar      --&gt;  C:bar (*)
+     * /foo/a/    + ../bar     --&gt;  /foo/bar
+     * /foo/      + ../../bar  --&gt;  null
+     * /foo/      + /bar       --&gt;  /bar
+     * /foo/..    + /bar       --&gt;  /bar
+     * /foo       + bar/c.txt  --&gt;  /foo/bar/c.txt
+     * /foo/c.txt + bar        --&gt;  /foo/c.txt/bar (!)
      * </pre>
      * (*) Note that the Windows relative drive prefix is unreliable when
      * used with this method.
@@ -1209,10 +1213,8 @@ public class FilenameUtils {
         if (normalized) {
             fileName1 = normalize(fileName1);
             fileName2 = normalize(fileName2);
-            if (fileName1 == null || fileName2 == null) {
-                throw new NullPointerException(
-                    "Error normalizing one or both of the file names");
-            }
+            Objects.requireNonNull(fileName1, "Error normalizing one or both of the file names");
+            Objects.requireNonNull(fileName2, "Error normalizing one or both of the file names");
         }
         if (caseSensitivity == null) {
             caseSensitivity = IOCase.SENSITIVE;
@@ -1387,11 +1389,11 @@ public class FilenameUtils {
         boolean anyChars = false;
         int textIdx = 0;
         int wcsIdx = 0;
-        final Stack<int[]> backtrack = new Stack<>();
+        final Deque<int[]> backtrack = new ArrayDeque<>(wcs.length);
 
         // loop around a backtrack stack, to handle complex * matching
         do {
-            if (backtrack.size() > 0) {
+            if (!backtrack.isEmpty()) {
                 final int[] array = backtrack.pop();
                 wcsIdx = array[0];
                 textIdx = array[1];
@@ -1450,7 +1452,7 @@ public class FilenameUtils {
                 return true;
             }
 
-        } while (backtrack.size() > 0);
+        } while (!backtrack.isEmpty());
 
         return false;
     }
@@ -1495,7 +1497,7 @@ public class FilenameUtils {
             list.add(buffer.toString());
         }
 
-        return list.toArray( new String[ list.size() ] );
+        return list.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
@@ -1578,7 +1580,7 @@ public class FilenameUtils {
             } else if (inet6Address.startsWith("::") && !octetList.isEmpty()) {
                 octetList.remove(0);
             }
-            octets = octetList.toArray(new String[octetList.size()]);
+            octets = octetList.toArray(EMPTY_STRING_ARRAY);
         }
         if (octets.length > IPV6_MAX_HEX_GROUPS) {
             return false;
@@ -1617,10 +1619,7 @@ public class FilenameUtils {
             }
             validOctets++;
         }
-        if (validOctets > IPV6_MAX_HEX_GROUPS || (validOctets < IPV6_MAX_HEX_GROUPS && !containsCompressedZeroes)) {
-            return false;
-        }
-        return true;
+        return validOctets <= IPV6_MAX_HEX_GROUPS && (validOctets >= IPV6_MAX_HEX_GROUPS || containsCompressedZeroes);
     }
 
     private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");

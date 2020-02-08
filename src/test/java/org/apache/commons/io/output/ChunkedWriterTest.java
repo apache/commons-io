@@ -16,13 +16,14 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ChunkedWriterTest {
     @Test
@@ -60,8 +61,9 @@ public class ChunkedWriterTest {
         };
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void negative_chunksize_not_permitted() throws Exception {
-        (new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0)).close();
+    @Test
+    public void negative_chunksize_not_permitted() {
+        assertThrows(IllegalArgumentException.class,
+               () -> new ChunkedWriter(new OutputStreamWriter(new ByteArrayOutputStream()), 0));
     }
 }

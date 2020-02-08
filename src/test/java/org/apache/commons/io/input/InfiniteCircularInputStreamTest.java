@@ -16,12 +16,14 @@
  */
 package org.apache.commons.io.input;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class InfiniteCircularInputStreamTest {
 
@@ -53,8 +55,8 @@ public class InfiniteCircularInputStreamTest {
         try (InputStream infStream = new InfiniteCircularInputStream(toCycle)) {
             final int actualReadBytes = infStream.read(actual);
 
-            Assert.assertArrayEquals(expected, actual);
-            Assert.assertEquals(expected.length, actualReadBytes);
+            assertArrayEquals(expected, actual);
+            assertEquals(expected.length, actualReadBytes);
         }
     }
 

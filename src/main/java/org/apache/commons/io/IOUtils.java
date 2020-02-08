@@ -47,7 +47,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
+import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 
@@ -101,45 +105,7 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
-    /**
-     * Represents the end-of-file (or stream).
-     * @since 2.5 (made public)
-     */
-    public static final int EOF = -1;
-
-    /**
-     * The Unix directory separator character.
-     */
-    public static final char DIR_SEPARATOR_UNIX = '/';
-    /**
-     * The Windows directory separator character.
-     */
-    public static final char DIR_SEPARATOR_WINDOWS = '\\';
-    /**
-     * The system directory separator character.
-     */
-    public static final char DIR_SEPARATOR = File.separatorChar;
-    /**
-     * The Unix line separator string.
-     */
-    public static final String LINE_SEPARATOR_UNIX = "\n";
-    /**
-     * The Windows line separator string.
-     */
-    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
-    /**
-     * The system line separator string.
-     */
-    public static final String LINE_SEPARATOR;
-
-    static {
-        // avoid security issues
-        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
-                final PrintWriter out = new PrintWriter(buf)) {
-            out.println();
-            LINE_SEPARATOR = buf.toString();
-        }
-    }
+    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /**
      * The default buffer size ({@value}) to use in copy methods.
@@ -147,9 +113,47 @@ public class IOUtils {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     /**
+     * The system directory separator character.
+     */
+    public static final char DIR_SEPARATOR = File.separatorChar;
+
+    /**
+     * The Unix directory separator character.
+     */
+    public static final char DIR_SEPARATOR_UNIX = '/';
+
+    /**
+     * The Windows directory separator character.
+     */
+    public static final char DIR_SEPARATOR_WINDOWS = '\\';
+
+    /**
+     * Represents the end-of-file (or stream).
+     * @since 2.5 (made public)
+     */
+    public static final int EOF = -1;
+
+    /**
+     * The system line separator string.
+     */
+    public static final String LINE_SEPARATOR;
+
+    /**
+     * The Unix line separator string.
+     */
+    public static final String LINE_SEPARATOR_UNIX = "\n";
+
+    /**
+     * The Windows line separator string.
+     */
+    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+
+    /**
      * The default buffer size to use for the skip() methods.
      */
     private static final int SKIP_BUFFER_SIZE = 2048;
+
+    private static byte[] SKIP_BYTE_BUFFER;
 
     // Allocated in the relevant skip method if necessary.
     /*
@@ -163,7 +167,15 @@ public class IOUtils {
      * did not create a smaller one)
      */
     private static char[] SKIP_CHAR_BUFFER;
-    private static byte[] SKIP_BYTE_BUFFER;
+
+    static {
+        // avoid security issues
+        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
+                final PrintWriter out = new PrintWriter(buf)) {
+            out.println();
+            LINE_SEPARATOR = buf.toString();
+        }
+    }
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -176,14 +188,11 @@ public class IOUtils {
      */
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
-        if (inputStream == null) { // not checked by BufferedInputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream);
     }
-
-    //-----------------------------------------------------------------------
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -197,9 +206,8 @@ public class IOUtils {
      */
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
-        if (inputStream == null) { // not checked by BufferedInputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream ?
                 (BufferedInputStream) inputStream : new BufferedInputStream(inputStream, size);
     }
@@ -215,9 +223,8 @@ public class IOUtils {
      */
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
-        if (outputStream == null) { // not checked by BufferedOutputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream);
     }
@@ -234,9 +241,8 @@ public class IOUtils {
      */
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
-        if (outputStream == null) { // not checked by BufferedOutputStream
-            throw new NullPointerException();
-        }
+        // not checked by BufferedInputStream
+        Objects.requireNonNull(outputStream, "outputStream");
         return outputStream instanceof BufferedOutputStream ?
                 (BufferedOutputStream) outputStream : new BufferedOutputStream(outputStream, size);
     }
@@ -296,18 +302,6 @@ public class IOUtils {
     }
 
     /**
-     * Closes a URLConnection.
-     *
-     * @param conn the connection to close.
-     * @since 2.4
-     */
-    public static void close(final URLConnection conn) {
-        if (conn instanceof HttpURLConnection) {
-            ((HttpURLConnection) conn).disconnect();
-        }
-    }
-
-    /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
@@ -342,18 +336,76 @@ public class IOUtils {
      * @param closeable the objects to close, may be null or already closed
      * @since 2.0
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
     public static void closeQuietly(final Closeable closeable) {
-        try {
-            if (closeable != null) {
+        closeQuietly(closeable, (Consumer<IOException>) null);
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
+     * @since 2.7
+     */
+    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+        if (closeable != null) {
+            try {
                 closeable.close();
+            } catch (IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
             }
-        } catch (final IOException ioe) {
-            // ignore
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable) throws IOException {
+        if (closeable != null) {
+            closeable.close();
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Closes a URLConnection.
+     *
+     * @param conn the connection to close.
+     * @since 2.4
+     */
+    public static void close(final URLConnection conn) {
+        if (conn instanceof HttpURLConnection) {
+            ((HttpURLConnection) conn).disconnect();
         }
     }
 
@@ -400,7 +452,7 @@ public class IOUtils {
      * @see #closeQuietly(Closeable)
      * @since 2.5
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -437,7 +489,7 @@ public class IOUtils {
      *
      * @param input the InputStream to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -470,7 +522,7 @@ public class IOUtils {
      *
      * @param output the OutputStream to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -502,7 +554,7 @@ public class IOUtils {
      *
      * @param input the Reader to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -534,19 +586,13 @@ public class IOUtils {
      * @param selector the Selector to close, may be null or already closed
      * @since 2.2
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
     public static void closeQuietly(final Selector selector) {
-        if (selector != null) {
-            try {
-                selector.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+        closeQuietly((Closeable) selector);
     }
 
     /**
@@ -569,22 +615,16 @@ public class IOUtils {
      *   }
      * </pre>
      *
-     * @param sock the ServerSocket to close, may be null or already closed
+     * @param serverSocket the ServerSocket to close, may be null or already closed
      * @since 2.2
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final ServerSocket sock) {
-        if (sock != null) {
-            try {
-                sock.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+    public static void closeQuietly(final ServerSocket serverSocket) {
+        closeQuietly((Closeable) serverSocket);
     }
 
     /**
@@ -607,22 +647,16 @@ public class IOUtils {
      *   }
      * </pre>
      *
-     * @param sock the Socket to close, may be null or already closed
+     * @param socket the Socket to close, may be null or already closed
      * @since 2.0
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
     @Deprecated
-    public static void closeQuietly(final Socket sock) {
-        if (sock != null) {
-            try {
-                sock.close();
-            } catch (final IOException ioe) {
-                // ignored
-            }
-        }
+    public static void closeQuietly(final Socket socket) {
+        closeQuietly((Closeable) socket);
     }
 
     /**
@@ -647,7 +681,7 @@ public class IOUtils {
      *
      * @param output the Writer to close, may be null or already closed
      *
-     * @deprecated As of 2.6 removed without replacement. Please use the try-with-resources statement or handle
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
      * suppressed exceptions manually.
      * @see Throwable#addSuppressed(java.lang.Throwable)
      */
@@ -662,6 +696,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally using
      * <code>BufferedInputStream</code> if they are not already buffered.
+     * </p>
      *
      * @param input1 the first stream
      * @param input2 the second stream
@@ -670,29 +705,26 @@ public class IOUtils {
      * @throws NullPointerException if either input is null
      * @throws IOException          if an I/O error occurs
      */
-    public static boolean contentEquals(InputStream input1, InputStream input2)
+    @SuppressWarnings("resource")
+    public static boolean contentEquals(final InputStream input1, final InputStream input2)
             throws IOException {
         if (input1 == input2) {
             return true;
         }
-        if (!(input1 instanceof BufferedInputStream)) {
-            input1 = new BufferedInputStream(input1);
+        if (input1 == null ^ input2 == null) {
+            return false;
         }
-        if (!(input2 instanceof BufferedInputStream)) {
-            input2 = new BufferedInputStream(input2);
-        }
-
-        int ch = input1.read();
+        final BufferedInputStream bufferedInput1 = buffer(input1);
+        final BufferedInputStream bufferedInput2 = buffer(input2);
+        int ch = bufferedInput1.read();
         while (EOF != ch) {
-            final int ch2 = input2.read();
+            final int ch2 = bufferedInput2.read();
             if (ch != ch2) {
                 return false;
             }
-            ch = input1.read();
+            ch = bufferedInput1.read();
         }
-
-        final int ch2 = input2.read();
-        return ch2 == EOF;
+        return bufferedInput2.read() == EOF;
     }
 
     /**
@@ -701,6 +733,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally using
      * <code>BufferedReader</code> if they are not already buffered.
+     * </p>
      *
      * @param input1 the first reader
      * @param input2 the second reader
@@ -710,26 +743,28 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
-    public static boolean contentEquals(Reader input1, Reader input2)
+    @SuppressWarnings("resource")
+    public static boolean contentEquals(final Reader input1, final Reader input2)
             throws IOException {
         if (input1 == input2) {
             return true;
         }
+        if (input1 == null ^ input2 == null) {
+            return false;
+        }
+        final BufferedReader bufferedInput1 = toBufferedReader(input1);
+        final BufferedReader bufferedInput2 = toBufferedReader(input2);
 
-        input1 = toBufferedReader(input1);
-        input2 = toBufferedReader(input2);
-
-        int ch = input1.read();
+        int ch = bufferedInput1.read();
         while (EOF != ch) {
-            final int ch2 = input2.read();
+            final int ch2 = bufferedInput2.read();
             if (ch != ch2) {
                 return false;
             }
-            ch = input1.read();
+            ch = bufferedInput1.read();
         }
 
-        final int ch2 = input2.read();
-        return ch2 == EOF;
+        return bufferedInput2.read() == EOF;
     }
 
     /**
@@ -746,21 +781,25 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 2.2
      */
+    @SuppressWarnings("resource")
     public static boolean contentEqualsIgnoreEOL(final Reader input1, final Reader input2)
             throws IOException {
         if (input1 == input2) {
             return true;
+        }
+        if (input1 == null ^ input2 == null) {
+            return false;
         }
         final BufferedReader br1 = toBufferedReader(input1);
         final BufferedReader br2 = toBufferedReader(input2);
 
         String line1 = br1.readLine();
         String line2 = br2.readLine();
-        while (line1 != null && line2 != null && line1.equals(line2)) {
+        while (line1 != null && line1.equals(line2)) {
             line1 = br1.readLine();
             line2 = br2.readLine();
         }
-        return line1 == null ? line2 == null ? true : false : line1.equals(line2);
+        return Objects.equals(line1, line2);
     }
 
     /**
@@ -810,9 +849,6 @@ public class IOUtils {
         return copyLarge(input, output, new byte[bufferSize]);
     }
 
-    // read toByteArray
-    //-----------------------------------------------------------------------
-
     /**
      * Copies bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code> using the default character encoding of the platform.
@@ -846,14 +882,14 @@ public class IOUtils {
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
-     * @param inputEncoding the encoding to use for the input stream, null means platform default
+     * @param inputCharset the charser to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final InputStream input, final Writer output, final Charset inputEncoding)
+    public static void copy(final InputStream input, final Writer output, final Charset inputCharset)
             throws IOException {
-        final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(inputEncoding));
+        final InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(inputCharset));
         copy(in, output);
     }
 
@@ -871,7 +907,7 @@ public class IOUtils {
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
-     * @param inputEncoding the encoding to use for the InputStream, null means platform default
+     * @param inputCharsetName the name of the requested charset for the InputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
      * @throws IOException                                  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -879,9 +915,57 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void copy(final InputStream input, final Writer output, final String inputEncoding)
+    public static void copy(final InputStream input, final Writer output, final String inputCharsetName)
             throws IOException {
-        copy(input, output, Charsets.toCharset(inputEncoding));
+        copy(input, output, Charsets.toCharset(inputCharsetName));
+    }
+
+    /**
+     * Copies chars from a <code>Reader</code> to a <code>Appendable</code>.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * <p>
+     * Large streams (over 2GB) will return a chars copied value of
+     * <code>-1</code> after the copy has completed since the correct
+     * number of chars cannot be returned as an int. For large streams
+     * use the <code>copyLarge(Reader, Writer)</code> method.
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output) throws IOException {
+        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+    }
+
+    /**
+     * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
+     * <p>
+     * This method uses the provided buffer, so there is no need to use a
+     * <code>BufferedReader</code>.
+     * </p>
+     *
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>Appendable</code> to write to
+     * @param buffer the buffer to be used for the copy
+     * @return the number of characters copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.7
+     */
+    public static long copy(final Reader input, final Appendable output, final CharBuffer buffer) throws IOException {
+        long count = 0;
+        int n;
+        while (EOF != (n = input.read(buffer))) {
+            buffer.flip();
+            output.append(buffer, 0, n);
+            count += n;
+        }
+        return count;
     }
 
     /**
@@ -928,14 +1012,14 @@ public class IOUtils {
      *
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @param outputEncoding the encoding to use for the OutputStream, null means platform default
+     * @param outputCharset the charset to use for the OutputStream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void copy(final Reader input, final OutputStream output, final Charset outputEncoding)
+    public static void copy(final Reader input, final OutputStream output, final Charset outputCharset)
             throws IOException {
-        final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(outputEncoding));
+        final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(outputCharset));
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter,
         // we have to flush here.
@@ -960,7 +1044,7 @@ public class IOUtils {
      *
      * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @param outputEncoding the encoding to use for the OutputStream, null means platform default
+     * @param outputCharsetName the name of the requested charset for the OutputStream, null means platform default
      * @throws NullPointerException                         if the input or output is null
      * @throws IOException                                  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -968,31 +1052,9 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void copy(final Reader input, final OutputStream output, final String outputEncoding)
+    public static void copy(final Reader input, final OutputStream output, final String outputCharsetName)
             throws IOException {
-        copy(input, output, Charsets.toCharset(outputEncoding));
-    }
-
-    /**
-     * Copies chars from a <code>Reader</code> to a <code>Appendable</code>.
-     * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedReader</code>.
-     * <p>
-     * Large streams (over 2GB) will return a chars copied value of
-     * <code>-1</code> after the copy has completed since the correct
-     * number of chars cannot be returned as an int. For large streams
-     * use the <code>copyLarge(Reader, Writer)</code> method.
-     *
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Appendable</code> to write to
-     * @return the number of characters copied, or -1 if &gt; Integer.MAX_VALUE
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
-     * @since 2.7
-     */
-    public static long copy(final Reader input, final Appendable output) throws IOException {
-        return copy(input, output, CharBuffer.allocate(DEFAULT_BUFFER_SIZE));
+        copy(input, output, Charsets.toCharset(outputCharsetName));
     }
 
     /**
@@ -1098,9 +1160,6 @@ public class IOUtils {
         return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);
     }
 
-    // read char[]
-    //-----------------------------------------------------------------------
-
     /**
      * Copies some or all bytes from a large (over 2GB) <code>InputStream</code> to an
      * <code>OutputStream</code>, optionally skipping input bytes.
@@ -1152,32 +1211,6 @@ public class IOUtils {
     }
 
     /**
-     * Copies chars from a <code>Reader</code> to an <code>Appendable</code>.
-     * <p>
-     * This method uses the provided buffer, so there is no need to use a
-     * <code>BufferedReader</code>.
-     * </p>
-     *
-     * @param input the <code>Reader</code> to read from
-     * @param output the <code>Appendable</code> to write to
-     * @param buffer the buffer to be used for the copy
-     * @return the number of characters copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
-     * @since 2.7
-     */
-    public static long copy(final Reader input, final Appendable output, final CharBuffer buffer) throws IOException {
-        long count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            buffer.flip();
-            output.append(buffer, 0, n);
-            count += n;
-        }
-        return count;
-    }
-
-    /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
      * <p>
      * This method buffers the input internally, so there is no need to use a
@@ -1195,9 +1228,6 @@ public class IOUtils {
     public static long copyLarge(final Reader input, final Writer output) throws IOException {
         return copyLarge(input, output, new char[DEFAULT_BUFFER_SIZE]);
     }
-
-    // read toString
-    //-----------------------------------------------------------------------
 
     /**
      * Copies chars from a large (over 2GB) <code>Reader</code> to a <code>Writer</code>.
@@ -1294,6 +1324,50 @@ public class IOUtils {
     }
 
     /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final byte[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final char[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
+     * Returns the length of the given CharSequence in a null-safe manner.
+     *
+     * @param csq a CharSequence or null
+     * @return the CharSequence length -- or 0 if the given CharSequence is null.
+     * @since 2.7
+     */
+    public static int length(final CharSequence csq) {
+        return csq == null ? 0 : csq.length();
+    }
+
+    /**
+     * Returns the length of the given array in a null-safe manner.
+     *
+     * @param array an array or null
+     * @return the array length -- or 0 if the given array is null.
+     * @since 2.7
+     */
+    public static int length(final Object[] array) {
+        return array == null ? 0 : array.length;
+    }
+
+    /**
      * Returns an Iterator for the lines in an <code>InputStream</code>, using
      * the character encoding specified (or default encoding if null).
      * <p>
@@ -1317,14 +1391,14 @@ public class IOUtils {
      * </pre>
      *
      * @param input the <code>InputStream</code> to read from, not null
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
      * @throws IOException              if an I/O error occurs, such as if the encoding is invalid
      * @since 2.3
      */
-    public static LineIterator lineIterator(final InputStream input, final Charset encoding) throws IOException {
-        return new LineIterator(new InputStreamReader(input, Charsets.toCharset(encoding)));
+    public static LineIterator lineIterator(final InputStream input, final Charset charset) throws IOException {
+        return new LineIterator(new InputStreamReader(input, Charsets.toCharset(charset)));
     }
 
     /**
@@ -1351,7 +1425,7 @@ public class IOUtils {
      * </pre>
      *
      * @param input the <code>InputStream</code> to read from, not null
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException                     if the input is null
      * @throws IOException                                  if an I/O error occurs, such as if the encoding is invalid
@@ -1360,8 +1434,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.2
      */
-    public static LineIterator lineIterator(final InputStream input, final String encoding) throws IOException {
-        return lineIterator(input, Charsets.toCharset(encoding));
+    public static LineIterator lineIterator(final InputStream input, final String charsetName) throws IOException {
+        return lineIterator(input, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -1575,9 +1649,6 @@ public class IOUtils {
         return buffer;
     }
 
-    // resources
-    //-----------------------------------------------------------------------
-
     /**
      * Reads the requested number of bytes or fail if there are not enough left.
      * <p>
@@ -1665,14 +1736,14 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      *
      * @param input the <code>InputStream</code> to read from, not null
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static List<String> readLines(final InputStream input, final Charset encoding) throws IOException {
-        final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(encoding));
+    public static List<String> readLines(final InputStream input, final Charset charset) throws IOException {
+        final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(charset));
         return readLines(reader);
     }
 
@@ -1687,7 +1758,7 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      *
      * @param input the <code>InputStream</code> to read from, not null
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return the list of Strings, never null
      * @throws NullPointerException                         if the input is null
      * @throws IOException                                  if an I/O error occurs
@@ -1696,12 +1767,9 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static List<String> readLines(final InputStream input, final String encoding) throws IOException {
-        return readLines(input, Charsets.toCharset(encoding));
+    public static List<String> readLines(final InputStream input, final String charsetName) throws IOException {
+        return readLines(input, Charsets.toCharset(charsetName));
     }
-
-    // readLines
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of a <code>Reader</code> as a list of Strings,
@@ -1774,18 +1842,15 @@ public class IOUtils {
      * </p>
      *
      * @param name     name of the desired resource
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return the requested String
      * @throws IOException if an I/O error occurs
      *
      * @since 2.6
      */
-    public static String resourceToString(final String name, final Charset encoding) throws IOException {
-        return resourceToString(name, encoding, null);
+    public static String resourceToString(final String name, final Charset charset) throws IOException {
+        return resourceToString(name, charset, null);
     }
-
-    // lineIterator
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of a classpath resource as a String using the
@@ -1797,15 +1862,15 @@ public class IOUtils {
      * </p>
      *
      * @param name     name of the desired resource
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested String
      * @throws IOException if an I/O error occurs
      *
      * @since 2.6
      */
-    public static String resourceToString(final String name, final Charset encoding, final ClassLoader classLoader) throws IOException {
-        return toString(resourceToURL(name, classLoader), encoding);
+    public static String resourceToString(final String name, final Charset charset, final ClassLoader classLoader) throws IOException {
+        return toString(resourceToURL(name, classLoader), charset);
     }
 
     /**
@@ -1852,8 +1917,6 @@ public class IOUtils {
 
         return resource;
     }
-
-    //-----------------------------------------------------------------------
 
     /**
      * Skips bytes from an input byte stream.
@@ -1975,8 +2038,6 @@ public class IOUtils {
         return toSkip - remain;
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Skips the requested number of bytes or fail if there are not enough left.
      * <p>
@@ -2051,9 +2112,6 @@ public class IOUtils {
             throw new EOFException("Chars to skip: " + toSkip + " actual: " + skipped);
         }
     }
-
-    // write byte[]
-    //-----------------------------------------------------------------------
 
     /**
      * Fetches entire contents of an <code>InputStream</code> and represent
@@ -2153,9 +2211,6 @@ public class IOUtils {
         }
     }
 
-    // write char[]
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * Use this method instead of <code>toByteArray(InputStream)</code>
@@ -2176,7 +2231,7 @@ public class IOUtils {
         }
 
         if (size == 0) {
-            return new byte[0];
+            return EMPTY_BYTE_ARRAY;
         }
 
         final byte[] data = new byte[size];
@@ -2246,15 +2301,15 @@ public class IOUtils {
      * <code>BufferedReader</code>.
      *
      * @param input the <code>Reader</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return the requested byte array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static byte[] toByteArray(final Reader input, final Charset encoding) throws IOException {
+    public static byte[] toByteArray(final Reader input, final Charset charset) throws IOException {
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            copy(input, output, encoding);
+            copy(input, output, charset);
             return output.toByteArray();
         }
     }
@@ -2270,7 +2325,7 @@ public class IOUtils {
      * <code>BufferedReader</code>.
      *
      * @param input the <code>Reader</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return the requested byte array
      * @throws NullPointerException                         if the input is null
      * @throws IOException                                  if an I/O error occurs
@@ -2279,12 +2334,9 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static byte[] toByteArray(final Reader input, final String encoding) throws IOException {
-        return toByteArray(input, Charsets.toCharset(encoding));
+    public static byte[] toByteArray(final Reader input, final String charsetName) throws IOException {
+        return toByteArray(input, Charsets.toCharset(charsetName));
     }
-
-    // write CharSequence
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents of a <code>String</code> as a <code>byte[]</code>
@@ -2350,9 +2402,6 @@ public class IOUtils {
         }
     }
 
-    // write String
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of an <code>InputStream</code> as a character array
      * using the default character encoding of the platform.
@@ -2380,16 +2429,16 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      *
      * @param is the <code>InputStream</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static char[] toCharArray(final InputStream is, final Charset encoding)
+    public static char[] toCharArray(final InputStream is, final Charset charset)
             throws IOException {
         final CharArrayWriter output = new CharArrayWriter();
-        copy(is, output, encoding);
+        copy(is, output, charset);
         return output.toCharArray();
     }
 
@@ -2404,7 +2453,7 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      *
      * @param is the <code>InputStream</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return the requested character array
      * @throws NullPointerException                         if the input is null
      * @throws IOException                                  if an I/O error occurs
@@ -2413,8 +2462,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static char[] toCharArray(final InputStream is, final String encoding) throws IOException {
-        return toCharArray(is, Charsets.toCharset(encoding));
+    public static char[] toCharArray(final InputStream is, final String charsetName) throws IOException {
+        return toCharArray(is, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2435,9 +2484,6 @@ public class IOUtils {
         return sw.toCharArray();
     }
 
-    // write StringBuffer
-    //-----------------------------------------------------------------------
-
     /**
      * Converts the specified CharSequence to an input stream, encoded as bytes
      * using the default character encoding of the platform.
@@ -2457,12 +2503,12 @@ public class IOUtils {
      * using the specified character encoding.
      *
      * @param input the CharSequence to convert
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return an input stream
      * @since 2.3
      */
-    public static InputStream toInputStream(final CharSequence input, final Charset encoding) {
-        return toInputStream(input.toString(), encoding);
+    public static InputStream toInputStream(final CharSequence input, final Charset charset) {
+        return toInputStream(input.toString(), charset);
     }
 
     /**
@@ -2473,7 +2519,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      *
      * @param input the CharSequence to convert
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
      * @throws IOException                                  if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -2481,12 +2527,9 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.0
      */
-    public static InputStream toInputStream(final CharSequence input, final String encoding) throws IOException {
-        return toInputStream(input, Charsets.toCharset(encoding));
+    public static InputStream toInputStream(final CharSequence input, final String charsetName) throws IOException {
+        return toInputStream(input, Charsets.toCharset(charsetName));
     }
-
-    // writeLines
-    //-----------------------------------------------------------------------
 
     /**
      * Converts the specified string to an input stream, encoded as bytes
@@ -2507,12 +2550,12 @@ public class IOUtils {
      * using the specified character encoding.
      *
      * @param input the string to convert
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return an input stream
      * @since 2.3
      */
-    public static InputStream toInputStream(final String input, final Charset encoding) {
-        return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(encoding)));
+    public static InputStream toInputStream(final String input, final Charset charset) {
+        return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(charset)));
     }
 
     /**
@@ -2523,7 +2566,7 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      *
      * @param input the string to convert
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
      * @throws IOException                                  if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -2531,8 +2574,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static InputStream toInputStream(final String input, final String encoding) throws IOException {
-        final byte[] bytes = input.getBytes(Charsets.toCharset(encoding));
+    public static InputStream toInputStream(final String input, final String charsetName) throws IOException {
+        final byte[] bytes = input.getBytes(Charsets.toCharset(charsetName));
         return new ByteArrayInputStream(bytes);
     }
 
@@ -2552,9 +2595,6 @@ public class IOUtils {
         return new String(input, Charset.defaultCharset());
     }
 
-    // copy from InputStream
-    //-----------------------------------------------------------------------
-
     /**
      * Gets the contents of a <code>byte[]</code> as a String
      * using the specified character encoding.
@@ -2563,13 +2603,13 @@ public class IOUtils {
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      *
      * @param input the byte array to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs (never occurs)
      */
-    public static String toString(final byte[] input, final String encoding) throws IOException {
-        return new String(input, Charsets.toCharset(encoding));
+    public static String toString(final byte[] input, final String charsetName) throws IOException {
+        return new String(input, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2599,15 +2639,15 @@ public class IOUtils {
      * </p>
      *
      * @param input the <code>InputStream</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static String toString(final InputStream input, final Charset encoding) throws IOException {
+    public static String toString(final InputStream input, final Charset charset) throws IOException {
         try (final StringBuilderWriter sw = new StringBuilderWriter()) {
-            copy(input, sw, encoding);
+            copy(input, sw, charset);
             return sw.toString();
         }
     }
@@ -2623,7 +2663,7 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      *
      * @param input the <code>InputStream</code> to read from
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException                         if the input is null
      * @throws IOException                                  if an I/O error occurs
@@ -2631,9 +2671,9 @@ public class IOUtils {
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      */
-    public static String toString(final InputStream input, final String encoding)
+    public static String toString(final InputStream input, final String charsetName)
             throws IOException {
-        return toString(input, Charsets.toCharset(encoding));
+        return toString(input, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2685,7 +2725,7 @@ public class IOUtils {
      * Gets the contents at the given URI.
      *
      * @param uri The URI source.
-     * @param encoding The encoding name for the URL contents.
+     * @param charsetName The encoding name for the URL contents.
      * @return The contents of the URL as a String.
      * @throws IOException                                  if an I/O exception occurs.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -2693,8 +2733,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.1
      */
-    public static String toString(final URI uri, final String encoding) throws IOException {
-        return toString(uri, Charsets.toCharset(encoding));
+    public static String toString(final URI uri, final String charsetName) throws IOException {
+        return toString(uri, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2710,9 +2750,6 @@ public class IOUtils {
     public static String toString(final URL url) throws IOException {
         return toString(url, Charset.defaultCharset());
     }
-
-    // copy from Reader
-    //-----------------------------------------------------------------------
 
     /**
      * Gets the contents at the given URL.
@@ -2733,7 +2770,7 @@ public class IOUtils {
      * Gets the contents at the given URL.
      *
      * @param url The URL source.
-     * @param encoding The encoding name for the URL contents.
+     * @param charsetName The encoding name for the URL contents.
      * @return The contents of the URL as a String.
      * @throws IOException                                  if an I/O exception occurs.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -2741,8 +2778,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 2.1
      */
-    public static String toString(final URL url, final String encoding) throws IOException {
-        return toString(url, Charsets.toCharset(encoding));
+    public static String toString(final URL url, final String charsetName) throws IOException {
+        return toString(url, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2790,14 +2827,14 @@ public class IOUtils {
      * @param data the byte array to write, do not modify during output,
      * null ignored
      * @param output the <code>Writer</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final byte[] data, final Writer output, final Charset encoding) throws IOException {
+    public static void write(final byte[] data, final Writer output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(new String(data, Charsets.toCharset(encoding)));
+            output.write(new String(data, Charsets.toCharset(charset)));
         }
     }
 
@@ -2813,7 +2850,7 @@ public class IOUtils {
      * @param data the byte array to write, do not modify during output,
      * null ignored
      * @param output the <code>Writer</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if output is null
      * @throws IOException                                  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -2821,8 +2858,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static void write(final byte[] data, final Writer output, final String encoding) throws IOException {
-        write(data, output, Charsets.toCharset(encoding));
+    public static void write(final byte[] data, final Writer output, final String charsetName) throws IOException {
+        write(data, output, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2856,19 +2893,16 @@ public class IOUtils {
      * @param data the char array to write, do not modify during output,
      * null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the chartset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final char[] data, final OutputStream output, final Charset encoding) throws IOException {
+    public static void write(final char[] data, final OutputStream output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(new String(data).getBytes(Charsets.toCharset(encoding)));
+            output.write(new String(data).getBytes(Charsets.toCharset(charset)));
         }
     }
-
-    // content equals
-    //-----------------------------------------------------------------------
 
     /**
      * Writes chars from a <code>char[]</code> to bytes on an
@@ -2883,16 +2917,16 @@ public class IOUtils {
      * @param data the char array to write, do not modify during output,
      * null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if output is null
      * @throws IOException                                  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
-    public static void write(final char[] data, final OutputStream output, final String encoding)
+    public static void write(final char[] data, final OutputStream output, final String charsetName)
             throws IOException {
-        write(data, output, Charsets.toCharset(encoding));
+        write(data, output, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2939,15 +2973,15 @@ public class IOUtils {
      *
      * @param data the <code>CharSequence</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final CharSequence data, final OutputStream output, final Charset encoding)
+    public static void write(final CharSequence data, final OutputStream output, final Charset charset)
             throws IOException {
         if (data != null) {
-            write(data.toString(), output, encoding);
+            write(data.toString(), output, charset);
         }
     }
 
@@ -2962,16 +2996,16 @@ public class IOUtils {
      *
      * @param data the <code>CharSequence</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 2.0
      */
-    public static void write(final CharSequence data, final OutputStream output, final String encoding)
+    public static void write(final CharSequence data, final OutputStream output, final String charsetName)
             throws IOException {
-        write(data, output, Charsets.toCharset(encoding));
+        write(data, output, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -2988,6 +3022,7 @@ public class IOUtils {
             write(data.toString(), output);
         }
     }
+
 
     /**
      * Writes chars from a <code>String</code> to bytes on an
@@ -3017,14 +3052,14 @@ public class IOUtils {
      *
      * @param data the <code>String</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static void write(final String data, final OutputStream output, final Charset encoding) throws IOException {
+    public static void write(final String data, final OutputStream output, final Charset charset) throws IOException {
         if (data != null) {
-            output.write(data.getBytes(Charsets.toCharset(encoding)));
+            output.write(data.getBytes(Charsets.toCharset(charset)));
         }
     }
 
@@ -3039,18 +3074,17 @@ public class IOUtils {
      *
      * @param data the <code>String</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      * .UnsupportedEncodingException} in version 2.2 if the encoding is not supported.
      * @since 1.1
      */
-    public static void write(final String data, final OutputStream output, final String encoding)
+    public static void write(final String data, final OutputStream output, final String charsetName)
             throws IOException {
-        write(data, output, Charsets.toCharset(encoding));
+        write(data, output, Charsets.toCharset(charsetName));
     }
-
 
     /**
      * Writes chars from a <code>String</code> to a <code>Writer</code>.
@@ -3098,7 +3132,7 @@ public class IOUtils {
      *
      * @param data the <code>StringBuffer</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException        if output is null
      * @throws IOException                 if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -3107,10 +3141,10 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final OutputStream output, final String encoding)
+    public static void write(final StringBuffer data, final OutputStream output, final String charsetName)
             throws IOException {
         if (data != null) {
-            output.write(data.toString().getBytes(Charsets.toCharset(encoding)));
+            output.write(data.toString().getBytes(Charsets.toCharset(charsetName)));
         }
     }
 
@@ -3210,20 +3244,20 @@ public class IOUtils {
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
      * @param output the <code>OutputStream</code> to write to, not null, not closed
-     * @param encoding the encoding to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
-                                  final Charset encoding) throws IOException {
+                                  final Charset charset) throws IOException {
         if (lines == null) {
             return;
         }
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        final Charset cs = Charsets.toCharset(encoding);
+        final Charset cs = Charsets.toCharset(charset);
         for (final Object line : lines) {
             if (line != null) {
                 output.write(line.toString().getBytes(cs));
@@ -3243,7 +3277,7 @@ public class IOUtils {
      * @param lines the lines to write, null entries produce blank lines
      * @param lineEnding the line separator to use, null is system default
      * @param output the <code>OutputStream</code> to write to, not null, not closed
-     * @param encoding the encoding to use, null means platform default
+     * @param charsetName the name of the requested charset, null means platform default
      * @throws NullPointerException                         if the output is null
      * @throws IOException                                  if an I/O error occurs
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
@@ -3252,8 +3286,8 @@ public class IOUtils {
      * @since 1.1
      */
     public static void writeLines(final Collection<?> lines, final String lineEnding,
-                                  final OutputStream output, final String encoding) throws IOException {
-        writeLines(lines, lineEnding, output, Charsets.toCharset(encoding));
+                                  final OutputStream output, final String charsetName) throws IOException {
+        writeLines(lines, lineEnding, output, Charsets.toCharset(charsetName));
     }
 
     /**
@@ -3281,6 +3315,26 @@ public class IOUtils {
             }
             writer.write(lineEnding);
         }
+    }
+
+    /**
+     * Returns the given Appendable if it is already a {@link Writer}, otherwise creates a Writer wrapper around the
+     * given Appendable.
+     *
+     * @param appendable the Appendable to wrap or return (not null)
+     * @return  the given Appendable or a Writer wrapper around the given Appendable
+     * @throws NullPointerException if the input parameter is null
+     * @since 2.7
+     */
+    public static Writer writer(final Appendable appendable) {
+        Objects.requireNonNull(appendable, "appendable");
+        if (appendable instanceof Writer) {
+            return (Writer) appendable;
+        }
+        if (appendable instanceof StringBuilder) {
+            return new StringBuilderWriter((StringBuilder) appendable);
+        }
+        return new AppendableWriter<>(appendable);
     }
 
     /**

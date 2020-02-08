@@ -14,23 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.commons.io.input;
 
-package org.apache.commons.io.testtools;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.junit.jupiter.api.Test;
 
 /**
- * Annotation used with {@link SystemDefaults} that specifies the
- * system default Locale to be used in a test method.
+ * JUnit Test Case for {@link ClosedReader}.
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SystemDefaults {
-    /**
-     * The name of the Locale to be used while running a test method
-     */
-    String locale() default "";
+public class ClosedReaderTest {
+
+    @Test
+    public void testRead() throws Exception {
+        try (final ClosedReader cr = new ClosedReader()) {
+            assertEquals(-1, cr.read(new char[10], 0, 10), "read(cbuf, off, len)");
+        }
+    }
+
 }

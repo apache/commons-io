@@ -16,8 +16,9 @@
  */
 package org.apache.commons.io.testtools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -35,8 +36,6 @@ import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * Base class for testcases doing tests with files.
@@ -104,7 +103,7 @@ public abstract class TestUtils {
 
     public static void checkFile(final File file, final File referenceFile)
             throws Exception {
-        assertTrue("Check existence of output file", file.exists());
+        assertTrue(file.exists(), "Check existence of output file");
         assertEqualContent(referenceFile, file);
     }
 
@@ -129,12 +128,12 @@ public abstract class TestUtils {
                 while (-1 != n0) {
                     n0 = is0.read(buf0);
                     n1 = is1.read(buf1);
-                    assertTrue("The files " + f0 + " and " + f1 +
-                            " have differing number of bytes available (" + n0 +
-                            " vs " + n1 + ")", (n0 == n1));
+                    assertTrue((n0 == n1),
+                            "The files " + f0 + " and " + f1 +
+                            " have differing number of bytes available (" + n0 + " vs " + n1 + ")");
 
-                    assertTrue("The files " + f0 + " and " + f1 +
-                            " have different content", Arrays.equals(buf0, buf1));
+                    assertTrue(Arrays.equals(buf0, buf1),
+                            "The files " + f0 + " and " + f1 + " have different content");
                 }
             }
         }
@@ -155,9 +154,9 @@ public abstract class TestUtils {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
             }
-            assertEquals("Different number of bytes: ", b0.length, count);
+            assertEquals(b0.length, count, "Different number of bytes: ");
             for (int i = 0; i < count; i++) {
-                assertEquals("byte " + i + " differs", b0[i], b1[i]);
+                assertEquals(b0[i], b1[i], "byte " + i + " differs");
             }
         }
     }
@@ -177,9 +176,9 @@ public abstract class TestUtils {
                 numRead = ir.read(c1, count, c0.length);
                 count += numRead;
             }
-            assertEquals("Different number of chars: ", c0.length, count);
+            assertEquals(c0.length, count, "Different number of chars: ");
             for (int i = 0; i < count; i++) {
-                assertEquals("char " + i + " differs", c0[i], c1[i]);
+                assertEquals(c0[i], c1[i], "char " + i + " differs");
             }
         }
     }
@@ -188,10 +187,7 @@ public abstract class TestUtils {
         try {
             new java.io.PrintStream(output).write(0);
         } catch (final Throwable t) {
-            throw new AssertionFailedError(
-                    "The copy() method closed the stream "
-                            + "when it shouldn't have. "
-                            + t.getMessage());
+            fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }
     }
 
@@ -199,17 +195,14 @@ public abstract class TestUtils {
         try {
             new java.io.PrintWriter(output).write('a');
         } catch (final Throwable t) {
-            throw new AssertionFailedError(
-                    "The copy() method closed the stream "
-                            + "when it shouldn't have. "
-                            + t.getMessage());
+            fail("The copy() method closed the stream when it shouldn't have. " + t.getMessage());
         }
     }
 
     public static void deleteFile(final File file)
             throws Exception {
         if (file.exists()) {
-            assertTrue("Couldn't delete file: " + file, file.delete());
+            assertTrue(file.delete(), "Couldn't delete file: " + file);
         }
     }
 

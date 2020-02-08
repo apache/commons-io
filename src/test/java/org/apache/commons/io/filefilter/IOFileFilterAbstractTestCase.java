@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.filefilter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
@@ -24,47 +24,42 @@ public abstract class IOFileFilterAbstractTestCase {
 
     public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
-        assertEquals(
-                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                expected, filter.accept(file));
+        assertEquals(expected, filter.accept(file),
+                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
     }
 
     public static void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         // Assumes file has parent and is not passed as null
-        assertEquals(
-                "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                expected, filter.accept(file.getParentFile(), file.getName()));
+        assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
+                "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
     }
 
     public static void assertFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected)
             throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
-        assertEquals(
-                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                expected, filter.accept(file));
+        assertEquals(expected, filter.accept(file),
+                "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {
-            assertEquals(
-                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file,
-                    expected, filter.accept(file.getParentFile(), file.getName()));
+            assertEquals(expected, filter.accept(file.getParentFile(), file.getName()),
+                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for " + file);
         } else if (file == null) {
-            assertEquals(
-                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null",
-                    expected, filter.accept(file));
+            assertEquals(expected, filter.accept(file),
+                    "test " + testNumber + " Filter(File, String) " + filter.getClass().getName() + " not " + expected + " for null");
         }
     }
 
     public static void assertTrueFiltersInvoked(final int testNumber, final TesterTrueFileFilter[] filters, final boolean[] invoked) {
         for (int i = 1; i < filters.length; i++) {
-            assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i - 1], filters[i].isInvoked());
+            assertEquals(invoked[i - 1], filters[i].isInvoked(), "test " + testNumber + " filter " + i + " invoked");
         }
     }
 
     public static void assertFalseFiltersInvoked(final int testNumber, final TesterFalseFileFilter[] filters, final boolean[] invoked) {
         for (int i = 1; i < filters.length; i++) {
-            assertEquals("test " + testNumber + " filter " + i + " invoked", invoked[i - 1], filters[i].isInvoked());
+            assertEquals(invoked[i - 1], filters[i].isInvoked(), "test " + testNumber + " filter " + i + " invoked");
         }
     }
 

@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -30,7 +30,7 @@ import org.apache.commons.io.input.DemuxInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.DemuxOutputStream;
 import org.apache.commons.io.testtools.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic unit tests for the multiplexing streams.
@@ -53,14 +53,14 @@ public class DemuxTestCase {
     private String getOutput(final String threadName) {
         final ByteArrayOutputStream output =
                 m_outputMap.get(threadName);
-        assertNotNull("getOutput()", output);
+        assertNotNull(output, "getOutput()");
 
         return output.toString(StandardCharsets.UTF_8);
     }
 
     private String getInput(final String threadName) {
         final ReaderThread thread = (ReaderThread) m_threadMap.get(threadName);
-        assertNotNull("getInput()", thread);
+        assertNotNull(thread, "getInput()");
 
         return thread.getData();
     }
@@ -113,10 +113,10 @@ public class DemuxTestCase {
         doStart();
         doJoin();
 
-        assertEquals("Data1", DATA1, getOutput(T1));
-        assertEquals("Data2", DATA2, getOutput(T2));
-        assertEquals("Data3", DATA3, getOutput(T3));
-        assertEquals("Data4", DATA4, getOutput(T4));
+        assertEquals(DATA1, getOutput(T1), "Data1");
+        assertEquals(DATA2, getOutput(T2), "Data2");
+        assertEquals(DATA3, getOutput(T3), "Data3");
+        assertEquals(DATA4, getOutput(T4), "Data4");
     }
 
     @Test
@@ -131,10 +131,10 @@ public class DemuxTestCase {
         doStart();
         doJoin();
 
-        assertEquals("Data1", DATA1, getInput(T1));
-        assertEquals("Data2", DATA2, getInput(T2));
-        assertEquals("Data3", DATA3, getInput(T3));
-        assertEquals("Data4", DATA4, getInput(T4));
+        assertEquals(DATA1, getInput(T1), "Data1");
+        assertEquals(DATA2, getInput(T2), "Data2");
+        assertEquals(DATA3, getInput(T3), "Data3");
+        assertEquals(DATA4, getInput(T4), "Data4");
     }
 
     private static class ReaderThread

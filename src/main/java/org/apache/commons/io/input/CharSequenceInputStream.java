@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.util.Objects;
 
 /**
  * {@link InputStream} implementation that can read from String, StringBuffer,
@@ -128,12 +129,10 @@ public class CharSequenceInputStream extends InputStream {
     }
 
     @Override
-    public int read(final byte[] b, int off, int len) throws IOException {
-        if (b == null) {
-            throw new NullPointerException("Byte array is null");
-        }
-        if (len < 0 || (off + len) > b.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + b.length +
+    public int read(final byte[] array, int off, int len) throws IOException {
+        Objects.requireNonNull(array, "array");
+        if (len < 0 || (off + len) > array.length) {
+            throw new IndexOutOfBoundsException("Array Size=" + array.length +
                     ", offset=" + off + ", length=" + len);
         }
         if (len == 0) {
@@ -146,7 +145,7 @@ public class CharSequenceInputStream extends InputStream {
         while (len > 0) {
             if (this.bbuf.hasRemaining()) {
                 final int chunk = Math.min(this.bbuf.remaining(), len);
-                this.bbuf.get(b, off, chunk);
+                this.bbuf.get(array, off, chunk);
                 off += chunk;
                 len -= chunk;
                 bytesRead += chunk;

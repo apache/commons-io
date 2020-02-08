@@ -29,6 +29,8 @@ import java.io.FilenameFilter;
  */
 public interface IOFileFilter extends FileFilter, FilenameFilter {
 
+    String[] EMPTY_STRING_ARRAY = new String[0];
+
     /**
      * Checks to see if the File should be accepted by this filter.
      * <p>

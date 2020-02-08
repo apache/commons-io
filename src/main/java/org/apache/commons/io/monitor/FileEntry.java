@@ -30,7 +30,7 @@ import java.io.Serializable;
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
  *
- * <h3>Custom Implementations</h3>
+ * <h2>Custom Implementations</h2>
  * <p>
  * If the state of additional {@link File} attributes is required then create a custom
  * {@link FileEntry} with properties for those attributes. Override the
@@ -162,7 +162,7 @@ public class FileEntry implements Serializable {
      *
      * @param children This directory's files, may be null
      */
-    public void setChildren(final FileEntry[] children) {
+    public void setChildren(final FileEntry... children) {
         this.children = children;
     }
 
