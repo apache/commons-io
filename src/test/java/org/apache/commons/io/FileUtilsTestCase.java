@@ -224,7 +224,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openInputStream_existsButIsDirectory() throws Exception {
+    public void test_openInputStream_existsButIsDirectory() {
         final File directory = new File(temporaryFolder, "subdir");
         directory.mkdirs();
         try (FileInputStream in = FileUtils.openInputStream(directory)) {
@@ -235,11 +235,28 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openInputStream_notExists() throws Exception {
+    public void test_openInputStream_notExists() {
         final File directory = new File(temporaryFolder, "test.txt");
         try (FileInputStream in = FileUtils.openInputStream(directory)) {
             fail();
         } catch (final IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void openInputStreamCannotReadFile() throws IOException {
+        final File file = new File(temporaryFolder, "test.txt") {
+            @Override
+            public boolean canRead() {
+                return false;
+            }
+        };
+        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+
+        try (FileInputStream in = FileUtils.openInputStream(file)) {
+            fail();
+        } catch (IOException ioe) {
             // expected
         }
     }
@@ -317,6 +334,24 @@ public class FileUtilsTestCase {
         try (FileOutputStream out = FileUtils.openOutputStream(file)) {
             fail();
         } catch (final IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void openOutputStreamCannotWriteFile() throws Exception {
+        final File file = new File(temporaryFolder, "test.txt") {
+            @Override
+            public boolean canWrite() {
+                return false;
+            }
+        };
+        TestUtils.createLineBasedFile(file, new String[]{"Hello"});
+
+        try {
+            FileUtils.openOutputStream(file, false);
+            fail();
+        } catch (IOException ioe) {
             // expected
         }
     }
@@ -1238,6 +1273,65 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void copyFileFailedWhenSourceIsDirectory() throws Exception {
+        final File source = new File(temporaryFolder, "testCopyFileWhenSourceIsDirectory");
+        if (!source.exists()) {
+            source.mkdirs();
+        }
+        final File destination = new File(temporaryFolder, "destination");
+
+        try {
+            FileUtils.copyFile(source, destination, false);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void copyFileFailedWhenDestinationParentDirectoryCannotBeCreated() throws Exception {
+        final File destination = new File(temporaryFolder, "destination/drop.txt") {
+            @Override
+            public File getParentFile() {
+                final File parentFile = new File(String.valueOf(super.getParentFile())) {
+                    @Override
+                    public boolean mkdirs() {
+                        return false;
+                    }
+                };
+                return parentFile;
+            }
+        };
+
+        try {
+            FileUtils.copyFile(testFile1, destination, false);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void copyFileFailedWhenDestinationExistsButIsReadyOnly() {
+        final File destination = new File(temporaryFolder, "destination/drop.txt") {
+            @Override
+            public boolean canWrite() {
+                return false;
+            }
+        };
+        if (!destination.exists()) {
+            destination.mkdirs();
+        }
+
+        try {
+            FileUtils.copyFile(testFile1, destination, false);
+            fail();
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
     public void testCopyDirectoryToDirectory_NonExistingDest() throws Exception {
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
@@ -1279,6 +1373,24 @@ public class FileUtilsTestCase {
         assertEquals(srcSize, FileUtils.sizeOfDirectory(actualDestDir), "Check size");
         assertTrue(new File(actualDestDir, "sub/A.txt").exists());
         FileUtils.deleteDirectory(destDir);
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryWhenSourceDirIsAFile() throws IOException {
+        try {
+            FileUtils.copyDirectoryToDirectory(testFile1, temporaryFolder);
+        } catch (IllegalArgumentException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryWhenDestinationDirIsAFile() throws IOException {
+        try {
+            FileUtils.copyDirectoryToDirectory(temporaryFolder, testFile1);
+        } catch (IllegalArgumentException ioe) {
+            // expected
+        }
     }
 
     @Test
@@ -1707,6 +1819,20 @@ public class FileUtilsTestCase {
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
+    }
+
+    @Test
+    public void copyFileToDirectoryWhenDestinationIsNotDirectory() throws Exception {
+        final File directory = new File(temporaryFolder, "subdir.txt");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try {
+            FileUtils.copyFileToDirectory(testFile1, testFile2, true);
+        } catch (IllegalArgumentException ioe) {
+            // expected
+        }
     }
 
     // forceDelete
@@ -2502,7 +2628,27 @@ public class FileUtilsTestCase {
         try {
             FileUtils.deleteDirectory(testFile1);
             fail();
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException iae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void deleteDirectoryFailed() throws Exception {
+        File directoryToDelete = new File(temporaryFolder, "directoryToDelete") {
+            @Override
+            public boolean delete() {
+                return false;
+            }
+        };
+        if (!directoryToDelete.exists()) {
+            directoryToDelete.mkdirs();
+        }
+
+        try {
+            FileUtils.deleteDirectory(directoryToDelete);
+            fail();
+        } catch (final IOException ioe) {
             // expected
         }
     }
