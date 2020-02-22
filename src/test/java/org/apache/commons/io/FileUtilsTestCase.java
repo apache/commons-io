@@ -1273,7 +1273,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void copyFileFailedWhenSourceIsDirectory() throws Exception {
+    public void copyFileFailedWhenSourceIsDirectory() {
         final File source = new File(temporaryFolder, "testCopyFileWhenSourceIsDirectory");
         if (!source.exists()) {
             source.mkdirs();
@@ -1289,7 +1289,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void copyFileFailedWhenDestinationParentDirectoryCannotBeCreated() throws Exception {
+    public void copyFileFailedWhenDestinationParentDirectoryCannotBeCreated() {
         final File destination = new File(temporaryFolder, "destination/drop.txt") {
             @Override
             public File getParentFile() {
@@ -2634,7 +2634,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void deleteDirectoryFailed() throws Exception {
+    public void deleteDirectoryFailed() {
         File directoryToDelete = new File(temporaryFolder, "directoryToDelete") {
             @Override
             public boolean delete() {
