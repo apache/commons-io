@@ -1379,7 +1379,7 @@ public class FileUtilsTestCase {
     public void copyDirectoryToDirectoryWhenSourceDirIsAFile() throws IOException {
         try {
             FileUtils.copyDirectoryToDirectory(testFile1, temporaryFolder);
-        } catch (IllegalArgumentException ioe) {
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }
@@ -1388,7 +1388,7 @@ public class FileUtilsTestCase {
     public void copyDirectoryToDirectoryWhenDestinationDirIsAFile() throws IOException {
         try {
             FileUtils.copyDirectoryToDirectory(temporaryFolder, testFile1);
-        } catch (IllegalArgumentException ioe) {
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }
@@ -1830,7 +1830,7 @@ public class FileUtilsTestCase {
 
         try {
             FileUtils.copyFileToDirectory(testFile1, testFile2, true);
-        } catch (IllegalArgumentException ioe) {
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }
@@ -2628,7 +2628,7 @@ public class FileUtilsTestCase {
         try {
             FileUtils.deleteDirectory(testFile1);
             fail();
-        } catch (final IllegalArgumentException iae) {
+        } catch (final IllegalArgumentException ex) {
             // expected
         }
     }
