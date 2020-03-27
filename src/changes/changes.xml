@@ -186,6 +186,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-648" dev="ggregory" type="add" due-to="Gary Gregory">
         Implement directory content equality. 100#.
       </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+         Update tests from Apache Commons Lang 3.9 to 3.10.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
