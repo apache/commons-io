@@ -112,7 +112,7 @@ Enhancements from 1.2
   - New class designed for subclassing to walk through a set of files.
     DirectoryWalker provides the walk of the directories, filtering of
     directories and files, and cancellation support. The subclass must provide
-    the specific behaviour, such as text searching or image processing.
+    the specific behavior, such as text searching or image processing.
 
 - IOCase
   - New class/enumeration for case-sensitivity control

@@ -169,7 +169,7 @@ Enhancements from 1.0
     Constant for an empty array of File objects
 
 - ConditionalFileFilter - new interface  [30705]
-    Defines the behaviour of list based filters
+    Defines the behavior of list based filters
 
 - AndFileFilter, OrFileFilter  [30705]
     Now support a list of filters to and/or

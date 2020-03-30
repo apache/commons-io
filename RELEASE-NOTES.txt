@@ -218,7 +218,7 @@ o IO-422:  Deprecate Charsets Charset constants in favor of Java 7's java.nio.ch
 o IO-239:  Convert IOCase to a Java 1.5+ Enumeration
          [N.B. this is binary compatible] 
 o IO-328:  getPrefixLength returns null if filename has leading slashes
-        Javadoc: add examples to show correct behaviour; add unit tests 
+        Javadoc: add examples to show correct behavior; add unit tests 
 o IO-299:  FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
         Javadoc: clarify that original dir is included in the results 
 o IO-375:  FilenameUtils.splitOnTokens(String text) check for '**' could be simplified 
@@ -772,7 +772,7 @@ Enhancements from 1.2
   - New class designed for subclassing to walk through a set of files.
     DirectoryWalker provides the walk of the directories, filtering of
     directories and files, and cancellation support. The subclass must provide
-    the specific behaviour, such as text searching or image processing.
+    the specific behavior, such as text searching or image processing.
 
 - IOCase
   - New class/enumeration for case-sensitivity control
@@ -1063,7 +1063,7 @@ Enhancements from 1.0
     Constant for an empty array of File objects
 
 - ConditionalFileFilter - new interface  [30705]
-    Defines the behaviour of list based filters
+    Defines the behavior of list based filters
 
 - AndFileFilter, OrFileFilter  [30705]
     Now support a list of filters to and/or
