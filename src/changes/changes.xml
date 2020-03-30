@@ -419,7 +419,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-328" dev="sebb" type="update">
         getPrefixLength returns null if filename has leading slashes
-        Javadoc: add examples to show correct behaviour; add unit tests
+        Javadoc: add examples to show correct behavior; add unit tests
       </action>
       <action issue="IO-299" dev="sebb" type="update">
         FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter

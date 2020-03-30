@@ -123,7 +123,7 @@ limitations under the License.
                     o IO-239:  Convert IOCase to a Java 1.5+ Enumeration
                              [N.B. this is binary compatible]
                     o IO-328:  getPrefixLength returns null if filename has leading slashes
-                            Javadoc: add examples to show correct behaviour; add unit tests
+                            Javadoc: add examples to show correct behavior; add unit tests
                     o IO-299:  FileUtils.listFilesAndDirs includes original dir in results even when it doesn't match filter
                             Javadoc: clarify that original dir is included in the results
                     o IO-375:  FilenameUtils.splitOnTokens(String text) check for '**' could be simplified
