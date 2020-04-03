@@ -16,19 +16,23 @@
  */
 package org.apache.commons.io.output;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ClosedInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementations.
@@ -96,6 +100,103 @@ public class ByteArrayOutputStreamTestCase {
         final byte[] buf = actual.toByteArray();
         final byte[] refbuf = expected.toByteArray();
         checkByteArrays(buf, refbuf);
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                baout.write(null, -1, 0)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                baout.write(new byte[0], 1, 0)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidWriteLenUnder(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                baout.write(new byte[1], 0, -1)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                baout.write(new byte[1], 1, -2)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidWriteOffsetAndLenOver(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                baout.write(new byte[1], 0, 2)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testInvalidParameterizedConstruction(final String baosName, final BAOSFactory baosFactory) {
+        assertThrows(IllegalArgumentException.class, () ->
+                baosFactory.instance(-1)
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testToInputStreamEmpty(final String baosName, final BAOSFactory baosFactory) throws IOException {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+
+        //Get data before more writes
+        final InputStream in = baout.toInputStream();
+        assertEquals(0, in.available());
+        assertTrue(in instanceof ClosedInputStream);
+
+        in.close();
+        baout.close();
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("toBufferedInputStreamFunctionFactories")
+    public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
+        final ByteArrayInputStream bain = new ByteArrayInputStream(new byte[0]);
+        assertEquals(0, bain.available());
+
+        final InputStream buffered = toBufferedInputStreamFunction.apply(bain);
+        assertEquals(0, buffered.available());
+
+        buffered.close();
+        bain.close();
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("toBufferedInputStreamFunctionFactories")
+    public void testToBufferedInputStream(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
+        final byte data[] = {(byte)0xCA, (byte)0xFE, (byte)0xBA, (byte)0xBE};
+
+        final ByteArrayInputStream bain = new ByteArrayInputStream(data);
+        assertEquals(data.length, bain.available());
+
+        final InputStream buffered = toBufferedInputStreamFunction.apply(bain);
+        assertEquals(data.length, buffered.available());
+
+        assertArrayEquals(data, IOUtils.toByteArray(buffered));
+
+        buffered.close();
+        bain.close();
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
@@ -241,6 +342,25 @@ public class ByteArrayOutputStreamTestCase {
             return instance(AbstractByteArrayOutputStream.DEFAULT_SIZE);
         }
         AbstractByteArrayOutputStream instance(final int size);
+    }
+
+    private static Stream<Arguments> toBufferedInputStreamFunctionFactories() {
+        final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStream = ByteArrayOutputStream::toBufferedInputStream;
+        final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWithSize = is -> ByteArrayOutputStream.toBufferedInputStream(is, 1024);
+        final IOFunction<InputStream, InputStream> nonSyncBaosToBufferedInputStream = FastByteArrayOutputStream::toBufferedInputStream;
+        final IOFunction<InputStream, InputStream> nonSyncBaosToBufferedInputStreamWithSize = is -> FastByteArrayOutputStream.toBufferedInputStream(is, 1024);
+
+        return Stream.of(
+            Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
+            Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
+            Arguments.of("FastByteArrayOutputStream.toBufferedInputStream(InputStream)", nonSyncBaosToBufferedInputStream),
+            Arguments.of("FastByteArrayOutputStream.toBufferedInputStream(InputStream, int)", nonSyncBaosToBufferedInputStreamWithSize)
+        );
+    }
+
+    @FunctionalInterface
+    private interface IOFunction<T, R> {
+        R apply(final T t) throws IOException;
     }
 }
 
