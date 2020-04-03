@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.output;
 
+import org.apache.commons.io.input.UnsynchronizedByteArrayInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -153,7 +155,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public InputStream toInputStream() {
-        return toInputStreamImpl();
+        return toInputStreamImpl(UnsynchronizedByteArrayInputStream::new);
     }
 
     @Override

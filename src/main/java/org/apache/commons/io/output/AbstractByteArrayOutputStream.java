@@ -18,7 +18,6 @@ package org.apache.commons.io.output;
 
 import org.apache.commons.io.input.ClosedInputStream;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -294,20 +293,26 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * returned stream is backed by buffers of <code>this</code> stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
+     * @param <T> the type of the InputStream which makes up
+     *            the {@link SequenceInputStream}.
+     * @param isConstructor A constructor for an InputStream which makes
+     *                     up the {@link SequenceInputStream}.
+     *
      * @return the current contents of this output stream.
      * @see java.io.ByteArrayOutputStream#toByteArray()
      * @see #reset()
      * @since 2.7
      */
-    protected InputStream toInputStreamImpl() {
+    protected <T extends InputStream> InputStream toInputStreamImpl(
+            final InputStreamConstructor<T> isConstructor) {
         int remaining = count;
         if (remaining == 0) {
             return new ClosedInputStream();
         }
-        final List<ByteArrayInputStream> list = new ArrayList<>(buffers.size());
+        final List<T> list = new ArrayList<>(buffers.size());
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
-            list.add(new ByteArrayInputStream(buf, 0, c));
+            list.add(isConstructor.construct(buf, 0, c));
             remaining -= c;
             if (remaining == 0) {
                 break;
@@ -315,6 +320,26 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         }
         reuseBuffers = false;
         return new SequenceInputStream(Collections.enumeration(list));
+    }
+
+    /**
+     * Constructor for an InputStream subclass.
+     *
+     * @param <T> the type of the InputStream.
+     */
+    @FunctionalInterface
+    protected interface InputStreamConstructor<T extends InputStream> {
+
+        /**
+         * Construct an InputStream subclass.
+         *
+         * @param buf the buffer
+         * @param offset the offset into the buffer
+         * @param length the length of the buffer
+         *
+         * @return the InputStream subclass.
+         */
+        T construct(final byte buf[], final int offset, final int length);
     }
 
     /**
