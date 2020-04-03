@@ -20,15 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.annotation.concurrent.NotThreadSafe;
-
 /**
  * This class implements a version of {@link AbstractByteArrayOutputStream}
  * <b>without</b> any concurrent thread safety.
  *
  * @since 2.7
  */
-@NotThreadSafe
+//@NotThreadSafe
 public final class FastByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**

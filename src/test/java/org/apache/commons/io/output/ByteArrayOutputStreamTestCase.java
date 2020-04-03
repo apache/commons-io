@@ -329,10 +329,10 @@ public class ByteArrayOutputStreamTestCase {
 
     private static Stream<Arguments> baosFactories() {
         final BAOSFactory syncBaosFactory = size -> new ByteArrayOutputStream(size);
-        final BAOSFactory nonSyncBaos = size -> new FastByteArrayOutputStream(size);
+        final BAOSFactory nonSyncBaosFactory = size -> new FastByteArrayOutputStream(size);
         return Stream.of(
                 Arguments.of(ByteArrayOutputStream.class.getSimpleName(), syncBaosFactory),
-                Arguments.of(FastByteArrayOutputStream.class.getSimpleName(), nonSyncBaos)
+                Arguments.of(FastByteArrayOutputStream.class.getSimpleName(), nonSyncBaosFactory)
         );
     }
 

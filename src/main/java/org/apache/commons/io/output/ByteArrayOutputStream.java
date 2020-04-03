@@ -20,14 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.annotation.concurrent.ThreadSafe;
-
 /**
  * This class implements a ThreadSafe version of
  * {@link AbstractByteArrayOutputStream} using instance
  * synchronisation.
  */
-@ThreadSafe
+//@ThreadSafe
 public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
