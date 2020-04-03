@@ -209,6 +209,10 @@ file comparators, endian transformation classes, and much more.
       <email>alban.peignier at free.fr</email>
     </contributor>
     <contributor>
+      <name>Adam Retter</name>
+      <organization>Evolved Binary</organization>
+    </contributor>
+    <contributor>
       <name>Ian Springer</name>
     </contributor>
     <contributor>
@@ -226,6 +230,11 @@ file comparators, endian transformation classes, and much more.
   </contributors>
 
   <dependencies>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

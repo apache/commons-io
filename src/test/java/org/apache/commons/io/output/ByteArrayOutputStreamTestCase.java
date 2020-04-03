@@ -23,12 +23,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Basic unit tests for the alternative ByteArrayOutputStream implementation.
+ * Basic unit tests for the alternative ByteArrayOutputStream implementations.
  */
 public class ByteArrayOutputStreamTestCase {
 
@@ -41,7 +44,7 @@ public class ByteArrayOutputStreamTestCase {
         }
     }
 
-    private int writeData(final ByteArrayOutputStream baout,
+    private int writeData(final AbstractByteArrayOutputStream baout,
                 final java.io.ByteArrayOutputStream ref,
                 final int count) {
         if (count > DATA.length) {
@@ -58,7 +61,7 @@ public class ByteArrayOutputStreamTestCase {
         }
     }
 
-    private int writeData(final ByteArrayOutputStream baout,
+    private int writeData(final AbstractByteArrayOutputStream baout,
                 final java.io.ByteArrayOutputStream ref,
                 final int[] instructions) {
         int written = 0;
@@ -87,7 +90,7 @@ public class ByteArrayOutputStreamTestCase {
     }
 
     private void checkStreams(
-            final ByteArrayOutputStream actual,
+            final AbstractByteArrayOutputStream actual,
             final java.io.ByteArrayOutputStream expected) {
         assertEquals(expected.size(), actual.size(), "Sizes are not equal");
         final byte[] buf = actual.toByteArray();
@@ -95,9 +98,10 @@ public class ByteArrayOutputStreamTestCase {
         checkByteArrays(buf, refbuf);
     }
 
-    @Test
-    public void testToInputStream() throws IOException {
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testToInputStream(final String baosName, final BAOSFactory baosFactory) throws IOException {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
         //Write 8224 bytes
@@ -127,10 +131,11 @@ public class ByteArrayOutputStreamTestCase {
         in.close();
     }
 
-    @Test
-    public void testToInputStreamWithReset() throws IOException {
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testToInputStreamWithReset(final String baosName, final BAOSFactory baosFactory) throws IOException {
         //Make sure reset() do not destroy InputStream returned from toInputStream()
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
         //Write 8224 bytes
@@ -162,13 +167,14 @@ public class ByteArrayOutputStreamTestCase {
         in.close();
     }
 
-    @Test
-    public void testStream() throws Exception {
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
+    public void testStream(final String baosName, final BAOSFactory baosFactory) throws Exception {
         int written;
 
         //The ByteArrayOutputStream is initialized with 32 bytes to match
         //the original more closely for this test.
-        final ByteArrayOutputStream baout = new ByteArrayOutputStream(32);
+        final AbstractByteArrayOutputStream baout = baosFactory.instance(32);
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
         //First three writes
@@ -198,7 +204,7 @@ public class ByteArrayOutputStreamTestCase {
 
         //Write the commons Byte[]OutputStream to a java.io.Byte[]OutputStream
         //and vice-versa to test the writeTo() method.
-        final ByteArrayOutputStream baout1 = new ByteArrayOutputStream(32);
+        final AbstractByteArrayOutputStream baout1 = baosFactory.instance(32);
         ref.writeTo(baout1);
         final java.io.ByteArrayOutputStream ref1 = new java.io.ByteArrayOutputStream();
         baout.writeTo(ref1);
@@ -211,13 +217,30 @@ public class ByteArrayOutputStreamTestCase {
 
         //Make sure that empty ByteArrayOutputStreams really don't create garbage
         //on toByteArray()
-        final ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
-        final ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+        final AbstractByteArrayOutputStream baos1 = baosFactory.instance();
+        final AbstractByteArrayOutputStream baos2 = baosFactory.instance();
         assertSame(baos1.toByteArray(), baos2.toByteArray());
         baos1.close();
         baos2.close();
         baout.close();
         baout1.close();
+    }
+
+    private static Stream<Arguments> baosFactories() {
+        final BAOSFactory syncBaosFactory = size -> new ByteArrayOutputStream(size);
+        final BAOSFactory nonSyncBaos = size -> new FastByteArrayOutputStream(size);
+        return Stream.of(
+                Arguments.of(ByteArrayOutputStream.class.getSimpleName(), syncBaosFactory),
+                Arguments.of(FastByteArrayOutputStream.class.getSimpleName(), nonSyncBaos)
+        );
+    }
+
+    @FunctionalInterface
+    private interface BAOSFactory {
+        default AbstractByteArrayOutputStream instance() {
+            return instance(AbstractByteArrayOutputStream.DEFAULT_SIZE);
+        }
+        AbstractByteArrayOutputStream instance(final int size);
     }
 }
 
