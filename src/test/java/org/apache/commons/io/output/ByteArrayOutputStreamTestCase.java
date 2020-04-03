@@ -329,10 +329,10 @@ public class ByteArrayOutputStreamTestCase {
 
     private static Stream<Arguments> baosFactories() {
         final BAOSFactory syncBaosFactory = size -> new ByteArrayOutputStream(size);
-        final BAOSFactory nonSyncBaosFactory = size -> new FastByteArrayOutputStream(size);
+        final BAOSFactory unSyncBaosFactory = size -> new UnsynchronizedByteArrayOutputStream(size);
         return Stream.of(
                 Arguments.of(ByteArrayOutputStream.class.getSimpleName(), syncBaosFactory),
-                Arguments.of(FastByteArrayOutputStream.class.getSimpleName(), nonSyncBaosFactory)
+                Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), unSyncBaosFactory)
         );
     }
 
@@ -347,14 +347,14 @@ public class ByteArrayOutputStreamTestCase {
     private static Stream<Arguments> toBufferedInputStreamFunctionFactories() {
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStream = ByteArrayOutputStream::toBufferedInputStream;
         final IOFunction<InputStream, InputStream> syncBaosToBufferedInputStreamWithSize = is -> ByteArrayOutputStream.toBufferedInputStream(is, 1024);
-        final IOFunction<InputStream, InputStream> nonSyncBaosToBufferedInputStream = FastByteArrayOutputStream::toBufferedInputStream;
-        final IOFunction<InputStream, InputStream> nonSyncBaosToBufferedInputStreamWithSize = is -> FastByteArrayOutputStream.toBufferedInputStream(is, 1024);
+        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStream = UnsynchronizedByteArrayOutputStream::toBufferedInputStream;
+        final IOFunction<InputStream, InputStream> unSyncBaosToBufferedInputStreamWithSize = is -> UnsynchronizedByteArrayOutputStream.toBufferedInputStream(is, 1024);
 
         return Stream.of(
             Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream)", syncBaosToBufferedInputStream),
             Arguments.of("ByteArrayOutputStream.toBufferedInputStream(InputStream, int)", syncBaosToBufferedInputStreamWithSize),
-            Arguments.of("FastByteArrayOutputStream.toBufferedInputStream(InputStream)", nonSyncBaosToBufferedInputStream),
-            Arguments.of("FastByteArrayOutputStream.toBufferedInputStream(InputStream, int)", nonSyncBaosToBufferedInputStreamWithSize)
+            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
+            Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize)
         );
     }
 

@@ -27,13 +27,13 @@ import java.io.OutputStream;
  * @since 2.7
  */
 //@NotThreadSafe
-public final class FastByteArrayOutputStream extends AbstractByteArrayOutputStream {
+public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
      * Creates a new byte array output stream. The buffer capacity is
      * initially 1024 bytes, though its size increases if necessary.
      */
-    public FastByteArrayOutputStream() {
+    public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);
     }
 
@@ -44,7 +44,7 @@ public final class FastByteArrayOutputStream extends AbstractByteArrayOutputStre
      * @param size  the initial size
      * @throws IllegalArgumentException if size is negative
      */
-    public FastByteArrayOutputStream(final int size) {
+    public UnsynchronizedByteArrayOutputStream(final int size) {
         if (size < 0) {
             throw new IllegalArgumentException(
                 "Negative initial size: " + size);
@@ -144,7 +144,7 @@ public final class FastByteArrayOutputStream extends AbstractByteArrayOutputStre
             throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
         @SuppressWarnings("resource")
-        final FastByteArrayOutputStream output = new FastByteArrayOutputStream(size);
+        final UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream(size);
         output.write(input);
         return output.toInputStream();
     }
