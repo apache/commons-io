@@ -38,10 +38,12 @@ import static org.apache.commons.io.IOUtils.EOF;
  * <p>
  * The data can be retrieved using <code>toByteArray()</code> and
  * <code>toString()</code>.
+ * </p>
  * <p>
  * Closing an {@code AbstractByteArrayOutputStream} has no effect. The methods in
  * this class can be called after the stream has been closed without
  * generating an {@code IOException}.
+ * </p>
  * <p>
  * This is the base for an alternative implementation of the
  * {@link java.io.ByteArrayOutputStream} class. The original implementation
@@ -53,6 +55,9 @@ import static org.apache.commons.io.IOUtils.EOF;
  * like the original. The only exception is the deprecated
  * {@link java.io.ByteArrayOutputStream#toString(int)} method that has been
  * ignored.
+ * </p>
+ *
+ * @since 2.7
  */
 public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
@@ -107,7 +112,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Write the bytes to byte array.
+     * Writes the bytes to the byte array.
      * @param b the bytes to write
      * @param off The start offset
      * @param len The number of bytes to write
@@ -116,7 +121,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     public abstract void write(final byte[] b, final int off, final int len);
 
     /**
-     * Write the bytes to byte array.
+     * Writes the bytes to the byte array.
      * @param b the bytes to write
      * @param off The start offset
      * @param len The number of bytes to write
@@ -201,7 +206,8 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Return the current size of the byte array.
+     * Returns the current size of the byte array.
+     *
      * @return the current size of the byte array
      */
     public abstract int size();

@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * This class implements a version of {@link AbstractByteArrayOutputStream}
+ * Implements a version of {@link AbstractByteArrayOutputStream}
  * <b>without</b> any concurrent thread safety.
  *
  * @since 2.7
@@ -97,7 +97,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     /**
      * Fetches entire contents of an <code>InputStream</code> and represent
      * same data as result InputStream.
-     *
+     * <p>
      * This method is useful where,
      * <ul>
      * <li>Source InputStream is slow.</li>
@@ -109,6 +109,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -134,6 +135,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
