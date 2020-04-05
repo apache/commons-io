@@ -109,7 +109,6 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * </p>
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -135,7 +134,6 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * avoids unnecessary allocation and copy of byte[].<br>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * </p>
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
