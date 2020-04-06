@@ -102,6 +102,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * same data as result InputStream.
      * <p>
      * This method is useful where,
+     * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
      * <li>It has network resources associated, so we cannot keep it open for
@@ -128,6 +129,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * same data as result InputStream.
      * <p>
      * This method is useful where,
+     * </p>
      * <ul>
      * <li>Source InputStream is slow.</li>
      * <li>It has network resources associated, so we cannot keep it open for

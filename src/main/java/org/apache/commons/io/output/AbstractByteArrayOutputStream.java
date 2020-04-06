@@ -41,6 +41,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  * Closing an {@code AbstractByteArrayOutputStream} has no effect. The methods in
  * this class can be called after the stream has been closed without
  * generating an {@code IOException}.
+ * </p>
  * <p>
  * This is the base for an alternative implementation of the
  * {@link java.io.ByteArrayOutputStream} class. The original implementation
@@ -52,6 +53,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  * like the original. The only exception is the deprecated
  * {@link java.io.ByteArrayOutputStream#toString(int)} method that has been
  * ignored.
+ * </p>
  *
  * @since 2.7
  */
