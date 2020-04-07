@@ -104,6 +104,13 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
+    public void testWriteZero(final String baosName, final BAOSFactory baosFactory) {
+        final AbstractByteArrayOutputStream baout = baosFactory.instance();
+        baout.write(new byte[0], 0, 0);
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("baosFactories")
     public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
@@ -328,19 +335,38 @@ public class ByteArrayOutputStreamTestCase {
     }
 
     private static Stream<Arguments> baosFactories() {
-        final BAOSFactory syncBaosFactory = size -> new ByteArrayOutputStream(size);
-        final BAOSFactory unSyncBaosFactory = size -> new UnsynchronizedByteArrayOutputStream(size);
         return Stream.of(
-                Arguments.of(ByteArrayOutputStream.class.getSimpleName(), syncBaosFactory),
-                Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), unSyncBaosFactory)
+                Arguments.of(ByteArrayOutputStream.class.getSimpleName(), new ByteArrayOutputStreamFactory()),
+                Arguments.of(UnsynchronizedByteArrayOutputStream.class.getSimpleName(), new UnsynchronizedByteArrayOutputStreamFactory())
         );
     }
 
-    @FunctionalInterface
-    private interface BAOSFactory {
-        default AbstractByteArrayOutputStream instance() {
-            return instance(AbstractByteArrayOutputStream.DEFAULT_SIZE);
+    private static class ByteArrayOutputStreamFactory implements BAOSFactory {
+        @Override
+        public AbstractByteArrayOutputStream instance() {
+            return new ByteArrayOutputStream();
         }
+
+        @Override
+        public AbstractByteArrayOutputStream instance(final int size) {
+            return new ByteArrayOutputStream(size);
+        }
+    }
+
+    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory {
+        @Override
+        public AbstractByteArrayOutputStream instance() {
+            return new UnsynchronizedByteArrayOutputStream();
+        }
+
+        @Override
+        public AbstractByteArrayOutputStream instance(final int size) {
+            return new UnsynchronizedByteArrayOutputStream(size);
+        }
+    }
+
+    private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
+        AbstractByteArrayOutputStream instance();
         AbstractByteArrayOutputStream instance(final int size);
     }
 
