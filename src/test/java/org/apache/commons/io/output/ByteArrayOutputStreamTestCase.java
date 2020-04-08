@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.input.ClosedInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -382,11 +383,6 @@ public class ByteArrayOutputStreamTestCase {
             Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
             Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize)
         );
-    }
-
-    @FunctionalInterface
-    private interface IOFunction<T, R> {
-        R apply(final T t) throws IOException;
     }
 }
 
