@@ -341,33 +341,33 @@ public class ByteArrayOutputStreamTestCase {
         );
     }
 
-    private static class ByteArrayOutputStreamFactory implements BAOSFactory {
+    private static class ByteArrayOutputStreamFactory implements BAOSFactory<ByteArrayOutputStream> {
         @Override
-        public AbstractByteArrayOutputStream instance() {
+        public ByteArrayOutputStream instance() {
             return new ByteArrayOutputStream();
         }
 
         @Override
-        public AbstractByteArrayOutputStream instance(final int size) {
+        public ByteArrayOutputStream instance(final int size) {
             return new ByteArrayOutputStream(size);
         }
     }
 
-    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory {
+    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory<UnsynchronizedByteArrayOutputStream> {
         @Override
-        public AbstractByteArrayOutputStream instance() {
+        public UnsynchronizedByteArrayOutputStream instance() {
             return new UnsynchronizedByteArrayOutputStream();
         }
 
         @Override
-        public AbstractByteArrayOutputStream instance(final int size) {
+        public UnsynchronizedByteArrayOutputStream instance(final int size) {
             return new UnsynchronizedByteArrayOutputStream(size);
         }
     }
 
     private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
-        AbstractByteArrayOutputStream instance();
-        AbstractByteArrayOutputStream instance(final int size);
+        T instance();
+        T instance(final int size);
     }
 
     private static Stream<Arguments> toBufferedInputStreamFunctionFactories() {
