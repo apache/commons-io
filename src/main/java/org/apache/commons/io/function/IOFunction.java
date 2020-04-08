@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Like {@link Function} but throws {@link IOException}.
@@ -80,6 +81,42 @@ public interface IOFunction<T, R> {
     default <V> IOFunction<V, R> compose(final Function<? super V, ? extends T> before) {
         Objects.requireNonNull(before);
         return (V v) -> apply(before.apply(v));
+    }
+
+    /**
+     * Returns a composed {@link IOFunction} that first applies the {@code before}
+     * function to its input, and then applies this function to the result.
+     * If evaluation of either function throws an exception, it is relayed to
+     * the caller of the composed function.
+     *
+     * @param before the supplier which feeds the application of this function
+     * @return a composed function that first applies the {@code before}
+     * function and then applies this function
+     * @throws NullPointerException if before is null
+     *
+     * @see #andThen(IOFunction)
+     */
+    default IOSupplier<R> compose(final IOSupplier<? extends T> before) {
+        Objects.requireNonNull(before);
+        return () -> apply(before.get());
+    }
+
+    /**
+     * Returns a composed {@link IOFunction} that first applies the {@code before}
+     * function to its input, and then applies this function to the result.
+     * If evaluation of either function throws an exception, it is relayed to
+     * the caller of the composed function.
+     *
+     * @param before the supplier which feeds the application of this function
+     * @return a composed function that first applies the {@code before}
+     * function and then applies this function
+     * @throws NullPointerException if before is null
+     *
+     * @see #andThen(IOFunction)
+     */
+    default IOSupplier<R> compose(final Supplier<? extends T> before) {
+        Objects.requireNonNull(before);
+        return () -> apply(before.get());
     }
 
     /**

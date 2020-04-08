@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -72,6 +73,28 @@ public class IOFunctionTest {
         final InputStream is = new ByteArrayInputStream(new byte[] {2, 3});
         assertEquals(49, productFunction.apply(is));
         assertEquals(49, productFunction.apply(is));
+    }
+
+    @Test
+    public void testComposeIOSupplier() throws IOException {
+        final InputStream is = new ByteArrayInputStream(new byte[] {2, 3});
+
+        final IOSupplier<Integer> readByte = () -> is.read();
+        final IOFunction<Integer, Integer> squareInteger = i -> i * i;
+        final IOSupplier<Integer> productFunction = squareInteger.compose(readByte);
+
+        assertEquals(4, productFunction.get());
+        assertEquals(9, productFunction.get());
+    }
+
+    @Test
+    public void testComposeSupplier() throws IOException {
+        final Supplier<Integer> alwaysNine = () -> 9;
+        final IOFunction<Integer, Integer> squareInteger = i -> i * i;
+        final IOSupplier<Integer> productFunction = squareInteger.compose(alwaysNine);
+
+        assertEquals(81, productFunction.get());
+        assertEquals(81, productFunction.get());
     }
 
     @Test
