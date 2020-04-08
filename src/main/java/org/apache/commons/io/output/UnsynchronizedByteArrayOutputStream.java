@@ -21,18 +21,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Implements a ThreadSafe version of
- * {@link AbstractByteArrayOutputStream} using instance
- * synchronisation.
+ * Implements a version of {@link AbstractByteArrayOutputStream}
+ * <b>without</b> any concurrent thread safety.
+ *
+ * @since 2.7
  */
-//@ThreadSafe
-public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
+//@NotThreadSafe
+public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
      * Creates a new byte array output stream. The buffer capacity is
      * initially 1024 bytes, though its size increases if necessary.
      */
-    public ByteArrayOutputStream() {
+    public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);
     }
 
@@ -43,14 +44,12 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * @param size  the initial size
      * @throws IllegalArgumentException if size is negative
      */
-    public ByteArrayOutputStream(final int size) {
+    public UnsynchronizedByteArrayOutputStream(final int size) {
         if (size < 0) {
             throw new IllegalArgumentException(
                 "Negative initial size: " + size);
         }
-        synchronized (this) {
-            needNewBuffer(size);
-        }
+        needNewBuffer(size);
     }
 
     @Override
@@ -64,23 +63,21 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
         } else if (len == 0) {
             return;
         }
-        synchronized (this) {
-            writeImpl(b, off, len);
-        }
+        writeImpl(b, off, len);
     }
 
     @Override
-    public synchronized void write(final int b) {
+    public void write(final int b) {
         writeImpl(b);
     }
 
     @Override
-    public synchronized int write(final InputStream in) throws IOException {
+    public int write(final InputStream in) throws IOException {
         return writeImpl(in);
     }
 
     @Override
-    public synchronized int size() {
+    public int size() {
         return count;
     }
 
@@ -88,12 +85,12 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * @see java.io.ByteArrayOutputStream#reset()
      */
     @Override
-    public synchronized void reset() {
+    public void reset() {
         resetImpl();
     }
 
     @Override
-    public synchronized void writeTo(final OutputStream out) throws IOException {
+    public void writeTo(final OutputStream out) throws IOException {
         writeToImpl(out);
     }
 
@@ -117,7 +114,6 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
-     * @since 2.0
      */
     public static InputStream toBufferedInputStream(final InputStream input)
             throws IOException {
@@ -145,24 +141,23 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * @param size the initial buffer size
      * @return A fully buffered stream.
      * @throws IOException if an I/O error occurs
-     * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size)
             throws IOException {
         // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
         @SuppressWarnings("resource")
-        final ByteArrayOutputStream output = new ByteArrayOutputStream(size);
+        final UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream(size);
         output.write(input);
         return output.toInputStream();
     }
 
     @Override
-    public synchronized InputStream toInputStream() {
+    public InputStream toInputStream() {
         return toInputStreamImpl();
     }
 
     @Override
-    public synchronized byte[] toByteArray() {
+    public byte[] toByteArray() {
         return toByteArrayImpl();
     }
 }
