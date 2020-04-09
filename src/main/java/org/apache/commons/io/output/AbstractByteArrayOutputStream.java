@@ -303,7 +303,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @see #reset()
      * @since 2.7
      */
-    protected <T extends InputStream> InputStream toInputStreamImpl(
+    protected <T extends InputStream> InputStream toInputStream(
             final InputStreamConstructor<T> isConstructor) {
         int remaining = count;
         if (remaining == 0) {

@@ -155,7 +155,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
 
     @Override
     public InputStream toInputStream() {
-        return toInputStreamImpl(UnsynchronizedByteArrayInputStream::new);
+        return toInputStream(UnsynchronizedByteArrayInputStream::new);
     }
 
     @Override
