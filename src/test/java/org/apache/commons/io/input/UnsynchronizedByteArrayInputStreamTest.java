@@ -19,7 +19,10 @@ package org.apache.commons.io.input;
 import org.junit.jupiter.api.Test;
 
 import static org.apache.commons.io.input.UnsynchronizedByteArrayInputStream.END_OF_STREAM;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Basic unit tests for the alternative ByteArrayInputStream implementation.
@@ -132,13 +135,6 @@ public class UnsynchronizedByteArrayInputStreamTest {
     }
 
     @Test
-    public void testInvalidConstructor3OffsetUnder() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new UnsynchronizedByteArrayInputStream(new byte[0], -1, 1);
-        });
-    }
-
-    @Test
     public void testInvalidConstructor3LengthUnder() {
         assertThrows(IllegalArgumentException.class, () -> {
             new UnsynchronizedByteArrayInputStream(new byte[0], 0, -1);
@@ -146,12 +142,76 @@ public class UnsynchronizedByteArrayInputStreamTest {
     }
 
     @Test
-    public void testReadSingle() {
-        UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[0]);
+    public void testInvalidConstructor3OffsetUnder() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new UnsynchronizedByteArrayInputStream(new byte[0], -1, 1);
+        });
+    }
+
+    @Test
+    public void testInvalidReadArrayExplicitLenUnder() {
+        final byte[] buf = new byte[0];
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            is.read(buf, 0, -1);
+        });
+    }
+
+    @Test
+    public void testInvalidReadArrayExplicitOffsetUnder() {
+        final byte[] buf = new byte[0];
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            is.read(buf, -1, 1);
+        });
+    }
+
+    @Test
+    public void testInvalidReadArrayExplicitRangeOver() {
+        final byte[] buf = new byte[0];
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            is.read(buf, 0, 1);
+        });
+    }
+
+    @Test
+    public void testInvalidReadArrayNull() {
+        final byte[] buf = null;
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertThrows(NullPointerException.class, () -> {
+            is.read(buf);
+        });
+    }
+
+    @Test
+    public void testInvalidSkipNUnder() {
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertThrows(IllegalArgumentException.class, () -> {
+            is.skip(-1);
+        });
+    }
+
+    @Test
+    public void testMarkReset() {
+        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertTrue(is.markSupported());
+        assertEquals(0xa, is.read());
+        assertTrue(is.markSupported());
+
+        is.mark(10);
+
+        assertEquals(0xb, is.read());
+        assertEquals(0xc, is.read());
+
+        is.reset();
+
+        assertEquals(0xb, is.read());
+        assertEquals(0xc, is.read());
         assertEquals(END_OF_STREAM, is.read());
 
-        is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertEquals(0xa, is.read());
+        is.reset();
+
         assertEquals(0xb, is.read());
         assertEquals(0xc, is.read());
         assertEquals(END_OF_STREAM, is.read());
@@ -188,15 +248,6 @@ public class UnsynchronizedByteArrayInputStreamTest {
         read = is.read(buf);
         assertEquals(1, read);
         assertEquals(0xc, buf[0]);
-    }
-
-    @Test
-    public void testInvalidReadArrayNull() {
-        final byte[] buf = null;
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertThrows(NullPointerException.class, () -> {
-            is.read(buf);
-        });
     }
 
     @Test
@@ -237,52 +288,12 @@ public class UnsynchronizedByteArrayInputStreamTest {
     }
 
     @Test
-    public void testInvalidReadArrayExplicitOffsetUnder() {
-        final byte[] buf = new byte[0];
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, -1, 1);
-        });
-    }
-
-    @Test
-    public void testInvalidReadArrayExplicitLenUnder() {
-        final byte[] buf = new byte[0];
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, 0, -1);
-        });
-    }
-
-    @Test
-    public void testInvalidReadArrayExplicitRangeOver() {
-        final byte[] buf = new byte[0];
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            is.read(buf, 0, 1);
-        });
-    }
-
-    @Test
-    public void testMarkReset() {
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertTrue(is.markSupported());
-        assertEquals(0xa, is.read());
-        assertTrue(is.markSupported());
-
-        is.mark(10);
-
-        assertEquals(0xb, is.read());
-        assertEquals(0xc, is.read());
-
-        is.reset();
-
-        assertEquals(0xb, is.read());
-        assertEquals(0xc, is.read());
+    public void testReadSingle() {
+        UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[0]);
         assertEquals(END_OF_STREAM, is.read());
 
-        is.reset();
-
+        is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
+        assertEquals(0xa, is.read());
         assertEquals(0xb, is.read());
         assertEquals(0xc, is.read());
         assertEquals(END_OF_STREAM, is.read());
@@ -329,13 +340,5 @@ public class UnsynchronizedByteArrayInputStreamTest {
         is.skip(999);
         assertEquals(0, is.available());
         assertEquals(END_OF_STREAM, is.read());
-    }
-
-    @Test
-    public void testInavlidSkipNUnder() {
-        final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
-        assertThrows(IllegalArgumentException.class, () -> {
-            is.skip(-1);
-        });
     }
 }

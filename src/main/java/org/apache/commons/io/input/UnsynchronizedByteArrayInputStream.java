@@ -57,6 +57,8 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     private int markedOffset;
 
     /**
+     * Creates a new byte array input stream.
+     *
      * @param data the buffer
      */
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
@@ -68,6 +70,8 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     }
 
     /**
+     * Creates a new byte array input stream.
+     *
      * @param data the buffer
      * @param offset the offset into the buffer
      *
@@ -86,6 +90,8 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
 
     /**
+     * Creates a new byte array input stream.
+     *
      * @param data the buffer
      * @param offset the offset into the buffer
      * @param length the length of the buffer
