@@ -158,7 +158,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     @Override
     public synchronized InputStream toInputStream() {
-        return toInputStreamImpl();
+        return toInputStreamImpl(java.io.ByteArrayInputStream::new);
     }
 
     @Override
