@@ -201,6 +201,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-648" dev="ggregory" type="add" due-to="Adam Retter, Alex Herbert, Gary Gregory">
          Refactor ByteArrayOutputStream into synchronized and unsynchronized versions #108.
       </action>
+      <action issue="IO-662" dev="ggregory" type="add" due-to="Adam Retter, Gary Gregory">
+         Refactor ByteArrayOutputStream into synchronized and unsynchronized versions #108.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
