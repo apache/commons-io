@@ -233,19 +233,19 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.5.2</version>
+      <version>5.6.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>0.3.0</version>
+      <version>0.5.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.0.0</version>
+      <version>3.3.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
