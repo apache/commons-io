@@ -700,7 +700,6 @@ public class FileUtils {
      * @param destinationDir the directory to place the copy in, must not be {@code null}
      *
      * @throws NullPointerException if source or destination is {@code null}
-     * @throws IllegalArgumentException if {@code srcDir} or {@code destDir} is not a directory
      * @throws IOException          if source or destination is invalid
      * @throws IOException          if an IO error occurs during copying
      * @since 1.2
@@ -708,11 +707,11 @@ public class FileUtils {
     public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
         Objects.requireNonNull(sourceDir, "sourceDir");
         if (sourceDir.exists() && sourceDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Source '" + sourceDir + "' is not a directory");
+            throw new IOException("Source '" + sourceDir + "' is not a directory");
         }
         Objects.requireNonNull(destinationDir, "destinationDir");
         if (destinationDir.exists() && destinationDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
+            throw new IOException("Destination '" + destinationDir + "' is not a directory");
         }
         copyDirectory(sourceDir, new File(destinationDir, sourceDir.getName()), true);
     }
@@ -877,7 +876,7 @@ public class FileUtils {
             throws IOException {
         Objects.requireNonNull(destinationDir, "destinationDir");
         if (destinationDir.exists() && destinationDir.isDirectory() == false) {
-            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
+            throw new IOException("Destination '" + destinationDir + "' is not a directory");
         }
         final File destFile = new File(destinationDir, sourceFile.getName());
         copyFile(sourceFile, destFile, preserveFileDate);
