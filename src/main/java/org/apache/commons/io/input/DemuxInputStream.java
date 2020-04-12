@@ -28,7 +28,7 @@ import org.apache.commons.io.IOUtils;
  *
  */
 public class DemuxInputStream extends InputStream {
-    private final InheritableThreadLocal<InputStream> m_streams = new InheritableThreadLocal<>();
+    private final InheritableThreadLocal<InputStream> inputStream = new InheritableThreadLocal<>();
 
     /**
      * Bind the specified stream to the current thread.
@@ -37,8 +37,8 @@ public class DemuxInputStream extends InputStream {
      * @return the InputStream that was previously active
      */
     public InputStream bindStream(final InputStream input) {
-        final InputStream oldValue = m_streams.get();
-        m_streams.set(input);
+        final InputStream oldValue = inputStream.get();
+        inputStream.set(input);
         return oldValue;
     }
 
@@ -49,7 +49,7 @@ public class DemuxInputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
-        IOUtils.close(m_streams.get());
+        IOUtils.close(inputStream.get());
     }
 
     /**
@@ -60,7 +60,7 @@ public class DemuxInputStream extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        final InputStream input = m_streams.get();
+        final InputStream input = inputStream.get();
         if (null != input) {
             return input.read();
         }
