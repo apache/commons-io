@@ -1022,7 +1022,9 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
-        copyInputStreamToFile(source.openStream(), destination);
+        try (final InputStream stream = source.openStream()) {
+            copyInputStreamToFile(stream, destination);
+        }
     }
 
     /**
@@ -1046,11 +1048,13 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyURLToFile(final URL source, final File destination,
-                                     final int connectionTimeout, final int readTimeout) throws IOException {
+        final int connectionTimeout, final int readTimeout) throws IOException {
         final URLConnection connection = source.openConnection();
         connection.setConnectTimeout(connectionTimeout);
         connection.setReadTimeout(readTimeout);
-        copyInputStreamToFile(connection.getInputStream(), destination);
+        try (final InputStream stream = connection.getInputStream()) {
+            copyInputStreamToFile(stream, destination);
+        }
     }
 
     /**
