@@ -171,11 +171,13 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         return true;
     }
 
+    @SuppressWarnings("sync-override")
     @Override
     public void mark(final int readlimit) {
         this.markedOffset = this.offset;
     }
 
+    @SuppressWarnings("sync-override")
     @Override
     public void reset() {
         this.offset = this.markedOffset;
