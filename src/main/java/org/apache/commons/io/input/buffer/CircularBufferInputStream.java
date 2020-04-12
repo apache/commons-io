@@ -36,19 +36,19 @@ public class CircularBufferInputStream extends InputStream {
      * Creates a new instance, which filters the given input stream, and
      * uses the given buffer size.
      *
-     * @param pIn         The input stream, which is being buffered.
-     * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
+     * @param inputStream         The input stream, which is being buffered.
+     * @param bufferSize The size of the {@link CircularByteBuffer}, which is
      *                    used internally.
      */
-    public CircularBufferInputStream(final InputStream pIn, final int pBufferSize) {
-        Objects.requireNonNull(pIn, "InputStream");
-        if (pBufferSize <= 0) {
-            throw new IllegalArgumentException("Invalid buffer size: " + pBufferSize);
+    public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
+        Objects.requireNonNull(inputStream, "InputStream");
+        if (bufferSize <= 0) {
+            throw new IllegalArgumentException("Invalid buffer size: " + bufferSize);
         }
-        in = pIn;
-        buffer = new CircularByteBuffer(pBufferSize);
-        bufferSize = pBufferSize;
-        eofSeen = false;
+        this.in = inputStream;
+        this.buffer = new CircularByteBuffer(bufferSize);
+        this.bufferSize = bufferSize;
+        this.eofSeen = false;
     }
 
     /**
@@ -87,12 +87,12 @@ public class CircularBufferInputStream extends InputStream {
     /**
      * Fills the buffer from the input stream until the given number of bytes have been added to the buffer.
      *
-     * @param pNumber number of byte to fill into the buffer
+     * @param number number of byte to fill into the buffer
      * @return true if the buffer has bytes
      * @throws IOException in case of an error while reading from the input stream.
      */
-    protected boolean haveBytes(final int pNumber) throws IOException {
-        if (buffer.getCurrentNumberOfBytes() < pNumber) {
+    protected boolean haveBytes(final int number) throws IOException {
+        if (buffer.getCurrentNumberOfBytes() < number) {
             fillBuffer();
         }
         return buffer.hasBytes();
@@ -107,8 +107,8 @@ public class CircularBufferInputStream extends InputStream {
     }
 
     @Override
-    public int read(final byte[] pBuffer) throws IOException {
-        return read(pBuffer, 0, pBuffer.length);
+    public int read(final byte[] buffer) throws IOException {
+        return read(buffer, 0, buffer.length);
     }
 
     @Override
