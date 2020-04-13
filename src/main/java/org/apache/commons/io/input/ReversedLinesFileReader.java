@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
@@ -40,7 +41,7 @@ import org.apache.commons.io.Charsets;
 public class ReversedLinesFileReader implements Closeable {
 
     private static final String EMPTY_STRING = "";
-    private static final int DEFAULT_BLOCK_SIZE = 4096;
+    private static final int DEFAULT_BLOCK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private final int blockSize;
     private final Charset encoding;

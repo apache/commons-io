@@ -110,7 +110,7 @@ public class IOUtils {
     /**
      * The default buffer size ({@value}) to use in copy methods.
      */
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+    public static final int DEFAULT_BUFFER_SIZE = 8192;
 
     /**
      * The system directory separator character.

@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.XmlStreamWriter;
 
 /**
@@ -62,7 +63,7 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * @see XmlStreamWriter
  */
 public class XmlStreamReader extends Reader {
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private static final String UTF_8 = "UTF-8";
 
