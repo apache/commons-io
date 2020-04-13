@@ -27,68 +27,69 @@ import java.util.Objects;
  * scanners, lexers, parsers, or the like.
  */
 public class PeekableInputStream extends CircularBufferInputStream {
+
     /**
      * Creates a new instance, which filters the given input stream, and
      * uses the given buffer size.
      *
-     * @param pIn         The input stream, which is being buffered.
-     * @param pBufferSize The size of the {@link CircularByteBuffer}, which is
+     * @param inputStream         The input stream, which is being buffered.
+     * @param bufferSize The size of the {@link CircularByteBuffer}, which is
      *                    used internally.
      */
-    public PeekableInputStream(final InputStream pIn, final int pBufferSize) {
-        super(pIn, pBufferSize);
+    public PeekableInputStream(final InputStream inputStream, final int bufferSize) {
+        super(inputStream, bufferSize);
     }
 
     /**
      * Creates a new instance, which filters the given input stream, and
      * uses a reasonable default buffer size (8192).
      *
-     * @param pIn The input stream, which is being buffered.
+     * @param inputStream The input stream, which is being buffered.
      */
-    public PeekableInputStream(final InputStream pIn) {
-        super(pIn);
+    public PeekableInputStream(final InputStream inputStream) {
+        super(inputStream);
     }
 
     /**
      * Returns, whether the next bytes in the buffer are as given by
-     * {@code pBuffer}. This is equivalent to {@link #peek(byte[], int, int)}
-     * with {@code pOffset} == 0, and {@code pLength} == {@code pBuffer.length}
+     * {@code sourceBuffer}. This is equivalent to {@link #peek(byte[], int, int)}
+     * with {@code offset} == 0, and {@code length} == {@code sourceBuffer.length}
      *
-     * @param pBuffer the buffer to compare against
+     * @param sourceBuffer the buffer to compare against
      * @return true if the next bytes are as given
      * @throws IOException Refilling the buffer failed.
      */
-    public boolean peek(final byte[] pBuffer) throws IOException {
-        Objects.requireNonNull(pBuffer, "Buffer");
-        if (pBuffer.length > bufferSize) {
-            throw new IllegalArgumentException("Peek request size of " + pBuffer.length
+    public boolean peek(final byte[] sourceBuffer) throws IOException {
+        Objects.requireNonNull(sourceBuffer, "Buffer");
+        if (sourceBuffer.length > bufferSize) {
+            throw new IllegalArgumentException("Peek request size of " + sourceBuffer.length
                     + " bytes exceeds buffer size of " + bufferSize + " bytes");
         }
-        if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
+        if (buffer.getCurrentNumberOfBytes() < sourceBuffer.length) {
             fillBuffer();
         }
-        return buffer.peek(pBuffer, 0, pBuffer.length);
+        return buffer.peek(sourceBuffer, 0, sourceBuffer.length);
     }
 
     /**
      * Returns, whether the next bytes in the buffer are as given by
-     * {@code pBuffer}, {code pOffset}, and {@code pLength}.
+     * {@code sourceBuffer}, {code offset}, and {@code length}.
      *
-     * @param pBuffer the buffer to compare against
-     * @param pOffset the start offset
-     * @param pLength the length to compare
+     * @param sourceBuffer the buffer to compare against
+     * @param offset the start offset
+     * @param length the length to compare
      * @return true if the next bytes in the buffer are as given
      * @throws IOException if there is a problem calling fillBuffer()
      */
-    public boolean peek(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
-        Objects.requireNonNull(pBuffer, "Buffer");
-        if (pBuffer.length > bufferSize) {
-            throw new IllegalArgumentException("Peek request size of " + pBuffer.length
+    public boolean peek(final byte[] sourceBuffer, final int offset, final int length) throws IOException {
+        Objects.requireNonNull(sourceBuffer, "Buffer");
+        if (sourceBuffer.length > bufferSize) {
+            throw new IllegalArgumentException("Peek request size of " + sourceBuffer.length
                     + " bytes exceeds buffer size of " + bufferSize + " bytes");
         }
-        if (buffer.getCurrentNumberOfBytes() < pBuffer.length) {
+        if (buffer.getCurrentNumberOfBytes() < sourceBuffer.length) {
             fillBuffer();
         }
-        return buffer.peek(pBuffer, pOffset, pLength);
+        return buffer.peek(sourceBuffer, offset, length);
     }
 }

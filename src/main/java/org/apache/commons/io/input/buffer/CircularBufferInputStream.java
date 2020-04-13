@@ -41,11 +41,10 @@ public class CircularBufferInputStream extends InputStream {
      *                    used internally.
      */
     public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
-        Objects.requireNonNull(inputStream, "InputStream");
         if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Invalid buffer size: " + bufferSize);
+            throw new IllegalArgumentException("Invalid bufferSize: " + bufferSize);
         }
-        this.in = inputStream;
+        this.in = Objects.requireNonNull(inputStream, "inputStream");
         this.buffer = new CircularByteBuffer(bufferSize);
         this.bufferSize = bufferSize;
         this.eofSeen = false;
@@ -55,10 +54,10 @@ public class CircularBufferInputStream extends InputStream {
      * Creates a new instance, which filters the given input stream, and
      * uses a reasonable default buffer size (8192).
      *
-     * @param pIn The input stream, which is being buffered.
+     * @param inputStream The input stream, which is being buffered.
      */
-    public CircularBufferInputStream(final InputStream pIn) {
-        this(pIn, 8192);
+    public CircularBufferInputStream(final InputStream inputStream) {
+        this(inputStream, 8192);
     }
 
     /**
@@ -87,12 +86,12 @@ public class CircularBufferInputStream extends InputStream {
     /**
      * Fills the buffer from the input stream until the given number of bytes have been added to the buffer.
      *
-     * @param number number of byte to fill into the buffer
+     * @param count number of byte to fill into the buffer
      * @return true if the buffer has bytes
      * @throws IOException in case of an error while reading from the input stream.
      */
-    protected boolean haveBytes(final int number) throws IOException {
-        if (buffer.getCurrentNumberOfBytes() < number) {
+    protected boolean haveBytes(final int count) throws IOException {
+        if (buffer.getCurrentNumberOfBytes() < count) {
             fillBuffer();
         }
         return buffer.hasBytes();
@@ -112,20 +111,20 @@ public class CircularBufferInputStream extends InputStream {
     }
 
     @Override
-    public int read(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
-        Objects.requireNonNull(pBuffer, "Buffer");
-        if (pOffset < 0) {
+    public int read(final byte[] targetBuffer, final int offset, final int length) throws IOException {
+        Objects.requireNonNull(targetBuffer, "Buffer");
+        if (offset < 0) {
             throw new IllegalArgumentException("Offset must not be negative");
         }
-        if (pLength < 0) {
+        if (length < 0) {
             throw new IllegalArgumentException("Length must not be negative");
         }
-        if (!haveBytes(pLength)) {
+        if (!haveBytes(length)) {
             return -1;
         }
-        final int result = Math.min(pLength, buffer.getCurrentNumberOfBytes());
+        final int result = Math.min(length, buffer.getCurrentNumberOfBytes());
         for (int i = 0; i < result; i++) {
-            pBuffer[pOffset + i] = buffer.read();
+            targetBuffer[offset + i] = buffer.read();
         }
         return result;
     }
