@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Character stream that handles all the necessary Voodoo to figure out the
@@ -63,7 +64,7 @@ import org.apache.commons.io.ByteOrderMark;
  * @since 2.0
  */
 public class XmlStreamReader extends Reader {
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private static final String UTF_8 = "UTF-8";
 

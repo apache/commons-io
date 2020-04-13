@@ -26,6 +26,7 @@ import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Simple implementation of the unix "tail -f" functionality.
@@ -123,8 +124,6 @@ public class Tailer implements Runnable {
 
     private static final String RAF_MODE = "r";
 
-    private static final int DEFAULT_BUFSIZE = 4096;
-
     // The default charset used for reading files
     private static final Charset DEFAULT_CHARSET = Charset.defaultCharset();
 
@@ -195,7 +194,7 @@ public class Tailer implements Runnable {
      * @param end Set to true to tail from the end of the file, false to tail from the beginning of the file.
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end) {
-        this(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
+        this(file, listener, delayMillis, end, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -208,7 +207,7 @@ public class Tailer implements Runnable {
      */
     public Tailer(final File file, final TailerListener listener, final long delayMillis, final boolean end,
                   final boolean reOpen) {
-        this(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+        this(file, listener, delayMillis, end, reOpen, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -329,7 +328,7 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end) {
-        return create(file, listener, delayMillis, end, DEFAULT_BUFSIZE);
+        return create(file, listener, delayMillis, end, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -344,7 +343,7 @@ public class Tailer implements Runnable {
      */
     public static Tailer create(final File file, final TailerListener listener, final long delayMillis,
                                 final boolean end, final boolean reOpen) {
-        return create(file, listener, delayMillis, end, reOpen, DEFAULT_BUFSIZE);
+        return create(file, listener, delayMillis, end, reOpen, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**

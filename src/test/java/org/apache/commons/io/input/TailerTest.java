@@ -132,7 +132,7 @@ public class TailerTest {
         final boolean isWindows = osname.startsWith("Windows");
         // Need to use UTF-8 to read & write the file otherwise it can be corrupted (depending on the default charset)
         final Charset charsetUTF8 = StandardCharsets.UTF_8;
-        tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, 4096);
+        tailer = new Tailer(file, charsetUTF8, listener, delay, false, isWindows, IOUtils.DEFAULT_BUFFER_SIZE);
         final Thread thread = new Thread(tailer);
         thread.start();
 
@@ -365,7 +365,7 @@ public class TailerTest {
         // Use a long delay to try to make sure the test thread calls interrupt() while the tailer thread is sleeping.
         final int delay = 1000;
         final int idle = 50; // allow time for thread to work
-        tailer = new Tailer(file, listener, delay, false, 4096);
+        tailer = new Tailer(file, listener, delay, false, IOUtils.DEFAULT_BUFFER_SIZE);
         final Thread thread = new Thread(tailer);
         thread.setDaemon(true);
         thread.start();

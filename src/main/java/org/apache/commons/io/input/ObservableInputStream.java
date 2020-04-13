@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 
 /**
  * The {@link ObservableInputStream} allows, that an InputStream may be consumed
@@ -263,7 +265,7 @@ public class ObservableInputStream extends ProxyInputStream {
      *   observers has thrown an exception.
      */
     public void consume() throws IOException {
-        final byte[] buffer = new byte[8192];
+        final byte[] buffer = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
         for (;;) {
             final int res = read(buffer);
             if (res == -1) {

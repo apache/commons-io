@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,14 +56,14 @@ public class ReversedLinesFileReaderTestSimple {
     public void testUnsupportedEncodingUTF16() throws URISyntaxException {
         final File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
         assertThrows(UnsupportedEncodingException.class,
-                () -> new ReversedLinesFileReader(testFileEmpty, 4096, "UTF-16").close());
+                () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, "UTF-16").close());
     }
 
     @Test
     public void testUnsupportedEncodingBig5() throws URISyntaxException {
         final File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
         assertThrows(UnsupportedEncodingException.class,
-                () -> new ReversedLinesFileReader(testFileEncodingBig5, 4096, "Big5").close());
+                () -> new ReversedLinesFileReader(testFileEncodingBig5, IOUtils.DEFAULT_BUFFER_SIZE, "Big5").close());
     }
 
 

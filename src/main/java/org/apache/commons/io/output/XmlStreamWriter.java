@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.XmlStreamReader;
 
 /**
@@ -38,7 +39,7 @@ import org.apache.commons.io.input.XmlStreamReader;
  * @since 2.0
  */
 public class XmlStreamWriter extends Writer {
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private final OutputStream out;
 

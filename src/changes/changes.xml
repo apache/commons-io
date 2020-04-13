@@ -207,6 +207,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-664" dev="ggregory" type="fix" due-to="Gary Gregory">
          org.apache.commons.io.FileUtils.copyURLToFile(*) open but do not close streams.
       </action>
+      <action issue="IO-666" dev="ggregory" type="update" due-to="Gary Gregory">
+         Normalize internal buffers to 8192 bytes.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">

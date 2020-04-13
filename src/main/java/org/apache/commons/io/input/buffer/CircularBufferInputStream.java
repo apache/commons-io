@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
+
 
 /**
  * Implementation of a buffered input stream, which is internally based on the
@@ -52,12 +54,12 @@ public class CircularBufferInputStream extends InputStream {
 
     /**
      * Creates a new instance, which filters the given input stream, and
-     * uses a reasonable default buffer size (8192).
+     * uses a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
      *
      * @param inputStream The input stream, which is being buffered.
      */
     public CircularBufferInputStream(final InputStream inputStream) {
-        this(inputStream, 8192);
+        this(inputStream, IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**

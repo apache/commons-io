@@ -18,6 +18,8 @@ package org.apache.commons.io.input.buffer;
 
 import java.util.Objects;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * A buffer, which doesn't need reallocation of byte arrays, because it
  * reuses a single byte array. This works particularly well, if reading
@@ -42,10 +44,10 @@ public class CircularByteBuffer {
     }
 
     /**
-     * Creates a new instance with a reasonable default buffer size (8192).
+     * Creates a new instance with a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
      */
     public CircularByteBuffer() {
-        this(8192);
+        this(IOUtils.DEFAULT_BUFFER_SIZE);
     }
 
     /**
