@@ -72,9 +72,9 @@ public class CircularByteBuffer {
      * Returns the given number of bytes from the buffer by storing them in
      * the given byte array at the given offset.
      *
-     * @param pBuffer The byte array, where to add bytes.
-     * @param pOffset The offset, where to store bytes in the byte array.
-     * @param pLength The number of bytes to return.
+     * @param targetBuffer The byte array, where to add bytes.
+     * @param targetOffset The offset, where to store bytes in the byte array.
+     * @param length The number of bytes to return.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative,
      *                                  or the length of the byte array {@code pBuffer} is too small.
@@ -82,26 +82,26 @@ public class CircularByteBuffer {
      *                                  of bytes. Use {@link #getCurrentNumberOfBytes()} to prevent this
      *                                  exception.
      */
-    public void read(final byte[] pBuffer, final int pOffset, final int pLength) {
-        Objects.requireNonNull(pBuffer);
-        if (pOffset < 0 || pOffset >= pBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + pOffset);
+    public void read(final byte[] targetBuffer, final int targetOffset, final int length) {
+        Objects.requireNonNull(targetBuffer);
+        if (targetOffset < 0 || targetOffset >= targetBuffer.length) {
+            throw new IllegalArgumentException("Invalid offset: " + targetOffset);
         }
-        if (pLength < 0 || pLength > buffer.length) {
-            throw new IllegalArgumentException("Invalid length: " + pLength);
+        if (length < 0 || length > buffer.length) {
+            throw new IllegalArgumentException("Invalid length: " + length);
         }
-        if (pOffset + pLength > pBuffer.length) {
+        if (targetOffset + length > targetBuffer.length) {
             throw new IllegalArgumentException("The supplied byte array contains only "
-                    + pBuffer.length + " bytes, but offset, and length would require "
-                    + (pOffset + pLength - 1));
+                    + targetBuffer.length + " bytes, but offset, and length would require "
+                    + (targetOffset + length - 1));
         }
-        if (currentNumberOfBytes < pLength) {
+        if (currentNumberOfBytes < length) {
             throw new IllegalStateException("Currently, there are only " + currentNumberOfBytes
-                    + "in the buffer, not " + pLength);
+                    + "in the buffer, not " + length);
         }
-        int offset = pOffset;
-        for (int i = 0; i < pLength; i++) {
-            pBuffer[offset++] = buffer[startOffset];
+        int offset = targetOffset;
+        for (int i = 0; i < length; i++) {
+            targetBuffer[offset++] = buffer[startOffset];
             --currentNumberOfBytes;
             if (++startOffset == buffer.length) {
                 startOffset = 0;
@@ -113,15 +113,15 @@ public class CircularByteBuffer {
      * Adds a new byte to the buffer, which will eventually be returned by following
      * invocations of {@link #read()}.
      *
-     * @param pByte The byte, which is being added to the buffer.
+     * @param value The byte, which is being added to the buffer.
      * @throws IllegalStateException The buffer is full. Use {@link #hasSpace()},
      *                               or {@link #getSpace()}, to prevent this exception.
      */
-    public void add(final byte pByte) {
+    public void add(final byte value) {
         if (currentNumberOfBytes >= buffer.length) {
             throw new IllegalStateException("No space available");
         }
-        buffer[endOffset] = pByte;
+        buffer[endOffset] = value;
         ++currentNumberOfBytes;
         if (++endOffset == buffer.length) {
             endOffset = 0;
@@ -130,37 +130,37 @@ public class CircularByteBuffer {
 
     /**
      * Returns, whether the next bytes in the buffer are exactly those, given by
-     * {@code pBuffer}, {@code pOffset}, and {@code pLength}. No bytes are being
+     * {@code sourceBuffer}, {@code offset}, and {@code length}. No bytes are being
      * removed from the buffer. If the result is true, then the following invocations
      * of {@link #read()} are guaranteed to return exactly those bytes.
      *
-     * @param pBuffer the buffer to compare against
-     * @param pOffset start offset
-     * @param pLength length to compare
+     * @param sourceBuffer the buffer to compare against
+     * @param offset start offset
+     * @param length length to compare
      * @return True, if the next invocations of {@link #read()} will return the
      * bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
      * {@code pOffset}+{@code pLength}-1 of byte array {@code pBuffer}.
      * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
-    public boolean peek(final byte[] pBuffer, final int pOffset, final int pLength) {
-        Objects.requireNonNull(pBuffer, "Buffer");
-        if (pOffset < 0 || pOffset >= pBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + pOffset);
+    public boolean peek(final byte[] sourceBuffer, final int offset, final int length) {
+        Objects.requireNonNull(sourceBuffer, "Buffer");
+        if (offset < 0 || offset >= sourceBuffer.length) {
+            throw new IllegalArgumentException("Invalid offset: " + offset);
         }
-        if (pLength < 0 || pLength > buffer.length) {
-            throw new IllegalArgumentException("Invalid length: " + pLength);
+        if (length < 0 || length > buffer.length) {
+            throw new IllegalArgumentException("Invalid length: " + length);
         }
-        if (pLength < currentNumberOfBytes) {
+        if (length < currentNumberOfBytes) {
             return false;
         }
-        int offset = startOffset;
-        for (int i = 0; i < pLength; i++) {
-            if (buffer[offset] != pBuffer[i + pOffset]) {
+        int localOffset = startOffset;
+        for (int i = 0; i < length; i++) {
+            if (buffer[localOffset] != sourceBuffer[i + offset]) {
                 return false;
             }
-            if (++offset == buffer.length) {
-                offset = 0;
+            if (++localOffset == buffer.length) {
+                localOffset = 0;
             }
         }
         return true;
@@ -168,35 +168,35 @@ public class CircularByteBuffer {
 
     /**
      * Adds the given bytes to the buffer. This is the same as invoking {@link #add(byte)}
-     * for the bytes at offsets {@code pOffset}+0, {@code pOffset}+1, ...,
-     * {@code pOffset}+{@code pLength}-1 of byte array {@code pBuffer}.
+     * for the bytes at offsets {@code offset+0}, {@code offset+1}, ...,
+     * {@code offset+length-1} of byte array {@code targetBuffer}.
      *
-     * @param pBuffer the buffer to copy
-     * @param pOffset start offset
-     * @param pLength length to copy
+     * @param targetBuffer the buffer to copy
+     * @param offset start offset
+     * @param length length to copy
      * @throws IllegalStateException    The buffer doesn't have sufficient space. Use
      *                                  {@link #getSpace()} to prevent this exception.
      * @throws IllegalArgumentException Either of {@code pOffset}, or {@code pLength} is negative.
      * @throws NullPointerException     The byte array {@code pBuffer} is null.
      */
-    public void add(final byte[] pBuffer, final int pOffset, final int pLength) {
-        Objects.requireNonNull(pBuffer, "Buffer");
-        if (pOffset < 0 || pOffset >= pBuffer.length) {
-            throw new IllegalArgumentException("Invalid offset: " + pOffset);
+    public void add(final byte[] targetBuffer, final int offset, final int length) {
+        Objects.requireNonNull(targetBuffer, "Buffer");
+        if (offset < 0 || offset >= targetBuffer.length) {
+            throw new IllegalArgumentException("Invalid offset: " + offset);
         }
-        if (pLength < 0) {
-            throw new IllegalArgumentException("Invalid length: " + pLength);
+        if (length < 0) {
+            throw new IllegalArgumentException("Invalid length: " + length);
         }
-        if (currentNumberOfBytes + pLength > buffer.length) {
+        if (currentNumberOfBytes + length > buffer.length) {
             throw new IllegalStateException("No space available");
         }
-        for (int i = 0; i < pLength; i++) {
-            buffer[endOffset] = pBuffer[pOffset + i];
+        for (int i = 0; i < length; i++) {
+            buffer[endOffset] = targetBuffer[offset + i];
             if (++endOffset == buffer.length) {
                 endOffset = 0;
             }
         }
-        currentNumberOfBytes += pLength;
+        currentNumberOfBytes += length;
     }
 
     /**
@@ -214,13 +214,13 @@ public class CircularByteBuffer {
     /**
      * Returns, whether there is currently room for the given number of bytes in the buffer.
      *
-     * @param pBytes the byte count
+     * @param count the byte count
      * @return true if there is space for the given number of bytes
      * @see #hasSpace()
      * @see #getSpace()
      */
-    public boolean hasSpace(final int pBytes) {
-        return currentNumberOfBytes + pBytes <= buffer.length;
+    public boolean hasSpace(final int count) {
+        return currentNumberOfBytes + count <= buffer.length;
     }
 
     /**
