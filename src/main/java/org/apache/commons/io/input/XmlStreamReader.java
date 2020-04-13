@@ -145,11 +145,11 @@ public class XmlStreamReader extends Reader {
      * It does a lenient charset encoding detection, check the constructor with
      * the lenient parameter for details.
      *
-     * @param is InputStream to create a Reader from.
+     * @param inputStream InputStream to create a Reader from.
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    public XmlStreamReader(final InputStream is) throws IOException {
-        this(is, true);
+    public XmlStreamReader(final InputStream inputStream) throws IOException {
+        this(inputStream, true);
     }
 
     /**
@@ -172,15 +172,15 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create a Reader from.
+     * @param inputStream InputStream to create a Reader from.
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @throws IOException thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final boolean lenient) throws IOException {
-        this(is, lenient, null);
+    public XmlStreamReader(final InputStream inputStream, final boolean lenient) throws IOException {
+        this(inputStream, lenient, null);
     }
 
     /**
@@ -203,7 +203,7 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create a Reader from.
+     * @param inputStream InputStream to create a Reader from.
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @param defaultEncoding The default encoding
@@ -211,10 +211,10 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final boolean lenient, final String defaultEncoding)
+    public XmlStreamReader(final InputStream inputStream, final boolean lenient, final String defaultEncoding)
             throws IOException {
         this.defaultEncoding = defaultEncoding;
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         this.encoding = doRawStream(bom, pis, lenient);
         this.reader = new InputStreamReader(pis, encoding);
@@ -264,8 +264,8 @@ public class XmlStreamReader extends Reader {
         this.defaultEncoding = defaultEncoding;
         final boolean lenient = true;
         final String contentType = conn.getContentType();
-        final InputStream is = conn.getInputStream();
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        final InputStream inputStream = conn.getInputStream();
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
             this.encoding = doHttpStream(bom, pis, contentType, lenient);
@@ -287,14 +287,14 @@ public class XmlStreamReader extends Reader {
      * It does a lenient charset encoding detection, check the constructor with
      * the lenient parameter for details.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @throws IOException thrown if there is a problem reading the file.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType)
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType)
             throws IOException {
-        this(is, httpContentType, true);
+        this(inputStream, httpContentType, true);
     }
 
     /**
@@ -321,7 +321,7 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @param lenient indicates if the charset encoding detection should be
@@ -331,10 +331,10 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType,
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient, final String defaultEncoding) throws IOException {
         this.defaultEncoding = defaultEncoding;
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(is, BUFFER_SIZE), false, BOMS);
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         this.encoding = doHttpStream(bom, pis, httpContentType, lenient);
         this.reader = new InputStreamReader(pis, encoding);
@@ -364,7 +364,7 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @param lenient indicates if the charset encoding detection should be
@@ -373,9 +373,9 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType,
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException {
-        this(is, httpContentType, lenient, null);
+        this(inputStream, httpContentType, lenient, null);
     }
 
     /**
@@ -693,26 +693,26 @@ public class XmlStreamReader extends Reader {
     /**
      * Returns the encoding declared in the <?xml encoding=...?>, NULL if none.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param guessedEnc guessed encoding
      * @return the encoding declared in the <?xml encoding=...?>
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private static String getXmlProlog(final InputStream is, final String guessedEnc)
+    private static String getXmlProlog(final InputStream inputStream, final String guessedEnc)
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
             final byte[] bytes = new byte[BUFFER_SIZE];
-            is.mark(BUFFER_SIZE);
+            inputStream.mark(BUFFER_SIZE);
             int offset = 0;
             int max = BUFFER_SIZE;
-            int c = is.read(bytes, offset, max);
+            int c = inputStream.read(bytes, offset, max);
             int firstGT = -1;
             String xmlProlog = ""; // avoid possible NPE warning (cannot happen; this just silences the warning)
             while (c != -1 && firstGT == -1 && offset < BUFFER_SIZE) {
                 offset += c;
                 max -= c;
-                c = is.read(bytes, offset, max);
+                c = inputStream.read(bytes, offset, max);
                 xmlProlog = new String(bytes, 0, offset, guessedEnc);
                 firstGT = xmlProlog.indexOf('>');
             }
@@ -726,7 +726,7 @@ public class XmlStreamReader extends Reader {
             }
             final int bytesRead = offset;
             if (bytesRead > 0) {
-                is.reset();
+                inputStream.reset();
                 final BufferedReader bReader = new BufferedReader(new StringReader(
                         xmlProlog.substring(0, firstGT + 1)));
                 final StringBuffer prolog = new StringBuffer();
