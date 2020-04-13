@@ -17,19 +17,24 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
@@ -76,6 +81,26 @@ public class XmlStreamReaderTest {
         } catch (final IOException ex) {
             assertTrue(ex.getMessage().contains("Invalid encoding,"));
         }
+    }
+
+    @Test
+    protected void testNullFileInput() throws IOException {
+        assertThrows(NullPointerException.class, ()-> new XmlStreamReader((File)null));
+    }
+
+    @Test
+    protected void testNullInputStreamInput() throws IOException {
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
+    }
+
+    @Test
+    protected void testNullURLInput() throws IOException {
+         assertThrows(NullPointerException.class, ()-> new XmlStreamReader((URL)null));
+    }
+
+    @Test
+    protected void testNullURLConnectionInput() throws IOException {
+          assertThrows(NullPointerException.class, ()-> new XmlStreamReader((URLConnection)null, "US-ASCII"));
     }
 
     @Test

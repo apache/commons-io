@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -213,6 +214,7 @@ public class XmlStreamReader extends Reader {
      */
     public XmlStreamReader(final InputStream inputStream, final boolean lenient, final String defaultEncoding)
             throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
