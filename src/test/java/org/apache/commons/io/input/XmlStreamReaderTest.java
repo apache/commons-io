@@ -84,7 +84,7 @@ public class XmlStreamReaderTest {
 
     @Test
     protected void testNullFileInput() throws IOException {
-        assertThrows(NullPointerException.class, ()-> new XmlStreamReader((File)null));
+        assertThrows(NullPointerException.class, () -> new XmlStreamReader((File)null));
     }
 
     @Test
@@ -94,12 +94,12 @@ public class XmlStreamReaderTest {
 
     @Test
     protected void testNullURLInput() throws IOException {
-         assertThrows(NullPointerException.class, ()-> new XmlStreamReader((URL)null));
+         assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL)null));
     }
 
     @Test
     protected void testNullURLConnectionInput() throws IOException {
-          assertThrows(NullPointerException.class, ()-> new XmlStreamReader((URLConnection)null, "US-ASCII"));
+          assertThrows(NullPointerException.class, () -> new XmlStreamReader((URLConnection)null, "US-ASCII"));
     }
 
     @Test
