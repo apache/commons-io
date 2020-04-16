@@ -233,7 +233,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.6.1</version>
+      <version>5.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -291,7 +291,7 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
-    <commons.jacoco.version>0.8.4</commons.jacoco.version>
+    <commons.jacoco.version>0.8.5</commons.jacoco.version>
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.1</commons.japicmp.version>
     <japicmp.skip>false</japicmp.skip>

@@ -213,6 +213,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-665" dev="ggregory" type="update" due-to="Otto Fowler, Gary Gregory">
          Ensure that passing a null InputStream results in NPE with tests #112.
       </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+         org.junit.jupiter:junit-jupiter 5.6.1 -> 5.6.2
+      </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+         commons.jacoco.version 0.8.4 -> 0.8.5.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
