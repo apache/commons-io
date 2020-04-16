@@ -219,6 +219,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Gary Gregory">
          commons.jacoco.version 0.8.4 -> 0.8.5.
       </action>
+      <action issue="IO-667" dev="ggregory" type="update" due-to="Adam Retter, Gary Gregory">
+         Add functional interfaces IOFunction and IOSupplier #110.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
