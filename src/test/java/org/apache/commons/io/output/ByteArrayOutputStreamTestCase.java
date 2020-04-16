@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.function.IOFunction;
 import org.apache.commons.io.input.ClosedInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -341,33 +342,33 @@ public class ByteArrayOutputStreamTestCase {
         );
     }
 
-    private static class ByteArrayOutputStreamFactory implements BAOSFactory {
+    private static class ByteArrayOutputStreamFactory implements BAOSFactory<ByteArrayOutputStream> {
         @Override
-        public AbstractByteArrayOutputStream instance() {
+        public ByteArrayOutputStream instance() {
             return new ByteArrayOutputStream();
         }
 
         @Override
-        public AbstractByteArrayOutputStream instance(final int size) {
+        public ByteArrayOutputStream instance(final int size) {
             return new ByteArrayOutputStream(size);
         }
     }
 
-    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory {
+    private static class UnsynchronizedByteArrayOutputStreamFactory implements BAOSFactory<UnsynchronizedByteArrayOutputStream> {
         @Override
-        public AbstractByteArrayOutputStream instance() {
+        public UnsynchronizedByteArrayOutputStream instance() {
             return new UnsynchronizedByteArrayOutputStream();
         }
 
         @Override
-        public AbstractByteArrayOutputStream instance(final int size) {
+        public UnsynchronizedByteArrayOutputStream instance(final int size) {
             return new UnsynchronizedByteArrayOutputStream(size);
         }
     }
 
     private interface BAOSFactory<T extends AbstractByteArrayOutputStream> {
-        AbstractByteArrayOutputStream instance();
-        AbstractByteArrayOutputStream instance(final int size);
+        T instance();
+        T instance(final int size);
     }
 
     private static Stream<Arguments> toBufferedInputStreamFunctionFactories() {
@@ -382,11 +383,6 @@ public class ByteArrayOutputStreamTestCase {
             Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream)", unSyncBaosToBufferedInputStream),
             Arguments.of("UnsynchronizedByteArrayOutputStream.toBufferedInputStream(InputStream, int)", unSyncBaosToBufferedInputStreamWithSize)
         );
-    }
-
-    @FunctionalInterface
-    private interface IOFunction<T, R> {
-        R apply(final T t) throws IOException;
     }
 }
 
