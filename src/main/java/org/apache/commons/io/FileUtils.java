@@ -510,9 +510,9 @@ public class FileUtils {
      * @param srcDir  an existing directory to copy, must not be {@code null}
      * @param destDir the new directory, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir) throws IOException {
@@ -543,9 +543,9 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @since 1.1
      */
     public static void copyDirectory(final File srcDir, final File destDir,
@@ -594,9 +594,9 @@ public class FileUtils {
      * @param filter  the filter to apply, null means copy all directories and files
      *                should be the same as the original
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir,
@@ -647,19 +647,22 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @since 1.4
      */
     public static void copyDirectory(final File srcDir, final File destDir,
                                      final FileFilter filter, final boolean preserveFileDate) throws IOException {
         checkFileRequirements(srcDir, destDir);
         if (!srcDir.isDirectory()) {
-            throw new IOException("Source '" + srcDir + "' exists but is not a directory");
+            throw new IllegalArgumentException("Source '" + srcDir + "' exists but is not a directory");
+        }
+        if (destDir.exists() && !destDir.isDirectory()) {
+            throw new IllegalArgumentException("Destination '" + destDir + "' exists but is not a directory");
         }
         if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
-            throw new IOException("Source '" + srcDir + "' and destination '" + destDir + "' are the same");
+            throw new IllegalArgumentException("Source '" + srcDir + "' and destination '" + destDir + "' are the same");
         }
 
         // Cater for destination being directory within the source directory (see IO-141)
@@ -699,19 +702,19 @@ public class FileUtils {
      * @param sourceDir  an existing directory to copy, must not be {@code null}
      * @param destinationDir the directory to place the copy in, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @since 1.2
      */
     public static void copyDirectoryToDirectory(final File sourceDir, final File destinationDir) throws IOException {
         Objects.requireNonNull(sourceDir, "sourceDir");
         if (sourceDir.exists() && sourceDir.isDirectory() == false) {
-            throw new IOException("Source '" + sourceDir + "' is not a directory");
+            throw new IllegalArgumentException("Source '" + sourceDir + "' is not a directory");
         }
         Objects.requireNonNull(destinationDir, "destinationDir");
         if (destinationDir.exists() && destinationDir.isDirectory() == false) {
-            throw new IOException("Destination '" + destinationDir + "' is not a directory");
+            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
         }
         copyDirectory(sourceDir, new File(destinationDir, sourceDir.getName()), true);
     }
@@ -734,11 +737,11 @@ public class FileUtils {
      * @param srcFile  an existing file to copy, must not be {@code null}
      * @param destFile the new file, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy
-     * completes
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
+     * @throws IOException              if the output file length is not the same as the input file length
+     * after the copy completes
      * @see #copyFileToDirectory(File, File)
      * @see #copyFile(File, File, boolean)
      */
@@ -767,11 +770,10 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy
-     * completes
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if the output file length is not the same as the input file length
+     * after the copy completes
      * @see #copyFileToDirectory(File, File, boolean)
      * @see #doCopyFile(File, File, boolean)
      */
@@ -779,10 +781,10 @@ public class FileUtils {
                                 final boolean preserveFileDate) throws IOException {
         checkFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
-            throw new IOException("Source '" + srcFile + "' exists but is a directory");
+            throw new IllegalArgumentException("Source '" + srcFile + "' exists but is a directory");
         }
         if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
-            throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
+            throw new IllegalArgumentException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
         }
         final File parentFile = destFile.getParentFile();
         if (parentFile != null) {
@@ -834,9 +836,9 @@ public class FileUtils {
      * @param srcFile an existing file to copy, must not be {@code null}
      * @param destDir the directory to place the copy in, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is null
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is null
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @see #copyFile(File, File, boolean)
      */
     public static void copyFileToDirectory(final File srcFile, final File destDir) throws IOException {
@@ -864,10 +866,10 @@ public class FileUtils {
      * @param preserveFileDate true if the file date of the copy
      *                         should be the same as the original
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException          if source or destination is invalid
-     * @throws IOException          if an IO error occurs during copying
-     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
+     * @throws IOException              if the output file length is not the same as the input file length after the copy
      * completes
      * @see #copyFile(File, File, boolean)
      * @since 1.3
@@ -876,7 +878,7 @@ public class FileUtils {
             throws IOException {
         Objects.requireNonNull(destinationDir, "destinationDir");
         if (destinationDir.exists() && destinationDir.isDirectory() == false) {
-            throw new IOException("Destination '" + destinationDir + "' is not a directory");
+            throw new IllegalArgumentException("Destination '" + destinationDir + "' is not a directory");
         }
         final File destFile = new File(destinationDir, sourceFile.getName());
         copyFile(sourceFile, destFile, preserveFileDate);
@@ -926,9 +928,9 @@ public class FileUtils {
      * @param sourceFile      an existing file or directory to copy, must not be {@code null}
      * @param destinationDir  the directory to place the copy in, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is {@code null}
-     * @throws IOException if source or destination is invalid
-     * @throws IOException if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is {@code null}
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @see #copyDirectoryToDirectory(File, File)
      * @see #copyFileToDirectory(File, File)
      * @since 2.6
@@ -940,7 +942,7 @@ public class FileUtils {
         } else if (sourceFile.isDirectory()) {
             copyDirectoryToDirectory(sourceFile, destinationDir);
         } else {
-            throw new IOException("The source " + sourceFile + " does not exist");
+            throw new IllegalArgumentException("The source " + sourceFile + " does not exist");
         }
     }
 
@@ -963,9 +965,9 @@ public class FileUtils {
      * @param sourceIterable     a existing files to copy, must not be {@code null}
      * @param destinationDir  the directory to place the copy in, must not be {@code null}
      *
-     * @throws NullPointerException if source or destination is null
-     * @throws IOException if source or destination is invalid
-     * @throws IOException if an IO error occurs during copying
+     * @throws NullPointerException     if source or destination is null
+     * @throws IllegalArgumentException if source or destination is invalid
+     * @throws IOException              if an IO error occurs during copying
      * @see #copyFileToDirectory(File, File)
      * @since 2.6
      */
@@ -1232,6 +1234,7 @@ public class FileUtils {
      * @param filter           the filter to apply, null means copy all directories and files
      * @param preserveFileDate whether to preserve the file date
      * @param exclusionList    List of files and directories to exclude from the copy, may be null
+     * @throws IllegalArgumentException if {@code srcDir} or {@code destDir} is not a directory
      * @throws IOException if an error occurs
      * @since 1.1
      */
@@ -1239,13 +1242,16 @@ public class FileUtils {
                                         final boolean preserveFileDate, final List<String> exclusionList)
             throws IOException {
         // recurse
+        if (srcDir.isDirectory() == false) {
+            throw new IllegalArgumentException("Source '" + srcDir + "' exists but is not a directory");
+        }
         final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
         if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
             throw new IOException("Failed to list contents of " + srcDir);
         }
         if (destDir.exists()) {
             if (destDir.isDirectory() == false) {
-                throw new IOException("Destination '" + destDir + "' exists but is not a directory");
+                throw new IllegalArgumentException("Destination '" + destDir + "' exists but is not a directory");
             }
         } else {
             if (!destDir.mkdirs() && !destDir.isDirectory()) {
@@ -1286,18 +1292,26 @@ public class FileUtils {
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
      * copy completes
+     * @throws IllegalArgumentException if {@code srcFile} does not exist or is a directory or {@code destFile} exists
+     * and is a directory
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
     private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
             throws IOException {
+        if (!srcFile.exists()) {
+            throw new IllegalArgumentException("Source '" + srcFile + "' does not exists");
+        }
+        if (srcFile.isDirectory()) {
+            throw new IllegalArgumentException("Source '" + srcFile + "' exists but is a directory");
+        }
         if (destFile.exists() && destFile.isDirectory()) {
-            throw new IOException("Destination '" + destFile + "' exists but is a directory");
+            throw new IllegalArgumentException("Destination '" + destFile + "' exists but is a directory");
         }
 
         final Path srcPath = srcFile.toPath();
         final Path destPath = destFile.toPath();
-        final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
+        final long newLastModified = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
         Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
 
         // TODO IO-386: Do we still need this check?
@@ -1305,7 +1319,7 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        destFile.setLastModified(newLastModifed);
+        destFile.setLastModified(newLastModified);
     }
 
     //-----------------------------------------------------------------------
