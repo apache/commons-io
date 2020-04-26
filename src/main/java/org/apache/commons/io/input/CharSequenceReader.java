@@ -111,10 +111,16 @@ public class CharSequenceReader extends Reader implements Serializable {
         this.mark = start;
     }
 
+    /**
+     * @return The start index in the character sequence, taking into account it's length.
+     */
     private int start() {
         return Math.min(charSequence.length(), start);
     }
 
+    /**
+     * @return The end index in the character sequence, taking into account it's length.
+     */
     private int end() {
         /*
          * end == null for de-serialized instances that were serialized before start and end were added.
