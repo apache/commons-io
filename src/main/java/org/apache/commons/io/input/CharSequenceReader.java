@@ -71,7 +71,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @throws IllegalArgumentException if the start index is negative
      * @since 2.7
      */
-    public CharSequenceReader(final CharSequence charSequence, int start) {
+    public CharSequenceReader(final CharSequence charSequence, final int start) {
         this(charSequence, start, Integer.MAX_VALUE);
     }
 
@@ -93,7 +93,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      * @throws IllegalArgumentException if the start index is negative, or if the end index is smaller than the start index
      * @since 2.7
      */
-    public CharSequenceReader(final CharSequence charSequence, int start, int end) {
+    public CharSequenceReader(final CharSequence charSequence, final int start, final int end) {
         if (start < 0) {
             throw new IllegalArgumentException(
                     "Start index is less than zero: " + start);
@@ -114,14 +114,18 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * @return The start index in the character sequence, taking into account it's length.
+     * Returns the index in the character sequence to start reading from, taking into account its length.
+     *
+     * @return The start index in the character sequence (inclusive).
      */
     private int start() {
         return Math.min(charSequence.length(), start);
     }
 
     /**
-     * @return The end index in the character sequence, taking into account it's length.
+     * Returns the index in the character sequence to end reading at, taking into account its length.
+     *
+     * @return The end index in the character sequence (exclusive).
      */
     private int end() {
         /*
