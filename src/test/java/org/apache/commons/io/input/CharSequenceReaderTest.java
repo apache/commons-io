@@ -17,8 +17,8 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -214,18 +214,10 @@ public class CharSequenceReaderTest {
 
     @Test
     public void testConstructor() {
-        try {
-            new CharSequenceReader("FooBar", -1, 6);
-            fail("Expected exception not thrown for negative start.");
-        } catch (IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new CharSequenceReader("FooBar", 1, 0);
-            fail("Expected exception not thrown for end before start.");
-        } catch (IllegalArgumentException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", -1, 6),
+                "Expected exception not thrown for negative start.");
+        assertThrows(IllegalArgumentException.class, () -> new CharSequenceReader("FooBar", 1, 0),
+                "Expected exception not thrown for end before start.");
     }
 
     @Test
@@ -238,7 +230,7 @@ public class CharSequenceReaderTest {
     public void testSerialization() throws IOException, ClassNotFoundException {
         /*
          * File CharSequenceReader.bin contains a CharSequenceReader that was serialized before
-         * the start and end fields were added. Its CharSequecne is "FooBar".
+         * the start and end fields were added. Its CharSequence is "FooBar".
          * This part of the test will test that adding the fields does not break any existing
          * serialized CharSequenceReaders.
          */
