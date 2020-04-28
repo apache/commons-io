@@ -128,8 +128,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-617" dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
         Add class CloseShieldWriter. #83.
       </action>
-      <action issue="IO-617" dev="ggregory" type="add" due-to="Rob Spoor">
+      <action issue="IO-618" dev="ggregory" type="add" due-to="Rob Spoor">
         Add classes Added TaggedReader, ClosedReader and BrokenReader. #85.
+      </action>
+      <action issue="IO-619" dev="ggregory" type="add" due-to="Rob Spoor">
+        Support sub sequences in CharSequenceReader. #91.
       </action>
       <action issue="IO-625" dev="ggregory" type="fix" due-to="Mikko Maunu">
         Corrected misleading exception message for FileUtils.copyDirectoryToDirectory.
