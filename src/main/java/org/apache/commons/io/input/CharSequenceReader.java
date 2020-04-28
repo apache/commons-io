@@ -27,6 +27,7 @@ import java.util.Objects;
  * StringBuilder or CharBuffer.
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
+ * </p>
  *
  * @since 1.4
  */
@@ -37,18 +38,38 @@ public class CharSequenceReader extends Reader implements Serializable {
     private int idx;
     private int mark;
 
-    /*
-     * end is an Integer instead of int because of backwards compatibility.
+    /**
+     * The start index in the character sequence, inclusive.
+     * <p>
      * When de-serializing a CharSequenceReader that was serialized before
-     * these two fields were added, they will be initialized to 0 and null
-     * respectively. If end was an int, it would be initialized to 0 as well.
-     * That would cause all de-serialized CharSequenceReaders to be empty.
+     * this fields was added, this field will be initialized to 0, which
+     * gives the same behavior as before: start reading from the start.
+     * </p>
+     *
+     * @see #start()
+     * @since 2.7
      */
     private final int start;
+
+    /**
+     * The end index in the character sequence, exclusive.
+     * <p>
+     * When de-serializing a CharSequenceReader that was serialized before
+     * this fields was added, this field will be initialized to {@code null},
+     * which gives the same behavior as before: stop reading at the
+     * CharSequence's length.
+     * If this field was an int instead, it would be initialized to 0 when the
+     * CharSequenceReader is de-serialized, causing it to not return any
+     * characters at all.
+     * </p>
+     *
+     * @see #end()
+     * @since 2.7
+     */
     private final Integer end;
 
     /**
-     * Construct a new instance with the specified character sequence.
+     * Constructs a new instance with the specified character sequence.
      *
      * @param charSequence The character sequence, may be {@code null}
      */
@@ -57,7 +78,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Construct a new instance with a portion of the specified character sequence.
+     * Constructs a new instance with a portion of the specified character sequence.
      * <p>
      * The start index is not strictly enforced to be within the bounds of the
      * character sequence. This allows the character sequence to grow or shrink
@@ -76,7 +97,7 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
-     * Construct a new instance with a portion of the specified character sequence.
+     * Constructs a new instance with a portion of the specified character sequence.
      * <p>
      * The start and end indexes are not strictly enforced to be within the bounds
      * of the character sequence. This allows the character sequence to grow or shrink
@@ -89,7 +110,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      *
      * @param charSequence The character sequence, may be {@code null}
      * @param start The start index in the character sequence, inclusive
-     * @param end The start index in the character sequence, exclusive
+     * @param end The end index in the character sequence, exclusive
      * @throws IllegalArgumentException if the start index is negative, or if the end index is smaller than the start index
      * @since 2.7
      */
