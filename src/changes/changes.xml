@@ -225,6 +225,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-667" dev="ggregory" type="update" due-to="Adam Retter, Gary Gregory">
          Add functional interfaces IOFunction and IOSupplier #110.
       </action>
+      <action dev="ggregory" type="update" due-to="Rob Spoor, Gary Gregory">
+         Support sub sequences in CharSequenceReader #91.
+      </action>
     </release>
 
     <release version="2.6" date="2017-10-15" description="Java 7 required, Java 9 supported.">
