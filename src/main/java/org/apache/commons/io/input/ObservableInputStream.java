@@ -38,6 +38,9 @@ import org.apache.commons.io.IOUtils;
  */
 public class ObservableInputStream extends ProxyInputStream {
 
+    /**
+     * Abstracts observer callback for {@code ObservableInputStream}s.
+     */
     public static abstract class Observer {
 
         /** Called to indicate, that {@link InputStream#read()} has been invoked
