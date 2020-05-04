@@ -103,8 +103,7 @@ public class TaggedOutputStreamTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        try (final OutputStream closed = new ClosedOutputStream();
-                final TaggedOutputStream stream = new TaggedOutputStream(closed)) {
+        try (final TaggedOutputStream stream = new TaggedOutputStream(ClosedOutputStream.CLOSED_OUTPUT_STREAM)) {
 
             assertFalse(stream.isCauseOf(exception));
             assertFalse(stream.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
