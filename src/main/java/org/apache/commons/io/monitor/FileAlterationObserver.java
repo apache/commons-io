@@ -128,7 +128,7 @@ public class FileAlterationObserver implements Serializable {
     private final Comparator<File> comparator;
 
     /**
-     * Construct an observer for the specified directory.
+     * Constructs an observer for the specified directory.
      *
      * @param directoryName the name of the directory to observe
      */
@@ -137,7 +137,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory and file filter.
+     * Constructs an observer for the specified directory and file filter.
      *
      * @param directoryName the name of the directory to observe
      * @param fileFilter The file filter or null if none
@@ -160,7 +160,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory.
+     * Constructs an observer for the specified directory.
      *
      * @param directory the directory to observe
      */
@@ -169,7 +169,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory and file filter.
+     * Constructs an observer for the specified directory and file filter.
      *
      * @param directory the directory to observe
      * @param fileFilter The file filter or null if none
@@ -179,7 +179,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory, file filter and
+     * Constructs an observer for the specified directory, file filter and
      * file comparator.
      *
      * @param directory the directory to observe
@@ -191,7 +191,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Construct an observer for the specified directory, file filter and
+     * Constructs an observer for the specified directory, file filter and
      * file comparator.
      *
      * @param rootEntry the root directory to observe
@@ -218,7 +218,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Return the directory being observed.
+     * Returns the directory being observed.
      *
      * @return the directory being observed
      */
@@ -227,7 +227,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Return the fileFilter.
+     * Returns the fileFilter.
      *
      * @return the fileFilter
      * @since 2.1
@@ -237,7 +237,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Add a file system listener.
+     * Adds a file system listener.
      *
      * @param listener The file system listener
      */
@@ -248,13 +248,14 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Remove a file system listener.
+     * Removes a file system listener.
      *
      * @param listener The file system listener
      */
     public void removeListener(final FileAlterationListener listener) {
         if (listener != null) {
             while (listeners.remove(listener)) {
+                // empty
             }
         }
     }
@@ -269,7 +270,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Initialize the observer.
+     * Initializes the observer.
      *
      * @throws Exception if an error occurs
      */
@@ -289,7 +290,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Check whether the file and its children have been created, modified or deleted.
+     * Checks whether the file and its children have been created, modified or deleted.
      */
     public void checkAndNotify() {
 
@@ -315,7 +316,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Compare two file lists for files which have been created, modified or deleted.
+     * Compares two file lists for files which have been created, modified or deleted.
      *
      * @param parent The parent entry
      * @param previous The original list of files
@@ -348,7 +349,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Create a new file entry for the specified file.
+     * Creates a new file entry for the specified file.
      *
      * @param parent The parent file entry
      * @param file The file to create an entry for
@@ -363,7 +364,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * List the files
+     * Lists the files
      * @param file The file to list files for
      * @param entry the parent entry
      * @return The child files
@@ -378,7 +379,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Fire directory/file created events to the registered listeners.
+     * Fires directory/file created events to the registered listeners.
      *
      * @param entry The file entry
      */
@@ -397,7 +398,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Fire directory/file change events to the registered listeners.
+     * Fires directory/file change events to the registered listeners.
      *
      * @param entry The previous file system entry
      * @param file The current file
@@ -415,7 +416,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Fire directory/file delete events to the registered listeners.
+     * Fires directory/file delete events to the registered listeners.
      *
      * @param entry The file entry
      */
@@ -430,7 +431,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * List the contents of a directory
+     * Lists the contents of a directory
      *
      * @param file The file to list the contents of
      * @return the directory contents or a zero length array if
@@ -451,7 +452,7 @@ public class FileAlterationObserver implements Serializable {
     }
 
     /**
-     * Provide a String representation of this observer.
+     * Returns a String representation of this observer.
      *
      * @return a String representation of this observer
      */
