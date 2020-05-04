@@ -36,7 +36,7 @@ public class TaggedInputStreamTest  {
 
     @Test
     public void testEmptyStream() throws IOException {
-        final InputStream stream = new TaggedInputStream(new ClosedInputStream());
+        final InputStream stream = new TaggedInputStream(ClosedInputStream.CLOSED_INPUT_STREAM);
         assertEquals(0, stream.available());
         assertEquals(-1, stream.read());
         assertEquals(-1, stream.read(new byte[1]));
@@ -111,8 +111,7 @@ public class TaggedInputStreamTest  {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        final InputStream closed = new ClosedInputStream();
-        final TaggedInputStream stream = new TaggedInputStream(closed);
+        final TaggedInputStream stream = new TaggedInputStream(ClosedInputStream.CLOSED_INPUT_STREAM);
 
         assertFalse(stream.isCauseOf(exception));
         assertFalse(stream.isCauseOf(
