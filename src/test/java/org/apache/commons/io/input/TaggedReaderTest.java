@@ -36,26 +36,26 @@ public class TaggedReaderTest {
 
     @Test
     public void testEmptyReader() throws IOException {
-        final Reader reader = new TaggedReader(new ClosedReader());
-        assertFalse(reader.ready());
-        assertEquals(-1, reader.read());
-        assertEquals(-1, reader.read(new char[1]));
-        assertEquals(-1, reader.read(new char[1], 0, 1));
-        reader.close();
+        try (final Reader reader = new TaggedReader(ClosedReader.CLOSED_READER)) {
+            assertFalse(reader.ready());
+            assertEquals(-1, reader.read());
+            assertEquals(-1, reader.read(new char[1]));
+            assertEquals(-1, reader.read(new char[1], 0, 1));
+        }
     }
 
     @Test
     public void testNormalReader() throws IOException {
-        final Reader reader = new TaggedReader(new StringReader("abc"));
-        assertTrue(reader.ready());
-        assertEquals('a', reader.read());
-        final char[] buffer = new char[1];
-        assertEquals(1, reader.read(buffer));
-        assertEquals('b', buffer[0]);
-        assertEquals(1, reader.read(buffer, 0, 1));
-        assertEquals('c', buffer[0]);
-        assertEquals(-1, reader.read());
-        reader.close();
+        try (final Reader reader = new TaggedReader(new StringReader("abc"))) {
+            assertTrue(reader.ready());
+            assertEquals('a', reader.read());
+            final char[] buffer = new char[1];
+            assertEquals(1, reader.read(buffer));
+            assertEquals('b', buffer[0]);
+            assertEquals(1, reader.read(buffer, 0, 1));
+            assertEquals('c', buffer[0]);
+            assertEquals(-1, reader.read());
+        }
     }
 
     @Test
@@ -109,16 +109,15 @@ public class TaggedReaderTest {
     @Test
     public void testOtherException() throws Exception {
         final IOException exception = new IOException("test exception");
-        final Reader closed = new ClosedReader();
-        final TaggedReader reader = new TaggedReader(closed);
+        try (final TaggedReader reader = new TaggedReader(ClosedReader.CLOSED_READER)) {
 
-        assertFalse(reader.isCauseOf(exception));
-        assertFalse(reader.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
+            assertFalse(reader.isCauseOf(exception));
+            assertFalse(reader.isCauseOf(new TaggedIOException(exception, UUID.randomUUID())));
 
-        reader.throwIfCauseOf(exception);
+            reader.throwIfCauseOf(exception);
 
-        reader.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
-        reader.close();
+            reader.throwIfCauseOf(new TaggedIOException(exception, UUID.randomUUID()));
+        }
     }
 
 }
