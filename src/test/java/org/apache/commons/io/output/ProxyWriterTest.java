@@ -258,7 +258,7 @@ public class ProxyWriterTest {
     }
 
     @Test
-    public void exceptions_in_close() throws IOException {
+    public void exceptions_in_close() {
         assertThrows(UnsupportedEncodingException.class, () -> {
             try (final OutputStreamWriter osw = new OutputStreamWriter(new ByteArrayOutputStream()) {
                 @Override

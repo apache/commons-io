@@ -154,8 +154,9 @@ public class IOFunctionTest {
     @Test
     public void testIdentity() throws IOException {
         final IOFunction<InputStream, InputStream> identityFunction = IOFunction.identity();
-        final InputStream is = new ByteArrayInputStream(new byte[] { (byte)0xa, (byte)0xb, (byte)0xc});
-        assertEquals(is, identityFunction.apply(is));
+        try (final InputStream is = new ByteArrayInputStream(new byte[] { (byte) 0xa, (byte) 0xb, (byte) 0xc })) {
+            assertEquals(is, identityFunction.apply(is));
+        }
     }
 
     private static class Holder<T> {
