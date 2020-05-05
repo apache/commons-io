@@ -16,18 +16,18 @@
  */
 package org.apache.commons.io;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * This class ensure the correctness of {@link FileUtils#copyDirectoryToDirectory(File, File)}.
- * TODO: currently does not cover happy cases
+ * This class ensure the correctness of {@link FileUtils#copyDirectoryToDirectory(File, File)}. TODO: currently does not
+ * cover happy cases
  *
  * @see FileUtils#copyDirectoryToDirectory(File, File)
  */
@@ -37,7 +37,8 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     public File temporaryFolder;
 
     @Test
-    public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory() throws IOException {
+    public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
+        throws IOException {
         final File srcDir = File.createTempFile("notadireotry", null, temporaryFolder);
         final File destDir = new File(temporaryFolder, "destinationDirectory");
         destDir.mkdirs();
@@ -46,7 +47,8 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory() throws IOException {
+    public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
+        throws IOException {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
         final File destDir = new File(temporaryFolder, "notadirectory");
@@ -56,22 +58,23 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() throws IOException {
+    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
         final File srcDir = null;
         final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
         destinationDirectory.mkdir();
-        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class,  "sourceDir");
+        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class, "sourceDir");
     }
 
     @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() throws IOException {
+    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
         final File srcDir = new File(temporaryFolder, "sourceDirectory");
         srcDir.mkdir();
-        final File destDir =  null;
+        final File destDir = null;
         assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, "destinationDir");
     }
 
-    private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir, final Class expectedExceptionType, final String expectedMessage) {
+    private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
+        final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {
         try {
             FileUtils.copyDirectoryToDirectory(srcDir, destDir);
         } catch (final Exception e) {
