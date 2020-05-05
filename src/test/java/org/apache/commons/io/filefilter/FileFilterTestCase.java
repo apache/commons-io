@@ -1119,10 +1119,8 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterBytes() throws Exception {
-        final byte[] classFileMagicNumber =
-            new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" +
-            "<element>text</element>";
+        final byte[] classFileMagicNumber = new byte[] { (byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE };
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
 
         final File classFileA = new File(temporaryFolder, "A.class");
         final File xmlFileB = new File(temporaryFolder, "B.xml");
@@ -1130,10 +1128,10 @@ public class FileFilterTestCase {
         final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
-        final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
-        IOUtils.write(classFileMagicNumber, classFileAStream);
-        TestUtils.generateTestData(classFileAStream, 32);
-        classFileAStream.close();
+        try (final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA)) {
+            IOUtils.write(classFileMagicNumber, classFileAStream);
+            TestUtils.generateTestData(classFileAStream, 32);
+        }
 
         FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);
         FileUtils.touch(emptyFile);
@@ -1145,7 +1143,6 @@ public class FileFilterTestCase {
         assertFiltering(filter, emptyFile, false);
         assertFiltering(filter, dir, false);
 
-
         filter = FileFilterUtils.magicNumberFileFilter(classFileMagicNumber);
 
         assertFiltering(filter, classFileA, true);
@@ -1156,7 +1153,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterBytesOffset() throws Exception {
-        final byte[] tarMagicNumber = new byte[] {0x75, 0x73, 0x74, 0x61, 0x72};
+        final byte[] tarMagicNumber = new byte[] { 0x75, 0x73, 0x74, 0x61, 0x72 };
         final long tarMagicNumberOffset = 257;
 
         final File tarFileA = new File(temporaryFolder, "A.tar");
@@ -1164,29 +1161,25 @@ public class FileFilterTestCase {
         final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
-        final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
-        TestUtils.generateTestData(tarFileAStream, tarMagicNumberOffset);
-        IOUtils.write(tarMagicNumber, tarFileAStream);
-        tarFileAStream.close();
+        try (final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA)) {
+            TestUtils.generateTestData(tarFileAStream, tarMagicNumberOffset);
+            IOUtils.write(tarMagicNumber, tarFileAStream);
+        }
 
         if (!randomFileB.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + randomFileB
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + randomFileB + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(randomFileB))) {
+        try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(randomFileB))) {
             TestUtils.generateTestData(output, 2 * tarMagicNumberOffset);
         }
 
-        IOFileFilter filter =
-            new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
+        IOFileFilter filter = new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
 
         assertFiltering(filter, tarFileA, true);
         assertFiltering(filter, randomFileB, false);
         assertFiltering(filter, dir, false);
 
-        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber,
-                tarMagicNumberOffset);
+        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
 
         assertFiltering(filter, tarFileA, true);
         assertFiltering(filter, randomFileB, false);
@@ -1195,10 +1188,8 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterString() throws Exception {
-        final byte[] classFileMagicNumber =
-            new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" +
-            "<element>text</element>";
+        final byte[] classFileMagicNumber = new byte[] { (byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE };
+        final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
         final String xmlMagicNumber = "<?xml version=\"1.0\"";
 
         final File classFileA = new File(temporaryFolder, "A.class");
@@ -1206,10 +1197,10 @@ public class FileFilterTestCase {
         final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
-        final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA);
-        IOUtils.write(classFileMagicNumber, classFileAStream);
-        TestUtils.generateTestData(classFileAStream, 32);
-        classFileAStream.close();
+        try (final OutputStream classFileAStream = FileUtils.openOutputStream(classFileA)) {
+            IOUtils.write(classFileMagicNumber, classFileAStream);
+            TestUtils.generateTestData(classFileAStream, 32);
+        }
 
         FileUtils.write(xmlFileB, xmlFileContent, StandardCharsets.UTF_8);
 
@@ -1236,29 +1227,25 @@ public class FileFilterTestCase {
         final File dir = new File(temporaryFolder, "D");
         dir.mkdirs();
 
-        final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA);
-        TestUtils.generateTestData(tarFileAStream, tarMagicNumberOffset);
-        IOUtils.write(tarMagicNumber, tarFileAStream, StandardCharsets.UTF_8);
-        tarFileAStream.close();
+        try (final OutputStream tarFileAStream = FileUtils.openOutputStream(tarFileA)) {
+            TestUtils.generateTestData(tarFileAStream, tarMagicNumberOffset);
+            IOUtils.write(tarMagicNumber, tarFileAStream, StandardCharsets.UTF_8);
+        }
 
         if (!randomFileB.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + randomFileB
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + randomFileB + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(randomFileB))) {
+        try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(randomFileB))) {
             TestUtils.generateTestData(output, 2 * tarMagicNumberOffset);
         }
 
-        IOFileFilter filter =
-            new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
+        IOFileFilter filter = new MagicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
 
         assertFiltering(filter, tarFileA, true);
         assertFiltering(filter, randomFileB, false);
         assertFiltering(filter, dir, false);
 
-        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber,
-                tarMagicNumberOffset);
+        filter = FileFilterUtils.magicNumberFileFilter(tarMagicNumber, tarMagicNumberOffset);
 
         assertFiltering(filter, tarFileA, true);
         assertFiltering(filter, randomFileB, false);
