@@ -59,11 +59,10 @@ public class ByteArrayOutputStreamTestCase {
             baout.write(100);
             ref.write(100);
             return 1;
-        } else {
-            baout.write(DATA, 0, count);
-            ref.write(DATA, 0, count);
-            return count;
         }
+        baout.write(DATA, 0, count);
+        ref.write(DATA, 0, count);
+        return count;
     }
 
     private int writeData(final AbstractByteArrayOutputStream baout,
@@ -180,14 +179,14 @@ public class ByteArrayOutputStreamTestCase {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
-        final ByteArrayInputStream bain = new ByteArrayInputStream(new byte[0]);
-        assertEquals(0, bain.available());
+        try (final ByteArrayInputStream bain = new ByteArrayInputStream(new byte[0])) {
+            assertEquals(0, bain.available());
 
-        final InputStream buffered = toBufferedInputStreamFunction.apply(bain);
-        assertEquals(0, buffered.available());
+            try (final InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
+                assertEquals(0, buffered.available());
 
-        buffered.close();
-        bain.close();
+            }
+        }
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
@@ -195,16 +194,16 @@ public class ByteArrayOutputStreamTestCase {
     public void testToBufferedInputStream(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
         final byte data[] = {(byte)0xCA, (byte)0xFE, (byte)0xBA, (byte)0xBE};
 
-        final ByteArrayInputStream bain = new ByteArrayInputStream(data);
-        assertEquals(data.length, bain.available());
+        try (final ByteArrayInputStream bain = new ByteArrayInputStream(data)) {
+            assertEquals(data.length, bain.available());
 
-        final InputStream buffered = toBufferedInputStreamFunction.apply(bain);
-        assertEquals(data.length, buffered.available());
+            try (final InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {
+                assertEquals(data.length, buffered.available());
 
-        assertArrayEquals(data, IOUtils.toByteArray(buffered));
+                assertArrayEquals(data, IOUtils.toByteArray(buffered));
 
-        buffered.close();
-        bain.close();
+            }
+        }
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
