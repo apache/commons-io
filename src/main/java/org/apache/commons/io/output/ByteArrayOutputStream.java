@@ -21,9 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Implements a ThreadSafe version of
- * {@link AbstractByteArrayOutputStream} using instance
- * synchronisation.
+ * Implements a ThreadSafe version of {@link AbstractByteArrayOutputStream} using instance synchronization.
  */
 //@ThreadSafe
 public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
@@ -121,7 +119,7 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      */
     public static InputStream toBufferedInputStream(final InputStream input)
             throws IOException {
-        return toBufferedInputStream(input, 1024);
+        return toBufferedInputStream(input, DEFAULT_SIZE);
     }
 
     /**

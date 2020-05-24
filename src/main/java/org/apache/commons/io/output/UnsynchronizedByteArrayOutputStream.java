@@ -119,7 +119,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      */
     public static InputStream toBufferedInputStream(final InputStream input)
             throws IOException {
-        return toBufferedInputStream(input, 1024);
+        return toBufferedInputStream(input, DEFAULT_SIZE);
     }
 
     /**
