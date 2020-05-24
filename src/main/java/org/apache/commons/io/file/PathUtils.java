@@ -341,7 +341,7 @@ public final class PathUtils {
                     return false;
                 }
             } else {
-                throw new IllegalStateException(String.format("Unexpected mismatch."));
+                throw new IllegalStateException("Unexpected mismatch.");
             }
         }
         return true;
