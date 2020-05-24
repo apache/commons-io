@@ -38,6 +38,7 @@ public class NullPrintStream extends PrintStream {
      * Constructs an instance.
      */
     public NullPrintStream() {
+        // Relies on the default charset which is OK since we are not writing.
         super(NullOutputStream.NULL_OUTPUT_STREAM);
     }
 
