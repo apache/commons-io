@@ -146,12 +146,11 @@ public class ByteArrayOutputStream extends AbstractByteArrayOutputStream {
      * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size)
-            throws IOException {
-        // It does not matter if a ByteArrayOutputStream is not closed as close() is a no-op
-        @SuppressWarnings("resource")
-        final ByteArrayOutputStream output = new ByteArrayOutputStream(size);
-        output.write(input);
-        return output.toInputStream();
+        throws IOException {
+        try (final ByteArrayOutputStream output = new ByteArrayOutputStream(size)) {
+            output.write(input);
+            return output.toInputStream();
+        }
     }
 
     @Override
