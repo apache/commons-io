@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 
@@ -73,7 +74,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
      * @return true to process the given path, false if not.
      */
     private boolean accept(final Path path) {
-        return Arrays.binarySearch(skip, path.getFileName().toString()) < 0;
+        return Arrays.binarySearch(skip, Objects.toString(path.getFileName(), null)) < 0;
     }
 
     @Override
