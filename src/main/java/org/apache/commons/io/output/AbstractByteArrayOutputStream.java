@@ -45,7 +45,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  * This is the base for an alternative implementation of the
  * {@link java.io.ByteArrayOutputStream} class. The original implementation
  * only allocates 32 bytes at the beginning. As this class is designed for
- * heavy duty it starts at 1024 bytes. In contrast to the original it doesn't
+ * heavy duty it starts at {@value #DEFAULT_SIZE} bytes. In contrast to the original it doesn't
  * reallocate the whole memory block but allocates additional buffers. This
  * way no buffers need to be garbage collected and the contents don't have
  * to be copied to the new buffer. This class is designed to behave exactly

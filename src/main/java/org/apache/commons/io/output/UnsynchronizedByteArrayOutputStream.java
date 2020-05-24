@@ -32,8 +32,8 @@ import java.io.OutputStream;
 public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArrayOutputStream {
 
     /**
-     * Creates a new byte array output stream. The buffer capacity is
-     * initially 1024 bytes, though its size increases if necessary.
+     * Creates a new byte array output stream. The buffer capacity is initially
+     * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
      */
     public UnsynchronizedByteArrayOutputStream() {
         this(DEFAULT_SIZE);

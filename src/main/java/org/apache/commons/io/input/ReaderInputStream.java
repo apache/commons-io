@@ -144,7 +144,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
-     * 1024 characters.
+     * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @param charset the charset encoding
@@ -166,7 +166,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} with a default input buffer size of
-     * 1024 characters.
+     * {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @param charsetName the name of the charset encoding
@@ -177,7 +177,7 @@ public class ReaderInputStream extends InputStream {
 
     /**
      * Construct a new {@link ReaderInputStream} that uses the default character encoding
-     * with a default input buffer size of 1024 characters.
+     * with a default input buffer size of {@value #DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
