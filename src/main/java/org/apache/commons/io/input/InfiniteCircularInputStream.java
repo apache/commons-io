@@ -26,6 +26,7 @@ import java.io.InputStream;
  * this class can be called after the stream has been closed without generating
  * an <code>IOException</code>.
  * </p>
+ * @since 2.6
  */
 public class InfiniteCircularInputStream extends InputStream {
 
