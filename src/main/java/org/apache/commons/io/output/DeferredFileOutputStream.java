@@ -97,7 +97,7 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(final int threshold, final File outputFile)
     {
-        this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);
+        this(threshold,  outputFile, null, null, null, AbstractByteArrayOutputStream.DEFAULT_SIZE);
     }
 
     /**
@@ -132,7 +132,7 @@ public class DeferredFileOutputStream
      */
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
     {
-        this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);
+        this(threshold, null, prefix, suffix, directory, AbstractByteArrayOutputStream.DEFAULT_SIZE);
         if (prefix == null) {
             throw new IllegalArgumentException("Temporary file prefix is missing");
         }
