@@ -239,7 +239,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>0.5.6</version>
+      <version>0.6.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -293,7 +293,7 @@ file comparators, endian transformation classes, and much more.
     <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
     <commons.jacoco.version>0.8.5</commons.jacoco.version>
     <commons.surefire.version>2.22.2</commons.surefire.version>
-    <commons.japicmp.version>0.14.1</commons.japicmp.version>
+    <commons.japicmp.version>0.14.3</commons.japicmp.version>
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
   </properties>

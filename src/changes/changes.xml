@@ -193,10 +193,10 @@ The <action> type attribute can be add,update,fix,remove.
          Update tests from Apache Commons Lang 3.9 to 3.10.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
-         Update tests org.junit-pioneer:junit-pioneer 0.3.0 -> 0.5.6.
+         Update tests org.junit-pioneer:junit-pioneer 0.3.0 -> 0.6.0.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
-         Update tests org.junit.jupiter:junit-jupiter 5.5.2 -> 5.6.1.
+         Update tests org.junit.jupiter:junit-jupiter 5.5.2 -> 5.6.2.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
          Update tests org.mockito:mockito-core 3.0.0 -> 3.3.3.
@@ -217,10 +217,10 @@ The <action> type attribute can be add,update,fix,remove.
          Ensure that passing a null InputStream results in NPE with tests #112.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
-         org.junit.jupiter:junit-jupiter 5.6.1 -> 5.6.2
+         commons.jacoco.version 0.8.4 -> 0.8.5.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
-         commons.jacoco.version 0.8.4 -> 0.8.5.
+         com.github.siom79.japicmp:japicmp-maven-plugin 0.14.1 -> 0.14.3.
       </action>
       <action issue="IO-667" dev="ggregory" type="update" due-to="Adam Retter, Gary Gregory">
          Add functional interfaces IOFunction and IOSupplier #110.
