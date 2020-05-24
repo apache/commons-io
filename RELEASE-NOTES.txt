@@ -1,6 +1,108 @@
-                    Apache Commons IO
-                       Version 2.6
-                      Release Notes
+
+Apache Commons IO 
+Version 2.7-SNAPSHOT
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+==============================================================================
+Apache Commons IO Version 2.7-SNAPSHOT
+==============================================================================
+Java 8 required.
+
+Changes in this version include:
+
+New features:
+o           Adding the CircularBufferInputStream, and the PeekableInputStream. 
+o IO-553:  Add org.apache.commons.io.FilenameUtils.isIllegalWindowsFileName(char). 
+o IO-577:  Add readers to filter out given characters: CharacterSetFilterReader and CharacterFilterReader. Thanks to Gary Gregory. 
+o IO-594:  Add IOUtils copy methods with java.lang.Appendable as the target. Thanks to Gary Gregory. 
+o IO-605:  Add class CanExecuteFileFilter. Thanks to Gary Gregory. 
+o IO-578:  Support java.nio.Path and non-default file systems for ReversedLinesFileReader (#62). Thanks to Mark Chesney. 
+o IO-608:  Add a convenience NullPrintStream. Thanks to Gary Gregory. 
+o IO-612:  Add class TeeReader. Thanks to Rob Spoor, Gary Gregory. 
+o IO-613:  Add classes ClosedReader and CloseShieldReader. #84. Thanks to Rob Spoor, Gary Gregory. 
+o IO-614:  Add classes TaggedWriter, ClosedWriter and BrokenWriter. #86. Thanks to Rob Spoor. 
+o IO-615:  Add classes TeeWriter, FilterCollectionWriter, ProxyCollectionWriter, IOExceptionList, IOIndexedException. Thanks to Gary Gregory, Rob Spoor. 
+o IO-616:  Add class AppendableWriter. #87. Thanks to Rob Spoor. 
+o IO-617:  Add class CloseShieldWriter. #83. Thanks to Rob Spoor, Gary Gregory. 
+o IO-618:  Add classes Added TaggedReader, ClosedReader and BrokenReader. #85. Thanks to Rob Spoor. 
+o IO-619:  Support sub sequences in CharSequenceReader. #91. Thanks to Rob Spoor. 
+o IO-631:  Add a CountingFileVisitor (as the basis for a forthcoming DeletingFileVisitor). Thanks to Gary Gregory. 
+o IO-632:  Add PathUtils for operations on NIO Path. Thanks to Gary Gregory. 
+o IO-633:  Add DeletingFileVisitor. Thanks to Gary Gregory. 
+o IO-635:  Add org.apache.commons.io.IOUtils.close(Closeable). Thanks to Gary Gregory. 
+o IO-636:  Add and reuse org.apache.commons.io.IOUtils.closeQuitely(Closeable, Consumer<IOException>).
+           Add and reuse org.apache.commons.io.IOUtils.close(Closeable, IOConsumer<IOException>). Thanks to Gary Gregory. 
+o IO-645:  Add org.apache.commons.io.file.PathUtils.fileContentEquals(Path, Path, OpenOption...). Thanks to Gary Gregory. 
+o IO-458:  Add a SequenceReader similar to java.io.SequenceInputStream. Thanks to Gary Gregory, Joshua Gitlin. 
+o IO-648:  Implement directory content equality. 100#. Thanks to Gary Gregory. 
+o IO-648:  Refactor ByteArrayOutputStream into synchronized and unsynchronized versions #108. Thanks to Adam Retter, Alex Herbert, Gary Gregory. 
+o IO-662:  Refactor ByteArrayOutputStream into synchronized and unsynchronized versions #108. Thanks to Adam Retter, Gary Gregory. 
+
+Fixed Bugs:
+o IO-589:  Some tests fail if the base path contains a space. 
+o IO-582:  Make methods in ObservableInputStream.Obsever public. Thanks to Bruno Palos. 
+o IO-535:  Thread bug in FileAlterationMonitor#stop(int). Thanks to Svetlin Zarev, Anthony Raymond. 
+o IO-557:  Perform locale independent upper case conversions. Thanks to luccioman. 
+o IO-570:  Missing Javadoc in FilenameUtils causing Travis-CI build to fail. Thanks to Pranet Verma. 
+o IO-571:  Remove redundant isDirectory() check in org.apache.commons.io.FileUtils.listFilesAndDirs(File, IOFileFilter, IOFileFilter). Thanks to pranet. 
+o IO-559:  FilenameUtils.normalize now verifies hostname syntax in UNC path. 
+o IO-554:  FileUtils.copyToFile(InputStream source, File destination) should not close input stream. Thanks to Michele Mariotti. 
+o IO-604:  FileUtils.doCopyFile(File, File, boolean) can throw ClosedByInterruptException. Thanks to Gary Gregory. 
+o IO-625:  Corrected misleading exception message for FileUtils.copyDirectoryToDirectory. Thanks to Mikko Maunu. 
+o IO-626:  A mistake in the FilenameUtils.concat()'s Javadoc about an absolute path. Thanks to Yuji Konishi. 
+o IO-640:  NPE in org.apache.commons.io.IOUtils.contentEquals(InputStream, InputStream) when only one input is null. Thanks to Gary Gregory. 
+o IO-641:  NPE in org.apache.commons.io.IOUtils.contentEquals(Reader, Reader) when only one input is null. Thanks to Gary Gregory. 
+o IO-643:  NPE in org.apache.commons.io.IOUtils.contentEqualsIgnoreEOL(Reader, Reader) when only one input is null. Thanks to Gary Gregory. 
+o IO-644:  NPE in org.apache.commons.io.FileUtils.contentEqualsIgnoreEOL(File, File) when only one input is null. Thanks to Gary Gregory. 
+o IO-664:  org.apache.commons.io.FileUtils.copyURLToFile(*) open but do not close streams. Thanks to Gary Gregory. 
+
+Changes:
+o IO-572:  Refactor duplicate code in org.apache.commons.io.FileUtils. Thanks to Pranet Verma. 
+o IO-580:  Update org.apache.commons.io.FilenameUtils.isExtension(String, String[]) to use var args. 
+o IO-701:  Make array declaration in ThresholdingOutputStream consistent with other array declarations in the library #77. Thanks to Raymond Tan. 
+o IO-607:  Update from Java 7 to Java 8. Thanks to Gary Gregory. 
+o IO-610:  Remove throws IOException in method isSymlink() #80. Thanks to Sebastian. 
+o IO-628:  Migration to JUnit Jupiter #97. Thanks to Allon Mureinik. 
+o IO-630:  Deprecate org.apache.commons.io.output.NullOutputStream.NullOutputStream() in favor of org.apache.commons.io.output.NullOutputStream.NULL_OUTPUT_STREAM. Thanks to Gary Gregory. 
+o IO-629:  FileUtils#forceDelete should use Files#delete rather than File#delete so exception messages includes reason for failure. Thanks to Ian Springer, Ian Springer, Gary Gregory. 
+o IO-634:  Make getCause synchronized and use a Deque instead of a Stack #64. Thanks to Václav Haisman, Bruno P. Kinoshita, Gary Gregory. 
+o            Update tests from Apache Commons Lang 3.9 to 3.10. Thanks to Gary Gregory. 
+o            Update tests org.junit-pioneer:junit-pioneer 0.3.0 -> 0.6.0. Thanks to Gary Gregory. 
+o            Update tests org.junit.jupiter:junit-jupiter 5.5.2 -> 5.6.2. Thanks to Gary Gregory. 
+o            Update tests org.mockito:mockito-core 3.0.0 -> 3.3.3. Thanks to Gary Gregory. 
+o IO-666:  Normalize internal buffers to 8192 bytes. Thanks to Gary Gregory. 
+o IO-665:  Ensure that passing a null InputStream results in NPE with tests #112. Thanks to Otto Fowler, Gary Gregory. 
+o            commons.jacoco.version 0.8.4 -> 0.8.5. Thanks to Gary Gregory. 
+o            com.github.siom79.japicmp:japicmp-maven-plugin 0.14.1 -> 0.14.3. Thanks to Gary Gregory. 
+o IO-667:  Add functional interfaces IOFunction and IOSupplier #110. Thanks to Adam Retter, Gary Gregory. 
+o            Support sub sequences in CharSequenceReader #91. Thanks to Rob Spoor, Gary Gregory. 
+o            Remove deprecated sudo setting. #113. Thanks to dengliming. 
+
+Compatibility with 2.6:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+==============================================================================
+Apache Commons IO Version 2.6
+==============================================================================
 
 INTRODUCTION:
 
@@ -122,12 +224,12 @@ Source compatible: No, see the rare case in
 Semantic compatible: No, see the rare case in
   https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.6 requires JDK 1.7 or later.
-Commons IO 2.5 requires JDK 1.6 or later.
-Commons IO 2.4 requires JDK 1.6 or later.
-Commons IO 2.3 requires JDK 1.6 or later.
-Commons IO 2.2 requires JDK 1.5 or later.
-Commons IO 1.4 requires JDK 1.3 or later.
+Commons IO 2.6 requires Java 7 or later.
+Commons IO 2.5 requires Java 6 or later.
+Commons IO 2.4 requires Java 6 or later.
+Commons IO 2.3 requires Java 6 or later.
+Commons IO 2.2 requires Java 5 or later.
+Commons IO 1.4 requires Java 1.3 or later.
 
 ==============================================================================
 Apache Commons IO Version 2.5
@@ -234,11 +336,11 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.5 requires JDK 1.6 or later.
-Commons IO 2.4 requires JDK 1.6 or later.
-Commons IO 2.3 requires JDK 1.6 or later.
-Commons IO 2.2 requires JDK 1.5 or later.
-Commons IO 1.4 requires JDK 1.3 or later.
+Commons IO 2.5 requires Java 6 or later.
+Commons IO 2.4 requires Java 6 or later.
+Commons IO 2.3 requires Java 6 or later.
+Commons IO 2.2 requires Java 5 or later.
+Commons IO 1.4 requires Java 1.3 or later.
 
 ==============================================================================
 Apache Commons IO Version 2.4
@@ -287,10 +389,10 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.4 requires JDK 1.6 or later.
-Commons IO 2.3 requires JDK 1.6 or later.
-Commons IO 2.2 requires JDK 1.5 or later.
-Commons IO 1.4 requires JDK 1.3 or later.
+Commons IO 2.4 requires Java 6 or later.
+Commons IO 2.3 requires Java 6 or later.
+Commons IO 2.2 requires Java 5 or later.
+Commons IO 1.4 requires Java 1.3 or later.
 
 ==============================================================================
 Apache Commons IO Version 2.3
@@ -308,9 +410,9 @@ Binary compatible: Yes.
 Source compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 Semantic compatible: No, see the rare case in https://issues.apache.org/jira/browse/IO-318.
 
-Commons IO 2.3 requires JDK 1.6 or later.
-Commons IO 2.2 requires JDK 1.5 or later.
-Commons IO 1.4 requires JDK 1.3 or later.
+Commons IO 2.3 requires Java 6 or later.
+Commons IO 2.2 requires Java 5 or later.
+Commons IO 1.4 requires Java 1.3 or later.
 
 ==============================================================================
 Apache Commons IO Version 2.2
@@ -355,8 +457,8 @@ Binary compatible: Yes
 Source compatible: Yes
 Semantic compatible: Yes. Check the bug fixes section for semantic bug fixes
 
-Commons IO 2.2 requires a minimum of JDK 1.5. 
-Commons IO 1.4 requires a minimum of JDK 1.3. 
+Commons IO 2.2 requires a minimum of Java 5. 
+Commons IO 1.4 requires a minimum of Java 1.3. 
 
 ==============================================================================
 Apache Commons IO Version 2.1
@@ -397,8 +499,8 @@ Source compatible - Yes
 Semantic compatible - Yes
   Check the bug fixes section for semantic bug fixes
 
-Commons IO 2.0.1 requires a minimum of JDK 1.5
- (Commons IO 1.4 had a minimum of JDK 1.3) 
+Commons IO 2.0.1 requires a minimum of Java 5
+ (Commons IO 1.4 had a minimum of Java 1.3) 
 
 Enhancements from 2.0
 ---------------------
@@ -424,8 +526,8 @@ Source compatible - Yes
 Semantic compatible - Yes
   Check the bug fixes section for semantic bug fixes
 
-Commons IO 2.0 requires a minimum of JDK 1.5
- (Commons IO 1.4 had a minimum of JDK 1.3) 
+Commons IO 2.0 requires a minimum of Java 5
+ (Commons IO 1.4 had a minimum of Java 1.3) 
 
 Deprecations from 1.4
 ---------------------
@@ -442,7 +544,7 @@ Deprecations from 1.4
 Enhancements from 1.4
 ---------------------
 
-  * [IO-140] Move minimum Java requirement from JDK 1.3 to JDK 1.5
+  * [IO-140] Move minimum Java requirement from Java 1.3 to Java 5
              - use Generics
              - add new CharSequence write() flavour methods to IOUtils and FileUtils
              - replace StringBuffer with StringBuilder, where appropriate
@@ -539,10 +641,10 @@ Source compatible - Yes
 Semantic compatible - Yes
   Check the bug fixes section for semantic bug fixes
 
-Commons IO 1.4 introduces four new implementations which depend on JDK 1.4 features
+Commons IO 1.4 introduces four new implementations which depend on Java 4 features
 (CharSequenceReader, FileWriterWithEncoding, IOExceptionWithCause and RegexFileFilter).
-It has been built with the JDK source and target options set to JDK 1.3 and, except for
-those implementations, can be used with JDK 1.3 (see IO IO-127).
+It has been built with the JDK source and target options set to Java 1.3 and, except for
+those implementations, can be used with Java 1.3 (see IO IO-127).
 
 Deprecations from 1.3.2
 -----------------------
@@ -856,7 +958,7 @@ Enhancements from 1.2
 
 - TrueFileFilter/FalseFileFilter/DirectoryFileFilter
   - New singleton instance constants (TRUE/FALSE/DIRECTORY)
-  - The new constants are more JDK 1.5 friendly with regards to static imports
+  - The new constants are more Java 5 friendly with regards to static imports
     (whereas if everything uses INSTANCE, then they just clash)
   - The old INSTANCE constants are still present and have not been deprecated
 

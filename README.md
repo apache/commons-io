@@ -25,7 +25,7 @@
  | commons-build-plugin/trunk/src/main/resources/commons-xdoc-templates |
  +======================================================================+
  |                                                                      |
- | 1) Re-generate using: mvn commons:readme-md                          |
+ | 1) Re-generate using: mvn commons-build:readme-md                    |
  |                                                                      |
  | 2) Set the following properties in the component's pom:              |
  |    - commons.componentid (required, alphabetic, lower case)          |
@@ -43,10 +43,10 @@
 Apache Commons IO
 ===================
 
-[![Build Status](https://travis-ci.org/apache/commons-io.svg?branch=master)](https://travis-ci.org/apache/commons-io)
-[![Coverage Status](https://coveralls.io/repos/apache/commons-io/badge.svg?branch=master)](https://coveralls.io/r/apache/commons-io)
+[![Build Status](https://travis-ci.org/apache/commons-io.svg)](https://travis-ci.org/apache/commons-io)
+[![Coverage Status](https://coveralls.io/repos/apache/commons-io/badge.svg)](https://coveralls.io/r/apache/commons-io)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/)
-[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.7.svg)](https://javadoc.io/doc/commons-io/commons-io/2.7)
 
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
@@ -55,7 +55,7 @@ Documentation
 -------------
 
 More information can be found on the [Apache Commons IO homepage](https://commons.apache.org/proper/commons-io).
-The [Javadoc](https://commons.apache.org/proper/commons-io/javadocs/api-release) can be browsed.
+The [Javadoc](https://commons.apache.org/proper/commons-io/apidocs) can be browsed.
 Questions related to the usage of Apache Commons IO should be posted to the [user mailing list][ml].
 
 Where can I get the latest release?
@@ -68,7 +68,7 @@ Alternatively you can pull it from the central Maven repositories:
 <dependency>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.6</version>
+  <version>2.7</version>
 </dependency>
 ```
 
