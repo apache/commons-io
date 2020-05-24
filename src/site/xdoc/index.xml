@@ -47,22 +47,35 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
-    <subsection name="Commons IO 2.6 (requires JDK 1.7+)">
+    <subsection name="Commons IO 2.7 (requires Java 8)">
         <p>
-            Commons IO 2.6 is the latest version and requires a minimum of JDK 1.7 -
+            Commons IO 2.7 requires a minimum of Java 8 -
+            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+        </p>
+        <p>
+            View the
+            <a href="changes-report.html">Release Notes</a>
+            and
+            <a href="javadocs/api-release/index.html">Javadoc API documents</a>
+        </p>
+    </subsection>
+
+    <subsection name="Commons IO 2.6 (requires Java 7)">
+        <p>
+            Commons IO 2.6 requires a minimum of Java 7 -
             <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
         </p>
         <p>
             View the
             <a href="upgradeto2_6.html">Release Notes</a>
             and
-            <a href="javadocs/api-release/index.html">Javadoc API documents</a>
+            <a href="javadocs/api-2.6/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
-    <subsection name="Commons IO 2.5 (requires JDK 1.6+)">
+    <subsection name="Commons IO 2.5 (requires Java 6)">
         <p>
-            Commons IO 2.5 requires a minimum of JDK 1.6 -
+            Commons IO 2.5 requires a minimum of Java 6 -
             <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
         </p>
         <p>
@@ -73,7 +86,7 @@ There are six main areas included:
         </p>
     </subsection>
 
-    <subsection name="Commons IO 2.4 (requires JDK 1.6+)">
+    <subsection name="Commons IO 2.4 (requires Java 6)">
 <p>
     Commons IO 2.4 requires a minimum of JDK 1.6 -
 <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
@@ -84,7 +97,7 @@ View the <a href="upgradeto2_4.html">Release Notes</a> and
 </p>
 </subsection>
 
-    <subsection name="Commons IO 2.3 (requires JDK 1.6+)">
+    <subsection name="Commons IO 2.3 (requires Java 6)">
 <p>
     Commons IO 2.3 requires a minimum of JDK 1.6 -
 <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
@@ -95,7 +108,7 @@ View the <a href="upgradeto2_3.html">Release Notes</a> and
 </p>
 </subsection>
 
-<subsection name="Commons IO 2.2 (requires JDK 1.5+)">
+<subsection name="Commons IO 2.2 (requires Java 5)">
 <p>
 Commons IO 2.2 requires a minimum of JDK 1.5 -
 <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
