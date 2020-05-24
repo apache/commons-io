@@ -1,6 +1,6 @@
 
 Apache Commons IO 
-Version 2.7-SNAPSHOT
+Version 2.7
 Release Notes
 
 INTRODUCTION:
@@ -13,7 +13,7 @@ The Apache Commons IO library contains utility classes, stream implementations, 
 file comparators, endian transformation classes, and much more.
 
 ==============================================================================
-Apache Commons IO Version 2.7-SNAPSHOT
+Apache Commons IO Version 2.7
 ==============================================================================
 Java 8 required.
 
