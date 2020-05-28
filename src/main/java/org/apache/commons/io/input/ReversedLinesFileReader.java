@@ -133,7 +133,7 @@ public class ReversedLinesFileReader implements Closeable {
      */
     public ReversedLinesFileReader(final Path file, final int blockSize, final Charset encoding) throws IOException {
         this.blockSize = blockSize;
-        this.encoding = encoding;
+        this.encoding = Charsets.toCharset(encoding);
 
         // --- check & prepare encoding ---
         final Charset charset = Charsets.toCharset(encoding);
@@ -161,12 +161,12 @@ public class ReversedLinesFileReader implements Closeable {
             throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " +
                     "UTF-16LE)");
         } else {
-            throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to " +
+            throw new UnsupportedEncodingException("Encoding " + this.encoding + " is not supported yet (feel free to " +
                     "submit a patch)");
         }
 
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
-        newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
+        newLineSequences = new byte[][] { "\r\n".getBytes(this.encoding), "\n".getBytes(this.encoding), "\r".getBytes(this.encoding) };
 
         avoidNewlineSplitBufferSize = newLineSequences[0].length;
 
