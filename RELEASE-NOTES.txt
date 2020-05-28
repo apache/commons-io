@@ -100,6 +100,18 @@ Commons IO 2.3 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
 
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_csv.cgi
+
+Have fun!
+-Apache Commons Team
+
 ==============================================================================
 Apache Commons IO Version 2.6
 ==============================================================================
