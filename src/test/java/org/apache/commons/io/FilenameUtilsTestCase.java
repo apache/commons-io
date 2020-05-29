@@ -1000,19 +1000,19 @@ public class FilenameUtilsTestCase {
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
             fail("Invalid normalized first file");
-        } catch (final NullPointerException e) {
+        } catch (final IllegalArgumentException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
             fail("Invalid normalized second file");
-        } catch (final NullPointerException e) {
+        } catch (final IllegalArgumentException e) {
             // expected result
         }
         try {
             FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
             fail("Invalid normalized both filse");
-        } catch (final NullPointerException e) {
+        } catch (final IllegalArgumentException e) {
             // expected result
         }
     }
