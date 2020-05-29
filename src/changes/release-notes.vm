@@ -163,7 +163,7 @@ patches, or suggestions for improvement, see the Apache ${project.name} website:
 
 ${project.url}
 
-Download page: ${project.url}download_csv.cgi
+Download page: ${project.url}download_io.cgi
 
 Have fun!
 -Apache Commons Team
