@@ -37,7 +37,7 @@ import org.junit.jupiter.api.io.TempDir;
 public class ReversedLinesFileReaderTestSimple {
 
     @TempDir
-    private static File temporaryFolder;
+    public static File temporaryFolder;
 
     private ReversedLinesFileReader reversedLinesFileReader;
 
