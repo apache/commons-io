@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.apache.commons.io.input.ReversedLinesFileReaderTestParamBlockSize.assertEqualsAndNoLineBreaks;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
@@ -26,11 +27,17 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 
 public class ReversedLinesFileReaderTestSimple {
+
+    @TempDir
+    private static File temporaryFolder;
 
     private ReversedLinesFileReader reversedLinesFileReader;
 
@@ -69,8 +76,12 @@ public class ReversedLinesFileReaderTestSimple {
 
     @Test
     public void testNullEncoding() throws IOException, URISyntaxException {
-        new ReversedLinesFileReader(new File(this.getClass().getResource("/test-file-empty.bin").toURI()),
-                                    (Charset) null);
+        final File file = new File(temporaryFolder, "write.txt");
+        final String text = "Hello /u1234";
+        FileUtils.writeStringToFile(file, text, (Charset) null);
+        ReversedLinesFileReader rlfr =
+                new ReversedLinesFileReader(file, (Charset) null);
+        assertEquals(text, rlfr.readLine());
     }
 
 }
