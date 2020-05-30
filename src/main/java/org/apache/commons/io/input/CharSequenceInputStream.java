@@ -252,7 +252,7 @@ public class CharSequenceInputStream extends InputStream {
                 }
             }
             if (this.cbuf.position() != this.mark_cbuf) {
-                throw new IllegalStateException("Unexpected CharBuffer postion: actual=" + cbuf.position() + " " +
+                throw new IllegalStateException("Unexpected CharBuffer position: actual=" + cbuf.position() + " " +
                         "expected=" + this.mark_cbuf);
             }
             this.bbuf.position(this.mark_bbuf);

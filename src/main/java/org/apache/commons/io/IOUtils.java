@@ -882,7 +882,7 @@ public class IOUtils {
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
-     * @param inputCharset the charser to use for the input stream, null means platform default
+     * @param inputCharset the charset to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
@@ -2893,7 +2893,7 @@ public class IOUtils {
      * @param data the char array to write, do not modify during output,
      * null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param charset the chartset to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3

@@ -123,7 +123,7 @@ public class ProxyWriterTest {
     }
 
     @Test
-    public void nullCharSequencec() throws Exception {
+    public void nullCharSequence() throws Exception {
         try (final ProxyWriter proxy = new ProxyWriter(NullWriter.NULL_WRITER)) {
             proxy.append(null);
             proxy.close();
