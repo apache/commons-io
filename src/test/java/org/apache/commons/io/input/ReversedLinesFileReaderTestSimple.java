@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -66,6 +67,10 @@ public class ReversedLinesFileReaderTestSimple {
                 () -> new ReversedLinesFileReader(testFileEncodingBig5, IOUtils.DEFAULT_BUFFER_SIZE, "Big5").close());
     }
 
-
+    @Test
+    public void testNullEncoding() throws IOException, URISyntaxException {
+        new ReversedLinesFileReader(new File(this.getClass().getResource("/test-file-empty.bin").toURI()),
+                                    (Charset) null);
+    }
 
 }
