@@ -90,7 +90,7 @@ public class TeeReader extends ProxyReader {
     }
 
     /**
-     * Reads a single chracter from the proxied reader and writes it to the associated writer.
+     * Reads a single character from the proxied reader and writes it to the associated writer.
      *
      * @return next character from the reader, or -1 if the reader has ended
      * @throws IOException if the reader could not be read (or written)

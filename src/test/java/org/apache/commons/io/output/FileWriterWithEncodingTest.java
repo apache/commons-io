@@ -69,37 +69,37 @@ public class FileWriterWithEncodingTest {
     //-----------------------------------------------------------------------
     @Test
     public void sameEncoding_string_constructor() throws Exception {
-        succesfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
+        successfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
     }
 
     @Test
     public void sameEncoding_string_string_constructor() throws Exception {
-        succesfulRun(new FileWriterWithEncoding(file2.getPath(), defaultEncoding));
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), defaultEncoding));
     }
 
     @Test
     public void sameEncoding_Charset_constructor() throws Exception {
-        succesfulRun(new FileWriterWithEncoding(file2, Charset.defaultCharset()));
+        successfulRun(new FileWriterWithEncoding(file2, Charset.defaultCharset()));
     }
 
     @Test
     public void sameEncoding_string_Charset_constructor() throws Exception {
-        succesfulRun(new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset()));
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), Charset.defaultCharset()));
     }
 
     @Test
     public void sameEncoding_CharsetEncoder_constructor() throws Exception {
         final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        succesfulRun(new FileWriterWithEncoding(file2, enc));
+        successfulRun(new FileWriterWithEncoding(file2, enc));
     }
 
     @Test
     public void sameEncoding_string_CharsetEncoder_constructor() throws Exception {
         final CharsetEncoder enc = Charset.defaultCharset().newEncoder();
-        succesfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
+        successfulRun(new FileWriterWithEncoding(file2.getPath(), enc));
     }
 
-    private void succesfulRun(final FileWriterWithEncoding fw21) throws Exception {
+    private void successfulRun(final FileWriterWithEncoding fw21) throws Exception {
         FileWriter fw1 = null;
         FileWriterWithEncoding fw2 = null;
         try {
@@ -248,7 +248,7 @@ public class FileWriterWithEncodingTest {
     @Test
     public void sameEncoding_null_Charset_constructor() throws Exception {
         try {
-            succesfulRun(new FileWriterWithEncoding(file2, (Charset) null));
+            successfulRun(new FileWriterWithEncoding(file2, (Charset) null));
             fail();
         } catch (final NullPointerException ignore) {
 

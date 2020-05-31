@@ -1406,7 +1406,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterList(filter, Arrays.asList((File) null));
+            FileFilterUtils.filterList(filter, Collections.singletonList((File) null));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for list containing null
@@ -1467,7 +1467,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterSet(filter, new HashSet<>(Arrays.asList((File) null)));
+            FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList((File) null)));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for set containing null
