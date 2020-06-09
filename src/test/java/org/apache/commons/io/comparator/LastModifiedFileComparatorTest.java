@@ -30,8 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
     @BeforeEach
     public void setUp() throws Exception {
-        comparator = (AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_COMPARATOR;
-        reverse = LastModifiedFileComparator.LAST_MODIFIED_REVERSE;
+        comparator = (AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_FILE_COMPARATOR;
+        reverse = LastModifiedFileComparator.LAST_MODIFIED_REVERSE_COMPARATOR;
         final File olderFile = new File(dir, "older.txt");
         if (!olderFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + olderFile
