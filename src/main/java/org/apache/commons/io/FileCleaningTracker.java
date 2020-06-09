@@ -52,11 +52,11 @@ public class FileCleaningTracker {
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
+    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
     /**
      * Collection of File paths that failed to delete.
      */
-    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<String>());
+    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<>());
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
@@ -215,7 +215,7 @@ public class FileCleaningTracker {
         @Override
         public void run() {
             // thread exits when exitWhenFinished is true and there are no more tracked objects
-            while (exitWhenFinished == false || trackers.size() > 0) {
+            while (!exitWhenFinished || trackers.size() > 0) {
                 try {
                     // Wait for a tracker to remove.
                     final Tracker tracker = (Tracker) q.remove(); // cannot return null
@@ -224,8 +224,7 @@ public class FileCleaningTracker {
                         deleteFailures.add(tracker.getPath());
                     }
                     tracker.clear();
-                } catch (final InterruptedException e) {
-                    continue;
+                } catch (final InterruptedException ignored) {
                 }
             }
         }

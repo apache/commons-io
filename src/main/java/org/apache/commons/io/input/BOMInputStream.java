@@ -21,10 +21,8 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
 
@@ -140,13 +138,7 @@ public class BOMInputStream extends ProxyInputStream {
     private static final Comparator<ByteOrderMark> ByteOrderMarkLengthComparator = (bom1, bom2) -> {
         final int len1 = bom1.length();
         final int len2 = bom2.length();
-        if (len1 > len2) {
-            return EOF;
-        }
-        if (len2 > len1) {
-            return 1;
-        }
-        return 0;
+        return Integer.compare(len2, len1);
     };
 
     /**
@@ -167,7 +159,7 @@ public class BOMInputStream extends ProxyInputStream {
         this.include = include;
         final List<ByteOrderMark> list = Arrays.asList(boms);
         // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
-        Collections.sort(list, ByteOrderMarkLengthComparator);
+        list.sort(ByteOrderMarkLengthComparator);
         this.boms = list;
 
     }
