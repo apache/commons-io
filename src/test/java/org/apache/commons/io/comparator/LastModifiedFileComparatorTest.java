@@ -30,7 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
     @BeforeEach
     public void setUp() throws Exception {
-        comparator = (AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_FILE_COMPARATOR;
+        comparator = (AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_COMPARATOR;
         reverse = LastModifiedFileComparator.LAST_MODIFIED_REVERSE;
         final File olderFile = new File(dir, "older.txt");
         if (!olderFile.getParentFile().exists()) {

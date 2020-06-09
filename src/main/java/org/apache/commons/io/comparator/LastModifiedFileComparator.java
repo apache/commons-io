@@ -28,17 +28,17 @@ import java.util.Comparator;
  * by their last modified date/time.
  * <p>
  * Example of sorting a list of files using the
- * {@link #LAST_MODIFIED_FILE_COMPARATOR} singleton instance:
+ * {@link #LAST_MODIFIED_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
- *       ((AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_COMPARATOR).sort(list);
+ *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
  * {@link #LAST_MODIFIED_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
- *       ((AbstractFileComparator) LastModifiedFileComparator.LAST_MODIFIED_REVERSE).sort(array);
+ *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_REVERSE).sort(array);
  * </pre>
  * <p>
  *
@@ -49,11 +49,11 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
     private static final long serialVersionUID = 7372168004395734046L;
 
     /** Last modified comparator instance */
-    public static final Comparator<File> LAST_MODIFIED_FILE_COMPARATOR = new LastModifiedFileComparator();
+    public static final Comparator<File> LAST_MODIFIED_COMPARATOR = new LastModifiedFileComparator();
 
     /** Reverse last modified comparator instance */
     public static final Comparator<File> LAST_MODIFIED_REVERSE = new ReverseComparator(
-        LAST_MODIFIED_FILE_COMPARATOR);
+        LAST_MODIFIED_COMPARATOR);
 
     /**
      * Compare the last the last modified date/time of two files.
