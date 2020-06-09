@@ -59,7 +59,7 @@ public class Charsets {
     // correctly and without delay on all Java platforms.
     //
 
-    private static final TreeMap<String, Charset> REQUIRED_CHARSETS = new TreeMap<>();
+    private static final TreeMap<String, Charset> REQUIRED_CHARSETS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     static {
         REQUIRED_CHARSETS.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
