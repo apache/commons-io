@@ -20,6 +20,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.SortedMap;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class CharsetsTestCase {
 
     @Test
     public void testRequiredCharsets() {
-        final SortedMap<String, Charset> requiredCharsets = Charsets.requiredCharsets();
+        final Map<String, Charset> requiredCharsets = Charsets.requiredCharsets();
         // test for what we expect to be there as of Java 6
         // Make sure the object at the given key is the right one
         assertEquals(requiredCharsets.get("US-ASCII").name(), "US-ASCII");

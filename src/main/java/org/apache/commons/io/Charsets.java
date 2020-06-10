@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -59,7 +60,7 @@ public class Charsets {
     // correctly and without delay on all Java platforms.
     //
 
-    private static final TreeMap<String, Charset> REQUIRED_CHARSETS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private static final SortedMap<String, Charset> REQUIRED_CHARSETS = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     static {
         REQUIRED_CHARSETS.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
@@ -82,7 +83,7 @@ public class Charsets {
      * @see Charset#availableCharsets()
      * @since 2.5
      */
-    public static SortedMap<String, Charset> requiredCharsets() {
+    public static Map<String, Charset> requiredCharsets() {
         return Collections.unmodifiableSortedMap(REQUIRED_CHARSETS);
     }
 
