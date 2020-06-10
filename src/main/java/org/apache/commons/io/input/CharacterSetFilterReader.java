@@ -49,7 +49,7 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
     @Override
     protected boolean filter(final int ch) {
         // Note WRT Integer.valueOf(): You can increase the Integer cache with a system property, see {@link Integer}.
-        return skipSet.contains(ch);
+        return skipSet.contains(Integer.valueOf(ch));
     }
 
 }

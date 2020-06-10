@@ -159,7 +159,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @since 2.1
      */
     public synchronized void stop(final long stopInterval) throws Exception {
-        if (!running) {
+        if (running == false) {
             throw new IllegalStateException("Monitor is not running");
         }
         running = false;

@@ -500,7 +500,7 @@ public final class PathUtils {
      */
     static List<Path> relativize(Collection<Path> collection, Path parent, boolean sort,
             Comparator<? super Path> comparator) {
-        Stream<Path> stream = collection.stream().map(parent::relativize);
+        Stream<Path> stream = collection.stream().map(e -> parent.relativize(e));
         if (sort) {
             stream = comparator == null ? stream.sorted() : stream.sorted(comparator);
         }

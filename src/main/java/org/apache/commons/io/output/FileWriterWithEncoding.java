@@ -244,7 +244,7 @@ public class FileWriterWithEncoding extends Writer {
             } catch (final IOException e) {
                 ex.addSuppressed(e);
             }
-            if (!fileExistedAlready) {
+            if (fileExistedAlready == false) {
                 FileUtils.deleteQuietly(file);
             }
             throw ex;

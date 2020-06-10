@@ -144,7 +144,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public void close() throws IOException {
-        IOUtils.close(in, this::handleIOException);
+        IOUtils.close(in, e -> handleIOException(e));
     }
 
     /**

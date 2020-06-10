@@ -64,14 +64,14 @@ class ThreadMonitor implements Runnable {
      * if the timeout amount is not greater than zero
      */
     public static Thread start(final Thread thread, final long timeout) {
-        Thread monitorThread = null;
+        Thread monitor = null;
         if (timeout > 0) {
-            final ThreadMonitor monitor = new ThreadMonitor(thread, timeout);
-            monitorThread = new Thread(monitor, ThreadMonitor.class.getSimpleName());
-            monitorThread.setDaemon(true);
-            monitorThread.start();
+            final ThreadMonitor timout = new ThreadMonitor(thread, timeout);
+            monitor = new Thread(timout, ThreadMonitor.class.getSimpleName());
+            monitor.setDaemon(true);
+            monitor.start();
         }
-        return monitorThread;
+        return monitor;
     }
 
     /**
