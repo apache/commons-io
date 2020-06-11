@@ -33,7 +33,7 @@ public class IOFunctionTest {
 
     @Test
     public void testApply() throws IOException {
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final InputStream is = new ByteArrayInputStream(new byte[] { (byte)0xa, (byte)0xb, (byte)0xc});
         assertEquals(0xa, readByte.apply(is));
         assertEquals(0xb, readByte.apply(is));
@@ -55,7 +55,7 @@ public class IOFunctionTest {
 
     @Test
     public void testComposeIOFunction() throws IOException {
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = squareInteger.compose(readByte);
 
@@ -99,7 +99,7 @@ public class IOFunctionTest {
 
     @Test
     public void testAndThenIOFunction() throws IOException {
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOFunction<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = readByte.andThen(squareInteger);
 
@@ -110,7 +110,7 @@ public class IOFunctionTest {
 
     @Test
     public void testAndThenFunction() throws IOException {
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final Function<Integer, Integer> squareInteger = i -> i * i;
         final IOFunction<InputStream, Integer> productFunction = readByte.andThen(squareInteger);
 
@@ -122,7 +122,7 @@ public class IOFunctionTest {
     @Test
     public void testAndThenIOConsumer() throws IOException {
         final Holder<Integer> holder = new Holder<>();
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final IOConsumer<Integer> sinkInteger = i -> {
             holder.value = i * i;
         };
@@ -138,7 +138,7 @@ public class IOFunctionTest {
     @Test
     public void testAndThenConsumer() throws IOException {
         final Holder<Integer> holder = new Holder<>();
-        final IOFunction<InputStream, Integer> readByte = is -> is.read();
+        final IOFunction<InputStream, Integer> readByte = InputStream::read;
         final Consumer<Integer> sinkInteger = i -> {
             holder.value = i * i;
         };
