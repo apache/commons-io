@@ -59,6 +59,19 @@ public class Charsets {
     // correctly and without delay on all Java platforms.
     //
 
+    private static final SortedMap<String, Charset> REQUIRED_CHARSETS;
+
+    static {
+        SortedMap<String, Charset> requiredCharsets = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        requiredCharsets.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
+        requiredCharsets.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
+        requiredCharsets.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);
+        requiredCharsets.put(StandardCharsets.UTF_16BE.name(), StandardCharsets.UTF_16BE);
+        requiredCharsets.put(StandardCharsets.UTF_16LE.name(), StandardCharsets.UTF_16LE);
+        requiredCharsets.put(StandardCharsets.UTF_8.name(), StandardCharsets.UTF_8);
+        REQUIRED_CHARSETS = Collections.unmodifiableSortedMap(requiredCharsets);
+    }
+
     /**
      * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
      * Java platform.
@@ -72,15 +85,7 @@ public class Charsets {
      * @since 2.5
      */
     public static SortedMap<String, Charset> requiredCharsets() {
-        // maybe cache?
-        final TreeMap<String, Charset> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        m.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
-        m.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
-        m.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);
-        m.put(StandardCharsets.UTF_16BE.name(), StandardCharsets.UTF_16BE);
-        m.put(StandardCharsets.UTF_16LE.name(), StandardCharsets.UTF_16LE);
-        m.put(StandardCharsets.UTF_8.name(), StandardCharsets.UTF_8);
-        return Collections.unmodifiableSortedMap(m);
+        return REQUIRED_CHARSETS;
     }
 
     /**
