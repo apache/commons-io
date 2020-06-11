@@ -50,6 +50,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-669" dev="ggregory" type="fix" due-to="XenoAmess, Gary Gregory">
         Fix code smells; fix typos #115.
       </action>
+      <action dev="ggregory" type="fix" due-to="Jerome Wolff, Gary Gregory">
+        Add caching for required charsets #120.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
