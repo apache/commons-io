@@ -19,7 +19,6 @@ package org.apache.commons.io;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -85,7 +84,7 @@ public class Charsets {
      * @see Charset#availableCharsets()
      * @since 2.5
      */
-    public static Map<String, Charset> requiredCharsets() {
+    public static SortedMap<String, Charset> requiredCharsets() {
         return REQUIRED_CHARSETS;
     }
 
