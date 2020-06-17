@@ -53,7 +53,7 @@ public final class PathUtils {
 
     /**
      * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
-     * 
+     *
      * @param directory The directory to accumulate information.
      * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @param linkOptions Options indicating how symbolic links are handled.
@@ -81,7 +81,7 @@ public final class PathUtils {
 
         /**
          * Constructs and initializes a new instance by accumulating directory and file info.
-         * 
+         *
          * @param dir1 First directory to compare.
          * @param dir2 Seconds directory to compare.
          * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
@@ -289,7 +289,7 @@ public final class PathUtils {
     /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
      * comparison includes all files in all sub-directories.
-     * 
+     *
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files while considering file contents.
@@ -303,7 +303,7 @@ public final class PathUtils {
     /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
      * comparison includes all files in all sub-directories.
-     * 
+     *
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @param linkOptions options to follow links.
@@ -350,7 +350,7 @@ public final class PathUtils {
     /**
      * Compares the file sets of two Paths to determine if they are equal or not without considering file contents. The
      * comparison includes all files in all sub-directories.
-     * 
+     *
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @return Whether the two directories contain the same files without considering file contents.
@@ -364,7 +364,7 @@ public final class PathUtils {
     /**
      * Compares the file sets of two Paths to determine if they are equal or not without considering file contents. The
      * comparison includes all files in all sub-directories.
-     * 
+     *
      * @param path1 The first directory.
      * @param path2 The second directory.
      * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
@@ -491,7 +491,7 @@ public final class PathUtils {
 
     /**
      * Relativizes all files in the given {@code collection} against a {@code parent}.
-     * 
+     *
      * @param collection The collection of paths to relativize.
      * @param parent relativizes against this parent path.
      * @param sort Whether to sort the result.
@@ -509,7 +509,7 @@ public final class PathUtils {
 
     /**
      * Converts an array of {@link FileVisitOption} to a {@link Set}.
-     * 
+     *
      * @param fileVisitOptions input array.
      * @return a new Set.
      */

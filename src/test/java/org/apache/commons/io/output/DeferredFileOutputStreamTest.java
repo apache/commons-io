@@ -321,7 +321,7 @@ public class DeferredFileOutputStreamTest {
 
     /**
      * Test specifying a temporary file and the threshold is reached.
-     * 
+     *
      * @throws Exception
      */
     @Test

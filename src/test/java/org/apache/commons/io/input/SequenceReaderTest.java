@@ -160,9 +160,9 @@ public class SequenceReaderTest {
     public void testReadLength1Readers() throws IOException {
         try (final Reader reader = new SequenceReader(
         // @formatter:off
-            new StringReader("0"), 
+            new StringReader("0"),
             new StringReader("1"),
-            new StringReader("2"), 
+            new StringReader("2"),
             new StringReader("3"))) {
             // @formatter:on
             assertEquals('0', reader.read());

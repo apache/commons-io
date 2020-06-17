@@ -72,7 +72,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     /**
      * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
      * given algorithm.
-     * 
+     *
      * @param inputStream the stream to calculate the message digest for
      * @param algorithm the name of the algorithm to use
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
@@ -86,7 +86,7 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     /**
      * Creates a new instance, which calculates a signature on the given stream, using a {@link MessageDigest} with the
      * "MD5" algorithm.
-     * 
+     *
      * @param inputStream the stream to calculate the message digest for
      * @throws NoSuchAlgorithmException if no Provider supports a MessageDigestSpi implementation for the specified
      *         algorithm.

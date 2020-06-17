@@ -87,7 +87,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
 
     /**
      * Gets the list of visited directories.
-     * 
+     *
      * @return the list of visited directories.
      */
     public List<Path> getDirList() {
@@ -96,7 +96,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
 
     /**
      * Gets the list of visited files.
-     * 
+     *
      * @return the list of visited files.
      */
     public List<Path> getFileList() {
@@ -114,7 +114,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Relativizes each directory path with {@link Path#relativize(Path)} against the given {@code parent}, optionally
      * sorting the result.
-     * 
+     *
      * @param parent A parent path
      * @param sort Whether to sort
      * @param comparator How to sort, null uses default sorting.
@@ -127,7 +127,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Relativizes each file path with {@link Path#relativize(Path)} against the given {@code parent}, optionally
      * sorting the result.
-     * 
+     *
      * @param parent A parent path
      * @param sort Whether to sort
      * @param comparator How to sort, null uses default sorting.
