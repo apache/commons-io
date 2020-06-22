@@ -53,6 +53,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Jerome Wolff, Gary Gregory">
         Add caching for required charsets #120.
       </action>
+      <action issue="IO-673" dev="ggregory" type="fix" due-to="Jerome Wolff">
+        Make some simplifications #121.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
