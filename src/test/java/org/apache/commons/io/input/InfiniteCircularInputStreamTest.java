@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 public class InfiniteCircularInputStreamTest {
 
     @Test
-    public void should_cycle_bytes() throws IOException {
+    public void shouldCycleBytes() throws IOException {
         final byte[] input = new byte[] { 1, 2 };
         final byte[] expected = new byte[] { 1, 2, 1, 2, 1 };
 
@@ -36,7 +36,7 @@ public class InfiniteCircularInputStreamTest {
     }
 
     @Test
-    public void should_handle_whole_range_of_bytes() throws IOException {
+    public void shouldHandleWholeRangeOfBytes() throws IOException {
         final int size = Byte.MAX_VALUE - Byte.MIN_VALUE + 1;
         final byte[] contentToCycle = new byte[size];
         byte value = Byte.MIN_VALUE;
