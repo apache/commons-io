@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.7.1" date="2020-MM-DD" description="Java 8 required.">
+    <release version="2.8" date="2020-MM-DD" description="Java 8 required.">
       <action issue="IO-669" dev="ggregory" type="fix" due-to="XenoAmess, Gary Gregory">
         Fix code smells; fix typos #115.
       </action>
@@ -55,6 +55,15 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-673" dev="ggregory" type="fix" due-to="Jerome Wolff">
         Make some simplifications #121.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Add org.apache.commons.io.input.CircularInputStream.
+      </action>
+      <action issue="IO-674" dev="ggregory" type="fix" due-to="Gary Gregory">
+        InfiniteCircularInputStream is not infinite if its input buffer contains -1.
+      </action>
+      <action issue="IO-675" dev="ggregory" type="fix" due-to="Gary Gregory">
+        InfiniteCircularInputStream throws a divide-by-zero exception when reading if its input buffer is size 0.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->

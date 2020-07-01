@@ -28,14 +28,14 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link InfiniteCircularInputStream}.
+ * Tests {@link CircularInputStream}.
  */
-public class InfiniteCircularInputStreamTest {
+public class CircularInputStreamTest {
 
     private void assertStreamOutput(final byte[] toCycle, final byte[] expected) throws IOException {
         final byte[] actual = new byte[expected.length];
 
-        try (InputStream infStream = new InfiniteCircularInputStream(toCycle)) {
+        try (InputStream infStream = createInputStream(toCycle, -1)) {
             final int actualReadBytes = infStream.read(actual);
 
             assertArrayEquals(expected, actual);
@@ -43,32 +43,39 @@ public class InfiniteCircularInputStreamTest {
         }
     }
 
-    private InputStream createInputStream(final byte[] repeatContent) {
-        return new InfiniteCircularInputStream(repeatContent);
+    private InputStream createInputStream(final byte[] repeatContent, final long targetByteCount) {
+        return new CircularInputStream(repeatContent, targetByteCount);
     }
 
     @Test
     public void testContainsEofInputSize0() {
-        assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] { -1 }));
+        assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] { -1 }, 0));
+    }
+
+    @Test
+    public void testCount0() throws IOException {
+        try (InputStream in = createInputStream(new byte[] { 1, 2 }, 0)) {
+            assertEquals(IOUtils.EOF, in.read());
+        }
     }
 
     @Test
     public void testCount0InputSize0() {
-        assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] {}));
+        assertThrows(IllegalArgumentException.class, () -> createInputStream(new byte[] {}, 0));
     }
 
     @Test
     public void testCount0InputSize1() throws IOException {
-        try (InputStream in = createInputStream(new byte[] { 1 })) {
-            // empty
+        try (InputStream in = createInputStream(new byte[] { 1 }, 0)) {
+            assertEquals(IOUtils.EOF, in.read());
         }
     }
 
     @Test
     public void testCount1InputSize1() throws IOException {
-        try (InputStream in = createInputStream(new byte[] { 1 })) {
+        try (InputStream in = createInputStream(new byte[] { 1 }, 1)) {
             assertEquals(1, in.read());
-            assertEquals(1, in.read());
+            assertEquals(IOUtils.EOF, in.read());
         }
     }
 
@@ -82,7 +89,7 @@ public class InfiniteCircularInputStreamTest {
 
     @Test
     public void testNullInputSize0() {
-        assertThrows(NullPointerException.class, () -> createInputStream(null));
+        assertThrows(NullPointerException.class, () -> createInputStream(null, 0));
     }
 
     @Test

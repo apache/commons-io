@@ -16,37 +16,29 @@
  */
 package org.apache.commons.io.input;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
  *
- * An {@link InputStream} that infinitely repeats provided bytes.
+ * An {@link InputStream} that infinitely repeats the provided bytes.
  * <p>
- * Closing a <code>InfiniteCircularInputStream</code> has no effect. The methods in
- * this class can be called after the stream has been closed without generating
- * an <code>IOException</code>.
+ * Closing this input stream has no effect. The methods in this class can be called after the stream has been closed
+ * without generating an {@link IOException}.
  * </p>
+ *
  * @since 2.6
  */
-public class InfiniteCircularInputStream extends InputStream {
-
-    final private byte[] repeatedContent;
-    private int position = -1;
+public class InfiniteCircularInputStream extends CircularInputStream {
 
     /**
-     * Creates a InfiniteCircularStream from the specified array of chars.
+     * Creates an instance from the specified array of bytes.
      *
-     * @param repeatedContent
-     *            Input buffer to be repeated (not copied)
+     * @param repeatContent Input buffer to be repeated this buffer is not copied.
      */
-    public InfiniteCircularInputStream(final byte[] repeatedContent) {
-        this.repeatedContent = repeatedContent;
-    }
-
-    @Override
-    public int read() {
-        position = (position + 1) % repeatedContent.length;
-        return repeatedContent[position] & 0xff;
+    public InfiniteCircularInputStream(final byte[] repeatContent) {
+        // A negative number means an infinite target count.
+        super(repeatContent, -1);
     }
 
 }
