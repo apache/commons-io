@@ -47,6 +47,19 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
+    <subsection name="Commons IO 2.8 (requires Java 8)">
+        <p>
+            Commons IO 2.8 requires a minimum of Java 8 -
+            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+        </p>
+        <p>
+            View the
+            <a href="changes-report.html">Release Notes</a>
+            and
+            <a href="javadocs/api-release/index.html">Javadoc API documents</a>
+        </p>
+    </subsection>
+
     <subsection name="Commons IO 2.7 (requires Java 8)">
         <p>
             Commons IO 2.7 requires a minimum of Java 8 -
@@ -56,7 +69,7 @@ There are six main areas included:
             View the
             <a href="changes-report.html">Release Notes</a>
             and
-            <a href="javadocs/api-release/index.html">Javadoc API documents</a>
+            <a href="javadocs/api-2.7/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
