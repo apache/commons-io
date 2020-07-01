@@ -1237,10 +1237,11 @@ public class FileUtils {
      * @param filter           the filter to apply, null means copy all directories and files
      * @param preserveFileDate whether to preserve the file date
      * @param exclusionList    List of files and directories to exclude from the copy, may be null
+     * @return whether the operation succeeded
      * @throws IOException if an error occurs
      * @since 1.1
      */
-    private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+    private static boolean doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
                                         final boolean preserveFileDate, final List<String> exclusionList)
             throws IOException {
         // recurse
@@ -1273,8 +1274,9 @@ public class FileUtils {
 
         // Do this last, as the above has probably affected directory metadata
         if (preserveFileDate) {
-            destDir.setLastModified(srcDir.lastModified());
+            return destDir.setLastModified(srcDir.lastModified());
         }
+        return true;
     }
 
     /**
@@ -1288,13 +1290,14 @@ public class FileUtils {
      * @param srcFile          the validated source file, must not be {@code null}
      * @param destFile         the validated destination file, must not be {@code null}
      * @param preserveFileDate whether to preserve the file date
+     * @return whether the operation succeeded
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
      * copy completes
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+    private static boolean doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
             throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
@@ -1310,7 +1313,7 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        destFile.setLastModified(newLastModifed);
+        return destFile.setLastModified(newLastModifed);
     }
 
     //-----------------------------------------------------------------------
@@ -1977,7 +1980,9 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(src, destDir);
         if (!destDir.exists() && createDestDir) {
-            destDir.mkdirs();
+            if (!destDir.mkdirs()) {
+                throw new IOException("Could not create destination directories '" + destDir + "'");
+            }
         }
         if (!destDir.exists()) {
             throw new FileNotFoundException("Destination directory '" + destDir +
@@ -2042,7 +2047,9 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(srcFile, destDir);
         if (!destDir.exists() && createDestDir) {
-            destDir.mkdirs();
+            if (!destDir.mkdirs()) {
+                throw new IOException("Could not create destination directories '" + destDir + "'");
+            }
         }
         if (!destDir.exists()) {
             throw new FileNotFoundException("Destination directory '" + destDir +
