@@ -65,6 +65,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-675" dev="ggregory" type="fix" due-to="Gary Gregory">
         InfiniteCircularInputStream throws a divide-by-zero exception when reading if its input buffer is size 0.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        maven-checkstyle-plugin 3.1.0 -> 3.1.1.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">

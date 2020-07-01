@@ -50,6 +50,7 @@ public class CircularInputStream extends InputStream {
         }
         return repeatContent;
     }
+
     private long byteCount;
     private int position = -1;
     private final byte[] repeatedContent;
@@ -71,9 +72,6 @@ public class CircularInputStream extends InputStream {
 
     @Override
     public int read() {
-        if (repeatedContent.length == 0) {
-            return IOUtils.EOF;
-        }
         if (targetByteCount >= 0) {
             if (byteCount == targetByteCount) {
                 return IOUtils.EOF;
