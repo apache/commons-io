@@ -294,6 +294,8 @@ file comparators, endian transformation classes, and much more.
     <commons.jacoco.version>0.8.5</commons.jacoco.version>
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.3</commons.japicmp.version>
+    <spotbugs.plugin.version>4.0.0</spotbugs.plugin.version>
+    <spotbugs.impl.version>4.0.6</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
@@ -388,6 +390,21 @@ file comparators, endian transformation classes, and much more.
           </ignorePathsToDelete>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.impl.version}</version>
+         </dependency>
+        </dependencies>
+        <configuration>
+          <excludeFilterFile>${basedir}/sb-excludes.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -403,13 +420,11 @@ file comparators, endian transformation classes, and much more.
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.5</version>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin.version}</version>
         <configuration>
-          <threshold>Normal</threshold>
-          <effort>Default</effort>
-          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
+          <excludeFilterFile>${basedir}/sb-excludes.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
