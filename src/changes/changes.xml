@@ -53,7 +53,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Jerome Wolff, Gary Gregory">
         Add caching for required charsets #120.
       </action>
-      <action issue="IO-673" dev="ggregory" type="fix" due-to="Jerome Wolff">
+      <action issue="IO-673" type="fix" dev="ggregory" due-to="Jerome Wolff">
         Make some simplifications #121.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
