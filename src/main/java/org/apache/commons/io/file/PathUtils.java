@@ -163,7 +163,7 @@ public final class PathUtils {
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @return The visitation path counters.
      * @throws IOException if an I/O error is thrown by a visitor method.
-     * @since 2.9
+     * @since 2.8
      */
     public static PathCounters cleanDirectory(final Path directory, final FileVisitOption... fileVisitOptions)
         throws IOException {
@@ -287,6 +287,7 @@ public final class PathUtils {
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.8
      */
     public static PathCounters deleteDirectory(final Path directory, final FileVisitOption... fileVisitOptions) throws IOException {
         return visitFileTree(DeletingPathVisitor.withLongCounters(), directory).getPathCounters();
