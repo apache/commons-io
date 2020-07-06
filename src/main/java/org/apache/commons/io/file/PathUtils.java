@@ -153,7 +153,22 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters cleanDirectory(final Path directory) throws IOException {
-        return visitFileTree(CleaningPathVisitor.withLongCounters(), directory).getPathCounters();
+        return cleanDirectory(directory, FileVisitOption.FOLLOW_LINKS);
+    }
+
+    /**
+     * Cleans a directory including sub-directories without deleting directories.
+     *
+     * @param directory directory to clean.
+     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @return The visitation path counters.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.9
+     */
+    public static PathCounters cleanDirectory(final Path directory, final FileVisitOption... fileVisitOptions)
+        throws IOException {
+        return visitFileTree(CleaningPathVisitor.withLongCounters(), directory, toFileVisitOptionSet(fileVisitOptions),
+            Integer.MAX_VALUE).getPathCounters();
     }
 
     /**
@@ -262,6 +277,18 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters deleteDirectory(final Path directory) throws IOException {
+        return deleteDirectory(directory, FileVisitOption.FOLLOW_LINKS);
+    }
+
+    /**
+     * Deletes a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @return The visitor used to delete the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     */
+    public static PathCounters deleteDirectory(final Path directory, final FileVisitOption... fileVisitOptions) throws IOException {
         return visitFileTree(DeletingPathVisitor.withLongCounters(), directory).getPathCounters();
     }
 
