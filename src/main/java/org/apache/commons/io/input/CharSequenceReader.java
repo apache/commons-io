@@ -272,7 +272,7 @@ public class CharSequenceReader extends Reader implements Serializable {
                     "Number of characters to skip is less than zero: " + n);
         }
         if (idx >= end()) {
-            return EOF;
+            return 0;
         }
         final int dest = (int)Math.min(end(), idx + n);
         final int count = dest - idx;

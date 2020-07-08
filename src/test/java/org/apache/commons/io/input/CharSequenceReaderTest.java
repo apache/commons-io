@@ -89,11 +89,11 @@ public class CharSequenceReaderTest {
         final Reader reader = new CharSequenceReader("FooBar");
         assertEquals(3, reader.skip(3));
         checkRead(reader, "Bar");
-        assertEquals(-1, reader.skip(3));
+        assertEquals(0, reader.skip(3));
         reader.reset();
         assertEquals(2, reader.skip(2));
         assertEquals(4, reader.skip(10));
-        assertEquals(-1, reader.skip(1));
+        assertEquals(0, reader.skip(1));
         reader.close();
         assertEquals(6, reader.skip(20));
         assertEquals(-1, reader.read());
@@ -101,11 +101,11 @@ public class CharSequenceReaderTest {
         final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
         assertEquals(3, subReader.skip(3));
         checkRead(subReader, "Bar");
-        assertEquals(-1, subReader.skip(3));
+        assertEquals(0, subReader.skip(3));
         subReader.reset();
         assertEquals(2, subReader.skip(2));
         assertEquals(4, subReader.skip(10));
-        assertEquals(-1, subReader.skip(1));
+        assertEquals(0, subReader.skip(1));
         subReader.close();
         assertEquals(6, subReader.skip(20));
         assertEquals(-1, subReader.read());
