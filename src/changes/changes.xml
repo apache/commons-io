@@ -59,6 +59,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Rob Spoor, Jochen Wiedmann">
         CharSequenceReader.skip should return 0 instead of EOF on stream end #123.
       </action>
+      <action dev="ggregory" type="fix" due-to="Rob Spoor">
+        Implement CharSequenceReader.ready #122.
+      </action>
       <action issue="IO-669" dev="ggregory" type="fix" due-to="XenoAmess, Gary Gregory">
         Fix code smells; fix typos #115.
       </action>
