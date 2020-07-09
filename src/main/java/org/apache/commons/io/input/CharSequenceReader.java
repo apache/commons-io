@@ -166,6 +166,16 @@ public class CharSequenceReader extends Reader implements Serializable {
     }
 
     /**
+     * Tells whether this stream is ready to be read.
+     *
+     * @return {@code true} if more characters from the character sequence are available, or {@code false} otherwise.
+     */
+    @Override
+    public boolean ready() {
+        return idx < end();
+    }
+
+    /**
      * Mark the current position.
      *
      * @param readAheadLimit ignored

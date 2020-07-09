@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,6 +50,43 @@ public class CharSequenceReaderTest {
         checkRead(subReader, "Foo");
         subReader.close();
         checkRead(subReader, "Foo");
+    }
+
+    @Test
+    public void testReady() throws IOException {
+        final Reader reader = new CharSequenceReader("FooBar");
+        assertTrue(reader.ready());
+        reader.skip(3);
+        assertTrue(reader.ready());
+        checkRead(reader, "Bar");
+        assertFalse(reader.ready());
+        reader.reset();
+        assertTrue(reader.ready());
+        reader.skip(2);
+        assertTrue(reader.ready());
+        reader.skip(10);
+        assertFalse(reader.ready());
+        reader.close();
+        assertTrue(reader.ready());
+        reader.skip(20);
+        assertFalse(reader.ready());
+
+        final Reader subReader = new CharSequenceReader("xFooBarx", 1, 7);
+        assertTrue(subReader.ready());
+        subReader.skip(3);
+        assertTrue(subReader.ready());
+        checkRead(subReader, "Bar");
+        assertFalse(subReader.ready());
+        subReader.reset();
+        assertTrue(subReader.ready());
+        subReader.skip(2);
+        assertTrue(subReader.ready());
+        subReader.skip(10);
+        assertFalse(subReader.ready());
+        subReader.close();
+        assertTrue(subReader.ready());
+        subReader.skip(20);
+        assertFalse(subReader.ready());
     }
 
     @Test
