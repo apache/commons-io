@@ -89,6 +89,8 @@ import org.apache.commons.io.output.NullOutputStream;
  * </p>
  */
 public class FileUtils {
+    private static final String NO_SPECIFIED_LOCALDATE = "No specified localDate";
+    private static final String NO_SPECIFIED_ZONEID = "No specified zoneID";
 
     /**
      * The number of bytes in a kilobyte.
@@ -1731,6 +1733,119 @@ public class FileUtils {
     }
 
     /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>Instant</code>.
+     *
+     * @param file    the <code>File</code> of which the modification date
+     *                must be compared, must not be {@code null}
+     * @param instant the date reference, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>Instant</code>.
+     * @throws IllegalArgumentException if the file or instant is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final Instant instant) {
+        if (instant == null) {
+            throw new IllegalArgumentException("No specified instant");
+        }
+        return isFileNewer(file, instant.toEpochMilli());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>ZonedDateTime</code>.
+     *
+     * @param file          the <code>File</code> of which the modification date
+     *                      must be compared, must not be {@code null}
+     * @param zonedDateTime the date reference, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>ZonedDateTime</code>.
+     * @throws IllegalArgumentException if the file or zoned date time is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final ZonedDateTime zonedDateTime) {
+        if (zonedDateTime == null) {
+            throw new IllegalArgumentException("No specified zonedDateTime");
+        }
+        return isFileNewer(file, zonedDateTime.toInstant());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>LocalDateTime</code> at the system-default time zone.
+     *
+     * @param file          the <code>File</code> of which the modification date
+     *                      must be compared, must not be {@code null}
+     * @param localDateTime the date reference, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>LocalDateTime</code> at the system-default time zone.
+     * @throws IllegalArgumentException if the file or local date time is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final LocalDateTime localDateTime) {
+        return isFileNewer(file, localDateTime, ZoneId.systemDefault());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>LocalDateTime</code> at the specified <code>ZoneId</code>.
+     *
+     * @param file          the <code>File</code> of which the modification date
+     *                      must be compared, must not be {@code null}
+     * @param localDateTime the date reference, must not be {@code null}
+     * @param zoneId        the time zone, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>LocalDateTime</code> at the given <code>ZoneId</code>.
+     * @throws IllegalArgumentException if the file, local date time or zone ID is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
+        if (localDateTime == null) {
+            throw new IllegalArgumentException("No specified localDateTime");
+        }
+        if (zoneId == null) {
+            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
+        }
+        return isFileNewer(file, localDateTime.atZone(zoneId));
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>LocalDate</code> at the system-default time zone.
+     *
+     * @param file      the <code>File</code> of which the modification date
+     *                  must be compared, must not be {@code null}
+     * @param localDate the date reference, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>LocalDate</code> at the system-default time zone.
+     * @throws IllegalArgumentException if the file or local date is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final LocalDate localDate) {
+        if (localDate == null) {
+            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
+        }
+        return isFileNewer(file, localDate.atStartOfDay());
+    }
+
+    /**
+     * Tests if the specified <code>File</code> is newer than the specified
+     * <code>LocalDate</code> at the specified <code>ZoneId</code>.
+     *
+     * @param file      the <code>File</code> of which the modification date
+     *                  must be compared, must not be {@code null}
+     * @param localDate the date reference, must not be {@code null}
+     * @param zoneId    the time zone, must not be {@code null}
+     * @return true if the <code>File</code> exists and has been modified
+     * after the given <code>LocalDate</code> at the given <code>ZoneId</code>.
+     * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
+     */
+    public static boolean isFileNewer(final File file, final LocalDate localDate, final ZoneId zoneId) {
+        if (localDate == null) {
+            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
+        }
+        if (zoneId == null) {
+            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
+        }
+        return isFileNewer(file, localDate.atStartOfDay(zoneId));
+    }
+
+    /**
      * Tests if the specified <code>File</code> is older than the specified
      * <code>Date</code>.
      *
@@ -1864,7 +1979,7 @@ public class FileUtils {
             throw new IllegalArgumentException("No specified localDateTime");
         }
         if (zoneId == null) {
-            throw new IllegalArgumentException("No specified zoneID");
+            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
         }
         return isFileOlder(file, localDateTime.atZone(zoneId));
     }
@@ -1882,7 +1997,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate) {
         if (localDate == null) {
-            throw new IllegalArgumentException("No specified localDate");
+            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
         }
         return isFileOlder(file, localDate.atStartOfDay());
     }
@@ -1901,10 +2016,10 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate, final ZoneId zoneId) {
         if (localDate == null) {
-            throw new IllegalArgumentException("No specified localDate");
+            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
         }
         if (zoneId == null) {
-            throw new IllegalArgumentException("No specified zoneID");
+            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
         }
         return isFileOlder(file, localDate.atStartOfDay(zoneId));
     }

@@ -1058,9 +1058,26 @@ public class FileUtilsTestCase {
         assertFalse(FileUtils.isFileNewer(oldFile, reference), "Old File - Newer - File");
         assertFalse(FileUtils.isFileNewer(oldFile, date), "Old File - Newer - Date");
         assertFalse(FileUtils.isFileNewer(oldFile, now), "Old File - Newer - Mili");
+        assertFalse(FileUtils.isFileNewer(oldFile, instant), "Old File - Newer - Instant");
+        assertFalse(FileUtils.isFileNewer(oldFile, zonedDateTime), "Old File - Newer - ZonedDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime), "Old File - Newer - LocalDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Newer - LocalDateTime,ZoneId");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate), "Old File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate, ZoneId.systemDefault()), "Old File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay), "Old File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, ZoneId.systemDefault()), "Old File - Newer - LocalDate plus one day,ZoneId");
+
         assertTrue(FileUtils.isFileNewer(newFile, reference), "New File - Newer - File");
         assertTrue(FileUtils.isFileNewer(newFile, date), "New File - Newer - Date");
         assertTrue(FileUtils.isFileNewer(newFile, now), "New File - Newer - Mili");
+        assertTrue(FileUtils.isFileNewer(newFile, instant), "New File - Newer - Instant");
+        assertTrue(FileUtils.isFileNewer(newFile, zonedDateTime), "New File - Newer - ZonedDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime), "New File - Newer - LocalDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime, ZoneId.systemDefault()), "New File - Newer - LocalDateTime,ZoneId");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate), "New File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate, ZoneId.systemDefault()), "New File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay), "New File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, ZoneId.systemDefault()), "New File - Newer - LocalDate plus one day,ZoneId");
         assertFalse(FileUtils.isFileNewer(invalidFile, reference), "Invalid - Newer - File");
         final String invalidFileName = invalidFile.getName();
         try {
