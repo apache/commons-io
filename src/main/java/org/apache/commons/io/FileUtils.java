@@ -89,8 +89,8 @@ import org.apache.commons.io.output.NullOutputStream;
  * </p>
  */
 public class FileUtils {
-    private static final String NO_SPECIFIED_LOCALDATE = "No specified localDate";
-    private static final String NO_SPECIFIED_ZONEID = "No specified zoneID";
+    private static final String LOCAL_DATE = "localDate";
+    private static final String ZONE_ID = "zoneId";
 
     /**
      * The number of bytes in a kilobyte.
@@ -1673,13 +1673,10 @@ public class FileUtils {
      * @param date the date reference
      * @return true if the {@code File} exists and has been modified
      * after the given {@code Date}.
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the date is {@code null}
+     * @throws NullPointerException if the file or date is {@code null}
      */
     public static boolean isFileNewer(final File file, final Date date) {
-        if (date == null) {
-            throw new IllegalArgumentException("No specified date");
-        }
+        Objects.requireNonNull(date, "date");
         return isFileNewer(file, date.getTime());
     }
 
@@ -1691,13 +1688,11 @@ public class FileUtils {
      * @param reference the {@code File} of which the modification date is used
      * @return true if the {@code File} exists and has been modified more
      * recently than the reference {@code File}
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
+     * @throws NullPointerException if the file or reference file is {@code null}
+     * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileNewer(final File file, final File reference) {
-        if (reference == null) {
-            throw new IllegalArgumentException("No specified reference file");
-        }
+        Objects.requireNonNull(reference, "reference");
         if (!reference.exists()) {
             throw new IllegalArgumentException("The reference file '"
                     + reference + "' doesn't exist");
@@ -1712,12 +1707,10 @@ public class FileUtils {
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
      * @return true if the {@code File} exists and has been modified after the given time reference.
-     * @throws IllegalArgumentException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
-        if (file == null) {
-            throw new IllegalArgumentException("No specified file");
-        }
+        Objects.requireNonNull(file, "file");
         if (!file.exists()) {
             return false;
         }
@@ -1730,12 +1723,10 @@ public class FileUtils {
      * @param file    the {@code File} of which the modification date must be compared
      * @param instant the date reference
      * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
-     * @throws IllegalArgumentException if the file or instant is {@code null}
+     * @throws NullPointerException if the file or instant is {@code null}
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
-        if (instant == null) {
-            throw new IllegalArgumentException("No specified instant");
-        }
+        Objects.requireNonNull(instant, "instant");
         return isFileNewer(file, instant.toEpochMilli());
     }
 
@@ -1745,12 +1736,10 @@ public class FileUtils {
      * @param file          the {@code File} of which the modification date must be compared
      * @param zonedDateTime the date reference
      * @return true if the {@code File} exists and has been modified after the given {@code ZonedDateTime}.
-     * @throws IllegalArgumentException if the file or zoned date time is {@code null}
+     * @throws NullPointerException if the file or zoned date time is {@code null}
      */
     public static boolean isFileNewer(final File file, final ZonedDateTime zonedDateTime) {
-        if (zonedDateTime == null) {
-            throw new IllegalArgumentException("No specified zonedDateTime");
-        }
+        Objects.requireNonNull(zonedDateTime, "zonedDateTime");
         return isFileNewer(file, zonedDateTime.toInstant());
     }
 
@@ -1762,7 +1751,7 @@ public class FileUtils {
      * @param localDateTime the date reference
      * @return true if the {@code File} exists and has been modified after the given
      * {@code LocalDateTime} at the system-default time zone.
-     * @throws IllegalArgumentException if the file or local date time is {@code null}
+     * @throws NullPointerException if the file or local date time is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDateTime localDateTime) {
         return isFileNewer(file, localDateTime, ZoneId.systemDefault());
@@ -1777,15 +1766,11 @@ public class FileUtils {
      * @param zoneId        the time zone
      * @return true if the {@code File} exists and has been modified after the given
      * {@code LocalDateTime} at the given {@code ZoneId}.
-     * @throws IllegalArgumentException if the file, local date time or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
-        if (localDateTime == null) {
-            throw new IllegalArgumentException("No specified localDateTime");
-        }
-        if (zoneId == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
-        }
+        Objects.requireNonNull(localDateTime, "localDateTime");
+        Objects.requireNonNull(zoneId, ZONE_ID);
         return isFileNewer(file, localDateTime.atZone(zoneId));
     }
 
@@ -1797,12 +1782,10 @@ public class FileUtils {
      * @param localDate the date reference
      * @return true if the {@code File} exists and has been modified after the given
      * {@code LocalDate} at the system-default time zone.
-     * @throws IllegalArgumentException if the file or local date is {@code null}
+     * @throws NullPointerException if the file or local date is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDate localDate) {
-        if (localDate == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
-        }
+        Objects.requireNonNull(localDate, LOCAL_DATE);
         return isFileNewer(file, localDate.atStartOfDay());
     }
 
@@ -1815,15 +1798,11 @@ public class FileUtils {
      * @param zoneId    the time zone
      * @return true if the {@code File} exists and has been modified after the given
      * {@code LocalDate} at the given {@code ZoneId}.
-     * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date or zone ID is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDate localDate, final ZoneId zoneId) {
-        if (localDate == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
-        }
-        if (zoneId == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
-        }
+        Objects.requireNonNull(localDate, LOCAL_DATE);
+        Objects.requireNonNull(zoneId, ZONE_ID);
         return isFileNewer(file, localDate.atStartOfDay(zoneId));
     }
 
@@ -1833,13 +1812,10 @@ public class FileUtils {
      * @param file the {@code File} of which the modification date must be compared
      * @param date the date reference
      * @return true if the {@code File} exists and has been modified before the given {@code Date}.
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the date is {@code null}
+     * @throws NullPointerException if the file or date is {@code null}
      */
     public static boolean isFileOlder(final File file, final Date date) {
-        if (date == null) {
-            throw new IllegalArgumentException("No specified date");
-        }
+        Objects.requireNonNull(date, "date");
         return isFileOlder(file, date.getTime());
     }
 
@@ -1850,14 +1826,11 @@ public class FileUtils {
      * @param file      the {@code File} of which the modification date must be compared
      * @param reference the {@code File} of which the modification date is used
      * @return true if the {@code File} exists and has been modified before the reference {@code File}
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
+     * @throws NullPointerException if the file or reference file is {@code null}
+     * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileOlder(final File file, final File reference) {
-        if (reference == null) {
-            throw new IllegalArgumentException("No specified reference file");
-        }
-        if (!reference.exists()) {
+        if (!Objects.requireNonNull(reference, "reference").exists()) {
             throw new IllegalArgumentException("The reference file '"
                     + reference + "' doesn't exist");
         }
@@ -1871,12 +1844,10 @@ public class FileUtils {
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
      * @return true if the {@code File} exists and has been modified before the given time reference.
-     * @throws IllegalArgumentException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
-        if (file == null) {
-            throw new IllegalArgumentException("No specified file");
-        }
+        Objects.requireNonNull(file, "file");
         if (!file.exists()) {
             return false;
         }
@@ -1889,12 +1860,10 @@ public class FileUtils {
      * @param file    the {@code File} of which the modification date must be compared
      * @param instant the date reference
      * @return true if the {@code File} exists and has been modified before the given {@code Instant}.
-     * @throws IllegalArgumentException if the file or instant is {@code null}
+     * @throws NullPointerException if the file or instant is {@code null}
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
-        if (instant == null) {
-            throw new IllegalArgumentException("No specified instant");
-        }
+        Objects.requireNonNull(instant, "instant");
         return isFileOlder(file, instant.toEpochMilli());
     }
 
@@ -1904,12 +1873,10 @@ public class FileUtils {
      * @param file          the {@code File} of which the modification date must be compared
      * @param zonedDateTime the date reference
      * @return true if the {@code File} exists and has been modified before the given {@code ZonedDateTime}.
-     * @throws IllegalArgumentException if the file or zoned date time is {@code null}
+     * @throws NullPointerException if the file or zoned date time is {@code null}
      */
     public static boolean isFileOlder(final File file, final ZonedDateTime zonedDateTime) {
-        if (zonedDateTime == null) {
-            throw new IllegalArgumentException("No specified zonedDateTime");
-        }
+        Objects.requireNonNull(zonedDateTime, "zonedDateTime");
         return isFileOlder(file, zonedDateTime.toInstant());
     }
 
@@ -1921,7 +1888,7 @@ public class FileUtils {
      * @param localDateTime the date reference
      * @return true if the {@code File} exists and has been modified before the given
      * {@code LocalDateTime} at the system-default time zone.
-     * @throws IllegalArgumentException if the file or local date time is {@code null}
+     * @throws NullPointerException if the file or local date time is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDateTime localDateTime) {
         return isFileOlder(file, localDateTime, ZoneId.systemDefault());
@@ -1936,15 +1903,11 @@ public class FileUtils {
      * @param zoneId        the time zone
      * @return true if the {@code File} exists and has been modified before the given
      * {@code LocalDateTime} at the given {@code ZoneId}.
-     * @throws IllegalArgumentException if the file, local date time or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
-        if (localDateTime == null) {
-            throw new IllegalArgumentException("No specified localDateTime");
-        }
-        if (zoneId == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
-        }
+        Objects.requireNonNull(localDateTime, "localDateTime");
+        Objects.requireNonNull(zoneId, ZONE_ID);
         return isFileOlder(file, localDateTime.atZone(zoneId));
     }
 
@@ -1956,12 +1919,10 @@ public class FileUtils {
      * @param localDate the date reference
      * @return true if the {@code File} exists and has been modified before the
      * given {@code LocalDate} at the system-default time zone.
-     * @throws IllegalArgumentException if the file or local date is {@code null}
+     * @throws NullPointerException if the file or local date is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate) {
-        if (localDate == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
-        }
+        Objects.requireNonNull(localDate, LOCAL_DATE);
         return isFileOlder(file, localDate.atStartOfDay());
     }
 
@@ -1977,12 +1938,8 @@ public class FileUtils {
      * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate, final ZoneId zoneId) {
-        if (localDate == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_LOCALDATE);
-        }
-        if (zoneId == null) {
-            throw new IllegalArgumentException(NO_SPECIFIED_ZONEID);
-        }
+        Objects.requireNonNull(localDate, LOCAL_DATE);
+        Objects.requireNonNull(zoneId, ZONE_ID);
         return isFileOlder(file, localDate.atStartOfDay(zoneId));
     }
 

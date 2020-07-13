@@ -1127,32 +1127,32 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileNewer(null, now);
-            fail("Newer Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException expected) {
+            fail("Newer Null, expected NullPointerException");
+        } catch (final NullPointerException expected) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileNewer(oldFile, (File) null);
-            fail("Newer Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileNewer(oldFile, invalidFile);
-            fail("Newer invalid reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer invalid reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Null reference Date
         try {
             FileUtils.isFileNewer(oldFile, (Date) null);
-            fail("Newer Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
@@ -1161,32 +1161,32 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileOlder(null, now);
-            fail("Older Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileOlder(oldFile, (File) null);
-            fail("Older Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileOlder(oldFile, invalidFile);
-            fail("Older invalid reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older invalid reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Null reference Date
         try {
             FileUtils.isFileOlder(oldFile, (Date) null);
-            fail("Older Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
