@@ -1667,14 +1667,12 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>Date</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code Date}.
      *
-     * @param file the <code>File</code> of which the modification date
-     *             must be compared, must not be {@code null}
-     * @param date the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>Date</code>.
+     * @param file the {@code File} of which the modification date must be compared
+     * @param date the date reference
+     * @return true if the {@code File} exists and has been modified
+     * after the given {@code Date}.
      * @throws IllegalArgumentException if the file is {@code null}
      * @throws IllegalArgumentException if the date is {@code null}
      */
@@ -1687,15 +1685,12 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Tests if the specified <code>File</code> is newer than the reference
-     * <code>File</code>.
+     * Tests if the specified {@code File} is newer than the reference {@code File}.
      *
-     * @param file      the <code>File</code> of which the modification date must
-     *                  be compared, must not be {@code null}
-     * @param reference the <code>File</code> of which the modification date
-     *                  is used, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified more
-     * recently than the reference <code>File</code>
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param reference the {@code File} of which the modification date is used
+     * @return true if the {@code File} exists and has been modified more
+     * recently than the reference {@code File}
      * @throws IllegalArgumentException if the file is {@code null}
      * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
      */
@@ -1711,15 +1706,12 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * time reference.
+     * Tests if the specified {@code File} is newer than the specified time reference.
      *
-     * @param file       the <code>File</code> of which the modification date must
-     *                   be compared, must not be {@code null}
+     * @param file       the {@code File} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
-     * @return true if the <code>File</code> exists and has been modified after
-     * the given time reference.
+     * @return true if the {@code File} exists and has been modified after the given time reference.
      * @throws IllegalArgumentException if the file is {@code null}
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
@@ -1733,14 +1725,11 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>Instant</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code Instant}.
      *
-     * @param file    the <code>File</code> of which the modification date
-     *                must be compared, must not be {@code null}
-     * @param instant the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>Instant</code>.
+     * @param file    the {@code File} of which the modification date must be compared
+     * @param instant the date reference
+     * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
      * @throws IllegalArgumentException if the file or instant is {@code null}
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
@@ -1751,14 +1740,11 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>ZonedDateTime</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code ZonedDateTime}.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param zonedDateTime the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>ZonedDateTime</code>.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param zonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified after the given {@code ZonedDateTime}.
      * @throws IllegalArgumentException if the file or zoned date time is {@code null}
      */
     public static boolean isFileNewer(final File file, final ZonedDateTime zonedDateTime) {
@@ -1769,14 +1755,13 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>LocalDateTime</code> at the system-default time zone.
+     * Tests if the specified {@code File} is newer than the specified {@code LocalDateTime}
+     * at the system-default time zone.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param localDateTime the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>LocalDateTime</code> at the system-default time zone.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param localDateTime the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code LocalDateTime} at the system-default time zone.
      * @throws IllegalArgumentException if the file or local date time is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDateTime localDateTime) {
@@ -1784,15 +1769,14 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>LocalDateTime</code> at the specified <code>ZoneId</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code LocalDateTime}
+     * at the specified {@code ZoneId}.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param localDateTime the date reference, must not be {@code null}
-     * @param zoneId        the time zone, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>LocalDateTime</code> at the given <code>ZoneId</code>.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param localDateTime the date reference
+     * @param zoneId        the time zone
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code LocalDateTime} at the given {@code ZoneId}.
      * @throws IllegalArgumentException if the file, local date time or zone ID is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
@@ -1806,14 +1790,13 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>LocalDate</code> at the system-default time zone.
+     * Tests if the specified {@code File} is newer than the specified {@code LocalDate}
+     * at the system-default time zone.
      *
-     * @param file      the <code>File</code> of which the modification date
-     *                  must be compared, must not be {@code null}
-     * @param localDate the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>LocalDate</code> at the system-default time zone.
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param localDate the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code LocalDate} at the system-default time zone.
      * @throws IllegalArgumentException if the file or local date is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDate localDate) {
@@ -1824,15 +1807,14 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>LocalDate</code> at the specified <code>ZoneId</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code LocalDate}
+     * at the specified {@code ZoneId}.
      *
-     * @param file      the <code>File</code> of which the modification date
-     *                  must be compared, must not be {@code null}
-     * @param localDate the date reference, must not be {@code null}
-     * @param zoneId    the time zone, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>LocalDate</code> at the given <code>ZoneId</code>.
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param localDate the date reference
+     * @param zoneId    the time zone
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code LocalDate} at the given {@code ZoneId}.
      * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
      */
     public static boolean isFileNewer(final File file, final LocalDate localDate, final ZoneId zoneId) {
@@ -1846,14 +1828,11 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>Date</code>.
+     * Tests if the specified {@code File} is older than the specified {@code Date}.
      *
-     * @param file the <code>File</code> of which the modification date
-     *             must be compared, must not be {@code null}
-     * @param date the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>Date</code>.
+     * @param file the {@code File} of which the modification date must be compared
+     * @param date the date reference
+     * @return true if the {@code File} exists and has been modified before the given {@code Date}.
      * @throws IllegalArgumentException if the file is {@code null}
      * @throws IllegalArgumentException if the date is {@code null}
      */
@@ -1866,15 +1845,11 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Tests if the specified <code>File</code> is older than the reference
-     * <code>File</code>.
+     * Tests if the specified {@code File} is older than the reference {@code File}.
      *
-     * @param file      the <code>File</code> of which the modification date must
-     *                  be compared, must not be {@code null}
-     * @param reference the <code>File</code> of which the modification date
-     *                  is used, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified before
-     * the reference <code>File</code>
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param reference the {@code File} of which the modification date is used
+     * @return true if the {@code File} exists and has been modified before the reference {@code File}
      * @throws IllegalArgumentException if the file is {@code null}
      * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
      */
@@ -1890,15 +1865,12 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * time reference.
+     * Tests if the specified {@code File} is older than the specified time reference.
      *
-     * @param file       the <code>File</code> of which the modification date must
-     *                   be compared, must not be {@code null}
+     * @param file       the {@code File} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
-     * @return true if the <code>File</code> exists and has been modified before
-     * the given time reference.
+     * @return true if the {@code File} exists and has been modified before the given time reference.
      * @throws IllegalArgumentException if the file is {@code null}
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
@@ -1912,14 +1884,11 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>Instant</code>.
+     * Tests if the specified {@code File} is older than the specified {@code Instant}.
      *
-     * @param file    the <code>File</code> of which the modification date
-     *                must be compared, must not be {@code null}
-     * @param instant the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>Instant</code>.
+     * @param file    the {@code File} of which the modification date must be compared
+     * @param instant the date reference
+     * @return true if the {@code File} exists and has been modified before the given {@code Instant}.
      * @throws IllegalArgumentException if the file or instant is {@code null}
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
@@ -1930,14 +1899,11 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>ZonedDateTime</code>.
+     * Tests if the specified {@code File} is older than the specified {@code ZonedDateTime}.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param zonedDateTime the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>ZonedDateTime</code>.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param zonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified before the given {@code ZonedDateTime}.
      * @throws IllegalArgumentException if the file or zoned date time is {@code null}
      */
     public static boolean isFileOlder(final File file, final ZonedDateTime zonedDateTime) {
@@ -1948,14 +1914,13 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>LocalDateTime</code> at the system-default time zone.
+     * Tests if the specified {@code File} is older than the specified {@code LocalDateTime}
+     * at the system-default time zone.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param localDateTime the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>LocalDateTime</code> at the system-default time zone.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param localDateTime the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code LocalDateTime} at the system-default time zone.
      * @throws IllegalArgumentException if the file or local date time is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDateTime localDateTime) {
@@ -1963,15 +1928,14 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>LocalDateTime</code> at the specified <code>ZoneId</code>.
+     * Tests if the specified {@code File} is older than the specified
+     * {@code LocalDateTime} at the specified {@code ZoneId}.
      *
-     * @param file          the <code>File</code> of which the modification date
-     *                      must be compared, must not be {@code null}
-     * @param localDateTime the date reference, must not be {@code null}
-     * @param zoneId        the time zone, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>LocalDateTime</code> at the given <code>ZoneId</code>.
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param localDateTime the date reference
+     * @param zoneId        the time zone
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code LocalDateTime} at the given {@code ZoneId}.
      * @throws IllegalArgumentException if the file, local date time or zone ID is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
@@ -1985,14 +1949,13 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>LocalDate</code> at the system-default time zone.
+     * Tests if the specified {@code File} is older than the specified  {@code LocalDate}
+     * at the system-default time zone.
      *
-     * @param file      the <code>File</code> of which the modification date
-     *                  must be compared, must not be {@code null}
-     * @param localDate the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>LocalDate</code> at the system-default time zone.
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param localDate the date reference
+     * @return true if the {@code File} exists and has been modified before the
+     * given {@code LocalDate} at the system-default time zone.
      * @throws IllegalArgumentException if the file or local date is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate) {
@@ -2003,15 +1966,14 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>LocalDate</code> at the specified <code>ZoneId</code>.
+     * Tests if the specified {@code File} is older than the specified {@code LocalDate}
+     * at the specified {@code ZoneId}.
      *
-     * @param file      the <code>File</code> of which the modification date
-     *                  must be compared, must not be {@code null}
-     * @param localDate the date reference, must not be {@code null}
-     * @param zoneId    the time zone, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>LocalDate</code> at the given <code>ZoneId</code>.
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param localDate the date reference
+     * @param zoneId    the time zone
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code LocalDate} at the given {@code ZoneId}.
      * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
      */
     public static boolean isFileOlder(final File file, final LocalDate localDate, final ZoneId zoneId) {
