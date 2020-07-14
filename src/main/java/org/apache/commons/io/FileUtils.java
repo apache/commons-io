@@ -38,10 +38,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -89,9 +90,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * </p>
  */
 public class FileUtils {
-    private static final String LOCAL_DATE = "localDate";
-    private static final String ZONE_ID = "zoneId";
-
     /**
      * The number of bytes in a kilobyte.
      */
@@ -1731,79 +1729,79 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code ZonedDateTime}.
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoZonedDateTime}.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param zonedDateTime the date reference
-     * @return true if the {@code File} exists and has been modified after the given {@code ZonedDateTime}.
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoZonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}
      */
-    public static boolean isFileNewer(final File file, final ZonedDateTime zonedDateTime) {
-        Objects.requireNonNull(zonedDateTime, "zonedDateTime");
-        return isFileNewer(file, zonedDateTime.toInstant());
+    public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
+        Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
+        return isFileNewer(file, chronoZonedDateTime.toInstant());
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code LocalDateTime}
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
      * at the system-default time zone.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param localDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
      * @return true if the {@code File} exists and has been modified after the given
-     * {@code LocalDateTime} at the system-default time zone.
+     * {@code ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}
      */
-    public static boolean isFileNewer(final File file, final LocalDateTime localDateTime) {
-        return isFileNewer(file, localDateTime, ZoneId.systemDefault());
+    public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
+        return isFileNewer(file, chronoLocalDateTime, ZoneId.systemDefault());
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code LocalDateTime}
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
      * at the specified {@code ZoneId}.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param localDateTime the date reference
-     * @param zoneId        the time zone
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @param zoneId              the time zone
      * @return true if the {@code File} exists and has been modified after the given
-     * {@code LocalDateTime} at the given {@code ZoneId}.
+     * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      */
-    public static boolean isFileNewer(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
-        Objects.requireNonNull(localDateTime, "localDateTime");
-        Objects.requireNonNull(zoneId, ZONE_ID);
-        return isFileNewer(file, localDateTime.atZone(zoneId));
+    public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
+        Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
+        Objects.requireNonNull(zoneId, "zoneId");
+        return isFileNewer(file, chronoLocalDateTime.atZone(zoneId));
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code LocalDate}
-     * at the system-default time zone.
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
+     * at the current time.
      *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param localDate the date reference
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
      * @return true if the {@code File} exists and has been modified after the given
-     * {@code LocalDate} at the system-default time zone.
+     * {@code ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}
      */
-    public static boolean isFileNewer(final File file, final LocalDate localDate) {
-        Objects.requireNonNull(localDate, LOCAL_DATE);
-        return isFileNewer(file, localDate.atStartOfDay());
+    public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate) {
+        return isFileNewer(file, chronoLocalDate, LocalTime.now());
     }
 
     /**
-     * Tests if the specified {@code File} is newer than the specified {@code LocalDate}
-     * at the specified {@code ZoneId}.
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
+     * at the specified time.
      *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param localDate the date reference
-     * @param zoneId    the time zone
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param localTime       the time reference
      * @return true if the {@code File} exists and has been modified after the given
-     * {@code LocalDate} at the given {@code ZoneId}.
+     * {@code ChronoLocalDate} at the given time.
      * @throws NullPointerException if the file, local date or zone ID is {@code null}
      */
-    public static boolean isFileNewer(final File file, final LocalDate localDate, final ZoneId zoneId) {
-        Objects.requireNonNull(localDate, LOCAL_DATE);
-        Objects.requireNonNull(zoneId, ZONE_ID);
-        return isFileNewer(file, localDate.atStartOfDay(zoneId));
+    public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(localTime, "localTime");
+        return isFileNewer(file, chronoLocalDate.atTime(localTime));
     }
 
     /**
@@ -1868,79 +1866,79 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified {@code File} is older than the specified {@code ZonedDateTime}.
+     * Tests if the specified {@code File} is older than the specified {@code ChronoZonedDateTime}.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param zonedDateTime the date reference
-     * @return true if the {@code File} exists and has been modified before the given {@code ZonedDateTime}.
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoZonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}
      */
-    public static boolean isFileOlder(final File file, final ZonedDateTime zonedDateTime) {
-        Objects.requireNonNull(zonedDateTime, "zonedDateTime");
-        return isFileOlder(file, zonedDateTime.toInstant());
+    public static boolean isFileOlder(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
+        Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
+        return isFileOlder(file, chronoZonedDateTime.toInstant());
     }
 
     /**
-     * Tests if the specified {@code File} is older than the specified {@code LocalDateTime}
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
      * at the system-default time zone.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param localDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
      * @return true if the {@code File} exists and has been modified before the given
-     * {@code LocalDateTime} at the system-default time zone.
+     * {@code ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}
      */
-    public static boolean isFileOlder(final File file, final LocalDateTime localDateTime) {
-        return isFileOlder(file, localDateTime, ZoneId.systemDefault());
+    public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
+        return isFileOlder(file, chronoLocalDateTime, ZoneId.systemDefault());
     }
 
     /**
-     * Tests if the specified {@code File} is older than the specified
-     * {@code LocalDateTime} at the specified {@code ZoneId}.
-     *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param localDateTime the date reference
-     * @param zoneId        the time zone
-     * @return true if the {@code File} exists and has been modified before the given
-     * {@code LocalDateTime} at the given {@code ZoneId}.
-     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
-     */
-    public static boolean isFileOlder(final File file, final LocalDateTime localDateTime, final ZoneId zoneId) {
-        Objects.requireNonNull(localDateTime, "localDateTime");
-        Objects.requireNonNull(zoneId, ZONE_ID);
-        return isFileOlder(file, localDateTime.atZone(zoneId));
-    }
-
-    /**
-     * Tests if the specified {@code File} is older than the specified  {@code LocalDate}
-     * at the system-default time zone.
-     *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param localDate the date reference
-     * @return true if the {@code File} exists and has been modified before the
-     * given {@code LocalDate} at the system-default time zone.
-     * @throws NullPointerException if the file or local date is {@code null}
-     */
-    public static boolean isFileOlder(final File file, final LocalDate localDate) {
-        Objects.requireNonNull(localDate, LOCAL_DATE);
-        return isFileOlder(file, localDate.atStartOfDay());
-    }
-
-    /**
-     * Tests if the specified {@code File} is older than the specified {@code LocalDate}
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
      * at the specified {@code ZoneId}.
      *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param localDate the date reference
-     * @param zoneId    the time zone
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @param zoneId        the time zone
      * @return true if the {@code File} exists and has been modified before the given
-     * {@code LocalDate} at the given {@code ZoneId}.
-     * @throws IllegalArgumentException if the file, local date or zone ID is {@code null}
+     * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      */
-    public static boolean isFileOlder(final File file, final LocalDate localDate, final ZoneId zoneId) {
-        Objects.requireNonNull(localDate, LOCAL_DATE);
-        Objects.requireNonNull(zoneId, ZONE_ID);
-        return isFileOlder(file, localDate.atStartOfDay(zoneId));
+    public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
+        Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
+        Objects.requireNonNull(zoneId, "zoneId");
+        return isFileOlder(file, chronoLocalDateTime.atZone(zoneId));
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
+     * at the current time.
+     *
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoLocalDate} at the current time.
+     * @throws NullPointerException if the file or local date is {@code null}
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate) {
+        return isFileOlder(file, chronoLocalDate, LocalTime.now());
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
+     * at the specified {@code LocalTime}.
+     *
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param localTime       the time reference
+     * @return true if the {@code File} exists and has been modified before the
+     * given {@code ChronoLocalDate} at the specified time.
+     * @throws NullPointerException if the file, local date or local time is {@code null}
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(localTime, "localTime");
+        return isFileOlder(file, chronoLocalDate.atTime(localTime));
     }
 
     /**
