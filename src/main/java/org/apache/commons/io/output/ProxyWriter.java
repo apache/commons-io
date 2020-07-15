@@ -205,7 +205,7 @@ public class ProxyWriter extends FilterWriter {
      */
     @Override
     public void close() throws IOException {
-        IOUtils.close(out, e -> handleIOException(e));
+        IOUtils.close(out, this::handleIOException);
     }
 
     /**
