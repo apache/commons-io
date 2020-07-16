@@ -20,10 +20,13 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ 8, 11, 14 ]
+        os: [ubuntu-latest, windows-latest]
+        java: [8, 11, 14]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
         
     steps:
     - uses: actions/checkout@v1
@@ -32,4 +35,4 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Maven
-      run: mvn -V package --file pom.xml
+      run: mvn -V -Dgpg.skip -Prelease --file pom.xml
