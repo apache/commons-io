@@ -35,4 +35,4 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build with Maven
-      run: mvn -V -Dgpg.skip -Prelease --file pom.xml
+      run: mvn -B -V "-Dgpg.skip" -Prelease --file pom.xml
