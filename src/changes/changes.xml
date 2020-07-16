@@ -86,6 +86,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix SpotBugs issues in org.apache.commons.io.FileUtils.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Update tests from org.apache.commons:commons-lang3 3.10 to 3.11.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
