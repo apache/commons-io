@@ -56,6 +56,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add org.apache.commons.io.file.PathUtils.deleteDirectory(Path, FileVisitOption...).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add NullAppendable.
+      </action>
       <action dev="ggregory" type="fix" due-to="Rob Spoor, Jochen Wiedmann">
         CharSequenceReader.skip should return 0 instead of EOF on stream end #123.
       </action>
