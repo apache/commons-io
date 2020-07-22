@@ -71,7 +71,9 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     @AfterEach
     public void closeReader() {
         try {
-            reversedLinesFileReader.close();
+            if (reversedLinesFileReader != null) {
+                reversedLinesFileReader.close();
+            }
         } catch (final Exception e) {
             // ignore
         }

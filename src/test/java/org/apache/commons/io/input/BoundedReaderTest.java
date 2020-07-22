@@ -203,17 +203,17 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolYes() throws IOException {
+    public void testLineNumberReaderAndStringReaderLastLineEolYes() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolNo() throws IOException {
+    public void testLineNumberReaderAndFileReaderLastLineEolNo() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolYes() throws IOException {
+    public void testLineNumberReaderAndFileReaderLastLineEolYes() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
     }
 
@@ -231,7 +231,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadBytesEOF() throws IOException {
+    public void testReadBytesEOF() {
         assertTimeout(Duration.ofMillis(5000), () -> {
             final BoundedReader mr = new BoundedReader(sr, 3);
             try (BufferedReader br = new BufferedReader(mr)) {

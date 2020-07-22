@@ -66,15 +66,14 @@ public class ReaderInputStreamTest {
             if (read == -1) {
                 assertEquals(offset, expected.length);
                 break;
-            } else {
-                assertTrue(read <= bufferLength);
-                while (read > 0) {
-                    assertTrue(offset < expected.length);
-                    assertEquals(expected[offset], buffer[bufferOffset]);
-                    offset++;
-                    bufferOffset++;
-                    read--;
-                }
+            }
+            assertTrue(read <= bufferLength);
+            while (read > 0) {
+                assertTrue(offset < expected.length);
+                assertEquals(expected[offset], buffer[bufferOffset]);
+                offset++;
+                bufferOffset++;
+                read--;
             }
         }
         in.close();

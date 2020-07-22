@@ -36,6 +36,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  * Test checks symmetric behavior with  BufferedReader
  */
 public class ReversedLinesFileReaderTestParamFile {
+
     public static Stream<Arguments> testDataIntegrityWithBufferedReader() {
         return Stream.of(
                 Arguments.of("test-file-20byteslength.bin", "ISO_8859_1", null, false),
@@ -61,9 +62,8 @@ public class ReversedLinesFileReaderTestParamFile {
 
     @ParameterizedTest(name = "{0}, encoding={1}, blockSize={2}, useNonDefaultFileSystem={3}")
     @MethodSource
-    public void testDataIntegrityWithBufferedReader
-            (final String fileName, final String encodingName, final Integer blockSize, final boolean useNonDefaultFileSystem)
-            throws IOException, URISyntaxException {
+    public void testDataIntegrityWithBufferedReader(final String fileName, final String encodingName,
+        final Integer blockSize, final boolean useNonDefaultFileSystem) throws IOException, URISyntaxException {
 
         Path file = Paths.get(getClass().getResource("/" + fileName).toURI());
         FileSystem fileSystem = null;
@@ -74,8 +74,8 @@ public class ReversedLinesFileReaderTestParamFile {
 
         Charset encoding = Charset.forName(encodingName);
         try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
-                ? new ReversedLinesFileReader(file, encoding)
-                : new ReversedLinesFileReader(file, blockSize, encoding)) {
+            ? new ReversedLinesFileReader(file, encoding)
+            : new ReversedLinesFileReader(file, blockSize, encoding)) {
 
             final Stack<String> lineStack = new Stack<>();
             String line;

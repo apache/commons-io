@@ -117,22 +117,20 @@ public class ObservableInputStreamTest {
                 if (result == -1) {
                     ois.close();
                     break;
-                } else {
-                    assertEquals(readBuffer, lko.buffer);
-                    assertEquals(0, lko.offset);
-                    assertEquals(readBuffer.length, lko.length);
                 }
+                assertEquals(readBuffer, lko.buffer);
+                assertEquals(0, lko.offset);
+                assertEquals(readBuffer.length, lko.length);
             } else {
                 final int res = Math.min(11, bais.available());
                 final int result = ois.read(readBuffer, 1, 11);
                 if (result == -1) {
                     ois.close();
                     break;
-                } else {
-                    assertEquals(readBuffer, lko.buffer);
-                    assertEquals(1, lko.offset);
-                    assertEquals(res, lko.length);
                 }
+                assertEquals(readBuffer, lko.buffer);
+                assertEquals(1, lko.offset);
+                assertEquals(res, lko.length);
             }
         }
     }

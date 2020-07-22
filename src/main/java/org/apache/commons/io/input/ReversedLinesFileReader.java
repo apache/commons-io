@@ -146,27 +146,27 @@ public class ReversedLinesFileReader implements Closeable {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
-        } else if(charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
-                // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
-                charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
-                charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
-                charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
-                charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
+        } else if (charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
+        // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
+            charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
+            charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
+            charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
+            charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
             byteDecrement = 1;
         } else if (charset == StandardCharsets.UTF_16BE || charset == StandardCharsets.UTF_16LE) {
             // UTF-16 new line sequences are not allowed as second tuple of four byte sequences,
             // however byte order has to be specified
             byteDecrement = 2;
         } else if (charset == StandardCharsets.UTF_16) {
-            throw new UnsupportedEncodingException("For UTF-16, you need to specify the byte order (use UTF-16BE or " +
-                    "UTF-16LE)");
+            throw new UnsupportedEncodingException(
+                "For UTF-16, you need to specify the byte order (use UTF-16BE or " + "UTF-16LE)");
         } else {
-            throw new UnsupportedEncodingException("Encoding " + encoding + " is not supported yet (feel free to " +
-                    "submit a patch)");
+            throw new UnsupportedEncodingException(
+                "Encoding " + encoding + " is not supported yet (feel free to " + "submit a patch)");
         }
 
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
-        newLineSequences = new byte[][] { "\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding) };
+        newLineSequences = new byte[][] {"\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding)};
 
         avoidNewlineSplitBufferSize = newLineSequences[0].length;
 
