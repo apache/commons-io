@@ -98,6 +98,12 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons-parent from 50 to 51 #129.
       </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update actions/checkout from v1 to v2.3.1 #126.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update junit-pioneer from 0.6.0 to 0.7.0 #127.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
