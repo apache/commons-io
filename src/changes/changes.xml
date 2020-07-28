@@ -63,7 +63,7 @@ The <action> type attribute can be add,update,fix,remove.
         CharSequenceReader.skip should return 0 instead of EOF on stream end #123.
       </action>
       <action dev="ggregory" type="fix" due-to="Rob Spoor">
-        Implement CharSequenceReader.ready #122.
+        Implement CharSequenceReader.ready() #122.
       </action>
       <action issue="IO-669" dev="ggregory" type="fix" due-to="XenoAmess, Gary Gregory">
         Fix code smells; fix typos #115.
@@ -79,6 +79,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-675" dev="ggregory" type="fix" due-to="Gary Gregory">
         InfiniteCircularInputStream throws a divide-by-zero exception when reading if its input buffer is size 0.
+      </action>
+      <action issue="IO-677" dev="ggregory" type="fix" due-to="Gary Gregory">
+        FileSystem.getCurrent() does not return the correct enum.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         maven-checkstyle-plugin 3.1.0 -> 3.1.1.
