@@ -16,11 +16,16 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -35,6 +40,11 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
 
     @TempDir
     public File temporaryFolder;
+    
+    
+   private static final String TMP_PREFIX = "junit";
+   private static final int TEMP_DIR_ATTEMPTS = 10000;
+
 
     @Test
     public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
@@ -73,6 +83,48 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, "destinationDir");
     }
 
+
+    @Test
+    public void copyFileWrongPermissions() throws IOException {
+        
+    	 
+        final File destDir = createTemporaryFolderIn(null);
+        final  Path srcFile = Files.createTempFile("tmp-output", ".xml");
+        final Path path = Paths.get(destDir.getAbsolutePath(), "newFile.xml");
+
+        try {
+            FileUtils.copyFile(srcFile.toFile(), path.toFile());
+        } catch (IllegalArgumentException iae) {
+        	iae.printStackTrace();
+        }
+        
+        assertTrue(Files.getPosixFilePermissions(path).contains(PosixFilePermission.OTHERS_READ), Files.getPosixFilePermissions(path).toString());
+
+    }
+    
+    
+    
+    private File createTemporaryFolderIn(File parentFolder) throws IOException {
+        File createdFolder = null;
+        for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
+            // Use createTempFile to get a suitable folder name.
+            String suffix = ".tmp";
+            File tmpFile = File.createTempFile(TMP_PREFIX, suffix, parentFolder);
+            String tmpName = tmpFile.toString();
+            // Discard .tmp suffix of tmpName.
+            String folderName = tmpName.substring(0, tmpName.length() - suffix.length());
+            createdFolder = new File(folderName);
+            if (createdFolder.mkdir()) {
+                tmpFile.delete();
+                return createdFolder;
+            }
+            tmpFile.delete();
+        }
+        throw new IOException("Unable to create temporary directory in: "
+            + parentFolder.toString() + ". Tried " + TEMP_DIR_ATTEMPTS + " times. "
+            + "Last attempted to create: " + createdFolder.toString());
+    }
+    
     private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
         final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {
         try {
