@@ -84,16 +84,19 @@ The <action> type attribute can be add,update,fix,remove.
         FileSystem.getCurrent() does not return the correct enum.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
-        maven-checkstyle-plugin 3.1.0 -> 3.1.1.
-      </action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Replace FindBugs with SpotBugs.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix SpotBugs issues in org.apache.commons.io.FileUtils.
       </action>
-      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        maven-checkstyle-plugin 3.1.0 -> 3.1.1.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update tests from org.apache.commons:commons-lang3 3.10 to 3.11.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update commons-parent from 50 to 51 #129.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
