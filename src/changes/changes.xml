@@ -83,6 +83,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-677" dev="ggregory" type="fix" due-to="Gary Gregory">
         FileSystem.getCurrent() does not return the correct enum.
       </action>
+      <action issue="IO-679" dev="ggregory" type="fix" due-to="proneel">
+        input.AbstractCharacterFilterReader passes count of chars read #132.
+      </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Replace FindBugs with SpotBugs.
       </action>
