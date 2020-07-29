@@ -33,6 +33,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -652,8 +653,62 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs during copying
      * @since 1.4
      */
-    public static void copyDirectory(final File srcDir, final File destDir,
-                                     final FileFilter filter, final boolean preserveFileDate) throws IOException {
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+        final boolean preserveFileDate) throws IOException {
+        copyDirectory(srcDir, destDir, filter, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Copies a filtered directory to a new location.
+     * <p>
+     * This method copies the contents of the specified source directory
+     * to within the specified destination directory.
+     * </p>
+     * <p>
+     * The destination directory is created if it does not exist.
+     * If the destination directory did exist, then this method merges
+     * the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * {@code true} tries to preserve the files' last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
+     * </p>
+     * <b>Example: Copy directories only</b>
+     * <pre>
+     *  // only copy the directory structure
+     *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
+     *  </pre>
+     *
+     * <b>Example: Copy directories and txt files</b>
+     * <pre>
+     *  // Create a filter for ".txt" files
+     *  IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
+     *  IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+     *
+     *  // Create a filter for either directories or ".txt" files
+     *  FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
+     *
+     *  // Copy using the filter
+     *  FileUtils.copyDirectory(srcDir, destDir, filter, false);
+     *  </pre>
+     *
+     * @param srcDir           an existing directory to copy, must not be {@code null}
+     * @param destDir          the new directory, must not be {@code null}
+     * @param filter           the filter to apply, null means copy all directories and files
+     * @param preserveFileDate true if the file date of the copy
+     *                         should be the same as the original
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
+     *
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
+     * @since 2.8.0
+     */
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+        final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
         checkFileRequirements(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
@@ -674,7 +729,7 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList);
+        doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList, copyOptions);
     }
 
     //-----------------------------------------------------------------------
@@ -774,10 +829,43 @@ public class FileUtils {
      * @throws IOException          if the output file length is not the same as the input file length after the copy
      * completes
      * @see #copyFileToDirectory(File, File, boolean)
-     * @see #doCopyFile(File, File, boolean)
      */
-    public static void copyFile(final File srcFile, final File destFile,
-                                final boolean preserveFileDate) throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+        throws IOException {
+        copyFile(srcFile, destFile, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Copies a file to a new location.
+     * <p>
+     * This method copies the contents of the specified source file
+     * to the specified destination file.
+     * The directory holding the destination file is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * {@code true} tries to preserve the file's last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     * </p>
+     *
+     * @param srcFile          an existing file to copy, must not be {@code null}
+     * @param destFile         the new file, must not be {@code null}
+     * @param preserveFileDate true if the file date of the copy
+     *                         should be the same as the original
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
+     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * completes
+     * @see #copyFileToDirectory(File, File, boolean)
+     * @since 2.8.0
+     */
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
+        throws IOException {
         checkFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' exists but is a directory");
@@ -794,7 +882,7 @@ public class FileUtils {
         if (destFile.exists() && destFile.canWrite() == false) {
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
         }
-        doCopyFile(srcFile, destFile, preserveFileDate);
+        doCopyFile(srcFile, destFile, preserveFileDate, copyOptions);
     }
 
     /**
@@ -1237,13 +1325,13 @@ public class FileUtils {
      * @param filter           the filter to apply, null means copy all directories and files
      * @param preserveFileDate whether to preserve the file date
      * @param exclusionList    List of files and directories to exclude from the copy, may be null
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @return whether the operation succeeded
      * @throws IOException if an error occurs
-     * @since 1.1
      */
     private static boolean doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
-                                        final boolean preserveFileDate, final List<String> exclusionList)
-            throws IOException {
+        final boolean preserveFileDate, final List<String> exclusionList, final CopyOption... copyOptions)
+        throws IOException {
         // recurse
         final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
         if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
@@ -1265,9 +1353,9 @@ public class FileUtils {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, dstFile, filter, preserveFileDate, exclusionList);
+                    doCopyDirectory(srcFile, dstFile, filter, preserveFileDate, exclusionList, copyOptions);
                 } else {
-                    doCopyFile(srcFile, dstFile, preserveFileDate);
+                    doCopyFile(srcFile, dstFile, preserveFileDate, copyOptions);
                 }
             }
         }
@@ -1290,6 +1378,7 @@ public class FileUtils {
      * @param srcFile          the validated source file, must not be {@code null}
      * @param destFile         the validated destination file, must not be {@code null}
      * @param preserveFileDate whether to preserve the file date
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @return whether the operation succeeded
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
@@ -1297,7 +1386,7 @@ public class FileUtils {
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
-    private static boolean doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+    private static boolean doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions)
             throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
@@ -1306,7 +1395,7 @@ public class FileUtils {
         final Path srcPath = srcFile.toPath();
         final Path destPath = destFile.toPath();
         final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
-        Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(srcPath, destPath, copyOptions);
 
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
