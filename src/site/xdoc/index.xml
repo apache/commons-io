@@ -47,9 +47,9 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
-    <subsection name="Commons IO 2.8 (requires Java 8)">
+    <subsection name="Commons IO 2.8.0 (requires Java 8)">
         <p>
-            Commons IO 2.8 requires a minimum of Java 8 -
+            Commons IO 2.8.0 requires a minimum of Java 8 -
             <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
         </p>
         <p>

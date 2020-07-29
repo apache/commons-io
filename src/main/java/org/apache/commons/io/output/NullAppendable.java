@@ -25,7 +25,7 @@ import java.io.IOException;
  * This Appendable has no destination (file/socket etc.) and all characters written to it are ignored and lost.
  * </p>
  *
- * @since 2.8
+ * @since 2.8.0
  */
 public class NullAppendable implements Appendable {
 

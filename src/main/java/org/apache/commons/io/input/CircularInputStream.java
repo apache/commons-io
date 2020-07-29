@@ -31,7 +31,7 @@ import org.apache.commons.io.IOUtils;
  * </p>
  *
  * @see InfiniteCircularInputStream
- * @since 2.8
+ * @since 2.8.0
  */
 public class CircularInputStream extends InputStream {
 
