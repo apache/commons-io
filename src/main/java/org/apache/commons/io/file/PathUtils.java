@@ -52,22 +52,6 @@ import org.apache.commons.io.file.Counters.PathCounters;
 public final class PathUtils {
 
     /**
-     * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
-     *
-     * @param directory The directory to accumulate information.
-     * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @param linkOptions Options indicating how symbolic links are handled.
-     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @throws IOException if an I/O error is thrown by a visitor method.
-     * @return file tree information.
-     */
-    private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
-            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
-        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
-                toFileVisitOptionSet(fileVisitOptions), maxDepth);
-    }
-
-    /**
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted
      * relative lists when comparing directories.
      */
@@ -144,6 +128,22 @@ public final class PathUtils {
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = new OpenOption[0];
+
+    /**
+     * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
+     *
+     * @param directory The directory to accumulate information.
+     * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @param linkOptions Options indicating how symbolic links are handled.
+     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @return file tree information.
+     */
+    private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
+            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
+        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
+                toFileVisitOptionSet(fileVisitOptions), maxDepth);
+    }
 
     /**
      * Cleans a directory including sub-directories without deleting directories.
