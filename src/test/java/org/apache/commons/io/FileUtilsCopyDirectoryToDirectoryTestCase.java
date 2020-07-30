@@ -58,7 +58,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     public File temporaryFolder;
 
     private void assertAcl(final Path sourcePath, final Path destPath) throws IOException {
-        assertEquals(getAcl(sourcePath), getAcl(destPath));
+        assertEquals(getAclEntryList(sourcePath), getAclEntryList(destPath));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         assertAcl(sourcePath, destPath);
     }
 
-    private List<AclEntry> getAcl(final Path sourcePath) throws IOException {
+    private List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
         final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
             AclFileAttributeView.class);
         return fileAttributeView == null ? null : fileAttributeView.getAcl();
