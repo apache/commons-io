@@ -36,11 +36,11 @@ import org.junit.jupiter.api.Test;
  * This is used to test FileSystemUtils.
  *
  */
+@SuppressWarnings("deprecation") // testing deprecated class
 public class FileSystemUtilsTestCase {
 
     //-----------------------------------------------------------------------
     @Test
-    @SuppressWarnings("deprecation") // testing decrecated code
     public void testGetFreeSpace_String() throws Exception {
         // test coverage, as we can't check value
         if (File.separatorChar == '/') {
