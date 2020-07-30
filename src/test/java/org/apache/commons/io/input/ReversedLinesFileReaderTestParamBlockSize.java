@@ -37,8 +37,6 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     private static final String UTF_8 = "UTF-8";
     private static final String ISO_8859_1 = "ISO-8859-1";
 
-    private static final int[] BLOCK_SIZES = {1, 3, 8, 256, 4096};
-
     // small and uneven block sizes are not used in reality but are good to show that the algorithm is solid
     public static IntStream blockSizes() {
         return IntStream.of(1, 3, 8, 256, 4096);

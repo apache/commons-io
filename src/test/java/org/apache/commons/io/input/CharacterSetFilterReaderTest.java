@@ -59,6 +59,7 @@ public class CharacterSetFilterReaderTest {
             codePoints.add(Integer.valueOf('a'));
             final CharacterSetFilterReader reader = new CharacterSetFilterReader(input, codePoints);
             assertEquals(-1, reader.read());
+            reader.close();
         }
     }
 

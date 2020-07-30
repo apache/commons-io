@@ -137,6 +137,7 @@ public class IOUtilsTestCase {
         }
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_AllCloseableIOException() {
         final Closeable closeable = () -> {
             throw new IOException();
@@ -144,12 +145,14 @@ public class IOUtilsTestCase {
         IOUtils.closeQuietly(closeable, null, closeable);
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_CloseableIOException() {
         IOUtils.closeQuietly((Closeable) () -> {
             throw new IOException();
         });
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_Selector() {
         Selector selector = null;
         try {
@@ -160,6 +163,7 @@ public class IOUtilsTestCase {
         }
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_SelectorIOException() {
         final Selector selector = new SelectorAdapter() {
             @Override
@@ -170,11 +174,13 @@ public class IOUtilsTestCase {
         IOUtils.closeQuietly(selector);
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_SelectorNull() {
         final Selector selector = null;
         IOUtils.closeQuietly(selector);
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_SelectorTwice() {
         Selector selector = null;
         try {
@@ -186,11 +192,13 @@ public class IOUtilsTestCase {
         }
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_ServerSocket() throws IOException {
         IOUtils.closeQuietly((ServerSocket) null);
         IOUtils.closeQuietly(new ServerSocket());
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_ServerSocketIOException() throws IOException {
         IOUtils.closeQuietly(new ServerSocket() {
             @Override
@@ -200,11 +208,13 @@ public class IOUtilsTestCase {
         });
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_Socket() {
         IOUtils.closeQuietly((Socket) null);
         IOUtils.closeQuietly(new Socket());
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_SocketIOException() {
         IOUtils.closeQuietly(new Socket() {
             @Override
@@ -230,7 +240,6 @@ public class IOUtilsTestCase {
 
     @Test public void testContentEquals_InputStream_InputStream() throws Exception {
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
             assertTrue(IOUtils.contentEquals((InputStream) null, null));
         }
         {
@@ -1266,10 +1275,12 @@ public class IOUtilsTestCase {
         assertTrue(exceptionOccurred);
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testResourceToString_NullCharset() throws Exception {
         IOUtils.resourceToString("/test-file-utf8.bin", null);
     }
 
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testResourceToString_NullCharset_WithClassLoader() throws Exception {
         IOUtils.resourceToString("test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
     }
