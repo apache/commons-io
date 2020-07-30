@@ -55,7 +55,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     @TempDir
     public File temporaryFolder;
 
-    private void assertAcl(final Path sourcePath, final Path destPath) throws IOException {
+    private void assertAclEntryList(final Path sourcePath, final Path destPath) throws IOException {
         assertEquals(PathUtils.getAclEntryList(sourcePath), PathUtils.getAclEntryList(destPath));
     }
 
@@ -102,16 +102,16 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
         // Test copy attributes without replace FIRST.
         FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.COPY_ATTRIBUTES);
-        assertAcl(sourcePath, destPath);
+        assertAclEntryList(sourcePath, destPath);
         //
         FileUtils.copyFile(sourcePath.toFile(), destPath.toFile());
-        assertAcl(sourcePath, destPath);
+        assertAclEntryList(sourcePath, destPath);
         //
         FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING);
-        assertAcl(sourcePath, destPath);
+        assertAclEntryList(sourcePath, destPath);
         //
         FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING,
             StandardCopyOption.COPY_ATTRIBUTES);
-        assertAcl(sourcePath, destPath);
+        assertAclEntryList(sourcePath, destPath);
     }
 }
