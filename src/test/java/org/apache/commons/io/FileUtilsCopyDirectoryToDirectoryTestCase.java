@@ -117,6 +117,13 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         assertAcl(sourcePath, destPath);
     }
 
+    /**
+     * Gets a a file attribute view.
+     *
+     * @param sourcePath the path to the file.
+     * @return a file attribute view of the specified type, or null ifthe attribute view type is not available.
+     * @throws IOException if an I/O error occurs.
+     */
     private List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
         final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
             AclFileAttributeView.class);
