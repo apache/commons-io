@@ -25,10 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.AclEntry;
-import java.nio.file.attribute.AclFileAttributeView;
-import java.util.List;
 
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -58,7 +56,7 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
     public File temporaryFolder;
 
     private void assertAcl(final Path sourcePath, final Path destPath) throws IOException {
-        assertEquals(getAclEntryList(sourcePath), getAclEntryList(destPath));
+        assertEquals(PathUtils.getAclEntryList(sourcePath), PathUtils.getAclEntryList(destPath));
     }
 
     @Test
@@ -115,18 +113,5 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
         FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING,
             StandardCopyOption.COPY_ATTRIBUTES);
         assertAcl(sourcePath, destPath);
-    }
-
-    /**
-     * Gets a a file attribute view.
-     *
-     * @param sourcePath the path to the file.
-     * @return a file attribute view of the specified type, or null ifthe attribute view type is not available.
-     * @throws IOException if an I/O error occurs.
-     */
-    private List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
-        final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
-            AclFileAttributeView.class);
-        return fileAttributeView == null ? null : fileAttributeView.getAcl();
     }
 }

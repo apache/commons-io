@@ -31,6 +31,8 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclFileAttributeView;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -477,6 +479,20 @@ public final class PathUtils {
                 final InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
             return IOUtils.contentEquals(inputStream1, inputStream2);
         }
+    }
+
+    /**
+     * Reads the access control list from a file attribute view.
+     *
+     * @param sourcePath the path to the file.
+     * @return a file attribute view of the specified type, or null ifthe attribute view type is not available.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
+        final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
+            AclFileAttributeView.class);
+        return fileAttributeView == null ? null : fileAttributeView.getAcl();
     }
 
     /**
