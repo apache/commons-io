@@ -69,6 +69,7 @@ public class TailerTest {
     }
 
     @Test
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     public void testLongFile() throws Exception {
         final long delay = 50;
 
@@ -84,7 +85,7 @@ public class TailerTest {
         final TestTailerListener listener = new TestTailerListener();
         tailer = new Tailer(file, listener, delay, false);
 
-        final long start = System.currentTimeMillis();
+        // final long start = System.currentTimeMillis();
 
         final Thread thread = new Thread(tailer);
         thread.start();
@@ -99,6 +100,7 @@ public class TailerTest {
     }
 
     @Test
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     public void testBufferBreak() throws Exception {
         final long delay = 50;
 
