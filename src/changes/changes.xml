@@ -113,6 +113,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update mockito-core from 3.3.3 to 3.4.6 #128, #133.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update spotbugs from 4.0.6 to 4.1.1 #134.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
