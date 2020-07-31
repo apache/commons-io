@@ -29,7 +29,6 @@ matrix:
     - jdk: openjdk-ea
       env: JACOCO_SKIP=true
 
-
 script:
   - mvn
 
