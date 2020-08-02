@@ -42,7 +42,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
                 new AbstractFileComparator[] {
                     (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR,
                     (AbstractFileComparator) ExtensionFileComparator.EXTENSION_COMPARATOR});
-        reverse = new ReverseComparator(comparator);
+        reverse = new ReverseFileComparator(comparator);
         lessFile   = new File(dir, "xyz.txt");
         equalFile1 = new File(dir, "foo.txt");
         equalFile2 = new File(dir, "bar.txt");

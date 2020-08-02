@@ -54,7 +54,7 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
     public static final Comparator<File> DIRECTORY_COMPARATOR = new DirectoryFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final Comparator<File> DIRECTORY_REVERSE = new ReverseComparator(DIRECTORY_COMPARATOR);
+    public static final Comparator<File> DIRECTORY_REVERSE = new ReverseFileComparator(DIRECTORY_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#isDirectory()} method.

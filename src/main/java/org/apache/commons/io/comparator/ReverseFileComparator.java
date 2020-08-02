@@ -26,7 +26,7 @@ import java.util.Comparator;
  *
  * @since 1.4
  */
-class ReverseComparator extends AbstractFileComparator implements Serializable {
+class ReverseFileComparator extends AbstractFileComparator implements Serializable {
 
     private static final long serialVersionUID = -4808255005272229056L;
     private final Comparator<File> delegate;
@@ -36,7 +36,7 @@ class ReverseComparator extends AbstractFileComparator implements Serializable {
      *
      * @param delegate The comparator to delegate to
      */
-    public ReverseComparator(final Comparator<File> delegate) {
+    public ReverseFileComparator(final Comparator<File> delegate) {
         if (delegate == null) {
             throw new IllegalArgumentException("Delegate comparator is missing");
         }
