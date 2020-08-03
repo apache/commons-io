@@ -28,14 +28,14 @@ import java.util.Comparator;
  * by their last modified date/time.
  * <p>
  * Example of sorting a list of files using the
- * {@link #INSTANCE} singleton instance:
+ * {@link #LASTMODIFIED_COMPARATOR} singleton instance:
  * <pre>
  *       List&lt;File&gt; list = ...
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_COMPARATOR).sort(list);
  * </pre>
  * <p>
  * Example of doing a <i>reverse</i> sort of an array of files using the
- * {@link #INSTANCE_REVERSE} singleton instance:
+ * {@link #LASTMODIFIED_REVERSE} singleton instance:
  * <pre>
  *       File[] array = ...
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_REVERSE).sort(array);
