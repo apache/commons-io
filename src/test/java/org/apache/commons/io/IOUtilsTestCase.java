@@ -1247,32 +1247,12 @@ public class IOUtilsTestCase {
                 () -> IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
     }
 
-    @Test public void testResourceToString_NullResource() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToString(null, StandardCharsets.UTF_8);
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToString_NullResource() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8));
     }
 
-    @Test public void testResourceToString_NullResource_WithClassLoader() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader());
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToString_NullResource_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
     }
 
     @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
@@ -1322,32 +1302,12 @@ public class IOUtilsTestCase {
                 () -> IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
-    @Test public void testResourceToByteArray_Null() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToByteArray(null);
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToByteArray_Null() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null));
     }
 
-    @Test public void testResourceToByteArray_Null_WithClassLoader() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader());
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToByteArray_Null_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
@@ -1387,32 +1347,12 @@ public class IOUtilsTestCase {
                 () -> IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
     }
 
-    @Test public void testResourceToURL_Null() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToURL(null);
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToURL_Null() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null));
     }
 
-    @Test public void testResourceToURL_Null_WithClassLoader() throws Exception {
-        boolean exceptionOccurred = false;
-
-        try {
-            IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader());
-            fail();
-        } catch (final NullPointerException npe) {
-            exceptionOccurred = true;
-            assertNotNull(npe);
-        }
-
-        assertTrue(exceptionOccurred);
+    @Test public void testResourceToURL_Null_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testAsBufferedNull() {
@@ -1559,12 +1499,7 @@ public class IOUtilsTestCase {
 
     @Test
     public void testAsWriterNull() {
-        try {
-            IOUtils.writer(null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> IOUtils.writer(null));
     }
 
     @Test
