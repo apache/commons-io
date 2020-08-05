@@ -193,35 +193,35 @@ public class IOUtilsTestCase {
         }
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    @Test public void testCloseQuietly_ServerSocket() throws IOException {
-        IOUtils.closeQuietly((ServerSocket) null);
-        IOUtils.closeQuietly(new ServerSocket());
+    @Test public void testCloseQuietly_ServerSocket() {
+        assertDoesNotThrow(() -> IOUtils.closeQuietly((ServerSocket) null));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new ServerSocket()));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    @Test public void testCloseQuietly_ServerSocketIOException() throws IOException {
-        IOUtils.closeQuietly(new ServerSocket() {
-            @Override
-            public void close() throws IOException {
-                throw new IOException();
-            }
+    @Test public void testCloseQuietly_ServerSocketIOException() {
+        assertDoesNotThrow(() -> {
+            IOUtils.closeQuietly(new ServerSocket() {
+                @Override
+                public void close() throws IOException {
+                    throw new IOException();
+                }
+            });
         });
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_Socket() {
-        IOUtils.closeQuietly((Socket) null);
-        IOUtils.closeQuietly(new Socket());
+        assertDoesNotThrow(() -> IOUtils.closeQuietly((Socket) null));
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(new Socket()));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_SocketIOException() {
-        IOUtils.closeQuietly(new Socket() {
-            @Override
-            public synchronized void close() throws IOException {
-                throw new IOException();
-            }
+        assertDoesNotThrow(() -> {
+            IOUtils.closeQuietly(new Socket() {
+                @Override
+                public synchronized void close() throws IOException {
+                    throw new IOException();
+                }
+            });
         });
     }
 
@@ -273,7 +273,6 @@ public class IOUtilsTestCase {
 
     @Test public void testContentEquals_Reader_Reader() throws Exception {
         {
-            final StringReader input1 = new StringReader("");
             assertTrue(IOUtils.contentEquals((Reader) null, null));
         }
         {
@@ -501,30 +500,20 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testCopyLarge_CharSkipInvalid() throws IOException {
-        CharArrayReader is = null;
-        CharArrayWriter os = null;
-        try {
-            // Create streams
-            is = new CharArrayReader(carr);
-            os = new CharArrayWriter();
-
-            // Test our copy method
-            IOUtils.copyLarge(is, os, 1000, 100);
-            fail("Should have thrown EOFException");
-        } catch (final EOFException ignore) {
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
+        try (
+            CharArrayReader is = new CharArrayReader(carr);
+            CharArrayWriter os = new CharArrayWriter();
+        ) {
+            assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
         }
     }
 
     @Test public void testCopyLarge_ExtraLength() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(iarr);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ) {
             // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
 
             // Test our copy method
             // for extra length, it reads till EOF
@@ -537,21 +526,14 @@ public class IOUtilsTestCase {
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals(-1, oarr[80]);
-
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
         }
     }
 
     @Test public void testCopyLarge_FullLength() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
-            // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
-
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(iarr);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ) {
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
             final byte[] oarr = os.toByteArray();
@@ -562,21 +544,14 @@ public class IOUtilsTestCase {
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals(-1, oarr[80]);
-
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
         }
     }
 
     @Test public void testCopyLarge_NoSkip() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
-            // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
-
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(iarr);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+         ) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final byte[] oarr = os.toByteArray();
@@ -587,21 +562,14 @@ public class IOUtilsTestCase {
             assertEquals(1, oarr[1]);
             assertEquals(79, oarr[79]);
             assertEquals(-1, oarr[80]);
-
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
         }
     }
 
     @Test public void testCopyLarge_Skip() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
-            // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
-
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(iarr);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
             final byte[] oarr = os.toByteArray();
@@ -612,28 +580,16 @@ public class IOUtilsTestCase {
             assertEquals(11, oarr[1]);
             assertEquals(79, oarr[69]);
             assertEquals(-1, oarr[70]);
-
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
         }
     }
 
     @Test public void testCopyLarge_SkipInvalid() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
-            // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
-
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(iarr);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ) {
             // Test our copy method
-            IOUtils.copyLarge(is, os, 1000, 100);
-            fail("Should have thrown EOFException");
-        } catch (final EOFException ignore) {
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
+            assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
         }
     }
 
