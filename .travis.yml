@@ -29,8 +29,9 @@ matrix:
     - jdk: openjdk-ea
       env: JACOCO_SKIP=true
 
+# --no-transfer-progress requires Maven 3.6.1+. Otherwise use --batch-mode
 script:
-  - mvn
+  - mvn --no-transfer-progress
 
 after_success:
-  - mvn clean cobertura:cobertura coveralls:report -Ptravis-cobertura
+  - mvn --no-transfer-progress clean cobertura:cobertura coveralls:report -Ptravis-cobertura
