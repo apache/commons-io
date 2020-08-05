@@ -17,6 +17,7 @@
 package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -137,18 +138,18 @@ public class IOUtilsTestCase {
         }
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_AllCloseableIOException() {
         final Closeable closeable = () -> {
             throw new IOException();
         };
-        IOUtils.closeQuietly(closeable, null, closeable);
+        assertDoesNotThrow(() -> IOUtils.closeQuietly(closeable, null, closeable));
     }
 
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     @Test public void testCloseQuietly_CloseableIOException() {
-        IOUtils.closeQuietly((Closeable) () -> {
-            throw new IOException();
+        assertDoesNotThrow(() -> {
+            IOUtils.closeQuietly((Closeable) () -> {
+                throw new IOException();
+            });    
         });
     }
 
