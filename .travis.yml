@@ -31,7 +31,7 @@ matrix:
 
 # --no-transfer-progress requires Maven 3.6.1+. Otherwise use --batch-mode
 script:
-  - mvn --no-transfer-progress
+  - mvn -V --no-transfer-progress
 
 after_success:
-  - mvn --no-transfer-progress clean cobertura:cobertura coveralls:report -Ptravis-cobertura
+  - mvn -V --no-transfer-progress clean cobertura:cobertura coveralls:report -Ptravis-cobertura
