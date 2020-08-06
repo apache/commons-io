@@ -146,6 +146,15 @@ public class IOUtilsTestCase {
         assertThrows(IOException.class, () -> IOUtils.close(new YellOnCloseReader(new StringReader("s"))));
     }
 
+    @Test public void testCloseMulti() {
+        Closeable nulCloseable = null;
+        Closeable [] closeables = {null, null};
+        assertDoesNotThrow(() -> IOUtils.close(nulCloseable,nulCloseable));
+        assertDoesNotThrow(() -> IOUtils.close(closeables));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"),nulCloseable));
+        assertThrows(IOException.class, () -> IOUtils.close(nulCloseable, new YellOnCloseReader(new StringReader("s"))));
+    }
+
     @Test public void testCloseConsumer() {
         Closeable nulCloseable = null;
         assertDoesNotThrow(() -> IOUtils.close(nulCloseable, null)); // null consumer
@@ -330,7 +339,6 @@ public class IOUtilsTestCase {
 
     @Test public void testContentEqualsIgnoreEOL() throws Exception {
         {
-            final Reader input1 = new CharArrayReader("".toCharArray());
             assertTrue(IOUtils.contentEqualsIgnoreEOL((Reader) null, null));
         }
         {

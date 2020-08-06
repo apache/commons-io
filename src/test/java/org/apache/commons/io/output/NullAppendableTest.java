@@ -27,7 +27,6 @@ public class NullAppendableTest {
 
     @Test
     public void testNull() throws IOException {
-        final char[] chars = new char[] {'A', 'B', 'C'};
         final Appendable appendable = NullAppendable.INSTANCE;
         appendable.append('a');
         appendable.append("A");
