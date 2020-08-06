@@ -330,7 +330,6 @@ public class IOUtilsTestCase {
 
     @Test public void testContentEqualsIgnoreEOL() throws Exception {
         {
-            final Reader input1 = new CharArrayReader("".toCharArray());
             assertTrue(IOUtils.contentEqualsIgnoreEOL((Reader) null, null));
         }
         {
