@@ -55,6 +55,18 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         this.copyOptions = copyOptions == null ? EMPTY_COPY_OPTIONS : copyOptions.clone();
     }
 
+    /**
+     * Copies the sourceFile to the targetFile.
+     *
+     * @param sourceFile the source file.
+     * @param targetFile the target file.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    protected void copy(final Path sourceFile, final Path targetFile) throws IOException {
+        Files.copy(sourceFile, targetFile, copyOptions);
+    }
+
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
             throws IOException {
@@ -68,7 +80,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
         final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile));
-        Files.copy(sourceFile, targetFile, copyOptions);
+        copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
     }
 
