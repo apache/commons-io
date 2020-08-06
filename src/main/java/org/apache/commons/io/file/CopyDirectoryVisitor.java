@@ -48,7 +48,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param copyOptions Specifies how the copying should be done.
      */
     public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory,
-            final CopyOption... copyOptions) {
+        final CopyOption... copyOptions) {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
@@ -67,9 +67,39 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         Files.copy(sourceFile, targetFile, copyOptions);
     }
 
+    /**
+     * Gets the copy options.
+     * 
+     * @return the copy options.
+     * @since 2.8.0
+     */
+    public CopyOption[] getCopyOptions() {
+        return copyOptions;
+    }
+
+    /**
+     * Gets the source directory.
+     * 
+     * @return the source directory.
+     * @since 2.8.0
+     */
+    public Path getSourceDirectory() {
+        return sourceDirectory;
+    }
+
+    /**
+     * Gets the target directory.
+     * 
+     * @return the target directory.
+     * @since 2.8.0
+     */
+    public Path getTargetDirectory() {
+        return targetDirectory;
+    }
+
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
-            throws IOException {
+        throws IOException {
         final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory));
         if (Files.notExists(newTargetDir)) {
             Files.createDirectory(newTargetDir);
