@@ -1394,7 +1394,6 @@ public class FileUtils {
 
         final Path srcPath = srcFile.toPath();
         final Path destPath = destFile.toPath();
-        final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
         Files.copy(srcPath, destPath, copyOptions);
 
         // TODO IO-386: Do we still need this check?
@@ -1402,7 +1401,10 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        return destFile.setLastModified(newLastModifed);
+        if (preserveFileDate) {
+            return destFile.setLastModified(srcFile.lastModified());
+        }
+        return true;
     }
 
     //-----------------------------------------------------------------------

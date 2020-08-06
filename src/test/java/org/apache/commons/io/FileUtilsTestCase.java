@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -1144,16 +1145,12 @@ public class FileUtilsTestCase {
     public void testCopyFile1() throws Exception {
         final File destination = new File(temporaryFolder, "copy1.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
     }
 
     @Test
@@ -1196,15 +1193,12 @@ public class FileUtilsTestCase {
     public void testCopyFile2() throws Exception {
         final File destination = new File(temporaryFolder, "copy2.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliably for this case
-        assertTrue(testFile1.lastModified() == destination.lastModified(), "Check last modified date preserved");*/
+        assertEquals(testFile1.lastModified() , destination.lastModified(), "Check last modified date preserved");
     }
 
     @Test
@@ -1225,16 +1219,15 @@ public class FileUtilsTestCase {
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
         final File destination = new File(temporaryFolder, "copy2.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile(testFile1); // set test file back 10 minutes
 
+        final long now = new Date().getTime()-1000L; // destination file time should not be less than this (allowing for granularity)
         FileUtils.copyFile(testFile1, destination, false);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date modified",
-            testFile1.lastModified() != destination.lastModified());*/
+        final long destLastMod = destination.lastModified();
+        assertNotEquals(testFile1.lastModified(), destLastMod, "Check last modified date not same as input");
+        assertTrue(destLastMod > now, destLastMod + " > " + now);
     }
 
     @Test
@@ -3083,6 +3076,12 @@ public class FileUtilsTestCase {
         }
     }
 
+    private void backDateFile(File testFile){
+        final long mins10 = 1000*60*10;
+        final long lastModified1 = testFile.lastModified();
+        testFile.setLastModified(lastModified1-mins10);
+        assertNotEquals(testFile.lastModified(), lastModified1, "Should have changed source date"); // ensure it was changed
+    }
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
