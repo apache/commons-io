@@ -254,11 +254,7 @@ public class FileUtilsTestCase {
         };
         TestUtils.createLineBasedFile(file, new String[]{"Hello"});
 
-        try (FileInputStream in = FileUtils.openInputStream(file)) {
-            fail();
-        } catch (IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(file));
     }
 
     //-----------------------------------------------------------------------
@@ -348,12 +344,7 @@ public class FileUtilsTestCase {
         };
         TestUtils.createLineBasedFile(file, new String[]{"Hello"});
 
-        try {
-            FileUtils.openOutputStream(file, false);
-            fail();
-        } catch (IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.openOutputStream(file, false));
     }
 
     //-----------------------------------------------------------------------
@@ -1280,12 +1271,7 @@ public class FileUtilsTestCase {
         }
         final File destination = new File(temporaryFolder, "destination");
 
-        try {
-            FileUtils.copyFile(source, destination, false);
-            fail();
-        } catch (IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.copyFile(source, destination, false));
     }
 
     @Test
@@ -1303,12 +1289,7 @@ public class FileUtilsTestCase {
             }
         };
 
-        try {
-            FileUtils.copyFile(testFile1, destination, false);
-            fail();
-        } catch (IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.copyFile(testFile1, destination, false));
     }
 
     @Test
@@ -1323,12 +1304,7 @@ public class FileUtilsTestCase {
             destination.mkdirs();
         }
 
-        try {
-            FileUtils.copyFile(testFile1, destination, false);
-            fail();
-        } catch (IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.copyFile(testFile1, destination, false));
     }
 
     @Test
@@ -1376,21 +1352,13 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void copyDirectoryToDirectoryWhenSourceDirIsAFile() throws IOException {
-        try {
-            FileUtils.copyDirectoryToDirectory(testFile1, temporaryFolder);
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+    public void copyDirectoryToDirectoryWhenSourceDirIsAFile() {
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectoryToDirectory(testFile1, temporaryFolder));
     }
 
     @Test
-    public void copyDirectoryToDirectoryWhenDestinationDirIsAFile() throws IOException {
-        try {
-            FileUtils.copyDirectoryToDirectory(temporaryFolder, testFile1);
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+    public void copyDirectoryToDirectoryWhenDestinationDirIsAFile() {
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectoryToDirectory(temporaryFolder, testFile1));
     }
 
     @Test
@@ -1822,17 +1790,13 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void copyFileToDirectoryWhenDestinationIsNotDirectory() throws Exception {
+    public void copyFileToDirectoryWhenDestinationIsNotDirectory() {
         final File directory = new File(temporaryFolder, "subdir.txt");
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        try {
-            FileUtils.copyFileToDirectory(testFile1, testFile2, true);
-        } catch (IllegalArgumentException iae) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyFileToDirectory(testFile1, testFile2, true));
     }
 
     // forceDelete
@@ -2645,12 +2609,7 @@ public class FileUtilsTestCase {
             directoryToDelete.mkdirs();
         }
 
-        try {
-            FileUtils.deleteDirectory(directoryToDelete);
-            fail();
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.deleteDirectory(directoryToDelete));
     }
 
     @Test
