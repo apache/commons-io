@@ -116,6 +116,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update spotbugs from 4.0.6 to 4.1.1 #134.
       </action>
+      <action dev="sebb" type="add">
+        IO-681 IOUtils.close(Closeable) should allow a list of closeables
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
