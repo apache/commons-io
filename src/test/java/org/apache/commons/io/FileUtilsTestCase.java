@@ -1679,23 +1679,16 @@ public class FileUtilsTestCase {
         }
         final File destination = new File(directory, testFile1.getName());
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1);
 
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
 
-        try {
-            FileUtils.copyFileToDirectory(destination, directory);
-            fail("Should not be able to copy a file into the same directory as itself");
-        } catch (final IOException ioe) {
-            //we want that, cannot copy to the same directory as the original file
-        }
+        assertThrows(IOException.class, 
+            () -> FileUtils.copyFileToDirectory(destination, directory),
+            "Should not be able to copy a file into the same directory as itself");
     }
 
     @Test
@@ -1706,16 +1699,12 @@ public class FileUtilsTestCase {
         }
         final File destination = new File(directory, testFile1.getName());
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1);
 
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
     }
 
     // forceDelete
