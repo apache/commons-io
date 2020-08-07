@@ -40,6 +40,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1399,9 +1400,9 @@ public class FileUtilsTestCase {
         // Set dates in reverse order to avoid overwriting previous values
         // Also, use full seconds (arguments are in ms) close to today
         // but still highly unlikely to occur in the real world
-        sourceFile.setLastModified(DATE3);
-        sourceDirectory.setLastModified(DATE2);
-        source.setLastModified(DATE1);
+        setLastModifiedMillis(sourceFile, DATE3);
+        setLastModifiedMillis(sourceDirectory, DATE2);
+        setLastModifiedMillis(source, DATE1);
 
         final File target = new File(temporaryFolder, "target");
         final File targetDirectory = new File(target, "directory");
@@ -1438,7 +1439,7 @@ public class FileUtilsTestCase {
         FileUtils.deleteDirectory(target);
     }
 
-    public long getLastModifiedMillis(final File file) throws IOException {
+    private long getLastModifiedMillis(final File file) throws IOException {
         return file.lastModified();
         //https://bugs.openjdk.java.net/browse/JDK-8177809
         //return Files.getLastModifiedTime(file.toPath()).toMillis();
@@ -1774,7 +1775,7 @@ public class FileUtilsTestCase {
         out.close();
         assertEquals(1, file.length(), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
-        final boolean res = file.setLastModified(y2k);  // 0L fails on Win98
+        final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98
         assertEquals(true, res, "Bad test: set lastModified failed");
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long now = System.currentTimeMillis();
@@ -3096,9 +3097,19 @@ public class FileUtilsTestCase {
     private void backDateFile(File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
-        testFile.setLastModified(lastModified1 - mins10);
+        setLastModifiedMillis(testFile, lastModified1 - mins10);
         // ensure it was changed
         assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
+    }
+
+    private boolean setLastModifiedMillis(File testFile, final long millis) {
+        return testFile.setLastModified(millis);
+//        try {
+//            Files.setLastModifiedTime(testFile.toPath(), FileTime.fromMillis(millis));
+//        } catch (IOException e) {
+//            return false;
+//        }
+//        return true;
     }
 
     /**
