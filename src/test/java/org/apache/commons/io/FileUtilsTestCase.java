@@ -38,6 +38,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,6 +67,12 @@ import org.junit.jupiter.api.io.TempDir;
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTestCase {
+
+    private static final long DATE3 = 1000000002000L;
+
+    private static final long DATE2 = 1000000001000L;
+
+    private static final long DATE1 = 1000000000000L;
 
     @TempDir
     public File temporaryFolder;
@@ -1012,7 +1019,7 @@ public class FileUtilsTestCase {
             } finally {
                 IOUtils.closeQuietly(output);
             }
-        } while (oldFile.lastModified() == reference.lastModified());
+        } while (getLastModifiedMillis(oldFile) == getLastModifiedMillis(reference));
 
         final Date date = new Date();
         final long now = date.getTime();
@@ -1034,7 +1041,7 @@ public class FileUtilsTestCase {
             } finally {
                 IOUtils.closeQuietly(output);
             }
-        } while (reference.lastModified() == newFile.lastModified());
+        } while (getLastModifiedMillis(reference) == getLastModifiedMillis(newFile));
 
         // Test isFileNewer()
         assertFalse(FileUtils.isFileNewer(oldFile, reference), "Old File - Newer - File");
@@ -1150,7 +1157,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
+        assertEquals(testFile1.lastModified(), getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1198,7 +1205,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified() , destination.lastModified(), "Check last modified date preserved");
+        assertEquals(testFile1.lastModified() , getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1217,16 +1224,19 @@ public class FileUtilsTestCase {
 
     @Test
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
-        final File destination = new File(temporaryFolder, "copy2.txt");
+        final File destFile = new File(temporaryFolder, "copy2.txt");
 
         backDateFile(testFile1); // set test file back 10 minutes
 
-        final long now = new Date().getTime()-1000L; // destination file time should not be less than this (allowing for granularity)
-        FileUtils.copyFile(testFile1, destination, false);
-        assertTrue(destination.exists(), "Check Exist");
-        assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        final long destLastMod = destination.lastModified();
-        assertNotEquals(testFile1.lastModified(), destLastMod, "Check last modified date not same as input");
+        // destination file time should not be less than this (allowing for granularity)
+        final long now = new Date().getTime() - 1000L;
+        FileUtils.copyFile(testFile1, destFile, false);
+        assertTrue(destFile.exists(), "Check Exist");
+        assertEquals(testFile2Size, destFile.length(), "Check Full copy");
+        final long destLastMod = getLastModifiedMillis(destFile);
+        final long unexpected = getLastModifiedMillis(testFile1);
+        assertNotEquals(unexpected, destLastMod,
+            "Check last modified date not same as input, delta " + (destLastMod - unexpected));
         assertTrue(destLastMod > now, destLastMod + " > " + now);
     }
 
@@ -1388,9 +1398,9 @@ public class FileUtilsTestCase {
         // Set dates in reverse order to avoid overwriting previous values
         // Also, use full seconds (arguments are in ms) close to today
         // but still highly unlikely to occur in the real world
-        sourceFile.setLastModified(1000000002000L);
-        sourceDirectory.setLastModified(1000000001000L);
-        source.setLastModified(1000000000000L);
+        sourceFile.setLastModified(DATE3);
+        sourceDirectory.setLastModified(DATE2);
+        source.setLastModified(DATE1);
 
         final File target = new File(temporaryFolder, "target");
         final File targetDirectory = new File(target, "directory");
@@ -1398,33 +1408,39 @@ public class FileUtilsTestCase {
 
         // Test with preserveFileDate disabled
         FileUtils.copyDirectory(source, target, false);
-        assertTrue(1000000000000L != target.lastModified());
-        assertTrue(1000000001000L != targetDirectory.lastModified());
-        assertTrue(1000000002000L != targetFile.lastModified());
+        assertTrue(DATE1 != getLastModifiedMillis(target));
+        assertTrue(DATE2 != getLastModifiedMillis(targetDirectory));
+        assertTrue(DATE3 != getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // also if the target directory already exists (IO-190)
         target.mkdirs();
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // also if the target subdirectory already exists (IO-190)
         targetDirectory.mkdirs();
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
+    }
+
+    public long getLastModifiedMillis(final File file) throws IOException {
+        return file.lastModified();
+        //https://bugs.openjdk.java.net/browse/JDK-8177809
+        //return Files.getLastModifiedTime(file.toPath()).toMillis();
     }
 
     /* Test for IO-141 */
@@ -1759,13 +1775,13 @@ public class FileUtilsTestCase {
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
         final boolean res = file.setLastModified(y2k);  // 0L fails on Win98
         assertEquals(true, res, "Bad test: set lastModified failed");
-        assertEquals(y2k, file.lastModified(), "Bad test: set lastModified set incorrect value");
+        assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long now = System.currentTimeMillis();
         FileUtils.touch(file);
         assertEquals(1, file.length(), "FileUtils.touch() didn't empty the file.");
-        assertEquals(false, y2k == file.lastModified(), "FileUtils.touch() changed lastModified");
-        assertEquals(true, file.lastModified() >= now - 3000, "FileUtils.touch() changed lastModified to more than now-3s");
-        assertEquals(true, file.lastModified() <= now + 3000, "FileUtils.touch() changed lastModified to less than now+3s");
+        assertEquals(false, y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
+        assertEquals(true, getLastModifiedMillis(file) >= now - 3000, "FileUtils.touch() changed lastModified to more than now-3s");
+        assertEquals(true, getLastModifiedMillis(file) <= now + 3000, "FileUtils.touch() changed lastModified to less than now+3s");
     }
 
     @Test
@@ -3076,16 +3092,19 @@ public class FileUtilsTestCase {
         }
     }
 
-    private void backDateFile(File testFile){
-        final long mins10 = 1000*60*10;
-        final long lastModified1 = testFile.lastModified();
-        testFile.setLastModified(lastModified1-mins10);
-        assertNotEquals(testFile.lastModified(), lastModified1, "Should have changed source date"); // ensure it was changed
+    private void backDateFile(File testFile) throws IOException {
+        final long mins10 = 1000 * 60 * 10;
+        final long lastModified1 = getLastModifiedMillis(testFile);
+        testFile.setLastModified(lastModified1 - mins10);
+        // ensure it was changed
+        assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
     }
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
     static class ListDirectoryWalker extends DirectoryWalker<File> {
+
         ListDirectoryWalker() {
             super();
         }
