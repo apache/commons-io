@@ -138,14 +138,12 @@ public class LineIteratorTestCase {
     public void testMissingFile() throws Exception {
         final File testFile = new File(temporaryFolder, "dummy-missing-file.txt");
 
-        LineIterator iterator = null;
-        try {
-            iterator = FileUtils.lineIterator(testFile, "UTF-8");
+        try (
+            LineIterator iterator = FileUtils.lineIterator(testFile, "UTF-8");
+        ){
             fail("Expected FileNotFoundException");
         } catch (final FileNotFoundException expected) {
             // ignore, expected result
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -156,16 +154,15 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, "LineIterator-validEncoding.txt");
         createLinesFile(testFile, encoding, 3);
 
-        final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
+        try (
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        ){
             int count = 0;
             while (iterator.hasNext()) {
                 assertNotNull(iterator.next());
                 count++;
             }
             assertEquals(3, count);
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -176,14 +173,12 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, "LineIterator-invalidEncoding.txt");
         createLinesFile(testFile, "UTF-8", 3);
 
-        LineIterator iterator = null;
-        try {
-            iterator = FileUtils.lineIterator(testFile, encoding);
+        try (
+            LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        ) {
             fail("Expected UnsupportedCharsetException");
         } catch (final UnsupportedCharsetException expected) {
             // ignore, expected result
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -225,15 +220,14 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, "LineIterator-nextOnly.txt");
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
-        final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
+        try (
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        ){
             for (int i = 0; i < lines.size(); i++) {
                 final String line = iterator.next();
                 assertEquals(lines.get(i), line, "next() line " + i);
             }
             assertEquals(false, iterator.hasNext(), "No more expected");
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -260,8 +254,9 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, "LineIterator-closeEarly.txt");
         createLinesFile(testFile, encoding, 3);
 
-        final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
+        try (
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        ) {
             // get
             assertNotNull("Line expected", iterator.next());
             assertTrue(iterator.hasNext(), "More expected");
@@ -296,8 +291,6 @@ public class LineIteratorTestCase {
             } catch (final NoSuchElementException ex) {
                 // expected
             }
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
@@ -315,8 +308,9 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, lineCount);
 
-        final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
-        try {
+        try (
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+        ){
             try {
                 iterator.remove();
                 fail("Remove is unsupported");
@@ -346,8 +340,6 @@ public class LineIteratorTestCase {
             } catch (final NoSuchElementException expected) {
                 // ignore, expected result
             }
-        } finally {
-            LineIterator.closeQuietly(iterator);
         }
     }
 
