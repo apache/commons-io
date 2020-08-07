@@ -60,8 +60,8 @@ public final class PathUtils {
     private static class RelativeSortedPaths {
 
         final boolean equals;
-        final List<Path> relativeDirList1; // might need later?
-        final List<Path> relativeDirList2; // might need later?
+        // final List<Path> relativeDirList1; // might need later?
+        // final List<Path> relativeDirList2; // might need later?
         final List<Path> relativeFileList1;
         final List<Path> relativeFileList2;
 
@@ -91,8 +91,8 @@ public final class PathUtils {
                 if (!parentDirExists1 || !parentDirExists2) {
                     equals = !parentDirExists1 && !parentDirExists2;
                 } else {
-                    AccumulatorPathVisitor visitor1 = accumulate(dir1, maxDepth, linkOptions, fileVisitOptions);
-                    AccumulatorPathVisitor visitor2 = accumulate(dir2, maxDepth, linkOptions, fileVisitOptions);
+                    AccumulatorPathVisitor visitor1 = accumulate(dir1, maxDepth, fileVisitOptions);
+                    AccumulatorPathVisitor visitor2 = accumulate(dir2, maxDepth, fileVisitOptions);
                     if (visitor1.getDirList().size() != visitor2.getDirList().size()
                             || visitor1.getFileList().size() != visitor2.getFileList().size()) {
                         equals = false;
@@ -109,8 +109,8 @@ public final class PathUtils {
                     }
                 }
             }
-            relativeDirList1 = tmpRelativeDirList1;
-            relativeDirList2 = tmpRelativeDirList2;
+            // relativeDirList1 = tmpRelativeDirList1;
+            // relativeDirList2 = tmpRelativeDirList2;
             relativeFileList1 = tmpRelativeFileList1;
             relativeFileList2 = tmpRelativeFileList2;
         }
@@ -136,13 +136,12 @@ public final class PathUtils {
      *
      * @param directory The directory to accumulate information.
      * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @param linkOptions Options indicating how symbolic links are handled.
      * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @return file tree information.
      */
     private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
-            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
+            final FileVisitOption[] fileVisitOptions) throws IOException {
         return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
                 toFileVisitOptionSet(fileVisitOptions), maxDepth);
     }
