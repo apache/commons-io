@@ -1400,9 +1400,9 @@ public class FileUtilsTestCase {
         // Set dates in reverse order to avoid overwriting previous values
         // Also, use full seconds (arguments are in ms) close to today
         // but still highly unlikely to occur in the real world
-        setLastModifiedMillis(sourceFile, DATE3);
-        setLastModifiedMillis(sourceDirectory, DATE2);
-        setLastModifiedMillis(source, DATE1);
+        assertTrue(setLastModifiedMillis(sourceFile, DATE3));
+        assertTrue(setLastModifiedMillis(sourceDirectory, DATE2));
+        assertTrue(setLastModifiedMillis(source, DATE1));
 
         final File target = new File(temporaryFolder, "target");
         final File targetDirectory = new File(target, "directory");
@@ -3097,7 +3097,7 @@ public class FileUtilsTestCase {
     private void backDateFile10Minutes(File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
-        setLastModifiedMillis(testFile, lastModified1 - mins10);
+        assertTrue(setLastModifiedMillis(testFile, lastModified1 - mins10));
         // ensure it was changed
         assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
     }
