@@ -367,16 +367,27 @@ public class IOUtils {
     /**
      * Closes the given {@link Closeable} as a null-safe operation.
      *
-     * @param closeables The resource(s) to close, may be null.
+     * @param closeable The resource to close, may be null.
      * @throws IOException if an I/O error occurs.
      * @since 2.7
+     */
+    public static void close(final Closeable closeable) throws IOException {
+        if (closeable != null) {
+            closeable.close();
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeables The resource(s) to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
      */
     public static void close(final Closeable... closeables) throws IOException {
         if (closeables != null) {
             for (Closeable closeable : closeables) {
-                if (closeable != null) {
-                    closeable.close();
-                }
+                close(closeable);
             }
         }
     }

@@ -146,16 +146,20 @@ public class IOUtilsTestCase {
         assertThrows(IOException.class, () -> IOUtils.close(new YellOnCloseReader(new StringReader("s"))));
     }
 
-    @Test public void testCloseMulti() {
+    @Test
+    public void testCloseMulti() {
         Closeable nulCloseable = null;
-        Closeable [] closeables = {null, null};
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable,nulCloseable));
+        Closeable[] closeables = {null, null};
+        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nulCloseable));
         assertDoesNotThrow(() -> IOUtils.close(closeables));
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"),nulCloseable));
-        assertThrows(IOException.class, () -> IOUtils.close(nulCloseable, new YellOnCloseReader(new StringReader("s"))));
+        assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nulCloseable));
+        assertThrows(IOException.class,
+            () -> IOUtils.close(nulCloseable, new YellOnCloseReader(new StringReader("s"))));
     }
 
-    @Test public void testCloseConsumer() {
+    @Test
+    public void testCloseConsumer() {
         Closeable nulCloseable = null;
         assertDoesNotThrow(() -> IOUtils.close(nulCloseable, null)); // null consumer
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null)); // null consumer
@@ -171,10 +175,13 @@ public class IOUtilsTestCase {
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new YellOnCloseReader(new StringReader("s")), silentConsumer));
 
-        final IOConsumer<IOException> noisyConsumer = i -> {throw i;}; // consumer passes on the throw
+        final IOConsumer<IOException> noisyConsumer = i -> {
+            throw i;
+        }; // consumer passes on the throw
         assertDoesNotThrow(() -> IOUtils.close(nulCloseable, noisyConsumer)); // no throw
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer)); // no throw
-        assertThrows(IOException.class, () -> IOUtils.close(new YellOnCloseReader(new StringReader("s")),noisyConsumer)); // closeable throws
+        assertThrows(IOException.class,
+            () -> IOUtils.close(new YellOnCloseReader(new StringReader("s")), noisyConsumer)); // closeable throws
     }
 
     @Test public void testCloseQuietly_AllCloseableIOException() {

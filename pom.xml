@@ -304,7 +304,8 @@ file comparators, endian transformation classes, and much more.
   </properties>
 
   <build>
-    <defaultGoal>clean verify apache-rat:check clirr:check checkstyle:check javadoc:javadoc</defaultGoal>
+    <!-- japicmp:cmp needs package to work from a jar -->
+    <defaultGoal>clean package apache-rat:check japicmp:cmp checkstyle:check javadoc:javadoc</defaultGoal>
     <pluginManagement>
       <plugins>
         <plugin>
