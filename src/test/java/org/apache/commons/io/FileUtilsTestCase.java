@@ -1154,7 +1154,7 @@ public class FileUtilsTestCase {
     public void testCopyFile1() throws Exception {
         final File destination = new File(temporaryFolder, "copy1.txt");
 
-        backDateFile(testFile1); // set test file back 10 minutes
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
@@ -1202,7 +1202,7 @@ public class FileUtilsTestCase {
     public void testCopyFile2() throws Exception {
         final File destination = new File(temporaryFolder, "copy2.txt");
 
-        backDateFile(testFile1); // set test file back 10 minutes
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
@@ -1228,7 +1228,7 @@ public class FileUtilsTestCase {
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
         final File destFile = new File(temporaryFolder, "copy2.txt");
 
-        backDateFile(testFile1); // set test file back 10 minutes
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         // destination file time should not be less than this (allowing for granularity)
         final long now = new Date().getTime() - 1000L;
@@ -3094,7 +3094,7 @@ public class FileUtilsTestCase {
         }
     }
 
-    private void backDateFile(File testFile) throws IOException {
+    private void backDateFile10Minutes(File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
         setLastModifiedMillis(testFile, lastModified1 - mins10);
