@@ -1408,9 +1408,9 @@ public class FileUtilsTestCase {
 
         // Test with preserveFileDate disabled
         FileUtils.copyDirectory(source, target, false);
-        assertTrue(DATE1 != getLastModifiedMillis(target));
-        assertTrue(DATE2 != getLastModifiedMillis(targetDirectory));
-        assertTrue(DATE3 != getLastModifiedMillis(targetFile));
+        assertNotEquals(DATE1, target.lastModified());
+        assertNotEquals(DATE2, targetDirectory.lastModified());
+        assertNotEquals(DATE3, targetFile.lastModified());
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
