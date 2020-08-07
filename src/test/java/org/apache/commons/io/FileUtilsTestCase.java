@@ -1749,7 +1749,7 @@ public class FileUtilsTestCase {
         assertTrue(file2.length() > 0);
 
         final String file2contents = FileUtils.readFileToString(file2, "UTF-8");
-        assertTrue(filename.equals(file2contents), "Second file's contents correct");
+        assertEquals(filename, file2contents, "Second file's contents correct");
 
         assertTrue(file2.delete());
 
