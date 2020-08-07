@@ -16,35 +16,53 @@
  */
 package org.apache.commons.io.test;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.ProxyOutputStream;
 
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseOutputStream extends ProxyOutputStream {
+public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
 
-    /**
-     * Default ctor.
-     */
-    public YellOnCloseOutputStream() {
-        super(NullOutputStream.NULL_OUTPUT_STREAM);
-    }
+    private boolean yellOnFlush;
+    private boolean yellOnClose;
 
     /**
      * @param proxy OutputStream to delegate to.
+     * @param yellOnFlush True if flush() is forbidden
+     * @param yellOnClose True if close() is forbidden
      */
-    public YellOnCloseOutputStream(final OutputStream proxy) {
+    public ThrowOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean yellOnFlush, final boolean yellOnClose) {
         super(proxy);
+        this.yellOnFlush = yellOnFlush;
+        this.yellOnClose = yellOnClose;
+    }
+
+    /** @see java.io.OutputStream#flush() */
+    @Override
+    public void flush() throws IOException {
+        if (yellOnFlush) {
+            fail(getClass().getSimpleName() + ".flush() called.");
+        }
+        super.flush();
     }
 
     /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
-        throw new IOException(getClass().getSimpleName() + ".close() called.");
+        if (yellOnClose) {
+            fail(getClass().getSimpleName() + ".close() called.");
+        }
+        super.close();
+    }
+
+    public void off() {
+        yellOnFlush = false;
+        yellOnClose = false;
     }
 
 }

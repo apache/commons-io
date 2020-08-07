@@ -25,19 +25,19 @@ import org.apache.commons.io.output.ProxyWriter;
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseWriter extends ProxyWriter {
+public class ThrowOnCloseWriter extends ProxyWriter {
 
     /**
      * Default ctor.
      */
-    public YellOnCloseWriter() {
+    public ThrowOnCloseWriter() {
         super(NullWriter.NULL_WRITER);
     }
 
     /**
      * @param proxy Writer to delegate to.
      */
-    public YellOnCloseWriter(final Writer proxy) {
+    public ThrowOnCloseWriter(final Writer proxy) {
         super(proxy);
     }
 

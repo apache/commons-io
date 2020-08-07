@@ -25,20 +25,20 @@ import org.apache.commons.io.input.ProxyReader;
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseReader extends ProxyReader {
+public class ThrowOnCloseReader extends ProxyReader {
 
     /**
      * Default ctor.
      */
     @SuppressWarnings("resource")
-    public YellOnCloseReader() {
+    public ThrowOnCloseReader() {
         super(new NullReader());
     }
 
     /**
      * @param proxy Reader to delegate to.
      */
-    public YellOnCloseReader(final Reader proxy) {
+    public ThrowOnCloseReader(final Reader proxy) {
         super(proxy);
     }
 

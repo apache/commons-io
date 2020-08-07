@@ -25,20 +25,20 @@ import org.apache.commons.io.input.ProxyInputStream;
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseInputStream extends ProxyInputStream {
+public class ThrowOnCloseInputStream extends ProxyInputStream {
 
     /**
      * Default ctor.
      */
     @SuppressWarnings("resource")
-    public YellOnCloseInputStream() {
+    public ThrowOnCloseInputStream() {
         super(new NullInputStream());
     }
 
     /**
      * @param proxy InputStream to delegate to.
      */
-    public YellOnCloseInputStream(final InputStream proxy) {
+    public ThrowOnCloseInputStream(final InputStream proxy) {
         super(proxy);
     }
 
