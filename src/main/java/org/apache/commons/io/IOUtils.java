@@ -372,9 +372,11 @@ public class IOUtils {
      * @since 2.7
      */
     public static void close(final Closeable... closeables) throws IOException {
-            for(Closeable closeable : closeables) {
+        if (closeables != null) {
+            for (Closeable closeable : closeables) {
                 if (closeable != null) {
                     closeable.close();
+                }
             }
         }
     }

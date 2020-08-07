@@ -89,6 +89,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.getAclEntryList(Path).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Null-guard IOUtils.close(Closeable, IOConsumer).
+      </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Replace FindBugs with SpotBugs.
       </action>
