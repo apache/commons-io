@@ -1234,7 +1234,7 @@ public class FileUtilsTestCase {
         final long now = System.currentTimeMillis() - 1000L;
         FileUtils.copyFile(testFile1, destFile, false);
         assertTrue(destFile.exists(), "Check Exist");
-        assertEquals(testFile2Size, destFile.length(), "Check Full copy");
+        assertEquals(testFile1Size, destFile.length(), "Check Full copy");
         final long destLastMod = getLastModifiedMillis(destFile);
         final long unexpected = getLastModifiedMillis(testFile1);
         assertNotEquals(unexpected, destLastMod,
