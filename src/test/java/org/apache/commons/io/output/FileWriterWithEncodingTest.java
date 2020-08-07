@@ -100,17 +100,12 @@ public class FileWriterWithEncodingTest {
     }
 
     private void successfulRun(final FileWriterWithEncoding fw21) throws Exception {
-        FileWriter fw1 = null;
-        FileWriterWithEncoding fw2 = null;
-        try {
-            fw1 = new FileWriter(file1);  // default encoding
-            fw2 = fw21;
+        try (
+            FileWriter fw1 = new FileWriter(file1);  // default encoding
+            FileWriterWithEncoding fw2 = fw21;
+        ){
             writeTestPayload(fw1, fw2);
             checkFile(file1, file2);
-
-        } finally {
-            IOUtils.closeQuietly(fw1);
-            IOUtils.closeQuietly(fw2);
         }
         assertTrue(file1.exists());
         assertTrue(file2.exists());
@@ -119,11 +114,10 @@ public class FileWriterWithEncodingTest {
     @Test
     public void testDifferentEncoding() throws Exception {
         if (Charset.isSupported("UTF-16BE")) {
-            FileWriter fw1 = null;
-            FileWriterWithEncoding fw2 = null;
-            try {
-                fw1 = new FileWriter(file1);  // default encoding
-                fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
+            try (
+                FileWriter fw1 = new FileWriter(file1);  // default encoding
+                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
+            ){
                 writeTestPayload(fw1, fw2);
                 try {
                     checkFile(file1, file2);
@@ -132,19 +126,15 @@ public class FileWriterWithEncodingTest {
                     // success
                 }
 
-            } finally {
-                IOUtils.closeQuietly(fw1);
-                IOUtils.closeQuietly(fw2);
             }
             assertTrue(file1.exists());
             assertTrue(file2.exists());
         }
         if (Charset.isSupported("UTF-16LE")) {
-            FileWriter fw1 = null;
-            FileWriterWithEncoding fw2 = null;
-            try {
-                fw1 = new FileWriter(file1);  // default encoding
-                fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
+            try (
+                FileWriter fw1 = new FileWriter(file1);  // default encoding
+                FileWriterWithEncoding fw2 = new FileWriterWithEncoding(file2, defaultEncoding);
+            ){
                 writeTestPayload(fw1, fw2);
                 try {
                     checkFile(file1, file2);
@@ -153,9 +143,6 @@ public class FileWriterWithEncodingTest {
                     // success
                 }
 
-            } finally {
-                IOUtils.closeQuietly(fw1);
-                IOUtils.closeQuietly(fw2);
             }
             assertTrue(file1.exists());
             assertTrue(file2.exists());
