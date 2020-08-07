@@ -104,14 +104,15 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testWriteZero(final String baosName, final BAOSFactory baosFactory) {
+    public void testWriteZero(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         baout.write(new byte[0], 0, 0);
+        assertTrue(true, "Dummy");
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidWriteOffsetUnder(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
                 baout.write(null, -1, 0)
@@ -120,7 +121,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
                 baout.write(new byte[0], 1, 0)
@@ -129,7 +130,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteLenUnder(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidWriteLenUnder(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
                 baout.write(new byte[1], 0, -1)
@@ -138,7 +139,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidWriteOffsetAndLenUnder(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
                 baout.write(new byte[1], 1, -2)
@@ -147,7 +148,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidWriteOffsetAndLenOver(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidWriteOffsetAndLenOver(final String baosName, final BAOSFactory<?> baosFactory) {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         assertThrows(IndexOutOfBoundsException.class, () ->
                 baout.write(new byte[1], 0, 2)
@@ -156,7 +157,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testInvalidParameterizedConstruction(final String baosName, final BAOSFactory baosFactory) {
+    public void testInvalidParameterizedConstruction(final String baosName, final BAOSFactory<?> baosFactory) {
         assertThrows(IllegalArgumentException.class, () ->
                 baosFactory.instance(-1)
         );
@@ -164,7 +165,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testToInputStreamEmpty(final String baosName, final BAOSFactory baosFactory) throws IOException {
+    public void testToInputStreamEmpty(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
 
         //Get data before more writes
@@ -208,7 +209,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testToInputStream(final String baosName, final BAOSFactory baosFactory) throws IOException {
+    public void testToInputStream(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
 
@@ -241,7 +242,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testToInputStreamWithReset(final String baosName, final BAOSFactory baosFactory) throws IOException {
+    public void testToInputStreamWithReset(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         //Make sure reset() do not destroy InputStream returned from toInputStream()
         final AbstractByteArrayOutputStream baout = baosFactory.instance();
         final java.io.ByteArrayOutputStream ref = new java.io.ByteArrayOutputStream();
@@ -277,7 +278,7 @@ public class ByteArrayOutputStreamTestCase {
 
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("baosFactories")
-    public void testStream(final String baosName, final BAOSFactory baosFactory) throws Exception {
+    public void testStream(final String baosName, final BAOSFactory<?> baosFactory) throws Exception {
         int written;
 
         //The ByteArrayOutputStream is initialized with 32 bytes to match
