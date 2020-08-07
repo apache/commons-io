@@ -54,7 +54,11 @@ public class LineIteratorTestCase {
             }
             assertFalse(iterator.hasNext(), "No more expected");
         } finally {
-            LineIterator.closeQuietly(iterator);
+            try {
+                IOUtils.close(iterator);
+            } catch (IOException ignored) {
+                // Ignored
+            }
         }
     }
 
@@ -414,7 +418,11 @@ public class LineIteratorTestCase {
                 // ignore, expected result
             }
         } finally {
-            LineIterator.closeQuietly(iterator);
+            try {
+                IOUtils.close(iterator);
+            } catch (IOException ignored) {
+                // Ignored
+            }
         }
     }
 

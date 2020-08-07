@@ -316,7 +316,11 @@ public class TailerTest {
                 }
             }
         } finally {
-            IOUtils.closeQuietly(reader);
+            try {
+                IOUtils.close(reader);
+            } catch (IOException ignored) {
+                // ignored
+            }
         }
     }
 
