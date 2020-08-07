@@ -1158,7 +1158,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified(), getLastModifiedMillis(destination), "Check last modified date preserved");
+        assertEquals(getLastModifiedMillis(testFile1), getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1206,7 +1206,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified() , getLastModifiedMillis(destination), "Check last modified date preserved");
+        assertEquals(getLastModifiedMillis(testFile1) , getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1409,9 +1409,9 @@ public class FileUtilsTestCase {
 
         // Test with preserveFileDate disabled
         FileUtils.copyDirectory(source, target, false);
-        assertNotEquals(DATE1, target.lastModified());
-        assertNotEquals(DATE2, targetDirectory.lastModified());
-        assertNotEquals(DATE3, targetFile.lastModified());
+        assertNotEquals(DATE1, getLastModifiedMillis(target));
+        assertNotEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertNotEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
