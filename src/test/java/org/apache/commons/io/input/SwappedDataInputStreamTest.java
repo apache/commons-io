@@ -63,8 +63,10 @@ public class SwappedDataInputStreamTest {
     @Test
     public void testReadBoolean() throws IOException {
         bytes = new byte[] {0x00, 0x01, 0x02,};
-        try (final ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+        try (
+            final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             final SwappedDataInputStream sdis = new SwappedDataInputStream(bais);
+        ) {
             assertEquals(false, sdis.readBoolean());
             assertEquals(true, sdis.readBoolean());
             assertEquals(true, sdis.readBoolean());
