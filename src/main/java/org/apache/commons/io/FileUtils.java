@@ -1387,7 +1387,7 @@ public class FileUtils {
      * position
      */
     private static boolean doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions)
-            throws IOException {
+        throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
@@ -1401,10 +1401,7 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        if (preserveFileDate) {
-            return destFile.setLastModified(srcFile.lastModified());
-        }
-        return true;
+        return destFile.setLastModified(preserveFileDate ? srcFile.lastModified() : System.currentTimeMillis());
     }
 
     //-----------------------------------------------------------------------
