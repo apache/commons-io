@@ -27,8 +27,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.TestUtils;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.io.test.YellOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**

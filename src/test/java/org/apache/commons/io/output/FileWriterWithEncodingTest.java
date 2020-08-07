@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.output;
 
-import static org.apache.commons.io.testtools.TestUtils.checkFile;
+import static org.apache.commons.io.test.TestUtils.checkFile;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;

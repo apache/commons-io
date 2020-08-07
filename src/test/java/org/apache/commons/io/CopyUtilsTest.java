@@ -28,9 +28,9 @@ import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.TestUtils;
-import org.apache.commons.io.testtools.YellOnCloseInputStream;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.io.test.YellOnCloseInputStream;
+import org.apache.commons.io.test.YellOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils

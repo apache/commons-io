@@ -31,8 +31,8 @@ import java.io.Writer;
 import java.nio.CharBuffer;
 
 import org.apache.commons.io.output.StringBuilderWriter;
-import org.apache.commons.io.testtools.YellOnCloseReader;
-import org.apache.commons.io.testtools.YellOnCloseWriter;
+import org.apache.commons.io.test.YellOnCloseReader;
+import org.apache.commons.io.test.YellOnCloseWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

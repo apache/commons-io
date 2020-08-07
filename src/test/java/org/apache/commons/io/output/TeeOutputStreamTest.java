@@ -25,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.commons.io.testtools.YellOnCloseOutputStream;
+import org.apache.commons.io.test.YellOnCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**On

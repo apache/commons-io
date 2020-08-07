@@ -29,8 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.io.testtools.YellOnCloseInputStream;
-import org.apache.commons.io.testtools.YellOnCloseOutputStream;
+import org.apache.commons.io.test.YellOnCloseInputStream;
+import org.apache.commons.io.test.YellOnCloseOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
