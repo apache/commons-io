@@ -23,7 +23,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
         java: [ 8, 11, 14 ]
@@ -31,6 +30,7 @@ jobs:
         include:
           - java: 15-ea
             experimental: true        
+      fail-fast: false
         
     steps:
     - uses: actions/checkout@v2.3.1
