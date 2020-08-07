@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -110,12 +111,11 @@ public class LineIteratorTestCase {
 
     @Test
     public void testConstructor() throws Exception {
-        try {
-            new LineIterator(null);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> {
+            try (
+                LineIterator li = new LineIterator(null);
+            ) { }    
+        });
     }
 
     @Test
@@ -243,12 +243,13 @@ public class LineIteratorTestCase {
                 throw new IOException("hasNext");
             }
         };
-        try {
-            new LineIterator(reader).hasNext();
-            fail("Expected IllegalStateException");
-        } catch (final IllegalStateException e) {
-            // expected
-        }
+        try (
+            LineIterator li = new LineIterator(reader);
+        ) {
+            assertThrows(IllegalStateException.class, () -> {
+                li.hasNext();
+            });
+        }    
     }
 
     @Test
