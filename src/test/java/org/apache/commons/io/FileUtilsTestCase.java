@@ -1231,7 +1231,7 @@ public class FileUtilsTestCase {
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         // destination file time should not be less than this (allowing for granularity)
-        final long now = new Date().getTime() - 1000L;
+        final long now = System.currentTimeMillis() - 1000L;
         FileUtils.copyFile(testFile1, destFile, false);
         assertTrue(destFile.exists(), "Check Exist");
         assertEquals(testFile2Size, destFile.length(), "Check Full copy");
