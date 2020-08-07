@@ -109,16 +109,16 @@ public class FileUtilsTestCase {
     private File testFile1;
     private File testFile2;
 
-    private int testFile1Size;
-    private int testFile2Size;
+    private long testFile1Size;
+    private long testFile2Size;
 
     @BeforeEach
     public void setUp() throws Exception {
         testFile1 = new File(temporaryFolder, "file1-test.txt");
         testFile2 = new File(temporaryFolder, "file1a-test.txt");
 
-        testFile1Size = (int) testFile1.length();
-        testFile2Size = (int) testFile2.length();
+        testFile1Size = testFile1.length();
+        testFile2Size = testFile2.length();
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
