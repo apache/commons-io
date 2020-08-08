@@ -74,7 +74,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @since 2.8.0
      */
     public CopyOption[] getCopyOptions() {
-        return copyOptions;
+        return copyOptions.clone();
     }
 
     /**
