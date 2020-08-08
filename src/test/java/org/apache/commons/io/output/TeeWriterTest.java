@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * JUnit Test Case for {@link TeeWriter}.
  */
+@SuppressWarnings("resource") // not necessary to close these resources
 public class TeeWriterTest {
 
     @Test
@@ -382,6 +384,7 @@ public class TeeWriterTest {
             teeWriter.append('a');
             teeWriter.flush();
         }
+        assertTrue(true, "Dummy to show test completed OK");
     }
 
     @Test

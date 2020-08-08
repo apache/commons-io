@@ -259,6 +259,7 @@ public class CharSequenceReaderTest {
     }
 
     @Test
+    @SuppressWarnings("resource") // don't really need to close CharSequenceReader here
     public void testToString() {
         assertEquals("FooBar", new CharSequenceReader("FooBar").toString());
         assertEquals("FooBar", new CharSequenceReader("xFooBarx", 1, 7).toString());
