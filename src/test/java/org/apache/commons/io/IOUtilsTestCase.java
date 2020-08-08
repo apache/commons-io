@@ -60,6 +60,7 @@ import java.nio.channels.Selector;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.AppendableWriter;
@@ -635,6 +636,57 @@ public class IOUtilsTestCase {
         ) {
             // Test our copy method
             assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
+        }
+    }
+
+    @Test void testLines_InputStream_Charset() throws Exception {
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
+        InputStream in = null;
+        try {
+            final String[] data = new String[] { "hello", "world", "", "this is", "some text" };
+            TestUtils.createLineBasedFile(file, data);
+
+            in = new FileInputStream(file);
+            final List<String> lines = IOUtils.lines(in, StandardCharsets.UTF_8).collect(Collectors.toList());
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test void testLines_InputStream_String() throws Exception {
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
+        InputStream in = null;
+        try {
+            final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
+            TestUtils.createLineBasedFile(file, data);
+
+            in = new FileInputStream(file);
+            final List<String> lines = IOUtils.lines(in, "UTF-8").collect(Collectors.toList());
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            TestUtils.deleteFile(file);
+        }
+    }
+
+    @Test void testLines_Reader() throws Exception {
+        final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
+        Reader in = null;
+        try {
+            final String[] data = new String[] { "hello", "/u1234", "", "this is", "some text" };
+            TestUtils.createLineBasedFile(file, data);
+
+            in = new InputStreamReader(new FileInputStream(file));
+            final List<String> lines = IOUtils.lines(in).collect(Collectors.toList());
+            assertEquals(Arrays.asList(data), lines);
+            assertEquals(-1, in.read());
+        } finally {
+            IOUtils.closeQuietly(in);
+            TestUtils.deleteFile(file);
         }
     }
 

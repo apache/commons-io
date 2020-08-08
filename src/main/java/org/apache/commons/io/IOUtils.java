@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.AppendableWriter;
@@ -1482,6 +1483,47 @@ public class IOUtils {
      */
     public static LineIterator lineIterator(final Reader reader) {
         return new LineIterator(reader);
+    }
+
+    /**
+     * Returns a {@code Stream} that provides the lines in the given {@code InputStream}, using the given
+     * charset.
+     *
+     * @param input the {@code InputStream} to read from, not null
+     * @param charset the charset to use, null means platform default
+     * @return a {@code Stream} that provides the lines in the input stream
+     * @see BufferedReader#lines()
+     * @since 2.8
+     */
+    public static Stream<String> lines(final InputStream input, final Charset charset) {
+        final InputStreamReader inputStreamReader = new InputStreamReader(input, Charsets.toCharset(charset));
+        return lines(inputStreamReader);
+    }
+
+    /**
+     * Returns a {@code Stream} that provides the lines in the given {@code InputStream}, using the given
+     * charset name.
+     *
+     * @param input the {@code InputStream} to be used, not null
+     * @param charsetName the name of the requested charset, null means platform default
+     * @return a {@code Stream} that provides the lines in the input stream
+     * @see BufferedReader#lines()
+     * @since 2.8
+     */
+    public static Stream<String> lines(final InputStream input, final String charsetName) {
+        return lines(input, Charsets.toCharset(charsetName));
+    }
+
+    /**
+     * Returns a {@code Stream} that provides the lines in the given {@code Reader}.
+     *
+     * @param reader the {@code Reader} to read from, not null
+     * @return a {@code Stream} that provides the lines in the reader
+     * @see BufferedReader#lines()
+     * @since 2.8
+     */
+    public static Stream<String> lines(final Reader reader) {
+        return toBufferedReader(reader).lines();
     }
 
     /**
