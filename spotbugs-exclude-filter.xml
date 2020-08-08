@@ -17,5 +17,24 @@
 -->
 <FindBugsFilter>
 
+  <!--  See discussion on https://issues.apache.org/jira/browse/IO-216 -->
+  <Match>
+    <Class name="org.apache.commons.io.output.LockableFileWriter" />
+    <Method name="close" params="" returns="void" />
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE" />
+  </Match>
+
+  <!-- The constructors intentionally do not copy the input byte array -->
+  <Match>
+    <Class name="org.apache.commons.io.input.UnsynchronizedByteArrayInputStream" />
+    <Method name="&lt;init&gt;" />
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
+  <!-- The encoding is irrelevant as output is binned -->
+  <Match>
+    <Class name="org.apache.commons.io.output.NullPrintStream" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
 
 </FindBugsFilter>
