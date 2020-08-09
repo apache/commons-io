@@ -47,9 +47,8 @@ public class ReversedLinesFileReaderTestSimple {
         final int blockSize = 10;
         final File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
         reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize, "ISO-8859-1");
-        final String testLine = "123456789";
-        assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
-        assertEqualsAndNoLineBreaks(testLine, reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks("987654321", reversedLinesFileReader.readLine());
+        assertEqualsAndNoLineBreaks("123456789", reversedLinesFileReader.readLine());
     }
 
     @Test
