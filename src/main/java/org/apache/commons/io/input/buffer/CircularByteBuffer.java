@@ -29,7 +29,9 @@ import org.apache.commons.io.IOUtils;
  */
 public class CircularByteBuffer {
     private final byte[] buffer;
-    private int startOffset, endOffset, currentNumberOfBytes;
+    private int startOffset;
+    private int endOffset;
+    private int currentNumberOfBytes;
 
     /**
      * Creates a new instance with the given buffer size.
