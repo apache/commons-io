@@ -104,7 +104,7 @@ public class CircularBufferInputStream extends InputStream {
         if (!haveBytes(1)) {
             return -1;
         }
-        return buffer.read();
+        return buffer.read() & 0xFF; // return unsigned byte
     }
 
     @Override

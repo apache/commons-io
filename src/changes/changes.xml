@@ -128,6 +128,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-pioneer from 0.8.0 to 0.9.0 #138.
       </action>
+      <action issue="IO-683" dev="sebb" type="fix">
+        CircularBufferInputStream.read() fails to convert byte to unsigned int
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
