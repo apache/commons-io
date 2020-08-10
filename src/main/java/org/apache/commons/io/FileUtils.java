@@ -1394,6 +1394,7 @@ public class FileUtils {
 
         final Path srcPath = srcFile.toPath();
         final Path destPath = destFile.toPath();
+        // On Windows, the last modified time is copied by default.
         Files.copy(srcPath, destPath, copyOptions);
 
         // TODO IO-386: Do we still need this check?
@@ -1401,7 +1402,7 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        return destFile.setLastModified(preserveFileDate ? srcFile.lastModified() : System.currentTimeMillis());
+        return preserveFileDate ? destFile.setLastModified(srcFile.lastModified()) : true;
     }
 
     //-----------------------------------------------------------------------

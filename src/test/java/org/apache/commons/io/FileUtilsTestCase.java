@@ -55,6 +55,7 @@ import java.util.zip.Checksum;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -1230,14 +1231,17 @@ public class FileUtilsTestCase {
 
         // destination file time should not be less than this (allowing for granularity)
         final long now = System.currentTimeMillis() - 1000L;
+        // On Windows, the last modified time is copied by default.
         FileUtils.copyFile(testFile1, destFile, false);
         assertTrue(destFile.exists(), "Check Exist");
         assertEquals(testFile1Size, destFile.length(), "Check Full copy");
         final long destLastMod = getLastModifiedMillis(destFile);
         final long unexpected = getLastModifiedMillis(testFile1);
-        assertNotEquals(unexpected, destLastMod,
-            "Check last modified date not same as input, delta " + (destLastMod - unexpected));
-        assertTrue(destLastMod > now, destLastMod + " > " + now);
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            assertNotEquals(unexpected, destLastMod,
+                "Check last modified date not same as input, delta " + (destLastMod - unexpected));
+            assertTrue(destLastMod > now, destLastMod + " > " + now);
+        }
     }
 
     @Test
@@ -1407,10 +1411,13 @@ public class FileUtilsTestCase {
         final File targetFile = new File(targetDirectory, "hello.txt");
 
         // Test with preserveFileDate disabled
+        // On Windows, the last modified time is copied by default.
         FileUtils.copyDirectory(source, target, false);
         assertNotEquals(DATE1, getLastModifiedMillis(target));
         assertNotEquals(DATE2, getLastModifiedMillis(targetDirectory));
-        assertNotEquals(DATE3, getLastModifiedMillis(targetFile));
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            assertNotEquals(DATE3, getLastModifiedMillis(targetFile));
+        }
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
