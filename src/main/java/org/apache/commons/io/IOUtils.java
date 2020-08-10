@@ -3131,7 +3131,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final OutputStream output)
+    public static void write(final StringBuffer data, final OutputStream output) //NOSONAR
             throws IOException {
         write(data, output, (String) null);
     }
@@ -3156,7 +3156,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final OutputStream output, final String charsetName)
+    public static void write(final StringBuffer data, final OutputStream output, final String charsetName) //NOSONAR
             throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes(Charsets.toCharset(charsetName)));
@@ -3174,7 +3174,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, Writer)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final Writer output)
+    public static void write(final StringBuffer data, final Writer output) //NOSONAR
             throws IOException {
         if (data != null) {
             output.write(data.toString());
@@ -3355,7 +3355,7 @@ public class IOUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public IOUtils() {
+    public IOUtils() { //NOSONAR
         super();
     }
 
