@@ -120,10 +120,13 @@ The <action> type attribute can be add,update,fix,remove.
         Update spotbugs from 4.0.6 to 4.1.1 #134.
       </action>
       <action issue="IO-681" dev="sebb" type="add">
-        IO-681 IOUtils.close(Closeable) should allow a list of closeables
+        IO-681 IOUtils.close(Closeable) should allow a list of closeables.
       </action>
       <action issue="IO-672" dev="sebb" type="fix">
-        Copying a File sets last modified date to 01 January 1970
+        Copying a File sets last modified date to 01 January 1970.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update junit-pioneer from 0.8.0 to 0.9.0 #138.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
