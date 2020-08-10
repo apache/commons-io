@@ -92,6 +92,7 @@ public class ReversedLinesFileReaderTestParamFile {
                 final String lineFromBufferedReader = lineStack.pop();
                 assertEquals(lineFromBufferedReader, line);
             }
+            assertEquals(0, lineStack.size(), "Stack should be empty");
 
             if (fileSystem != null) {
                 fileSystem.close();
