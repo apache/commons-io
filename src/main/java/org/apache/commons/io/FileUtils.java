@@ -1377,7 +1377,6 @@ public class FileUtils {
      * @param destFile         the validated destination file, must not be {@code null}
      * @param preserveFileDate whether to preserve the file date
      * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
-     * @return whether the operation succeeded
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
      * copy completes
