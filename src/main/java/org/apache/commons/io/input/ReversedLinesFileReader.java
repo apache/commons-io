@@ -166,23 +166,23 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         // NOTE: The new line sequences are matched in the order given, so it is important that \r\n is BEFORE \n
-        newLineSequences = new byte[][] {"\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding)};
+        this.newLineSequences = new byte[][] {"\r\n".getBytes(encoding), "\n".getBytes(encoding), "\r".getBytes(encoding)};
 
-        avoidNewlineSplitBufferSize = newLineSequences[0].length;
+        this.avoidNewlineSplitBufferSize = newLineSequences[0].length;
 
         // Open file
-        channel = Files.newByteChannel(file, StandardOpenOption.READ);
-        totalByteLength = channel.size();
-        int lastBlockLength = (int) (totalByteLength % blockSize);
+        this.channel = Files.newByteChannel(file, StandardOpenOption.READ);
+        this.totalByteLength = channel.size();
+        int lastBlockLength = (int) (this.totalByteLength % blockSize);
         if (lastBlockLength > 0) {
-            totalBlockCount = totalByteLength / blockSize + 1;
+            this.totalBlockCount = this.totalByteLength / blockSize + 1;
         } else {
-            totalBlockCount = totalByteLength / blockSize;
-            if (totalByteLength > 0) {
+            this.totalBlockCount = this.totalByteLength / blockSize;
+            if (this.totalByteLength > 0) {
                 lastBlockLength = blockSize;
             }
         }
-        currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
+        this.currentFilePart = new FilePart(totalBlockCount, lastBlockLength, null);
 
     }
 
