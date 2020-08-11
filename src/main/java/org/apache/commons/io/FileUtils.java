@@ -1326,10 +1326,9 @@ public class FileUtils {
      * @param preserveFileDate whether to preserve the file date
      * @param exclusionList    List of files and directories to exclude from the copy, may be null
      * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
-     * @return whether the operation succeeded
      * @throws IOException if an error occurs
      */
-    private static boolean doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+    private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
         final boolean preserveFileDate, final List<String> exclusionList, final CopyOption... copyOptions)
         throws IOException {
         // recurse
@@ -1362,9 +1361,8 @@ public class FileUtils {
 
         // Do this last, as the above has probably affected directory metadata
         if (preserveFileDate) {
-            return destDir.setLastModified(srcDir.lastModified());
+            setLastModified(srcDir, destDir);
         }
-        return true;
     }
 
     /**
@@ -1386,7 +1384,7 @@ public class FileUtils {
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
-    private static boolean doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions)
+    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions)
         throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
@@ -1402,7 +1400,22 @@ public class FileUtils {
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        return preserveFileDate ? destFile.setLastModified(srcFile.lastModified()) : true;
+        if (preserveFileDate) {
+            setLastModified(srcFile, destFile);
+        }
+    }
+
+    /**
+     * Sets the given {@code destFile}'s last modified date to the value from {@code srcFile}.
+     *
+     * @param sourceFile The source file to query.
+     * @param targetFile The target file to set.
+     * @throws IOException if an error occurs
+     */
+    private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
+        if (!targetFile.setLastModified(sourceFile.lastModified())) {
+            throw new IOException("Failed setLastModified on " + sourceFile);
+        }
     }
 
     //-----------------------------------------------------------------------
