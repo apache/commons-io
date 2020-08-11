@@ -47,7 +47,7 @@ public class CircularBufferInputStreamTest {
 				if (res == -1) {
 					throw new IllegalStateException("Unexpected EOF at offset " + offset);
 				}
-				if (inputBuffer[offset] != res) {
+				if (inputBuffer[offset] != (byte) res) { // compare as bytes
 					throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
 				}
 				++offset;
