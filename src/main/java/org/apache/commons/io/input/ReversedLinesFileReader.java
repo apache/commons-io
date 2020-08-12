@@ -28,6 +28,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -225,7 +228,7 @@ public class ReversedLinesFileReader implements Closeable {
 
     /**
      * Returns the lines of the file from bottom to top.
-     *
+     * 
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
@@ -249,6 +252,35 @@ public class ReversedLinesFileReader implements Closeable {
         }
 
         return line;
+    }
+
+    /**
+     * Returns {@code lineCount} lines of the file from bottom to top.
+     * <p>
+     * If there are less than {@code lineCount} lines in the file, then that's what you get.
+     * </p>
+     * <p>
+     * Note: You can easily flip the result with {@link Collections#reverse(List)}.
+     * </p>
+     *
+     * @param lineCount How many lines to read.
+     * @return A new list
+     * @throws IOException if an I/O error occurs
+     * @since 2.8.0
+     */
+    public List<String> readLines(int lineCount) throws IOException {
+        if (lineCount < 0) {
+            throw new IllegalArgumentException("lineCount < 0");
+        }
+        final ArrayList<String> arrayList = new ArrayList<>(lineCount);
+        for (int i = 0; i < lineCount; i++) {
+            final String line = readLine();
+            if (line == null) {
+                return arrayList;
+            }
+            arrayList.add(line);
+        }
+        return arrayList;
     }
 
     /**
