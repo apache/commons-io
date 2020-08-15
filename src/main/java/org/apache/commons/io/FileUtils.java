@@ -1408,7 +1408,7 @@ public class FileUtils {
     }
 
     /**
-     * Sets the given {@code destFile}'s last modified date to the value from {@code srcFile}.
+     * Sets the given {@code targetFile}'s last modified date to the value from {@code sourceFile}.
      *
      * @param sourceFile The source file to query.
      * @param targetFile The target file to set.

@@ -1238,9 +1238,9 @@ public class FileUtilsTestCase {
         final long destLastMod = getLastModifiedMillis(destFile);
         final long unexpected = getLastModifiedMillis(testFile1);
         if (!SystemUtils.IS_OS_WINDOWS) {
-            assertNotEquals(unexpected, destLastMod,
-                "Check last modified date not same as input, delta " + (destLastMod - unexpected));
-            assertTrue(destLastMod > now, destLastMod + " > " + now);
+            final long delta = destLastMod - unexpected;
+            assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
+            assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
         }
     }
 
