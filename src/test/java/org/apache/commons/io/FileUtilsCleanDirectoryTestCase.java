@@ -87,6 +87,10 @@ public class FileUtilsCleanDirectoryTestCase {
         try {
             // cleanDirectory calls forceDelete
             FileUtils.cleanDirectory(top);
+            fail("expected IOException");
+        } catch (final IOException e) {
+            assertEquals("Failed to list contents of " +
+                    top.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(top, 755, false);
         }
@@ -103,6 +107,10 @@ public class FileUtilsCleanDirectoryTestCase {
         try {
             // cleanDirectory calls forceDelete
             FileUtils.cleanDirectory(top);
+            fail("expected IOException");
+        } catch (final IOException e) {
+            assertEquals("Unable to delete file: " +
+                    file.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(top, 755, false);
         }
