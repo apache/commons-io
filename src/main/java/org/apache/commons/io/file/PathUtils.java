@@ -360,7 +360,7 @@ public final class PathUtils {
         final boolean exists = Files.exists(file, LinkOption.NOFOLLOW_LINKS);
         final long size = exists ? Files.size(file) : 0;
         if (overrideReadOnly(options) && exists) {
-            setReadOnly(file, false/*, LinkOption.NOFOLLOW_LINKS*/);
+            setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
         }
         if (Files.deleteIfExists(file)) {
             pathCounts.getFileCounter().increment();

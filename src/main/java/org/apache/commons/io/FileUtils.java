@@ -1440,7 +1440,7 @@ public class FileUtils {
     public static void forceDelete(final File file) throws IOException {
         final Counters.PathCounters deleteCounters;
         try {
-            deleteCounters = PathUtils.delete(file.toPath(), StandardDeleteOption.OVERRIDE_READ_ONLY);
+            deleteCounters = PathUtils.delete(file.toPath());
         } catch (IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }
