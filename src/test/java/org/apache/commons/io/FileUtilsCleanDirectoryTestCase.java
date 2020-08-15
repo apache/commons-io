@@ -129,8 +129,7 @@ public class FileUtilsCleanDirectoryTestCase {
         } catch (final IOException e) {
             return false;
         }
-        final int result = proc.waitFor();
-        return result == 0;
+        return proc.waitFor() == 0;
     }
 
 }
