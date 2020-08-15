@@ -148,8 +148,8 @@ public class IOUtilsTestCase {
 
     @Test
     public void testCloseMulti() {
-        Closeable nulCloseable = null;
-        Closeable[] closeables = {null, null};
+        final Closeable nulCloseable = null;
+        final Closeable[] closeables = {null, null};
         assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nulCloseable));
         assertDoesNotThrow(() -> IOUtils.close(closeables));
         assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
@@ -160,7 +160,7 @@ public class IOUtilsTestCase {
 
     @Test
     public void testCloseConsumer() {
-        Closeable nulCloseable = null;
+        final Closeable nulCloseable = null;
         assertDoesNotThrow(() -> IOUtils.close(nulCloseable, null)); // null consumer
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null)); // null consumer
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null)); // null consumer
@@ -195,7 +195,7 @@ public class IOUtilsTestCase {
         assertDoesNotThrow(() -> {
             IOUtils.closeQuietly((Closeable) () -> {
                 throw new IOException();
-            });    
+            });
         });
     }
 

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class FileSystemTestCase {
 
-    
+
     @Test
     public void testGetCurrent() {
         if (SystemUtils.IS_OS_WINDOWS) {

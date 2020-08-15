@@ -298,7 +298,7 @@ public class CharSequenceReader extends Reader implements Serializable {
      */
     @Override
     public String toString() {
-        CharSequence subSequence = charSequence.subSequence(start(), end());
+        final CharSequence subSequence = charSequence.subSequence(start(), end());
         return subSequence.toString();
     }
 }

@@ -57,7 +57,7 @@ public class LineIteratorTestCase {
         } finally {
             try {
                 IOUtils.close(iterator);
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
                 // Ignored
             }
         }
@@ -114,7 +114,7 @@ public class LineIteratorTestCase {
         assertThrows(IllegalArgumentException.class, () -> {
             try (
                 LineIterator li = new LineIterator(null);
-            ) { }    
+            ) { }
         });
     }
 
@@ -249,7 +249,7 @@ public class LineIteratorTestCase {
             assertThrows(IllegalStateException.class, () -> {
                 li.hasNext();
             });
-        }    
+        }
     }
 
     @Test
@@ -421,7 +421,7 @@ public class LineIteratorTestCase {
         } finally {
             try {
                 IOUtils.close(iterator);
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
                 // Ignored
             }
         }

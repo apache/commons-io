@@ -26,7 +26,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
 
 class CounterAssertions {
 
-    static void assertCounter(final long expected, final Counter actual, String message) {
+    static void assertCounter(final long expected, final Counter actual, final String message) {
         assertEquals(expected, actual.get(), message);
         assertEquals(Long.valueOf(expected), actual.getLong(), message);
         assertEquals(BigInteger.valueOf(expected), actual.getBigInteger(), message);

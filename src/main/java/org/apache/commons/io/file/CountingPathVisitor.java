@@ -66,14 +66,14 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
         if (!(obj instanceof CountingPathVisitor)) {
             return false;
         }
-        CountingPathVisitor other = (CountingPathVisitor) obj;
+        final CountingPathVisitor other = (CountingPathVisitor) obj;
         return Objects.equals(pathCounters, other.pathCounters);
     }
 

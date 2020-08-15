@@ -66,12 +66,12 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      *
      * @param pathCounter How to count path visits.
      */
-    public AccumulatorPathVisitor(PathCounters pathCounter) {
+    public AccumulatorPathVisitor(final PathCounters pathCounter) {
         super(pathCounter);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -81,7 +81,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
         if (!(obj instanceof AccumulatorPathVisitor)) {
             return false;
         }
-        AccumulatorPathVisitor other = (AccumulatorPathVisitor) obj;
+        final AccumulatorPathVisitor other = (AccumulatorPathVisitor) obj;
         return Objects.equals(dirList, other.dirList) && Objects.equals(fileList, other.fileList);
     }
 
@@ -120,7 +120,7 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param comparator How to sort, null uses default sorting.
      * @return A new list
      */
-    public List<Path> relativizeDirectories(final Path parent, boolean sort, Comparator<? super Path> comparator) {
+    public List<Path> relativizeDirectories(final Path parent, final boolean sort, final Comparator<? super Path> comparator) {
         return PathUtils.relativize(getDirList(), parent, sort, comparator);
     }
 
@@ -133,12 +133,12 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * @param comparator How to sort, null uses default sorting.
      * @return A new list
      */
-    public List<Path> relativizeFiles(final Path parent, boolean sort, Comparator<? super Path> comparator) {
+    public List<Path> relativizeFiles(final Path parent, final boolean sort, final Comparator<? super Path> comparator) {
         return PathUtils.relativize(getFileList(), parent, sort, comparator);
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
         ((Files.isDirectory(file)) ? dirList : fileList).add(file.normalize());
         return super.visitFile(file, attributes);
     }

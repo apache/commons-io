@@ -228,7 +228,7 @@ public class ReversedLinesFileReader implements Closeable {
 
     /**
      * Returns the lines of the file from bottom to top.
-     * 
+     *
      * @return the next line or null if the start of the file is reached
      * @throws IOException  if an I/O error occurs
      */
@@ -268,7 +268,7 @@ public class ReversedLinesFileReader implements Closeable {
      * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
-    public List<String> readLines(int lineCount) throws IOException {
+    public List<String> readLines(final int lineCount) throws IOException {
         if (lineCount < 0) {
             throw new IllegalArgumentException("lineCount < 0");
         }

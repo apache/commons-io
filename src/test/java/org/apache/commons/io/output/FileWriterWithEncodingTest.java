@@ -174,7 +174,7 @@ public class FileWriterWithEncodingTest {
         assertThrows(IOException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding(file1, "BAD-ENCODE");
-            ){ }    
+            ){ }
          });
         assertFalse(file1.exists());
     }
@@ -185,7 +185,7 @@ public class FileWriterWithEncodingTest {
         assertThrows(IOException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding(temporaryFolder, defaultEncoding);
-            ){ }    
+            ){ }
          });
         assertFalse(file1.exists());
     }
@@ -196,7 +196,7 @@ public class FileWriterWithEncodingTest {
         assertThrows(NullPointerException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding);
-            ){ }    
+            ){ }
          });
         assertFalse(file1.exists());
     }
@@ -207,7 +207,7 @@ public class FileWriterWithEncodingTest {
         assertThrows(NullPointerException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding((String) null, defaultEncoding);
-            ){ }    
+            ){ }
          });
         assertFalse(file1.exists());
     }

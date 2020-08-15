@@ -1385,7 +1385,7 @@ public class FileUtils {
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, CopyOption... copyOptions)
+    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
         throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
@@ -1440,7 +1440,7 @@ public class FileUtils {
         final Counters.PathCounters deleteCounters;
         try {
             deleteCounters = PathUtils.delete(file.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }
 

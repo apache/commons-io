@@ -76,8 +76,8 @@ public class CharacterFilterReaderTest {
     public void testReadIntoBuffer() throws IOException {
         final StringReader input = new StringReader("ababcabcd");
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
-            char[] buff = new char[9];
-            int charCount = reader.read(buff);
+            final char[] buff = new char[9];
+            final int charCount = reader.read(buff);
             assertEquals(6, charCount);
             assertEquals("aacacd", new String(buff, 0, charCount));
         }

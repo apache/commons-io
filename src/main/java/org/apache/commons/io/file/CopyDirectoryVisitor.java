@@ -69,7 +69,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     /**
      * Gets the copy options.
-     * 
+     *
      * @return the copy options.
      * @since 2.8.0
      */
@@ -79,7 +79,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     /**
      * Gets the source directory.
-     * 
+     *
      * @return the source directory.
      * @since 2.8.0
      */
@@ -89,7 +89,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     /**
      * Gets the target directory.
-     * 
+     *
      * @return the target directory.
      * @since 2.8.0
      */

@@ -356,7 +356,7 @@ public class IOUtils {
         if (closeable != null) {
             try {
                 closeable.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 if (consumer != null) {
                     consumer.accept(e);
                 }
@@ -386,7 +386,7 @@ public class IOUtils {
      */
     public static void close(final Closeable... closeables) throws IOException {
         if (closeables != null) {
-            for (Closeable closeable : closeables) {
+            for (final Closeable closeable : closeables) {
                 close(closeable);
             }
         }
@@ -404,7 +404,7 @@ public class IOUtils {
         if (closeable != null) {
             try {
                 closeable.close();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 if (consumer != null) {
                     consumer.accept(e);
                 }

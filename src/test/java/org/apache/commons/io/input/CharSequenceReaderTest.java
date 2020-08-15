@@ -285,7 +285,7 @@ public class CharSequenceReaderTest {
             assertEquals(-1, reader.read());
         }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             final CharSequenceReader reader = new CharSequenceReader("xFooBarx", 1, 7);
             oos.writeObject(reader);

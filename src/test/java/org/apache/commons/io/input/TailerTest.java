@@ -318,7 +318,7 @@ public class TailerTest {
         } finally {
             try {
                 IOUtils.close(reader);
-            } catch (IOException ignored) {
+            } catch (final IOException ignored) {
                 // ignored
             }
         }

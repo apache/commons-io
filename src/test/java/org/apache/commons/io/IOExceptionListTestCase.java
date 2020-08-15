@@ -58,10 +58,10 @@ public class IOExceptionListTestCase {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
         sqlExceptionList.printStackTrace(pw);
-        String st = sw.toString();
+        final String st = sw.toString();
         assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exceptions: [java.io.EOFException]"));
         assertTrue(st.contains("Caused by: java.io.EOFException"));
     }

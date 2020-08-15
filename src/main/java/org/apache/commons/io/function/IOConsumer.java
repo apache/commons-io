@@ -48,9 +48,9 @@ public interface IOConsumer<T> {
      *         operation
      * @throws NullPointerException if {@code after} is null
      */
-    default IOConsumer<T> andThen(IOConsumer<? super T> after) {
+    default IOConsumer<T> andThen(final IOConsumer<? super T> after) {
         Objects.requireNonNull(after);
-        return (T t) -> {
+        return (final T t) -> {
             accept(t);
             after.accept(t);
         };

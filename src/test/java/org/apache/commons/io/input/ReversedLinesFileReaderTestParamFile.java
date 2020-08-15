@@ -72,7 +72,7 @@ public class ReversedLinesFileReaderTestParamFile {
             file = Files.copy(file, fileSystem.getPath("/" + fileName));
         }
 
-        Charset encoding = Charset.forName(encodingName);
+        final Charset encoding = Charset.forName(encodingName);
         try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
             ? new ReversedLinesFileReader(file, encoding)
             : new ReversedLinesFileReader(file, blockSize, encoding)) {

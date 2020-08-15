@@ -1693,7 +1693,7 @@ public class FileUtilsTestCase {
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
         assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
 
-        assertThrows(IOException.class, 
+        assertThrows(IOException.class,
             () -> FileUtils.copyFileToDirectory(destination, directory),
             "Should not be able to copy a file into the same directory as itself");
     }
@@ -3088,7 +3088,7 @@ public class FileUtilsTestCase {
         }
     }
 
-    private void backDateFile10Minutes(File testFile) throws IOException {
+    private void backDateFile10Minutes(final File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
         assertTrue(setLastModifiedMillis(testFile, lastModified1 - mins10));
@@ -3096,7 +3096,7 @@ public class FileUtilsTestCase {
         assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
     }
 
-    private boolean setLastModifiedMillis(File testFile, final long millis) {
+    private boolean setLastModifiedMillis(final File testFile, final long millis) {
         return testFile.setLastModified(millis);
 //        try {
 //            Files.setLastModifiedTime(testFile.toPath(), FileTime.fromMillis(millis));
