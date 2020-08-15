@@ -49,7 +49,6 @@ import java.util.zip.Checksum;
 
 import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathUtils;
-import org.apache.commons.io.file.StandardDeleteOption;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -331,17 +330,17 @@ public class FileUtils {
     public static void cleanDirectory(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
 
-        IOException exception = null;
+        final List<Exception> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDelete(file);
             } catch (final IOException ioe) {
-                exception = ioe;
+                causeList.add(ioe);
             }
         }
 
-        if (null != exception) {
-            throw exception;
+        if (!causeList.isEmpty()) {
+            throw new IOExceptionList(causeList);
         }
     }
 
@@ -356,17 +355,17 @@ public class FileUtils {
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
 
-        IOException exception = null;
+        final List<Exception> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDeleteOnExit(file);
             } catch (final IOException ioe) {
-                exception = ioe;
+                causeList.add(ioe);
             }
         }
 
-        if (null != exception) {
-            throw exception;
+        if (!causeList.isEmpty()) {
+            throw new IOExceptionList(causeList);
         }
     }
 
