@@ -49,6 +49,7 @@ import java.util.zip.Checksum;
 
 import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.StandardDeleteOption;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -325,6 +326,7 @@ public class FileUtils {
      * @param directory directory to clean
      * @throws IOException              in case cleaning is unsuccessful
      * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
+     * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
@@ -349,6 +351,7 @@ public class FileUtils {
      * @param directory directory to clean, must not be {@code null}
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException          in case cleaning is unsuccessful
+     * @see #forceDeleteOnExit(File)
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
@@ -1437,7 +1440,7 @@ public class FileUtils {
     public static void forceDelete(final File file) throws IOException {
         final Counters.PathCounters deleteCounters;
         try {
-            deleteCounters = PathUtils.delete(file.toPath());
+            deleteCounters = PathUtils.delete(file.toPath(), StandardDeleteOption.OVERRIDE_READ_ONLY);
         } catch (IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }

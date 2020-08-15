@@ -95,6 +95,14 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add ReversedLinesFileReader.readLines(int).
       </action>
+      <action issue="IO-684" dev="ggregory" type="add" due-to="Gary Gregory, Robin Jansohn">
+        Add PathUtils.delete(Path, DeleteOption...).
+        Add PathUtils.deleteDirectory(Path, DeleteOption...).
+        Add PathUtils.deleteFile(Path, DeleteOption...).
+        Add PathUtils.setReadOnly(Path, boolean, LinkOption...).
+        Add CleaningPathVisitor.CleaningPathVisitor(PathCounters, DeleteOption[], String...).
+        Add DeletingPathVisitor.DeletingPathVisitor(PathCounters, DeleteOption[], String...).
+      </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Replace FindBugs with SpotBugs.
       </action>

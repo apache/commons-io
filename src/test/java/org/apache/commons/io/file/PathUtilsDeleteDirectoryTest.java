@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,6 +58,27 @@ public class PathUtilsDeleteDirectoryTest {
         assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDir));
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
+    }
+
+    /**
+     * Tests a directory with one file of size 0.
+     */
+    private void testDeleteDirectory1FileSize0(final DeleteOption... options) throws IOException {
+        // TODO Setup the test to use FileVisitOption.
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
+        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDir, options));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDir);
+    }
+
+    @Test
+    public void testDeleteDirectory1FileSize0NoOptions() throws IOException {
+        testDeleteDirectory1FileSize0(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    @Test
+    public void testDeleteDirectory1FileSize0OverrideReadOnly() throws IOException {
+        testDeleteDirectory1FileSize0(StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
     /**
