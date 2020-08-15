@@ -32,7 +32,7 @@ property to the number of days since the last release.
 
 To generate the release notes from this file:
 
-mvn changes:announcement-generate -Prelease-notes [-Dchanges.version=nnn]
+./mvnw changes:announcement-generate -Prelease-notes [-Dchanges.version=nnn]
 
 then tweak the source formatting if necessary and regenerate, then commit
 
