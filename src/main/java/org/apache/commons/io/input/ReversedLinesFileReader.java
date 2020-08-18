@@ -202,24 +202,18 @@ public class ReversedLinesFileReader implements Closeable {
         }
     }
     private static final String EMPTY_STRING = "";
-
     private static final int DEFAULT_BLOCK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
+
     private final int blockSize;
-
     private final Charset encoding;
-
     private final SeekableByteChannel channel;
     private final long totalByteLength;
-
     private final long totalBlockCount;
     private final byte[][] newLineSequences;
     private final int avoidNewlineSplitBufferSize;
-
     private final int byteDecrement;
-
     private FilePart currentFilePart;
-
-    private boolean trailingNewlineOfFileSkipped = false;
+    private boolean trailingNewlineOfFileSkipped;
 
     /**
      * Creates a ReversedLinesFileReader with default block size of 4KB and the
@@ -450,6 +444,23 @@ public class ReversedLinesFileReader implements Closeable {
             arrayList.add(line);
         }
         return arrayList;
+    }
+
+    /**
+     * Returns the last {@code lineCount} lines of the file.
+     * <p>
+     * If there are less than {@code lineCount} lines in the file, then that's what you get.
+     * </p>
+     *
+     * @param lineCount How many lines to read.
+     * @return A String.
+     * @throws IOException if an I/O error occurs
+     * @since 2.8.0
+     */
+    public String toString(final int lineCount) throws IOException {
+        final List<String> lines = readLines(lineCount);
+        Collections.reverse(lines);
+        return lines.isEmpty() ? EMPTY_STRING : String.join(System.lineSeparator(), lines) + System.lineSeparator();
     }
 
 }

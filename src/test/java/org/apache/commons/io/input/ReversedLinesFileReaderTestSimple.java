@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import static org.apache.commons.io.input.ReversedLinesFileReaderTestParamBlockSize.assertEqualsAndNoLineBreaks;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,6 +56,21 @@ public class ReversedLinesFileReaderTestSimple {
             assertEqualsAndNoLineBreaks("123456789", lines.get(1));
             assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
             assertTrue(reversedLinesFileReader.readLines(10000).isEmpty());
+        }
+    }
+
+    @Test
+    public void testToString() throws URISyntaxException, IOException {
+        final int blockSize = 10;
+        final File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
+        try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
+            "ISO-8859-1")) {
+            assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.toString(-1));
+            assertTrue(reversedLinesFileReader.readLines(0).isEmpty());
+            final String lines = reversedLinesFileReader.toString(2);
+            assertEquals("123456789" + System.lineSeparator() + "987654321" + System.lineSeparator(), lines);
+            assertTrue(reversedLinesFileReader.toString(0).isEmpty());
+            assertTrue(reversedLinesFileReader.toString(10000).isEmpty());
         }
     }
 
