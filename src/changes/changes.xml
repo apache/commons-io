@@ -112,6 +112,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         Fix SpotBugs issues in org.apache.commons.io.FileUtils.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add RandomAccessFileInputStream.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Replace FindBugs with SpotBugs.
