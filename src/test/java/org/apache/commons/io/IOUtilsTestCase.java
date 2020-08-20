@@ -62,7 +62,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.output.AppendableWriter;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
@@ -448,6 +450,22 @@ public class IOUtilsTestCase {
             assertEquals('/', IOUtils.DIR_SEPARATOR);
             assertEquals("\n", IOUtils.LINE_SEPARATOR);
         }
+    }
+
+    @Test
+    public void testConsume() throws Exception {
+        final long size = (long)Integer.MAX_VALUE + (long)1;
+        final InputStream  in  = new NullInputStream(size);
+        final OutputStream out = NullOutputStream.NULL_OUTPUT_STREAM;
+
+        // Test copy() method
+        assertEquals(-1, IOUtils.copy(in, out));
+
+        // reset the input
+        in.close();
+
+        // Test consume() method
+        assertEquals(size, IOUtils.consume(in), "consume()");
     }
 
     @Test public void testContentEquals_InputStream_InputStream() throws Exception {

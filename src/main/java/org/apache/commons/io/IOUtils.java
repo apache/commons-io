@@ -53,6 +53,7 @@ import java.util.function.Consumer;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 
 /**
@@ -703,6 +704,23 @@ public class IOUtils {
     @Deprecated
     public static void closeQuietly(final Writer output) {
         closeQuietly((Closeable) output);
+    }
+
+    /**
+     * Consumes bytes from a <code>InputStream</code> and ignores them.
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
+     *
+     * @param input the <code>InputStream</code> to read from
+     * @return the number of bytes copied
+     * @throws NullPointerException if the input or output is null
+     * @throws IOException          if an I/O error occurs
+     * @since 2.8.0
+     */
+    public static long consume(final InputStream input)
+            throws IOException {
+        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM);
     }
 
     /**

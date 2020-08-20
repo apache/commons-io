@@ -78,11 +78,10 @@ public class CountingOutputStreamTest {
      */
     @Test
     public void testLargeFiles_IO84() throws Exception {
-        final long size = (long)Integer.MAX_VALUE + (long)1;
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
 
-        final NullInputStream mock     = new NullInputStream(size);
-        final OutputStream nos         = NullOutputStream.NULL_OUTPUT_STREAM;
-        final CountingOutputStream cos = new CountingOutputStream(nos);
+        final NullInputStream mock = new NullInputStream(size);
+        final CountingOutputStream cos = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
 
         // Test integer methods
         IOUtils.copyLarge(mock, cos);
