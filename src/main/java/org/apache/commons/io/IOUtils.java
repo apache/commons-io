@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -136,8 +135,11 @@ public class IOUtils {
 
     /**
      * The system line separator string.
+     * 
+     * @deprecated Use {@link System#lineSeparator()}.
      */
-    public static final String LINE_SEPARATOR;
+    @Deprecated
+    public static final String LINE_SEPARATOR = System.lineSeparator();
 
     /**
      * The Unix line separator string.
@@ -166,15 +168,6 @@ public class IOUtils {
      * did not create a smaller one)
      */
     private static char[] SKIP_CHAR_BUFFER;
-
-    static {
-        // avoid security issues
-        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
-                final PrintWriter out = new PrintWriter(buf)) {
-            out.println();
-            LINE_SEPARATOR = buf.toString();
-        }
-    }
 
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
@@ -3289,7 +3282,7 @@ public class IOUtils {
             return;
         }
         if (lineEnding == null) {
-            lineEnding = LINE_SEPARATOR;
+            lineEnding = System.lineSeparator();
         }
         final Charset cs = Charsets.toCharset(charset);
         for (final Object line : lines) {
@@ -3341,7 +3334,7 @@ public class IOUtils {
             return;
         }
         if (lineEnding == null) {
-            lineEnding = LINE_SEPARATOR;
+            lineEnding = System.lineSeparator();
         }
         for (final Object line : lines) {
             if (line != null) {

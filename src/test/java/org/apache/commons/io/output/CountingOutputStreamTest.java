@@ -16,25 +16,20 @@
  */
 package org.apache.commons.io.output;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import org.junit.jupiter.api.Test;
 
-
 /**
  *
  */
-
 public class CountingOutputStreamTest {
-
 
     @Test
     public void testCounting() throws IOException {

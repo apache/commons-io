@@ -622,7 +622,7 @@ public class IOUtilsWriteTestCase {
         out.off();
         out.flush();
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator();
         final String actual = baout.toString();
         assertEquals(expected, actual);
     }
@@ -682,7 +682,7 @@ public class IOUtilsWriteTestCase {
         out.off();
         out.flush();
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator();
         final String actual = baout.toString();
         assertEquals(expected, actual);
     }
@@ -767,7 +767,7 @@ public class IOUtilsWriteTestCase {
         out.off();
         writer.flush();
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator();
         final String actual = baout.toString();
         assertEquals(expected, actual);
     }

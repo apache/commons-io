@@ -2102,9 +2102,9 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, null);
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
+                System.lineSeparator() + "this is" + System.lineSeparator() +
+                System.lineSeparator() + "some text" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
@@ -2118,9 +2118,9 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list);
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
+                System.lineSeparator() + "this is" + System.lineSeparator() +
+                System.lineSeparator() + "some text" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
@@ -2135,8 +2135,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2150,8 +2150,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, null, linesToAppend, null, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2166,8 +2166,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2181,8 +2181,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, linesToAppend, null, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2198,8 +2198,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2213,8 +2213,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, null, linesToAppend, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2229,8 +2229,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2244,8 +2244,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, linesToAppend, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
