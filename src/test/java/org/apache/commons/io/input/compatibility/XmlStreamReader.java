@@ -691,10 +691,9 @@ public class XmlStreamReader extends Reader {
                 final BufferedReader bReader = new BufferedReader(new StringReader(
                         xmlProlog.substring(0, firstGT + 1)));
                 final StringBuffer prolog = new StringBuffer();
-                String line = bReader.readLine();
-                while (line != null) {
+                String line;
+                while ((line = bReader.readLine()) != null) {
                     prolog.append(line);
-                    line = bReader.readLine();
                 }
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {
