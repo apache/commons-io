@@ -295,7 +295,7 @@ file comparators, endian transformation classes, and much more.
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.3</commons.japicmp.version>
     <spotbugs.plugin.version>4.0.4</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.1.1</spotbugs.impl.version>    
+    <spotbugs.impl.version>4.1.2</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
