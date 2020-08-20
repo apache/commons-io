@@ -83,9 +83,6 @@ import org.junit.jupiter.api.io.TempDir;
 @SuppressWarnings("deprecation") // deliberately testing deprecated code
 public class IOUtilsTestCase {
 
-    @TempDir
-    public File temporaryFolder;
-
     private static final int FILE_SIZE = 1024 * 4 + 1;
 
     /** Determine if this is windows. */
@@ -95,6 +92,9 @@ public class IOUtilsTestCase {
      * implement "trojan horse" wrapper implementations of the various stream classes, which set a flag when relevant
      * methods are called. (JT)
      */
+
+    @TempDir
+    public File temporaryFolder;
 
     private char[] carr = null;
 
@@ -140,22 +140,175 @@ public class IOUtilsTestCase {
         }
     }
 
+    @Test public void testAsBufferedInputStream() {
+        final InputStream is = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        };
+        final BufferedInputStream bis = IOUtils.buffer(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    @Test public void testAsBufferedInputStreamWithBufferSize() {
+        final InputStream is = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        };
+        final BufferedInputStream bis = IOUtils.buffer(is, 2048);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+        assertSame(bis, IOUtils.buffer(bis, 1024));
+    }
+
+    @Test public void testAsBufferedNull() {
+        try {
+            IOUtils.buffer((InputStream) null);
+            fail("Expected NullPointerException");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.buffer((OutputStream) null);
+            fail("Expected NullPointerException");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.buffer((Reader) null);
+            fail("Expected NullPointerException");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+        try {
+            IOUtils.buffer((Writer) null);
+            fail("Expected NullPointerException");
+        } catch (final NullPointerException npe) {
+            // expected
+        }
+    }
+
+    @Test public void testAsBufferedOutputStream() {
+        final OutputStream is = new OutputStream() {
+            @Override
+            public void write(final int b) throws IOException { }
+        };
+        final BufferedOutputStream bis = IOUtils.buffer(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    @Test public void testAsBufferedOutputStreamWithBufferSize() {
+        final OutputStream os = new OutputStream() {
+            @Override
+            public void write(final int b) throws IOException { }
+        };
+        final BufferedOutputStream bos = IOUtils.buffer(os, 2048);
+        assertNotSame(os, bos);
+        assertSame(bos, IOUtils.buffer(bos));
+        assertSame(bos, IOUtils.buffer(bos, 1024));
+    }
+
+    @Test public void testAsBufferedReader() {
+        final Reader is = new Reader() {
+            @Override
+            public void close() throws IOException { }
+            @Override
+            public int read(final char[] cbuf, final int off, final int len) throws IOException {
+                return 0;
+            }
+        };
+        final BufferedReader bis = IOUtils.buffer(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    @Test public void testAsBufferedReaderWithBufferSize() {
+        final Reader r = new Reader() {
+            @Override
+            public void close() throws IOException { }
+            @Override
+            public int read(final char[] cbuf, final int off, final int len) throws IOException {
+                return 0;
+            }
+        };
+        final BufferedReader br = IOUtils.buffer(r, 2048);
+        assertNotSame(r, br);
+        assertSame(br, IOUtils.buffer(br));
+        assertSame(br, IOUtils.buffer(br, 1024));
+    }
+
+    @Test public void testAsBufferedWriter() {
+        final Writer is = new Writer() {
+            @Override
+            public void close() throws IOException { }
+
+            @Override
+            public void flush() throws IOException { }
+
+            @Override
+            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
+
+            @Override
+            public void write(final int b) throws IOException { }
+        };
+        final BufferedWriter bis = IOUtils.buffer(is);
+        assertNotSame(is, bis);
+        assertSame(bis, IOUtils.buffer(bis));
+    }
+
+    @Test
+    public void testAsBufferedWriterWithBufferSize() {
+        final Writer w = new Writer() {
+            @Override
+            public void close() throws IOException { }
+
+            @Override
+            public void flush() throws IOException { }
+
+            @Override
+            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
+
+            @Override
+            public void write(final int b) throws IOException { }
+        };
+        final BufferedWriter bw = IOUtils.buffer(w, 2024);
+        assertNotSame(w, bw);
+        assertSame(bw, IOUtils.buffer(bw));
+        assertSame(bw, IOUtils.buffer(bw, 1024));
+    }
+
+    @Test
+    public void testAsWriterAppendable() {
+        final Appendable a = new StringBuffer();
+        final Writer w = IOUtils.writer(a);
+        assertNotSame(w, a);
+        assertEquals(AppendableWriter.class, w.getClass());
+        assertSame(w, IOUtils.writer(w));
+    }
+
+    @Test
+    public void testAsWriterNull() {
+        assertThrows(NullPointerException.class, () -> IOUtils.writer(null));
+    }
+
+    @Test
+    public void testAsWriterStringBuilder() {
+        final Appendable a = new StringBuilder();
+        final Writer w = IOUtils.writer(a);
+        assertNotSame(w, a);
+        assertEquals(StringBuilderWriter.class, w.getClass());
+        assertSame(w, IOUtils.writer(w));
+    }
+
     @Test public void testClose() {
         assertDoesNotThrow(() -> IOUtils.close((Closeable) null));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s")));
         assertThrows(IOException.class, () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s"))));
-    }
-
-    @Test
-    public void testCloseMulti() {
-        final Closeable nulCloseable = null;
-        final Closeable[] closeables = {null, null};
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nulCloseable));
-        assertDoesNotThrow(() -> IOUtils.close(closeables));
-        assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nulCloseable));
-        assertThrows(IOException.class,
-            () -> IOUtils.close(nulCloseable, new ThrowOnCloseReader(new StringReader("s"))));
     }
 
     @Test
@@ -182,6 +335,18 @@ public class IOUtilsTestCase {
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer)); // no throw
         assertThrows(IOException.class,
             () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer)); // closeable throws
+    }
+
+    @Test
+    public void testCloseMulti() {
+        final Closeable nulCloseable = null;
+        final Closeable[] closeables = {null, null};
+        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nulCloseable));
+        assertDoesNotThrow(() -> IOUtils.close(closeables));
+        assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nulCloseable));
+        assertThrows(IOException.class,
+            () -> IOUtils.close(nulCloseable, new ThrowOnCloseReader(new StringReader("s"))));
     }
 
     @Test public void testCloseQuietly_AllCloseableIOException() {
@@ -638,6 +803,32 @@ public class IOUtilsTestCase {
         }
     }
 
+    @Test
+    public void testCopyLarge_SkipWithInvalidOffset() throws IOException {
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            // Create streams
+            is = new ByteArrayInputStream(iarr);
+            os = new ByteArrayOutputStream();
+
+            // Test our copy method
+            assertEquals(100, IOUtils.copyLarge(is, os, -10, 100));
+            final byte[] oarr = os.toByteArray();
+
+            // check that output length is correct
+            assertEquals(100, oarr.length);
+            // check that output data corresponds to input data
+            assertEquals(1, oarr[1]);
+            assertEquals(79, oarr[79]);
+            assertEquals(-1, oarr[80]);
+
+        } finally {
+            IOUtils.closeQuietly(is);
+            IOUtils.closeQuietly(os);
+        }
+    }
+
     @Test public void testRead_ReadableByteChannel() throws Exception {
         final ByteBuffer buffer = ByteBuffer.allocate(FILE_SIZE);
         final FileInputStream fileInputStream = new FileInputStream(m_testFile);
@@ -657,6 +848,17 @@ public class IOUtilsTestCase {
         } finally {
             IOUtils.closeQuietly(input, fileInputStream);
         }}
+
+    @Test public void testReadFully_InputStream__ReturnByteArray() throws Exception {
+        final byte[] bytes = "abcd1234".getBytes("UTF-8");
+        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+
+        final byte[] result = IOUtils.readFully(stream, bytes.length);
+
+        IOUtils.closeQuietly(stream);
+
+        assertEqualContent(result, bytes);
+    }
 
     @Test public void testReadFully_InputStream_ByteArray() throws Exception {
         final int size = 1027;
@@ -680,17 +882,6 @@ public class IOUtilsTestCase {
         }
         IOUtils.closeQuietly(input);
 
-    }
-
-    @Test public void testReadFully_InputStream__ReturnByteArray() throws Exception {
-        final byte[] bytes = "abcd1234".getBytes("UTF-8");
-        final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-
-        final byte[] result = IOUtils.readFully(stream, bytes.length);
-
-        IOUtils.closeQuietly(stream);
-
-        assertEqualContent(result, bytes);
     }
 
     @Test public void testReadFully_InputStream_Offset() throws Exception {
@@ -808,6 +999,166 @@ public class IOUtilsTestCase {
             IOUtils.closeQuietly(in);
             TestUtils.deleteFile(file);
         }
+    }
+
+    @Test public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
+        final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").toURI()).length();
+        final byte[] bytes = IOUtils.resourceToByteArray("/test-file-utf8.bin");
+        assertNotNull(bytes);
+        assertEquals(fileSize, bytes.length);
+    }
+
+    @Test public void testResourceToByteArray_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+        final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").toURI()).length();
+        final byte[] bytes = IOUtils.resourceToByteArray("test-file-utf8.bin", ClassLoader.getSystemClassLoader());
+        assertNotNull(bytes);
+        assertEquals(fileSize, bytes.length);
+    }
+
+    @Test public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
+        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
+        final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        assertNotNull(bytes);
+        assertEquals(fileSize, bytes.length);
+    }
+
+    @Test public void testResourceToByteArray_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
+        final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/FileUtilsTestDataCR.dat", ClassLoader.getSystemClassLoader());
+        assertNotNull(bytes);
+        assertEquals(fileSize, bytes.length);
+    }
+
+    @Test public void testResourceToByteArray_NonExistingResource() {
+        assertThrows(IOException.class, () -> IOUtils.resourceToByteArray("/non-existing-file.bin"));
+    }
+
+    @Test public void testResourceToByteArray_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
+    }
+
+    @Test public void testResourceToByteArray_Null() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null));
+    }
+
+    @Test public void testResourceToByteArray_Null_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader()));
+    }
+
+    @Test public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
+        final long fileSize = new File(getClass().getResource("/test-file-simple-utf8.bin").toURI()).length();
+        final String content = IOUtils.resourceToString("/test-file-simple-utf8.bin", StandardCharsets.UTF_8);
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    @Test public void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+        final long fileSize = new File(getClass().getResource("/test-file-simple-utf8.bin").toURI()).length();
+        final String content = IOUtils.resourceToString(
+                "test-file-simple-utf8.bin",
+                StandardCharsets.UTF_8,
+                ClassLoader.getSystemClassLoader()
+        );
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    @Test public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
+        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
+        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", StandardCharsets.UTF_8);
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    // Tests from IO-305
+
+    @Test public void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
+        final String content = IOUtils.resourceToString(
+                "org/apache/commons/io/FileUtilsTestDataCR.dat",
+                StandardCharsets.UTF_8,
+                ClassLoader.getSystemClassLoader()
+        );
+
+        assertNotNull(content);
+        assertEquals(fileSize, content.getBytes().length);
+    }
+
+    @Test public void testResourceToString_NonExistingResource() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8));
+    }
+
+    @Test public void testResourceToString_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
+    }
+
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
+    @Test public void testResourceToString_NullCharset() throws Exception {
+        IOUtils.resourceToString("/test-file-utf8.bin", null);
+    }
+
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
+    @Test public void testResourceToString_NullCharset_WithClassLoader() throws Exception {
+        IOUtils.resourceToString("test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
+    }
+
+    @Test public void testResourceToString_NullResource() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8));
+    }
+
+    @Test public void testResourceToString_NullResource_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
+    }
+
+    @Test public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
+        final URL url = IOUtils.resourceToURL("/test-file-utf8.bin");
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
+    }
+
+    @Test public void testResourceToURL_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
+        final URL url = IOUtils.resourceToURL("test-file-utf8.bin", ClassLoader.getSystemClassLoader());
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
+    }
+
+    @Test public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
+        final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
+    }
+
+    @Test public void testResourceToURL_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
+        final URL url = IOUtils.resourceToURL(
+                "org/apache/commons/io/FileUtilsTestDataCR.dat",
+                ClassLoader.getSystemClassLoader()
+        );
+
+        assertNotNull(url);
+        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
+    }
+
+    @Test public void testResourceToURL_NonExistingResource() {
+        assertThrows(IOException.class, () -> IOUtils.resourceToURL("/non-existing-file.bin"));
+    }
+
+    @Test public void testResourceToURL_NonExistingResource_WithClassLoader() {
+        assertThrows(IOException.class,
+                () -> IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
+    }
+
+    @Test public void testResourceToURL_Null() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null));
+    }
+
+    @Test public void testResourceToURL_Null_WithClassLoader() {
+        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
     }
 
     @Test public void testSkip_FileReader() throws Exception {
@@ -1106,8 +1457,6 @@ public class IOUtilsTestCase {
         assertEqualContent(csq.toString().getBytes("UTF-8"), bytes);
     }
 
-    // Tests from IO-305
-
     /**
      * Test for {@link IOUtils#toInputStream(String)} and {@link IOUtils#toInputStream(String, String)}. Note, this test
      * utilizes on {@link IOUtils#toByteArray(java.io.InputStream)} and so relies on
@@ -1197,355 +1546,6 @@ public class IOUtilsTestCase {
 
     @Test public void testToString_URL_CharsetNameNull() throws Exception {
         testToString_URL(null);
-    }
-
-    @Test public void testResourceToString_ExistingResourceAtRootPackage() throws Exception {
-        final long fileSize = new File(getClass().getResource("/test-file-simple-utf8.bin").toURI()).length();
-        final String content = IOUtils.resourceToString("/test-file-simple-utf8.bin", StandardCharsets.UTF_8);
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test public void testResourceToString_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
-        final long fileSize = new File(getClass().getResource("/test-file-simple-utf8.bin").toURI()).length();
-        final String content = IOUtils.resourceToString(
-                "test-file-simple-utf8.bin",
-                StandardCharsets.UTF_8,
-                ClassLoader.getSystemClassLoader()
-        );
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test public void testResourceToString_ExistingResourceAtSubPackage() throws Exception {
-        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
-        final String content = IOUtils.resourceToString("/org/apache/commons/io/FileUtilsTestDataCR.dat", StandardCharsets.UTF_8);
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test public void testResourceToString_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
-        final String content = IOUtils.resourceToString(
-                "org/apache/commons/io/FileUtilsTestDataCR.dat",
-                StandardCharsets.UTF_8,
-                ClassLoader.getSystemClassLoader()
-        );
-
-        assertNotNull(content);
-        assertEquals(fileSize, content.getBytes().length);
-    }
-
-    @Test public void testResourceToString_NonExistingResource() {
-        assertThrows(IOException.class,
-                () -> IOUtils.resourceToString("/non-existing-file.bin", StandardCharsets.UTF_8));
-    }
-
-    @Test public void testResourceToString_NonExistingResource_WithClassLoader() {
-        assertThrows(IOException.class,
-                () -> IOUtils.resourceToString("non-existing-file.bin", StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
-    }
-
-    @Test public void testResourceToString_NullResource() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8));
-    }
-
-    @Test public void testResourceToString_NullResource_WithClassLoader() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToString(null, StandardCharsets.UTF_8, ClassLoader.getSystemClassLoader()));
-    }
-
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    @Test public void testResourceToString_NullCharset() throws Exception {
-        IOUtils.resourceToString("/test-file-utf8.bin", null);
-    }
-
-    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
-    @Test public void testResourceToString_NullCharset_WithClassLoader() throws Exception {
-        IOUtils.resourceToString("test-file-utf8.bin", null, ClassLoader.getSystemClassLoader());
-    }
-
-    @Test public void testResourceToByteArray_ExistingResourceAtRootPackage() throws Exception {
-        final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").toURI()).length();
-        final byte[] bytes = IOUtils.resourceToByteArray("/test-file-utf8.bin");
-        assertNotNull(bytes);
-        assertEquals(fileSize, bytes.length);
-    }
-
-    @Test public void testResourceToByteArray_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
-        final long fileSize = new File(getClass().getResource("/test-file-utf8.bin").toURI()).length();
-        final byte[] bytes = IOUtils.resourceToByteArray("test-file-utf8.bin", ClassLoader.getSystemClassLoader());
-        assertNotNull(bytes);
-        assertEquals(fileSize, bytes.length);
-    }
-
-    @Test public void testResourceToByteArray_ExistingResourceAtSubPackage() throws Exception {
-        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
-        final byte[] bytes = IOUtils.resourceToByteArray("/org/apache/commons/io/FileUtilsTestDataCR.dat");
-        assertNotNull(bytes);
-        assertEquals(fileSize, bytes.length);
-    }
-
-    @Test public void testResourceToByteArray_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final long fileSize = new File(getClass().getResource("/org/apache/commons/io/FileUtilsTestDataCR.dat").toURI()).length();
-        final byte[] bytes = IOUtils.resourceToByteArray("org/apache/commons/io/FileUtilsTestDataCR.dat", ClassLoader.getSystemClassLoader());
-        assertNotNull(bytes);
-        assertEquals(fileSize, bytes.length);
-    }
-
-    @Test public void testResourceToByteArray_NonExistingResource() {
-        assertThrows(IOException.class, () -> IOUtils.resourceToByteArray("/non-existing-file.bin"));
-    }
-
-    @Test public void testResourceToByteArray_NonExistingResource_WithClassLoader() {
-        assertThrows(IOException.class,
-                () -> IOUtils.resourceToByteArray("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
-    }
-
-    @Test public void testResourceToByteArray_Null() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null));
-    }
-
-    @Test public void testResourceToByteArray_Null_WithClassLoader() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToByteArray(null, ClassLoader.getSystemClassLoader()));
-    }
-
-    @Test public void testResourceToURL_ExistingResourceAtRootPackage() throws Exception {
-        final URL url = IOUtils.resourceToURL("/test-file-utf8.bin");
-        assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
-    }
-
-    @Test public void testResourceToURL_ExistingResourceAtRootPackage_WithClassLoader() throws Exception {
-        final URL url = IOUtils.resourceToURL("test-file-utf8.bin", ClassLoader.getSystemClassLoader());
-        assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/test-file-utf8.bin"));
-    }
-
-    @Test public void testResourceToURL_ExistingResourceAtSubPackage() throws Exception {
-        final URL url = IOUtils.resourceToURL("/org/apache/commons/io/FileUtilsTestDataCR.dat");
-        assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
-    }
-
-    @Test public void testResourceToURL_ExistingResourceAtSubPackage_WithClassLoader() throws Exception {
-        final URL url = IOUtils.resourceToURL(
-                "org/apache/commons/io/FileUtilsTestDataCR.dat",
-                ClassLoader.getSystemClassLoader()
-        );
-
-        assertNotNull(url);
-        assertTrue(url.getFile().endsWith("/org/apache/commons/io/FileUtilsTestDataCR.dat"));
-    }
-
-    @Test public void testResourceToURL_NonExistingResource() {
-        assertThrows(IOException.class, () -> IOUtils.resourceToURL("/non-existing-file.bin"));
-    }
-
-    @Test public void testResourceToURL_NonExistingResource_WithClassLoader() {
-        assertThrows(IOException.class,
-                () -> IOUtils.resourceToURL("non-existing-file.bin", ClassLoader.getSystemClassLoader()));
-    }
-
-    @Test public void testResourceToURL_Null() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null));
-    }
-
-    @Test public void testResourceToURL_Null_WithClassLoader() {
-        assertThrows(NullPointerException.class, () -> IOUtils.resourceToURL(null, ClassLoader.getSystemClassLoader()));
-    }
-
-    @Test public void testAsBufferedNull() {
-        try {
-            IOUtils.buffer((InputStream) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((OutputStream) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((Reader) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-        try {
-            IOUtils.buffer((Writer) null);
-            fail("Expected NullPointerException");
-        } catch (final NullPointerException npe) {
-            // expected
-        }
-    }
-
-    @Test public void testAsBufferedInputStream() {
-        final InputStream is = new InputStream() {
-            @Override
-            public int read() throws IOException {
-                return 0;
-            }
-        };
-        final BufferedInputStream bis = IOUtils.buffer(is);
-        assertNotSame(is, bis);
-        assertSame(bis, IOUtils.buffer(bis));
-    }
-
-    @Test public void testAsBufferedInputStreamWithBufferSize() {
-        final InputStream is = new InputStream() {
-            @Override
-            public int read() throws IOException {
-                return 0;
-            }
-        };
-        final BufferedInputStream bis = IOUtils.buffer(is, 2048);
-        assertNotSame(is, bis);
-        assertSame(bis, IOUtils.buffer(bis));
-        assertSame(bis, IOUtils.buffer(bis, 1024));
-    }
-
-    @Test public void testAsBufferedOutputStream() {
-        final OutputStream is = new OutputStream() {
-            @Override
-            public void write(final int b) throws IOException { }
-        };
-        final BufferedOutputStream bis = IOUtils.buffer(is);
-        assertNotSame(is, bis);
-        assertSame(bis, IOUtils.buffer(bis));
-    }
-
-    @Test public void testAsBufferedOutputStreamWithBufferSize() {
-        final OutputStream os = new OutputStream() {
-            @Override
-            public void write(final int b) throws IOException { }
-        };
-        final BufferedOutputStream bos = IOUtils.buffer(os, 2048);
-        assertNotSame(os, bos);
-        assertSame(bos, IOUtils.buffer(bos));
-        assertSame(bos, IOUtils.buffer(bos, 1024));
-    }
-
-    @Test public void testAsBufferedReader() {
-        final Reader is = new Reader() {
-            @Override
-            public int read(final char[] cbuf, final int off, final int len) throws IOException {
-                return 0;
-            }
-            @Override
-            public void close() throws IOException { }
-        };
-        final BufferedReader bis = IOUtils.buffer(is);
-        assertNotSame(is, bis);
-        assertSame(bis, IOUtils.buffer(bis));
-    }
-
-    @Test public void testAsBufferedReaderWithBufferSize() {
-        final Reader r = new Reader() {
-            @Override
-            public int read(final char[] cbuf, final int off, final int len) throws IOException {
-                return 0;
-            }
-            @Override
-            public void close() throws IOException { }
-        };
-        final BufferedReader br = IOUtils.buffer(r, 2048);
-        assertNotSame(r, br);
-        assertSame(br, IOUtils.buffer(br));
-        assertSame(br, IOUtils.buffer(br, 1024));
-    }
-
-    @Test public void testAsBufferedWriter() {
-        final Writer is = new Writer() {
-            @Override
-            public void write(final int b) throws IOException { }
-
-            @Override
-            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
-
-            @Override
-            public void flush() throws IOException { }
-
-            @Override
-            public void close() throws IOException { }
-        };
-        final BufferedWriter bis = IOUtils.buffer(is);
-        assertNotSame(is, bis);
-        assertSame(bis, IOUtils.buffer(bis));
-    }
-
-    @Test
-    public void testAsBufferedWriterWithBufferSize() {
-        final Writer w = new Writer() {
-            @Override
-            public void write(final int b) throws IOException { }
-
-            @Override
-            public void write(final char[] cbuf, final int off, final int len) throws IOException { }
-
-            @Override
-            public void flush() throws IOException { }
-
-            @Override
-            public void close() throws IOException { }
-        };
-        final BufferedWriter bw = IOUtils.buffer(w, 2024);
-        assertNotSame(w, bw);
-        assertSame(bw, IOUtils.buffer(bw));
-        assertSame(bw, IOUtils.buffer(bw, 1024));
-    }
-
-    @Test
-    public void testAsWriterNull() {
-        assertThrows(NullPointerException.class, () -> IOUtils.writer(null));
-    }
-
-    @Test
-    public void testAsWriterStringBuilder() {
-        final Appendable a = new StringBuilder();
-        final Writer w = IOUtils.writer(a);
-        assertNotSame(w, a);
-        assertEquals(StringBuilderWriter.class, w.getClass());
-        assertSame(w, IOUtils.writer(w));
-    }
-
-    @Test
-    public void testAsWriterAppendable() {
-        final Appendable a = new StringBuffer();
-        final Writer w = IOUtils.writer(a);
-        assertNotSame(w, a);
-        assertEquals(AppendableWriter.class, w.getClass());
-        assertSame(w, IOUtils.writer(w));
-    }
-
-    @Test
-    public void testCopyLarge_SkipWithInvalidOffset() throws IOException {
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-        try {
-            // Create streams
-            is = new ByteArrayInputStream(iarr);
-            os = new ByteArrayOutputStream();
-
-            // Test our copy method
-            assertEquals(100, IOUtils.copyLarge(is, os, -10, 100));
-            final byte[] oarr = os.toByteArray();
-
-            // check that output length is correct
-            assertEquals(100, oarr.length);
-            // check that output data corresponds to input data
-            assertEquals(1, oarr[1]);
-            assertEquals(79, oarr[79]);
-            assertEquals(-1, oarr[80]);
-
-        } finally {
-            IOUtils.closeQuietly(is);
-            IOUtils.closeQuietly(os);
-        }
     }
 
 }
