@@ -98,7 +98,7 @@ public class IOUtilsCopyTestCase {
     @Test
     public void testCopy_inputStreamToOutputStream_nullIn() throws Exception {
         final OutputStream out = new ByteArrayOutputStream();
-        assertThrows(NullPointerException.class, () -> IOUtils.copy((InputStream) null, out));
+        assertEquals(0, IOUtils.copy((InputStream) null, out));
     }
 
     @Test

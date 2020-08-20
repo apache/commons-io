@@ -713,9 +713,8 @@ public class IOUtils {
      * </p>
      *
      * @param input the <code>InputStream</code> to read from
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
     public static long consume(final InputStream input)
@@ -841,16 +840,18 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
      * Large streams (over 2GB) will return a bytes copied value of
      * <code>-1</code> after the copy has completed since the correct
      * number of bytes cannot be returned as an int. For large streams
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE
-     * @throws NullPointerException if the input or output is null
+     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE, or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
@@ -867,14 +868,14 @@ public class IOUtils {
      * given size.
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
-     * <p>
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @param bufferSize the bufferSize used to copy from the input to the output
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
      * @since 2.5
      */
     public static long copy(final InputStream input, final OutputStream output, final int bufferSize)
@@ -1122,14 +1123,16 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
      * @since 1.3
      */
     public static long copyLarge(final InputStream input, final OutputStream output)
@@ -1143,23 +1146,24 @@ public class IOUtils {
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * <p>
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @param buffer the buffer to use for the copy
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws IOException if an I/O error occurs
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer)
-            throws IOException {
+        throws IOException {
         long count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
+        if (input != null) {
+            int n;
+            while (EOF != (n = input.read(buffer))) {
+                output.write(buffer, 0, n);
+                count += n;
+            }
         }
         return count;
     }
@@ -2231,6 +2235,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @return the requested byte array
