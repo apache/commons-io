@@ -302,69 +302,6 @@ public class IOUtils {
     }
 
     /**
-     * Closes a <code>Closeable</code> unconditionally.
-     * <p>
-     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
-     * finally blocks.
-     * <p>
-     * Example code:
-     * </p>
-     * <pre>
-     * Closeable closeable = null;
-     * try {
-     *     closeable = new FileReader(&quot;foo.txt&quot;);
-     *     // process closeable
-     *     closeable.close();
-     * } catch (Exception e) {
-     *     // error handling
-     * } finally {
-     *     IOUtils.closeQuietly(closeable);
-     * }
-     * </pre>
-     * <p>
-     * Closing all streams:
-     * </p>
-     * <pre>
-     * try {
-     *     return IOUtils.copy(inputStream, outputStream);
-     * } finally {
-     *     IOUtils.closeQuietly(inputStream);
-     *     IOUtils.closeQuietly(outputStream);
-     * }
-     * </pre>
-     *
-     * @param closeable the objects to close, may be null or already closed
-     * @since 2.0
-     *
-     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
-     * suppressed exceptions manually.
-     * @see Throwable#addSuppressed(java.lang.Throwable)
-     */
-    @Deprecated
-    public static void closeQuietly(final Closeable closeable) {
-        closeQuietly(closeable, (Consumer<IOException>) null);
-    }
-
-    /**
-     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
-     *
-     * @param closeable The resource to close, may be null.
-     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
-     * @since 2.7
-     */
-    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (final IOException e) {
-                if (consumer != null) {
-                    consumer.accept(e);
-                }
-            }
-        }
-    }
-
-    /**
      * Closes the given {@link Closeable} as a null-safe operation.
      *
      * @param closeable The resource to close, may be null.
@@ -427,6 +364,50 @@ public class IOUtils {
     /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
+     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
+     * finally blocks.
+     * <p>
+     * Example code:
+     * </p>
+     * <pre>
+     * Closeable closeable = null;
+     * try {
+     *     closeable = new FileReader(&quot;foo.txt&quot;);
+     *     // process closeable
+     *     closeable.close();
+     * } catch (Exception e) {
+     *     // error handling
+     * } finally {
+     *     IOUtils.closeQuietly(closeable);
+     * }
+     * </pre>
+     * <p>
+     * Closing all streams:
+     * </p>
+     * <pre>
+     * try {
+     *     return IOUtils.copy(inputStream, outputStream);
+     * } finally {
+     *     IOUtils.closeQuietly(inputStream);
+     *     IOUtils.closeQuietly(outputStream);
+     * }
+     * </pre>
+     *
+     * @param closeable the objects to close, may be null or already closed
+     * @since 2.0
+     *
+     * @deprecated As of 2.6 deprecated without replacement. Please use the try-with-resources statement or handle
+     * suppressed exceptions manually.
+     * @see Throwable#addSuppressed(java.lang.Throwable)
+     */
+    @Deprecated
+    public static void closeQuietly(final Closeable closeable) {
+        closeQuietly(closeable, (Consumer<IOException>) null);
+    }
+
+    /**
+     * Closes a <code>Closeable</code> unconditionally.
+     * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
      * <p>
      * This is typically used in finally blocks to ensure that the closeable is closed
@@ -478,6 +459,25 @@ public class IOUtils {
         }
         for (final Closeable closeable : closeables) {
             closeQuietly(closeable);
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
+     * @since 2.7
+     */
+    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
         }
     }
 
