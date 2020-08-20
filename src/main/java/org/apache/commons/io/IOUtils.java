@@ -150,12 +150,10 @@ public class IOUtils {
     public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
 
     /**
-     * The default buffer size to use for the skip() methods.
+     * The default buffer to use for the skip() methods.
      */
-    private static final int SKIP_BUFFER_SIZE = 2048;
-
-    private static byte[] SKIP_BYTE_BUFFER;
-
+    private static final byte[] SKIP_BYTE_BUFFER = new byte[DEFAULT_BUFFER_SIZE];
+    
     // Allocated in the relevant skip method if necessary.
     /*
      * These buffers are static and are shared between threads.
@@ -719,7 +717,7 @@ public class IOUtils {
      */
     public static long consume(final InputStream input)
             throws IOException {
-        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM);
+        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, SKIP_BYTE_BUFFER);
     }
 
     /**
@@ -1981,17 +1979,15 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
         /*
-         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
-         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
-         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+         * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
+         * times (the data is ignored) - we always use the same size buffer, so if it it is recreated it will still be
+         * OK (if the buffer size were variable, we would need to synch. to ensure some other thread did not create a
+         * smaller one)
          */
-        if (SKIP_BYTE_BUFFER == null) {
-            SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
-        }
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             if (n < 0) { // EOF
                 break;
             }
@@ -2016,11 +2012,11 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BUFFER_SIZE));
+        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BYTE_BUFFER.length));
         long remain = toSkip;
         while (remain > 0) {
             skipByteBuffer.position(0);
-            skipByteBuffer.limit((int) Math.min(remain, SKIP_BUFFER_SIZE));
+            skipByteBuffer.limit((int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             final int n = input.read(skipByteBuffer);
             if (n == EOF) {
                 break;
@@ -2061,12 +2057,12 @@ public class IOUtils {
          * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
          */
         if (SKIP_CHAR_BUFFER == null) {
-            SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];
+            SKIP_CHAR_BUFFER = new char[SKIP_BYTE_BUFFER.length];
         }
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             if (n < 0) { // EOF
                 break;
             }
