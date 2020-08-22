@@ -1,0 +1,48 @@
+
+Reporting New Security Problems with Apache Commons Components
+--------------------------------------------------------------
+
+The [Apache Software Foundation](https://www.apache.org) takes a very active stance in eliminating security problems and denial of service attacks against its products.
+
+We strongly encourage folks to report such problems to our private security mailing list first, before disclosing them in a public forum.
+
+Please note that the security mailing list should only be used for reporting undisclosed security vulnerabilities and managing the process of fixing such vulnerabilities. 
+We cannot accept regular bug reports or other queries at this address. 
+All mail sent to this address that does not relate to an undisclosed security problem in our source code will be ignored.
+
+If you need to report a bug that isn't an undisclosed security vulnerability, please use the [bug reporting page](https://commons.apache.org/patches.html#Submitting_A_Patch).
+
+The private security mailing address is: [security@commons.apache.org](mailto:security@commons.apache.org)
+
+Asking Questions About Known Security Problems
+----------------------------------------------
+
+Questions about:
+
+- if a vulnerability applies to your particular application
+- obtaining further information on a published vulnerability
+- availability of patches and/or new releases
+
+should be addressed to the users mailing list. 
+
+Please see the [mailing lists page](https://commons.apache.org/mail-lists.html) for details of how to subscribe.
+
+Known Security Vulnerabilities
+------------------------------
+
+Known security vulnerabilities fixed in released versions of Apache Commons components are listed in specific pages for each component.
+
+- [Apache Commons Compress Security Vulnerabilities](https://commons.apache.org/proper/commons-compress/security-reports.html#Apache_Commons_Compress_Security_Vulnerabilities)
+- [Apache Commons Collections Security Vulnerabilities](https://commons.apache.org/proper/commons-collections/security-reports.html#Apache_Commons_Collections_Security_Vulnerabilities)
+- [Apache Commons Email Security Vulnerabilities](https://commons.apache.org/proper/commons-email/security-reports.html#Apache_Commons_Email_Security_Vulnerabilities)
+- [Apache Commons FileUpload Security Vulnerabilities](https://commons.apache.org/proper/commons-fileupload/security-reports.html#Apache_Commons_FileUpload_Security_Vulnerabilities)
+
+If you have encountered an unlisted security vulnerability or other unexpected behavior that has security impact, or if the descriptions in one of the pages are incomplete, please report them privately to the Apache Security Team. 
+
+Errors and Omissions
+--------------------
+
+Please report any errors or omissions to the [dev mailing list](https://commons.apache.org/mail-lists.html).
+
+Thank you,  
+The Apache Commons Team
