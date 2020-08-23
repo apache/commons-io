@@ -46,12 +46,7 @@ Please see the [mailing lists page](https://commons.apache.org/mail-lists.html) 
 Known Security Vulnerabilities
 ------------------------------
 
-Known security vulnerabilities fixed in released versions of Apache Commons components are listed in specific pages for each component.
-
-- [Apache Commons Compress Security Vulnerabilities](https://commons.apache.org/proper/commons-compress/security-reports.html#Apache_Commons_Compress_Security_Vulnerabilities)
-- [Apache Commons Collections Security Vulnerabilities](https://commons.apache.org/proper/commons-collections/security-reports.html#Apache_Commons_Collections_Security_Vulnerabilities)
-- [Apache Commons Email Security Vulnerabilities](https://commons.apache.org/proper/commons-email/security-reports.html#Apache_Commons_Email_Security_Vulnerabilities)
-- [Apache Commons FileUpload Security Vulnerabilities](https://commons.apache.org/proper/commons-fileupload/security-reports.html#Apache_Commons_FileUpload_Security_Vulnerabilities)
+Known security vulnerabilities fixed in released versions of [Apache Commons](https://commons.apache.org) components are listed in specific pages for each component.
 
 If you have encountered an unlisted security vulnerability or other unexpected behavior that has security impact, or if the descriptions in one of the pages are incomplete, please report them privately to the Apache Security Team. 
 
