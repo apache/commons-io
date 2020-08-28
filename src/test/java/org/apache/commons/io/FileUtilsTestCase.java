@@ -39,6 +39,12 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1024,6 +1030,12 @@ public class FileUtilsTestCase {
 
         final Date date = new Date();
         final long now = date.getTime();
+        final Instant instant = date.toInstant();
+        final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+        final LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
+        final LocalDate localDate = zonedDateTime.toLocalDate();
+        final LocalDate localDatePlusDay = localDate.plusDays(1);
+        final LocalTime localTime = LocalTime.ofSecondOfDay(0);
 
         do {
             try {
@@ -1048,9 +1060,26 @@ public class FileUtilsTestCase {
         assertFalse(FileUtils.isFileNewer(oldFile, reference), "Old File - Newer - File");
         assertFalse(FileUtils.isFileNewer(oldFile, date), "Old File - Newer - Date");
         assertFalse(FileUtils.isFileNewer(oldFile, now), "Old File - Newer - Mili");
+        assertFalse(FileUtils.isFileNewer(oldFile, instant), "Old File - Newer - Instant");
+        assertFalse(FileUtils.isFileNewer(oldFile, zonedDateTime), "Old File - Newer - ZonedDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime), "Old File - Newer - LocalDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Newer - LocalDateTime,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDate), "Old File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate, localTime), "Old File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay), "Old File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, localTime), "Old File - Newer - LocalDate plus one day,ZoneId");
+
         assertTrue(FileUtils.isFileNewer(newFile, reference), "New File - Newer - File");
         assertTrue(FileUtils.isFileNewer(newFile, date), "New File - Newer - Date");
         assertTrue(FileUtils.isFileNewer(newFile, now), "New File - Newer - Mili");
+        assertTrue(FileUtils.isFileNewer(newFile, instant), "New File - Newer - Instant");
+        assertTrue(FileUtils.isFileNewer(newFile, zonedDateTime), "New File - Newer - ZonedDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime), "New File - Newer - LocalDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime, ZoneId.systemDefault()), "New File - Newer - LocalDateTime,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDate), "New File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate, localTime), "New File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay), "New File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime), "New File - Newer - LocalDate plus one day,ZoneId");
         assertFalse(FileUtils.isFileNewer(invalidFile, reference), "Invalid - Newer - File");
         final String invalidFileName = invalidFile.getName();
         try {
@@ -1065,9 +1094,27 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.isFileOlder(oldFile, reference), "Old File - Older - File");
         assertTrue(FileUtils.isFileOlder(oldFile, date), "Old File - Older - Date");
         assertTrue(FileUtils.isFileOlder(oldFile, now), "Old File - Older - Mili");
+        assertTrue(FileUtils.isFileOlder(oldFile, instant), "Old File - Older - Instant");
+        assertTrue(FileUtils.isFileOlder(oldFile, zonedDateTime), "Old File - Older - ZonedDateTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDateTime), "Old File - Older - LocalDateTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Older - LocalDateTime,LocalTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDate), "Old File - Older - LocalDate");
+        assertFalse(FileUtils.isFileOlder(oldFile, localDate, localTime), "Old File - Older - LocalDate,ZoneId");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay), "Old File - Older - LocalDate plus one day");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay, localTime), "Old File - Older - LocalDate plus one day,LocalTime");
+
         assertFalse(FileUtils.isFileOlder(newFile, reference), "New File - Older - File");
         assertFalse(FileUtils.isFileOlder(newFile, date), "New File - Older - Date");
         assertFalse(FileUtils.isFileOlder(newFile, now), "New File - Older - Mili");
+        assertFalse(FileUtils.isFileOlder(newFile, instant), "New File - Older - Instant");
+        assertFalse(FileUtils.isFileOlder(newFile, zonedDateTime), "New File - Older - ZonedDateTime");
+        assertFalse(FileUtils.isFileOlder(newFile, localDateTime), "New File - Older - LocalDateTime");
+        assertFalse(FileUtils.isFileOlder(newFile, localDateTime, ZoneId.systemDefault()), "New File - Older - LocalDateTime,ZoneId");
+        assertTrue(FileUtils.isFileOlder(newFile, localDate), "New File - Older - LocalDate");
+        assertFalse(FileUtils.isFileOlder(newFile, localDate, localTime), "New File - Older - LocalDate,LocalTime");
+        assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay), "New File - Older - LocalDate plus one day");
+        assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime), "New File - Older - LocalDate plus one day,LocalTime");
+
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
         try {
             FileUtils.isFileOlder(newFile, invalidFile);
@@ -1082,23 +1129,23 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileNewer(null, now);
-            fail("Newer Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException expected) {
+            fail("Newer Null, expected NullPointerException");
+        } catch (final NullPointerException expected) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileNewer(oldFile, (File) null);
-            fail("Newer Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileNewer(oldFile, invalidFile);
-            fail("Newer invalid reference, expected IllegalArgumentExcepion");
+            fail("Newer invalid reference, expected IllegalArgumentException");
         } catch (final IllegalArgumentException ignore) {
             // expected result
         }
@@ -1106,8 +1153,8 @@ public class FileUtilsTestCase {
         // Null reference Date
         try {
             FileUtils.isFileNewer(oldFile, (Date) null);
-            fail("Newer Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
@@ -1116,23 +1163,23 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileOlder(null, now);
-            fail("Older Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileOlder(oldFile, (File) null);
-            fail("Older Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileOlder(oldFile, invalidFile);
-            fail("Older invalid reference, expected IllegalArgumentExcepion");
+            fail("Older invalid reference, expected IllegalArgumentException");
         } catch (final IllegalArgumentException ignore) {
             // expected result
         }
@@ -1140,8 +1187,8 @@ public class FileUtilsTestCase {
         // Null reference Date
         try {
             FileUtils.isFileOlder(oldFile, (Date) null);
-            fail("Older Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
