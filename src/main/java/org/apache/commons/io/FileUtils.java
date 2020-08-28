@@ -1724,7 +1724,7 @@ public class FileUtils {
      * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
      * @throws NullPointerException if the file or instant is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
@@ -1740,7 +1740,7 @@ public class FileUtils {
      * {@code ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
@@ -1757,7 +1757,7 @@ public class FileUtils {
      * {@code ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
         return isFileNewer(file, chronoLocalDateTime, ZoneId.systemDefault());
@@ -1774,7 +1774,7 @@ public class FileUtils {
      * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
         Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
@@ -1792,7 +1792,7 @@ public class FileUtils {
      * {@code ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate) {
         return isFileNewer(file, chronoLocalDate, LocalTime.now());
@@ -1809,7 +1809,7 @@ public class FileUtils {
      * {@code ChronoLocalDate} at the given time.
      * @throws NullPointerException if the file, local date or zone ID is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
         Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
@@ -1873,7 +1873,7 @@ public class FileUtils {
      * @return true if the {@code File} exists and has been modified before the given {@code Instant}.
      * @throws NullPointerException if the file or instant is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
         Objects.requireNonNull(instant, "instant");
@@ -1889,7 +1889,7 @@ public class FileUtils {
      * {@code ChronoZonedDateTime}.
      * @throws NullPointerException if the file or zoned date time is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
         Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
@@ -1906,7 +1906,7 @@ public class FileUtils {
      * {@code ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
         return isFileOlder(file, chronoLocalDateTime, ZoneId.systemDefault());
@@ -1923,7 +1923,7 @@ public class FileUtils {
      * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
      * @throws NullPointerException if the file, local date time or zone ID is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
         Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
@@ -1941,7 +1941,7 @@ public class FileUtils {
      * {@code ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate) {
         return isFileOlder(file, chronoLocalDate, LocalTime.now());
@@ -1958,7 +1958,7 @@ public class FileUtils {
      * given {@code ChronoLocalDate} at the specified time.
      * @throws NullPointerException if the file, local date or local time is {@code null}
      *
-     * @since 2.8
+     * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
         Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
