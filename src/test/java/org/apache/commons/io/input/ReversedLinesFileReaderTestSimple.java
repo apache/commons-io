@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.TestResources;
 import org.junit.jupiter.api.Test;
 
 public class ReversedLinesFileReaderTestSimple {

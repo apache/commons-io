@@ -30,6 +30,7 @@ import java.io.Reader;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 
+import org.apache.commons.io.TestResources;
 import org.junit.jupiter.api.Test;
 
 /**

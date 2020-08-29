@@ -127,6 +127,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-676" dev="ggregory" type="add" due-to="Isira Seneviratne, Gary Gregory">
         Add isFileNewer() and isFileOlder() methods that support the Java 8 Date/Time API. #124.
       </action>
+      <action issue="IO-676" dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        Prevent NullPointerException in ReversedLinesFileReader constructors #117.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Deprecate IOUtils.LINE_SEPARATOR in favor of Java 7's System.lineSeparator().

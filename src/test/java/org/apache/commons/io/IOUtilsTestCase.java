@@ -63,7 +63,6 @@ import java.util.List;
 
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.io.input.TestResources;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
