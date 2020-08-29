@@ -126,7 +126,7 @@ public class TailerTest {
     public void testMultiByteBreak() throws Exception {
         // System.out.println("testMultiByteBreak() Default charset: " + Charset.defaultCharset().displayName());
         final long delay = 50;
-        final File origin = new File(this.getClass().getResource("/test-file-utf8.bin").toURI());
+        final File origin = TestResources.getFile("test-file-utf8.bin");
         final File file = new File(temporaryFolder, "testMultiByteBreak.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();

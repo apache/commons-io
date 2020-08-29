@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 public class RandomAccessFileInputStreamTest {
 
-    private static final String DATA_FILE = "src/test/resources/test-file-iso8859-1.bin";
+    private static final String DATA_FILE = "src/test/resources/org/apache/commons/io/test-file-iso8859-1.bin";
     private static final int DATA_FILE_LEN = 1430;
 
     private RandomAccessFile createRandomAccessFile() throws FileNotFoundException {

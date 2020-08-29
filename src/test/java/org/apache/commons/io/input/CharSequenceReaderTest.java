@@ -273,7 +273,7 @@ public class CharSequenceReaderTest {
          * This part of the test will test that adding the fields does not break any existing
          * serialized CharSequenceReaders.
          */
-        try (ObjectInputStream ois = new ObjectInputStream(getClass().getResourceAsStream("CharSequenceReader.bin"))) {
+        try (ObjectInputStream ois = new ObjectInputStream(TestResources.getInputStream("CharSequenceReader.bin"))) {
             final CharSequenceReader reader = (CharSequenceReader) ois.readObject();
             assertEquals('F', reader.read());
             assertEquals('o', reader.read());

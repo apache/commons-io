@@ -35,7 +35,7 @@ public class ReversedLinesFileReaderTestSimple {
     @Test
     public void testFileSizeIsExactMultipleOfBlockSize() throws URISyntaxException, IOException {
         final int blockSize = 10;
-        final File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
+        final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
             "ISO-8859-1")) {
             assertEqualsAndNoLineBreaks("987654321", reversedLinesFileReader.readLine());
@@ -46,7 +46,7 @@ public class ReversedLinesFileReaderTestSimple {
     @Test
     public void testLineCount() throws URISyntaxException, IOException {
         final int blockSize = 10;
-        final File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
+        final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
             "ISO-8859-1")) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.readLines(-1));
@@ -62,7 +62,7 @@ public class ReversedLinesFileReaderTestSimple {
     @Test
     public void testToString() throws URISyntaxException, IOException {
         final int blockSize = 10;
-        final File testFile20Bytes = new File(this.getClass().getResource("/test-file-20byteslength.bin").toURI());
+        final File testFile20Bytes = TestResources.getFile("/test-file-20byteslength.bin");
         try (ReversedLinesFileReader reversedLinesFileReader = new ReversedLinesFileReader(testFile20Bytes, blockSize,
             "ISO-8859-1")) {
             assertThrows(IllegalArgumentException.class, () -> reversedLinesFileReader.toString(-1));
@@ -76,14 +76,14 @@ public class ReversedLinesFileReaderTestSimple {
 
     @Test
     public void testUnsupportedEncodingUTF16() throws URISyntaxException {
-        final File testFileEmpty = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
+        final File testFileEmpty = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEmpty, IOUtils.DEFAULT_BUFFER_SIZE, "UTF-16").close());
     }
 
     @Test
     public void testUnsupportedEncodingBig5() throws URISyntaxException {
-        final File testFileEncodingBig5 = new File(this.getClass().getResource("/test-file-empty.bin").toURI());
+        final File testFileEncodingBig5 = TestResources.getFile("/test-file-empty.bin");
         assertThrows(UnsupportedEncodingException.class,
             () -> new ReversedLinesFileReader(testFileEncodingBig5, IOUtils.DEFAULT_BUFFER_SIZE, "Big5").close());
     }

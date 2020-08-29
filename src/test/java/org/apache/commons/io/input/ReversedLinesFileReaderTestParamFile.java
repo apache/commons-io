@@ -22,18 +22,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Stack;
 import java.util.stream.Stream;
 
-import com.google.common.jimfs.Configuration;
-import com.google.common.jimfs.Jimfs;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+
 /**
- * Test checks symmetric behavior with  BufferedReader
+ * Test checks symmetric behavior with BufferedReader.
  */
 public class ReversedLinesFileReaderTestParamFile {
 
@@ -65,7 +68,7 @@ public class ReversedLinesFileReaderTestParamFile {
     public void testDataIntegrityWithBufferedReader(final String fileName, final String encodingName,
         final Integer blockSize, final boolean useNonDefaultFileSystem) throws IOException, URISyntaxException {
 
-        Path filePath = Paths.get(getClass().getResource("/" + fileName).toURI());
+        Path filePath = TestResources.getPath(fileName);
         FileSystem fileSystem = null;
         if (useNonDefaultFileSystem) {
             fileSystem = Jimfs.newFileSystem(Configuration.unix());
