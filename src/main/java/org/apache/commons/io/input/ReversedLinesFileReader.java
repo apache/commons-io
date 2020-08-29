@@ -201,6 +201,7 @@ public class ReversedLinesFileReader implements Closeable {
             return null;
         }
     }
+
     private static final String EMPTY_STRING = "";
     private static final int DEFAULT_BLOCK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
