@@ -65,22 +65,22 @@ public class ReversedLinesFileReaderTestParamFile {
     public void testDataIntegrityWithBufferedReader(final String fileName, final String encodingName,
         final Integer blockSize, final boolean useNonDefaultFileSystem) throws IOException, URISyntaxException {
 
-        Path file = Paths.get(getClass().getResource("/" + fileName).toURI());
+        Path filePath = Paths.get(getClass().getResource("/" + fileName).toURI());
         FileSystem fileSystem = null;
         if (useNonDefaultFileSystem) {
             fileSystem = Jimfs.newFileSystem(Configuration.unix());
-            file = Files.copy(file, fileSystem.getPath("/" + fileName));
+            filePath = Files.copy(filePath, fileSystem.getPath("/" + fileName));
         }
 
-        final Charset encoding = Charset.forName(encodingName);
+        final Charset charset = Charset.forName(encodingName);
         try (ReversedLinesFileReader reversedLinesFileReader = blockSize == null
-            ? new ReversedLinesFileReader(file, encoding)
-            : new ReversedLinesFileReader(file, blockSize, encoding)) {
+            ? new ReversedLinesFileReader(filePath, charset)
+            : new ReversedLinesFileReader(filePath, blockSize, charset)) {
 
             final Stack<String> lineStack = new Stack<>();
             String line;
 
-            try (BufferedReader bufferedReader = Files.newBufferedReader(file, encoding)) {
+            try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, charset)) {
                 // read all lines in normal order
                 while ((line = bufferedReader.readLine()) != null) {
                     lineStack.push(line);
