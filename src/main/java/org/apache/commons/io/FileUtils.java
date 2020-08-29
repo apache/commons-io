@@ -176,7 +176,6 @@ public class FileUtils {
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
@@ -307,7 +306,6 @@ public class FileUtils {
         return checksum;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Computes the checksum of a file using the CRC32 checksum routine.
      * The value of the checksum is returned.
@@ -373,7 +371,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Compares the contents of two files to determine if they are equal or not.
      * <p>
@@ -430,7 +427,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Compares the contents of two files to determine if they are equal or not.
      * <p>
@@ -482,7 +478,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts a Collection containing java.io.File instanced into array
      * representation. This is to account for the difference between
@@ -738,7 +733,6 @@ public class FileUtils {
         doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList, copyOptions);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies a directory to within another directory preserving the file dates.
      * <p>
@@ -910,7 +904,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies a file to a directory preserving the file date.
      * <p>
@@ -1094,7 +1087,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies bytes from the URL <code>source</code> to a file
      * <code>destination</code>. The directories up to <code>destination</code>
@@ -1198,7 +1190,6 @@ public class FileUtils {
         return decoded;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Deletes a directory recursively.
      *
@@ -1410,7 +1401,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Deletes a file. If file is a directory, delete it and all sub-directories.
      * <p>
@@ -1508,7 +1498,6 @@ public class FileUtils {
         forceMkdir(parent);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Construct a file from the set of name elements.
      *
@@ -1591,7 +1580,6 @@ public class FileUtils {
         return System.getProperty("user.home");
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
@@ -1902,7 +1890,6 @@ public class FileUtils {
         return isFileOlder(file, date.getTime());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Tests if the specified {@code File} is older than the reference {@code File}.
      *
@@ -2349,7 +2336,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Opens a {@link FileInputStream} for the specified file, providing better
      * error messages than simply calling <code>new FileInputStream(file)</code>.
@@ -2384,9 +2370,7 @@ public class FileUtils {
         return new FileInputStream(file);
     }
 
-    //-----------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------
     /**
      * Opens a {@link FileOutputStream} for the specified file, checking and
      * creating the parent directory if it does not exist.
@@ -2488,7 +2472,6 @@ public class FileUtils {
         return readFileToString(file, Charset.defaultCharset());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Reads the contents of a file into a String.
      * The file is always closed.
@@ -2600,7 +2583,6 @@ public class FileUtils {
         return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the size of the specified file or directory. If the provided
      * {@link File} is a regular file, then the file's length is returned.
@@ -2771,7 +2753,6 @@ public class FileUtils {
         return size;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
      * <p>
@@ -2835,7 +2816,6 @@ public class FileUtils {
         return files;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
@@ -2851,7 +2831,6 @@ public class FileUtils {
         return suffixes;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Implements the same behavior as the "touch" utility on Unix. It creates
      * a new file with size 0 or, if the file exists already, it is opened and
@@ -2958,7 +2937,6 @@ public class FileUtils {
         return files;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Waits for NFS to propagate a file creation, imposing a timeout.
      * <p>
