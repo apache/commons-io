@@ -37,7 +37,7 @@ public class RandomAccessFileInputStream extends InputStream {
      *
      * @param file The file to stream.
      */
-    public RandomAccessFileInputStream(RandomAccessFile file) {
+    public RandomAccessFileInputStream(final RandomAccessFile file) {
         this(file, false);
     }
 
@@ -47,7 +47,7 @@ public class RandomAccessFileInputStream extends InputStream {
      * @param file The file to stream.
      * @param closeOnClose Whether to close the underlying file when this stream is closed.
      */
-    public RandomAccessFileInputStream(RandomAccessFile file, boolean closeOnClose) {
+    public RandomAccessFileInputStream(final RandomAccessFile file, final boolean closeOnClose) {
         this.randomAccessFile = Objects.requireNonNull(file, "file");
         this.closeOnClose = closeOnClose;
     }
@@ -111,12 +111,12 @@ public class RandomAccessFileInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte[] bytes) throws IOException {
+    public int read(final byte[] bytes) throws IOException {
         return randomAccessFile.read(bytes);
     }
 
     @Override
-    public int read(byte[] bytes, int offset, int length) throws IOException {
+    public int read(final byte[] bytes, final int offset, final int length) throws IOException {
         return randomAccessFile.read(bytes, offset, length);
     }
 
@@ -127,12 +127,12 @@ public class RandomAccessFileInputStream extends InputStream {
      * @throws IOException See {@link RandomAccessFile#seek(long)}.
      * @see RandomAccessFile#seek(long)
      */
-    private void seek(long position) throws IOException {
+    private void seek(final long position) throws IOException {
         randomAccessFile.seek(position);
     }
 
     @Override
-    public long skip(long skipCount) throws IOException {
+    public long skip(final long skipCount) throws IOException {
         if (skipCount <= 0) {
             return 0;
         }
