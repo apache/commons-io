@@ -255,7 +255,7 @@ public class TailerTest {
         assertEquals(0, listener.getLines().size(), "4 line count");
         assertNotNull(listener.exception, "Missing InterruptedException");
         assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1 , listener.initialised, "Expected init to be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
         // assertEquals(0 , listener.notFound, "fileNotFound should not be called"); // there is a window when it might be called
         assertEquals(1 , listener.rotated, "fileRotated should be be called");
     }
@@ -355,7 +355,7 @@ public class TailerTest {
         tailer.stop();
         TestUtils.sleep(delay+idle);
         assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialised, "Expected init to be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0 , listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -381,7 +381,7 @@ public class TailerTest {
         TestUtils.sleep(delay + idle);
         assertNotNull(listener.exception, "Missing InterruptedException");
         assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1, listener.initialised, "Expected init to be called");
+        assertEquals(1, listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0, listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -401,7 +401,7 @@ public class TailerTest {
         tailer.stop();
         TestUtils.sleep(delay+idle);
         assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialised, "Expected init to be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0 , listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -444,7 +444,7 @@ public class TailerTest {
 
         volatile int rotated = 0;
 
-        volatile int initialised = 0;
+        volatile int initialized = 0;
 
         volatile int reachedEndOfFile = 0;
 
@@ -468,7 +468,7 @@ public class TailerTest {
 
         @Override
         public void init(final Tailer tailer) {
-            initialised++; // not atomic, but OK because only updated here.
+            initialized++; // not atomic, but OK because only updated here.
         }
 
         @Override
