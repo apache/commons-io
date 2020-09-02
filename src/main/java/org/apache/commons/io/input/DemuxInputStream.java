@@ -25,7 +25,6 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Data written to this stream is forwarded to a stream that has been associated with this thread.
- *
  */
 public class DemuxInputStream extends InputStream {
     private final InheritableThreadLocal<InputStream> inputStream = new InheritableThreadLocal<>();
