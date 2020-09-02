@@ -130,6 +130,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-676" dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
         Prevent NullPointerException in ReversedLinesFileReader constructors #117.
       </action>
+      <action dev="ggregory" type="add" due-to="Adam Retter, Gary Gregory">
+        Add a MarkShieldInputStream #119.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Deprecate IOUtils.LINE_SEPARATOR in favor of Java 7's System.lineSeparator().
