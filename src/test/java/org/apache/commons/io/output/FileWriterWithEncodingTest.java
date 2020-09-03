@@ -192,7 +192,7 @@ public class FileWriterWithEncodingTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void constructor_File_nullFile() throws IOException {
+    public void constructor_File_nullFile() {
         assertThrows(NullPointerException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding((File) null, defaultEncoding);
@@ -203,7 +203,7 @@ public class FileWriterWithEncodingTest {
 
     //-----------------------------------------------------------------------
     @Test
-    public void constructor_fileName_nullFile() throws IOException {
+    public void constructor_fileName_nullFile() {
         assertThrows(NullPointerException.class, () -> {
             try (
                 Writer writer = new FileWriterWithEncoding((String) null, defaultEncoding);
