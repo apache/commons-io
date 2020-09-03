@@ -31,6 +31,9 @@ import static java.lang.Math.min;
 //@NotThreadSafe
 public class UnsynchronizedByteArrayInputStream extends InputStream {
 
+    /**
+     * The end of stream marker.
+     */
     public static final int END_OF_STREAM = -1;
 
     /**
