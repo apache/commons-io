@@ -277,7 +277,7 @@ public class XmlStreamReader extends Reader {
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
-            this.encoding = doHttpStream(bom, pis, contentType, lenient);
+            this.encoding = processHttpStream(bom, pis, contentType, lenient);
         } else {
             this.encoding = doRawStream(bom, pis, lenient);
         }
@@ -346,7 +346,7 @@ public class XmlStreamReader extends Reader {
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
-        this.encoding = doHttpStream(bom, pis, httpContentType, lenient);
+        this.encoding = processHttpStream(bom, pis, httpContentType, lenient);
         this.reader = new InputStreamReader(pis, encoding);
     }
 
@@ -456,14 +456,13 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
-            final boolean lenient) throws IOException {
-        final String bomEnc      = bom.getBOMCharsetName();
+    private String processHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
+        final boolean lenient) throws IOException {
+        final String bomEnc = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
         final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         try {
-            return calculateHttpEncoding(httpContentType, bomEnc,
-                    xmlGuessEnc, xmlEnc, lenient);
+            return calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
         } catch (final XmlStreamReaderException ex) {
             if (lenient) {
                 return doLenientDetection(httpContentType, ex);

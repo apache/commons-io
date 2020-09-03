@@ -178,6 +178,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -196,6 +197,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -213,6 +215,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -231,6 +234,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
