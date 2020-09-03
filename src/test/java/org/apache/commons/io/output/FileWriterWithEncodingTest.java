@@ -66,7 +66,6 @@ public class FileWriterWithEncodingTest {
         textContent = new String(arr);
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void sameEncoding_string_constructor() throws Exception {
         successfulRun(new FileWriterWithEncoding(file2, defaultEncoding));
@@ -168,7 +167,6 @@ public class FileWriterWithEncodingTest {
         fw2.flush();
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void constructor_File_encoding_badEncoding() {
         assertThrows(IOException.class, () -> {
@@ -179,7 +177,6 @@ public class FileWriterWithEncodingTest {
         assertFalse(file1.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void constructor_File_directory() {
         assertThrows(IOException.class, () -> {
@@ -190,7 +187,6 @@ public class FileWriterWithEncodingTest {
         assertFalse(file1.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void constructor_File_nullFile() {
         assertThrows(NullPointerException.class, () -> {
@@ -201,7 +197,6 @@ public class FileWriterWithEncodingTest {
         assertFalse(file1.exists());
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void constructor_fileName_nullFile() {
         assertThrows(NullPointerException.class, () -> {
