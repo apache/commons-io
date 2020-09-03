@@ -696,6 +696,9 @@ public class XmlStreamReader extends Reader {
         return encoding;
     }
 
+    /**
+     * Pattern capturing the encoding of the "xml" processing instruction.
+     */
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
             "<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))",
             Pattern.MULTILINE);
