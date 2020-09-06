@@ -61,17 +61,6 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     *
-     * @param skip The files to skip deleting.
-     */
-    public DeletingPathVisitor(final PathCounters pathCounter, final String... skip) {
-        this(pathCounter, PathUtils.EMPTY_DELETE_OPTION_ARRAY, skip);
-    }
-
-    /**
-     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
-     *
-     * @param pathCounter How to count visits.
      * @param deleteOption options indicating how deletion is handled.
      * @param skip The files to skip deleting.
      * @since 2.8.0
@@ -85,6 +74,17 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     }
 
     /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     *
+     * @param skip The files to skip deleting.
+     */
+    public DeletingPathVisitor(final PathCounters pathCounter, final String... skip) {
+        this(pathCounter, PathUtils.EMPTY_DELETE_OPTION_ARRAY, skip);
+    }
+
+    /**
      * Returns true to process the given path, false if not.
      *
      * @param path the path to test.
@@ -92,6 +92,30 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      */
     private boolean accept(final Path path) {
         return Arrays.binarySearch(skip, Objects.toString(path.getFileName(), null)) < 0;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DeletingPathVisitor other = (DeletingPathVisitor) obj;
+        return overrideReadOnly == other.overrideReadOnly && Arrays.equals(skip, other.skip);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Arrays.hashCode(skip);
+        result = prime * result + Objects.hash(overrideReadOnly);
+        return result;
     }
 
     @Override

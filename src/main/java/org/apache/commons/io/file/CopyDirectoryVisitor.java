@@ -23,6 +23,8 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
+import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 
@@ -67,6 +69,22 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         Files.copy(sourceFile, targetFile, copyOptions);
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CopyDirectoryVisitor other = (CopyDirectoryVisitor) obj;
+        return Arrays.equals(copyOptions, other.copyOptions) && Objects.equals(sourceDirectory, other.sourceDirectory)
+                && Objects.equals(targetDirectory, other.targetDirectory);
+    }
+
     /**
      * Gets the copy options.
      *
@@ -95,6 +113,15 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      */
     public Path getTargetDirectory() {
         return targetDirectory;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Arrays.hashCode(copyOptions);
+        result = prime * result + Objects.hash(sourceDirectory, targetDirectory);
+        return result;
     }
 
     @Override
