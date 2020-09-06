@@ -34,34 +34,31 @@ public class ObservableInputStreamTest {
         private boolean closed;
 
         @Override
-		public
-        void data(final int pByte) throws IOException {
+        public void data(final int pByte) throws IOException {
             super.data(pByte);
             lastByteSeen = pByte;
         }
 
         @Override
-		public
-        void finished() throws IOException {
+        public void finished() throws IOException {
             super.finished();
             finished = true;
         }
 
         @Override
-		public
-        void closed() throws IOException {
+        public void closed() throws IOException {
             super.closed();
             closed = true;
         }
     }
+
     private static class LastBytesKeepingObserver extends Observer {
         private byte[] buffer = null;
         private int offset = -1;
         private int length = -1;
 
         @Override
-		public
-        void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
+        public void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
             super.data(pBuffer, pOffset, pLength);
             buffer = pBuffer;
             offset = pOffset;
@@ -69,40 +66,45 @@ public class ObservableInputStreamTest {
         }
     }
 
-    /** Tests, that {@link Observer#data(int)} is called.
+    /**
+     * Tests that {@link Observer#data(int)} is called.
      */
     @Test
     public void testDataByteCalled() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
-        final ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer));
+        final byte[] buffer = MessageDigestCalculatingInputStreamTest
+                .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final LastByteKeepingObserver lko = new LastByteKeepingObserver();
-        assertEquals(-1, lko.lastByteSeen);
-        ois.read();
-        assertEquals(-1, lko.lastByteSeen);
-        assertFalse(lko.finished);
-        assertFalse(lko.closed);
-        ois.add(lko);
-        for (int i = 1;  i < buffer.length;  i++) {
-            final int result = ois.read();
-            assertEquals((byte) result, buffer[i]);
-            assertEquals(result, lko.lastByteSeen);
+        try (final ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer))) {
+            assertEquals(-1, lko.lastByteSeen);
+            ois.read();
+            assertEquals(-1, lko.lastByteSeen);
             assertFalse(lko.finished);
             assertFalse(lko.closed);
+            ois.add(lko);
+            for (int i = 1; i < buffer.length; i++) {
+                final int result = ois.read();
+                assertEquals((byte) result, buffer[i]);
+                assertEquals(result, lko.lastByteSeen);
+                assertFalse(lko.finished);
+                assertFalse(lko.closed);
+            }
+            final int result = ois.read();
+            assertEquals(-1, result);
+            assertTrue(lko.finished);
+            assertFalse(lko.closed);
+            ois.close();
+            assertTrue(lko.finished);
+            assertTrue(lko.closed);
         }
-        final int result = ois.read();
-        assertEquals(-1, result);
-        assertTrue(lko.finished);
-        assertFalse(lko.closed);
-        ois.close();
-        assertTrue(lko.finished);
-        assertTrue(lko.closed);
     }
 
-    /** Tests, that {@link Observer#data(byte[],int,int)} is called.
+    /**
+     * Tests that {@link Observer#data(byte[],int,int)} is called.
      */
     @Test
     public void testDataBytesCalled() throws Exception {
-        final byte[] buffer = MessageDigestCalculatingInputStreamTest.generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
+        final byte[] buffer = MessageDigestCalculatingInputStreamTest
+                .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
         final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
         final ObservableInputStream ois = new ObservableInputStream(bais);
         final LastBytesKeepingObserver lko = new LastBytesKeepingObserver();
