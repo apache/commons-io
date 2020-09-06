@@ -128,6 +128,6 @@ public abstract class ComparatorAbstractTestCase {
     @Test
     public void testToString() {
         assertNotNull(comparator.toString(), "comparator");
-        assertTrue(reverse.toString().startsWith("ReverseComparator["), "reverse");
+        assertTrue(reverse.toString().startsWith("ReverseFileComparator["), "reverse");
     }
 }

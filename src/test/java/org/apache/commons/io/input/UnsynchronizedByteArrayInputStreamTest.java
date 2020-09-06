@@ -24,13 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+
 /**
  * Basic unit tests for the alternative ByteArrayInputStream implementation.
  */
 public class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
-    public void testConstructor1() {
+    public void testConstructor1() throws IOException {
         final byte[] empty = new byte[0];
         final byte[] one = new byte[1];
         final byte[] some = new byte[25];
@@ -38,14 +40,18 @@ public class UnsynchronizedByteArrayInputStreamTest {
         UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(empty);
         assertEquals(empty.length, is.available());
 
+        is.close();
         is = new UnsynchronizedByteArrayInputStream(one);
         assertEquals(one.length, is.available());
 
+        is.close();
         is = new UnsynchronizedByteArrayInputStream(some);
         assertEquals(some.length, is.available());
+        is.close();
     }
 
     @Test
+    @SuppressWarnings("resource") // not necessary to close these resources
     public void testConstructor2() {
         final byte[] empty = new byte[0];
         final byte[] one = new byte[1];
@@ -74,6 +80,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     }
 
     @Test
+    @SuppressWarnings("resource") // not necessary to close these resources
     public void testConstructor3() {
         final byte[] empty = new byte[0];
         final byte[] one = new byte[1];
@@ -149,6 +156,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     }
 
     @Test
+    @SuppressWarnings("resource") // not necessary to close these resources
     public void testInvalidReadArrayExplicitLenUnder() {
         final byte[] buf = new byte[0];
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
@@ -160,6 +168,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     @Test
     public void testInvalidReadArrayExplicitOffsetUnder() {
         final byte[] buf = new byte[0];
+        @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertThrows(IndexOutOfBoundsException.class, () -> {
             is.read(buf, -1, 1);
@@ -169,6 +178,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     @Test
     public void testInvalidReadArrayExplicitRangeOver() {
         final byte[] buf = new byte[0];
+        @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertThrows(IndexOutOfBoundsException.class, () -> {
             is.read(buf, 0, 1);
@@ -178,6 +188,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     @Test
     public void testInvalidReadArrayNull() {
         final byte[] buf = null;
+        @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertThrows(NullPointerException.class, () -> {
             is.read(buf);
@@ -186,6 +197,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
     public void testInvalidSkipNUnder() {
+        @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertThrows(IllegalArgumentException.class, () -> {
             is.skip(-1);
@@ -194,6 +206,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
     public void testMarkReset() {
+        @SuppressWarnings("resource") // not necessary to close these resources
         final UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertTrue(is.markSupported());
         assertEquals(0xa, is.read());
@@ -220,6 +233,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     @Test
     public void testReadArray() {
         byte[] buf = new byte[10];
+        @SuppressWarnings("resource") // not necessary to close these resources
         UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[0]);
         int read = is.read(buf);
         assertEquals(END_OF_STREAM, read);
@@ -253,6 +267,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
     @Test
     public void testReadArrayExplicit() {
         byte[] buf = new byte[10];
+        @SuppressWarnings("resource") // not necessary to close these resources
         UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[0]);
         int read = is.read(buf, 0, 10);
         assertEquals(END_OF_STREAM, read);
@@ -289,6 +304,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
     public void testReadSingle() {
+        @SuppressWarnings("resource") // not necessary to close these resources
         UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[0]);
         assertEquals(END_OF_STREAM, is.read());
 
@@ -301,6 +317,7 @@ public class UnsynchronizedByteArrayInputStreamTest {
 
     @Test
     public void testSkip() {
+        @SuppressWarnings("resource") // not necessary to close these resources
         UnsynchronizedByteArrayInputStream is = new UnsynchronizedByteArrayInputStream(new byte[] {(byte)0xa, (byte)0xb, (byte)0xc});
         assertEquals(3, is.available());
 

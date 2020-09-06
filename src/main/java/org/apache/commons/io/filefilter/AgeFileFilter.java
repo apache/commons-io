@@ -53,6 +53,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
 
     /** The cutoff time threshold. */
     private final long cutoff;
+
     /** Whether the files accepted will be older or newer. */
     private final boolean acceptOlder;
 

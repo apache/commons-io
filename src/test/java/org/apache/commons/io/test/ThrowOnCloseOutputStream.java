@@ -14,35 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.testtools;
+package org.apache.commons.io.test;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 
-import org.apache.commons.io.input.NullInputStream;
-import org.apache.commons.io.input.ProxyInputStream;
+import org.apache.commons.io.output.NullOutputStream;
+import org.apache.commons.io.output.ProxyOutputStream;
 
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseInputStream extends ProxyInputStream {
+public class ThrowOnCloseOutputStream extends ProxyOutputStream {
 
     /**
      * Default ctor.
      */
-    @SuppressWarnings("resource")
-    public YellOnCloseInputStream() {
-        super(new NullInputStream());
+    public ThrowOnCloseOutputStream() {
+        super(NullOutputStream.NULL_OUTPUT_STREAM);
     }
 
     /**
-     * @param proxy InputStream to delegate to.
+     * @param proxy OutputStream to delegate to.
      */
-    public YellOnCloseInputStream(final InputStream proxy) {
+    public ThrowOnCloseOutputStream(final OutputStream proxy) {
         super(proxy);
     }
 
-    /** @see java.io.InputStream#close() */
+    /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
         throw new IOException(getClass().getSimpleName() + ".close() called.");

@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
@@ -53,6 +54,24 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     }
 
     private final String[] skip;
+    private final boolean overrideReadOnly;
+
+    /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     * @param deleteOption options indicating how deletion is handled.
+     * @param skip The files to skip deleting.
+     * @since 2.8.0
+     */
+    public CleaningPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption,
+        final String... skip) {
+        super(pathCounter);
+        final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
+        Arrays.sort(temp);
+        this.skip = temp;
+        this.overrideReadOnly = StandardDeleteOption.overrideReadOnly(deleteOption);
+    }
 
     /**
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
@@ -61,10 +80,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
      * @param skip The files to skip deleting.
      */
     public CleaningPathVisitor(final PathCounters pathCounter, final String... skip) {
-        super(pathCounter);
-        final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
-        Arrays.sort(temp);
-        this.skip = temp;
+        this(pathCounter, PathUtils.EMPTY_DELETE_OPTION_ARRAY, skip);
     }
 
     /**
@@ -78,6 +94,30 @@ public class CleaningPathVisitor extends CountingPathVisitor {
     }
 
     @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CleaningPathVisitor other = (CleaningPathVisitor) obj;
+        return overrideReadOnly == other.overrideReadOnly && Arrays.equals(skip, other.skip);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Arrays.hashCode(skip);
+        result = prime * result + Objects.hash(overrideReadOnly);
+        return result;
+    }
+
+    @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
         super.preVisitDirectory(dir, attributes);
         return accept(dir) ? FileVisitResult.CONTINUE : FileVisitResult.SKIP_SUBTREE;
@@ -85,7 +125,11 @@ public class CleaningPathVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        if (accept(file) && Files.exists(file)) {
+        // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
+        if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+            if (overrideReadOnly) {
+                PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+            }
             Files.deleteIfExists(file);
         }
         updateFileCounters(file, attributes);

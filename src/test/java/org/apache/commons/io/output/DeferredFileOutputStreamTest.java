@@ -59,7 +59,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testBelowThreshold(int initialBufferSize) {
+    public void testBelowThreshold(final int initialBufferSize) {
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize,
             null);
         try {
@@ -81,7 +81,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testAtThreshold(int initialBufferSize) {
+    public void testAtThreshold(final int initialBufferSize) {
         final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length, initialBufferSize, null);
         try {
             dfos.write(testBytes, 0, testBytes.length);
@@ -102,7 +102,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testAboveThreshold(int initialBufferSize) {
+    public void testAboveThreshold(final int initialBufferSize) {
         final File testFile = new File("testAboveThreshold.dat");
 
         // Ensure that the test starts from a clean base.
@@ -131,7 +131,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testThresholdReached(int initialBufferSize) {
+    public void testThresholdReached(final int initialBufferSize) {
         final File testFile = new File("testThresholdReached.dat");
 
         // Ensure that the test starts from a clean base.
@@ -163,7 +163,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testWriteToSmall(int initialBufferSize) {
+    public void testWriteToSmall(final int initialBufferSize) {
         final File testFile = new File("testWriteToMem.dat");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
         // Ensure that the test starts from a clean base.
@@ -200,7 +200,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testWriteToLarge(int initialBufferSize) {
+    public void testWriteToLarge(final int initialBufferSize) {
         final File testFile = new File("testWriteToFile.dat");
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(initialBufferSize);
         // Ensure that the test starts from a clean base.
@@ -236,7 +236,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileBelowThreshold(int initialBufferSize) {
+    public void testTempFileBelowThreshold(final int initialBufferSize) {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
@@ -259,7 +259,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileAboveThreshold(int initialBufferSize) {
+    public void testTempFileAboveThreshold(final int initialBufferSize) {
 
         final String prefix = "commons-io-test";
         final String suffix = ".out";
@@ -292,7 +292,7 @@ public class DeferredFileOutputStreamTest {
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")
-    public void testTempFileAboveThresholdPrefixOnly(int initialBufferSize) {
+    public void testTempFileAboveThresholdPrefixOnly(final int initialBufferSize) {
 
         final String prefix = "commons-io-test";
         final String suffix = null;
@@ -321,7 +321,7 @@ public class DeferredFileOutputStreamTest {
 
     /**
      * Test specifying a temporary file and the threshold is reached.
-     * 
+     *
      * @throws Exception
      */
     @Test

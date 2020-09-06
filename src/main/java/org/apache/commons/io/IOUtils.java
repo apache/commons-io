@@ -30,7 +30,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -53,6 +52,7 @@ import java.util.function.Consumer;
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
 
 /**
@@ -135,8 +135,11 @@ public class IOUtils {
 
     /**
      * The system line separator string.
+     * 
+     * @deprecated Use {@link System#lineSeparator()}.
      */
-    public static final String LINE_SEPARATOR;
+    @Deprecated
+    public static final String LINE_SEPARATOR = System.lineSeparator();
 
     /**
      * The Unix line separator string.
@@ -149,12 +152,10 @@ public class IOUtils {
     public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
 
     /**
-     * The default buffer size to use for the skip() methods.
+     * The default buffer to use for the skip() methods.
      */
-    private static final int SKIP_BUFFER_SIZE = 2048;
-
-    private static byte[] SKIP_BYTE_BUFFER;
-
+    private static final byte[] SKIP_BYTE_BUFFER = new byte[DEFAULT_BUFFER_SIZE];
+    
     // Allocated in the relevant skip method if necessary.
     /*
      * These buffers are static and are shared between threads.
@@ -168,15 +169,6 @@ public class IOUtils {
      */
     private static char[] SKIP_CHAR_BUFFER;
 
-    static {
-        // avoid security issues
-        try (final StringBuilderWriter buf = new StringBuilderWriter(4);
-                final PrintWriter out = new PrintWriter(buf)) {
-            out.println();
-            LINE_SEPARATOR = buf.toString();
-        }
-    }
-
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.
@@ -186,6 +178,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedInputStream buffer(final InputStream inputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -204,6 +197,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedInputStream buffer(final InputStream inputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -221,6 +215,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedOutputStream buffer(final OutputStream outputStream) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -239,6 +234,7 @@ public class IOUtils {
      * @throws NullPointerException if the input parameter is null
      * @since 2.5
      */
+    @SuppressWarnings("resource") // parameter null check
     public static BufferedOutputStream buffer(final OutputStream outputStream, final int size) {
         // reject null early on rather than waiting for IO operation to fail
         // not checked by BufferedInputStream
@@ -302,6 +298,66 @@ public class IOUtils {
     }
 
     /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable) throws IOException {
+        if (closeable != null) {
+            closeable.close();
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeables The resource(s) to close, may be null.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static void close(final Closeable... closeables) throws IOException {
+        if (closeables != null) {
+            for (final Closeable closeable : closeables) {
+                close(closeable);
+            }
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.7
+     */
+    public static void close(final Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Closes a URLConnection.
+     *
+     * @param conn the connection to close.
+     * @since 2.4
+     */
+    public static void close(final URLConnection conn) {
+        if (conn instanceof HttpURLConnection) {
+            ((HttpURLConnection) conn).disconnect();
+        }
+    }
+
+    /**
      * Closes a <code>Closeable</code> unconditionally.
      * <p>
      * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored. This is typically used in
@@ -343,70 +399,6 @@ public class IOUtils {
     @Deprecated
     public static void closeQuietly(final Closeable closeable) {
         closeQuietly(closeable, (Consumer<IOException>) null);
-    }
-
-    /**
-     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
-     *
-     * @param closeable The resource to close, may be null.
-     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
-     * @since 2.7
-     */
-    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-                if (consumer != null) {
-                    consumer.accept(e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Closes the given {@link Closeable} as a null-safe operation.
-     *
-     * @param closeable The resource to close, may be null.
-     * @throws IOException if an I/O error occurs.
-     * @since 2.7
-     */
-    public static void close(final Closeable closeable) throws IOException {
-        if (closeable != null) {
-            closeable.close();
-        }
-    }
-
-    /**
-     * Closes the given {@link Closeable} as a null-safe operation.
-     *
-     * @param closeable The resource to close, may be null.
-     * @param consumer Consume the IOException thrown by {@link Closeable#close()}.
-     * @throws IOException if an I/O error occurs.
-     * @since 2.7
-     */
-    public static void close(final Closeable closeable, final IOConsumer<IOException> consumer) throws IOException {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-                if (consumer != null) {
-                    consumer.accept(e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Closes a URLConnection.
-     *
-     * @param conn the connection to close.
-     * @since 2.4
-     */
-    public static void close(final URLConnection conn) {
-        if (conn instanceof HttpURLConnection) {
-            ((HttpURLConnection) conn).disconnect();
-        }
     }
 
     /**
@@ -463,6 +455,25 @@ public class IOUtils {
         }
         for (final Closeable closeable : closeables) {
             closeQuietly(closeable);
+        }
+    }
+
+    /**
+     * Closes the given {@link Closeable} as a null-safe operation while consuming IOException by the given {@code consumer}.
+     *
+     * @param closeable The resource to close, may be null.
+     * @param consumer Consumes the IOException thrown by {@link Closeable#close()}.
+     * @since 2.7
+     */
+    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> consumer) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (final IOException e) {
+                if (consumer != null) {
+                    consumer.accept(e);
+                }
+            }
         }
     }
 
@@ -691,6 +702,22 @@ public class IOUtils {
     }
 
     /**
+     * Consumes bytes from a <code>InputStream</code> and ignores them.
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
+     *
+     * @param input the <code>InputStream</code> to read from
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws IOException if an I/O error occurs
+     * @since 2.8.0
+     */
+    public static long consume(final InputStream input)
+            throws IOException {
+        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, SKIP_BYTE_BUFFER);
+    }
+
+    /**
      * Compares the contents of two Streams to determine if they are equal or
      * not.
      * <p>
@@ -808,16 +835,18 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
      * Large streams (over 2GB) will return a bytes copied value of
      * <code>-1</code> after the copy has completed since the correct
      * number of bytes cannot be returned as an int. For large streams
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE
-     * @throws NullPointerException if the input or output is null
+     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE, or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
@@ -834,14 +863,14 @@ public class IOUtils {
      * given size.
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
-     * <p>
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @param bufferSize the bufferSize used to copy from the input to the output
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
      * @since 2.5
      */
     public static long copy(final InputStream input, final OutputStream output, final int bufferSize)
@@ -882,7 +911,7 @@ public class IOUtils {
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
-     * @param inputCharset the charser to use for the input stream, null means platform default
+     * @param inputCharset the charset to use for the input stream, null means platform default
      * @throws NullPointerException if the input or output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
@@ -1089,14 +1118,16 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      * <p>
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the output is null
+     * @throws IOException if an I/O error occurs
      * @since 1.3
      */
     public static long copyLarge(final InputStream input, final OutputStream output)
@@ -1110,23 +1141,24 @@ public class IOUtils {
      * <p>
      * This method uses the provided buffer, so there is no need to use a
      * <code>BufferedInputStream</code>.
-     * <p>
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @param buffer the buffer to use for the copy
-     * @return the number of bytes copied
-     * @throws NullPointerException if the input or output is null
-     * @throws IOException          if an I/O error occurs
+     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws IOException if an I/O error occurs
      * @since 2.2
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer)
-            throws IOException {
+        throws IOException {
         long count = 0;
-        int n;
-        while (EOF != (n = input.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
+        if (input != null) {
+            int n;
+            while (EOF != (n = input.read(buffer))) {
+                output.write(buffer, 0, n);
+                count += n;
+            }
         }
         return count;
     }
@@ -1784,13 +1816,13 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
+    @SuppressWarnings("resource") // reader wraps input and is the responsibility of the caller.
     public static List<String> readLines(final Reader input) throws IOException {
         final BufferedReader reader = toBufferedReader(input);
         final List<String> list = new ArrayList<>();
-        String line = reader.readLine();
-        while (line != null) {
+        String line;
+        while ((line = reader.readLine()) != null) {
             list.add(line);
-            line = reader.readLine();
         }
         return list;
     }
@@ -1944,17 +1976,15 @@ public class IOUtils {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
         /*
-         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
-         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
-         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+         * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
+         * times (the data is ignored) - we always use the same size buffer, so if it it is recreated it will still be
+         * OK (if the buffer size were variable, we would need to synch. to ensure some other thread did not create a
+         * smaller one)
          */
-        if (SKIP_BYTE_BUFFER == null) {
-            SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];
-        }
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             if (n < 0) { // EOF
                 break;
             }
@@ -1979,11 +2009,11 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BUFFER_SIZE));
+        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BYTE_BUFFER.length));
         long remain = toSkip;
         while (remain > 0) {
             skipByteBuffer.position(0);
-            skipByteBuffer.limit((int) Math.min(remain, SKIP_BUFFER_SIZE));
+            skipByteBuffer.limit((int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             final int n = input.read(skipByteBuffer);
             if (n == EOF) {
                 break;
@@ -2024,12 +2054,12 @@ public class IOUtils {
          * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
          */
         if (SKIP_CHAR_BUFFER == null) {
-            SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];
+            SKIP_CHAR_BUFFER = new char[SKIP_BYTE_BUFFER.length];
         }
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));
+            final long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
             if (n < 0) { // EOF
                 break;
             }
@@ -2198,6 +2228,7 @@ public class IOUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
+     * </p>
      *
      * @param input the <code>InputStream</code> to read from
      * @return the requested byte array
@@ -2893,7 +2924,7 @@ public class IOUtils {
      * @param data the char array to write, do not modify during output,
      * null ignored
      * @param output the <code>OutputStream</code> to write to
-     * @param charset the chartset to use, null means platform default
+     * @param charset the charset to use, null means platform default
      * @throws NullPointerException if output is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
@@ -3116,7 +3147,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final OutputStream output)
+    public static void write(final StringBuffer data, final OutputStream output) //NOSONAR
             throws IOException {
         write(data, output, (String) null);
     }
@@ -3141,7 +3172,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, OutputStream, String)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final OutputStream output, final String charsetName)
+    public static void write(final StringBuffer data, final OutputStream output, final String charsetName) //NOSONAR
             throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes(Charsets.toCharset(charsetName)));
@@ -3159,7 +3190,7 @@ public class IOUtils {
      * @deprecated replaced by write(CharSequence, Writer)
      */
     @Deprecated
-    public static void write(final StringBuffer data, final Writer output)
+    public static void write(final StringBuffer data, final Writer output) //NOSONAR
             throws IOException {
         if (data != null) {
             output.write(data.toString());
@@ -3255,7 +3286,7 @@ public class IOUtils {
             return;
         }
         if (lineEnding == null) {
-            lineEnding = LINE_SEPARATOR;
+            lineEnding = System.lineSeparator();
         }
         final Charset cs = Charsets.toCharset(charset);
         for (final Object line : lines) {
@@ -3307,7 +3338,7 @@ public class IOUtils {
             return;
         }
         if (lineEnding == null) {
-            lineEnding = LINE_SEPARATOR;
+            lineEnding = System.lineSeparator();
         }
         for (final Object line : lines) {
             if (line != null) {
@@ -3340,7 +3371,7 @@ public class IOUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public IOUtils() {
+    public IOUtils() { //NOSONAR
         super();
     }
 

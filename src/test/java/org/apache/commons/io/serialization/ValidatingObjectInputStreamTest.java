@@ -40,7 +40,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     private MockSerializedClass testObject;
     private InputStream testStream;
 
-    static private final ClassNameMatcher ALWAYS_TRUE = className -> true;
+    private static final ClassNameMatcher ALWAYS_TRUE = className -> true;
 
     @Override
     @BeforeEach

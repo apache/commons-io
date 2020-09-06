@@ -339,7 +339,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
          *
          * @return the InputStream subclass.
          */
-        T construct(final byte buf[], final int offset, final int length);
+        T construct(final byte[] buf, final int offset, final int length);
     }
 
     /**
@@ -363,7 +363,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         if (remaining == 0) {
             return EMPTY_BYTE_ARRAY;
         }
-        final byte newbuf[] = new byte[remaining];
+        final byte[] newbuf = new byte[remaining];
         int pos = 0;
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);

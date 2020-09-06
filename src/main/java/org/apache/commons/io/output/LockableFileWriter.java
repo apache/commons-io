@@ -259,7 +259,7 @@ public class LockableFileWriter extends Writer {
      * @param file  the file to be accessed
      * @param charset  the charset to use
      * @param append  true to append
-     * @return The initialised writer
+     * @return The initialized writer
      * @throws IOException if an error occurs
      */
     private Writer initWriter(final File file, final Charset charset, final boolean append) throws IOException {

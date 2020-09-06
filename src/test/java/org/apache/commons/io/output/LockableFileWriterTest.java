@@ -58,7 +58,7 @@ public class LockableFileWriterTest {
     //-----------------------------------------------------------------------
     @Test public void testFileLocked() throws IOException {
 
-        // open a valid locakable writer
+        // open a valid lockable writer
         try (LockableFileWriter lfw1 = new LockableFileWriter(file)) {
             assertTrue(file.exists());
             assertTrue(lockFile.exists());
@@ -91,7 +91,7 @@ public class LockableFileWriterTest {
 
     //-----------------------------------------------------------------------
     @Test public void testAlternateLockDir() throws IOException {
-        // open a valid locakable writer
+        // open a valid lockable writer
         try (LockableFileWriter lfw1 = new LockableFileWriter(file, "UTF-8" ,true, altLockDir.getAbsolutePath())){
             assertTrue(file.exists());
             assertTrue(altLockFile.exists());

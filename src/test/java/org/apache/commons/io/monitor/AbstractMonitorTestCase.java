@@ -16,7 +16,7 @@
  */
 package org.apache.commons.io.monitor;
 
-import static org.apache.commons.io.testtools.TestUtils.sleepQuietly;
+import static org.apache.commons.io.test.TestUtils.sleepQuietly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 

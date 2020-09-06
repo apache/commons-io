@@ -70,7 +70,7 @@ public class PathUtilsCleanDirectoryTest {
     }
 
     /**
-     * Tests a directory with two subdirectorys, each containing one file of size 1.
+     * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
     public void testCleanDirectory2FileSize2() throws IOException {

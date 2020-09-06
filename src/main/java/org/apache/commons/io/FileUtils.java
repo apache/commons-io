@@ -33,9 +33,16 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -54,7 +61,6 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.output.NullOutputStream;
 
 /**
  * General file manipulation utilities.
@@ -83,7 +89,6 @@ import org.apache.commons.io.output.NullOutputStream;
  * </p>
  */
 public class FileUtils {
-
     /**
      * The number of bytes in a kilobyte.
      */
@@ -171,7 +176,6 @@ public class FileUtils {
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
@@ -297,12 +301,11 @@ public class FileUtils {
             throw new IllegalArgumentException("Checksums can't be computed on directories");
         }
         try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
-            IOUtils.copy(in, NullOutputStream.NULL_OUTPUT_STREAM);
+            IOUtils.consume(in);
         }
         return checksum;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Computes the checksum of a file using the CRC32 checksum routine.
      * The value of the checksum is returned.
@@ -324,21 +327,22 @@ public class FileUtils {
      * @param directory directory to clean
      * @throws IOException              in case cleaning is unsuccessful
      * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
+     * @see #forceDelete(File)
      */
     public static void cleanDirectory(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
 
-        IOException exception = null;
+        final List<Exception> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDelete(file);
             } catch (final IOException ioe) {
-                exception = ioe;
+                causeList.add(ioe);
             }
         }
 
-        if (null != exception) {
-            throw exception;
+        if (!causeList.isEmpty()) {
+            throw new IOExceptionList(causeList);
         }
     }
 
@@ -348,25 +352,25 @@ public class FileUtils {
      * @param directory directory to clean, must not be {@code null}
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException          in case cleaning is unsuccessful
+     * @see #forceDeleteOnExit(File)
      */
     private static void cleanDirectoryOnExit(final File directory) throws IOException {
         final File[] files = verifiedListFiles(directory);
 
-        IOException exception = null;
+        final List<Exception> causeList = new ArrayList<>();
         for (final File file : files) {
             try {
                 forceDeleteOnExit(file);
             } catch (final IOException ioe) {
-                exception = ioe;
+                causeList.add(ioe);
             }
         }
 
-        if (null != exception) {
-            throw exception;
+        if (!causeList.isEmpty()) {
+            throw new IOExceptionList(causeList);
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Compares the contents of two files to determine if they are equal or not.
      * <p>
@@ -423,7 +427,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Compares the contents of two files to determine if they are equal or not.
      * <p>
@@ -475,7 +478,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts a Collection containing java.io.File instanced into array
      * representation. This is to account for the difference between
@@ -652,8 +654,62 @@ public class FileUtils {
      * @throws IOException          if an IO error occurs during copying
      * @since 1.4
      */
-    public static void copyDirectory(final File srcDir, final File destDir,
-                                     final FileFilter filter, final boolean preserveFileDate) throws IOException {
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+        final boolean preserveFileDate) throws IOException {
+        copyDirectory(srcDir, destDir, filter, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Copies a filtered directory to a new location.
+     * <p>
+     * This method copies the contents of the specified source directory
+     * to within the specified destination directory.
+     * </p>
+     * <p>
+     * The destination directory is created if it does not exist.
+     * If the destination directory did exist, then this method merges
+     * the source with the destination, with the source taking precedence.
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * {@code true} tries to preserve the files' last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that those operations will succeed.
+     * If the modification operation fails, no indication is provided.
+     * </p>
+     * <b>Example: Copy directories only</b>
+     * <pre>
+     *  // only copy the directory structure
+     *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
+     *  </pre>
+     *
+     * <b>Example: Copy directories and txt files</b>
+     * <pre>
+     *  // Create a filter for ".txt" files
+     *  IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
+     *  IOFileFilter txtFiles = FileFilterUtils.andFileFilter(FileFileFilter.FILE, txtSuffixFilter);
+     *
+     *  // Create a filter for either directories or ".txt" files
+     *  FileFilter filter = FileFilterUtils.orFileFilter(DirectoryFileFilter.DIRECTORY, txtFiles);
+     *
+     *  // Copy using the filter
+     *  FileUtils.copyDirectory(srcDir, destDir, filter, false);
+     *  </pre>
+     *
+     * @param srcDir           an existing directory to copy, must not be {@code null}
+     * @param destDir          the new directory, must not be {@code null}
+     * @param filter           the filter to apply, null means copy all directories and files
+     * @param preserveFileDate true if the file date of the copy
+     *                         should be the same as the original
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
+     *
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
+     * @since 2.8.0
+     */
+    public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
+        final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
         checkFileRequirements(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
@@ -674,10 +730,9 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList);
+        doCopyDirectory(srcDir, destDir, filter, preserveFileDate, exclusionList, copyOptions);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies a directory to within another directory preserving the file dates.
      * <p>
@@ -774,10 +829,43 @@ public class FileUtils {
      * @throws IOException          if the output file length is not the same as the input file length after the copy
      * completes
      * @see #copyFileToDirectory(File, File, boolean)
-     * @see #doCopyFile(File, File, boolean)
      */
-    public static void copyFile(final File srcFile, final File destFile,
-                                final boolean preserveFileDate) throws IOException {
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+        throws IOException {
+        copyFile(srcFile, destFile, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Copies a file to a new location.
+     * <p>
+     * This method copies the contents of the specified source file
+     * to the specified destination file.
+     * The directory holding the destination file is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * {@code true} tries to preserve the file's last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     * </p>
+     *
+     * @param srcFile          an existing file to copy, must not be {@code null}
+     * @param destFile         the new file, must not be {@code null}
+     * @param preserveFileDate true if the file date of the copy
+     *                         should be the same as the original
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
+     * @throws IOException          if the output file length is not the same as the input file length after the copy
+     * completes
+     * @see #copyFileToDirectory(File, File, boolean)
+     * @since 2.8.0
+     */
+    public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
+        throws IOException {
         checkFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' exists but is a directory");
@@ -794,7 +882,7 @@ public class FileUtils {
         if (destFile.exists() && destFile.canWrite() == false) {
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
         }
-        doCopyFile(srcFile, destFile, preserveFileDate);
+        doCopyFile(srcFile, destFile, preserveFileDate, copyOptions);
     }
 
     /**
@@ -816,7 +904,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies a file to a directory preserving the file date.
      * <p>
@@ -1000,7 +1087,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Copies bytes from the URL <code>source</code> to a file
      * <code>destination</code>. The directories up to <code>destination</code>
@@ -1104,7 +1190,6 @@ public class FileUtils {
         return decoded;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Deletes a directory recursively.
      *
@@ -1237,12 +1322,12 @@ public class FileUtils {
      * @param filter           the filter to apply, null means copy all directories and files
      * @param preserveFileDate whether to preserve the file date
      * @param exclusionList    List of files and directories to exclude from the copy, may be null
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws IOException if an error occurs
-     * @since 1.1
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter filter,
-                                        final boolean preserveFileDate, final List<String> exclusionList)
-            throws IOException {
+        final boolean preserveFileDate, final List<String> exclusionList, final CopyOption... copyOptions)
+        throws IOException {
         // recurse
         final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
         if (srcFiles == null) {  // null if abstract pathname does not denote a directory, or if an I/O error occurs
@@ -1264,16 +1349,16 @@ public class FileUtils {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, dstFile, filter, preserveFileDate, exclusionList);
+                    doCopyDirectory(srcFile, dstFile, filter, preserveFileDate, exclusionList, copyOptions);
                 } else {
-                    doCopyFile(srcFile, dstFile, preserveFileDate);
+                    doCopyFile(srcFile, dstFile, preserveFileDate, copyOptions);
                 }
             }
         }
 
         // Do this last, as the above has probably affected directory metadata
         if (preserveFileDate) {
-            destDir.setLastModified(srcDir.lastModified());
+            setLastModified(srcDir, destDir);
         }
     }
 
@@ -1288,32 +1373,34 @@ public class FileUtils {
      * @param srcFile          the validated source file, must not be {@code null}
      * @param destFile         the validated destination file, must not be {@code null}
      * @param preserveFileDate whether to preserve the file date
+     * @param copyOptions      options specifying how the copy should be done, for example {@link StandardCopyOption}.
      * @throws IOException              if an error occurs
      * @throws IOException              if the output file length is not the same as the input file length after the
      * copy completes
      * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
      * position
      */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
-            throws IOException {
+    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
+        throws IOException {
         if (destFile.exists() && destFile.isDirectory()) {
             throw new IOException("Destination '" + destFile + "' exists but is a directory");
         }
 
         final Path srcPath = srcFile.toPath();
         final Path destPath = destFile.toPath();
-        final long newLastModifed = preserveFileDate ? srcFile.lastModified() : destFile.lastModified();
-        Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        // On Windows, the last modified time is copied by default.
+        Files.copy(srcPath, destPath, copyOptions);
 
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
         // TODO IO-386: Do we still need this check?
         checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
-        destFile.setLastModified(newLastModifed);
+        if (preserveFileDate) {
+            setLastModified(srcFile, destFile);
+        }
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Deletes a file. If file is a directory, delete it and all sub-directories.
      * <p>
@@ -1334,7 +1421,7 @@ public class FileUtils {
         final Counters.PathCounters deleteCounters;
         try {
             deleteCounters = PathUtils.delete(file.toPath());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }
 
@@ -1411,7 +1498,6 @@ public class FileUtils {
         forceMkdir(parent);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Construct a file from the set of name elements.
      *
@@ -1494,7 +1580,6 @@ public class FileUtils {
         return System.getProperty("user.home");
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
@@ -1556,42 +1641,117 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * <code>Date</code>.
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
+     * at the current time.
      *
-     * @param file the <code>File</code> of which the modification date
-     *             must be compared, must not be {@code null}
-     * @param date the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * after the given <code>Date</code>.
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the date is {@code null}
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoLocalDate} at the current time.
+     * @throws NullPointerException if the file or local date is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate) {
+        return isFileNewer(file, chronoLocalDate, LocalTime.now());
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
+     * at the specified time.
+     *
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param localTime       the time reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoLocalDate} at the given time.
+     * @throws NullPointerException if the file, local date or zone ID is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(localTime, "localTime");
+        return isFileNewer(file, chronoLocalDate.atTime(localTime));
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
+     * at the system-default time zone.
+     *
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoLocalDateTime} at the system-default time zone.
+     * @throws NullPointerException if the file or local date time is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
+        return isFileNewer(file, chronoLocalDateTime, ZoneId.systemDefault());
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
+     * at the specified {@code ZoneId}.
+     *
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @param zoneId              the time zone
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
+        Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
+        Objects.requireNonNull(zoneId, "zoneId");
+        return isFileNewer(file, chronoLocalDateTime.atZone(zoneId));
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code ChronoZonedDateTime}.
+     *
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoZonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified after the given
+     * {@code ChronoZonedDateTime}.
+     * @throws NullPointerException if the file or zoned date time is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
+        Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
+        return isFileNewer(file, chronoZonedDateTime.toInstant());
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified {@code Date}.
+     *
+     * @param file the {@code File} of which the modification date must be compared
+     * @param date the date reference
+     * @return true if the {@code File} exists and has been modified
+     * after the given {@code Date}.
+     * @throws NullPointerException if the file or date is {@code null}
      */
     public static boolean isFileNewer(final File file, final Date date) {
-        if (date == null) {
-            throw new IllegalArgumentException("No specified date");
-        }
+        Objects.requireNonNull(date, "date");
         return isFileNewer(file, date.getTime());
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Tests if the specified <code>File</code> is newer than the reference
-     * <code>File</code>.
+     * Tests if the specified {@code File} is newer than the reference {@code File}.
      *
-     * @param file      the <code>File</code> of which the modification date must
-     *                  be compared, must not be {@code null}
-     * @param reference the <code>File</code> of which the modification date
-     *                  is used, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified more
-     * recently than the reference <code>File</code>
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param reference the {@code File} of which the modification date is used
+     * @return true if the {@code File} exists and has been modified more
+     * recently than the reference {@code File}
+     * @throws NullPointerException if the file or reference file is {@code null}
+     * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileNewer(final File file, final File reference) {
-        if (reference == null) {
-            throw new IllegalArgumentException("No specified reference file");
-        }
+        Objects.requireNonNull(reference, "reference");
         if (!reference.exists()) {
             throw new IllegalArgumentException("The reference file '"
                     + reference + "' doesn't exist");
@@ -1600,21 +1760,31 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is newer than the specified
-     * time reference.
+     * Tests if the specified {@code File} is newer than the specified {@code Instant}.
      *
-     * @param file       the <code>File</code> of which the modification date must
-     *                   be compared, must not be {@code null}
+     * @param file    the {@code File} of which the modification date must be compared
+     * @param instant the date reference
+     * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
+     * @throws NullPointerException if the file or instant is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileNewer(final File file, final Instant instant) {
+        Objects.requireNonNull(instant, "instant");
+        return isFileNewer(file, instant.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+
+    /**
+     * Tests if the specified {@code File} is newer than the specified time reference.
+     *
+     * @param file       the {@code File} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
-     * @return true if the <code>File</code> exists and has been modified after
-     * the given time reference.
-     * @throws IllegalArgumentException if the file is {@code null}
+     * @return true if the {@code File} exists and has been modified after the given time reference.
+     * @throws NullPointerException if the file is {@code null}
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
-        if (file == null) {
-            throw new IllegalArgumentException("No specified file");
-        }
+        Objects.requireNonNull(file, "file");
         if (!file.exists()) {
             return false;
         }
@@ -1622,43 +1792,115 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * <code>Date</code>.
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
+     * at the current time.
      *
-     * @param file the <code>File</code> of which the modification date
-     *             must be compared, must not be {@code null}
-     * @param date the date reference, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified
-     * before the given <code>Date</code>.
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the date is {@code null}
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoLocalDate} at the current time.
+     * @throws NullPointerException if the file or local date is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate) {
+        return isFileOlder(file, chronoLocalDate, LocalTime.now());
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
+     * at the specified {@code LocalTime}.
+     *
+     * @param file            the {@code File} of which the modification date must be compared
+     * @param chronoLocalDate the date reference
+     * @param localTime       the time reference
+     * @return true if the {@code File} exists and has been modified before the
+     * given {@code ChronoLocalDate} at the specified time.
+     * @throws NullPointerException if the file, local date or local time is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDate chronoLocalDate, final LocalTime localTime) {
+        Objects.requireNonNull(chronoLocalDate, "chronoLocalDate");
+        Objects.requireNonNull(localTime, "localTime");
+        return isFileOlder(file, chronoLocalDate.atTime(localTime));
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
+     * at the system-default time zone.
+     *
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoLocalDateTime} at the system-default time zone.
+     * @throws NullPointerException if the file or local date time is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime) {
+        return isFileOlder(file, chronoLocalDateTime, ZoneId.systemDefault());
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
+     * at the specified {@code ZoneId}.
+     *
+     * @param file          the {@code File} of which the modification date must be compared
+     * @param chronoLocalDateTime the date reference
+     * @param zoneId        the time zone
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoLocalDateTime<?> chronoLocalDateTime, final ZoneId zoneId) {
+        Objects.requireNonNull(chronoLocalDateTime, "chronoLocalDateTime");
+        Objects.requireNonNull(zoneId, "zoneId");
+        return isFileOlder(file, chronoLocalDateTime.atZone(zoneId));
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code ChronoZonedDateTime}.
+     *
+     * @param file                the {@code File} of which the modification date must be compared
+     * @param chronoZonedDateTime the date reference
+     * @return true if the {@code File} exists and has been modified before the given
+     * {@code ChronoZonedDateTime}.
+     * @throws NullPointerException if the file or zoned date time is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final ChronoZonedDateTime<?> chronoZonedDateTime) {
+        Objects.requireNonNull(chronoZonedDateTime, "chronoZonedDateTime");
+        return isFileOlder(file, chronoZonedDateTime.toInstant());
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified {@code Date}.
+     *
+     * @param file the {@code File} of which the modification date must be compared
+     * @param date the date reference
+     * @return true if the {@code File} exists and has been modified before the given {@code Date}.
+     * @throws NullPointerException if the file or date is {@code null}
      */
     public static boolean isFileOlder(final File file, final Date date) {
-        if (date == null) {
-            throw new IllegalArgumentException("No specified date");
-        }
+        Objects.requireNonNull(date, "date");
         return isFileOlder(file, date.getTime());
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Tests if the specified <code>File</code> is older than the reference
-     * <code>File</code>.
+     * Tests if the specified {@code File} is older than the reference {@code File}.
      *
-     * @param file      the <code>File</code> of which the modification date must
-     *                  be compared, must not be {@code null}
-     * @param reference the <code>File</code> of which the modification date
-     *                  is used, must not be {@code null}
-     * @return true if the <code>File</code> exists and has been modified before
-     * the reference <code>File</code>
-     * @throws IllegalArgumentException if the file is {@code null}
-     * @throws IllegalArgumentException if the reference file is {@code null} or doesn't exist
+     * @param file      the {@code File} of which the modification date must be compared
+     * @param reference the {@code File} of which the modification date is used
+     * @return true if the {@code File} exists and has been modified before the reference {@code File}
+     * @throws NullPointerException if the file or reference file is {@code null}
+     * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileOlder(final File file, final File reference) {
-        if (reference == null) {
-            throw new IllegalArgumentException("No specified reference file");
-        }
-        if (!reference.exists()) {
+        if (!Objects.requireNonNull(reference, "reference").exists()) {
             throw new IllegalArgumentException("The reference file '"
                     + reference + "' doesn't exist");
         }
@@ -1666,21 +1908,31 @@ public class FileUtils {
     }
 
     /**
-     * Tests if the specified <code>File</code> is older than the specified
-     * time reference.
+     * Tests if the specified {@code File} is older than the specified {@code Instant}.
      *
-     * @param file       the <code>File</code> of which the modification date must
-     *                   be compared, must not be {@code null}
+     * @param file    the {@code File} of which the modification date must be compared
+     * @param instant the date reference
+     * @return true if the {@code File} exists and has been modified before the given {@code Instant}.
+     * @throws NullPointerException if the file or instant is {@code null}
+     *
+     * @since 2.8.0
+     */
+    public static boolean isFileOlder(final File file, final Instant instant) {
+        Objects.requireNonNull(instant, "instant");
+        return isFileOlder(file, instant.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+
+    /**
+     * Tests if the specified {@code File} is older than the specified time reference.
+     *
+     * @param file       the {@code File} of which the modification date must be compared
      * @param timeMillis the time reference measured in milliseconds since the
      *                   epoch (00:00:00 GMT, January 1, 1970)
-     * @return true if the <code>File</code> exists and has been modified before
-     * the given time reference.
-     * @throws IllegalArgumentException if the file is {@code null}
+     * @return true if the {@code File} exists and has been modified before the given time reference.
+     * @throws NullPointerException if the file is {@code null}
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
-        if (file == null) {
-            throw new IllegalArgumentException("No specified file");
-        }
+        Objects.requireNonNull(file, "file");
         if (!file.exists()) {
             return false;
         }
@@ -1876,7 +2128,6 @@ public class FileUtils {
         return innerListFilesOrDirectories(directory, fileFilter, dirFilter, false);
     }
 
-
     /**
      * Finds files within a given directory (and optionally its subdirectories)
      * which match an array of extensions.
@@ -1899,6 +2150,7 @@ public class FileUtils {
         return listFiles(directory, filter,
                 recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
     }
+
 
     /**
      * Finds files within a given directory (and optionally its
@@ -1977,7 +2229,9 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(src, destDir);
         if (!destDir.exists() && createDestDir) {
-            destDir.mkdirs();
+            if (!destDir.mkdirs()) {
+                throw new IOException("Could not create destination directories '" + destDir + "'");
+            }
         }
         if (!destDir.exists()) {
             throw new FileNotFoundException("Destination directory '" + destDir +
@@ -2042,7 +2296,9 @@ public class FileUtils {
             throws IOException {
         validateMoveParameters(srcFile, destDir);
         if (!destDir.exists() && createDestDir) {
-            destDir.mkdirs();
+            if (!destDir.mkdirs()) {
+                throw new IOException("Could not create destination directories '" + destDir + "'");
+            }
         }
         if (!destDir.exists()) {
             throw new FileNotFoundException("Destination directory '" + destDir +
@@ -2080,9 +2336,6 @@ public class FileUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
-
-    //-----------------------------------------------------------------------
     /**
      * Opens a {@link FileInputStream} for the specified file, providing better
      * error messages than simply calling <code>new FileInputStream(file)</code>.
@@ -2117,7 +2370,7 @@ public class FileUtils {
         return new FileInputStream(file);
     }
 
-    //-----------------------------------------------------------------------
+
     /**
      * Opens a {@link FileOutputStream} for the specified file, checking and
      * creating the parent directory if it does not exist.
@@ -2219,7 +2472,6 @@ public class FileUtils {
         return readFileToString(file, Charset.defaultCharset());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Reads the contents of a file into a String.
      * The file is always closed.
@@ -2298,6 +2550,19 @@ public class FileUtils {
     }
 
     /**
+     * Sets the given {@code targetFile}'s last modified date to the value from {@code sourceFile}.
+     *
+     * @param sourceFile The source file to query.
+     * @param targetFile The target file to set.
+     * @throws IOException if an error occurs
+     */
+    private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
+        if (!targetFile.setLastModified(sourceFile.lastModified())) {
+            throw new IOException("Failed setLastModified on " + sourceFile);
+        }
+    }
+
+    /**
      * Returns a filter that accepts directories in addition to the {@link File} objects accepted by the given filter.
      *
      * @param dirFilter a base filter to add to
@@ -2318,7 +2583,6 @@ public class FileUtils {
         return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the size of the specified file or directory. If the provided
      * {@link File} is a regular file, then the file's length is returned.
@@ -2489,7 +2753,6 @@ public class FileUtils {
         return size;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
      * <p>
@@ -2553,7 +2816,6 @@ public class FileUtils {
         return files;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
@@ -2569,7 +2831,6 @@ public class FileUtils {
         return suffixes;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Implements the same behavior as the "touch" utility on Unix. It creates
      * a new file with size 0 or, if the file exists already, it is opened and
@@ -2676,7 +2937,6 @@ public class FileUtils {
         return files;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Waits for NFS to propagate a file creation, imposing a timeout.
      * <p>
@@ -3136,7 +3396,7 @@ public class FileUtils {
     /**
      * Instances should NOT be constructed in standard programming.
      */
-    public FileUtils() {
+    public FileUtils() { //NOSONAR
         super();
     }
 }

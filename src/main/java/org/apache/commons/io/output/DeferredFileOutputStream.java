@@ -308,7 +308,7 @@ public class DeferredFileOutputStream
     public void writeTo(final OutputStream out) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file
-        // but we should force the habit of closing wether we are working with
+        // but we should force the habit of closing whether we are working with
         // a file or memory.
         if (!closed) {
             throw new IOException("Stream not closed");

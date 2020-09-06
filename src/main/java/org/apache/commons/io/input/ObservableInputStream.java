@@ -43,7 +43,8 @@ public class ObservableInputStream extends ProxyInputStream {
      */
     public static abstract class Observer {
 
-        /** Called to indicate, that {@link InputStream#read()} has been invoked
+        /** 
+         * Called to indicate, that {@link InputStream#read()} has been invoked
          * on the {@link ObservableInputStream}, and will return a value.
          * @param pByte The value, which is being returned. This will never be -1 (EOF),
          *    because, in that case, {@link #finished()} will be invoked instead.
@@ -53,7 +54,8 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** Called to indicate, that {@link InputStream#read(byte[])}, or
+        /** 
+         * Called to indicate that {@link InputStream#read(byte[])}, or
          * {@link InputStream#read(byte[], int, int)} have been called, and are about to
          * invoke data.
          * @param pBuffer The byte array, which has been passed to the read call, and where
@@ -66,7 +68,8 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** Called to indicate, that EOF has been seen on the underlying stream.
+        /** 
+         * Called to indicate that EOF has been seen on the underlying stream.
          * This method may be called multiple times, if the reader keeps invoking
          * either of the read methods, and they will consequently keep returning
          * EOF.
@@ -76,7 +79,8 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** Called to indicate, that the {@link ObservableInputStream} has been closed.
+        /** 
+         * Called to indicate that the {@link ObservableInputStream} has been closed.
          * @throws IOException if an i/o-error occurs
          */
         public void closed() throws IOException {
@@ -84,7 +88,7 @@ public class ObservableInputStream extends ProxyInputStream {
         }
 
         /**
-         * Called to indicate, that an error occurred on the underlying stream.
+         * Called to indicate that an error occurred on the underlying stream.
          * @param pException the exception to throw
          * @throws IOException if an i/o-error occurs
          */

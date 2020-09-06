@@ -20,7 +20,7 @@ package org.apache.commons.io.output;
 import java.io.PrintStream;
 
 /**
- * This PrintStream writes all data to the famous <b>/dev/null</b>.
+ * Writes all data to the famous <b>/dev/null</b>.
  * <p>
  * This print stream has no destination (file/socket etc.) and all bytes written to it are ignored and lost.
  * </p>
@@ -38,7 +38,7 @@ public class NullPrintStream extends PrintStream {
      * Constructs an instance.
      */
     public NullPrintStream() {
-        // Relies on the default charset which is OK since we are not writing.
+        // Relies on the default charset which is OK since we are not actually writing.
         super(NullOutputStream.NULL_OUTPUT_STREAM);
     }
 

@@ -62,17 +62,15 @@ public class SwappedDataInputStreamTest {
 
     @Test
     public void testReadBoolean() throws IOException {
-        bytes = new byte[] {
-            0x00,
-            0x01,
-            0x02,
-        };
-        final ByteArrayInputStream bais = new ByteArrayInputStream( bytes );
-        final SwappedDataInputStream sdis = new SwappedDataInputStream( bais );
-        assertEquals( false, sdis.readBoolean() );
-        assertEquals( true, sdis.readBoolean() );
-        assertEquals( true, sdis.readBoolean() );
-        sdis.close();
+        bytes = new byte[] {0x00, 0x01, 0x02,};
+        try (
+            final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            final SwappedDataInputStream sdis = new SwappedDataInputStream(bais);
+        ) {
+            assertEquals(false, sdis.readBoolean());
+            assertEquals(true, sdis.readBoolean());
+            assertEquals(true, sdis.readBoolean());
+        }
     }
 
     @Test
@@ -136,7 +134,7 @@ public class SwappedDataInputStreamTest {
     }
 
     @Test
-    public void testReadUTF() throws IOException {
+    public void testReadUTF() {
         assertThrows(UnsupportedOperationException.class, () ->  this.sdis.readUTF(),
                 "readUTF should be unsupported. ");
     }

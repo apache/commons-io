@@ -189,7 +189,7 @@ public class FilterCollectionWriter extends Writer {
      * @exception IOException If an I/O error occurs
      */
     @Override
-    public void write(final char cbuf[], final int off, final int len) throws IOException {
+    public void write(final char[] cbuf, final int off, final int len) throws IOException {
         final List<Exception> causeList = new ArrayList<>();
         int i = 0;
         for (final Writer w : writers) {

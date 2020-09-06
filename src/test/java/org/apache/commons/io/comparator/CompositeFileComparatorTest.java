@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +42,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
                 new AbstractFileComparator[] {
                     (AbstractFileComparator) SizeFileComparator.SIZE_COMPARATOR,
                     (AbstractFileComparator) ExtensionFileComparator.EXTENSION_COMPARATOR});
-        reverse = new ReverseComparator(comparator);
+        reverse = new ReverseFileComparator(comparator);
         lessFile   = new File(dir, "xyz.txt");
         equalFile1 = new File(dir, "foo.txt");
         equalFile2 = new File(dir, "bar.txt");

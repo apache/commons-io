@@ -56,7 +56,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
     public static final Comparator<File> SIZE_COMPARATOR = new SizeFileComparator();
 
     /** Reverse size comparator instance - directories are treated as zero size */
-    public static final Comparator<File> SIZE_REVERSE = new ReverseComparator(SIZE_COMPARATOR);
+    public static final Comparator<File> SIZE_REVERSE = new ReverseFileComparator(SIZE_COMPARATOR);
 
     /**
      * Size comparator instance which sums the size of a directory's contents
@@ -68,7 +68,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * Reverse size comparator instance which sums the size of a directory's contents
      * using {@link FileUtils#sizeOfDirectory(File)}
      */
-    public static final Comparator<File> SIZE_SUMDIR_REVERSE = new ReverseComparator(SIZE_SUMDIR_COMPARATOR);
+    public static final Comparator<File> SIZE_SUMDIR_REVERSE = new ReverseFileComparator(SIZE_SUMDIR_COMPARATOR);
 
     /** Whether the sum of the directory's contents should be calculated. */
     private final boolean sumDirectoryContents;
@@ -108,13 +108,13 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      */
     @Override
     public int compare(final File file1, final File file2) {
-        long size1 = 0;
+        long size1;
         if (file1.isDirectory()) {
             size1 = sumDirectoryContents && file1.exists() ? FileUtils.sizeOfDirectory(file1) : 0;
         } else {
             size1 = file1.length();
         }
-        long size2 = 0;
+        long size2;
         if (file2.isDirectory()) {
             size2 = sumDirectoryContents && file2.exists() ? FileUtils.sizeOfDirectory(file2) : 0;
         } else {

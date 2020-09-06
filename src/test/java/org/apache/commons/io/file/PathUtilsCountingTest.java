@@ -67,7 +67,7 @@ public class PathUtilsCountingTest {
     }
 
     /**
-     * Tests a directory with two subdirectorys, each containing one file of size 1.
+     * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
     public void testCountFolders2FileSize2() throws IOException {

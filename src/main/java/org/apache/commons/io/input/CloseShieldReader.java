@@ -24,7 +24,7 @@ import java.io.Reader;
  * This class is typically used in cases where a reader needs to be
  * passed to a component that wants to explicitly close the reader even if
  * more input would still be available to other components.
- * <p>
+ * </p>
  *
  * @since 2.7
  */

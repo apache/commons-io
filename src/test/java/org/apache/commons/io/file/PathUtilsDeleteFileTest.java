@@ -18,14 +18,15 @@
 package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NotDirectoryException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,7 +97,48 @@ public class PathUtilsDeleteFileTest {
      */
     @Test
     public void testDeleteFileEmptyDirectory() throws IOException {
-        Assertions.assertThrows(NotDirectoryException.class, () -> testDeleteFileEmpty(PathUtils.deleteFile(tempDir)));
+        Assertions.assertThrows(NoSuchFileException.class, () -> testDeleteFileEmpty(PathUtils.deleteFile(tempDir)));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDir);
+    }
+
+    /**
+     * Tests a directory with one file of size 1.
+     */
+    @Test
+    public void testDeleteReadOnlyFileDirectory1FileSize1() throws IOException {
+        final String fileName = "file-size-1.bin";
+        PathUtils.copyFileToDirectory(
+            Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
+        final Path resolved = tempDir.resolve(fileName);
+        PathUtils.setReadOnly(resolved, true);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            // Fails on Windows's Ubuntu subsystem.
+            assertFalse(Files.isWritable(resolved));
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(resolved));
+        }
+        assertCounts(0, 1, 1, PathUtils.deleteFile(resolved, StandardDeleteOption.OVERRIDE_READ_ONLY));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDir);
+    }
+
+    /**
+     * Tests a directory with one file of size 1.
+     */
+    @Test
+    public void testSetReadOnlyFileDirectory1FileSize1() throws IOException {
+        final String fileName = "file-size-1.bin";
+        PathUtils.copyFileToDirectory(
+            Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/" + fileName), tempDir);
+        final Path resolved = tempDir.resolve(fileName);
+        PathUtils.setReadOnly(resolved, true);
+        if (SystemUtils.IS_OS_WINDOWS) {
+            // Fails on Windows's Ubuntu subsystem.
+            assertFalse(Files.isWritable(resolved));
+            assertThrows(IOException.class, () -> PathUtils.deleteFile(resolved));
+        }
+        PathUtils.setReadOnly(resolved, false);
+        PathUtils.deleteFile(resolved);
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
     }

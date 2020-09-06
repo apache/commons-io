@@ -44,7 +44,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -1406,7 +1406,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterList(filter, Arrays.asList((File) null));
+            FileFilterUtils.filterList(filter, Collections.singletonList((File) null));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for list containing null
@@ -1467,7 +1467,7 @@ public class FileFilterTestCase {
 
         final IOFileFilter filter = FileFilterUtils.trueFileFilter();
         try {
-            FileFilterUtils.filterSet(filter, new HashSet<>(Arrays.asList((File) null)));
+            FileFilterUtils.filterSet(filter, new HashSet<>(Collections.singletonList((File) null)));
             fail();
         } catch (final IllegalArgumentException iae) {
             // Test passes, exception thrown for set containing null

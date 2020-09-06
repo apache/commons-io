@@ -19,11 +19,10 @@ package org.apache.commons.io.output;
 import java.io.Writer;
 
 /**
- * This {@link Writer} writes all data to the famous <b>/dev/null</b>.
+ * Writes all data to the famous <b>/dev/null</b>.
  * <p>
- * This <code>Writer</code> has no destination (file/socket etc.) and all
- * characters written to it are ignored and lost.
- *
+ * This <code>Writer</code> has no destination (file/socket etc.) and all characters written to it are ignored and lost.
+ * </p>
  */
 public class NullWriter extends Writer {
 

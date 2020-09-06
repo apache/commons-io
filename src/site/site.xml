@@ -28,13 +28,8 @@
             <item name="Download"             href="https://commons.apache.org/io/download_io.cgi"/>
             <item name="User guide"           href="/description.html"/>
             <item name="Best practices"       href="/bestpractices.html"/>
-            <item name="Javadoc 2.7"          href="/javadocs/api-release/index.html"/>
-            <item name="Javadoc 2.6"          href="/javadocs/api-2.6/index.html"/>
-            <item name="Javadoc 2.5"          href="/javadocs/api-2.5/index.html"/>
-            <item name="Javadoc 2.4"          href="/javadocs/api-2.4/index.html"/>
-            <item name="Javadoc 2.3"          href="/javadocs/api-2.3/index.html"/>
-            <item name="Javadoc 2.2"          href="/javadocs/api-2.2/index.html"/>
-            <item name="Javadoc 1.4"          href="/javadocs/api-1.4/index.html"/>
+            <item name="Javadoc"              href="/apidocs/index.html"/>
+            <item name="Javadoc Archive"      href="https://javadoc.io/doc/commons-io/commons-io/latest/index.html"/>
         </menu>
 
         <menu name="Development">
@@ -45,7 +40,6 @@
             <item name="Tasks"                href="/tasks.html"/>
             <item name="Proposal"             href="/proposal.html"/>
             <item name="Source repository"    href="/scm.html"/>
-            <item name="Javadoc (GIT latest)" href="apidocs/index.html"/>
         </menu>
 
     </body>

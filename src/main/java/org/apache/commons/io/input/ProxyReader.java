@@ -33,7 +33,7 @@ import org.apache.commons.io.IOUtils;
  * It is an alternative base class to FilterReader
  * to increase reusability, because FilterReader changes the
  * methods being called, such as read(char[]) to read(char[], int, int).
- *
+ * </p>
  */
 public abstract class ProxyReader extends FilterReader {
 

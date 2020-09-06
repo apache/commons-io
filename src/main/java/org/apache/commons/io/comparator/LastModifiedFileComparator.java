@@ -48,22 +48,20 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
 
     private static final long serialVersionUID = 7372168004395734046L;
 
-    /** Last modified comparator instance */
+    /** Last modified comparator instance. */
     public static final Comparator<File> LASTMODIFIED_COMPARATOR = new LastModifiedFileComparator();
 
-    /** Reverse last modified comparator instance */
-    public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseComparator(LASTMODIFIED_COMPARATOR);
+    /** Reverse last modified comparator instance. */
+    public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseFileComparator(LASTMODIFIED_COMPARATOR);
 
     /**
-     * Compare the last the last modified date/time of two files.
+     * Compares the last the last modified date/time of two files.
      *
-     * @param file1 The first file to compare
-     * @param file2 The second file to compare
-     * @return a negative value if the first file's lastmodified date/time
-     * is less than the second, zero if the lastmodified date/time are the
-     * same and a positive value if the first files lastmodified date/time
-     * is greater than the second file.
-     *
+     * @param file1 The first file to compare.
+     * @param file2 The second file to compare.
+     * @return a negative value if the first file's last modified date/time is less than the second, zero if the last
+     *         modified date/time are the same and a positive value if the first files last modified date/time is
+     *         greater than the second file.
      */
     @Override
     public int compare(final File file1, final File file2) {

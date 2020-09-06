@@ -28,9 +28,9 @@ import java.io.Writer;
 import java.util.Arrays;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.io.testtools.TestUtils;
-import org.apache.commons.io.testtools.YellOnCloseInputStream;
-import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
+import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.io.test.ThrowOnCloseInputStream;
+import org.apache.commons.io.test.ThrowOnFlushAndCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("deprecation") // these are test cases for the deprecated CopyUtils
@@ -66,7 +66,7 @@ public class CopyUtilsTest {
     @Test
     public void copy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
         CopyUtils.copy(inData, out);
 
@@ -77,7 +77,7 @@ public class CopyUtilsTest {
     @Test
     public void copy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
         CopyUtils.copy(inData, writer);
@@ -100,10 +100,10 @@ public class CopyUtilsTest {
     @Test
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new YellOnCloseInputStream(in);
+        in = new ThrowOnCloseInputStream(in);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
         final int count = CopyUtils.copy(in, out);
 
@@ -117,10 +117,10 @@ public class CopyUtilsTest {
     @Test
     public void copy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new YellOnCloseInputStream(in);
+        in = new ThrowOnCloseInputStream(in);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
         CopyUtils.copy(in, writer);
@@ -144,11 +144,11 @@ public class CopyUtilsTest {
     @Test
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new YellOnCloseInputStream(in);
+        in = new ThrowOnCloseInputStream(in);
         final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
         CopyUtils.copy(reader, out);
         //Note: this method *does* flush. It is equivalent to:
@@ -166,11 +166,11 @@ public class CopyUtilsTest {
     @Test
     public void copy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new YellOnCloseInputStream(in);
+        in = new ThrowOnCloseInputStream(in);
         final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
         final int count = CopyUtils.copy(reader, writer);
@@ -185,7 +185,7 @@ public class CopyUtilsTest {
         final String str = new String(inData, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
 
         CopyUtils.copy(str, out);
         //Note: this method *does* flush. It is equivalent to:
@@ -204,7 +204,7 @@ public class CopyUtilsTest {
         final String str = new String(inData, "US-ASCII");
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
 
         CopyUtils.copy(str, writer);

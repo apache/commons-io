@@ -105,16 +105,19 @@ import org.apache.commons.io.IOUtils;
  * </pre>
  *
  * <h2>4. Interrupting a Tailer</h2>
- * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.</p>
+ * <p>You can interrupt the thread a tailer is running on by calling {@link Thread#interrupt()}.
+ * </p>
  * <pre>
  *      thread.interrupt();
  * </pre>
- * <p>If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.</p>
- *
- * <p>The file is read using the default charset; this can be overridden if necessary</p>
+ * <p>
+ * If you interrupt a tailer, the tailer listener is called with the {@link InterruptedException}.
+ * </p>
+ * <p>
+ * The file is read using the default charset; this can be overridden if necessary.
+ * </p>
  * @see TailerListener
  * @see TailerListenerAdapter
- *
  * @since 2.0
  * @since 2.5 Updated behavior and documentation for {@link Thread#interrupt()}
  */
@@ -130,7 +133,7 @@ public class Tailer implements Runnable {
     /**
      * Buffer on top of RandomAccessFile.
      */
-    private final byte inbuf[];
+    private final byte[] inbuf;
 
     /**
      * The file which will be tailed.

@@ -59,7 +59,7 @@ public final class ByteOrderParser {
         if (ByteOrder.LITTLE_ENDIAN.toString().equals(value)) {
             return ByteOrder.LITTLE_ENDIAN;
         }
-        throw new IllegalArgumentException("Unsupported byte order setting: " + value + ", expeced one of " + ByteOrder.LITTLE_ENDIAN +
+        throw new IllegalArgumentException("Unsupported byte order setting: " + value + ", expected one of " + ByteOrder.LITTLE_ENDIAN +
                  ", " + ByteOrder.BIG_ENDIAN);
     }
 

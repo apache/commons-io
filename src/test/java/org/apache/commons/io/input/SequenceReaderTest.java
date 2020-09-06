@@ -17,8 +17,8 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -124,7 +124,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadCollection() throws IOException {
-        Collection<Reader> readers = new ArrayList<>();
+        final Collection<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
         try (final Reader reader = new SequenceReader(readers)) {
@@ -136,10 +136,10 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadIterable() throws IOException {
-        Collection<Reader> readers = new ArrayList<>();
+        final Collection<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
-        Iterable<Reader> iterable = readers;
+        final Iterable<Reader> iterable = readers;
         try (final Reader reader = new SequenceReader(iterable)) {
             assertEquals('F', reader.read());
             assertEquals('B', reader.read());
@@ -159,9 +159,9 @@ public class SequenceReaderTest {
     public void testReadLength1Readers() throws IOException {
         try (final Reader reader = new SequenceReader(
         // @formatter:off
-            new StringReader("0"), 
+            new StringReader("0"),
             new StringReader("1"),
-            new StringReader("2"), 
+            new StringReader("2"),
             new StringReader("3"))) {
             // @formatter:on
             assertEquals('0', reader.read());
@@ -173,7 +173,7 @@ public class SequenceReaderTest {
 
     @Test
     public void testReadList() throws IOException {
-        List<Reader> readers = new ArrayList<>();
+        final List<Reader> readers = new ArrayList<>();
         readers.add(new StringReader("F"));
         readers.add(new StringReader("B"));
         try (final Reader reader = new SequenceReader(readers)) {

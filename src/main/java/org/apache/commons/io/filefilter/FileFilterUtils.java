@@ -150,7 +150,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static List<File> filterList(final IOFileFilter filter, final Iterable<File> files) {
-        return filter(filter, files, new ArrayList<File>());
+        return filter(filter, files, new ArrayList<>());
     }
 
     /**
@@ -241,7 +241,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static Set<File> filterSet(final IOFileFilter filter, final Iterable<File> files) {
-        return filter(filter, files, new HashSet<File>());
+        return filter(filter, files, new HashSet<>());
     }
 
     /**

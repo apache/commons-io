@@ -57,7 +57,7 @@ public class IOExceptionList extends IOException {
     }
 
     /**
-     * Gets the cause list.
+     * Gets the cause exception at the given index.
      *
      * @param <T> type of exception to return.
      * @param index index in the cause list.
@@ -68,7 +68,7 @@ public class IOExceptionList extends IOException {
     }
 
     /**
-     * Gets the cause list.
+     * Gets the cause exception at the given index.
      *
      * @param <T> type of exception to return.
      * @param index index in the cause list.

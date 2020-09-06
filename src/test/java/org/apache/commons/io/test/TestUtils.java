@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.testtools;
+package org.apache.commons.io.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,9 +60,10 @@ public abstract class TestUtils {
 
     public static byte[] generateTestData(final long size) {
         try {
-            final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-            generateTestData(baout, size);
-            return baout.toByteArray();
+            try (final ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
+                generateTestData(baout, size);
+                return baout.toByteArray();
+            }
         } catch (final IOException ioe) {
             throw new RuntimeException("This should never happen: " + ioe.getMessage());
         }
@@ -183,7 +184,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void checkWrite(final OutputStream output) throws Exception {
+    public static void checkWrite(final OutputStream output) {
         try {
             new java.io.PrintStream(output).write(0);
         } catch (final Throwable t) {
@@ -191,7 +192,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void checkWrite(final Writer output) throws Exception {
+    public static void checkWrite(final Writer output) {
         try {
             new java.io.PrintWriter(output).write('a');
         } catch (final Throwable t) {
@@ -199,8 +200,7 @@ public abstract class TestUtils {
         }
     }
 
-    public static void deleteFile(final File file)
-            throws Exception {
+    public static void deleteFile(final File file) {
         if (file.exists()) {
             assertTrue(file.delete(), "Couldn't delete file: " + file);
         }
@@ -228,6 +228,7 @@ public abstract class TestUtils {
         try {
             sleep(ms);
         } catch (final InterruptedException ignored){
+            // ignore InterruptedException.
         }
     }
 

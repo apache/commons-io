@@ -16,25 +16,20 @@
  */
 package org.apache.commons.io.output;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.NullInputStream;
 import org.junit.jupiter.api.Test;
 
-
 /**
  *
  */
-
 public class CountingOutputStreamTest {
-
 
     @Test
     public void testCounting() throws IOException {
@@ -78,11 +73,10 @@ public class CountingOutputStreamTest {
      */
     @Test
     public void testLargeFiles_IO84() throws Exception {
-        final long size = (long)Integer.MAX_VALUE + (long)1;
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
 
-        final NullInputStream mock     = new NullInputStream(size);
-        final OutputStream nos         = NullOutputStream.NULL_OUTPUT_STREAM;
-        final CountingOutputStream cos = new CountingOutputStream(nos);
+        final NullInputStream mock = new NullInputStream(size);
+        final CountingOutputStream cos = new CountingOutputStream(NullOutputStream.NULL_OUTPUT_STREAM);
 
         // Test integer methods
         IOUtils.copyLarge(mock, cos);

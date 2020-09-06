@@ -220,7 +220,7 @@ public class FileWriterWithEncoding extends Writer {
      * @param file  the file to be accessed
      * @param encoding  the encoding to use - may be Charset, CharsetEncoder or String
      * @param append  true to append
-     * @return the initialised writer
+     * @return the initialized writer
      * @throws NullPointerException if the file or encoding is null
      * @throws IOException if an error occurs
      */

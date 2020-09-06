@@ -19,6 +19,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -37,6 +38,13 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,7 +60,8 @@ import java.util.zip.Checksum;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -65,6 +74,12 @@ import org.junit.jupiter.api.io.TempDir;
  */
 @SuppressWarnings({"deprecation", "ResultOfMethodCallIgnored"}) // unit tests include tests of many deprecated methods
 public class FileUtilsTestCase {
+
+    private static final long DATE3 = 1000000002000L;
+
+    private static final long DATE2 = 1000000001000L;
+
+    private static final long DATE1 = 1000000000000L;
 
     @TempDir
     public File temporaryFolder;
@@ -99,16 +114,16 @@ public class FileUtilsTestCase {
     private File testFile1;
     private File testFile2;
 
-    private int testFile1Size;
-    private int testFile2Size;
+    private long testFile1Size;
+    private long testFile2Size;
 
     @BeforeEach
     public void setUp() throws Exception {
         testFile1 = new File(temporaryFolder, "file1-test.txt");
         testFile2 = new File(temporaryFolder, "file1a-test.txt");
 
-        testFile1Size = (int) testFile1.length();
-        testFile2Size = (int) testFile2.length();
+        testFile1Size = testFile1.length();
+        testFile2Size = testFile2.length();
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
@@ -334,53 +349,53 @@ public class FileUtilsTestCase {
         final BigInteger TB1 = GB1.multiply(KB1);
         final BigInteger PB1 = TB1.multiply(KB1);
         final BigInteger EB1 = PB1.multiply(KB1);
-        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.ZERO), "0 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.ONE), "1 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(b1023), "1023 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(KB1), "1 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(b1025), "1 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(MB1.subtract(BigInteger.ONE)), "1023 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(MB1), "1 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(MB1.add(BigInteger.ONE)), "1 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(GB1.subtract(BigInteger.ONE)), "1023 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(GB1), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(GB1.add(BigInteger.ONE)), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(GB2), "2 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(GB2.subtract(BigInteger.ONE)), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(TB1), "1 TB");
-        assertEquals(FileUtils.byteCountToDisplaySize(PB1), "1 PB");
-        assertEquals(FileUtils.byteCountToDisplaySize(EB1), "1 EB");
-        assertEquals(FileUtils.byteCountToDisplaySize(Long.MAX_VALUE), "7 EB");
+        assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(BigInteger.ZERO));
+        assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(BigInteger.ONE));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(b1023));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(KB1));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(b1025));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(MB1.subtract(BigInteger.ONE)));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(MB1));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(MB1.add(BigInteger.ONE)));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(GB1.subtract(BigInteger.ONE)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(GB1));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(GB1.add(BigInteger.ONE)));
+        assertEquals("2 GB", FileUtils.byteCountToDisplaySize(GB2));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(GB2.subtract(BigInteger.ONE)));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(TB1));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(PB1));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(EB1));
+        assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.MAX_VALUE));
         // Other MAX_VALUEs
-        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)), "63 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)), "31 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)), "1 GB");
+        assertEquals("63 KB", FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Character.MAX_VALUE)));
+        assertEquals("31 KB", FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Short.MAX_VALUE)));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(BigInteger.valueOf(Integer.MAX_VALUE)));
     }
 
     @SuppressWarnings("NumericOverflow")
     @Test
     public void testByteCountToDisplaySizeLong() {
-        assertEquals(FileUtils.byteCountToDisplaySize(0), "0 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(1), "1 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(1023), "1023 bytes");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024), "1 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1025), "1 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1023), "1023 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024), "1 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1025), "1 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1023), "1023 MB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 2), "2 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024 * 2 - 1), "1 GB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024), "1 TB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024), "1 PB");
-        assertEquals(FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024), "1 EB");
-        assertEquals(FileUtils.byteCountToDisplaySize(Long.MAX_VALUE), "7 EB");
+        assertEquals("0 bytes", FileUtils.byteCountToDisplaySize(0));
+        assertEquals("1 bytes", FileUtils.byteCountToDisplaySize(1));
+        assertEquals("1023 bytes", FileUtils.byteCountToDisplaySize(1023));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(1024));
+        assertEquals("1 KB", FileUtils.byteCountToDisplaySize(1025));
+        assertEquals("1023 KB", FileUtils.byteCountToDisplaySize(1024 * 1023));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(1024 * 1024));
+        assertEquals("1 MB", FileUtils.byteCountToDisplaySize(1024 * 1025));
+        assertEquals("1023 MB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1023));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1025));
+        assertEquals("2 GB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 2));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(1024 * 1024 * 1024 * 2 - 1));
+        assertEquals("1 TB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024));
+        assertEquals("1 PB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024));
+        assertEquals("1 EB", FileUtils.byteCountToDisplaySize(1024L * 1024 * 1024 * 1024 * 1024 * 1024));
+        assertEquals("7 EB", FileUtils.byteCountToDisplaySize(Long.MAX_VALUE));
         // Other MAX_VALUEs
-        assertEquals(FileUtils.byteCountToDisplaySize(Character.MAX_VALUE), "63 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(Short.MAX_VALUE), "31 KB");
-        assertEquals(FileUtils.byteCountToDisplaySize(Integer.MAX_VALUE), "1 GB");
+        assertEquals("63 KB", FileUtils.byteCountToDisplaySize(Character.MAX_VALUE));
+        assertEquals("31 KB", FileUtils.byteCountToDisplaySize(Short.MAX_VALUE));
+        assertEquals("1 GB", FileUtils.byteCountToDisplaySize(Integer.MAX_VALUE));
     }
 
     //-----------------------------------------------------------------------
@@ -1011,10 +1026,16 @@ public class FileUtilsTestCase {
             } finally {
                 IOUtils.closeQuietly(output);
             }
-        } while (oldFile.lastModified() == reference.lastModified());
+        } while (getLastModifiedMillis(oldFile) == getLastModifiedMillis(reference));
 
         final Date date = new Date();
         final long now = date.getTime();
+        final Instant instant = date.toInstant();
+        final ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+        final LocalDateTime localDateTime = zonedDateTime.toLocalDateTime();
+        final LocalDate localDate = zonedDateTime.toLocalDate();
+        final LocalDate localDatePlusDay = localDate.plusDays(1);
+        final LocalTime localTime = LocalTime.ofSecondOfDay(0);
 
         do {
             try {
@@ -1033,15 +1054,32 @@ public class FileUtilsTestCase {
             } finally {
                 IOUtils.closeQuietly(output);
             }
-        } while (reference.lastModified() == newFile.lastModified());
+        } while (getLastModifiedMillis(reference) == getLastModifiedMillis(newFile));
 
         // Test isFileNewer()
         assertFalse(FileUtils.isFileNewer(oldFile, reference), "Old File - Newer - File");
         assertFalse(FileUtils.isFileNewer(oldFile, date), "Old File - Newer - Date");
         assertFalse(FileUtils.isFileNewer(oldFile, now), "Old File - Newer - Mili");
+        assertFalse(FileUtils.isFileNewer(oldFile, instant), "Old File - Newer - Instant");
+        assertFalse(FileUtils.isFileNewer(oldFile, zonedDateTime), "Old File - Newer - ZonedDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime), "Old File - Newer - LocalDateTime");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Newer - LocalDateTime,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDate), "Old File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(oldFile, localDate, localTime), "Old File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay), "Old File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(oldFile, localDatePlusDay, localTime), "Old File - Newer - LocalDate plus one day,ZoneId");
+
         assertTrue(FileUtils.isFileNewer(newFile, reference), "New File - Newer - File");
         assertTrue(FileUtils.isFileNewer(newFile, date), "New File - Newer - Date");
         assertTrue(FileUtils.isFileNewer(newFile, now), "New File - Newer - Mili");
+        assertTrue(FileUtils.isFileNewer(newFile, instant), "New File - Newer - Instant");
+        assertTrue(FileUtils.isFileNewer(newFile, zonedDateTime), "New File - Newer - ZonedDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime), "New File - Newer - LocalDateTime");
+        assertTrue(FileUtils.isFileNewer(newFile, localDateTime, ZoneId.systemDefault()), "New File - Newer - LocalDateTime,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDate), "New File - Newer - LocalDate");
+        assertTrue(FileUtils.isFileNewer(newFile, localDate, localTime), "New File - Newer - LocalDate,ZoneId");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay), "New File - Newer - LocalDate plus one day");
+        assertFalse(FileUtils.isFileNewer(newFile, localDatePlusDay, localTime), "New File - Newer - LocalDate plus one day,ZoneId");
         assertFalse(FileUtils.isFileNewer(invalidFile, reference), "Invalid - Newer - File");
         final String invalidFileName = invalidFile.getName();
         try {
@@ -1056,9 +1094,27 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.isFileOlder(oldFile, reference), "Old File - Older - File");
         assertTrue(FileUtils.isFileOlder(oldFile, date), "Old File - Older - Date");
         assertTrue(FileUtils.isFileOlder(oldFile, now), "Old File - Older - Mili");
+        assertTrue(FileUtils.isFileOlder(oldFile, instant), "Old File - Older - Instant");
+        assertTrue(FileUtils.isFileOlder(oldFile, zonedDateTime), "Old File - Older - ZonedDateTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDateTime), "Old File - Older - LocalDateTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDateTime, ZoneId.systemDefault()), "Old File - Older - LocalDateTime,LocalTime");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDate), "Old File - Older - LocalDate");
+        assertFalse(FileUtils.isFileOlder(oldFile, localDate, localTime), "Old File - Older - LocalDate,ZoneId");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay), "Old File - Older - LocalDate plus one day");
+        assertTrue(FileUtils.isFileOlder(oldFile, localDatePlusDay, localTime), "Old File - Older - LocalDate plus one day,LocalTime");
+
         assertFalse(FileUtils.isFileOlder(newFile, reference), "New File - Older - File");
         assertFalse(FileUtils.isFileOlder(newFile, date), "New File - Older - Date");
         assertFalse(FileUtils.isFileOlder(newFile, now), "New File - Older - Mili");
+        assertFalse(FileUtils.isFileOlder(newFile, instant), "New File - Older - Instant");
+        assertFalse(FileUtils.isFileOlder(newFile, zonedDateTime), "New File - Older - ZonedDateTime");
+        assertFalse(FileUtils.isFileOlder(newFile, localDateTime), "New File - Older - LocalDateTime");
+        assertFalse(FileUtils.isFileOlder(newFile, localDateTime, ZoneId.systemDefault()), "New File - Older - LocalDateTime,ZoneId");
+        assertTrue(FileUtils.isFileOlder(newFile, localDate), "New File - Older - LocalDate");
+        assertFalse(FileUtils.isFileOlder(newFile, localDate, localTime), "New File - Older - LocalDate,LocalTime");
+        assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay), "New File - Older - LocalDate plus one day");
+        assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime), "New File - Older - LocalDate plus one day,LocalTime");
+
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
         try {
             FileUtils.isFileOlder(newFile, invalidFile);
@@ -1073,23 +1129,23 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileNewer(null, now);
-            fail("Newer Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException expected) {
+            fail("Newer Null, expected NullPointerException");
+        } catch (final NullPointerException expected) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileNewer(oldFile, (File) null);
-            fail("Newer Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileNewer(oldFile, invalidFile);
-            fail("Newer invalid reference, expected IllegalArgumentExcepion");
+            fail("Newer invalid reference, expected IllegalArgumentException");
         } catch (final IllegalArgumentException ignore) {
             // expected result
         }
@@ -1097,8 +1153,8 @@ public class FileUtilsTestCase {
         // Null reference Date
         try {
             FileUtils.isFileNewer(oldFile, (Date) null);
-            fail("Newer Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Newer Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
@@ -1107,23 +1163,23 @@ public class FileUtilsTestCase {
         // Null File
         try {
             FileUtils.isFileOlder(null, now);
-            fail("Older Null, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Null reference File
         try {
             FileUtils.isFileOlder(oldFile, (File) null);
-            fail("Older Null reference, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null reference, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
         // Invalid reference File
         try {
             FileUtils.isFileOlder(oldFile, invalidFile);
-            fail("Older invalid reference, expected IllegalArgumentExcepion");
+            fail("Older invalid reference, expected IllegalArgumentException");
         } catch (final IllegalArgumentException ignore) {
             // expected result
         }
@@ -1131,8 +1187,8 @@ public class FileUtilsTestCase {
         // Null reference Date
         try {
             FileUtils.isFileOlder(oldFile, (Date) null);
-            fail("Older Null date, expected IllegalArgumentExcepion");
-        } catch (final IllegalArgumentException ignore) {
+            fail("Older Null date, expected NullPointerException");
+        } catch (final NullPointerException ignore) {
             // expected result
         }
 
@@ -1144,16 +1200,12 @@ public class FileUtilsTestCase {
     public void testCopyFile1() throws Exception {
         final File destination = new File(temporaryFolder, "copy1.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(getLastModifiedMillis(testFile1), getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1196,15 +1248,12 @@ public class FileUtilsTestCase {
     public void testCopyFile2() throws Exception {
         final File destination = new File(temporaryFolder, "copy2.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         FileUtils.copyFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliably for this case
-        assertTrue(testFile1.lastModified() == destination.lastModified(), "Check last modified date preserved");*/
+        assertEquals(getLastModifiedMillis(testFile1) , getLastModifiedMillis(destination), "Check last modified date preserved");
     }
 
     @Test
@@ -1223,18 +1272,23 @@ public class FileUtilsTestCase {
 
     @Test
     public void testCopyFile2WithoutFileDatePreservation() throws Exception {
-        final File destination = new File(temporaryFolder, "copy2.txt");
+        final File destFile = new File(temporaryFolder, "copy2.txt");
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
-        FileUtils.copyFile(testFile1, destination, false);
-        assertTrue(destination.exists(), "Check Exist");
-        assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date modified",
-            testFile1.lastModified() != destination.lastModified());*/
+        // destination file time should not be less than this (allowing for granularity)
+        final long now = System.currentTimeMillis() - 1000L;
+        // On Windows, the last modified time is copied by default.
+        FileUtils.copyFile(testFile1, destFile, false);
+        assertTrue(destFile.exists(), "Check Exist");
+        assertEquals(testFile1Size, destFile.length(), "Check Full copy");
+        final long destLastMod = getLastModifiedMillis(destFile);
+        final long unexpected = getLastModifiedMillis(testFile1);
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            final long delta = destLastMod - unexpected;
+            assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
+            assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
+        }
     }
 
     @Test
@@ -1395,43 +1449,52 @@ public class FileUtilsTestCase {
         // Set dates in reverse order to avoid overwriting previous values
         // Also, use full seconds (arguments are in ms) close to today
         // but still highly unlikely to occur in the real world
-        sourceFile.setLastModified(1000000002000L);
-        sourceDirectory.setLastModified(1000000001000L);
-        source.setLastModified(1000000000000L);
+        assertTrue(setLastModifiedMillis(sourceFile, DATE3));
+        assertTrue(setLastModifiedMillis(sourceDirectory, DATE2));
+        assertTrue(setLastModifiedMillis(source, DATE1));
 
         final File target = new File(temporaryFolder, "target");
         final File targetDirectory = new File(target, "directory");
         final File targetFile = new File(targetDirectory, "hello.txt");
 
         // Test with preserveFileDate disabled
+        // On Windows, the last modified time is copied by default.
         FileUtils.copyDirectory(source, target, false);
-        assertTrue(1000000000000L != target.lastModified());
-        assertTrue(1000000001000L != targetDirectory.lastModified());
-        assertTrue(1000000002000L != targetFile.lastModified());
+        assertNotEquals(DATE1, getLastModifiedMillis(target));
+        assertNotEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            assertNotEquals(DATE3, getLastModifiedMillis(targetFile));
+        }
         FileUtils.deleteDirectory(target);
 
         // Test with preserveFileDate enabled
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // also if the target directory already exists (IO-190)
         target.mkdirs();
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
 
         // also if the target subdirectory already exists (IO-190)
         targetDirectory.mkdirs();
         FileUtils.copyDirectory(source, target, true);
-        assertEquals(1000000000000L, target.lastModified());
-        assertEquals(1000000001000L, targetDirectory.lastModified());
-        assertEquals(1000000002000L, targetFile.lastModified());
+        assertEquals(DATE1, getLastModifiedMillis(target));
+        assertEquals(DATE2, getLastModifiedMillis(targetDirectory));
+        assertEquals(DATE3, getLastModifiedMillis(targetFile));
         FileUtils.deleteDirectory(target);
+    }
+
+    private long getLastModifiedMillis(final File file) throws IOException {
+        return file.lastModified();
+        //https://bugs.openjdk.java.net/browse/JDK-8177809
+        //return Files.getLastModifiedTime(file.toPath()).toMillis();
     }
 
     /* Test for IO-141 */
@@ -1670,23 +1733,16 @@ public class FileUtilsTestCase {
         }
         final File destination = new File(directory, testFile1.getName());
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1);
 
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
 
-        try {
-            FileUtils.copyFileToDirectory(destination, directory);
-            fail("Should not be able to copy a file into the same directory as itself");
-        } catch (final IOException ioe) {
-            //we want that, cannot copy to the same directory as the original file
-        }
+        assertThrows(IOException.class,
+            () -> FileUtils.copyFileToDirectory(destination, directory),
+            "Should not be able to copy a file into the same directory as itself");
     }
 
     @Test
@@ -1697,16 +1753,12 @@ public class FileUtilsTestCase {
         }
         final File destination = new File(directory, testFile1.getName());
 
-        //Thread.sleep(LAST_MODIFIED_DELAY);
-        //This is to slow things down so we can catch if
-        //the lastModified date is not ok
+        backDateFile10Minutes(testFile1);
 
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        /* disabled: Thread.sleep doesn't work reliantly for this case
-        assertTrue("Check last modified date preserved",
-            testFile1.lastModified() == destination.lastModified());*/
+        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
     }
 
     // forceDelete
@@ -1740,7 +1792,7 @@ public class FileUtilsTestCase {
         assertTrue(file2.length() > 0);
 
         final String file2contents = FileUtils.readFileToString(file2, "UTF-8");
-        assertTrue(filename.equals(file2contents), "Second file's contents correct");
+        assertEquals(filename, file2contents, "Second file's contents correct");
 
         assertTrue(file2.delete());
 
@@ -1764,15 +1816,15 @@ public class FileUtilsTestCase {
         out.close();
         assertEquals(1, file.length(), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
-        final boolean res = file.setLastModified(y2k);  // 0L fails on Win98
+        final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98
         assertEquals(true, res, "Bad test: set lastModified failed");
-        assertEquals(y2k, file.lastModified(), "Bad test: set lastModified set incorrect value");
+        assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long now = System.currentTimeMillis();
         FileUtils.touch(file);
         assertEquals(1, file.length(), "FileUtils.touch() didn't empty the file.");
-        assertEquals(false, y2k == file.lastModified(), "FileUtils.touch() changed lastModified");
-        assertEquals(true, file.lastModified() >= now - 3000, "FileUtils.touch() changed lastModified to more than now-3s");
-        assertEquals(true, file.lastModified() <= now + 3000, "FileUtils.touch() changed lastModified to less than now+3s");
+        assertEquals(false, y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
+        assertEquals(true, getLastModifiedMillis(file) >= now - 3000, "FileUtils.touch() changed lastModified to more than now-3s");
+        assertEquals(true, getLastModifiedMillis(file) <= now + 3000, "FileUtils.touch() changed lastModified to less than now+3s");
     }
 
     @Test
@@ -2097,9 +2149,9 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list, null);
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
+                System.lineSeparator() + "this is" + System.lineSeparator() +
+                System.lineSeparator() + "some text" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
@@ -2113,9 +2165,9 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeLines(file, "US-ASCII", list);
 
-        final String expected = "hello" + IOUtils.LINE_SEPARATOR + "world" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "this is" + IOUtils.LINE_SEPARATOR +
-                IOUtils.LINE_SEPARATOR + "some text" + IOUtils.LINE_SEPARATOR;
+        final String expected = "hello" + System.lineSeparator() + "world" + System.lineSeparator() +
+                System.lineSeparator() + "this is" + System.lineSeparator() +
+                System.lineSeparator() + "some text" + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file, "US-ASCII");
         assertEquals(expected, actual);
     }
@@ -2130,8 +2182,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2145,8 +2197,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, null, linesToAppend, null, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2161,8 +2213,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2176,8 +2228,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, linesToAppend, null, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2193,8 +2245,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2208,8 +2260,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, null, linesToAppend, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2224,8 +2276,8 @@ public class FileUtilsTestCase {
 
         final String expected = "This line was there before you..."
                 + "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2239,8 +2291,8 @@ public class FileUtilsTestCase {
         FileUtils.writeLines(file, linesToAppend, false);
 
         final String expected = "my first line"
-                + IOUtils.LINE_SEPARATOR + "The second Line"
-                + IOUtils.LINE_SEPARATOR;
+                + System.lineSeparator() + "The second Line"
+                + System.lineSeparator();
         final String actual = FileUtils.readFileToString(file);
         assertEquals(expected, actual);
     }
@@ -2375,11 +2427,11 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
-        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, true);
 
         final String expected = "This line was there before you..." + "this is brand new data";
-        final String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
@@ -2388,11 +2440,11 @@ public class FileUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         FileUtils.writeStringToFile(file, "This line was there before you...");
 
-        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(Charsets.UTF_8);
+        final byte[] data = "SKIP_THIS_this is brand new data_AND_SKIP_THIS".getBytes(StandardCharsets.UTF_8);
         FileUtils.writeByteArrayToFile(file, data, 10, 22, false);
 
         final String expected = "this is brand new data";
-        final String actual = FileUtils.readFileToString(file, Charsets.UTF_8);
+        final String actual = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
         assertEquals(expected, actual);
     }
 
@@ -3083,10 +3135,29 @@ public class FileUtilsTestCase {
         }
     }
 
+    private void backDateFile10Minutes(final File testFile) throws IOException {
+        final long mins10 = 1000 * 60 * 10;
+        final long lastModified1 = getLastModifiedMillis(testFile);
+        assertTrue(setLastModifiedMillis(testFile, lastModified1 - mins10));
+        // ensure it was changed
+        assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
+    }
+
+    private boolean setLastModifiedMillis(final File testFile, final long millis) {
+        return testFile.setLastModified(millis);
+//        try {
+//            Files.setLastModifiedTime(testFile.toPath(), FileTime.fromMillis(millis));
+//        } catch (IOException e) {
+//            return false;
+//        }
+//        return true;
+    }
+
     /**
      * DirectoryWalker implementation that recursively lists all files and directories.
      */
     static class ListDirectoryWalker extends DirectoryWalker<File> {
+
         ListDirectoryWalker() {
             super();
         }

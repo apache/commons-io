@@ -60,6 +60,27 @@ public class PathUtilsDeleteDirectoryTest {
     }
 
     /**
+     * Tests a directory with one file of size 0.
+     */
+    private void testDeleteDirectory1FileSize0(final DeleteOption... options) throws IOException {
+        // TODO Setup the test to use FileVisitOption.
+        PathUtils.copyDirectory(Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-0"), tempDir);
+        assertCounts(1, 1, 0, PathUtils.deleteDirectory(tempDir, options));
+        // This will throw if not empty.
+        Files.deleteIfExists(tempDir);
+    }
+
+    @Test
+    public void testDeleteDirectory1FileSize0NoOptions() throws IOException {
+        testDeleteDirectory1FileSize0(PathUtils.EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    @Test
+    public void testDeleteDirectory1FileSize0OverrideReadOnly() throws IOException {
+        testDeleteDirectory1FileSize0(StandardDeleteOption.OVERRIDE_READ_ONLY);
+    }
+
+    /**
      * Tests a directory with one file of size 1.
      */
     @Test
@@ -71,7 +92,7 @@ public class PathUtilsDeleteDirectoryTest {
     }
 
     /**
-     * Tests a directory with two subdirectorys, each containing one file of size 1.
+     * Tests a directory with two subdirectories, each containing one file of size 1.
      */
     @Test
     public void testDeleteDirectory2FileSize2() throws IOException {

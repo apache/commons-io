@@ -27,6 +27,7 @@ import java.io.IOException;
  * do an alternate processing with the stream. Note that the original
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
+ * </p>
  *
  * @since 2.0
  */
@@ -49,6 +50,7 @@ public class XmlStreamReaderException extends IOException {
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.
+     * </p>
      *
      * @param msg message describing the reason for the exception.
      * @param bomEnc BOM encoding.
@@ -65,6 +67,7 @@ public class XmlStreamReaderException extends IOException {
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.
+     * </p>
      *
      * @param msg message describing the reason for the exception.
      * @param ctMime MIME type in the content-type.

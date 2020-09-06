@@ -1,3 +1,99 @@
+Apache Commons IO 
+Version 2.8.0
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+==============================================================================
+Apache Commons IO Version 2.8.0
+==============================================================================
+Java 8 required.
+
+Changes in this version include:
+
+New features:
+o Add org.apache.commons.io.input.CircularInputStream. Thanks to Gary Gregory. 
+o Add org.apache.commons.io.file.PathUtils.cleanDirectory(Path, FileVisitOption...). Thanks to Gary Gregory. 
+o Add org.apache.commons.io.file.PathUtils.deleteDirectory(Path, FileVisitOption...). Thanks to Gary Gregory. 
+o Add NullAppendable. Thanks to Gary Gregory. 
+o Add PathUtils.getAclEntryList(Path). Thanks to Gary Gregory. 
+o Null-guard IOUtils.close(Closeable, IOConsumer). Thanks to Gary Gregory. 
+o Add ReversedLinesFileReader.readLines(int). Thanks to Gary Gregory. 
+o Add ReversedLinesFileReader.toString(int). Thanks to Gary Gregory. 
+o IO-684:  Add PathUtils.delete(Path, DeleteOption...).
+        Add PathUtils.deleteDirectory(Path, DeleteOption...).
+        Add PathUtils.deleteFile(Path, DeleteOption...).
+        Add PathUtils.setReadOnly(Path, boolean, LinkOption...).
+        Add CleaningPathVisitor.CleaningPathVisitor(PathCounters, DeleteOption[], String...).
+        Add DeletingPathVisitor.DeletingPathVisitor(PathCounters, DeleteOption[], String...). Thanks to Gary Gregory, Robin Jansohn. 
+o Add RandomAccessFileInputStream. Thanks to Gary Gregory. 
+o IO-681:  IOUtils.close(Closeable) should allow a list of closeables. 
+o Add IOUtils.consume(InputStream). Thanks to Gary Gregory. 
+o IO-676:  Add isFileNewer() and isFileOlder() methods that support the Java 8 Date/Time API. #124. Thanks to Isira Seneviratne, Gary Gregory. 
+o Add a MarkShieldInputStream #119. Thanks to Adam Retter, Gary Gregory. 
+o Deprecate IOUtils.LINE_SEPARATOR in favor of Java 7's System.lineSeparator(). Thanks to Gary Gregory. 
+
+Fixed Bugs:
+o CharSequenceReader.skip should return 0 instead of EOF on stream end #123. Thanks to Rob Spoor, Jochen Wiedmann. 
+o Implement CharSequenceReader.ready() #122. Thanks to Rob Spoor. 
+o IO-669:  Fix code smells; fix typos #115. Thanks to XenoAmess, Gary Gregory. 
+o Add caching for required charsets #120. Thanks to Jerome Wolff, Gary Gregory. 
+o IO-673:  Make some simplifications #121. Thanks to Jerome Wolff. 
+o IO-674:  InfiniteCircularInputStream is not infinite if its input buffer contains -1. Thanks to Gary Gregory. 
+o IO-675:  InfiniteCircularInputStream throws a divide-by-zero exception when reading if its input buffer is size 0. Thanks to Gary Gregory. 
+o IO-677:  FileSystem.getCurrent() does not return the correct enum. Thanks to Gary Gregory. 
+o IO-679:  input.AbstractCharacterFilterReader passes count of chars read #132. Thanks to proneel. 
+o IO-683:  CircularBufferInputStream.read() fails to convert byte to unsigned int 
+o Fix SpotBugs issues in org.apache.commons.io.FileUtils. Thanks to Gary Gregory. 
+o IO-672:  Copying a File sets last modified date to 01 January 1970. 
+o IO-676:  Prevent NullPointerException in ReversedLinesFileReader constructors #117. Thanks to Michael Ernst, Gary Gregory. 
+
+Changes:
+o Replace FindBugs with SpotBugs. Thanks to Gary Gregory. 
+o maven-checkstyle-plugin 3.1.0 -> 3.1.1. Thanks to Gary Gregory. 
+o Update tests from org.apache.commons:commons-lang3 3.10 to 3.11. Thanks to Gary Gregory. 
+o Update commons-parent from 50 to 51 #129. Thanks to Gary Gregory. 
+o Update actions/checkout from v1 to v2.3.1 #126. Thanks to Gary Gregory. 
+o Update junit-pioneer from 0.6.0 to 0.8.0, #127, #135. Thanks to Gary Gregory. 
+o Update mockito-core from 3.3.3 to 3.5.9 #128, #133, #145, #149, #151. Thanks to Gary Gregory. 
+o Update spotbugs from 4.0.6 to 4.1.1 #134. Thanks to Dependabot. 
+o Update junit-pioneer from 0.8.0 to 0.9.0 #138. Thanks to Dependabot. 
+o Update actions/checkout from v2.3.1 to v2.3.2 #140. Thanks to Dependabot. 
+o Update actions/setup-java from v1.4.0 to v1.4.2 #141, #148. Thanks to Dependabot. 
+
+Compatibility with 2.7:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
+==============================================================================
 
 Apache Commons IO 
 Version 2.7
@@ -99,6 +195,18 @@ Commons IO 2.4 requires Java 6.
 Commons IO 2.3 requires Java 6.
 Commons IO 2.2 requires Java 5.
 Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
 
 ==============================================================================
 Apache Commons IO Version 2.6

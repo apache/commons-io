@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.FileUtils;
@@ -70,9 +71,7 @@ public class BoundedReaderTest {
     public void readMulti() throws IOException {
         try (final BoundedReader mr = new BoundedReader(sr, 3)) {
             final char[] cbuf = new char[4];
-            for (int i = 0; i < cbuf.length; i++) {
-                cbuf[i] = 'X';
-            }
+            Arrays.fill(cbuf, 'X');
             final int read = mr.read(cbuf, 0, 4);
             assertEquals(3, read);
             assertEquals('0', cbuf[0]);
@@ -86,9 +85,7 @@ public class BoundedReaderTest {
     public void readMultiWithOffset() throws IOException {
         try (final BoundedReader mr = new BoundedReader(sr, 3)) {
             final char[] cbuf = new char[4];
-            for (int i = 0; i < cbuf.length; i++) {
-                cbuf[i] = 'X';
-            }
+            Arrays.fill(cbuf, 'X');
             final int read = mr.read(cbuf, 1, 2);
             assertEquals(2, read);
             assertEquals('X', cbuf[0]);
@@ -206,17 +203,17 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testLineNumberReaderAndStringReaderLastLineEolYes() throws IOException {
+    public void testLineNumberReaderAndStringReaderLastLineEolYes() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReader(new StringReader(STRING_END_EOL)));
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolNo() throws IOException {
+    public void testLineNumberReaderAndFileReaderLastLineEolNo() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_NO_EOL));
     }
 
     @Test
-    public void testLineNumberReaderAndFileReaderLastLineEolYes() throws IOException {
+    public void testLineNumberReaderAndFileReaderLastLineEolYes() {
         assertTimeout(Duration.ofMillis(5000), () -> testLineNumberReaderAndFileReaderLastLine(STRING_END_EOL));
     }
 
@@ -234,7 +231,7 @@ public class BoundedReaderTest {
     }
 
     @Test
-    public void testReadBytesEOF() throws IOException {
+    public void testReadBytesEOF() {
         assertTimeout(Duration.ofMillis(5000), () -> {
             final BoundedReader mr = new BoundedReader(sr, 3);
             try (BufferedReader br = new BufferedReader(mr)) {

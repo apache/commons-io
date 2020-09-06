@@ -49,7 +49,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * try {
      *     ...;
      * } catch (Throwable t) {
-     *     if (TaggedIOExcepton.isTaggedWith(t, tag)) {
+     *     if (TaggedIOException.isTaggedWith(t, tag)) {
      *         // special processing for tagged exception
      *     } else {
      *         // handling of other kinds of exceptions
@@ -81,7 +81,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * try {
      *     ...;
      * } catch (Throwable t) {
-     *     TaggedIOExcepton.throwCauseIfTagged(t, tag);
+     *     TaggedIOException.throwCauseIfTagged(t, tag);
      *     // handle other kinds of exceptions
      * }
      * </pre>

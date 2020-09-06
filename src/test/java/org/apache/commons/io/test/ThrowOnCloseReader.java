@@ -14,34 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.testtools;
+package org.apache.commons.io.test;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.Reader;
 
-import org.apache.commons.io.output.NullWriter;
-import org.apache.commons.io.output.ProxyWriter;
+import org.apache.commons.io.input.NullReader;
+import org.apache.commons.io.input.ProxyReader;
 
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnCloseWriter extends ProxyWriter {
+public class ThrowOnCloseReader extends ProxyReader {
 
     /**
      * Default ctor.
      */
-    public YellOnCloseWriter() {
-        super(NullWriter.NULL_WRITER);
+    @SuppressWarnings("resource")
+    public ThrowOnCloseReader() {
+        super(new NullReader());
     }
 
     /**
-     * @param proxy Writer to delegate to.
+     * @param proxy Reader to delegate to.
      */
-    public YellOnCloseWriter(final Writer proxy) {
+    public ThrowOnCloseReader(final Reader proxy) {
         super(proxy);
     }
 
-    /** @see java.io.Writer#close() */
+    /** @see java.io.Reader#close() */
     @Override
     public void close() throws IOException {
         throw new IOException(getClass().getSimpleName() + ".close() called.");

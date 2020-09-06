@@ -51,13 +51,26 @@ import java.util.TreeMap;
  *
  * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
- *
  */
 public class Charsets {
+
     //
     // This class should only contain Charset instances for required encodings. This guarantees that it will load
     // correctly and without delay on all Java platforms.
     //
+
+    private static final SortedMap<String, Charset> STANDARD_CHARSET_MAP;
+
+    static {
+        final SortedMap<String, Charset> standardCharsetMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        standardCharsetMap.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
+        standardCharsetMap.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
+        standardCharsetMap.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);
+        standardCharsetMap.put(StandardCharsets.UTF_16BE.name(), StandardCharsets.UTF_16BE);
+        standardCharsetMap.put(StandardCharsets.UTF_16LE.name(), StandardCharsets.UTF_16LE);
+        standardCharsetMap.put(StandardCharsets.UTF_8.name(), StandardCharsets.UTF_8);
+        STANDARD_CHARSET_MAP = Collections.unmodifiableSortedMap(standardCharsetMap);
+    }
 
     /**
      * Constructs a sorted map from canonical charset names to charset objects required of every implementation of the
@@ -72,15 +85,7 @@ public class Charsets {
      * @since 2.5
      */
     public static SortedMap<String, Charset> requiredCharsets() {
-        // maybe cache?
-        final TreeMap<String, Charset> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        m.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
-        m.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
-        m.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);
-        m.put(StandardCharsets.UTF_16BE.name(), StandardCharsets.UTF_16BE);
-        m.put(StandardCharsets.UTF_16LE.name(), StandardCharsets.UTF_16LE);
-        m.put(StandardCharsets.UTF_8.name(), StandardCharsets.UTF_8);
-        return Collections.unmodifiableSortedMap(m);
+        return STANDARD_CHARSET_MAP;
     }
 
     /**
