@@ -2232,7 +2232,6 @@ public class IOUtils {
      *
      * @param input the <code>InputStream</code> to read from
      * @return the requested byte array
-     * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      */
     public static byte[] toByteArray(final InputStream input) throws IOException {
