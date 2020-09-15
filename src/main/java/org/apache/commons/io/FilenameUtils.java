@@ -1193,12 +1193,11 @@ public class FilenameUtils {
      * Checks whether two fileNames are equal, optionally normalizing and providing
      * control over the case-sensitivity.
      *
-     * @param fileName1  the first fileName to query, may be null, otherwise must be valid
-     * @param fileName2  the second fileName to query, may be null, otherwise must be valid
+     * @param fileName1  the first fileName to query, may be null
+     * @param fileName2  the second fileName to query, may be null
      * @param normalized  whether to normalize the fileNames
      * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
      * @return true if the fileNames are equal, null equals null
-     * @throws IllegalArgumentException if fileName1 or fileName2 is invalid
      * @since 1.3
      */
     public static boolean equals(
@@ -1209,15 +1208,13 @@ public class FilenameUtils {
             return fileName1 == null && fileName2 == null;
         }
         if (normalized) {
-            String originalFileName1 = fileName1;
-            String originalFileName2 = fileName2;
             fileName1 = normalize(fileName1);
-            fileName2 = normalize(fileName2);
             if (fileName1 == null) {
-                throw new IllegalArgumentException("Error normalizing " + originalFileName1);
+                return false;
             }
+            fileName2 = normalize(fileName2);
             if (fileName2 == null) {
-                throw new IllegalArgumentException("Error normalizing " + originalFileName2);
+                return false;
             }
         }
         if (caseSensitivity == null) {
