@@ -50,6 +50,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="686" dev="ggregory" type="add" due-to="Alan Moffat, Gary Gregory">
         IOUtils.toByteArray(InputStream) Javadoc does not match code
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update junit-jupiter from 5.6.2 to 5.7.0 #153.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
