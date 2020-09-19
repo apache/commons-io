@@ -291,7 +291,7 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <checkstyle.plugin.version>3.1.1</checkstyle.plugin.version>
-    <commons.jacoco.version>0.8.5</commons.jacoco.version>
+    <commons.jacoco.version>0.8.6</commons.jacoco.version>
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.3</commons.japicmp.version>
     <spotbugs.plugin.version>4.0.4</spotbugs.plugin.version>
