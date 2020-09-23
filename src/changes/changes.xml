@@ -59,6 +59,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
       </action>
+      <action issue="IO-689" dev="aherbert" type="fix" due-to="Uwe Schindler">
+        FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
