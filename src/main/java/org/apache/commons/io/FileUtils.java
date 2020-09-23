@@ -1644,6 +1644,12 @@ public class FileUtils {
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the current time.
      *
+     * <p>Note: The input date is assumed to be in the system default time-zone with the time
+     * part set to the current time. To use a non-default time-zone use the method
+     * {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
+     * isFileNewer(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
+     * {@code zoneId} is a valid {@link ZoneId}.
+     *
      * @param file            the {@code File} of which the modification date must be compared
      * @param chronoLocalDate the date reference
      * @return true if the {@code File} exists and has been modified after the given
@@ -1659,6 +1665,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the specified time.
+     *
+     * <p>Note: The input date and time are assumed to be in the system default time-zone. To use a
+     * non-default time-zone use the method {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
+     * isFileNewer(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
+     * {@link ZoneId}.
      *
      * @param file            the {@code File} of which the modification date must be compared
      * @param chronoLocalDate the date reference
@@ -1678,6 +1689,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
      * at the system-default time zone.
+     *
+     * <p>Note: The input date and time is assumed to be in the system default time-zone. To use a
+     * non-default time-zone use the method {@link #isFileNewer(File, ChronoLocalDateTime, ZoneId)
+     * isFileNewer(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
+     * {@link ZoneId}.
      *
      * @param file                the {@code File} of which the modification date must be compared
      * @param chronoLocalDateTime the date reference
@@ -1795,11 +1811,19 @@ public class FileUtils {
      * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
      * at the current time.
      *
+     * <p>Note: The input date is assumed to be in the system default time-zone with the time
+     * part set to the current time. To use a non-default time-zone use the method
+     * {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
+     * isFileOlder(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
+     * {@code zoneId} is a valid {@link ZoneId}.
+     *
      * @param file            the {@code File} of which the modification date must be compared
      * @param chronoLocalDate the date reference
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoLocalDate} at the current time.
      * @throws NullPointerException if the file or local date is {@code null}
+     * @see ZoneId#systemDefault()
+     * @see LocalTime#now()
      *
      * @since 2.8.0
      */
@@ -1811,12 +1835,18 @@ public class FileUtils {
      * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDate}
      * at the specified {@code LocalTime}.
      *
+     * <p>Note: The input date and time are assumed to be in the system default time-zone. To use a
+     * non-default time-zone use the method {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
+     * isFileOlder(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
+     * {@link ZoneId}.
+     *
      * @param file            the {@code File} of which the modification date must be compared
      * @param chronoLocalDate the date reference
      * @param localTime       the time reference
      * @return true if the {@code File} exists and has been modified before the
      * given {@code ChronoLocalDate} at the specified time.
      * @throws NullPointerException if the file, local date or local time is {@code null}
+     * @see ZoneId#systemDefault()
      *
      * @since 2.8.0
      */
@@ -1830,11 +1860,17 @@ public class FileUtils {
      * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
      * at the system-default time zone.
      *
+     * <p>Note: The input date and time is assumed to be in the system default time-zone. To use a
+     * non-default time-zone use the method {@link #isFileOlder(File, ChronoLocalDateTime, ZoneId)
+     * isFileOlder(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
+     * {@link ZoneId}.
+     *
      * @param file                the {@code File} of which the modification date must be compared
      * @param chronoLocalDateTime the date reference
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoLocalDateTime} at the system-default time zone.
      * @throws NullPointerException if the file or local date time is {@code null}
+     * @see ZoneId#systemDefault()
      *
      * @since 2.8.0
      */
