@@ -370,24 +370,6 @@ public final class PathUtils {
     }
 
     /**
-     * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
-     *
-     * @param options the array to test
-     * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
-     */
-    private static boolean overrideReadOnly(final DeleteOption[] options) {
-        if (options == null) {
-            return false;
-        }
-        for (final DeleteOption deleteOption : options) {
-            if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Compares the file sets of two Paths to determine if they are equal or not while considering file contents. The
      * comparison includes all files in all sub-directories.
      *
@@ -602,6 +584,24 @@ public final class PathUtils {
      */
     public static boolean isEmptyFile(final Path file) throws IOException {
         return Files.size(file) <= 0;
+    }
+
+    /**
+     * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
+     *
+     * @param options the array to test
+     * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
+     */
+    private static boolean overrideReadOnly(final DeleteOption[] options) {
+        if (options == null) {
+            return false;
+        }
+        for (final DeleteOption deleteOption : options) {
+            if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
