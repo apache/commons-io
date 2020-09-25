@@ -50,6 +50,10 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="686" dev="ggregory" type="add" due-to="Alan Moffat, Gary Gregory">
         IOUtils.toByteArray(InputStream) Javadoc does not match code
       </action>
+      <action issue="IO-689" dev="aherbert" type="fix" due-to="Uwe Schindler">
+        FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
+      </action>
+      <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.
       </action>
@@ -58,9 +62,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
-      </action>
-      <action issue="IO-689" dev="aherbert" type="fix" due-to="Uwe Schindler">
-        FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update mockito-core from 3.5.10 to 3.5.11 #155.
