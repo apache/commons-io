@@ -29,16 +29,17 @@ import java.io.Serializable;
 public class TrueFileFilter implements IOFileFilter, Serializable {
 
     private static final long serialVersionUID = 8782512160909720199L;
+
     /**
      * Singleton instance of true filter.
+     *
      * @since 1.3
      */
     public static final IOFileFilter TRUE = new TrueFileFilter();
+
     /**
-     * Singleton instance of true filter.
-     * Please use the identical TrueFileFilter.TRUE constant.
-     * The new name is more JDK 1.5 friendly as it doesn't clash with other
-     * values when using static imports.
+     * Singleton instance of true filter. Please use the identical TrueFileFilter.TRUE constant. The new name is more
+     * JDK 1.5 friendly as it doesn't clash with other values when using static imports.
      */
     public static final IOFileFilter INSTANCE = TRUE;
 
@@ -51,7 +52,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param file  the file to check (ignored)
+     * @param file the file to check (ignored)
      * @return true
      */
     @Override
@@ -62,8 +63,8 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns true.
      *
-     * @param dir  the directory to check (ignored)
-     * @param name  the file name (ignored)
+     * @param dir the directory to check (ignored)
+     * @param name the file name (ignored)
      * @return true
      */
     @Override
