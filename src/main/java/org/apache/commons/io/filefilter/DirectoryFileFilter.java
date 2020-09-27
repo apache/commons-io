@@ -40,7 +40,6 @@ import java.io.Serializable;
  */
 public class DirectoryFileFilter extends AbstractFileFilter implements Serializable {
 
-    private static final long serialVersionUID = -5148237843784525732L;
     /**
      * Singleton instance of directory filter.
      * @since 1.3
@@ -53,6 +52,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      * values when using static imports.
      */
     public static final IOFileFilter INSTANCE = DIRECTORY;
+    private static final long serialVersionUID = -5148237843784525732L;
 
     /**
      * Restrictive constructor.

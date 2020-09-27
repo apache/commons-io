@@ -33,23 +33,10 @@ import java.io.Serializable;
 public class DelegateFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -8723373124984771318L;
-    /** The Filename filter */
-    private final FilenameFilter filenameFilter;
     /** The File filter */
     private final FileFilter fileFilter;
-
-    /**
-     * Constructs a delegate file filter around an existing FilenameFilter.
-     *
-     * @param filter  the filter to decorate
-     */
-    public DelegateFileFilter(final FilenameFilter filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("The FilenameFilter must not be null");
-        }
-        this.filenameFilter = filter;
-        this.fileFilter = null;
-    }
+    /** The Filename filter */
+    private final FilenameFilter filenameFilter;
 
     /**
      * Constructs a delegate file filter around an existing FileFilter.
@@ -62,6 +49,19 @@ public class DelegateFileFilter extends AbstractFileFilter implements Serializab
         }
         this.fileFilter = filter;
         this.filenameFilter = null;
+    }
+
+    /**
+     * Constructs a delegate file filter around an existing FilenameFilter.
+     *
+     * @param filter  the filter to decorate
+     */
+    public DelegateFileFilter(final FilenameFilter filter) {
+        if (filter == null) {
+            throw new IllegalArgumentException("The FilenameFilter must not be null");
+        }
+        this.filenameFilter = filter;
+        this.fileFilter = null;
     }
 
     /**

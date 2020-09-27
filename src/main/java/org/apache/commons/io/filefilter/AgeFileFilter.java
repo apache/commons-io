@@ -51,34 +51,11 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -2132740084016138541L;
 
-    /** The cutoff time threshold. */
-    private final long cutoff;
-
     /** Whether the files accepted will be older or newer. */
     private final boolean acceptOlder;
 
-    /**
-     * Constructs a new age file filter for files equal to or older than
-     * a certain cutoff
-     *
-     * @param cutoff  the threshold age of the files
-     */
-    public AgeFileFilter(final long cutoff) {
-        this(cutoff, true);
-    }
-
-    /**
-     * Constructs a new age file filter for files on any one side
-     * of a certain cutoff.
-     *
-     * @param cutoff  the threshold age of the files
-     * @param acceptOlder  if true, older files (at or before the cutoff)
-     * are accepted, else newer ones (after the cutoff).
-     */
-    public AgeFileFilter(final long cutoff, final boolean acceptOlder) {
-        this.acceptOlder = acceptOlder;
-        this.cutoff = cutoff;
-    }
+    /** The cutoff time threshold. */
+    private final long cutoff;
 
     /**
      * Constructs a new age file filter for files older than (at or before)
@@ -125,6 +102,29 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     public AgeFileFilter(final File cutoffReference, final boolean acceptOlder) {
         this(cutoffReference.lastModified(), acceptOlder);
+    }
+
+    /**
+     * Constructs a new age file filter for files equal to or older than
+     * a certain cutoff
+     *
+     * @param cutoff  the threshold age of the files
+     */
+    public AgeFileFilter(final long cutoff) {
+        this(cutoff, true);
+    }
+
+    /**
+     * Constructs a new age file filter for files on any one side
+     * of a certain cutoff.
+     *
+     * @param cutoff  the threshold age of the files
+     * @param acceptOlder  if true, older files (at or before the cutoff)
+     * are accepted, else newer ones (after the cutoff).
+     */
+    public AgeFileFilter(final long cutoff, final boolean acceptOlder) {
+        this.acceptOlder = acceptOlder;
+        this.cutoff = cutoff;
     }
 
     //-----------------------------------------------------------------------

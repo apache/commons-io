@@ -50,13 +50,13 @@ import java.io.Serializable;
  */
 public class CanExecuteFileFilter extends AbstractFileFilter implements Serializable {
 
-    private static final long serialVersionUID = 3179904805251622989L;
-
     /** Singleton instance of <i>executable</i> filter */
     public static final IOFileFilter CAN_EXECUTE = new CanExecuteFileFilter();
 
     /** Singleton instance of not <i>executable</i> filter */
     public static final IOFileFilter CANNOT_EXECUTE = new NotFileFilter(CAN_EXECUTE);
+
+    private static final long serialVersionUID = 3179904805251622989L;
 
     /**
      * Restrictive constructor.
