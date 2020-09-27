@@ -146,13 +146,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(final File file) {
-        final String name = file.getName();
-        for (final String prefix : this.prefixes) {
-            if (caseSensitivity.checkStartsWith(name, prefix)) {
-                return true;
-            }
-        }
-        return false;
+        return accept(file.getName());
     }
 
     /**
@@ -164,6 +158,10 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(final File file, final String name) {
+        return accept(name);
+    }
+
+    private boolean accept(final String name) {
         for (final String prefix : prefixes) {
             if (caseSensitivity.checkStartsWith(name, prefix)) {
                 return true;
