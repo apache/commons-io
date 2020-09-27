@@ -18,7 +18,6 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * This filter produces a logical NOT of the filters specified.
@@ -37,10 +36,13 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new file filter that NOTs the result of another filter.
      *
      * @param filter the filter, must not be null
-     * @throws NullPointerException if the filter is null
+     * @throws IllegalArgumentException if the filter is null
      */
     public NotFileFilter(final IOFileFilter filter) {
-        this.filter = Objects.requireNonNull(filter, "filter");
+        if (filter == null) {
+            throw new IllegalArgumentException("The filter must not be null");
+        }
+        this.filter = filter;
     }
 
     /**
