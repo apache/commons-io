@@ -53,7 +53,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return ! filter.accept(file);
+        return !filter.accept(file);
     }
 
     /**
