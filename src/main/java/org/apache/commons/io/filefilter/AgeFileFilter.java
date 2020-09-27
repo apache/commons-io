@@ -54,8 +54,8 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /** Whether the files accepted will be older or newer. */
     private final boolean acceptOlder;
 
-    /** The cutoff time threshold. */
-    private final long cutoff;
+    /** The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970). */
+    private final long cutoffMillis;
 
     /**
      * Constructs a new age file filter for files older than (at or before)
@@ -108,23 +108,23 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new age file filter for files equal to or older than
      * a certain cutoff
      *
-     * @param cutoff  the threshold age of the files
+     * @param cutoffMillis  The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
      */
-    public AgeFileFilter(final long cutoff) {
-        this(cutoff, true);
+    public AgeFileFilter(final long cutoffMillis) {
+        this(cutoffMillis, true);
     }
 
     /**
      * Constructs a new age file filter for files on any one side
      * of a certain cutoff.
      *
-     * @param cutoff  the threshold age of the files
+     * @param cutoffMillis  The cutoff time threshold measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970).
      * @param acceptOlder  if true, older files (at or before the cutoff)
      * are accepted, else newer ones (after the cutoff).
      */
-    public AgeFileFilter(final long cutoff, final boolean acceptOlder) {
+    public AgeFileFilter(final long cutoffMillis, final boolean acceptOlder) {
         this.acceptOlder = acceptOlder;
-        this.cutoff = cutoff;
+        this.cutoffMillis = cutoffMillis;
     }
 
     /**
@@ -142,7 +142,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        final boolean newer = FileUtils.isFileNewer(file, cutoff);
+        final boolean newer = FileUtils.isFileNewer(file, cutoffMillis);
         return acceptOlder != newer;
     }
 
@@ -154,6 +154,6 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public String toString() {
         final String condition = acceptOlder ? "<=" : ">";
-        return super.toString() + "(" + condition + cutoff + ")";
+        return super.toString() + "(" + condition + cutoffMillis + ")";
     }
 }
