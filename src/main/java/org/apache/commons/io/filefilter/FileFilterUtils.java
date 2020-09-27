@@ -40,12 +40,10 @@ import org.apache.commons.io.IOCase;
  */
 public class FileFilterUtils {
 
-    //-----------------------------------------------------------------------
     /* Constructed on demand and then cached */
     private static final IOFileFilter cvsFilter = notFileFilter(
             and(directoryFileFilter(), nameFileFilter("CVS")));
 
-    //-----------------------------------------------------------------------
 
     /* Constructed on demand and then cached */
     private static final IOFileFilter svnFilter = notFileFilter(
@@ -290,8 +288,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
-        final List<File> acceptedFiles = filterList(filter, files);
-        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
+        return filterList(filter, files).toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
@@ -360,8 +357,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static List<File> filterList(final IOFileFilter filter, final File... files) {
-        final File[] acceptedFiles = filter(filter, files);
-        return Arrays.asList(acceptedFiles);
+        return Arrays.asList(filter(filter, files));
     }
 
     /**
@@ -420,8 +416,7 @@ public class FileFilterUtils {
      * @since 2.0
      */
     public static Set<File> filterSet(final IOFileFilter filter, final File... files) {
-        final File[] acceptedFiles = filter(filter, files);
-        return new HashSet<>(Arrays.asList(acceptedFiles));
+        return new HashSet<>(Arrays.asList(filter(filter, files)));
     }
 
     /**
