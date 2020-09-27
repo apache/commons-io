@@ -23,21 +23,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A {@link java.io.FileFilter} providing conditional OR logic across a list of
- * file filters. This filter returns {@code true} if any filters in the
- * list return {@code true}. Otherwise, it returns {@code false}.
- * Checking of the file filter list stops when the first filter returns
- * {@code true}.
+ * A {@link java.io.FileFilter} providing conditional OR logic across a list of file filters. This filter returns
+ * {@code true} if any filters in the list return {@code true}. Otherwise, it returns {@code false}. Checking of the
+ * file filter list stops when the first filter returns {@code true}.
  *
  * @since 1.0
  *
  * @see FileFilterUtils#or(IOFileFilter...)
  */
-public class OrFileFilter
-        extends AbstractFileFilter
-        implements ConditionalFileFilter, Serializable {
+public class OrFileFilter extends AbstractFileFilter implements ConditionalFileFilter, Serializable {
 
     private static final long serialVersionUID = 5767770777065432721L;
+
     /** The list of file filters. */
     private final List<IOFileFilter> fileFilters;
 
@@ -53,8 +50,8 @@ public class OrFileFilter
     /**
      * Constructs a new file filter that ORs the result of two other filters.
      *
-     * @param filter1  the first filter, must not be null
-     * @param filter2  the second filter, must not be null
+     * @param filter1 the first filter, must not be null
+     * @param filter2 the second filter, must not be null
      * @throws IllegalArgumentException if either filter is null
      */
     public OrFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
@@ -67,10 +64,9 @@ public class OrFileFilter
     }
 
     /**
-     * Constructs a new instance of <code>OrFileFilter</code>
-     * with the specified filters.
+     * Constructs a new instance of <code>OrFileFilter</code> with the specified filters.
      *
-     * @param fileFilters  the file filters for this filter, copied, null ignored
+     * @param fileFilters the file filters for this filter, copied, null ignored
      * @since 1.1
      */
     public OrFileFilter(final List<IOFileFilter> fileFilters) {
