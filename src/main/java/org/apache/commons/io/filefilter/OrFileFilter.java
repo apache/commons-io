@@ -51,6 +51,22 @@ public class OrFileFilter
     }
 
     /**
+     * Constructs a new file filter that ORs the result of two other filters.
+     *
+     * @param filter1  the first filter, must not be null
+     * @param filter2  the second filter, must not be null
+     * @throws IllegalArgumentException if either filter is null
+     */
+    public OrFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
+        if (filter1 == null || filter2 == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        this.fileFilters = new ArrayList<>(2);
+        addFileFilter(filter1);
+        addFileFilter(filter2);
+    }
+
+    /**
      * Constructs a new instance of <code>OrFileFilter</code>
      * with the specified filters.
      *
@@ -66,19 +82,29 @@ public class OrFileFilter
     }
 
     /**
-     * Constructs a new file filter that ORs the result of two other filters.
-     *
-     * @param filter1  the first filter, must not be null
-     * @param filter2  the second filter, must not be null
-     * @throws IllegalArgumentException if either filter is null
+     * {@inheritDoc}
      */
-    public OrFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
-        if (filter1 == null || filter2 == null) {
-            throw new IllegalArgumentException("The filters must not be null");
+    @Override
+    public boolean accept(final File file) {
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file)) {
+                return true;
+            }
         }
-        this.fileFilters = new ArrayList<>(2);
-        addFileFilter(filter1);
-        addFileFilter(filter2);
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean accept(final File file, final String name) {
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file, name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -112,32 +138,6 @@ public class OrFileFilter
     public void setFileFilters(final List<IOFileFilter> fileFilters) {
         this.fileFilters.clear();
         this.fileFilters.addAll(fileFilters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accept(final File file) {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean accept(final File file, final String name) {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, name)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

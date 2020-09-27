@@ -56,6 +56,20 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     private final String[] wildcards;
 
     /**
+     * Construct a new case-sensitive wildcard filter for a list of wildcards.
+     *
+     * @param wildcards  the list of wildcards to match
+     * @throws IllegalArgumentException if the pattern list is null
+     * @throws ClassCastException if the list does not contain Strings
+     */
+    public WildcardFilter(final List<String> wildcards) {
+        if (wildcards == null) {
+            throw new IllegalArgumentException("The wildcard list must not be null");
+        }
+        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
+    }
+
+    /**
      * Construct a new case-sensitive wildcard filter for a single wildcard.
      *
      * @param wildcard  the wildcard to match
@@ -83,17 +97,24 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
-     * Construct a new case-sensitive wildcard filter for a list of wildcards.
+     * Checks to see if the file name matches one of the wildcards.
      *
-     * @param wildcards  the list of wildcards to match
-     * @throws IllegalArgumentException if the pattern list is null
-     * @throws ClassCastException if the list does not contain Strings
+     * @param file the file to check
+     * @return true if the file name matches one of the wildcards
      */
-    public WildcardFilter(final List<String> wildcards) {
-        if (wildcards == null) {
-            throw new IllegalArgumentException("The wildcard list must not be null");
+    @Override
+    public boolean accept(final File file) {
+        if (file.isDirectory()) {
+            return false;
         }
-        this.wildcards = wildcards.toArray(EMPTY_STRING_ARRAY);
+
+        for (final String wildcard : wildcards) {
+            if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //-----------------------------------------------------------------------
@@ -112,27 +133,6 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
         for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(name, wildcard)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks to see if the file name matches one of the wildcards.
-     *
-     * @param file the file to check
-     * @return true if the file name matches one of the wildcards
-     */
-    @Override
-    public boolean accept(final File file) {
-        if (file.isDirectory()) {
-            return false;
-        }
-
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
                 return true;
             }
         }
