@@ -69,6 +69,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/checkout from v2.3.2 to v2.3.3 #156.
       </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update org.junit-pioneer:junit-pioneer 0.9.0 -> 0.9.1.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
