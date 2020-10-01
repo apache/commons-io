@@ -997,24 +997,9 @@ public class FilenameUtilsTestCase {
      */
     @Test
     public void testEqualsNormalizedError_IO_128() {
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
-            fail("Invalid normalized first file");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
-            fail("Invalid normalized second file");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
-            fail("Invalid normalized both filse");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt"));
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt"));
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt"));
     }
 
     @Test
