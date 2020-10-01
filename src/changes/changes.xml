@@ -54,7 +54,10 @@ The <action> type attribute can be add,update,fix,remove.
         FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
-        Add FileSystemProviders.
+        Add FileSystemProviders class.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        Make `FilenameUtils.equals()` not throw an exception #154.
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
