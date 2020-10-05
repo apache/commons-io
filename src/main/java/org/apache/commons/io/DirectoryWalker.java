@@ -264,7 +264,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * @param <T> The result type, like {@link File}.
  * @since 1.3
- *
  */
 public abstract class DirectoryWalker<T> {
 
