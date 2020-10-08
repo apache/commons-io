@@ -714,13 +714,15 @@ public class FileUtils {
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
         }
-        if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
+        final String srcDirCanonicalPath = srcDir.getCanonicalPath();
+        final String destDirCanonicalPath = destDir.getCanonicalPath();
+        if (srcDirCanonicalPath.equals(destDirCanonicalPath)) {
             throw new IOException("Source '" + srcDir + "' and destination '" + destDir + "' are the same");
         }
 
         // Cater for destination being directory within the source directory (see IO-141)
         List<String> exclusionList = null;
-        if (destDir.getCanonicalPath().startsWith(srcDir.getCanonicalPath())) {
+        if (destDirCanonicalPath.startsWith(srcDirCanonicalPath)) {
             final File[] srcFiles = filter == null ? srcDir.listFiles() : srcDir.listFiles(filter);
             if (srcFiles != null && srcFiles.length > 0) {
                 exclusionList = new ArrayList<>(srcFiles.length);
