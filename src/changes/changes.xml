@@ -57,6 +57,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
         Make `FilenameUtils.equals()` not throw an exception #154.
       </action>
+      <action dev="ggregory" type="fix" due-to="Jan Peter Stotz, Bernd Eckenfels, Gary Gregory">
+        Un-derpecate IOUtils.closeQuietly() methods.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
