@@ -19,12 +19,12 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>50</version>
+    <version>52</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.7.1-SNAPSHOT</version>
+  <version>2.9.0-SNAPSHOT</version>
   <name>Apache Commons IO</name>
 
   <inceptionYear>2002</inceptionYear>
@@ -52,7 +52,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>commons-io-2.6</tag>
+    <tag>commons-io-2.8.0</tag>
   </scm>
 
   <developers>
@@ -233,19 +233,25 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.6.2</version>
+      <version>5.7.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.7.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>0.6.0</version>
+      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.3.3</version>
+      <version>3.5.13</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -257,7 +263,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.10</version>
+      <version>3.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -267,9 +273,9 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC1</commons.rc.version>
-    <commons.bc.version>2.6</commons.bc.version>
-    <commons.release.version>2.7</commons.release.version>
+    <commons.rc.version>RC2</commons.rc.version>
+    <commons.bc.version>2.7</commons.bc.version>
+    <commons.release.version>2.8.0</commons.release.version>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -290,20 +296,22 @@ file comparators, endian transformation classes, and much more.
     </commons.osgi.export>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <checkstyle.plugin.version>3.1.0</checkstyle.plugin.version>
-    <commons.jacoco.version>0.8.5</commons.jacoco.version>
+    <checkstyle.plugin.version>3.1.1</checkstyle.plugin.version>
+    <commons.jacoco.version>0.8.6</commons.jacoco.version>
     <commons.surefire.version>2.22.2</commons.surefire.version>
     <commons.japicmp.version>0.14.3</commons.japicmp.version>
+    <spotbugs.plugin.version>4.1.3</spotbugs.plugin.version>
+    <spotbugs.impl.version>4.1.3</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
-    <commons.bc.version>2.6</commons.bc.version>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>    
     <commons.releaseManagerKey>86fdc7e2a11262cb</commons.releaseManagerKey>
   </properties>
 
   <build>
-    <defaultGoal>clean verify apache-rat:check clirr:check checkstyle:check javadoc:javadoc</defaultGoal>
+    <!-- japicmp:cmp needs package to work from a jar -->
+    <defaultGoal>clean package apache-rat:check japicmp:cmp checkstyle:check javadoc:javadoc</defaultGoal>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -320,6 +328,26 @@ file comparators, endian transformation classes, and much more.
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M3</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.0.5</version>
+                </requireMavenVersion>
+              </rules>    
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -356,7 +384,7 @@ file comparators, endian transformation classes, and much more.
           <excludes>
             <exclude>**/*AbstractTestCase*</exclude>
             <exclude>**/testtools/**</exclude>
-            <!-- http://jira.codehaus.org/browse/SUREFIRE-44 -->
+            <!-- https://issues.apache.org/jira/browse/SUREFIRE-44 -->
             <exclude>**/*$*</exclude>
           </excludes>
         </configuration>
@@ -389,6 +417,21 @@ file comparators, endian transformation classes, and much more.
           </ignorePathsToDelete>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>${spotbugs.impl.version}</version>
+         </dependency>
+        </dependencies>
+        <configuration>
+          <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -404,13 +447,11 @@ file comparators, endian transformation classes, and much more.
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.5</version>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin.version}</version>
         <configuration>
-          <threshold>Normal</threshold>
-          <effort>Default</effort>
-          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
+          <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>

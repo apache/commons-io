@@ -61,7 +61,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
         }
         int pos = off - 1;
         for (int readPos = off; readPos < off + read; readPos++) {
-            if (filter(read)) {
+            if (filter(cbuf[readPos])) {
                 continue;
             }
             pos++;

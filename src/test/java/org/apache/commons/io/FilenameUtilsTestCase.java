@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -997,24 +997,9 @@ public class FilenameUtilsTestCase {
      */
     @Test
     public void testEqualsNormalizedError_IO_128() {
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt");
-            fail("Invalid normalized first file");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt");
-            fail("Invalid normalized second file");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
-        try {
-            FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt");
-            fail("Invalid normalized both filse");
-        } catch (final NullPointerException e) {
-            // expected result
-        }
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "file.txt"));
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("file.txt", "//file.txt"));
+        assertFalse(FilenameUtils.equalsNormalizedOnSystem("//file.txt", "//file.txt"));
     }
 
     @Test

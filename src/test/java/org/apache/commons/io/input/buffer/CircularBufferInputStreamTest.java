@@ -16,7 +16,11 @@
  */
 package org.apache.commons.io.input.buffer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -43,7 +47,7 @@ public class CircularBufferInputStreamTest {
 				if (res == -1) {
 					throw new IllegalStateException("Unexpected EOF at offset " + offset);
 				}
-				if (inputBuffer[offset] != res) {
+				if (inputBuffer[offset] != (byte) res) { // compare as bytes
 					throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + res);
 				}
 				++offset;
@@ -69,6 +73,24 @@ public class CircularBufferInputStreamTest {
 			default:
 				throw new IllegalStateException("Unexpected random choice value");
 			}
+		}
+		assertTrue(true, "Test finished OK");
+	}
+
+	@Test
+  public void testIO683() throws IOException {
+		final byte[] buffer = new byte[]{0,1,-2,-2,-1,4};
+		try (
+			final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais);
+		){
+			int b;
+			int i = 0;
+			while((b = cbis.read()) != -1) {
+				assertEquals(buffer[i] & 0xFF,b, "byte at index " + i + " should be equal");
+				i++;
+			}
+			assertEquals(buffer.length, i, "Should have read all the bytes");
 		}
 	}
 

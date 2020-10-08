@@ -46,15 +46,171 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.7.1" date="2020-MM-DD" description="Java 8 required.">
+    <release version="2.9.0" date="2020-MM-DD" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Gary Gregory">
+        IOUtils.toByteArray(InputStream) Javadoc does not match code
+      </action>
+      <action issue="IO-689" dev="aherbert" type="fix" due-to="Uwe Schindler">
+        FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        Make `FilenameUtils.equals()` not throw an exception #154.
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileSystemProviders class.
+      </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update junit-jupiter from 5.6.2 to 5.7.0 #153.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update mockito-core from 3.5.9 to 3.5.13 #152, #155, #157.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update spotbugs from 4.1.2 to 4.1.3 #158.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump spotbugs-maven-plugin from 4.0.4 to 4.1.3 #161.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory, Dependabot">
+        Update org.junit-pioneer:junit-pioneer 0.9.0 -> 1.0.0 #159, #162.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update actions/checkout from v2.3.2 to v2.3.3 #156.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/setup-java from v1.4.2 to v1.4.3 #160.
+      </action>
+    </release>
+    <!-- The release date is the date RC is cut -->
+    <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.input.CircularInputStream.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.file.PathUtils.cleanDirectory(Path, FileVisitOption...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add org.apache.commons.io.file.PathUtils.deleteDirectory(Path, FileVisitOption...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add NullAppendable.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Rob Spoor, Jochen Wiedmann">
+        CharSequenceReader.skip should return 0 instead of EOF on stream end #123.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Rob Spoor">
+        Implement CharSequenceReader.ready() #122.
+      </action>
       <action issue="IO-669" dev="ggregory" type="fix" due-to="XenoAmess, Gary Gregory">
         Fix code smells; fix typos #115.
       </action>
       <action dev="ggregory" type="fix" due-to="Jerome Wolff, Gary Gregory">
         Add caching for required charsets #120.
       </action>
-      <action issue="IO-673" dev="ggregory" type="fix" due-to="Jerome Wolff">
+      <action issue="IO-673" type="fix" dev="ggregory" due-to="Jerome Wolff">
         Make some simplifications #121.
+      </action>
+      <action issue="IO-674" dev="ggregory" type="fix" due-to="Gary Gregory">
+        InfiniteCircularInputStream is not infinite if its input buffer contains -1.
+      </action>
+      <action issue="IO-675" dev="ggregory" type="fix" due-to="Gary Gregory">
+        InfiniteCircularInputStream throws a divide-by-zero exception when reading if its input buffer is size 0.
+      </action>
+      <action issue="IO-677" dev="ggregory" type="fix" due-to="Gary Gregory">
+        FileSystem.getCurrent() does not return the correct enum.
+      </action>
+      <action issue="IO-679" dev="ggregory" type="fix" due-to="proneel">
+        input.AbstractCharacterFilterReader passes count of chars read #132.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.getAclEntryList(Path).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Null-guard IOUtils.close(Closeable, IOConsumer).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add ReversedLinesFileReader.readLines(int).
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add ReversedLinesFileReader.toString(int).
+      </action>
+      <action issue="IO-684" dev="ggregory" type="add" due-to="Gary Gregory, Robin Jansohn">
+        Add PathUtils.delete(Path, DeleteOption...).
+        Add PathUtils.deleteDirectory(Path, DeleteOption...).
+        Add PathUtils.deleteFile(Path, DeleteOption...).
+        Add PathUtils.setReadOnly(Path, boolean, LinkOption...).
+        Add CleaningPathVisitor.CleaningPathVisitor(PathCounters, DeleteOption[], String...).
+        Add DeletingPathVisitor.DeletingPathVisitor(PathCounters, DeleteOption[], String...).
+      </action>
+      <action issue="IO-683" dev="sebb" type="fix">
+        CircularBufferInputStream.read() fails to convert byte to unsigned int
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix SpotBugs issues in org.apache.commons.io.FileUtils.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add RandomAccessFileInputStream.
+      </action>
+      <action issue="IO-681" dev="sebb" type="add">
+        IOUtils.close(Closeable) should allow a list of closeables.
+      </action>
+      <action issue="IO-672" dev="sebb" type="fix">
+        Copying a File sets last modified date to 01 January 1970.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add IOUtils.consume(InputStream).
+      </action>
+      <action issue="IO-676" dev="ggregory" type="add" due-to="Isira Seneviratne, Gary Gregory">
+        Add isFileNewer() and isFileOlder() methods that support the Java 8 Date/Time API. #124.
+      </action>
+      <action issue="IO-676" dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
+        Prevent NullPointerException in ReversedLinesFileReader constructors #117.
+      </action>
+      <action dev="ggregory" type="add" due-to="Adam Retter, Gary Gregory">
+        Add a MarkShieldInputStream #119.
+      </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Deprecate IOUtils.LINE_SEPARATOR in favor of Java 7's System.lineSeparator().
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Replace FindBugs with SpotBugs.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        maven-checkstyle-plugin 3.1.0 -> 3.1.1.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update tests from org.apache.commons:commons-lang3 3.10 to 3.11.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update commons-parent from 50 to 51 #129.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update actions/checkout from v1 to v2.3.1 #126.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update junit-pioneer from 0.6.0 to 0.8.0, #127, #135.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update mockito-core from 3.3.3 to 3.5.9 #128, #133, #145, #149, #151.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update spotbugs from 4.0.6 to 4.1.1 #134.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update junit-pioneer from 0.8.0 to 0.9.0 #138.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update actions/checkout from v2.3.1 to v2.3.2 #140.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Update actions/setup-java from v1.4.0 to v1.4.2 #141, #148.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->

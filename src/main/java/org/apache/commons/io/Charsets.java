@@ -62,7 +62,7 @@ public class Charsets {
     private static final SortedMap<String, Charset> STANDARD_CHARSET_MAP;
 
     static {
-        SortedMap<String, Charset> standardCharsetMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        final SortedMap<String, Charset> standardCharsetMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         standardCharsetMap.put(StandardCharsets.ISO_8859_1.name(), StandardCharsets.ISO_8859_1);
         standardCharsetMap.put(StandardCharsets.US_ASCII.name(), StandardCharsets.US_ASCII);
         standardCharsetMap.put(StandardCharsets.UTF_16.name(), StandardCharsets.UTF_16);

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.testtools;
+package org.apache.commons.io.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -26,26 +26,27 @@ import org.apache.commons.io.output.ProxyOutputStream;
 /**
  * Helper class for checking behavior of IO classes.
  */
-public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
+public class ThrowOnFlushAndCloseOutputStream extends ProxyOutputStream {
 
-    private boolean yellOnFlush;
-    private boolean yellOnClose;
+    private boolean throwOnFlush;
+    private boolean throwOnClose;
 
     /**
      * @param proxy OutputStream to delegate to.
-     * @param yellOnFlush True if flush() is forbidden
-     * @param yellOnClose True if close() is forbidden
+     * @param throwOnFlush True if flush() is forbidden
+     * @param throwOnClose True if close() is forbidden
      */
-    public YellOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean yellOnFlush, final boolean yellOnClose) {
+    public ThrowOnFlushAndCloseOutputStream(final OutputStream proxy, final boolean throwOnFlush,
+        final boolean throwOnClose) {
         super(proxy);
-        this.yellOnFlush = yellOnFlush;
-        this.yellOnClose = yellOnClose;
+        this.throwOnFlush = throwOnFlush;
+        this.throwOnClose = throwOnClose;
     }
 
     /** @see java.io.OutputStream#flush() */
     @Override
     public void flush() throws IOException {
-        if (yellOnFlush) {
+        if (throwOnFlush) {
             fail(getClass().getSimpleName() + ".flush() called.");
         }
         super.flush();
@@ -54,15 +55,15 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     /** @see java.io.OutputStream#close() */
     @Override
     public void close() throws IOException {
-        if (yellOnClose) {
+        if (throwOnClose) {
             fail(getClass().getSimpleName() + ".close() called.");
         }
         super.close();
     }
 
     public void off() {
-        yellOnFlush = false;
-        yellOnClose = false;
+        throwOnFlush = false;
+        throwOnClose = false;
     }
 
 }

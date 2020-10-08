@@ -25,7 +25,6 @@ import java.io.FilenameFilter;
  * interfaces together.
  *
  * @since 1.0
- *
  */
 public interface IOFileFilter extends FileFilter, FilenameFilter {
 
@@ -38,7 +37,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * Checks to see if the File should be accepted by this filter.
      * <p>
      * Defined in {@link java.io.FileFilter}.
-     *
+     * </p>
      * @param file  the File to check
      * @return true if this file matches the test
      */
@@ -49,7 +48,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * Checks to see if the File should be accepted by this filter.
      * <p>
      * Defined in {@link java.io.FilenameFilter}.
-     *
+     * </p>
      * @param dir  the directory File to check
      * @param name  the file name within the directory to check
      * @return true if this file matches the test

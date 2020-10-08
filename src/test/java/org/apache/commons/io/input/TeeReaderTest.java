@@ -31,8 +31,8 @@ import java.io.Writer;
 import java.nio.CharBuffer;
 
 import org.apache.commons.io.output.StringBuilderWriter;
-import org.apache.commons.io.testtools.YellOnCloseReader;
-import org.apache.commons.io.testtools.YellOnCloseWriter;
+import org.apache.commons.io.test.ThrowOnCloseReader;
+import org.apache.commons.io.test.ThrowOnCloseWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +59,7 @@ public class TeeReaderTest  {
     @Test
     public void testCloseBranchIOException() throws Exception {
         final StringReader goodR = mock(StringReader.class);
-        final Writer badW = new YellOnCloseWriter();
+        final Writer badW = new ThrowOnCloseWriter();
 
         final TeeReader nonClosingTr = new TeeReader(goodR, badW, false);
         nonClosingTr.close();
@@ -80,7 +80,7 @@ public class TeeReaderTest  {
      */
     @Test
     public void testCloseMainIOException() throws IOException {
-        final Reader badR = new YellOnCloseReader();
+        final Reader badR = new ThrowOnCloseReader();
         final StringWriter goodW = mock(StringWriter.class);
 
         final TeeReader nonClosingTr = new TeeReader(badR, goodW, false);

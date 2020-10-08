@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -146,8 +146,8 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerNoFile() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(null,0),
-                "File not specified");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null,0),
+                "file");
     }
 
     /**
@@ -157,8 +157,8 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerNoDate() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(m_testFile1, (Date) null),
-                "Date not specified");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(m_testFile1, (Date) null),
+                "date");
     }
 
     /**
@@ -168,7 +168,7 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerNoFileReference() {
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(m_testFile1, (File) null),
-                "Reference file is not specified");
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(m_testFile1, (File) null),
+                "reference");
     }
 }

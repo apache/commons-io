@@ -57,7 +57,7 @@ public class FileUtilsCleanSymlinksTestCase {
         FileUtils.touch(randomFile);
 
         final File symlinkFile = new File(realInner, "fakeinner");
-        setupSymlink(randomFile, symlinkFile);
+        assertTrue(setupSymlink(randomFile, symlinkFile));
 
         assertEquals(2, realInner.list().length);
 
@@ -94,7 +94,7 @@ public class FileUtilsCleanSymlinksTestCase {
         assertEquals(1, randomDirectory.list().length);
 
         final File symlinkDirectory = new File(realOuter, "fakeinner");
-        setupSymlink(randomDirectory, symlinkDirectory);
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         assertEquals(1, symlinkDirectory.list().length);
 
@@ -129,12 +129,12 @@ public class FileUtilsCleanSymlinksTestCase {
         assertEquals(1, randomDirectory.list().length);
 
         final File symlinkDirectory = new File(realParent, "fakeinner");
-        setupSymlink(randomDirectory, symlinkDirectory);
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         assertEquals(1, symlinkDirectory.list().length);
 
         final File symlinkParentDirectory = new File(top, "fakeouter");
-        setupSymlink(realParent, symlinkParentDirectory);
+        assertTrue(setupSymlink(realParent, symlinkParentDirectory));
 
         // assert contents of the real directory were removed including the symlink
         FileUtils.cleanDirectory(symlinkParentDirectory);// should clean the contents of this but not recurse into other links
@@ -159,7 +159,7 @@ public class FileUtilsCleanSymlinksTestCase {
         assertEquals(1, randomDirectory.list().length);
 
         final File symlinkDirectory = new File(top, "fakeDir");
-        setupSymlink(randomDirectory, symlinkDirectory);
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         FileUtils.cleanDirectory(symlinkDirectory);
         assertEquals(0, symlinkDirectory.list().length);
@@ -178,7 +178,7 @@ public class FileUtilsCleanSymlinksTestCase {
         assertTrue(randomDirectory.mkdirs());
 
         final File symlinkDirectory = new File(top, "fakeDir");
-        setupSymlink(randomDirectory, symlinkDirectory);
+        assertTrue(setupSymlink(randomDirectory, symlinkDirectory));
 
         assertTrue(FileUtils.isSymlink(symlinkDirectory));
         assertFalse(FileUtils.isSymlink(randomDirectory));
@@ -195,7 +195,7 @@ public class FileUtilsCleanSymlinksTestCase {
         FileUtils.touch(randomFile);
 
         final File symlinkFile = new File(top, "fakeinner");
-        setupSymlink(randomFile, symlinkFile);
+        assertTrue(setupSymlink(randomFile, symlinkFile));
 
         assertTrue(FileUtils.isSymlink(symlinkFile));
         assertFalse(FileUtils.isSymlink(randomFile));
@@ -213,7 +213,7 @@ public class FileUtilsCleanSymlinksTestCase {
         final File badSymlinkInPathFile = new File(symlinkFile, "fakeinner");
         final File noexistParentFile = new File("noexist", "file");
 
-        setupSymlink(noexistFile, symlinkFile);
+        assertTrue(setupSymlink(noexistFile, symlinkFile));
 
         assertTrue(FileUtils.isSymlink(symlinkFile));
         assertFalse(FileUtils.isSymlink(noexistFile));
@@ -232,19 +232,19 @@ public class FileUtilsCleanSymlinksTestCase {
         assertTrue(realParent.mkdirs());
 
         final File symlinkParentDirectory = new File(top, "fakeparent");
-        setupSymlink(realParent, symlinkParentDirectory);
+        assertTrue(setupSymlink(realParent, symlinkParentDirectory));
 
         final File realChild = new File(symlinkParentDirectory, "realChild");
         assertTrue(realChild.mkdirs());
 
         final File symlinkChild = new File(symlinkParentDirectory, "fakeChild");
-        setupSymlink(realChild, symlinkChild);
+        assertTrue(setupSymlink(realChild, symlinkChild));
 
         assertTrue(FileUtils.isSymlink(symlinkChild));
         assertFalse(FileUtils.isSymlink(realChild));
     }
 
-    private void setupSymlink(final File res, final File link) throws Exception {
+    private boolean setupSymlink(final File res, final File link) throws Exception {
         // create symlink
         final List<String> args = new ArrayList<>();
         args.add("ln");
@@ -256,7 +256,7 @@ public class FileUtilsCleanSymlinksTestCase {
         Process proc;
 
         proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
-        proc.waitFor();
+        return proc.waitFor() == 0;
     }
 
 }

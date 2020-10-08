@@ -25,13 +25,12 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Data written to this stream is forwarded to a stream that has been associated with this thread.
- *
  */
 public class DemuxInputStream extends InputStream {
     private final InheritableThreadLocal<InputStream> inputStream = new InheritableThreadLocal<>();
 
     /**
-     * Bind the specified stream to the current thread.
+     * Binds the specified stream to the current thread.
      *
      * @param input the stream to bind
      * @return the InputStream that was previously active
@@ -53,7 +52,7 @@ public class DemuxInputStream extends InputStream {
     }
 
     /**
-     * Read byte from stream associated with current thread.
+     * Reads byte from stream associated with current thread.
      *
      * @return the byte read from stream
      * @throws IOException if an error occurs

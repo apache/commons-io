@@ -115,6 +115,46 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
     /**
      * <p>
      * Constructs a new MagicNumberFileFilter and associates it with the magic
+     * number to test for in files and the byte offset location in the file to
+     * to look for that magic number.
+     * </p>
+     *
+     * <pre>
+     * MagicNumberFileFilter tarFileFilter =
+     *     MagicNumberFileFilter(new byte[] {0x75, 0x73, 0x74, 0x61, 0x72}, 257);
+     * </pre>
+     *
+     * <pre>
+     * MagicNumberFileFilter javaClassFileFilter =
+     *     MagicNumberFileFilter(new byte[] {0xCA, 0xFE, 0xBA, 0xBE}, 0);
+     * </pre>
+     *
+     * @param magicNumber the magic number to look for in the file.
+     * @param offset the byte offset in the file to start comparing bytes.
+     *
+     * @throws IllegalArgumentException if <code>magicNumber</code> is
+     *         {@code null}, or contains no bytes, or <code>offset</code>
+     *         is a negative number.
+     */
+    public MagicNumberFileFilter(final byte[] magicNumber, final long offset) {
+        if (magicNumber == null) {
+            throw new IllegalArgumentException("The magic number cannot be null");
+        }
+        if (magicNumber.length == 0) {
+            throw new IllegalArgumentException("The magic number must contain at least one byte");
+        }
+        if (offset < 0) {
+            throw new IllegalArgumentException("The offset cannot be negative");
+        }
+
+        this.magicNumbers = new byte[magicNumber.length];
+        System.arraycopy(magicNumber, 0, this.magicNumbers, 0, magicNumber.length);
+        this.byteOffset = offset;
+    }
+
+    /**
+     * <p>
+     * Constructs a new MagicNumberFileFilter and associates it with the magic
      * number to test for in files. This constructor assumes a starting offset
      * of <code>0</code>.
      * </p>
@@ -170,46 +210,6 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
 
         this.magicNumbers = magicNumber.getBytes(Charset.defaultCharset()); // explicitly uses the platform default
                                                                             // charset
-        this.byteOffset = offset;
-    }
-
-    /**
-     * <p>
-     * Constructs a new MagicNumberFileFilter and associates it with the magic
-     * number to test for in files and the byte offset location in the file to
-     * to look for that magic number.
-     * </p>
-     *
-     * <pre>
-     * MagicNumberFileFilter tarFileFilter =
-     *     MagicNumberFileFilter(new byte[] {0x75, 0x73, 0x74, 0x61, 0x72}, 257);
-     * </pre>
-     *
-     * <pre>
-     * MagicNumberFileFilter javaClassFileFilter =
-     *     MagicNumberFileFilter(new byte[] {0xCA, 0xFE, 0xBA, 0xBE}, 0);
-     * </pre>
-     *
-     * @param magicNumber the magic number to look for in the file.
-     * @param offset the byte offset in the file to start comparing bytes.
-     *
-     * @throws IllegalArgumentException if <code>magicNumber</code> is
-     *         {@code null}, or contains no bytes, or <code>offset</code>
-     *         is a negative number.
-     */
-    public MagicNumberFileFilter(final byte[] magicNumber, final long offset) {
-        if (magicNumber == null) {
-            throw new IllegalArgumentException("The magic number cannot be null");
-        }
-        if (magicNumber.length == 0) {
-            throw new IllegalArgumentException("The magic number must contain at least one byte");
-        }
-        if (offset < 0) {
-            throw new IllegalArgumentException("The offset cannot be negative");
-        }
-
-        this.magicNumbers = new byte[magicNumber.length];
-        System.arraycopy(magicNumber, 0, this.magicNumbers, 0, magicNumber.length);
         this.byteOffset = offset;
     }
 

@@ -23,6 +23,8 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
+import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
 
@@ -48,16 +50,83 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * @param copyOptions Specifies how the copying should be done.
      */
     public CopyDirectoryVisitor(final PathCounters pathCounter, final Path sourceDirectory, final Path targetDirectory,
-            final CopyOption... copyOptions) {
+        final CopyOption... copyOptions) {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
         this.copyOptions = copyOptions == null ? EMPTY_COPY_OPTIONS : copyOptions.clone();
     }
 
+    /**
+     * Copies the sourceFile to the targetFile.
+     *
+     * @param sourceFile the source file.
+     * @param targetFile the target file.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    protected void copy(final Path sourceFile, final Path targetFile) throws IOException {
+        Files.copy(sourceFile, targetFile, copyOptions);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CopyDirectoryVisitor other = (CopyDirectoryVisitor) obj;
+        return Arrays.equals(copyOptions, other.copyOptions) && Objects.equals(sourceDirectory, other.sourceDirectory)
+                && Objects.equals(targetDirectory, other.targetDirectory);
+    }
+
+    /**
+     * Gets the copy options.
+     *
+     * @return the copy options.
+     * @since 2.8.0
+     */
+    public CopyOption[] getCopyOptions() {
+        return copyOptions.clone();
+    }
+
+    /**
+     * Gets the source directory.
+     *
+     * @return the source directory.
+     * @since 2.8.0
+     */
+    public Path getSourceDirectory() {
+        return sourceDirectory;
+    }
+
+    /**
+     * Gets the target directory.
+     *
+     * @return the target directory.
+     * @since 2.8.0
+     */
+    public Path getTargetDirectory() {
+        return targetDirectory;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Arrays.hashCode(copyOptions);
+        result = prime * result + Objects.hash(sourceDirectory, targetDirectory);
+        return result;
+    }
+
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
-            throws IOException {
+        throws IOException {
         final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory));
         if (Files.notExists(newTargetDir)) {
             Files.createDirectory(newTargetDir);
@@ -68,7 +137,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
         final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile));
-        Files.copy(sourceFile, targetFile, copyOptions);
+        copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
     }
 

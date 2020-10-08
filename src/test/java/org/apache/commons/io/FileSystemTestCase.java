@@ -21,9 +21,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 
 public class FileSystemTestCase {
+
+
+    @Test
+    public void testGetCurrent() {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals(FileSystem.WINDOWS, FileSystem.getCurrent());
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals(FileSystem.LINUX, FileSystem.getCurrent());
+        }
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            assertEquals(FileSystem.MAC_OSX, FileSystem.getCurrent());
+        }
+    }
 
     @Test
     public void testSorted() {

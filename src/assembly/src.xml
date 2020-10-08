@@ -25,12 +25,15 @@
         <fileSet>
             <includes>
                 <include>checkstyle.xml</include>
-                <include>findbugs-exclude-filter.xml</include>
+                <include>CONTRIBUTING.md</include>
                 <include>LICENSE.txt</include>
                 <include>NOTICE.txt</include>
                 <include>pom.xml</include>
                 <include>PROPOSAL.html</include>
+                <include>README.md</include>
                 <include>RELEASE-NOTES.txt</include>
+                <include>SECURITY.md</include>
+                <include>spotbugs-exclude-filter.xml</include>
             </includes>
         </fileSet>
         <fileSet>

@@ -50,60 +50,6 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     private final IOCase caseSensitivity;
 
     /**
-     * Constructs a new case-sensitive name file filter for a single name.
-     *
-     * @param name  the name to allow, must not be null
-     * @throws IllegalArgumentException if the name is null
-     */
-    public NameFileFilter(final String name) {
-        this(name, null);
-    }
-
-    /**
-     * Construct a new name file filter specifying case-sensitivity.
-     *
-     * @param name  the name to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the name is null
-     */
-    public NameFileFilter(final String name, final IOCase caseSensitivity) {
-        if (name == null) {
-            throw new IllegalArgumentException("The wildcard must not be null");
-        }
-        this.names = new String[] {name};
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
-    }
-
-    /**
-     * Constructs a new case-sensitive name file filter for an array of names.
-     * <p>
-     * The array is not cloned, so could be changed after constructing the
-     * instance. This would be inadvisable however.
-     *
-     * @param names  the names to allow, must not be null
-     * @throws IllegalArgumentException if the names array is null
-     */
-    public NameFileFilter(final String... names) {
-        this(names, null);
-    }
-
-    /**
-     * Constructs a new name file filter for an array of names specifying case-sensitivity.
-     *
-     * @param names  the names to allow, must not be null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the names array is null
-     */
-    public NameFileFilter(final String[] names, final IOCase caseSensitivity) {
-        if (names == null) {
-            throw new IllegalArgumentException("The array of names must not be null");
-        }
-        this.names = new String[names.length];
-        System.arraycopy(names, 0, this.names, 0, names.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
-    }
-
-    /**
      * Constructs a new case-sensitive name file filter for a list of names.
      *
      * @param names  the names to allow, must not be null
@@ -127,6 +73,60 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The list of names must not be null");
         }
         this.names = names.toArray(EMPTY_STRING_ARRAY);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    }
+
+    /**
+     * Constructs a new case-sensitive name file filter for a single name.
+     *
+     * @param name  the name to allow, must not be null
+     * @throws IllegalArgumentException if the name is null
+     */
+    public NameFileFilter(final String name) {
+        this(name, null);
+    }
+
+    /**
+     * Constructs a new case-sensitive name file filter for an array of names.
+     * <p>
+     * The array is not cloned, so could be changed after constructing the
+     * instance. This would be inadvisable however.
+     *
+     * @param names  the names to allow, must not be null
+     * @throws IllegalArgumentException if the names array is null
+     */
+    public NameFileFilter(final String... names) {
+        this(names, null);
+    }
+
+    /**
+     * Construct a new name file filter specifying case-sensitivity.
+     *
+     * @param name  the name to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the name is null
+     */
+    public NameFileFilter(final String name, final IOCase caseSensitivity) {
+        if (name == null) {
+            throw new IllegalArgumentException("The wildcard must not be null");
+        }
+        this.names = new String[] {name};
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    }
+
+    /**
+     * Constructs a new name file filter for an array of names specifying case-sensitivity.
+     *
+     * @param names  the names to allow, must not be null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the names array is null
+     */
+    public NameFileFilter(final String[] names, final IOCase caseSensitivity) {
+        if (names == null) {
+            throw new IllegalArgumentException("The array of names must not be null");
+        }
+        this.names = new String[names.length];
+        System.arraycopy(names, 0, this.names, 0, names.length);
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 

@@ -43,23 +43,28 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * IMPORTANT: This class is not related in any way to the org.xml.sax.XMLReader.
  * This one IS a character stream.
+ * </p>
  * <p>
  * All this has to be done without consuming characters from the stream, if not
  * the XML parser will not recognized the document as a valid XML. This is not
  * 100% true, but it's close enough (UTF-8 BOM is not handled by all parsers
  * right now, XmlStreamReader handles it and things work in all parsers).
+ * </p>
  * <p>
  * The XmlStreamReader class handles the charset encoding of XML documents in
  * Files, raw streams and HTTP streams by offering a wide set of constructors.
+ * </p>
  * <p>
  * By default the charset encoding detection is lenient, the constructor with
  * the lenient flag can be used for a script (following HTTP MIME and XML
  * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a
  * href="http://diveintomark.org/archives/2004/02/13/xml-media-types">
  * Determining the character encoding of a feed</a>.
+ * </p>
  * <p>
  * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
  * Apache License 2.0.
+ * </p>
  *
  * @see org.apache.commons.io.output.XmlStreamWriter
  * @since 2.0
@@ -272,7 +277,7 @@ public class XmlStreamReader extends Reader {
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
-            this.encoding = doHttpStream(bom, pis, contentType, lenient);
+            this.encoding = processHttpStream(bom, pis, contentType, lenient);
         } else {
             this.encoding = doRawStream(bom, pis, lenient);
         }
@@ -341,7 +346,7 @@ public class XmlStreamReader extends Reader {
         this.defaultEncoding = defaultEncoding;
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
-        this.encoding = doHttpStream(bom, pis, httpContentType, lenient);
+        this.encoding = processHttpStream(bom, pis, httpContentType, lenient);
         this.reader = new InputStreamReader(pis, encoding);
     }
 
@@ -451,14 +456,13 @@ public class XmlStreamReader extends Reader {
      * @return the encoding to be used
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    private String doHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
-            final boolean lenient) throws IOException {
-        final String bomEnc      = bom.getBOMCharsetName();
+    private String processHttpStream(final BOMInputStream bom, final BOMInputStream pis, final String httpContentType,
+        final boolean lenient) throws IOException {
+        final String bomEnc = bom.getBOMCharsetName();
         final String xmlGuessEnc = pis.getBOMCharsetName();
         final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
         try {
-            return calculateHttpEncoding(httpContentType, bomEnc,
-                    xmlGuessEnc, xmlEnc, lenient);
+            return calculateHttpEncoding(httpContentType, bomEnc, xmlGuessEnc, xmlEnc, lenient);
         } catch (final XmlStreamReaderException ex) {
             if (lenient) {
                 return doLenientDetection(httpContentType, ex);
@@ -691,6 +695,9 @@ public class XmlStreamReader extends Reader {
         return encoding;
     }
 
+    /**
+     * Pattern capturing the encoding of the "xml" processing instruction.
+     */
     public static final Pattern ENCODING_PATTERN = Pattern.compile(
             "<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))",
             Pattern.MULTILINE);
@@ -735,10 +742,9 @@ public class XmlStreamReader extends Reader {
                 final BufferedReader bReader = new BufferedReader(new StringReader(
                         xmlProlog.substring(0, firstGT + 1)));
                 final StringBuffer prolog = new StringBuffer();
-                String line = bReader.readLine();
-                while (line != null) {
+                String line;
+                while ((line = bReader.readLine()) != null) {
                     prolog.append(line);
-                    line = bReader.readLine();
                 }
                 final Matcher m = ENCODING_PATTERN.matcher(prolog);
                 if (m.find()) {

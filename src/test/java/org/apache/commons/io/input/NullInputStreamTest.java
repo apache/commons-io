@@ -122,6 +122,7 @@ public class NullInputStreamTest {
     public void testMarkAndReset() throws Exception {
         int position = 0;
         final int readlimit = 10;
+        @SuppressWarnings("resource") // this is actually closed
         final InputStream input = new TestNullInputStream(100, true, false);
 
         assertTrue(input.markSupported(), "Mark Should be Supported");

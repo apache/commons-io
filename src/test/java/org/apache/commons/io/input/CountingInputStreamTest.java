@@ -21,10 +21,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -73,13 +71,12 @@ public class CountingInputStreamTest {
      */
     @Test
     public void testLargeFiles_IO84() throws Exception {
-        final long size = (long)Integer.MAX_VALUE + (long)1;
-        final NullInputStream mock    = new NullInputStream(size);
+        final long size = (long) Integer.MAX_VALUE + (long) 1;
+        final NullInputStream mock = new NullInputStream(size);
         final CountingInputStream cis = new CountingInputStream(mock);
-        final OutputStream out        = NullOutputStream.NULL_OUTPUT_STREAM;
 
         // Test integer methods
-        IOUtils.copyLarge(cis, out);
+        IOUtils.consume(cis);
         try {
             cis.getCount();
             fail("Expected getCount() to throw an ArithmeticException");
@@ -96,7 +93,7 @@ public class CountingInputStreamTest {
         mock.close();
 
         // Test long methods
-        IOUtils.copyLarge(cis, out);
+        IOUtils.consume(cis);
         assertEquals(size, cis.getByteCount(), "getByteCount()");
         assertEquals(size, cis.resetByteCount(), "resetByteCount()");
     }

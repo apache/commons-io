@@ -31,6 +31,7 @@ import org.apache.commons.io.EndianUtils;
  * endian formats for internal usage.
  * <p>
  * <b>Origin of code: </b>Avalon Excalibur (IO)
+ * </p>
  *
  */
 public class SwappedDataInputStream extends ProxyInputStream

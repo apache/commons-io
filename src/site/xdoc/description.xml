@@ -35,14 +35,14 @@ limitations under the License.
 
         <p>
             For a more detailed descriptions, take a look at the
-            <a href="api-release/index.html">javadocs</a>.
+            <a href="api-release/index.html">Javadocs</a>.
         </p>
     </section>
 
     <section name="Utility classes">
         <subsection name="IOUtils">
             <p>
-                <a href="javadocs/api-release/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
+                <a href="apidocs/index.html?org/apache/commons/io/IOUtils.html">IOUtils</a>
                 contains utility methods dealing with reading, writing and copying.
                 The methods work on InputStream, OutputStream, Reader and Writer.
             </p>
@@ -92,7 +92,7 @@ limitations under the License.
 
         <subsection name="FileUtils">
             <p>
-                The <a href="javadocs/api-release/index.html?org/apache/commons/io/FileUtils.html">FileUtils</a>
+                The <a href="apidocs/index.html?org/apache/commons/io/FileUtils.html">FileUtils</a>
                 class contains utility methods for working with File objects.
                 These include reading, writing, copying and comparing files.
             </p>
@@ -106,7 +106,7 @@ limitations under the License.
 
         <subsection name="FilenameUtils">
             <p>
-                The <a href="javadocs/api-release/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>
+                The <a href="apidocs/index.html?org/apache/commons/io/FilenameUtils.html">FilenameUtils</a>
                 class contains utility methods for working with filenames <i>without</i>
                 using File objects. The class aims to be consistent
                 between Unix and Windows, to aid transitions between these
@@ -123,7 +123,7 @@ limitations under the License.
 
         <subsection name="FileSystemUtils">
             <p>
-                The <a href="javadocs/api-release/index.html?org/apache/commons/io/FileSystemUtils.html">FileSystemUtils</a>
+                The <a href="apidocs/index.html?org/apache/commons/io/FileSystemUtils.html">FileSystemUtils</a>
                 class contains
                 utility methods for working with the file system
                 to access functionality not supported by the JDK.
@@ -155,13 +155,13 @@ limitations under the License.
 
         <ul>
            <li>
-           The <a href="javadocs/api-release/index.html?org/apache/commons/io/EndianUtils.html">EndianUtils</a>
+           The <a href="apidocs/index.html?org/apache/commons/io/EndianUtils.html">EndianUtils</a>
            class contains static methods for swapping the Endian-ness
            of Java primitives and streams.
            </li>
 
            <li>
-           The <a href="javadocs/api-release/index.html?org/apache/commons/io/input/SwappedDataInputStream.html">SwappedDataInputStream</a>
+           The <a href="apidocs/index.html?org/apache/commons/io/input/SwappedDataInputStream.html">SwappedDataInputStream</a>
            class is an implementation of the <code>DataInput</code> interface. With
            this, one can read data from files of non-native Endian-ness.
            </li>
@@ -199,7 +199,7 @@ limitations under the License.
         <p>
             The <code>org.apache.commons.io.filefilter</code>
             package defines an interface
-            (<a href="javadocs/api-release/index.html?org/apache/commons/io/filefilter/IOFileFilter.html">IOFileFilter</a>)
+            (<a href="apidocs/index.html?org/apache/commons/io/filefilter/IOFileFilter.html">IOFileFilter</a>)
             that combines both <code>java.io.FileFilter</code> and
             <code>java.io.FilenameFilter</code>. Besides
             that the package offers a series of ready-to-use
@@ -211,7 +211,7 @@ limitations under the License.
         </p>
         <p>
             See the
-            <a href="javadocs/api-release/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
+            <a href="apidocs/index.html?org/apache/commons/io/filefilter/package-summary.html">filefilter</a>
             package javadoc for more details.
         </p>
     </section>
@@ -226,7 +226,7 @@ limitations under the License.
         </p>
         <p>
             See the
-            <a href="javadocs/api-release/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
+            <a href="apidocs/index.html?org/apache/commons/io/comparator/package-summary.html">comparator</a>
             package javadoc for more details.
         </p>
     </section>
@@ -248,8 +248,8 @@ limitations under the License.
         </p>
         <p>
             See the
-            <a href="javadocs/api-release/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
-            <a href="javadocs/api-release/index.html?org/apache/commons/io/output/package-summary.html">output</a>
+            <a href="apidocs/index.html?org/apache/commons/io/input/package-summary.html">input</a> or
+            <a href="apidocs/index.html?org/apache/commons/io/output/package-summary.html">output</a>
             package javadoc for more details.
         </p>
     </section>

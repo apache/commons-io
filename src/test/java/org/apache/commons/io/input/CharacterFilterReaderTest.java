@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.junit.jupiter.api.Test;
 
 public class CharacterFilterReaderTest {
@@ -67,6 +69,26 @@ public class CharacterFilterReaderTest {
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
             assertEquals('a', reader.read());
             assertEquals(-1, reader.read());
+        }
+    }
+
+    @Test
+    public void testReadIntoBuffer() throws IOException {
+        final StringReader input = new StringReader("ababcabcd");
+        try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
+            final char[] buff = new char[9];
+            final int charCount = reader.read(buff);
+            assertEquals(6, charCount);
+            assertEquals("aacacd", new String(buff, 0, charCount));
+        }
+    }
+
+    @Test
+    public void testReadUsingReader() throws IOException {
+        final StringReader input = new StringReader("ababcabcd");
+        try (StringBuilderWriter output = new StringBuilderWriter(); CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
+            IOUtils.copy(reader, output);
+            assertEquals("aacacd", output.toString());
         }
     }
 

@@ -19,7 +19,7 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 
 /**

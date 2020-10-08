@@ -83,22 +83,22 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    protected void testNullFileInput() throws IOException {
+    protected void testNullFileInput() {
         assertThrows(NullPointerException.class, () -> new XmlStreamReader((File)null));
     }
 
     @Test
-    protected void testNullInputStreamInput() throws IOException {
+    protected void testNullInputStreamInput() {
         assertThrows(NullPointerException.class, () -> new XmlStreamReader((InputStream) null));
     }
 
     @Test
-    protected void testNullURLInput() throws IOException {
+    protected void testNullURLInput() {
          assertThrows(NullPointerException.class, () -> new XmlStreamReader((URL)null));
     }
 
     @Test
-    protected void testNullURLConnectionInput() throws IOException {
+    protected void testNullURLConnectionInput() {
           assertThrows(NullPointerException.class, () -> new XmlStreamReader((URLConnection)null, "US-ASCII"));
     }
 

@@ -62,8 +62,6 @@ import java.io.Serializable;
  */
 public class CanReadFileFilter extends AbstractFileFilter implements Serializable {
 
-    private static final long serialVersionUID = 3179904805251622989L;
-
     /** Singleton instance of <i>readable</i> filter */
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();
 
@@ -73,6 +71,8 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     /** Singleton instance of <i>read-only</i> filter */
     public static final IOFileFilter READ_ONLY = new AndFileFilter(CAN_READ,
                                                 CanWriteFileFilter.CANNOT_WRITE);
+
+    private static final long serialVersionUID = 3179904805251622989L;
 
     /**
      * Restrictive constructor.

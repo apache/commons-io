@@ -48,6 +48,20 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     private final Pattern pattern;
 
     /**
+     * Construct a new regular expression filter for a compiled regular expression
+     *
+     * @param pattern regular expression to match
+     * @throws IllegalArgumentException if the pattern is null
+     */
+    public RegexFileFilter(final Pattern pattern) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern is missing");
+        }
+
+        this.pattern = pattern;
+    }
+
+    /**
      * Construct a new regular expression filter.
      *
      * @param pattern regular string expression to match
@@ -59,6 +73,20 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
         }
 
         this.pattern = Pattern.compile(pattern);
+    }
+
+    /**
+     * Construct a new regular expression filter with the specified flags.
+     *
+     * @param pattern regular string expression to match
+     * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
+     * @throws IllegalArgumentException if the pattern is null
+     */
+    public RegexFileFilter(final String pattern, final int flags) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Pattern is missing");
+        }
+        this.pattern = Pattern.compile(pattern, flags);
     }
 
     /**
@@ -77,34 +105,6 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
             flags = Pattern.CASE_INSENSITIVE;
         }
         this.pattern = Pattern.compile(pattern, flags);
-    }
-
-    /**
-     * Construct a new regular expression filter with the specified flags.
-     *
-     * @param pattern regular string expression to match
-     * @param flags pattern flags - e.g. {@link Pattern#CASE_INSENSITIVE}
-     * @throws IllegalArgumentException if the pattern is null
-     */
-    public RegexFileFilter(final String pattern, final int flags) {
-        if (pattern == null) {
-            throw new IllegalArgumentException("Pattern is missing");
-        }
-        this.pattern = Pattern.compile(pattern, flags);
-    }
-
-    /**
-     * Construct a new regular expression filter for a compiled regular expression
-     *
-     * @param pattern regular expression to match
-     * @throws IllegalArgumentException if the pattern is null
-     */
-    public RegexFileFilter(final Pattern pattern) {
-        if (pattern == null) {
-            throw new IllegalArgumentException("Pattern is missing");
-        }
-
-        this.pattern = pattern;
     }
 
     /**

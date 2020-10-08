@@ -32,10 +32,11 @@ import org.apache.commons.io.IOUtils;
  * It is an alternative base class to FilterInputStream
  * to increase reusability, because FilterInputStream changes the
  * methods being called, such as read(byte[]) to read(byte[], int, int).
+ * </p>
  * <p>
  * See the protected methods for ways in which a subclass can easily decorate
  * a stream with custom pre-, post- or error processing functionality.
- *
+ * </p>
  */
 public abstract class ProxyInputStream extends FilterInputStream {
 
@@ -144,7 +145,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      */
     @Override
     public void close() throws IOException {
-        IOUtils.close(in, e -> handleIOException(e));
+        IOUtils.close(in, this::handleIOException);
     }
 
     /**

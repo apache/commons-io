@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 
 /**

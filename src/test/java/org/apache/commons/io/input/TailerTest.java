@@ -45,7 +45,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.testtools.TestUtils;
+import org.apache.commons.io.TestResources;
+import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -69,6 +70,7 @@ public class TailerTest {
     }
 
     @Test
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     public void testLongFile() throws Exception {
         final long delay = 50;
 
@@ -84,7 +86,7 @@ public class TailerTest {
         final TestTailerListener listener = new TestTailerListener();
         tailer = new Tailer(file, listener, delay, false);
 
-        final long start = System.currentTimeMillis();
+        // final long start = System.currentTimeMillis();
 
         final Thread thread = new Thread(tailer);
         thread.start();
@@ -99,6 +101,7 @@ public class TailerTest {
     }
 
     @Test
+    @SuppressWarnings("squid:S2699") // Suppress "Add at least one assertion to this test case"
     public void testBufferBreak() throws Exception {
         final long delay = 50;
 
@@ -124,7 +127,7 @@ public class TailerTest {
     public void testMultiByteBreak() throws Exception {
         // System.out.println("testMultiByteBreak() Default charset: " + Charset.defaultCharset().displayName());
         final long delay = 50;
-        final File origin = new File(this.getClass().getResource("/test-file-utf8.bin").toURI());
+        final File origin = TestResources.getFile("test-file-utf8.bin");
         final File file = new File(temporaryFolder, "testMultiByteBreak.txt");
         createFile(file, 0);
         final TestTailerListener listener = new TestTailerListener();
@@ -232,9 +235,9 @@ public class TailerTest {
 
         // Delete & re-create
         file.delete();
-        final boolean exists = file.exists();
-        assertFalse(exists, "File should not exist");
+        assertFalse(file.exists(), "File should not exist");
         createFile(file, 0);
+        assertTrue(file.exists(), "File should now exist");
         TestUtils.sleep(testDelayMillis);
 
         // Write another line
@@ -252,8 +255,8 @@ public class TailerTest {
         assertEquals(0, listener.getLines().size(), "4 line count");
         assertNotNull(listener.exception, "Missing InterruptedException");
         assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1 , listener.initialised, "Expected init to be called");
-        assertEquals(0 , listener.notFound, "fileNotFound should not be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
+        // assertEquals(0 , listener.notFound, "fileNotFound should not be called"); // there is a window when it might be called
         assertEquals(1 , listener.rotated, "fileRotated should be be called");
     }
 
@@ -314,7 +317,11 @@ public class TailerTest {
                 }
             }
         } finally {
-            IOUtils.closeQuietly(reader);
+            try {
+                IOUtils.close(reader);
+            } catch (final IOException ignored) {
+                // ignored
+            }
         }
     }
 
@@ -348,7 +355,7 @@ public class TailerTest {
         tailer.stop();
         TestUtils.sleep(delay+idle);
         assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialised, "Expected init to be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0 , listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -374,7 +381,7 @@ public class TailerTest {
         TestUtils.sleep(delay + idle);
         assertNotNull(listener.exception, "Missing InterruptedException");
         assertTrue(listener.exception instanceof InterruptedException, "Unexpected Exception: " + listener.exception);
-        assertEquals(1, listener.initialised, "Expected init to be called");
+        assertEquals(1, listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0, listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -394,7 +401,7 @@ public class TailerTest {
         tailer.stop();
         TestUtils.sleep(delay+idle);
         assertNull(listener.exception, "Should not generate Exception");
-        assertEquals(1 , listener.initialised, "Expected init to be called");
+        assertEquals(1 , listener.initialized, "Expected init to be called");
         assertTrue(listener.notFound > 0, "fileNotFound should be called");
         assertEquals(0 , listener.rotated, "fileRotated should be not be called");
         assertEquals(0, listener.reachedEndOfFile, "end of file never reached");
@@ -428,7 +435,7 @@ public class TailerTest {
      */
     private static class TestTailerListener extends TailerListenerAdapter {
 
-        // Must be synchronised because it is written by one thread and read by another
+        // Must be synchronized because it is written by one thread and read by another
         private final List<String> lines = Collections.synchronizedList(new ArrayList<String>());
 
         volatile Exception exception = null;
@@ -437,7 +444,7 @@ public class TailerTest {
 
         volatile int rotated = 0;
 
-        volatile int initialised = 0;
+        volatile int initialized = 0;
 
         volatile int reachedEndOfFile = 0;
 
@@ -461,7 +468,7 @@ public class TailerTest {
 
         @Override
         public void init(final Tailer tailer) {
-            initialised++; // not atomic, but OK because only updated here.
+            initialized++; // not atomic, but OK because only updated here.
         }
 
         @Override

@@ -27,7 +27,7 @@ import java.io.InputStream;
  * <p>
  * A typical use case would be during debugging, to ensure that data is being
  * read as expected.
- *
+ * </p>
  */
 public class CountingInputStream extends ProxyInputStream {
 

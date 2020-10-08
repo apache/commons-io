@@ -25,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.commons.io.testtools.YellOnCloseOutputStream;
+import org.apache.commons.io.test.ThrowOnCloseOutputStream;
 import org.junit.jupiter.api.Test;
 
 /**On
@@ -39,7 +39,7 @@ public class TeeOutputStreamTest {
      */
     @Test
     public void testIOExceptionOnCloseBranch() throws IOException {
-        final OutputStream badOs = new YellOnCloseOutputStream();
+        final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(goodOs, badOs);
         try {
@@ -56,7 +56,7 @@ public class TeeOutputStreamTest {
      */
     @Test
     public void testIOExceptionOnClose() throws IOException {
-        final OutputStream badOs = new YellOnCloseOutputStream();
+        final OutputStream badOs = new ThrowOnCloseOutputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
         final TeeOutputStream tos = new TeeOutputStream(badOs, goodOs);
         try {

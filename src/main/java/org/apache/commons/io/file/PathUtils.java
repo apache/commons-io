@@ -27,10 +27,16 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.NotDirectoryException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.AclEntry;
+import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,30 +58,14 @@ import org.apache.commons.io.file.Counters.PathCounters;
 public final class PathUtils {
 
     /**
-     * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
-     *
-     * @param directory The directory to accumulate information.
-     * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @param linkOptions Options indicating how symbolic links are handled.
-     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
-     * @throws IOException if an I/O error is thrown by a visitor method.
-     * @return file tree information.
-     */
-    private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
-            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
-        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
-                toFileVisitOptionSet(fileVisitOptions), maxDepth);
-    }
-
-    /**
      * Private worker/holder that computes and tracks relative path names and their equality. We reuse the sorted
      * relative lists when comparing directories.
      */
     private static class RelativeSortedPaths {
 
         final boolean equals;
-        final List<Path> relativeDirList1; // might need later?
-        final List<Path> relativeDirList2; // might need later?
+        // final List<Path> relativeDirList1; // might need later?
+        // final List<Path> relativeDirList2; // might need later?
         final List<Path> relativeFileList1;
         final List<Path> relativeFileList2;
 
@@ -90,7 +80,7 @@ public final class PathUtils {
          * @throws IOException if an I/O error is thrown by a visitor method.
          */
         private RelativeSortedPaths(final Path dir1, final Path dir2, final int maxDepth,
-                final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
+            final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
             List<Path> tmpRelativeDirList1 = null;
             List<Path> tmpRelativeDirList2 = null;
             List<Path> tmpRelativeFileList1 = null;
@@ -105,10 +95,10 @@ public final class PathUtils {
                 if (!parentDirExists1 || !parentDirExists2) {
                     equals = !parentDirExists1 && !parentDirExists2;
                 } else {
-                    AccumulatorPathVisitor visitor1 = accumulate(dir1, maxDepth, linkOptions, fileVisitOptions);
-                    AccumulatorPathVisitor visitor2 = accumulate(dir2, maxDepth, linkOptions, fileVisitOptions);
+                    final AccumulatorPathVisitor visitor1 = accumulate(dir1, maxDepth, fileVisitOptions);
+                    final AccumulatorPathVisitor visitor2 = accumulate(dir2, maxDepth, fileVisitOptions);
                     if (visitor1.getDirList().size() != visitor2.getDirList().size()
-                            || visitor1.getFileList().size() != visitor2.getFileList().size()) {
+                        || visitor1.getFileList().size() != visitor2.getFileList().size()) {
                         equals = false;
                     } else {
                         tmpRelativeDirList1 = visitor1.relativizeDirectories(dir1, true, null);
@@ -123,12 +113,19 @@ public final class PathUtils {
                     }
                 }
             }
-            relativeDirList1 = tmpRelativeDirList1;
-            relativeDirList2 = tmpRelativeDirList2;
+            // relativeDirList1 = tmpRelativeDirList1;
+            // relativeDirList2 = tmpRelativeDirList2;
             relativeFileList1 = tmpRelativeFileList1;
             relativeFileList2 = tmpRelativeFileList2;
         }
     }
+
+    /**
+     * Empty {@link LinkOption} array.
+     *
+     * @since 2.8.0
+     */
+    public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = new DeleteOption[0];
 
     /**
      * Empty {@link FileVisitOption} array.
@@ -146,6 +143,21 @@ public final class PathUtils {
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = new OpenOption[0];
 
     /**
+     * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
+     *
+     * @param directory The directory to accumulate information.
+     * @param maxDepth See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @param fileVisitOptions See {@link Files#walkFileTree(Path,Set,int,FileVisitor)}.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @return file tree information.
+     */
+    private static AccumulatorPathVisitor accumulate(final Path directory, final int maxDepth,
+        final FileVisitOption[] fileVisitOptions) throws IOException {
+        return visitFileTree(AccumulatorPathVisitor.withLongCounters(), directory,
+            toFileVisitOptionSet(fileVisitOptions), maxDepth);
+    }
+
+    /**
      * Cleans a directory including sub-directories without deleting directories.
      *
      * @param directory directory to clean.
@@ -153,7 +165,21 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters cleanDirectory(final Path directory) throws IOException {
-        return visitFileTree(CleaningPathVisitor.withLongCounters(), directory).getPathCounters();
+        return cleanDirectory(directory, EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    /**
+     * Cleans a directory including sub-directories without deleting directories.
+     *
+     * @param directory directory to clean.
+     * @param options options indicating how deletion is handled.
+     * @return The visitation path counters.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.8.0
+     */
+    public static PathCounters cleanDirectory(final Path directory, final DeleteOption... options) throws IOException {
+        return visitFileTree(new CleaningPathVisitor(Counters.longPathCounters(), options), directory)
+            .getPathCounters();
     }
 
     /**
@@ -166,10 +192,10 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory,
-            final CopyOption... copyOptions) throws IOException {
+        final CopyOption... copyOptions) throws IOException {
         return visitFileTree(
-                new CopyDirectoryVisitor(Counters.longPathCounters(), sourceDirectory, targetDirectory, copyOptions),
-                sourceDirectory).getPathCounters();
+            new CopyDirectoryVisitor(Counters.longPathCounters(), sourceDirectory, targetDirectory, copyOptions),
+            sourceDirectory).getPathCounters();
     }
 
     /**
@@ -183,7 +209,7 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFile(final URL sourceFile, final Path targetFile, final CopyOption... copyOptions)
-            throws IOException {
+        throws IOException {
         try (final InputStream inputStream = sourceFile.openStream()) {
             Files.copy(inputStream, targetFile, copyOptions);
             return targetFile;
@@ -201,7 +227,7 @@ public final class PathUtils {
      * @see Files#copy(Path, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory,
-            final CopyOption... copyOptions) throws IOException {
+        final CopyOption... copyOptions) throws IOException {
         return Files.copy(sourceFile, targetDirectory.resolve(sourceFile.getFileName()), copyOptions);
     }
 
@@ -216,7 +242,7 @@ public final class PathUtils {
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory,
-            final CopyOption... copyOptions) throws IOException {
+        final CopyOption... copyOptions) throws IOException {
         try (final InputStream inputStream = sourceFile.openStream()) {
             Files.copy(inputStream, targetDirectory.resolve(sourceFile.getFile()), copyOptions);
             return targetDirectory;
@@ -251,7 +277,31 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
      */
     public static PathCounters delete(final Path path) throws IOException {
-        return Files.isDirectory(path) ? deleteDirectory(path) : deleteFile(path);
+        return delete(path, EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    /**
+     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * </p>
+     * <ul>
+     * <li>A directory to delete does not have to be empty.</li>
+     * <li>You get exceptions when a file or directory cannot be deleted; {@link java.io.File#delete()} returns a
+     * boolean.
+     * </ul>
+     *
+     * @param path file or directory to delete, must not be {@code null}
+     * @param options options indicating how deletion is handled.
+     * @return The visitor used to delete the given directory.
+     * @throws NullPointerException if the directory is {@code null}
+     * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static PathCounters delete(final Path path, final DeleteOption... options) throws IOException {
+        // File deletion through Files deletes links, not targets, so use LinkOption.NOFOLLOW_LINKS.
+        return Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) ? deleteDirectory(path, options)
+            : deleteFile(path, options);
     }
 
     /**
@@ -262,7 +312,21 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method.
      */
     public static PathCounters deleteDirectory(final Path directory) throws IOException {
-        return visitFileTree(DeletingPathVisitor.withLongCounters(), directory).getPathCounters();
+        return deleteDirectory(directory, EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    /**
+     * Deletes a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @param options options indicating how deletion is handled.
+     * @return The visitor used to delete the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.8.0
+     */
+    public static PathCounters deleteDirectory(final Path directory, final DeleteOption... options) throws IOException {
+        return visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), options), directory)
+            .getPathCounters();
     }
 
     /**
@@ -271,14 +335,33 @@ public final class PathUtils {
      * @param file The file to delete.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException if an I/O error occurs.
-     * @throws NotDirectoryException if the file is a directory.
+     * @throws NoSuchFileException if the file is a directory.
      */
     public static PathCounters deleteFile(final Path file) throws IOException {
-        if (Files.isDirectory(file)) {
-            throw new NotDirectoryException(file.toString());
+        return deleteFile(file, EMPTY_DELETE_OPTION_ARRAY);
+    }
+
+    /**
+     * Deletes the given file.
+     *
+     * @param file The file to delete.
+     * @param options options indicating how deletion is handled.
+     * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
+     * @throws IOException if an I/O error occurs.
+     * @throws NoSuchFileException if the file is a directory.
+     * @since 2.8.0
+     */
+    public static PathCounters deleteFile(final Path file, final DeleteOption... options) throws IOException {
+        // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
+        if (Files.isDirectory(file, LinkOption.NOFOLLOW_LINKS)) {
+            throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
-        final long size = Files.exists(file) ? Files.size(file) : 0;
+        final boolean exists = Files.exists(file, LinkOption.NOFOLLOW_LINKS);
+        final long size = exists ? Files.size(file) : 0;
+        if (overrideReadOnly(options) && exists) {
+            setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+        }
         if (Files.deleteIfExists(file)) {
             pathCounts.getFileCounter().increment();
             pathCounts.getByteCounter().add(size);
@@ -297,7 +380,7 @@ public final class PathUtils {
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryAndFileContentEquals(path1, path2, EMPTY_LINK_OPTION_ARRAY, EMPTY_OPEN_OPTION_ARRAY,
-                EMPTY_FILE_VISIT_OPTION_ARRAY);
+            EMPTY_FILE_VISIT_OPTION_ARRAY);
     }
 
     /**
@@ -313,8 +396,8 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static boolean directoryAndFileContentEquals(final Path path1, final Path path2,
-            final LinkOption[] linkOptions, final OpenOption[] openOptions, final FileVisitOption[] fileVisitOption)
-            throws IOException {
+        final LinkOption[] linkOptions, final OpenOption[] openOptions, final FileVisitOption[] fileVisitOption)
+        throws IOException {
         // First walk both file trees and gather normalized paths.
         if (path1 == null && path2 == null) {
             return true;
@@ -326,7 +409,7 @@ public final class PathUtils {
             return true;
         }
         final RelativeSortedPaths relativeSortedPaths = new RelativeSortedPaths(path1, path2, Integer.MAX_VALUE,
-                linkOptions, fileVisitOption);
+            linkOptions, fileVisitOption);
         // If the normalized path names and counts are not the same, no need to compare contents.
         if (!relativeSortedPaths.equals) {
             return false;
@@ -334,7 +417,7 @@ public final class PathUtils {
         // Both visitors contain the same normalized paths, we can compare file contents.
         final List<Path> fileList1 = relativeSortedPaths.relativeFileList1;
         final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
-        for (Path path : fileList1) {
+        for (final Path path : fileList1) {
             final int binarySearch = Collections.binarySearch(fileList2, path);
             if (binarySearch > -1) {
                 if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
@@ -358,7 +441,7 @@ public final class PathUtils {
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2) throws IOException {
         return directoryContentEquals(path1, path2, Integer.MAX_VALUE, EMPTY_LINK_OPTION_ARRAY,
-                EMPTY_FILE_VISIT_OPTION_ARRAY);
+            EMPTY_FILE_VISIT_OPTION_ARRAY);
     }
 
     /**
@@ -374,7 +457,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static boolean directoryContentEquals(final Path path1, final Path path2, final int maxDepth,
-            LinkOption[] linkOptions, FileVisitOption[] fileVisitOptions) throws IOException {
+        final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
         return new RelativeSortedPaths(path1, path2, maxDepth, linkOptions, fileVisitOptions).equals;
     }
 
@@ -411,7 +494,7 @@ public final class PathUtils {
      * @see org.apache.commons.io.FileUtils#contentEquals(java.io.File, java.io.File)
      */
     public static boolean fileContentEquals(final Path path1, final Path path2, final LinkOption[] linkOptions,
-            final OpenOption[] openOptions) throws IOException {
+        final OpenOption[] openOptions) throws IOException {
         if (path1 == null && path2 == null) {
             return true;
         }
@@ -446,9 +529,23 @@ public final class PathUtils {
             return true;
         }
         try (final InputStream inputStream1 = Files.newInputStream(nPath1, openOptions);
-                final InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
+            final InputStream inputStream2 = Files.newInputStream(nPath2, openOptions)) {
             return IOUtils.contentEquals(inputStream1, inputStream2);
         }
+    }
+
+    /**
+     * Reads the access control list from a file attribute view.
+     *
+     * @param sourcePath the path to the file.
+     * @return a file attribute view of the specified type, or null ifthe attribute view type is not available.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static List<AclEntry> getAclEntryList(final Path sourcePath) throws IOException {
+        final AclFileAttributeView fileAttributeView = Files.getFileAttributeView(sourcePath,
+            AclFileAttributeView.class);
+        return fileAttributeView == null ? null : fileAttributeView.getAcl();
     }
 
     /**
@@ -490,6 +587,24 @@ public final class PathUtils {
     }
 
     /**
+     * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
+     *
+     * @param options the array to test
+     * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
+     */
+    private static boolean overrideReadOnly(final DeleteOption[] options) {
+        if (options == null) {
+            return false;
+        }
+        for (final DeleteOption deleteOption : options) {
+            if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Relativizes all files in the given {@code collection} against a {@code parent}.
      *
      * @param collection The collection of paths to relativize.
@@ -498,13 +613,50 @@ public final class PathUtils {
      * @param comparator How to sort.
      * @return A collection of relativized paths, optionally sorted.
      */
-    static List<Path> relativize(Collection<Path> collection, Path parent, boolean sort,
-            Comparator<? super Path> comparator) {
+    static List<Path> relativize(final Collection<Path> collection, final Path parent, final boolean sort,
+        final Comparator<? super Path> comparator) {
         Stream<Path> stream = collection.stream().map(parent::relativize);
         if (sort) {
             stream = comparator == null ? stream.sorted() : stream.sorted(comparator);
         }
         return stream.collect(Collectors.toList());
+    }
+
+    /**
+     * Sets the given Path to the {@code readOnly} value.
+     * <p>
+     * This behavior is OS dependent.
+     * </p>
+     *
+     * @param path The path to set.
+     * @param readOnly true for read-only, false for not read-only.
+     * @param options options indicating how symbolic links are handled.
+     * @return The given path.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.8.0
+     */
+    public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... options)
+        throws IOException {
+        final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class,
+            options);
+        if (fileAttributeView != null) {
+            fileAttributeView.setReadOnly(readOnly);
+            return path;
+        }
+        final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path,
+            PosixFileAttributeView.class, options);
+        if (posixFileAttributeView != null) {
+            // Works on Windows but not on Ubuntu:
+            // Files.setAttribute(path, "unix:readonly", readOnly, options);
+            // java.lang.IllegalArgumentException: 'unix:readonly' not recognized
+            final PosixFileAttributes readAttributes = posixFileAttributeView.readAttributes();
+            final Set<PosixFilePermission> permissions = readAttributes.permissions();
+            permissions.remove(PosixFilePermission.OWNER_WRITE);
+            permissions.remove(PosixFilePermission.GROUP_WRITE);
+            permissions.remove(PosixFilePermission.OTHERS_WRITE);
+            return Files.setPosixFilePermissions(path, permissions);
+        }
+        throw new IOException("No DosFileAttributeView or PosixFileAttributeView for " + path);
     }
 
     /**
@@ -515,7 +667,7 @@ public final class PathUtils {
      */
     static Set<FileVisitOption> toFileVisitOptionSet(final FileVisitOption... fileVisitOptions) {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class)
-                : Arrays.stream(fileVisitOptions).collect(Collectors.toSet());
+            : Arrays.stream(fileVisitOptions).collect(Collectors.toSet());
     }
 
     /**
@@ -531,7 +683,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path directory)
-            throws IOException {
+        throws IOException {
         Files.walkFileTree(directory, visitor);
         return visitor;
     }
@@ -550,8 +702,8 @@ public final class PathUtils {
      *
      * @throws IOException if an I/O error is thrown by a visitor method
      */
-    public static <T extends FileVisitor<? super Path>> T visitFileTree(T visitor, Path start,
-            Set<FileVisitOption> options, int maxDepth) throws IOException {
+    public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final Path start,
+        final Set<FileVisitOption> options, final int maxDepth) throws IOException {
         Files.walkFileTree(start, options, maxDepth, visitor);
         return visitor;
     }
@@ -570,7 +722,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final String first,
-            final String... more) throws IOException {
+        final String... more) throws IOException {
         return visitFileTree(visitor, Paths.get(first, more));
     }
 
@@ -587,7 +739,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error is thrown by a visitor method
      */
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri)
-            throws IOException {
+        throws IOException {
         return visitFileTree(visitor, Paths.get(uri));
     }
 

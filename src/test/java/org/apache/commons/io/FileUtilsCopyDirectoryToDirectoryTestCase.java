@@ -21,7 +21,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
+import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -32,46 +37,6 @@ import org.junit.jupiter.api.io.TempDir;
  * @see FileUtils#copyDirectoryToDirectory(File, File)
  */
 public class FileUtilsCopyDirectoryToDirectoryTestCase {
-
-    @TempDir
-    public File temporaryFolder;
-
-    @Test
-    public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
-        throws IOException {
-        final File srcDir = File.createTempFile("notadireotry", null, temporaryFolder);
-        final File destDir = new File(temporaryFolder, "destinationDirectory");
-        destDir.mkdirs();
-        final String expectedMessage = String.format("Source '%s' is not a directory", srcDir);
-        assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
-    }
-
-    @Test
-    public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
-        throws IOException {
-        final File srcDir = new File(temporaryFolder, "sourceDirectory");
-        srcDir.mkdir();
-        final File destDir = new File(temporaryFolder, "notadirectory");
-        destDir.createNewFile();
-        String expectedMessage = String.format("Destination '%s' is not a directory", destDir);
-        assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
-    }
-
-    @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
-        final File srcDir = null;
-        final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
-        destinationDirectory.mkdir();
-        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class, "sourceDir");
-    }
-
-    @Test
-    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
-        final File srcDir = new File(temporaryFolder, "sourceDirectory");
-        srcDir.mkdir();
-        final File destDir = null;
-        assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, "destinationDir");
-    }
 
     private static void assertExceptionTypeAndMessage(final File srcDir, final File destDir,
         final Class<? extends Exception> expectedExceptionType, final String expectedMessage) {
@@ -84,5 +49,69 @@ public class FileUtilsCopyDirectoryToDirectoryTestCase {
             return;
         }
         fail();
+    }
+
+    /** Temporary folder managed by JUnit. */
+    @TempDir
+    public File temporaryFolder;
+
+    private void assertAclEntryList(final Path sourcePath, final Path destPath) throws IOException {
+        assertEquals(PathUtils.getAclEntryList(sourcePath), PathUtils.getAclEntryList(destPath));
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryThrowsIllegalArgumentExceptionWithCorrectMessageWhenDstDirIsNotDirectory()
+        throws IOException {
+        final File srcDir = new File(temporaryFolder, "sourceDirectory");
+        srcDir.mkdir();
+        final File destDir = new File(temporaryFolder, "notadirectory");
+        destDir.createNewFile();
+        final String expectedMessage = String.format("Destination '%s' is not a directory", destDir);
+        assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryThrowsIllegalExceptionWithCorrectMessageWhenSrcDirIsNotDirectory()
+        throws IOException {
+        final File srcDir = File.createTempFile("notadireotry", null, temporaryFolder);
+        final File destDir = new File(temporaryFolder, "destinationDirectory");
+        destDir.mkdirs();
+        final String expectedMessage = String.format("Source '%s' is not a directory", srcDir);
+        assertExceptionTypeAndMessage(srcDir, destDir, IllegalArgumentException.class, expectedMessage);
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenDstDirIsNull() {
+        final File srcDir = new File(temporaryFolder, "sourceDirectory");
+        srcDir.mkdir();
+        final File destDir = null;
+        assertExceptionTypeAndMessage(srcDir, destDir, NullPointerException.class, "destinationDir");
+    }
+
+    @Test
+    public void copyDirectoryToDirectoryThrowsNullPointerExceptionWithCorrectMessageWhenSrcDirIsNull() {
+        final File srcDir = null;
+        final File destinationDirectory = new File(temporaryFolder, "destinationDirectory");
+        destinationDirectory.mkdir();
+        assertExceptionTypeAndMessage(srcDir, destinationDirectory, NullPointerException.class, "sourceDir");
+    }
+
+    @Test
+    public void copyFileAndCheckAcl() throws IOException {
+        final Path sourcePath = Files.createTempFile("TempOutput", ".bin");
+        final Path destPath = Paths.get(temporaryFolder.getAbsolutePath(), "SomeFile.bin");
+        // Test copy attributes without replace FIRST.
+        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.COPY_ATTRIBUTES);
+        assertAclEntryList(sourcePath, destPath);
+        //
+        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile());
+        assertAclEntryList(sourcePath, destPath);
+        //
+        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING);
+        assertAclEntryList(sourcePath, destPath);
+        //
+        FileUtils.copyFile(sourcePath.toFile(), destPath.toFile(), true, StandardCopyOption.REPLACE_EXISTING,
+            StandardCopyOption.COPY_ATTRIBUTES);
+        assertAclEntryList(sourcePath, destPath);
     }
 }

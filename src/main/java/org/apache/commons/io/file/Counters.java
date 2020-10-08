@@ -52,14 +52,14 @@ public class Counters {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
             if (!(obj instanceof AbstractPathCounters)) {
                 return false;
             }
-            AbstractPathCounters other = (AbstractPathCounters) obj;
+            final AbstractPathCounters other = (AbstractPathCounters) obj;
             return Objects.equals(byteCounter, other.byteCounter)
                     && Objects.equals(directoryCounter, other.directoryCounter)
                     && Objects.equals(fileCounter, other.fileCounter);
@@ -112,14 +112,14 @@ public class Counters {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
             if (!(obj instanceof Counter)) {
                 return false;
             }
-            Counter other = (Counter) obj;
+            final Counter other = (Counter) obj;
             return Objects.equals(value, other.getBigInteger());
         }
 
@@ -222,14 +222,14 @@ public class Counters {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
             if (!(obj instanceof Counter)) {
                 return false;
             }
-            Counter other = (Counter) obj;
+            final Counter other = (Counter) obj;
             return value == other.get();
         }
 

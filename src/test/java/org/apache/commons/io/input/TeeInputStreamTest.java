@@ -29,8 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.commons.io.testtools.YellOnCloseInputStream;
-import org.apache.commons.io.testtools.YellOnCloseOutputStream;
+import org.apache.commons.io.test.ThrowOnCloseInputStream;
+import org.apache.commons.io.test.ThrowOnCloseOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -122,7 +122,7 @@ public class TeeInputStreamTest  {
     @Test
     public void testCloseBranchIOException() throws Exception {
         final ByteArrayInputStream goodIs = mock(ByteArrayInputStream.class);
-        final OutputStream badOs = new YellOnCloseOutputStream();
+        final OutputStream badOs = new ThrowOnCloseOutputStream();
 
         final TeeInputStream nonClosingTis = new TeeInputStream(goodIs, badOs, false);
         nonClosingTis.close();
@@ -143,7 +143,7 @@ public class TeeInputStreamTest  {
      */
     @Test
     public void testCloseMainIOException() throws IOException {
-        final InputStream badIs = new YellOnCloseInputStream();
+        final InputStream badIs = new ThrowOnCloseInputStream();
         final ByteArrayOutputStream goodOs = mock(ByteArrayOutputStream.class);
 
         final TeeInputStream nonClosingTis = new TeeInputStream(badIs, goodOs, false);

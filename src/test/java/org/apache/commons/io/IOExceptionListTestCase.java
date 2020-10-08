@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.EOFException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +58,11 @@ public class IOExceptionListTestCase {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);
-        sqlExceptionList.printStackTrace();
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        sqlExceptionList.printStackTrace(pw);
+        final String st = sw.toString();
+        assertTrue(st.startsWith("org.apache.commons.io.IOExceptionList: 1 exceptions: [java.io.EOFException]"));
+        assertTrue(st.contains("Caused by: java.io.EOFException"));
     }
 }

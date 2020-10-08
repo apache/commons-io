@@ -59,59 +59,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
     private final IOCase caseSensitivity;
 
     /**
-     * Construct a new case-sensitive wildcard filter for a single wildcard.
-     *
-     * @param wildcard  the wildcard to match
-     * @throws IllegalArgumentException if the pattern is null
-     */
-    public WildcardFileFilter(final String wildcard) {
-        this(wildcard, IOCase.SENSITIVE);
-    }
-
-    /**
-     * Construct a new wildcard filter for a single wildcard specifying case-sensitivity.
-     *
-     * @param wildcard  the wildcard to match, not null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the pattern is null
-     */
-    public WildcardFileFilter(final String wildcard, final IOCase caseSensitivity) {
-        if (wildcard == null) {
-            throw new IllegalArgumentException("The wildcard must not be null");
-        }
-        this.wildcards = new String[] { wildcard };
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
-    }
-
-    /**
-     * Construct a new case-sensitive wildcard filter for an array of wildcards.
-     * <p>
-     *
-     * @param wildcards  the array of wildcards to match
-     * @throws IllegalArgumentException if the pattern array is null
-     */
-    public WildcardFileFilter(final String... wildcards) {
-        this(wildcards, IOCase.SENSITIVE);
-    }
-
-    /**
-     * Construct a new wildcard filter for an array of wildcards specifying case-sensitivity.
-     * <p>
-     *
-     * @param wildcards  the array of wildcards to match, not null
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
-     * @throws IllegalArgumentException if the pattern array is null
-     */
-    public WildcardFileFilter(final String[] wildcards, final IOCase caseSensitivity) {
-        if (wildcards == null) {
-            throw new IllegalArgumentException("The wildcard array must not be null");
-        }
-        this.wildcards = new String[wildcards.length];
-        System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
-    }
-
-    /**
      * Construct a new case-sensitive wildcard filter for a list of wildcards.
      *
      * @param wildcards  the list of wildcards to match, not null
@@ -138,22 +85,57 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Checks to see if the file name matches one of the wildcards.
+     * Construct a new case-sensitive wildcard filter for a single wildcard.
      *
-     * @param dir  the file directory (ignored)
-     * @param name  the file name
-     * @return true if the file name matches one of the wildcards
+     * @param wildcard  the wildcard to match
+     * @throws IllegalArgumentException if the pattern is null
      */
-    @Override
-    public boolean accept(final File dir, final String name) {
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {
-                return true;
-            }
+    public WildcardFileFilter(final String wildcard) {
+        this(wildcard, IOCase.SENSITIVE);
+    }
+
+    /**
+     * Construct a new case-sensitive wildcard filter for an array of wildcards.
+     * <p>
+     *
+     * @param wildcards  the array of wildcards to match
+     * @throws IllegalArgumentException if the pattern array is null
+     */
+    public WildcardFileFilter(final String... wildcards) {
+        this(wildcards, IOCase.SENSITIVE);
+    }
+
+    /**
+     * Construct a new wildcard filter for a single wildcard specifying case-sensitivity.
+     *
+     * @param wildcard  the wildcard to match, not null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the pattern is null
+     */
+    public WildcardFileFilter(final String wildcard, final IOCase caseSensitivity) {
+        if (wildcard == null) {
+            throw new IllegalArgumentException("The wildcard must not be null");
         }
-        return false;
+        this.wildcards = new String[] { wildcard };
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+    }
+
+    /**
+     * Construct a new wildcard filter for an array of wildcards specifying case-sensitivity.
+     * <p>
+     *
+     * @param wildcards  the array of wildcards to match, not null
+     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @throws IllegalArgumentException if the pattern array is null
+     */
+    public WildcardFileFilter(final String[] wildcards, final IOCase caseSensitivity) {
+        if (wildcards == null) {
+            throw new IllegalArgumentException("The wildcard array must not be null");
+        }
+        this.wildcards = new String[wildcards.length];
+        System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);
+        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
@@ -164,7 +146,23 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public boolean accept(final File file) {
-        final String name = file.getName();
+        return accept(file.getName());
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Checks to see if the file name matches one of the wildcards.
+     *
+     * @param dir  the file directory (ignored)
+     * @param name  the file name
+     * @return true if the file name matches one of the wildcards
+     */
+    @Override
+    public boolean accept(final File dir, final String name) {
+        return accept(name);
+    }
+
+    private boolean accept(final String name) {
         for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {
                 return true;

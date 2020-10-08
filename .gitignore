@@ -17,3 +17,6 @@ site-content
 /.idea/
 *.iml
 /bin/
+
+### Ignore Visual Studio code files
+/.vscode/

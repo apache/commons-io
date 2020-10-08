@@ -42,8 +42,10 @@ import java.io.Serializable;
 public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 7388077430788600069L;
+
     /** The size threshold. */
     private final long size;
+
     /** Whether the files accepted will be larger or smaller. */
     private final boolean acceptLarger;
 
@@ -75,7 +77,6 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
         this.acceptLarger = acceptLarger;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks to see if the size of the file is favorable.
      * <p>
@@ -83,14 +84,14 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <b>IS NOT</b> selected.
      * If size equals threshold and larger files are required,
      * file <b>IS</b> selected.
+     * </p>
      *
      * @param file  the File to check
      * @return true if the file name matches
      */
     @Override
     public boolean accept(final File file) {
-        final boolean smaller = file.length() < size;
-        return acceptLarger != smaller;
+        return acceptLarger != file.length() < size;
     }
 
     /**
