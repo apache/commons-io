@@ -101,7 +101,7 @@ public class Counters {
     /**
      * Counts using a BigInteger number.
      */
-    private static class BigIntegerCounter implements Counter {
+    private static final class BigIntegerCounter implements Counter {
 
         private BigInteger value = BigInteger.ZERO;
 
@@ -157,7 +157,7 @@ public class Counters {
     /**
      * Counts files, directories, and sizes, as a visit proceeds, using BigInteger numbers.
      */
-    private static class BigIntegerPathCounters extends AbstractPathCounters {
+    private final static class BigIntegerPathCounters extends AbstractPathCounters {
 
         /**
          * Constructs a new initialized instance.
@@ -211,7 +211,7 @@ public class Counters {
     /**
      * Counts using a long number.
      */
-    private static class LongCounter implements Counter {
+    private final static class LongCounter implements Counter {
 
         private long value;
 
@@ -267,7 +267,7 @@ public class Counters {
     /**
      * Counts files, directories, and sizes, as a visit proceeds, using long numbers.
      */
-    private static class LongPathCounters extends AbstractPathCounters {
+    private final static class LongPathCounters extends AbstractPathCounters {
 
         /**
          * Constructs a new initialized instance.
