@@ -35,7 +35,7 @@ public interface ConditionalFileFilter {
     void addFileFilter(IOFileFilter ioFileFilter);
 
     /**
-     * Returns this conditional file filter's list of file filters.
+     * Gets this conditional file filter's list of file filters.
      *
      * @return the file filter list
      * @since 1.1
