@@ -58,7 +58,7 @@ The <action> type attribute can be add,update,fix,remove.
         Make `FilenameUtils.equals()` not throw an exception #154.
       </action>
       <action dev="ggregory" type="fix" due-to="Jan Peter Stotz, Bernd Eckenfels, Gary Gregory">
-        Un-derpecate IOUtils.closeQuietly() methods.
+        Un-deprecate IOUtils.closeQuietly() methods.
       </action>
       <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
         FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163.
