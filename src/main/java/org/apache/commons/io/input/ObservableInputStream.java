@@ -43,7 +43,7 @@ public class ObservableInputStream extends ProxyInputStream {
      */
     public static abstract class Observer {
 
-        /** 
+        /**
          * Called to indicate, that {@link InputStream#read()} has been invoked
          * on the {@link ObservableInputStream}, and will return a value.
          * @param pByte The value, which is being returned. This will never be -1 (EOF),
@@ -54,7 +54,7 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** 
+        /**
          * Called to indicate that {@link InputStream#read(byte[])}, or
          * {@link InputStream#read(byte[], int, int)} have been called, and are about to
          * invoke data.
@@ -68,7 +68,7 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** 
+        /**
          * Called to indicate that EOF has been seen on the underlying stream.
          * This method may be called multiple times, if the reader keeps invoking
          * either of the read methods, and they will consequently keep returning
@@ -79,7 +79,7 @@ public class ObservableInputStream extends ProxyInputStream {
             // noop
         }
 
-        /** 
+        /**
          * Called to indicate that the {@link ObservableInputStream} has been closed.
          * @throws IOException if an i/o-error occurs
          */

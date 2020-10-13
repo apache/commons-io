@@ -47,7 +47,7 @@ public class FileSystemProviders {
 
     /**
      * Returns the instance for the installed providers.
-     * 
+     *
      * @return the instance for the installed providers.
      * @see FileSystemProvider#installedProviders()
      */
