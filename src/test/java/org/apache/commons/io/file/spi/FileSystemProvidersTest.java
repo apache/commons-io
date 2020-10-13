@@ -37,7 +37,7 @@ public class FileSystemProvidersTest {
     @Test
     public void testGetFileSystemProvider_all() throws URISyntaxException {
         final List<FileSystemProvider> installedProviders = FileSystemProvider.installedProviders();
-        for (FileSystemProvider fileSystemProvider : installedProviders) {
+        for (final FileSystemProvider fileSystemProvider : installedProviders) {
             final String scheme = fileSystemProvider.getScheme();
             final URI uri = new URI(scheme, "ssp", "fragment");
             assertEquals(scheme, FileSystemProviders.installed().getFileSystemProvider(uri).getScheme());
