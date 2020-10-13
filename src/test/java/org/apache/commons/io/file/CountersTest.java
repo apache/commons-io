@@ -19,6 +19,7 @@ package org.apache.commons.io.file;
 
 import static org.apache.commons.io.file.CounterAssertions.assertCounter;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.commons.io.file.Counters.Counter;
 import org.apache.commons.io.file.Counters.PathCounters;
@@ -38,6 +39,28 @@ public class CountersTest extends TestArguments {
     public void testInitialValues(final PathCounters pathCounter) {
         // Does not blow up
         assertCounts(0, 0, 0, pathCounter);
+    }
+
+    @ParameterizedTest
+    @MethodSource("pathCounters")
+    public void testResetCounter(final PathCounters pathCounter) {
+        final Counter byteCounter = pathCounter.getByteCounter();
+        final long old = byteCounter.get();
+        byteCounter.add(1);
+        assertEquals(old + 1, byteCounter.get());
+        byteCounter.reset();
+        assertEquals(0, byteCounter.get());
+    }
+
+    @ParameterizedTest
+    @MethodSource("pathCounters")
+    public void testResetPathCounter(final PathCounters pathCounter) {
+        final Counter byteCounter = pathCounter.getByteCounter();
+        final long old = byteCounter.get();
+        byteCounter.add(1);
+        assertEquals(old + 1, byteCounter.get());
+        pathCounter.reset();
+        assertEquals(0, byteCounter.get());
     }
 
     @ParameterizedTest

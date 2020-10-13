@@ -18,35 +18,39 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * This filter accepts <code>File</code>s that can be executed.
  * <p>
  * Example, showing how to print out a list of the
  * current directory's <i>executable</i> files:
- *
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( CanExecuteFileFilter.CAN_EXECUTE );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(CanExecuteFileFilter.CAN_EXECUTE);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
  * <p>
  * Example, showing how to print out a list of the
- * current directory's <i>un-executable</i> files:
+ * current directory's <i>non-executable</i> files:
+ * </p>
  *
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( CanExecuteFileFilter.CANNOT_EXECUTE );
- * for ( int i = 0; i &lt; files.length; i++ ) {
+ * String[] files = dir.list(CanExecuteFileFilter.CANNOT_EXECUTE);
+ * for (int i = 0; i &lt; files.length; i++) {
  *     System.out.println(files[i]);
  * }
  * </pre>
  *
  * @since 2.7
- *
  */
 public class CanExecuteFileFilter extends AbstractFileFilter implements Serializable {
 
@@ -54,7 +58,7 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
     public static final IOFileFilter CAN_EXECUTE = new CanExecuteFileFilter();
 
     /** Singleton instance of not <i>executable</i> filter */
-    public static final IOFileFilter CANNOT_EXECUTE = new NotFileFilter(CAN_EXECUTE);
+    public static final IOFileFilter CANNOT_EXECUTE = CAN_EXECUTE.not();
 
     private static final long serialVersionUID = 3179904805251622989L;
 
@@ -62,6 +66,7 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
      * Restrictive constructor.
      */
     protected CanExecuteFileFilter() {
+        // empty.
     }
 
     /**
@@ -73,6 +78,18 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
     @Override
     public boolean accept(final File file) {
         return file.canExecute();
+    }
+
+    /**
+     * Checks to see if the file can be executed.
+     *
+     * @param file  the File to check.
+     * @return {@code true} if the file can be executed, otherwise {@code false}.
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return toFileVisitResult(Files.isExecutable(file));
     }
 
 }

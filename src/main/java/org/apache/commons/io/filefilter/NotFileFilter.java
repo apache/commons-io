@@ -17,18 +17,21 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 
 /**
  * This filter produces a logical NOT of the filters specified.
  *
  * @since 1.0
- *
  * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */
 public class NotFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 6131563330944994230L;
+
     /** The filter */
     private final IOFileFilter filter;
 
@@ -66,6 +69,38 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public boolean accept(final File file, final String name) {
         return !filter.accept(file, name);
+    }
+
+    /**
+     * Returns the logical NOT of the underlying filter's return value for the same File.
+     *
+     * @param file the File to check
+     * @return true if the filter returns false
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) throws IOException {
+        return not(filter.accept(file));
+    }
+
+    /**
+     * Returns the logical NOT of the underlying filter's return value for the same arguments.
+     *
+     * @param file the File directory
+     * @param name the file name
+     * @return true if the filter returns false
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final Path name) throws IOException {
+        return not(filter.accept(file, name));
+    }
+
+    private FileVisitResult not(final FileVisitResult accept) {
+        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE
+            : FileVisitResult.CONTINUE;
     }
 
     /**

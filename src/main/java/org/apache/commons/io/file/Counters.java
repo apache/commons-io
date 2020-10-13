@@ -44,7 +44,7 @@ public class Counters {
          * @param fileCounter the file counter.
          */
         protected AbstractPathCounters(final Counter byteCounter, final Counter directoryCounter,
-                final Counter fileCounter) {
+            final Counter fileCounter) {
             super();
             this.byteCounter = byteCounter;
             this.directoryCounter = directoryCounter;
@@ -61,8 +61,8 @@ public class Counters {
             }
             final AbstractPathCounters other = (AbstractPathCounters) obj;
             return Objects.equals(byteCounter, other.byteCounter)
-                    && Objects.equals(directoryCounter, other.directoryCounter)
-                    && Objects.equals(fileCounter, other.fileCounter);
+                && Objects.equals(directoryCounter, other.directoryCounter)
+                && Objects.equals(fileCounter, other.fileCounter);
         }
 
         @Override
@@ -91,9 +91,16 @@ public class Counters {
         }
 
         @Override
+        public void reset() {
+            byteCounter.reset();
+            directoryCounter.reset();
+            fileCounter.reset();
+        }
+
+        @Override
         public String toString() {
             return String.format("%,d files, %,d directories, %,d bytes", Long.valueOf(fileCounter.get()),
-                    Long.valueOf(directoryCounter.get()), Long.valueOf(byteCounter.get()));
+                Long.valueOf(directoryCounter.get()), Long.valueOf(byteCounter.get()));
         }
 
     }
@@ -152,6 +159,11 @@ public class Counters {
         public String toString() {
             return value.toString();
         }
+
+        @Override
+        public void reset() {
+            value = BigInteger.ZERO;
+        }
     }
 
     /**
@@ -205,6 +217,13 @@ public class Counters {
          * Adds one to this counter.
          */
         void increment();
+
+        /**
+         * Resets this count to 0.
+         */
+        default void reset() {
+            // binary compat, do nothing
+        }
 
     }
 
@@ -262,6 +281,11 @@ public class Counters {
         public String toString() {
             return Long.toString(value);
         }
+
+        @Override
+        public void reset() {
+            value = 0L;
+        }
     }
 
     /**
@@ -274,6 +298,56 @@ public class Counters {
          */
         protected LongPathCounters() {
             super(Counters.longCounter(), Counters.longCounter(), Counters.longCounter());
+        }
+
+    }
+
+    /**
+     * Counts nothing.
+     */
+    private final static class NoopCounter implements Counter {
+
+        static final NoopCounter INSTANCE = new NoopCounter();
+
+        @Override
+        public void add(final long add) {
+            // noop
+        }
+
+        @Override
+        public long get() {
+            return 0;
+        }
+
+        @Override
+        public BigInteger getBigInteger() {
+            return BigInteger.ZERO;
+        }
+
+        @Override
+        public Long getLong() {
+            return 0L;
+        }
+
+        @Override
+        public void increment() {
+            // noop
+        }
+
+    }
+
+    /**
+     * Counts nothing.
+     */
+    private static final class NoopPathCounters extends AbstractPathCounters {
+
+        static final NoopPathCounters INSTANCE = new NoopPathCounters();
+
+        /**
+         * Constructs a new initialized instance.
+         */
+        private NoopPathCounters() {
+            super(Counters.noopCounter(), Counters.noopCounter(), Counters.noopCounter());
         }
 
     }
@@ -303,6 +377,13 @@ public class Counters {
          * @return the file counter.
          */
         Counter getFileCounter();
+
+        /**
+         * Resets the counts to 0.
+         */
+        default void reset() {
+            // binary compat, do nothing
+        }
 
     }
 
@@ -340,5 +421,25 @@ public class Counters {
      */
     public static PathCounters longPathCounters() {
         return new LongPathCounters();
+    }
+
+    /**
+     * Returns the NOOP Counter.
+     *
+     * @return the NOOP Counter.
+     * @since 2.9.0
+     */
+    public static Counter noopCounter() {
+        return NoopCounter.INSTANCE;
+    }
+
+    /**
+     * Returns the NOOP PathCounters.
+     *
+     * @return the NOOP PathCounters.
+     * @since 2.9.0
+     */
+    public static PathCounters noopPathCounters() {
+        return NoopPathCounters.INSTANCE;
     }
 }

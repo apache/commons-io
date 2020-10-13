@@ -18,12 +18,13 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 
 /**
  * A file filter that always returns true.
  *
  * @since 1.0
- *
  * @see FileFilterUtils#trueFileFilter()
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
@@ -70,6 +71,31 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
     @Override
     public boolean accept(final File dir, final String name) {
         return true;
+    }
+
+    /**
+     * Returns true.
+     *
+     * @param file the file to check (ignored)
+     * @return true
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return FileVisitResult.CONTINUE;
+    }
+
+    /**
+     * Returns true.
+     *
+     * @param dir the directory to check (ignored)
+     * @param name the file name (ignored)
+     * @return true
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path dir, final Path name) {
+        return FileVisitResult.CONTINUE;
     }
 
 }

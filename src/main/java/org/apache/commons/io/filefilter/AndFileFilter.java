@@ -17,8 +17,12 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,8 +34,6 @@ import java.util.List;
  * {@code false}.
  *
  * @since 1.0
- *
- *
  * @see FileFilterUtils#and(IOFileFilter...)
  */
 public class AndFileFilter
@@ -53,10 +55,10 @@ public class AndFileFilter
     }
 
     /**
-     * Constructs a new file filter that ANDs the result of two other filters.
+     * Constructs a new file filter that ANDs the result of other filters.
      *
-     * @param filter1  the first filter, must not be null
-     * @param filter2  the second filter, must not be null
+     * @param filter1  the first filter, must second be null
+     * @param filter2  the first filter, must not be null
      * @throws IllegalArgumentException if either filter is null
      */
     public AndFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
@@ -64,8 +66,24 @@ public class AndFileFilter
             throw new IllegalArgumentException("The filters must not be null");
         }
         this.fileFilters = new ArrayList<>(2);
-        addFileFilter(filter1);
-        addFileFilter(filter2);
+        this.fileFilters.add(filter1);
+        this.fileFilters.add(filter2);
+    }
+
+    /**
+     * Constructs a new file filter that ANDs the result of other filters.
+     *
+     * @param filter1  the first filter, must not be null
+     * @param filters  more filters, must not be null
+     * @throws IllegalArgumentException if either filter is null
+     */
+    public AndFileFilter(final IOFileFilter filter1, final IOFileFilter... filters) {
+        if (filter1 == null || filters == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        this.fileFilters = new ArrayList<>(filters.length + 1);
+        this.fileFilters.add(filter1);
+        this.fileFilters.addAll(Arrays.asList(filters));
     }
 
     /**
@@ -88,7 +106,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file) {
-        if (this.fileFilters.isEmpty()) {
+        if (isEmpty()) {
             return false;
         }
         for (final IOFileFilter fileFilter : fileFilters) {
@@ -104,7 +122,7 @@ public class AndFileFilter
      */
     @Override
     public boolean accept(final File file, final String name) {
-        if (this.fileFilters.isEmpty()) {
+        if (isEmpty()) {
             return false;
         }
         for (final IOFileFilter fileFilter : fileFilters) {
@@ -113,6 +131,40 @@ public class AndFileFilter
             }
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) throws IOException {
+        if (isEmpty()) {
+            return FileVisitResult.TERMINATE;
+        }
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file) != FileVisitResult.CONTINUE) {
+                return FileVisitResult.TERMINATE;
+            }
+        }
+        return FileVisitResult.CONTINUE;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final Path name) throws IOException {
+        if (isEmpty()) {
+            return FileVisitResult.TERMINATE;
+        }
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file, name) != FileVisitResult.CONTINUE) {
+                return FileVisitResult.TERMINATE;
+            }
+        }
+        return FileVisitResult.CONTINUE;
     }
 
     /**
@@ -129,6 +181,10 @@ public class AndFileFilter
     @Override
     public List<IOFileFilter> getFileFilters() {
         return Collections.unmodifiableList(this.fileFilters);
+    }
+
+    private boolean isEmpty() {
+        return this.fileFilters.isEmpty();
     }
 
     /**
@@ -158,14 +214,12 @@ public class AndFileFilter
         final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
-        if (fileFilters != null) {
-            for (int i = 0; i < fileFilters.size(); i++) {
-                if (i > 0) {
-                    buffer.append(",");
-                }
-                final Object filter = fileFilters.get(i);
-                buffer.append(filter == null ? "null" : filter.toString());
+        for (int i = 0; i < fileFilters.size(); i++) {
+            if (i > 0) {
+                buffer.append(",");
             }
+            final Object filter = fileFilters.get(i);
+            buffer.append(filter == null ? "null" : filter.toString());
         }
         buffer.append(")");
         return buffer.toString();

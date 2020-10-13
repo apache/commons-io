@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import org.apache.commons.io.file.Counters.Counter;
 import org.apache.commons.io.file.Counters.PathCounters;
 
-class CounterAssertions {
+public class CounterAssertions {
 
     static void assertCounter(final long expected, final Counter actual, final String message) {
         assertEquals(expected, actual.get(), message);
@@ -33,15 +33,20 @@ class CounterAssertions {
     }
 
     static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount,
-            final CountingPathVisitor actualVisitor) {
+        final CountingPathVisitor actualVisitor) {
         assertCounts(expectedDirCount, expectedFileCount, expectedByteCount, actualVisitor.getPathCounters());
     }
 
     static void assertCounts(final long expectedDirCount, final long expectedFileCount, final long expectedByteCount,
-            final PathCounters actualPathCounters) {
+        final PathCounters actualPathCounters) {
         assertCounter(expectedDirCount, actualPathCounters.getDirectoryCounter(), "getDirectoryCounter");
         assertCounter(expectedFileCount, actualPathCounters.getFileCounter(), "getFileCounter");
         assertCounter(expectedByteCount, actualPathCounters.getByteCounter(), "getByteCounter");
+    }
+
+    public static void assertZeroCounters(final PathCounters pathCounters) {
+        assertCounts(0, 0, 0, pathCounters);
+        assertEquals(Counters.longPathCounters(), pathCounters);
     }
 
 }

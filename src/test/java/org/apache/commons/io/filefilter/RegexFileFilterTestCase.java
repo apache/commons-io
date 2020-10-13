@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
@@ -45,32 +47,69 @@ public class RegexFileFilterTestCase {
         }
     }
 
+    public void assertFiltering(final IOFileFilter filter, final Path file, final boolean expected) throws Exception {
+        // Note. This only tests the (Path, Path) version if the parent of
+        // the Path passed in is not null
+        final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected);
+        assertEquals(expectedFileVisitResult, filter.accept(file),
+            "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + file);
+
+        if (file != null && file.getParent() != null) {
+            assertEquals(expectedFileVisitResult, filter.accept(file.getParent(), file.getFileName()),
+                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
+                    + file);
+        } else if (file == null) {
+            assertEquals(expectedFileVisitResult, filter.accept(file),
+                "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
+        }
+    }
+
     @Test
     public void testRegex() throws Exception {
         IOFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test-10.java"), true);
         assertFiltering(filter, new File("test-.java"), false);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("test-10.java").toPath(), true);
+        assertFiltering(filter, new File("test-.java").toPath(), false);
 
         filter = new RegexFileFilter("^[Tt]est.java$");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), false);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("test.java").toPath(), true);
+        assertFiltering(filter, new File("tEST.java").toPath(), false);
 
         filter = new RegexFileFilter(Pattern.compile("^test.java$", Pattern.CASE_INSENSITIVE));
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("test.java").toPath(), true);
+        assertFiltering(filter, new File("tEST.java").toPath(), true);
 
         filter = new RegexFileFilter("^test.java$", Pattern.CASE_INSENSITIVE);
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("test.java").toPath(), true);
+        assertFiltering(filter, new File("tEST.java").toPath(), true);
 
         filter = new RegexFileFilter("^test.java$", IOCase.INSENSITIVE);
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test.java"), true);
         assertFiltering(filter, new File("tEST.java"), true);
+        //
+        assertFiltering(filter, new File("Test.java").toPath(), true);
+        assertFiltering(filter, new File("test.java").toPath(), true);
+        assertFiltering(filter, new File("tEST.java").toPath(), true);
 
         try {
             new RegexFileFilter((String)null);

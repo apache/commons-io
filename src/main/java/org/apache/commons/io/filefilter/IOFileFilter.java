@@ -19,14 +19,16 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 
 /**
- * An interface which brings the FileFilter and FilenameFilter
- * interfaces together.
+ * An interface which brings the FileFilter, FilenameFilter, and PathFilter interfaces together.
  *
  * @since 1.0
  */
-public interface IOFileFilter extends FileFilter, FilenameFilter {
+public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
 
     /**
      * An empty String array.
@@ -38,7 +40,8 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * <p>
      * Defined in {@link java.io.FileFilter}.
      * </p>
-     * @param file  the File to check
+     *
+     * @param file the File to check
      * @return true if this file matches the test
      */
     @Override
@@ -49,11 +52,71 @@ public interface IOFileFilter extends FileFilter, FilenameFilter {
      * <p>
      * Defined in {@link java.io.FilenameFilter}.
      * </p>
-     * @param dir  the directory File to check
-     * @param name  the file name within the directory to check
+     *
+     * @param dir the directory File to check
+     * @param name the file name within the directory to check
      * @return true if this file matches the test
      */
     @Override
     boolean accept(File dir, String name);
+
+    /**
+     * Checks to see if the Path should be accepted by this filter.
+     *
+     * @param path the Path to check
+     * @return true if this path matches the test
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    @Override
+    default FileVisitResult accept(final Path path) throws IOException {
+        return AbstractFileFilter.toFileVisitResult(accept(path.toFile()));
+    }
+
+    /**
+     * Checks to see if the File should be accepted by this filter.
+     *
+     * @param path the directory File to check
+     * @param name the file name within the directory to check
+     * @return true if this file matches the test
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    @Override
+    default FileVisitResult accept(final Path path, final Path name) throws IOException {
+        return AbstractFileFilter.toFileVisitResult(accept(path.toFile(), name.toString()));
+    }
+
+    /**
+     * Creates a new "and" filter with this filter and the given filters.
+     *
+     * @param fileFilter the filters to "and".
+     * @return a new filter
+     * @since 2.9.0
+     */
+    default AndFileFilter and(final IOFileFilter... fileFilter) {
+        return new AndFileFilter(this, fileFilter);
+    }
+
+    /**
+     * Creates a new "not" filter with this filter.
+     *
+     * @return a new filter
+     * @since 2.9.0
+     */
+    default NotFileFilter not() {
+        return new NotFileFilter(this);
+    }
+
+    /**
+     * Creates a new "or" filter with this filter and the given filters.
+     *
+     * @param fileFilter the filters to "or".
+     * @return a new filter
+     * @since 2.9.0
+     */
+    default OrFileFilter or(final IOFileFilter... fileFilter) {
+        return new OrFileFilter(this, fileFilter);
+    }
 
 }

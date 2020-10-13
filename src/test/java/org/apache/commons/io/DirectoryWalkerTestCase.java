@@ -64,8 +64,8 @@ public class DirectoryWalkerTestCase {
     private static final IOFileFilter dirsFilter        = createNameFilter(dirs);
     private static final IOFileFilter iofilesFilter     = createNameFilter(ioFiles);
     private static final IOFileFilter outputFilesFilter = createNameFilter(outputFiles);
-    private static final IOFileFilter ioDirAndFilesFilter = new OrFileFilter(dirsFilter, iofilesFilter);
-    private static final IOFileFilter dirsAndFilesFilter = new OrFileFilter(ioDirAndFilesFilter, outputFilesFilter);
+    private static final IOFileFilter ioDirAndFilesFilter = dirsFilter.or(iofilesFilter);
+    private static final IOFileFilter dirsAndFilesFilter = ioDirAndFilesFilter.or(outputFilesFilter);
 
     // Filter to exclude SVN files
     private static final IOFileFilter NOT_SVN = FileFilterUtils.makeSVNAware(null);

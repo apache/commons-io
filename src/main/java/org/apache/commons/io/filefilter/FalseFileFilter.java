@@ -18,29 +18,30 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 
 /**
  * A file filter that always returns false.
  *
  * @since 1.0
- *
- *
  * @see FileFilterUtils#falseFileFilter()
  */
 public class FalseFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Singleton instance of false filter.
+     *
      * @since 1.3
      */
+
     public static final IOFileFilter FALSE = new FalseFileFilter();
     /**
-     * Singleton instance of false filter.
-     * Please use the identical FalseFileFilter.FALSE constant.
-     * The new name is more JDK 1.5 friendly as it doesn't clash with other
-     * values when using static imports.
+     * Singleton instance of false filter. Please use the identical FalseFileFilter.FALSE constant. The new name is more
+     * JDK 1.5 friendly as it doesn't clash with other values when using static imports.
      */
     public static final IOFileFilter INSTANCE = FALSE;
+
     private static final long serialVersionUID = 6210271677940926200L;
 
     /**
@@ -52,7 +53,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param file  the file to check (ignored)
+     * @param file the file to check (ignored)
      * @return false
      */
     @Override
@@ -63,13 +64,38 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
     /**
      * Returns false.
      *
-     * @param dir  the directory to check (ignored)
-     * @param name  the file name (ignored)
+     * @param dir the directory to check (ignored)
+     * @param name the file name (ignored)
      * @return false
      */
     @Override
     public boolean accept(final File dir, final String name) {
         return false;
+    }
+
+    /**
+     * Returns false.
+     *
+     * @param file the file to check (ignored)
+     * @return false
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return FileVisitResult.TERMINATE;
+    }
+
+    /**
+     * Returns false.
+     *
+     * @param dir the directory to check (ignored)
+     * @param name the file name (ignored)
+     * @return false
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path dir, final Path name) {
+        return FileVisitResult.TERMINATE;
     }
 
 }

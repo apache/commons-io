@@ -63,9 +63,15 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
         FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163.
       </action>
+      <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
+        AccumulatorPathVisitor does not track directories properly.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Let org.apache.commons.io.filefilter classes work with java.nio.file.Files.walk* APIs.
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">

@@ -25,6 +25,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.PathFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.
@@ -54,6 +56,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     private final PathCounters pathCounters;
+    private final PathFilter pathFilter;
 
     /**
      * Constructs a new instance.
@@ -61,8 +64,20 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param pathCounter How to count path visits.
      */
     public CountingPathVisitor(final PathCounters pathCounter) {
+        this(pathCounter, TrueFileFilter.INSTANCE);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounter How to count path visits.
+     * @param pathFilter Filters which paths to count.
+     * @since 2.9.0
+     */
+    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter pathFilter) {
         super();
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
+        this.pathFilter = Objects.requireNonNull(pathFilter, "pathFilter");
     }
 
     @Override
@@ -115,7 +130,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        if (Files.exists(file)) {
+        if (Files.exists(file) && pathFilter.accept(file) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;

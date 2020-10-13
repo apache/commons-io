@@ -17,8 +17,12 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +32,6 @@ import java.util.List;
  * file filter list stops when the first filter returns {@code true}.
  *
  * @since 1.0
- *
  * @see FileFilterUtils#or(IOFileFilter...)
  */
 public class OrFileFilter extends AbstractFileFilter implements ConditionalFileFilter, Serializable {
@@ -48,7 +51,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     }
 
     /**
-     * Constructs a new file filter that ORs the result of two other filters.
+     * Constructs a new file filter that ORs the result of other filters.
      *
      * @param filter1 the first filter, must not be null
      * @param filter2 the second filter, must not be null
@@ -59,8 +62,24 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
             throw new IllegalArgumentException("The filters must not be null");
         }
         this.fileFilters = new ArrayList<>(2);
-        addFileFilter(filter1);
-        addFileFilter(filter2);
+        this.fileFilters.add(filter1);
+        this.fileFilters.add(filter2);
+    }
+
+    /**
+     * Constructs a new file filter that ORs the result of other filters.
+     *
+     * @param filter1 the first filter, must not be null
+     * @param filters more filter, must not be null
+     * @throws IllegalArgumentException if either filter is null
+     */
+    public OrFileFilter(final IOFileFilter filter1, final IOFileFilter... filters) {
+        if (filter1 == null || filters == null) {
+            throw new IllegalArgumentException("The filters must not be null");
+        }
+        this.fileFilters = new ArrayList<>(filters.length + 1);
+        this.fileFilters.add(filter1);
+        this.fileFilters.addAll(Arrays.asList(filters));
     }
 
     /**
@@ -101,6 +120,32 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
             }
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileVisitResult accept(final Path file) throws IOException {
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file) == FileVisitResult.CONTINUE) {
+                return FileVisitResult.CONTINUE;
+            }
+        }
+        return FileVisitResult.TERMINATE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final Path name) throws IOException {
+        for (final IOFileFilter fileFilter : fileFilters) {
+            if (fileFilter.accept(file, name) == FileVisitResult.CONTINUE) {
+                return FileVisitResult.CONTINUE;
+            }
+        }
+        return FileVisitResult.TERMINATE;
     }
 
     /**

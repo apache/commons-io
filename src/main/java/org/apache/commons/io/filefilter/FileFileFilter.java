@@ -18,23 +18,45 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * This filter accepts <code>File</code>s that are files (not directories).
  * <p>
  * For example, here is how to print out a list of the real files
  * within the current directory:
- *
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( FileFileFilter.FILE );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(FileFileFilter.FILE);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
- * @since 1.3
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get(".");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(FileFileFilter.FILE);
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
+ * </pre>
  *
+ * @since 1.3
  * @see FileFilterUtils#fileFileFilter()
  */
 public class FileFileFilter extends AbstractFileFilter implements Serializable {
@@ -58,6 +80,18 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
     @Override
     public boolean accept(final File file) {
         return file.isFile();
+    }
+
+    /**
+     * Checks to see if the file is a file.
+     *
+     * @param file  the File to check
+     * @return true if the file is a file
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return toFileVisitResult(Files.isRegularFile(file));
     }
 
 }

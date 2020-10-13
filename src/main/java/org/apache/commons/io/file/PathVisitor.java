@@ -17,21 +17,14 @@
 
 package org.apache.commons.io.file;
 
+import java.nio.file.FileVisitor;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
 
 /**
- * A {@link SimpleFileVisitor} typed to a {@link Path}.
+ * A {@link FileVisitor} typed to a {@link Path}.
  *
- * @since 2.7
+ * @since 2.9.0
  */
-public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implements PathVisitor {
-
-    /**
-     * Constructs a new instance.
-     */
-    protected SimplePathVisitor() {
-        super();
-    }
-
+public interface PathVisitor extends FileVisitor<Path> {
+    // empty
 }

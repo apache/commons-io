@@ -15,23 +15,35 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io.file;
+package org.apache.commons.io.filefilter;
 
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
 
 /**
- * A {@link SimpleFileVisitor} typed to a {@link Path}.
+ * A filter for {@link Path}s.
  *
- * @since 2.7
+ * @since 2.9.0
  */
-public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implements PathVisitor {
+public interface PathFilter {
 
     /**
-     * Constructs a new instance.
+     * Tests whether or not to include the specified Path in a result.
+     *
+     * @param path The Path to test.
+     * @return a FileVisitResult
+     * @throws IOException if an I/O error occurs
      */
-    protected SimplePathVisitor() {
-        super();
-    }
+    FileVisitResult accept(Path path) throws IOException;
 
+    /**
+     * Tests whether or not to include the specified Path in a result.
+     *
+     * @param path The dir path to test.
+     * @param name The path base name to test.
+     * @return a FileVisitResult
+     * @throws IOException if an I/O error occurs
+     */
+    FileVisitResult accept(Path path, Path name) throws IOException;
 }

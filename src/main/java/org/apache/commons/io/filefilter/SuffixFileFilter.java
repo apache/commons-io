@@ -18,6 +18,8 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.commons.io.IOCase;
@@ -28,17 +30,36 @@ import org.apache.commons.io.IOCase;
  * <p>
  * For example, to retrieve and print all <code>*.java</code> files
  * in the current directory:
- *
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new SuffixFileFilter(".java") );
- * for (int i = 0; i &lt; files.length; i++) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(new SuffixFileFilter(".java"));
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
- * @since 1.0
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get(".");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new SuffixFileFilter(".java"));
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
+ * </pre>
  *
+ * @since 1.0
  * @see FileFilterUtils#suffixFileFilter(String)
  * @see FileFilterUtils#suffixFileFilter(String, IOCase)
  */
@@ -159,6 +180,30 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(final File file, final String name) {
+        return accept(name);
+    }
+
+    /**
+     * Checks to see if the file name ends with the suffix.
+     *
+     * @param file  the File to check
+     * @return true if the file name ends with one of our suffixes
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return toFileVisitResult(accept(file.getFileName().toString()));
+    }
+
+    /**
+     * Checks to see if the file name ends with the suffix.
+     *
+     * @param file  the File directory
+     * @param name  the file name
+     * @return true if the file name ends with one of our suffixes
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final Path name) {
         return accept(name);
     }
 

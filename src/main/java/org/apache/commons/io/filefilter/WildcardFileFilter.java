@@ -18,6 +18,8 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -39,13 +41,33 @@ import org.apache.commons.io.IOCase;
  * <p>
  * For example:
  * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
  * FileFilter fileFilter = new WildcardFileFilter("*test*.java~*~");
  * File[] files = dir.listFiles(fileFilter);
- * for (int i = 0; i &lt; files.length; i++) {
- *   System.out.println(files[i]);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
+ * </pre>
+ *
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get(".");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new WildcardFileFilter("*test*.java~*~"));
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
  * </pre>
  *
  * @since 1.3
@@ -53,8 +75,10 @@ import org.apache.commons.io.IOCase;
 public class WildcardFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = -7426486598995782105L;
+
     /** The wildcards that will be used to match file names. */
     private final String[] wildcards;
+
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
 
@@ -149,7 +173,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         return accept(file.getName());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks to see if the file name matches one of the wildcards.
      *
@@ -159,6 +182,30 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public boolean accept(final File dir, final String name) {
+        return accept(name);
+    }
+
+    /**
+     * Checks to see if the file name matches one of the wildcards.
+     *
+     * @param file  the file to check
+     * @return true if the file name matches one of the wildcards.
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file) {
+        return toFileVisitResult(accept(file.getFileName().toString()));
+    }
+
+    /**
+     * Checks to see if the file name matches one of the wildcards.
+     *
+     * @param dir  the file directory (ignored)
+     * @param name  the file name
+     * @return true if the file name matches one of the wildcards
+     */
+    @Override
+    public FileVisitResult accept(final Path dir, final Path name) {
         return accept(name);
     }
 
@@ -181,13 +228,11 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         final StringBuilder buffer = new StringBuilder();
         buffer.append(super.toString());
         buffer.append("(");
-        if (wildcards != null) {
-            for (int i = 0; i < wildcards.length; i++) {
-                if (i > 0) {
-                    buffer.append(",");
-                }
-                buffer.append(wildcards[i]);
+        for (int i = 0; i < wildcards.length; i++) {
+            if (i > 0) {
+                buffer.append(",");
             }
+            buffer.append(wildcards[i]);
         }
         buffer.append(")");
         return buffer.toString();

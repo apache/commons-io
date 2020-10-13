@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.PathFilter;
 
 /**
  * Copies a source directory to a target directory.
@@ -34,8 +35,6 @@ import org.apache.commons.io.file.Counters.PathCounters;
  * @since 2.7
  */
 public class CopyDirectoryVisitor extends CountingPathVisitor {
-
-    private static final CopyOption[] EMPTY_COPY_OPTIONS = new CopyOption[0];
 
     private final CopyOption[] copyOptions;
     private final Path sourceDirectory;
@@ -54,7 +53,25 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         super(pathCounter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
-        this.copyOptions = copyOptions == null ? EMPTY_COPY_OPTIONS : copyOptions.clone();
+        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
+    }
+
+    /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     * @param pathFilter How to filter paths.
+     * @param sourceDirectory The source directory
+     * @param targetDirectory The target directory
+     * @param copyOptions Specifies how the copying should be done.
+     * @since 2.9.0
+     */
+    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter pathFilter, final Path sourceDirectory, final Path targetDirectory,
+        final CopyOption... copyOptions) {
+        super(pathCounter, pathFilter);
+        this.sourceDirectory = sourceDirectory;
+        this.targetDirectory = targetDirectory;
+        this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();
     }
 
     /**

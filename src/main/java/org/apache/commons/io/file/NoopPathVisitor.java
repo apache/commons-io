@@ -17,21 +17,15 @@
 
 package org.apache.commons.io.file;
 
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-
 /**
- * A {@link SimpleFileVisitor} typed to a {@link Path}.
+ * A noop path visitor.
  *
- * @since 2.7
+ * @since 2.9.0
  */
-public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implements PathVisitor {
+public class NoopPathVisitor extends SimplePathVisitor {
 
     /**
-     * Constructs a new instance.
+     * The singleton instance.
      */
-    protected SimplePathVisitor() {
-        super();
-    }
-
+    public static NoopPathVisitor INSTANCE = new NoopPathVisitor();
 }
