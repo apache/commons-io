@@ -18,7 +18,6 @@
 package org.apache.commons.io.file;
 
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
@@ -70,6 +69,17 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     /**
+     * Creates a new instance configured with a BigInteger {@link PathCounters}.
+     *
+     * @param pathFilter Filters files to accumulate and count.
+     * @return a new instance configured with a long {@link PathCounters}.
+     * @since 2.9.0
+     */
+    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter pathFilter) {
+        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters(), pathFilter);
+    }
+
+    /**
      * Creates a new instance configured with a long {@link PathCounters}.
      *
      * @return a new instance configured with a long {@link PathCounters}.
@@ -87,17 +97,6 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      */
     public static AccumulatorPathVisitor withLongCounters(final PathFilter pathFilter) {
         return new AccumulatorPathVisitor(Counters.longPathCounters(), pathFilter);
-    }
-
-    /**
-     * Creates a new instance configured with a BigInteger {@link PathCounters}.
-     *
-     * @param pathFilter Filters files to accumulate and count.
-     * @return a new instance configured with a long {@link PathCounters}.
-     * @since 2.9.0
-     */
-    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter pathFilter) {
-        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters(), pathFilter);
     }
 
     private final List<Path> dirList = new ArrayList<>();
@@ -178,12 +177,6 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
         return result;
     }
 
-    @Override
-    public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        add(dirList, dir);
-        return super.postVisitDirectory(dir, exc);
-    }
-
     /**
      * Relativizes each directory path with {@link Path#relativize(Path)} against the given {@code parent}, optionally
      * sorting the result.
@@ -213,9 +206,15 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     }
 
     @Override
-    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+    protected void updateDirCounter(final Path dir, final IOException exc) {
+        super.updateDirCounter(dir, exc);
+        add(dirList, dir);
+    }
+
+    @Override
+    protected void updateFileCounters(final Path file, final BasicFileAttributes attributes) {
+        super.updateFileCounters(file, attributes);
         add(fileList, file);
-        return super.visitFile(file, attributes);
     }
 
 }

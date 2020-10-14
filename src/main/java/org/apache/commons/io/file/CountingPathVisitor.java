@@ -108,13 +108,24 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        pathCounters.getDirectoryCounter().increment();
+        updateDirCounter(dir, exc);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public String toString() {
         return pathCounters.toString();
+    }
+
+    /**
+     * Updates the counter for visiting the given directory.
+     *
+     * @param dir the visited directory.
+     * @param exc Encountered exception.
+     * @since 2.9.0
+     */
+    protected void updateDirCounter(Path dir, IOException exc) {
+        pathCounters.getDirectoryCounter().increment();
     }
 
     /**

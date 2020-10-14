@@ -52,7 +52,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>commons-io-2.8.0</tag>
+    <tag>rel/commons-io-2.9.0</tag>
   </scm>
 
   <developers>
@@ -278,9 +278,9 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC2</commons.rc.version>
-    <commons.bc.version>2.7</commons.bc.version>
-    <commons.release.version>2.8.0</commons.release.version>
+    <commons.rc.version>RC1</commons.rc.version>
+    <commons.bc.version>2.8.0</commons.bc.version>
+    <commons.release.version>2.9.0</commons.release.version>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
