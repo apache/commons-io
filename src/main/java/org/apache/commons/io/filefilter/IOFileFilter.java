@@ -19,7 +19,6 @@ package org.apache.commons.io.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -68,11 +67,10 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      *
      * @param path the Path to check
      * @return true if this path matches the test
-     * @throws IOException if an I/O error occurs
      * @since 2.9.0
      */
     @Override
-    default FileVisitResult accept(final Path path, final BasicFileAttributes attributes) throws IOException {
+    default FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
         return AbstractFileFilter.toFileVisitResult(accept(path.toFile()));
     }
 

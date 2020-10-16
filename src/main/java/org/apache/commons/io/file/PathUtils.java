@@ -596,8 +596,7 @@ public final class PathUtils {
         }
         return stream.filter(p -> {
             try {
-                return p != null
-                    && filter.accept(p, Files.readAttributes(p, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
+                return p != null && filter.accept(p, readBasicFileAttributes(p)) == FileVisitResult.CONTINUE;
             } catch (final IOException e) {
                 return false;
             }
@@ -705,6 +704,35 @@ public final class PathUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);}
+     * 
+     * @param path the path to read.
+     * @return the path attributes.
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static BasicFileAttributes readBasicFileAttributes(Path path) throws IOException {
+        return Files.readAttributes(path, BasicFileAttributes.class);
+    }
+
+    /**
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);} while wrapping {@link IOException}
+     * as {@link IllegalStateException}.
+     * 
+     * @param path the path to read.
+     * @return the path attributes.
+     * @throws IllegalStateException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static BasicFileAttributes readBasicFileAttributesQuietly(Path path) {
+        try {
+            return readBasicFileAttributes(path);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**

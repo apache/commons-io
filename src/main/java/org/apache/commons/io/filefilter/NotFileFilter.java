@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -77,11 +76,10 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      * @param file the File to check
      *
      * @return true if the filter returns false
-     * @throws IOException if an I/O error occurs
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) throws IOException {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         return not(filter.accept(file, attributes));
     }
 

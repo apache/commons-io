@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.file.NoopPathVisitor;
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.file.PathVisitor;
 
 /**
@@ -50,7 +51,8 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     public boolean accept(final File file) {
         try {
             final Path path = file.toPath();
-            return visitFile(path, file.exists() ? getBasicFileAttributeView(path) : null) == FileVisitResult.CONTINUE;
+            return visitFile(path,
+                file.exists() ? PathUtils.readBasicFileAttributes(path) : null) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }
@@ -60,24 +62,23 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     public boolean accept(final File dir, final String name) {
         try {
             final Path path = dir.toPath().resolve(name);
-            return accept(path, Files.readAttributes(path, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
+            return accept(path, PathUtils.readBasicFileAttributes(path)) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }
     }
 
     @Override
-    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) throws IOException {
-        return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null) : visitFile(path, attributes);
-    }
-
-    protected BasicFileAttributes getBasicFileAttributeView(final Path path) throws IOException {
-        return Files.readAttributes(path, BasicFileAttributes.class);
+    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
+        try {
+            return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null) : visitFile(path, attributes);
+        } catch (IOException e) {
+            return handle(e);
+        }
     }
 
     @Override
-    public FileVisitResult visitFile(final Path path, final BasicFileAttributes attributes)
-        throws IOException {
+    public FileVisitResult visitFile(final Path path, final BasicFileAttributes attributes) throws IOException {
         return pathVisitor.visitFile(path, attributes);
     }
 

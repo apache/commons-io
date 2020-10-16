@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -139,7 +138,7 @@ public class AndFileFilter
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) throws IOException {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         if (isEmpty()) {
             return FileVisitResult.TERMINATE;
         }

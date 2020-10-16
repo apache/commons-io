@@ -17,7 +17,6 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -127,7 +126,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      * {@inheritDoc}
      */
     @Override
-    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) throws IOException {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         for (final IOFileFilter fileFilter : fileFilters) {
             if (fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
                 return FileVisitResult.CONTINUE;
