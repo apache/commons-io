@@ -236,15 +236,17 @@ public class FileUtils {
      * Checks that the given {@code File} exists and is a directory.
      *
      * @param directory The {@code File} to check.
+     * @return the given directory.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
      */
-    private static void checkDirectory(final File directory) {
+    private static File checkDirectory(final File directory) {
         if (!directory.exists()) {
             throw new IllegalArgumentException(directory + " does not exist");
         }
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory + " is not a directory");
         }
+        return directory;
     }
 
     /**
@@ -1637,8 +1639,7 @@ public class FileUtils {
         if (includeSubDirectories) {
             files.add(directory);
         }
-        innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), includeSubDirectories);
+        innerListFiles(files, directory, effFileFilter.or(effDirFilter), includeSubDirectories);
         return files;
     }
 
@@ -2182,8 +2183,7 @@ public class FileUtils {
         if (extensions == null) {
             filter = TrueFileFilter.INSTANCE;
         } else {
-            final String[] suffixes = toSuffixes(extensions);
-            filter = new SuffixFileFilter(suffixes);
+            filter = new SuffixFileFilter(toSuffixes(extensions));
         }
         return listFiles(directory, filter,
                 recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
@@ -2607,8 +2607,7 @@ public class FileUtils {
      * @return a filter that accepts directories
      */
     private static IOFileFilter setUpEffectiveDirFilter(final IOFileFilter dirFilter) {
-        return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilterUtils.and(dirFilter,
-                DirectoryFileFilter.INSTANCE);
+        return dirFilter == null ? FalseFileFilter.INSTANCE : dirFilter.and(DirectoryFileFilter.INSTANCE);
     }
 
     /**
@@ -2618,7 +2617,7 @@ public class FileUtils {
      * @return a filter that accepts files
      */
     private static IOFileFilter setUpEffectiveFileFilter(final IOFileFilter fileFilter) {
-        return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
+        return fileFilter.and(DirectoryFileFilter.INSTANCE.not());
     }
 
     /**
@@ -2645,17 +2644,14 @@ public class FileUtils {
      * @since 2.0
      */
     public static long sizeOf(final File file) {
-
         if (!file.exists()) {
             final String message = file + " does not exist";
             throw new IllegalArgumentException(message);
         }
-
         if (file.isDirectory()) {
             return sizeOfDirectory0(file); // private method; expects directory
         }
         return file.length();
-
     }
 
     /**
@@ -2689,17 +2685,14 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
-
         if (!file.exists()) {
             final String message = file + " does not exist";
             throw new IllegalArgumentException(message);
         }
-
         if (file.isDirectory()) {
             return sizeOfDirectoryBig0(file); // internal method
         }
         return BigInteger.valueOf(file.length());
-
     }
 
     /**
@@ -2728,8 +2721,7 @@ public class FileUtils {
      * @throws NullPointerException if the directory is {@code null}
      */
     public static long sizeOfDirectory(final File directory) {
-        checkDirectory(directory);
-        return sizeOfDirectory0(directory);
+        return sizeOfDirectory0(checkDirectory(directory));
     }
 
     /**
@@ -2765,8 +2757,7 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        checkDirectory(directory);
-        return sizeOfDirectoryBig0(directory);
+        return sizeOfDirectoryBig0(checkDirectory(directory));
     }
 
     /**

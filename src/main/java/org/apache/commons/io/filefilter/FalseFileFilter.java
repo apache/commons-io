@@ -34,8 +34,8 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
      *
      * @since 1.3
      */
-
     public static final IOFileFilter FALSE = new FalseFileFilter();
+
     /**
      * Singleton instance of false filter. Please use the identical FalseFileFilter.FALSE constant. The new name is more
      * JDK 1.5 friendly as it doesn't clash with other values when using static imports.
