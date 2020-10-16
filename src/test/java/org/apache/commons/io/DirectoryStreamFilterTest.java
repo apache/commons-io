@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io.filefilter;
+package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,7 +27,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
+import org.apache.commons.io.file.DirectoryStreamFilter;
 import org.apache.commons.io.file.PathFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
 
 /**

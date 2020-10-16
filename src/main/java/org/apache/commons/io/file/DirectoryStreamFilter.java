@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io.filefilter;
+package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -24,8 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
-
-import org.apache.commons.io.file.PathFilter;
 
 /**
  * A {@link java.nio.file.DirectoryStream.Filter DirectoryStream.Filter} that delegates to a {@link PathFilter}.
