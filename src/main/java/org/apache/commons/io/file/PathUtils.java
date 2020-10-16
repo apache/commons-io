@@ -157,6 +157,7 @@ public final class PathUtils {
 
     /**
      * Empty {@link Path} array.
+     *
      * @since 2.9.0
      */
     public static final Path[] EMPTY_PATH_ARRAY = new Path[0];
@@ -555,9 +556,8 @@ public final class PathUtils {
 
     /**
      * <p>
-     * Applies an {@link IOFileFilter} to the provided {@link File}
-     * objects. The resulting array is a subset of the original file list that
-     * matches the provided filter.
+     * Applies an {@link IOFileFilter} to the provided {@link File} objects. The resulting array is a subset of the
+     * original file list that matches the provided filter.
      * </p>
      *
      * <p>
@@ -569,13 +569,13 @@ public final class PathUtils {
      * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
      *     FileFilterUtils.suffixFileFilter(".java"));
      * </pre>
+     *
      * @param filter the filter to apply to the set of files.
      * @param paths the array of files to apply the filter to.
      *
-     * @return a subset of <code>files</code> that is accepted by the
-     *         file filter.
-     * @throws IllegalArgumentException if the filter is {@code null}
-     *         or <code>files</code> contains a {@code null} value.
+     * @return a subset of <code>files</code> that is accepted by the file filter.
+     * @throws IllegalArgumentException if the filter is {@code null} or <code>files</code> contains a {@code null}
+     *         value.
      *
      * @since 2.9.0
      */
@@ -668,7 +668,8 @@ public final class PathUtils {
      * @throws NullPointerException if the file is {@code null}
      * @since 2.9.0
      */
-    public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options) throws IOException {
+    public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options)
+        throws IOException {
         Objects.requireNonNull(file, "file");
         if (!Files.exists(file)) {
             return false;
