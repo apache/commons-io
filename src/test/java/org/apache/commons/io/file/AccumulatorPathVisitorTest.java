@@ -46,12 +46,8 @@ public class AccumulatorPathVisitorTest {
     static Stream<Arguments> testParameters() {
         // @formatter:off
         return Stream.of(
-            Arguments.of((Supplier<AccumulatorPathVisitor>) () -> {
-                return AccumulatorPathVisitor.withLongCounters();
-            }),
-            Arguments.of((Supplier<AccumulatorPathVisitor>) () -> {
-                return AccumulatorPathVisitor.withBigIntegerCounters();
-            }));
+            Arguments.of((Supplier<AccumulatorPathVisitor>) () -> AccumulatorPathVisitor.withLongCounters()),
+            Arguments.of((Supplier<AccumulatorPathVisitor>) () -> AccumulatorPathVisitor.withBigIntegerCounters()));
         // @formatter:on
     }
 
