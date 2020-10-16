@@ -25,7 +25,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.apache.commons.io.filefilter.PathFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**

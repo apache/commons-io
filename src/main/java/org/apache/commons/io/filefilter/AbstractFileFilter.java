@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
+import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathVisitor;
 
 /**
@@ -68,34 +69,6 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     }
 
     /**
-     * Checks to see if the Path should be accepted by this filter.
-     *
-     * @param path the Path to check
-     * @return true if this path matches the test
-     * @throws IOException if an I/O error occurs
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path path) throws IOException {
-        Objects.requireNonNull(path, "path");
-        return accept(path.getParent(), path.getFileName());
-    }
-
-    /**
-     * Checks to see if the Path should be accepted by this filter.
-     *
-     * @param dir the directory Path to check
-     * @param name the path name within the directory to check
-     * @return true if this path matches the test
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) throws IOException {
-        Objects.requireNonNull(dir, "dir");
-        return accept(dir.resolve(name));
-    }
-
-    /**
      * Handles exceptions caught while accepting.
      *
      * @param t the caught exception.
@@ -113,7 +86,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-        return accept(dir, dir.getFileName());
+        return accept(dir);
     }
 
     /**

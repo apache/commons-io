@@ -84,20 +84,6 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
         return not(filter.accept(file));
     }
 
-    /**
-     * Returns the logical NOT of the underlying filter's return value for the same arguments.
-     *
-     * @param file the File directory
-     * @param name the file name
-     * @return true if the filter returns false
-     * @throws IOException if an I/O error occurs
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path file, final Path name) throws IOException {
-        return not(filter.accept(file, name));
-    }
-
     private FileVisitResult not(final FileVisitResult accept) {
         return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE
             : FileVisitResult.CONTINUE;

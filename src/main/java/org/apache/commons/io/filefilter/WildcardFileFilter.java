@@ -197,18 +197,6 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
         return toFileVisitResult(accept(file.getFileName().toString()));
     }
 
-    /**
-     * Checks to see if the file name matches one of the wildcards.
-     *
-     * @param dir  the file directory (ignored)
-     * @param name  the file name
-     * @return true if the file name matches one of the wildcards
-     */
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) {
-        return accept(name);
-    }
-
     private boolean accept(final String name) {
         for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {

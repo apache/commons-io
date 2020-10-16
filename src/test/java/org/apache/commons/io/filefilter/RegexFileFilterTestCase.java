@@ -47,19 +47,19 @@ public class RegexFileFilterTestCase {
         }
     }
 
-    public void assertFiltering(final IOFileFilter filter, final Path file, final boolean expected) throws Exception {
+    public void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) throws Exception {
         // Note. This only tests the (Path, Path) version if the parent of
         // the Path passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected);
-        assertEquals(expectedFileVisitResult, filter.accept(file),
-            "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + file);
+        assertEquals(expectedFileVisitResult, filter.accept(path),
+            "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 
-        if (file != null && file.getParent() != null) {
-            assertEquals(expectedFileVisitResult, filter.accept(file.getParent(), file.getFileName()),
+        if (path != null && path.getParent() != null) {
+            assertEquals(expectedFileVisitResult, filter.accept(path),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
-                    + file);
-        } else if (file == null) {
-            assertEquals(expectedFileVisitResult, filter.accept(file),
+                    + path);
+        } else if (path == null) {
+            assertEquals(expectedFileVisitResult, filter.accept(path),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
     }

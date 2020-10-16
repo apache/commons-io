@@ -85,17 +85,4 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
         return FileVisitResult.CONTINUE;
     }
 
-    /**
-     * Returns true.
-     *
-     * @param dir the directory to check (ignored)
-     * @param name the file name (ignored)
-     * @return true
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) {
-        return FileVisitResult.CONTINUE;
-    }
-
 }

@@ -148,8 +148,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return true if the file name matches one of the regular expressions
      */
     @Override
-    public FileVisitResult accept(final Path dir, final Path name) {
-        return toFileVisitResult(pattern.matcher(name.toString()).matches());
+    public FileVisitResult accept(final Path path) {
+        return toFileVisitResult(pattern.matcher(path.toString()).matches());
     }
 
 }

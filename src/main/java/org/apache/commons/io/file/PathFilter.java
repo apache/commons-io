@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.io.filefilter;
+package org.apache.commons.io.file;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -26,6 +26,7 @@ import java.nio.file.Path;
  *
  * @since 2.9.0
  */
+@FunctionalInterface
 public interface PathFilter {
 
     /**
@@ -33,17 +34,7 @@ public interface PathFilter {
      *
      * @param path The Path to test.
      * @return a FileVisitResult
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     FileVisitResult accept(Path path) throws IOException;
-
-    /**
-     * Tests whether or not to include the specified Path in a result.
-     *
-     * @param path The dir path to test.
-     * @param name The path base name to test.
-     * @return a FileVisitResult
-     * @throws IOException if an I/O error occurs
-     */
-    FileVisitResult accept(Path path, Path name) throws IOException;
 }

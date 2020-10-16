@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.apache.commons.io.filefilter.PathFilter;
 
 /**
  * Copies a source directory to a target directory.

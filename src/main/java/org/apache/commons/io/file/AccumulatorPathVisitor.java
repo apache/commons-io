@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
-import org.apache.commons.io.filefilter.PathFilter;
 
 /**
  * Accumulates normalized paths during visitation.

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.file.NoopPathVisitor;
@@ -60,7 +59,7 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     @Override
     public boolean accept(final File dir, final String name) {
         try {
-            return accept(dir.toPath(), Paths.get(name)) == FileVisitResult.CONTINUE;
+            return accept(dir.toPath().resolve(name)) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }
@@ -68,13 +67,8 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
 
     @Override
     public FileVisitResult accept(final Path path) throws IOException {
-        return visitFile(path, getBasicFileAttributeView(path));
-    }
-
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) throws IOException {
-        return pathVisitor.postVisitDirectory(dir, null);
-
+        return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null)
+            : visitFile(path, getBasicFileAttributeView(path));
     }
 
     protected BasicFileAttributes getBasicFileAttributeView(final Path path) throws IOException {

@@ -152,23 +152,6 @@ public class AndFileFilter
 
     /**
      * {@inheritDoc}
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path file, final Path name) throws IOException {
-        if (isEmpty()) {
-            return FileVisitResult.TERMINATE;
-        }
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, name) != FileVisitResult.CONTINUE) {
-                return FileVisitResult.TERMINATE;
-            }
-        }
-        return FileVisitResult.CONTINUE;
-    }
-
-    /**
-     * {@inheritDoc}
      */
     @Override
     public void addFileFilter(final IOFileFilter ioFileFilter) {

@@ -179,18 +179,6 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Checks to see if the file name matches.
      *
-     * @param dir  the File directory (ignored)
-     * @param name  the file name
-     * @return true if the file name matches
-     */
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) {
-        return toFileVisitResult(acceptBaseName(dir.getFileName().toString()));
-    }
-
-    /**
-     * Checks to see if the file name matches.
-     *
      * @param file  the File to check
      * @return true if the file name matches
      * @since 2.9.0

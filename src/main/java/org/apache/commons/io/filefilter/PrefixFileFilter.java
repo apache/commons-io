@@ -194,19 +194,6 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
         return toFileVisitResult(accept(file.getFileName().toFile()));
     }
 
-    /**
-     * Checks to see if the file name starts with the prefix.
-     *
-     * @param file  the File directory
-     * @param name  the file name
-     * @return true if the file name starts with one of our prefixes
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path file, final Path name) {
-        return accept(name);
-    }
-
     private boolean accept(final String name) {
         for (final String prefix : prefixes) {
             if (caseSensitivity.checkStartsWith(name, prefix)) {

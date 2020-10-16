@@ -195,18 +195,6 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         return toFileVisitResult(accept(file.getFileName().toString()));
     }
 
-    /**
-     * Checks to see if the file name ends with the suffix.
-     *
-     * @param file  the File directory
-     * @param name  the file name
-     * @return true if the file name ends with one of our suffixes
-     */
-    @Override
-    public FileVisitResult accept(final Path file, final Path name) {
-        return accept(name);
-    }
-
     private boolean accept(final String name) {
         for (final String suffix : this.suffixes) {
             if (caseSensitivity.checkEndsWith(name, suffix)) {

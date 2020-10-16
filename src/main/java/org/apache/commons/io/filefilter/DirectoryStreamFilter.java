@@ -23,6 +23,8 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import org.apache.commons.io.file.PathFilter;
+
 /**
  * A {@link java.nio.file.DirectoryStream.Filter DirectoryStream.Filter} that delegates to a {@link PathFilter}.
  * <p>

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 
+import org.apache.commons.io.file.PathFilter;
+
 /**
  * An interface which brings the FileFilter, FilenameFilter, and PathFilter interfaces together.
  *
@@ -71,20 +73,6 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     @Override
     default FileVisitResult accept(final Path path) throws IOException {
         return AbstractFileFilter.toFileVisitResult(accept(path.toFile()));
-    }
-
-    /**
-     * Checks to see if the File should be accepted by this filter.
-     *
-     * @param path the directory File to check
-     * @param name the file name within the directory to check
-     * @return true if this file matches the test
-     * @throws IOException if an I/O error occurs
-     * @since 2.9.0
-     */
-    @Override
-    default FileVisitResult accept(final Path path, final Path name) throws IOException {
-        return AbstractFileFilter.toFileVisitResult(accept(path.toFile(), name.toString()));
     }
 
     /**

@@ -187,27 +187,4 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         return false;
     }
 
-    /**
-     * Checks to see if the file name matches one of the wildcards.
-     *
-     * @param dir  the file directory
-     * @param name  the file name
-     * @return true if the file name matches one of the wildcards
-     * @since 2.9.0
-     */
-    @Override
-    public FileVisitResult accept(final Path dir, final Path name) {
-        if (dir != null && Files.isDirectory(dir.resolve(name))) {
-            return FileVisitResult.TERMINATE;
-        }
-
-        for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(name.toString(), wildcard)) {
-                return FileVisitResult.CONTINUE;
-            }
-        }
-
-        return FileVisitResult.TERMINATE;
-    }
-
 }

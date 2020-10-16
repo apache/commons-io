@@ -139,19 +139,6 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      * {@inheritDoc}
      */
     @Override
-    public FileVisitResult accept(final Path file, final Path name) throws IOException {
-        for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file, name) == FileVisitResult.CONTINUE) {
-                return FileVisitResult.CONTINUE;
-            }
-        }
-        return FileVisitResult.TERMINATE;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void addFileFilter(final IOFileFilter ioFileFilter) {
         this.fileFilters.add(ioFileFilter);
     }
