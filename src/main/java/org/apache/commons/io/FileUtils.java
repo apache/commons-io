@@ -2616,7 +2616,7 @@ public class FileUtils {
      * @return a filter that accepts files
      */
     private static IOFileFilter setUpEffectiveFileFilter(final IOFileFilter fileFilter) {
-        return fileFilter.and(DirectoryFileFilter.INSTANCE.not());
+        return fileFilter.and(DirectoryFileFilter.INSTANCE.negate());
     }
 
     /**

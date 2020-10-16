@@ -600,7 +600,7 @@ public class FileFilterUtils {
      * @see NotFileFilter
      */
     public static IOFileFilter notFileFilter(final IOFileFilter filter) {
-        return filter.not();
+        return filter.negate();
     }
 
     /**

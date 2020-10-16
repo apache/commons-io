@@ -67,7 +67,7 @@ public class CanReadFileFilter extends AbstractFileFilter implements Serializabl
     public static final IOFileFilter CAN_READ = new CanReadFileFilter();
 
     /** Singleton instance of not <i>readable</i> filter */
-    public static final IOFileFilter CANNOT_READ = CAN_READ.not();
+    public static final IOFileFilter CANNOT_READ = CAN_READ.negate();
 
     /** Singleton instance of <i>read-only</i> filter */
     public static final IOFileFilter READ_ONLY = CAN_READ.and(CanWriteFileFilter.CANNOT_WRITE);

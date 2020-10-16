@@ -524,8 +524,8 @@ public class FileFilterTestCase {
         assertFiltering(filter, (Path) null, true);
         //
         assertSame(TrueFileFilter.TRUE, TrueFileFilter.INSTANCE);
-        assertSame(FalseFileFilter.FALSE, TrueFileFilter.INSTANCE.not());
-        assertSame(FalseFileFilter.INSTANCE, TrueFileFilter.INSTANCE.not());
+        assertSame(FalseFileFilter.FALSE, TrueFileFilter.INSTANCE.negate());
+        assertSame(FalseFileFilter.INSTANCE, TrueFileFilter.INSTANCE.negate());
     }
 
     @Test
@@ -538,16 +538,16 @@ public class FileFilterTestCase {
         assertFiltering(filter, (File) null, false);
         assertFiltering(filter, (Path) null, false);
         assertSame(FalseFileFilter.FALSE, FalseFileFilter.INSTANCE);
-        assertSame(TrueFileFilter.TRUE, FalseFileFilter.INSTANCE.not());
-        assertSame(TrueFileFilter.INSTANCE, FalseFileFilter.INSTANCE.not());
+        assertSame(TrueFileFilter.TRUE, FalseFileFilter.INSTANCE.negate());
+        assertSame(TrueFileFilter.INSTANCE, FalseFileFilter.INSTANCE.negate());
     }
 
     @Test
-    public void testNot() throws Exception {
+    public void testNegate() throws Exception {
         final IOFileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.trueFileFilter());
         assertFiltering(filter, new File("foo.test"), false);
         assertFiltering(filter, new File("foo"), false);
-        assertFiltering(filter.not(), new File("foo"), true);
+        assertFiltering(filter.negate(), new File("foo"), true);
         assertFiltering(filter, (File) null, false);
         assertThrows(IllegalArgumentException.class, () -> new NotFileFilter(null));
     }

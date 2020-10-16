@@ -81,7 +81,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     private static final long serialVersionUID = 8930842316112759062L;
 
     /** Singleton instance of <i>visible</i> filter */
-    public static final IOFileFilter VISIBLE = HIDDEN.not();
+    public static final IOFileFilter VISIBLE = HIDDEN.negate();
 
     /**
      * Restrictive constructor.

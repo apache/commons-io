@@ -55,7 +55,7 @@ public class DirectoryStreamFilterTest {
 
     @Test
     public void testFilterByNameNot() throws Exception {
-        final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE).not();
+        final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE).negate();
         final DirectoryStreamFilter streamFilter = new DirectoryStreamFilter(pathFilter);
         assertEquals(pathFilter, streamFilter.getPathFilter());
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("."), streamFilter)) {

@@ -81,7 +81,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
     public static final IOFileFilter EMPTY = new EmptyFileFilter();
 
     /** Singleton instance of <i>not-empty</i> filter */
-    public static final IOFileFilter NOT_EMPTY = EMPTY.not();
+    public static final IOFileFilter NOT_EMPTY = EMPTY.negate();
 
     private static final long serialVersionUID = 3631422087512832211L;
 
