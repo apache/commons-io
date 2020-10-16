@@ -131,12 +131,12 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * If size equals threshold and larger files are required,
      * file <b>IS</b> selected.
      * </p>
-     *
      * @param file  the File to check
+     *
      * @return true if the file name matches
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         try {
             return toFileVisitResult(accept(Files.size(file)));
         } catch (final IOException e) {

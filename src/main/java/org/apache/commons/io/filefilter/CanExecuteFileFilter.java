@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter accepts <code>File</code>s that can be executed.
@@ -82,13 +83,13 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
 
     /**
      * Checks to see if the file can be executed.
-     *
      * @param file  the File to check.
+     *
      * @return {@code true} if the file can be executed, otherwise {@code false}.
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         return toFileVisitResult(Files.isExecutable(file));
     }
 

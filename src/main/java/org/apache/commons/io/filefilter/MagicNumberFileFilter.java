@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
 /**
@@ -284,7 +285,6 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * If any {@link IOException}s occur while reading the file, the file will
      * be rejected.
      * </p>
-     *
      * @param file the file to accept or reject.
      *
      * @return {@code true} if the file contains the filter's magic number
@@ -292,7 +292,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         if (file != null && Files.isRegularFile(file) && Files.isReadable(file)) {
             try {
                 try (final FileChannel fileChannel = FileChannel.open(file)) {

@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -145,13 +146,13 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file name matches one of the wildcards.
-     *
      * @param file the file to check
+     *
      * @return true if the file name matches one of the wildcards
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         if (Files.isDirectory(file)) {
             return FileVisitResult.TERMINATE;
         }

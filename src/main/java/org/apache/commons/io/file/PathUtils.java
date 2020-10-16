@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.AclEntry;
 import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
@@ -829,9 +830,10 @@ public final class PathUtils {
         if (stream == null) {
             return Stream.<Path>empty().collect(collector);
         }
-        return stream.filter(t -> {
+        return stream.filter(p -> {
             try {
-                return filter.accept(t) == FileVisitResult.CONTINUE;
+                return p != null
+                    && filter.accept(p, Files.readAttributes(p, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
             } catch (final IOException e) {
                 return false;
             }

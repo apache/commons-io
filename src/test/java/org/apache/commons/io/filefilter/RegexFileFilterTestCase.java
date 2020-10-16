@@ -51,15 +51,15 @@ public class RegexFileFilterTestCase {
         // Note. This only tests the (Path, Path) version if the parent of
         // the Path passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected);
-        assertEquals(expectedFileVisitResult, filter.accept(path),
+        assertEquals(expectedFileVisitResult, filter.accept(path, null),
             "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 
         if (path != null && path.getParent() != null) {
-            assertEquals(expectedFileVisitResult, filter.accept(path),
+            assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
                     + path);
         } else if (path == null) {
-            assertEquals(expectedFileVisitResult, filter.accept(path),
+            assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
     }

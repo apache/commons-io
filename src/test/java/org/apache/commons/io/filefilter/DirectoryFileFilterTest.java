@@ -47,7 +47,7 @@ public class DirectoryFileFilterTest {
     public void testJavadocExampleUsingIo() {
         final File dir = new File(".");
         final String[] files = dir.list(DirectoryFileFilter.INSTANCE);
-        for (String file : files) {
+        for (final String file : files) {
             // System.out.println(files[i]);
         }
         // End of Javadoc example

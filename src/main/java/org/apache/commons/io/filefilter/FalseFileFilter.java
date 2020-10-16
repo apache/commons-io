@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * A file filter that always returns false.
@@ -75,13 +76,13 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Returns false.
-     *
      * @param file the file to check (ignored)
+     *
      * @return false
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         return FileVisitResult.TERMINATE;
     }
 

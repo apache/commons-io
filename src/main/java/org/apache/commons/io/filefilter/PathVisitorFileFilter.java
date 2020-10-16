@@ -59,16 +59,16 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     @Override
     public boolean accept(final File dir, final String name) {
         try {
-            return accept(dir.toPath().resolve(name)) == FileVisitResult.CONTINUE;
+            final Path path = dir.toPath().resolve(name);
+            return accept(path, Files.readAttributes(path, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
         } catch (final IOException e) {
             return handle(e) == FileVisitResult.CONTINUE;
         }
     }
 
     @Override
-    public FileVisitResult accept(final Path path) throws IOException {
-        return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null)
-            : visitFile(path, getBasicFileAttributeView(path));
+    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) throws IOException {
+        return Files.isDirectory(path) ? pathVisitor.postVisitDirectory(path, null) : visitFile(path, attributes);
     }
 
     protected BasicFileAttributes getBasicFileAttributeView(final Path path) throws IOException {
@@ -76,9 +76,9 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
     }
 
     @Override
-    public FileVisitResult visitFile(final Path path, final BasicFileAttributes basicFileAttributeView)
+    public FileVisitResult visitFile(final Path path, final BasicFileAttributes attributes)
         throws IOException {
-        return pathVisitor.visitFile(path, basicFileAttributeView);
+        return pathVisitor.visitFile(path, attributes);
     }
 
 }

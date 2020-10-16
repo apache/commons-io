@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter accepts <code>File</code>s that are files (not directories).
@@ -84,13 +85,13 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the file is a file.
-     *
      * @param file  the File to check
+     *
      * @return true if the file is a file
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         return toFileVisitResult(Files.isRegularFile(file));
     }
 

@@ -85,8 +85,8 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-        return accept(dir);
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
+        return accept(dir, attributes);
     }
 
     /**
@@ -100,8 +100,8 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     }
 
     @Override
-    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        return accept(file);
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+        return accept(file, attributes);
     }
 
     @Override

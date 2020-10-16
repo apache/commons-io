@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,12 +139,12 @@ public class AndFileFilter
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) throws IOException {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) throws IOException {
         if (isEmpty()) {
             return FileVisitResult.TERMINATE;
         }
         for (final IOFileFilter fileFilter : fileFilters) {
-            if (fileFilter.accept(file) != FileVisitResult.CONTINUE) {
+            if (fileFilter.accept(file, attributes) != FileVisitResult.CONTINUE) {
                 return FileVisitResult.TERMINATE;
             }
         }

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter produces a logical NOT of the filters specified.
@@ -73,15 +74,15 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Returns the logical NOT of the underlying filter's return value for the same File.
-     *
      * @param file the File to check
+     *
      * @return true if the filter returns false
      * @throws IOException if an I/O error occurs
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) throws IOException {
-        return not(filter.accept(file));
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) throws IOException {
+        return not(filter.accept(file, attributes));
     }
 
     private FileVisitResult not(final FileVisitResult accept) {

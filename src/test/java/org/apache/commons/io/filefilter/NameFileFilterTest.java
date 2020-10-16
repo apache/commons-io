@@ -45,9 +45,9 @@ public class NameFileFilterTest {
      */
     @Test
     public void testJavadocExampleUsingIo() {
-        File dir = new File(".");
-        String[] files = dir.list(new NameFileFilter("NOTICE.txt"));
-        for (String file : files) {
+        final File dir = new File(".");
+        final String[] files = dir.list(new NameFileFilter("NOTICE.txt"));
+        for (final String file : files) {
             // System.out.println(file);
         }
         // End of Javadoc example

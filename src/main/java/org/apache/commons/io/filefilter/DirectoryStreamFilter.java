@@ -20,7 +20,9 @@ package org.apache.commons.io.filefilter;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.PathFilter;
@@ -50,8 +52,9 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
     }
 
     @Override
-    public boolean accept(final Path entry) throws IOException {
-        return pathFilter.accept(entry) == FileVisitResult.CONTINUE;
+    public boolean accept(final Path path) throws IOException {
+        return pathFilter.accept(path,
+            Files.readAttributes(path, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
     }
 
     /**

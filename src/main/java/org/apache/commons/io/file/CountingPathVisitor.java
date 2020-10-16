@@ -123,7 +123,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param exc Encountered exception.
      * @since 2.9.0
      */
-    protected void updateDirCounter(Path dir, IOException exc) {
+    protected void updateDirCounter(final Path dir, final IOException exc) {
         pathCounters.getDirectoryCounter().increment();
     }
 
@@ -140,7 +140,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        if (Files.exists(file) && pathFilter.accept(file) == FileVisitResult.CONTINUE) {
+        if (Files.exists(file) && pathFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;

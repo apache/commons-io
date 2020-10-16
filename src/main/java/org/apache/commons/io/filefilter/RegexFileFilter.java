@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
@@ -142,13 +143,13 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
 
     /**
      * Checks to see if the file name matches one of the regular expressions.
-     *
      * @param dir   the file directory (ignored)
      * @param name  the file name
+     *
      * @return true if the file name matches one of the regular expressions
      */
     @Override
-    public FileVisitResult accept(final Path path) {
+    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
         return toFileVisitResult(pattern.matcher(path.toString()).matches());
     }
 

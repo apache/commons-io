@@ -41,7 +41,7 @@ public abstract class IOFileFilterAbstractTestCase {
         //       the File passed in is not null
         assertEquals(expected, filter.accept(file),
             "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
-        assertEquals(expected, filter.accept(file.toPath()),
+        assertEquals(expected, filter.accept(file.toPath(), null),
             "test " + testNumber + " Filter(File) " + filter.getClass().getName() + " not " + expected + " for " + file);
 
         if (file != null && file.getParentFile() != null) {

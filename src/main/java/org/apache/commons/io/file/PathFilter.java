@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * A filter for {@link Path}s.
@@ -33,8 +34,9 @@ public interface PathFilter {
      * Tests whether or not to include the specified Path in a result.
      *
      * @param path The Path to test.
+     * @param attributes the file's basic attributes.
      * @return a FileVisitResult
      * @throws IOException if an I/O error occurs.
      */
-    FileVisitResult accept(Path path) throws IOException;
+    FileVisitResult accept(Path path, BasicFileAttributes attributes) throws IOException;
 }

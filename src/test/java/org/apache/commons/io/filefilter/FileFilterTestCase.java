@@ -89,15 +89,15 @@ public class FileFilterTestCase {
         // Note. This only tests the (Path, Path) version if the parent of
         // the File passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected);
-        assertEquals(expectedFileVisitResult, filter.accept(path),
+        assertEquals(expectedFileVisitResult, filter.accept(path, null),
             "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 
         if (path != null && path.getParent() != null) {
-            assertEquals(expectedFileVisitResult, filter.accept(path),
+            assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for "
                     + path);
         } else if (path == null) {
-            assertEquals(expectedFileVisitResult, filter.accept(path),
+            assertEquals(expectedFileVisitResult, filter.accept(path, null),
                 "Filter(Path, Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for null");
         }
         assertNotNull(filter.toString());
@@ -140,8 +140,8 @@ public class FileFilterTestCase {
         assertTrue(filter.accept(testFile.getParentFile(), testFile.getName()));
         assertTrue(!filter.accept(fredFile.getParentFile(), fredFile.getName()));
         //
-        assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath));
-        assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath));
+        assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath, null));
+        assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath, null));
 
         final List<String> prefixes = Arrays.asList("ood", "red");
         final IOFileFilter listFilter = new SuffixFileFilter(prefixes);
@@ -149,8 +149,8 @@ public class FileFilterTestCase {
         assertTrue(!listFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertTrue(listFilter.accept(fredFile.getParentFile(), fredFile.getName()));
         //
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath));
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath, null));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath, null));
 
         try {
             new SuffixFileFilter((String) null);
@@ -310,8 +310,8 @@ public class FileFilterTestCase {
         assertTrue(filter.accept(testFile.getParentFile(), testFile.getName()));
         assertTrue(!filter.accept(fredFile.getParentFile(), fredFile.getName()));
         //
-        assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath));
-        assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath));
+        assertEquals(FileVisitResult.CONTINUE, filter.accept(testPath, null));
+        assertEquals(FileVisitResult.TERMINATE, filter.accept(fredPath, null));
 
         final List<String> prefixes = Arrays.asList("foo", "fre");
         final IOFileFilter listFilter = new PrefixFileFilter(prefixes);
@@ -319,8 +319,8 @@ public class FileFilterTestCase {
         assertTrue(!listFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertTrue(listFilter.accept(fredFile.getParentFile(), fredFile.getName()));
         //
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath));
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(testPath, null));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(fredPath, null));
 
         try {
             new PrefixFileFilter((String) null);
@@ -635,10 +635,10 @@ public class FileFilterTestCase {
         assertFiltering(orFilter, testPath, true);
 
         assertTrue(orFilter.accept(testFile.getParentFile(), testFile.getName()));
-        assertEquals(FileVisitResult.CONTINUE, orFilter.accept(testPath));
+        assertEquals(FileVisitResult.CONTINUE, orFilter.accept(testPath, null));
         orFilter.removeFileFilter(trueFilter);
         assertTrue(!orFilter.accept(testFile.getParentFile(), testFile.getName()));
-        assertEquals(FileVisitResult.TERMINATE, orFilter.accept(testPath));
+        assertEquals(FileVisitResult.TERMINATE, orFilter.accept(testPath, null));
 
         try {
             new OrFileFilter(falseFilter, (IOFileFilter) null);
@@ -729,17 +729,17 @@ public class FileFilterTestCase {
         assertTrue(!listFilter.accept(bmpFile));
         assertTrue(!listFilter.accept(dirFile));
         //
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
         assertTrue(listFilter.accept(txtFile.getParentFile(), txtFile.getName()));
         assertTrue(!listFilter.accept(bmpFile.getParentFile(), bmpFile.getName()));
         assertTrue(!listFilter.accept(dirFile.getParentFile(), dirFile.getName()));
         //
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
         try {
             new WildcardFilter((String) null);
@@ -859,17 +859,17 @@ public class FileFilterTestCase {
         assertTrue(!listFilter.accept(bmpFile));
         assertTrue(!listFilter.accept(dirFile));
         //
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtFile.toPath()));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpFile.toPath()));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirFile.toPath()));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtFile.toPath(), null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpFile.toPath(), null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirFile.toPath(), null));
 
         assertTrue(listFilter.accept(txtFile.getParentFile(), txtFile.getName()));
         assertTrue(!listFilter.accept(bmpFile.getParentFile(), bmpFile.getName()));
         assertTrue(!listFilter.accept(dirFile.getParentFile(), dirFile.getName()));
         //
-        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath));
-        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath));
+        assertEquals(FileVisitResult.CONTINUE, listFilter.accept(txtPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(bmpPath, null));
+        assertEquals(FileVisitResult.TERMINATE, listFilter.accept(dirPath, null));
 
         try {
             new WildcardFileFilter((String) null);

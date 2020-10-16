@@ -22,6 +22,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.file.PathFilter;
 
@@ -71,7 +72,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * @since 2.9.0
      */
     @Override
-    default FileVisitResult accept(final Path path) throws IOException {
+    default FileVisitResult accept(final Path path, final BasicFileAttributes attributes) throws IOException {
         return AbstractFileFilter.toFileVisitResult(accept(path.toFile()));
     }
 

@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter accepts <code>File</code>s that are hidden.
@@ -102,14 +103,14 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Checks to see if the file is hidden.
-     *
      * @param file  the File to check
+     *
      * @return {@code true} if the file is
      *  <i>hidden</i>, otherwise {@code false}.
      * @since 2.9.0
      */
     @Override
-    public FileVisitResult accept(final Path file) {
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         try {
             return toFileVisitResult(Files.isHidden(file));
         } catch (final IOException e) {
