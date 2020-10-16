@@ -554,6 +554,57 @@ public final class PathUtils {
     }
 
     /**
+     * <p>
+     * Applies an {@link IOFileFilter} to the provided {@link File}
+     * objects. The resulting array is a subset of the original file list that
+     * matches the provided filter.
+     * </p>
+     *
+     * <p>
+     * The {@link Set} returned by this method is not guaranteed to be thread safe.
+     * </p>
+     *
+     * <pre>
+     * Set&lt;File&gt; allFiles = ...
+     * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     *     FileFilterUtils.suffixFileFilter(".java"));
+     * </pre>
+     * @param filter the filter to apply to the set of files.
+     * @param paths the array of files to apply the filter to.
+     *
+     * @return a subset of <code>files</code> that is accepted by the
+     *         file filter.
+     * @throws IllegalArgumentException if the filter is {@code null}
+     *         or <code>files</code> contains a {@code null} value.
+     *
+     * @since 2.9.0
+     */
+    public static Path[] filter(final PathFilter filter, final Path... paths) {
+        Objects.requireNonNull(filter, "filter");
+        if (paths == null) {
+            return EMPTY_PATH_ARRAY;
+        }
+        return filterPaths(filter, Arrays.stream(paths), Collectors.toList()).toArray(EMPTY_PATH_ARRAY);
+    }
+
+    private static <R, A> R filterPaths(final PathFilter filter, final Stream<Path> stream,
+        final Collector<? super Path, A, R> collector) {
+        Objects.requireNonNull(filter, "filter");
+        Objects.requireNonNull(collector, "collector");
+        if (stream == null) {
+            return Stream.<Path>empty().collect(collector);
+        }
+        return stream.filter(p -> {
+            try {
+                return p != null
+                    && filter.accept(p, Files.readAttributes(p, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
+            } catch (final IOException e) {
+                return false;
+            }
+        }).collect(collector);
+    }
+
+    /**
      * Reads the access control list from a file attribute view.
      *
      * @param sourcePath the path to the file.
@@ -787,57 +838,6 @@ public final class PathUtils {
      */
     private PathUtils() {
         // do not instantiate.
-    }
-
-    /**
-     * <p>
-     * Applies an {@link IOFileFilter} to the provided {@link File}
-     * objects. The resulting array is a subset of the original file list that
-     * matches the provided filter.
-     * </p>
-     *
-     * <p>
-     * The {@link Set} returned by this method is not guaranteed to be thread safe.
-     * </p>
-     *
-     * <pre>
-     * Set&lt;File&gt; allFiles = ...
-     * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
-     *     FileFilterUtils.suffixFileFilter(".java"));
-     * </pre>
-     * @param filter the filter to apply to the set of files.
-     * @param paths the array of files to apply the filter to.
-     *
-     * @return a subset of <code>files</code> that is accepted by the
-     *         file filter.
-     * @throws IllegalArgumentException if the filter is {@code null}
-     *         or <code>files</code> contains a {@code null} value.
-     *
-     * @since 2.9.0
-     */
-    public static Path[] filter(final PathFilter filter, final Path... paths) {
-        Objects.requireNonNull(filter, "filter");
-        if (paths == null) {
-            return EMPTY_PATH_ARRAY;
-        }
-        return filterPaths(filter, Arrays.stream(paths), Collectors.toList()).toArray(EMPTY_PATH_ARRAY);
-    }
-
-    private static <R, A> R filterPaths(final PathFilter filter, final Stream<Path> stream,
-        final Collector<? super Path, A, R> collector) {
-        Objects.requireNonNull(filter, "filter");
-        Objects.requireNonNull(collector, "collector");
-        if (stream == null) {
-            return Stream.<Path>empty().collect(collector);
-        }
-        return stream.filter(p -> {
-            try {
-                return p != null
-                    && filter.accept(p, Files.readAttributes(p, BasicFileAttributes.class)) == FileVisitResult.CONTINUE;
-            } catch (final IOException e) {
-                return false;
-            }
-        }).collect(collector);
     }
 
 }
