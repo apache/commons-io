@@ -46,7 +46,7 @@ public class AgeFileFilterTest {
     public void testJavadocExampleUsingIo() {
         final File dir = new File(".");
         // We are interested in files older than one day
-        final long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+        final long cutoff = System.currentTimeMillis();
         final String[] files = dir.list(new AgeFileFilter(cutoff));
         for (final String file : files) {
             // System.out.println(files[i]);
@@ -64,7 +64,7 @@ public class AgeFileFilterTest {
     public void testJavadocExampleUsingNio() throws IOException {
         final Path dir = Paths.get(".");
         // We are interested in files older than one day
-        final long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+        final long cutoff = System.currentTimeMillis();
         final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
         //
         // Walk one dir
@@ -96,7 +96,7 @@ public class AgeFileFilterTest {
     @Test
     public void testNoCounting() throws IOException {
         final Path dir = Paths.get(".");
-        final long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+        final long cutoff = System.currentTimeMillis();
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(),
             new AgeFileFilter(cutoff));
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
