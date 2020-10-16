@@ -18,28 +18,45 @@
 package org.apache.commons.io.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 
+import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
 
 public class PathUtilsTest extends TestArguments {
+
+    private static final String PATH_FIXTURE = "NOTICE.txt";
 
     @Test
     public void testCopyFile() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            final Path sourceFile = Paths.get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
-            final Path targetFile = PathUtils.copyFileToDirectory(
-                    sourceFile, tempDir);
+            final Path sourceFile = Paths
+                .get("src/test/resources/org/apache/commons/io/dirs-1-file-size-1/file-size-1.bin");
+            final Path targetFile = PathUtils.copyFileToDirectory(sourceFile, tempDir);
             assertTrue(Files.exists(targetFile));
             assertEquals(Files.size(sourceFile), Files.size(targetFile));
         } finally {
             PathUtils.deleteDirectory(tempDir);
+        }
+    }
+
+    @Test
+    public void testNewDirectoryStream() throws Exception {
+        final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
+        try (final DirectoryStream<Path> stream = PathUtils.newDirectoryStream(Paths.get("."), pathFilter)) {
+            final Iterator<Path> iterator = stream.iterator();
+            final Path path = iterator.next();
+            assertEquals(PATH_FIXTURE, path.getFileName().toString());
+            assertFalse(iterator.hasNext());
         }
     }
 

@@ -678,6 +678,18 @@ public final class PathUtils {
     }
 
     /**
+     * Creates a new DirectoryStream for Paths rooted at the given directory.
+     * 
+     * @param dir the path to the directory to stream.
+     * @param pathFilter the directory stream filter.
+     * @return a new instance.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static DirectoryStream<Path> newDirectoryStream(final Path dir, PathFilter pathFilter) throws IOException {
+        return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
+    }
+
+    /**
      * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      *
      * @param options the array to test
