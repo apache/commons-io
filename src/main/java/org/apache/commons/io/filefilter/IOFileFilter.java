@@ -93,7 +93,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * @return a new filter
      * @since 2.9.0
      */
-    default NotFileFilter not() {
+    default IOFileFilter not() {
         return new NotFileFilter(this);
     }
 

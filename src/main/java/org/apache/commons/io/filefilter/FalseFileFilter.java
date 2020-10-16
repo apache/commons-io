@@ -86,4 +86,9 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
         return FileVisitResult.TERMINATE;
     }
 
+    @Override
+    public IOFileFilter not() {
+        return TrueFileFilter.INSTANCE;
+    }
+
 }

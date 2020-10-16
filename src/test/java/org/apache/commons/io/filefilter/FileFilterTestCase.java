@@ -524,6 +524,8 @@ public class FileFilterTestCase {
         assertFiltering(filter, (Path) null, true);
         //
         assertSame(TrueFileFilter.TRUE, TrueFileFilter.INSTANCE);
+        assertSame(FalseFileFilter.FALSE, TrueFileFilter.INSTANCE.not());
+        assertSame(FalseFileFilter.INSTANCE, TrueFileFilter.INSTANCE.not());
     }
 
     @Test
@@ -536,6 +538,8 @@ public class FileFilterTestCase {
         assertFiltering(filter, (File) null, false);
         assertFiltering(filter, (Path) null, false);
         assertSame(FalseFileFilter.FALSE, FalseFileFilter.INSTANCE);
+        assertSame(TrueFileFilter.TRUE, FalseFileFilter.INSTANCE.not());
+        assertSame(TrueFileFilter.INSTANCE, FalseFileFilter.INSTANCE.not());
     }
 
     @Test
