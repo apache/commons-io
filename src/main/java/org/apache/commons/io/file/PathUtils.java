@@ -678,13 +678,13 @@ public final class PathUtils {
 
     /**
      * Creates a new DirectoryStream for Paths rooted at the given directory.
-     * 
+     *
      * @param dir the path to the directory to stream.
      * @param pathFilter the directory stream filter.
      * @return a new instance.
      * @throws IOException if an I/O error occurs.
      */
-    public static DirectoryStream<Path> newDirectoryStream(final Path dir, PathFilter pathFilter) throws IOException {
+    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter) throws IOException {
         return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
     }
 
@@ -708,29 +708,29 @@ public final class PathUtils {
 
     /**
      * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);}
-     * 
+     *
      * @param path the path to read.
      * @return the path attributes.
      * @throws IOException if an I/O error occurs
      * @since 2.9.0
      */
-    public static BasicFileAttributes readBasicFileAttributes(Path path) throws IOException {
+    public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
         return Files.readAttributes(path, BasicFileAttributes.class);
     }
 
     /**
      * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);} while wrapping {@link IOException}
      * as {@link IllegalStateException}.
-     * 
+     *
      * @param path the path to read.
      * @return the path attributes.
      * @throws IllegalStateException if an I/O error occurs
      * @since 2.9.0
      */
-    public static BasicFileAttributes readBasicFileAttributesQuietly(Path path) {
+    public static BasicFileAttributes readBasicFileAttributesQuietly(final Path path) {
         try {
             return readBasicFileAttributes(path);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalStateException(e);
         }
     }
