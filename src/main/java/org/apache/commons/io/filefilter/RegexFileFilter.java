@@ -33,6 +33,7 @@ import org.apache.commons.io.IOCase;
  * <h2>Using Classic IO</h2>
  * <p>
  * e.g.
+ * 
  * <pre>
  * File dir = new File(".");
  * FileFilter fileFilter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
@@ -43,6 +44,7 @@ import org.apache.commons.io.IOCase;
  * </pre>
  *
  * <h2>Using NIO</h2>
+ * 
  * <pre>
  * final Path dir = Paths.get(".");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$"));
@@ -115,7 +117,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * Construct a new regular expression filter with the specified flags case sensitivity.
      *
      * @param pattern regular string expression to match
-     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+     * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the pattern is null
      */
     public RegexFileFilter(final String pattern, final IOCase caseSensitivity) {
@@ -132,8 +134,8 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Checks to see if the file name matches one of the regular expressions.
      *
-     * @param dir   the file directory (ignored)
-     * @param name  the file name
+     * @param dir the file directory (ignored)
+     * @param name the file name
      * @return true if the file name matches one of the regular expressions
      */
     @Override
@@ -143,9 +145,9 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
 
     /**
      * Checks to see if the file name matches one of the regular expressions.
-     * @param dir   the file directory (ignored)
-     * @param name  the file name
-     *
+     * 
+     * @param path the path
+     * @param attributes the path attributes
      * @return true if the file name matches one of the regular expressions
      */
     @Override
