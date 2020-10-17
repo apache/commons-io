@@ -97,7 +97,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The list of names must not be null");
         }
         this.names = names.toArray(EMPTY_STRING_ARRAY);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
     /**
@@ -107,7 +107,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the name is null
      */
     public NameFileFilter(final String name) {
-        this(name, null);
+        this(name, IOCase.SENSITIVE);
     }
 
     /**
@@ -115,12 +115,13 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
+     * </p>
      *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
     public NameFileFilter(final String... names) {
-        this(names, null);
+        this(names, IOCase.SENSITIVE);
     }
 
     /**
@@ -135,7 +136,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
         this.names = new String[] {name};
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
     /**
@@ -151,7 +152,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         }
         this.names = new String[names.length];
         System.arraycopy(names, 0, this.names, 0, names.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
     /**
@@ -196,6 +197,10 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             }
         }
         return false;
+    }
+
+    private IOCase toIOCase(final IOCase caseSensitivity) {
+        return caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**
