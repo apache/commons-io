@@ -23,13 +23,16 @@ import java.util.Objects;
  * <p>
  * Different filing systems have different rules for case-sensitivity.
  * Windows is case-insensitive, Unix is case-sensitive.
+ * </p>
  * <p>
  * This class captures that difference, providing an enumeration to
  * control how file name comparisons should be performed. It also provides
  * methods that use the enumeration to perform comparisons.
+ * </p>
  * <p>
  * Wherever possible, you should use the <code>check</code> methods in this
  * class to compare file names.
+ * </p>
  *
  * @since 1.3
  */
