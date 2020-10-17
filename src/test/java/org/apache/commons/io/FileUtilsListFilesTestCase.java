@@ -145,7 +145,7 @@ public class FileUtilsListFilesTestCase {
         IOFileFilter fileFilter;
         IOFileFilter dirFilter;
 
-        //First, find non-recursively
+        // First, find non-recursively
         fileFilter = FileFilterUtils.trueFileFilter();
         files = FileUtils.listFiles(temporaryFolder, fileFilter, null);
         filenames = filesToFilenames(files);
@@ -153,7 +153,7 @@ public class FileUtilsListFilesTestCase {
         assertFalse(filenames.contains("dummy-index.html"), "'dummy-index.html' shouldn't be found");
         assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
-        //Second, find recursively
+        // Second, find recursively
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter("CVS"));
         files = FileUtils.listFiles(temporaryFolder, fileFilter, dirFilter);
@@ -162,7 +162,7 @@ public class FileUtilsListFilesTestCase {
         assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
         assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
-        //Do the same as above but now with the filter coming from FileFilterUtils
+        // Do the same as above but now with the filter coming from FileFilterUtils
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.makeCVSAware(null);
         files = FileUtils.listFiles(temporaryFolder, fileFilter, dirFilter);
@@ -171,7 +171,7 @@ public class FileUtilsListFilesTestCase {
         assertTrue(filenames.contains("dummy-index.html"), "'dummy-index.html' is missing");
         assertFalse(filenames.contains("Entries"), "'Entries' shouldn't be found");
 
-        //Again with the CVS filter but now with a non-null parameter
+        // Again with the CVS filter but now with a non-null parameter
         fileFilter = FileFilterUtils.trueFileFilter();
         dirFilter = FileFilterUtils.prefixFileFilter("sub");
         dirFilter = FileFilterUtils.makeCVSAware(dirFilter);
