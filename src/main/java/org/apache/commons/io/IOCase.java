@@ -38,12 +38,12 @@ public enum IOCase {
     /**
      * The constant for case sensitive regardless of operating system.
      */
-    SENSITIVE ("Sensitive", true),
+    SENSITIVE("Sensitive", true),
 
     /**
      * The constant for case insensitive regardless of operating system.
      */
-    INSENSITIVE ("Insensitive", false),
+    INSENSITIVE("Insensitive", false),
 
     /**
      * The constant for case sensitivity determined by the current operating system.
@@ -53,11 +53,13 @@ public enum IOCase {
      * systems (e.g. OSX and OpenVMS) are treated as case sensitive if they use the
      * Unix file separator and case-insensitive if they use the Windows file separator
      * (see {@link java.io.File#separatorChar}).
+     * </p>
      * <p>
      * If you serialize this constant on Windows, and deserialize on Unix, or vice
      * versa, then the value of the case-sensitivity flag will change.
+     * </p>
      */
-    SYSTEM ("System", !FilenameUtils.isSystemWindows());
+    SYSTEM("System", !FilenameUtils.isSystemWindows());
 
     /** Serialization version. */
     private static final long serialVersionUID = -6343169151696340687L;
@@ -68,7 +70,6 @@ public enum IOCase {
     /** The sensitivity flag. */
     private final transient boolean sensitive;
 
-    //-----------------------------------------------------------------------
     /**
      * Factory method to create an IOCase from a name.
      *
@@ -77,17 +78,14 @@ public enum IOCase {
      * @throws IllegalArgumentException if the name is invalid
      */
     public static IOCase forName(final String name) {
-        for (final IOCase ioCase : IOCase.values())
-        {
-            if (ioCase.getName().equals(name))
-            {
+        for (final IOCase ioCase : IOCase.values()) {
+            if (ioCase.getName().equals(name)) {
                 return ioCase;
             }
         }
         throw new IllegalArgumentException("Invalid IOCase name: " + name);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Constructs a new instance.
      *
@@ -109,7 +107,6 @@ public enum IOCase {
         return forName(name);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Gets the name of the constant.
      *
@@ -128,12 +125,12 @@ public enum IOCase {
         return sensitive;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Compares two strings using the case-sensitivity rule.
      * <p>
      * This method mimics {@link String#compareTo} but takes case-sensitivity
      * into account.
+     * </p>
      *
      * @param str1  the first string to compare, not null
      * @param str2  the second string to compare, not null
@@ -151,6 +148,7 @@ public enum IOCase {
      * <p>
      * This method mimics {@link String#equals} but takes case-sensitivity
      * into account.
+     * </p>
      *
      * @param str1  the first string to compare, not null
      * @param str2  the second string to compare, not null
@@ -168,6 +166,7 @@ public enum IOCase {
      * <p>
      * This method mimics {@link String#startsWith(String)} but takes case-sensitivity
      * into account.
+     * </p>
      *
      * @param str  the string to check, not null
      * @param start  the start to compare against, not null
@@ -183,6 +182,7 @@ public enum IOCase {
      * <p>
      * This method mimics {@link String#endsWith} but takes case-sensitivity
      * into account.
+     * </p>
      *
      * @param str  the string to check, not null
      * @param end  the end to compare against, not null
@@ -200,6 +200,7 @@ public enum IOCase {
      * <p>
      * This method mimics parts of {@link String#indexOf(String, int)}
      * but takes case-sensitivity into account.
+     * </p>
      *
      * @param str  the string to check, not null
      * @param strStartIndex  the index to start at in str
@@ -226,6 +227,7 @@ public enum IOCase {
      * <p>
      * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)}
      * but takes case-sensitivity into account.
+     * </p>
      *
      * @param str  the string to check, not null
      * @param strStartIndex  the index to start at in str
@@ -237,7 +239,6 @@ public enum IOCase {
         return str.regionMatches(!sensitive, strStartIndex, search, 0, search.length());
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Gets a string describing the sensitivity.
      *
