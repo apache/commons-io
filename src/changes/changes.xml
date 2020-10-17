@@ -101,6 +101,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/setup-java from v1.4.2 to v1.4.3 #160.
       </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
