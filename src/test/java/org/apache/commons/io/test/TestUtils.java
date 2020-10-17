@@ -42,104 +42,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
  */
 public abstract class TestUtils {
 
-    private TestUtils() {
-
-    }
-
-    public static void createFile(final File file, final long size)
-            throws IOException {
-        if (!file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file
-                    + " as the parent directory does not exist");
-        }
-        try (final BufferedOutputStream output =
-                new BufferedOutputStream(new java.io.FileOutputStream(file))) {
-            generateTestData(output, size);
-        }
-    }
-
-    public static byte[] generateTestData(final long size) {
-        try {
-            try (final ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
-                generateTestData(baout, size);
-                return baout.toByteArray();
-            }
-        } catch (final IOException ioe) {
-            throw new RuntimeException("This should never happen: " + ioe.getMessage());
-        }
-    }
-
-    public static void generateTestData(final OutputStream out, final long size)
-            throws IOException {
-        for (int i = 0; i < size; i++) {
-            //output.write((byte)'X');
-
-            // nice varied byte pattern compatible with Readers and Writers
-            out.write((byte) ((i % 127) + 1));
-        }
-    }
-
-    public static void createLineBasedFile(final File file, final String[] data) throws IOException {
-        if (file.getParentFile() != null && !file.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
-        }
-        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
-            for (final String element : data) {
-                output.println(element);
-            }
-        }
-    }
-
-    public static File newFile(final File testDirectory, final String filename) throws IOException {
-        final File destination = new File(testDirectory, filename);
-        /*
-        assertTrue( filename + "Test output data file shouldn't previously exist",
-                    !destination.exists() );
-        */
-        if (destination.exists()) {
-            FileUtils.forceDelete(destination);
-        }
-        return destination;
-    }
-
-    public static void checkFile(final File file, final File referenceFile)
-            throws Exception {
-        assertTrue(file.exists(), "Check existence of output file");
-        assertEqualContent(referenceFile, file);
-    }
-
-    /**
-     * Assert that the content of two files is the same.
-     */
-    private static void assertEqualContent(final File f0, final File f1)
-            throws IOException {
-        /* This doesn't work because the filesize isn't updated until the file
-         * is closed.
-        assertTrue( "The files " + f0 + " and " + f1 +
-                    " have differing file sizes (" + f0.length() +
-                    " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
-        */
-        try (InputStream is0 = new FileInputStream(f0)) {
-            try (InputStream is1 = new FileInputStream(f1)) {
-                final byte[] buf0 = new byte[1024];
-                final byte[] buf1 = new byte[1024];
-                int n0 = 0;
-                int n1;
-
-                while (-1 != n0) {
-                    n0 = is0.read(buf0);
-                    n1 = is1.read(buf1);
-                    assertTrue((n0 == n1),
-                            "The files " + f0 + " and " + f1 +
-                            " have differing number of bytes available (" + n0 + " vs " + n1 + ")");
-
-                    assertTrue(Arrays.equals(buf0, buf1),
-                            "The files " + f0 + " and " + f1 + " have different content");
-                }
-            }
-        }
-    }
-
     /**
      * Assert that the content of a file is equal to that in a byte[].
      *
@@ -184,6 +86,44 @@ public abstract class TestUtils {
         }
     }
 
+    /**
+     * Assert that the content of two files is the same.
+     */
+    private static void assertEqualContent(final File f0, final File f1)
+            throws IOException {
+        /* This doesn't work because the filesize isn't updated until the file
+         * is closed.
+        assertTrue( "The files " + f0 + " and " + f1 +
+                    " have differing file sizes (" + f0.length() +
+                    " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
+        */
+        try (InputStream is0 = new FileInputStream(f0)) {
+            try (InputStream is1 = new FileInputStream(f1)) {
+                final byte[] buf0 = new byte[1024];
+                final byte[] buf1 = new byte[1024];
+                int n0 = 0;
+                int n1;
+
+                while (-1 != n0) {
+                    n0 = is0.read(buf0);
+                    n1 = is1.read(buf1);
+                    assertTrue((n0 == n1),
+                            "The files " + f0 + " and " + f1 +
+                            " have differing number of bytes available (" + n0 + " vs " + n1 + ")");
+
+                    assertTrue(Arrays.equals(buf0, buf1),
+                            "The files " + f0 + " and " + f1 + " have different content");
+                }
+            }
+        }
+    }
+
+    public static void checkFile(final File file, final File referenceFile)
+            throws Exception {
+        assertTrue(file.exists(), "Check existence of output file");
+        assertEqualContent(referenceFile, file);
+    }
+
     public static void checkWrite(final OutputStream output) {
         try {
             new java.io.PrintStream(output).write(0);
@@ -200,10 +140,66 @@ public abstract class TestUtils {
         }
     }
 
+    public static void createFile(final File file, final long size)
+            throws IOException {
+        if (!file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file
+                    + " as the parent directory does not exist");
+        }
+        try (final BufferedOutputStream output =
+                new BufferedOutputStream(new java.io.FileOutputStream(file))) {
+            generateTestData(output, size);
+        }
+    }
+
+    public static void createLineBasedFile(final File file, final String[] data) throws IOException {
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
+        }
+        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+            for (final String element : data) {
+                output.println(element);
+            }
+        }
+    }
+
     public static void deleteFile(final File file) {
         if (file.exists()) {
             assertTrue(file.delete(), "Couldn't delete file: " + file);
         }
+    }
+
+    public static byte[] generateTestData(final long size) {
+        try {
+            try (final ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
+                generateTestData(baout, size);
+                return baout.toByteArray();
+            }
+        } catch (final IOException ioe) {
+            throw new RuntimeException("This should never happen: " + ioe.getMessage());
+        }
+    }
+
+    public static void generateTestData(final OutputStream out, final long size)
+            throws IOException {
+        for (int i = 0; i < size; i++) {
+            //output.write((byte)'X');
+
+            // nice varied byte pattern compatible with Readers and Writers
+            out.write((byte) ((i % 127) + 1));
+        }
+    }
+
+    public static File newFile(final File testDirectory, final String filename) throws IOException {
+        final File destination = new File(testDirectory, filename);
+        /*
+        assertTrue( filename + "Test output data file shouldn't previously exist",
+                    !destination.exists() );
+        */
+        if (destination.exists()) {
+            FileUtils.forceDelete(destination);
+        }
+        return destination;
     }
 
     /**
@@ -230,6 +226,10 @@ public abstract class TestUtils {
         } catch (final InterruptedException ignored){
             // ignore InterruptedException.
         }
+    }
+
+    private TestUtils() {
+
     }
 
 }
