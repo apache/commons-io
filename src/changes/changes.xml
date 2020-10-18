@@ -63,7 +63,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
         FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163.
       </action>
-      <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
         AccumulatorPathVisitor does not track directories properly.
       </action>
       <!-- ADD -->
