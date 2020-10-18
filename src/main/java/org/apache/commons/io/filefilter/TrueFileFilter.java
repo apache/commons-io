@@ -30,6 +30,8 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
 
+    private static final String TO_STRING = Boolean.TRUE.toString();
+
     private static final long serialVersionUID = 8782512160909720199L;
 
     /**
@@ -91,4 +93,20 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
         return FalseFileFilter.INSTANCE;
     }
 
+    @Override
+    public IOFileFilter or(final IOFileFilter fileFilter) {
+        // TRUE OR expression <=> true 
+        return INSTANCE;
+    }
+
+    @Override
+    public IOFileFilter and(final IOFileFilter fileFilter) {
+        // TRUE AND expression <=> expression
+        return fileFilter;
+    }
+
+    @Override
+    public String toString() {
+        return TO_STRING;
+    }
 }

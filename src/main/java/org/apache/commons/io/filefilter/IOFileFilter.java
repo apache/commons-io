@@ -75,13 +75,13 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     }
 
     /**
-     * Creates a new "and" filter with this filter and the given filters.
+     * Creates a new "and" filter with this filter.
      *
-     * @param fileFilter the filters to "and".
+     * @param fileFilter the filter to "and".
      * @return a new filter
      * @since 2.9.0
      */
-    default AndFileFilter and(final IOFileFilter... fileFilter) {
+    default IOFileFilter and(final IOFileFilter fileFilter) {
         return new AndFileFilter(this, fileFilter);
     }
 
@@ -96,13 +96,13 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     }
 
     /**
-     * Creates a new "or" filter with this filter and the given filters.
+     * Creates a new "or" filter with this filter.
      *
-     * @param fileFilter the filters to "or".
+     * @param fileFilter the filter to "or".
      * @return a new filter
      * @since 2.9.0
      */
-    default OrFileFilter or(final IOFileFilter... fileFilter) {
+    default IOFileFilter or(final IOFileFilter fileFilter) {
         return new OrFileFilter(this, fileFilter);
     }
 

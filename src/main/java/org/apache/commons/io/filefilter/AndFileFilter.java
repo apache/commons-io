@@ -22,9 +22,9 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A {@link java.io.FileFilter} providing conditional AND logic across a list of
@@ -46,12 +46,30 @@ public class AndFileFilter
     private final List<IOFileFilter> fileFilters;
 
     /**
-     * Constructs a new instance of <code>AndFileFilter</code>.
+     * Constructs a new empty instance.
      *
      * @since 1.1
      */
     public AndFileFilter() {
-        this.fileFilters = new ArrayList<>();
+        this(0);
+    }
+
+    /**
+     * Constructs a new instance with the given initial list.
+     * 
+     * @param initialList the initial list.
+     */
+    private AndFileFilter(final ArrayList<IOFileFilter> initialList) {
+        this.fileFilters = Objects.requireNonNull(initialList);
+    }
+
+    /**
+     * Constructs a new instance with the given initial capacity.
+     * 
+     * @param initialCapacity the initial capacity.
+     */
+    private AndFileFilter(int initialCapacity) {
+        this(new ArrayList<>(initialCapacity));
     }
 
     /**
@@ -62,43 +80,31 @@ public class AndFileFilter
      * @throws IllegalArgumentException if either filter is null
      */
     public AndFileFilter(final IOFileFilter filter1, final IOFileFilter filter2) {
-        if (filter1 == null || filter2 == null) {
-            throw new IllegalArgumentException("The filters must not be null");
-        }
-        this.fileFilters = new ArrayList<>(2);
-        this.fileFilters.add(filter1);
-        this.fileFilters.add(filter2);
+        this(2);
+        addFileFilter(filter1);
+        addFileFilter(filter2);
     }
 
     /**
-     * Constructs a new file filter that ANDs the result of other filters.
+     * Constructs a new instance for the give filters.
+     * @param fileFilters filters to OR.
      *
-     * @param filter1  the first filter, must not be null
-     * @param filters  more filters, must not be null
-     * @throws IllegalArgumentException if either filter is null
+     * @since 2.9.0
      */
-    public AndFileFilter(final IOFileFilter filter1, final IOFileFilter... filters) {
-        if (filter1 == null || filters == null) {
-            throw new IllegalArgumentException("The filters must not be null");
-        }
-        this.fileFilters = new ArrayList<>(filters.length + 1);
-        this.fileFilters.add(filter1);
-        this.fileFilters.addAll(Arrays.asList(filters));
+    public AndFileFilter(final IOFileFilter... fileFilters) {
+        this(Objects.requireNonNull(fileFilters, "fileFilters").length);
+        addFileFilter(fileFilters);
     }
 
     /**
      * Constructs a new instance of <code>AndFileFilter</code>
      * with the specified list of filters.
      *
-     * @param fileFilters  a List of IOFileFilter instances, copied, null ignored
+     * @param fileFilters  a List of IOFileFilter instances, copied.
      * @since 1.1
      */
     public AndFileFilter(final List<IOFileFilter> fileFilters) {
-        if (fileFilters == null) {
-            this.fileFilters = new ArrayList<>();
-        } else {
-            this.fileFilters = new ArrayList<>(fileFilters);
-        }
+        this(new ArrayList<>(Objects.requireNonNull(fileFilters)));
     }
 
     /**
@@ -154,8 +160,20 @@ public class AndFileFilter
      * {@inheritDoc}
      */
     @Override
-    public void addFileFilter(final IOFileFilter ioFileFilter) {
-        this.fileFilters.add(ioFileFilter);
+    public void addFileFilter(final IOFileFilter fileFilter) {
+        this.fileFilters.add(Objects.requireNonNull(fileFilter, "fileFilter"));
+    }
+
+    /**
+     * Adds the given file filters.
+     *
+     * @param fileFilters the filters to add.
+     * @since 2.9.0
+     */
+    public void addFileFilter(final IOFileFilter... fileFilters) {
+        for (final IOFileFilter fileFilter : Objects.requireNonNull(fileFilters, "fileFilters")) {
+            addFileFilter(fileFilter);
+        }
     }
 
     /**
@@ -201,8 +219,7 @@ public class AndFileFilter
             if (i > 0) {
                 buffer.append(",");
             }
-            final Object filter = fileFilters.get(i);
-            buffer.append(filter == null ? "null" : filter.toString());
+            buffer.append(Objects.toString(fileFilters.get(i)));
         }
         buffer.append(")");
         return buffer.toString();

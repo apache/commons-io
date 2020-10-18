@@ -95,7 +95,7 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public String toString() {
-        return super.toString() + "(" + filter.toString() + ")";
+        return "NOT (" + filter.toString() + ")";
     }
 
 }

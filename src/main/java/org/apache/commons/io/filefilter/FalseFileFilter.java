@@ -30,6 +30,8 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class FalseFileFilter implements IOFileFilter, Serializable {
 
+    private static final String TO_STRING = Boolean.FALSE.toString();
+
     /**
      * Singleton instance of false filter.
      *
@@ -76,6 +78,7 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
 
     /**
      * Returns false.
+     * 
      * @param file the file to check (ignored)
      *
      * @return false
@@ -91,4 +94,20 @@ public class FalseFileFilter implements IOFileFilter, Serializable {
         return TrueFileFilter.INSTANCE;
     }
 
+    @Override
+    public String toString() {
+        return TO_STRING;
+    }
+
+    @Override
+    public IOFileFilter and(IOFileFilter fileFilter) {
+        // FALSE AND expression <=> FALSE
+        return INSTANCE;
+    }
+
+    @Override
+    public IOFileFilter or(IOFileFilter fileFilter) {
+        // FALSE OR expression <=> expression
+        return fileFilter;
+    }
 }

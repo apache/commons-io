@@ -205,8 +205,6 @@ public class FileFilterTestCase {
         assertFiltering(trueFilter.and(falseFilter), new File("foo.test"), false);
         assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
         assertFiltering(falseFilter.and(trueFilter), new File("foo.test"), false);
-        assertFiltering(falseFilter.and(trueFilter, trueFilter), new File("foo.test"), false);
-        assertFiltering(falseFilter.and(trueFilter, trueFilter, trueFilter), new File("foo.test"), false);
     }
 
     @Test
@@ -222,13 +220,9 @@ public class FileFilterTestCase {
         assertFiltering(new AndFileFilter(filters), new File("test"), false);
         assertFiltering(new AndFileFilter(), new File("test"), false);
 
-        assertThrows(IllegalArgumentException.class, () -> new AndFileFilter(falseFilter, (IOFileFilter) null));
-        assertThrows(IllegalArgumentException.class, () -> new AndFileFilter(null, falseFilter));
-
-        final AndFileFilter f = new AndFileFilter((List<IOFileFilter>) null);
-        assertTrue(f.getFileFilters().isEmpty());
-
-        assertNotNull(f.toString()); // TODO better tests
+        assertThrows(NullPointerException.class, () -> new AndFileFilter(falseFilter, (IOFileFilter) null));
+        assertThrows(NullPointerException.class, () -> new AndFileFilter(null, falseFilter));
+        assertThrows(NullPointerException.class, () -> new AndFileFilter((List<IOFileFilter>) null));
     }
 
     @Test
@@ -519,6 +513,7 @@ public class FileFilterTestCase {
         assertSame(FalseFileFilter.FALSE, FalseFileFilter.INSTANCE);
         assertSame(TrueFileFilter.TRUE, FalseFileFilter.INSTANCE.negate());
         assertSame(TrueFileFilter.INSTANCE, FalseFileFilter.INSTANCE.negate());
+        assertNotNull(FalseFileFilter.INSTANCE.toString());
     }
 
     @Test
@@ -1339,8 +1334,6 @@ public class FileFilterTestCase {
         assertFiltering(new OrFileFilter(), testPath, false);
         //
         assertFiltering(falseFilter.or(trueFilter), testPath, true);
-        assertFiltering(falseFilter.or(falseFilter, trueFilter), testPath, true);
-        assertFiltering(falseFilter.or(falseFilter, falseFilter, trueFilter), testPath, true);
 
         final List<IOFileFilter> filters = new ArrayList<>();
         filters.add(trueFilter);
@@ -1364,14 +1357,7 @@ public class FileFilterTestCase {
         assertTrue(!orFilter.accept(testFile.getParentFile(), testFile.getName()));
         assertEquals(FileVisitResult.TERMINATE, orFilter.accept(testPath, null));
 
-        try {
-            new OrFileFilter(falseFilter, (IOFileFilter) null);
-            fail();
-        } catch (final IllegalArgumentException ex) {
-        }
-
-        final OrFileFilter f = new OrFileFilter((List<IOFileFilter>) null);
-        assertTrue(f.getFileFilters().isEmpty());
+        assertThrows(NullPointerException.class, () -> new OrFileFilter(falseFilter, (IOFileFilter) null));
     }
 
     @Test
@@ -1738,6 +1724,7 @@ public class FileFilterTestCase {
         assertSame(TrueFileFilter.TRUE, TrueFileFilter.INSTANCE);
         assertSame(FalseFileFilter.FALSE, TrueFileFilter.INSTANCE.negate());
         assertSame(FalseFileFilter.INSTANCE, TrueFileFilter.INSTANCE.negate());
+        assertNotNull(TrueFileFilter.INSTANCE.toString());
     }
 
     @Test
