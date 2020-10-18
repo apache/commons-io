@@ -61,10 +61,10 @@ public class NameFileFilterTest {
      */
     @Test
     public void testJavadocExampleUsingNio() throws IOException {
-        final Path dir = Paths.get(".");
+        final Path dir = Paths.get("");
         // We are interested in files older than one day
-        final AccumulatorPathVisitor visitor = AccumulatorPathVisitor
-            .withLongCounters(new NameFileFilter("NOTICE.txt"));
+        final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("NOTICE.txt"),
+            TrueFileFilter.INSTANCE);
         //
         // Walk one dir
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
@@ -101,9 +101,9 @@ public class NameFileFilterTest {
 
     @Test
     public void testNoCounting() throws IOException {
-        final Path dir = Paths.get(".");
+        final Path dir = Paths.get("");
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(),
-            new NameFileFilter("NOTICE.txt"));
+            new NameFileFilter("NOTICE.txt"), TrueFileFilter.INSTANCE);
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);
         //
         CounterAssertions.assertZeroCounters(visitor.getPathCounters());

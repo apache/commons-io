@@ -55,7 +55,8 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     private final PathCounters pathCounters;
-    private final PathFilter pathFilter;
+    private final PathFilter fileFilter;
+    private final PathFilter dirFilter;
 
     /**
      * Constructs a new instance.
@@ -63,20 +64,22 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param pathCounter How to count path visits.
      */
     public CountingPathVisitor(final PathCounters pathCounter) {
-        this(pathCounter, TrueFileFilter.INSTANCE);
+        this(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
     }
 
     /**
      * Constructs a new instance.
      *
      * @param pathCounter How to count path visits.
-     * @param pathFilter Filters which paths to count.
+     * @param fileFilter Filters which files to count.
+     * @param dirFilter Filters which directories to count.
      * @since 2.9.0
      */
-    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter pathFilter) {
+    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, PathFilter dirFilter) {
         super();
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
-        this.pathFilter = Objects.requireNonNull(pathFilter, "pathFilter");
+        this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
+        this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");
     }
 
     @Override
@@ -110,6 +113,12 @@ public class CountingPathVisitor extends SimplePathVisitor {
         updateDirCounter(dir, exc);
         return FileVisitResult.CONTINUE;
     }
+    
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attributes) throws IOException {
+        final FileVisitResult accept = dirFilter.accept(dir, attributes);
+        return accept != FileVisitResult.CONTINUE ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+    }
 
     @Override
     public String toString() {
@@ -140,7 +149,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        if (Files.exists(file) && pathFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
+        if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;

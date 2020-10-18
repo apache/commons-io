@@ -61,8 +61,9 @@ public class DirectoryFileFilterTest {
      */
     @Test
     public void testJavadocExampleUsingNio() throws IOException {
-        final Path dir = Paths.get(".");
-        final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE);
+        final Path dir = Paths.get("");
+        final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE,
+            TrueFileFilter.INSTANCE);
         //
         // Walk one dir
         Files.walkFileTree(dir, Collections.emptySet(), 1, visitor);

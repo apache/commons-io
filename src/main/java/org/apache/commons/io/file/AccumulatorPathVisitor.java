@@ -35,7 +35,7 @@ import org.apache.commons.io.file.Counters.PathCounters;
  * <h2>Example</h2>
  *
  * <pre>
- * Path dir = Paths.get(".");
+ * Path dir = Paths.get("");
  * // We are interested in files older than one day
  * long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
@@ -70,12 +70,14 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Creates a new instance configured with a BigInteger {@link PathCounters}.
      *
-     * @param pathFilter Filters files to accumulate and count.
+     * @param fileFilter Filters files to accumulate and count.
+     * @param dirFilter Filters directories to accumulate and count.
      * @return a new instance configured with a long {@link PathCounters}.
      * @since 2.9.0
      */
-    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter pathFilter) {
-        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters(), pathFilter);
+    public static AccumulatorPathVisitor withBigIntegerCounters(final PathFilter fileFilter,
+        final PathFilter dirFilter) {
+        return new AccumulatorPathVisitor(Counters.bigIntegerPathCounters(), fileFilter, dirFilter);
     }
 
     /**
@@ -90,12 +92,13 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
     /**
      * Creates a new instance configured with a long {@link PathCounters}.
      *
-     * @param pathFilter Filters files to accumulate and count.
+     * @param fileFilter Filters files to accumulate and count.
+     * @param dirFilter Filters directories to accumulate and count.
      * @return a new instance configured with a long {@link PathCounters}.
      * @since 2.9.0
      */
-    public static AccumulatorPathVisitor withLongCounters(final PathFilter pathFilter) {
-        return new AccumulatorPathVisitor(Counters.longPathCounters(), pathFilter);
+    public static AccumulatorPathVisitor withLongCounters(final PathFilter fileFilter, final PathFilter dirFilter) {
+        return new AccumulatorPathVisitor(Counters.longPathCounters(), fileFilter, dirFilter);
     }
 
     private final List<Path> dirList = new ArrayList<>();
@@ -124,11 +127,13 @@ public class AccumulatorPathVisitor extends CountingPathVisitor {
      * Constructs a new instance.
      *
      * @param pathCounter How to count path visits.
-     * @param pathFilter Filters which paths to count.
+     * @param pathFilter Filters which files to count.
+     * @param dirFilter Filters which directories to count.
      * @since 2.9.0
      */
-    public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter pathFilter) {
-        super(pathCounter, pathFilter);
+    public AccumulatorPathVisitor(final PathCounters pathCounter, final PathFilter pathFilter,
+        final PathFilter dirFilter) {
+        super(pathCounter, pathFilter, dirFilter);
     }
 
     private void add(final List<Path> list, final Path dir) {

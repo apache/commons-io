@@ -54,7 +54,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(HiddenFileFilter.HIDDEN);
  * //
  * // Walk one dir
@@ -112,7 +112,7 @@ public class HiddenFileFilter extends AbstractFileFilter implements Serializable
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
         try {
-            return toFileVisitResult(Files.isHidden(file));
+            return toFileVisitResult(Files.isHidden(file), file);
         } catch (final IOException e) {
             return handle(e);
         }

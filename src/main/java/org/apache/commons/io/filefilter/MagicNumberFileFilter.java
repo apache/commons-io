@@ -65,7 +65,7 @@ import java.util.Arrays;
  * </pre>
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(MagicNumberFileFilter("ustar", 257));
  * //
  * // Walk one dir
@@ -301,7 +301,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
                     if (read != magicNumbers.length) {
                         return FileVisitResult.TERMINATE;
                     }
-                    return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()));
+                    return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()), file);
                 }
             }
             catch (final IOException ioe) {

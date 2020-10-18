@@ -90,7 +90,7 @@ public class CanExecuteFileFilter extends AbstractFileFilter implements Serializ
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isExecutable(file));
+        return toFileVisitResult(Files.isExecutable(file), file);
     }
 
 }

@@ -39,7 +39,7 @@ import org.apache.commons.io.file.PathVisitor;
  */
 public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
-    protected static FileVisitResult toFileVisitResult(final boolean accept) {
+    static FileVisitResult toFileVisitResult(final boolean accept, final Path path) {
         return accept ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
     }
 

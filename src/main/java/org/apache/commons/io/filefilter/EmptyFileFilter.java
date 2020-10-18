@@ -56,7 +56,7 @@ import java.util.stream.Stream;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(EmptyFileFilter.EMPTY);
  * //
  * // Walk one dir
@@ -118,10 +118,10 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
         try {
             if (Files.isDirectory(file)) {
                 try (Stream<Path> stream = Files.list(file)) {
-                    return toFileVisitResult(!stream.findFirst().isPresent());
+                    return toFileVisitResult(!stream.findFirst().isPresent(), file);
                 }
             }
-            return toFileVisitResult(Files.size(file) == 0);
+            return toFileVisitResult(Files.size(file) == 0, file);
         } catch (final IOException e) {
             return handle(e);
         }

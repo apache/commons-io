@@ -214,10 +214,10 @@ public class FileFilterUtils {
      * Returns a filter that checks if the file is a file (and not a directory).
      *
      * @return file filter that accepts only files and not directories
-     * @see FileFileFilter#FILE
+     * @see FileFileFilter#INSTANCE
      */
     public static IOFileFilter fileFileFilter() {
-        return FileFileFilter.FILE;
+        return FileFileFilter.INSTANCE;
     }
 
     /**
@@ -545,14 +545,14 @@ public class FileFilterUtils {
      *
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @see FileFileFilter#FILE
+     * @see FileFileFilter#INSTANCE
      * @since 1.3
      */
     public static IOFileFilter makeFileOnly(final IOFileFilter filter) {
         if (filter == null) {
-            return FileFileFilter.FILE;
+            return FileFileFilter.INSTANCE;
         }
-        return FileFileFilter.FILE.and(filter);
+        return FileFileFilter.INSTANCE.and(filter);
     }
 
     /**

@@ -52,7 +52,7 @@ public class PathUtilsTest extends TestArguments {
     @Test
     public void testNewDirectoryStream() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
-        try (final DirectoryStream<Path> stream = PathUtils.newDirectoryStream(Paths.get("."), pathFilter)) {
+        try (final DirectoryStream<Path> stream = PathUtils.newDirectoryStream(PathUtils.current(), pathFilter)) {
             final Iterator<Path> iterator = stream.iterator();
             final Path path = iterator.next();
             assertEquals(PATH_FIXTURE, path.getFileName().toString());

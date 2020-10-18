@@ -66,6 +66,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         AccumulatorPathVisitor does not track directories properly.
       </action>
+      <action issue="IO-597" dev="ggregory" type="fix" due-to="Gary Gregory, Arvind, Rob Spoor">
+        FileUtils.iterateFiles runs out of memory when executed for a directory with large number of files.
+        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO 
+        file tree walking instead of IO file listings to avoid memory consumption issues on large file trees.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.

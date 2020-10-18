@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -169,6 +170,12 @@ public abstract class TestUtils {
         }
     }
 
+    public static void generateTestData(final File file, final long size) throws IOException, FileNotFoundException {
+        try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file))) {
+            generateTestData(output, size);
+        }
+    }
+
     public static byte[] generateTestData(final long size) {
         try {
             try (final ByteArrayOutputStream baout = new ByteArrayOutputStream()) {
@@ -176,15 +183,14 @@ public abstract class TestUtils {
                 return baout.toByteArray();
             }
         } catch (final IOException ioe) {
-            throw new RuntimeException("This should never happen: " + ioe.getMessage());
+            throw new IllegalStateException("This should never happen: " + ioe.getMessage(), ioe);
         }
     }
 
     public static void generateTestData(final OutputStream out, final long size)
             throws IOException {
         for (int i = 0; i < size; i++) {
-            //output.write((byte)'X');
-
+            // output.write((byte)'X');
             // nice varied byte pattern compatible with Readers and Writers
             out.write((byte) ((i % 127) + 1));
         }

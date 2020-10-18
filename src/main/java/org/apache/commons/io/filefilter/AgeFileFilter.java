@@ -34,7 +34,7 @@ import org.apache.commons.io.file.PathUtils;
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>
- * Path dir = Paths.get(".");
+ * Path dir = Paths.get("");
  * // We are interested in files older than one day
  * long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
  * String[] files = dir.list(new AgeFileFilter(cutoff));
@@ -45,7 +45,7 @@ import org.apache.commons.io.file.PathUtils;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * Path dir = Paths.get(".");
+ * Path dir = Paths.get("");
  * // We are interested in files older than one day
  * long cutoff = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
  * AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new AgeFileFilter(cutoff));
@@ -182,7 +182,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
         } catch (final IOException e) {
             return handle(e);
         }
-        return toFileVisitResult(acceptOlder != newer);
+        return toFileVisitResult(acceptOlder != newer, file);
     }
 
     /**

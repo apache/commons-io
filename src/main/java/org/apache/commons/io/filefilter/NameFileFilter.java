@@ -42,7 +42,7 @@ import org.apache.commons.io.IOCase;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("Test"));
  * //
  * // Walk one dir
@@ -187,7 +187,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(acceptBaseName(file.getFileName().toString()));
+        return toFileVisitResult(acceptBaseName(file.getFileName().toString()), file);
     }
 
     private boolean acceptBaseName(final String baseName) {

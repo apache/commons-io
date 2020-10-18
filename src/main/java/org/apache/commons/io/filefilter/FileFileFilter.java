@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(FileFileFilter.FILE);
  * //
  * // Walk one dir
@@ -62,8 +62,21 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class FileFileFilter extends AbstractFileFilter implements Serializable {
 
-    /** Singleton instance of file filter */
-    public static final IOFileFilter FILE = new FileFileFilter();
+    /**
+     * Singleton instance of file filter.
+     *
+     * @since 2.9.0
+     */
+    public static final IOFileFilter INSTANCE = new FileFileFilter();
+
+    /**
+     * Singleton instance of file filter.
+     *
+     * @deprecated Use {@link #INSTANCE}.
+     */
+    @Deprecated
+    public static final IOFileFilter FILE = INSTANCE;
+
     private static final long serialVersionUID = 5345244090827540862L;
 
     /**
@@ -92,7 +105,7 @@ public class FileFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isRegularFile(file));
+        return toFileVisitResult(Files.isRegularFile(file), file);
     }
 
 }

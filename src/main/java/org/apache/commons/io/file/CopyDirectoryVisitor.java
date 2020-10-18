@@ -59,15 +59,16 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     * @param pathFilter How to filter paths.
+     * @param fileFilter How to filter file paths.
+     * @param dirFilter How to filter directory paths.
      * @param sourceDirectory The source directory
      * @param targetDirectory The target directory
      * @param copyOptions Specifies how the copying should be done.
      * @since 2.9.0
      */
-    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter pathFilter, final Path sourceDirectory, final Path targetDirectory,
-        final CopyOption... copyOptions) {
-        super(pathCounter, pathFilter);
+    public CopyDirectoryVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter,
+        final Path sourceDirectory, final Path targetDirectory, final CopyOption... copyOptions) {
+        super(pathCounter, fileFilter, dirFilter);
         this.sourceDirectory = sourceDirectory;
         this.targetDirectory = targetDirectory;
         this.copyOptions = copyOptions == null ? PathUtils.EMPTY_COPY_OPTIONS : copyOptions.clone();

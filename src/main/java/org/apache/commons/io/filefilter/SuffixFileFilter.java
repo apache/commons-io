@@ -43,7 +43,7 @@ import org.apache.commons.io.IOCase;
  *
  * <h2>Using NIO</h2>
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new SuffixFileFilter(".java"));
  * //
  * // Walk one dir
@@ -193,7 +193,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(accept(file.getFileName().toString()));
+        return toFileVisitResult(accept(file.getFileName().toString()), file);
     }
 
     private boolean accept(final String name) {

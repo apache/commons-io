@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <h2>Using NIO</h2>
  *
  * <pre>
- * final Path dir = Paths.get(".");
+ * final Path dir = Paths.get("");
  * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE);
  * //
  * // Walk one dir
@@ -105,7 +105,7 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(Files.isDirectory(file));
+        return toFileVisitResult(Files.isDirectory(file), file);
     }
 
 }

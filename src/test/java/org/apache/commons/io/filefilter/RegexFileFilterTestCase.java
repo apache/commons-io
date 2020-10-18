@@ -50,7 +50,7 @@ public class RegexFileFilterTestCase {
     public void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) throws Exception {
         // Note. This only tests the (Path, Path) version if the parent of
         // the Path passed in is not null
-        final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected);
+        final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected, path);
         assertEquals(expectedFileVisitResult, filter.accept(path, null),
             "Filter(Path) " + filter.getClass().getName() + " not " + expectedFileVisitResult + " for " + path);
 

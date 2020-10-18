@@ -281,6 +281,17 @@ public final class PathUtils {
     }
 
     /**
+     * Gets the current directory.
+     * 
+     * @return the current directory.
+     *
+     * @since 2.9.0
+     */
+    public static Path current() {
+        return Paths.get("");
+    }
+    
+    /**
      * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
@@ -684,7 +695,8 @@ public final class PathUtils {
      * @return a new instance.
      * @throws IOException if an I/O error occurs.
      */
-    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter) throws IOException {
+    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter)
+        throws IOException {
         return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
     }
 
@@ -872,6 +884,24 @@ public final class PathUtils {
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri)
         throws IOException {
         return visitFileTree(visitor, Paths.get(uri));
+    }
+
+    /**
+     * Returns a stream of filtered paths.
+     *
+     * @param start the start path
+     * @param pathFilter the path filter
+     * @param maxDepth the maximum depth of directories to walk.
+     * @param readAttributes whether to call the filters with file attributes (false passes null).
+     * @param options the options to configure the walk.
+     * @return a filtered stream of paths.
+     * @throws IOException if an I/O error is thrown when accessing the starting file.
+     * @since 2.9.0
+     */
+    public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth,
+        boolean readAttributes, final FileVisitOption... options) throws IOException {
+        return Files.walk(start, maxDepth, options).filter(path -> pathFilter.accept(path,
+            readAttributes ? readBasicFileAttributesQuietly(path) : null) == FileVisitResult.CONTINUE);
     }
 
     /**

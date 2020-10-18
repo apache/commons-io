@@ -71,7 +71,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      */
     @Override
     default FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
-        return AbstractFileFilter.toFileVisitResult(accept(path.toFile()));
+        return AbstractFileFilter.toFileVisitResult(accept(path.toFile()), path);
     }
 
     /**
