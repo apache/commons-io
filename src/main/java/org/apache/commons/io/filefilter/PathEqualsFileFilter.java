@@ -45,12 +45,12 @@ public class PathEqualsFileFilter extends AbstractFileFilter {
     }
 
     @Override
-    public boolean accept(File file) {
+    public boolean accept(final File file) {
         return Objects.equals(this.path, file.toPath());
     }
 
     @Override
-    public FileVisitResult accept(Path path, BasicFileAttributes attributes) {
+    public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
         return toFileVisitResult(Objects.equals(this.path, path), path);
     }
 }

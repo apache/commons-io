@@ -2820,7 +2820,7 @@ public class FileUtils {
         return files;
     }
 
-    private static List<File> toList(Stream<File> stream) {
+    private static List<File> toList(final Stream<File> stream) {
         return stream.collect(Collectors.toList());
     }
 

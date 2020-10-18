@@ -899,7 +899,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth,
-        boolean readAttributes, final FileVisitOption... options) throws IOException {
+        final boolean readAttributes, final FileVisitOption... options) throws IOException {
         return Files.walk(start, maxDepth, options).filter(path -> pathFilter.accept(path,
             readAttributes ? readBasicFileAttributesQuietly(path) : null) == FileVisitResult.CONTINUE);
     }

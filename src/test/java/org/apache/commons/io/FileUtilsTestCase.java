@@ -169,7 +169,7 @@ public class FileUtilsTestCase {
         assertNotEquals(getLastModifiedMillis(testFile), lastModified1, "Should have changed source date");
     }
 
-    private void consumeRemaining(Iterator<File> iterator) {
+    private void consumeRemaining(final Iterator<File> iterator) {
         if (iterator != null) {
             iterator.forEachRemaining(e -> {});
         }
@@ -221,12 +221,12 @@ public class FileUtilsTestCase {
     }
 
     private void iterateFilesAndDirs(final File dir, final IOFileFilter fileFilter,
-        final IOFileFilter dirFilter, Collection<File> expectedFilesAndDirs) {
+        final IOFileFilter dirFilter, final Collection<File> expectedFilesAndDirs) {
         Iterator<File> iterator;
         int filesCount = 0;
         iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         try {
-            List<File> actualFiles = new ArrayList<>();
+            final List<File> actualFiles = new ArrayList<>();
             while (iterator.hasNext()) {
                 filesCount++;
                 final File file = iterator.next();
@@ -1919,7 +1919,7 @@ public class FileUtilsTestCase {
             iterateFilesAndDirs(subDir1, fileFilterAllFiles, fileFilterAllDirs, expectedFilesAndDirs);
             //
             // "*.txt" and "*"
-            int filesCount;
+            final int filesCount;
             expectedFilesAndDirs = Arrays.asList(subDir1, subDir2, someFile, subDir3, subDir4);
             iterateFilesAndDirs(subDir1, fileFilterExtTxt, fileFilterAllDirs, expectedFilesAndDirs);
             //

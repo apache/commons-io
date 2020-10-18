@@ -75,7 +75,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param dirFilter Filters which directories to count.
      * @since 2.9.0
      */
-    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, PathFilter dirFilter) {
+    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
         super();
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
         this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
@@ -115,7 +115,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
     
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attributes) throws IOException {
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
         final FileVisitResult accept = dirFilter.accept(dir, attributes);
         return accept != FileVisitResult.CONTINUE ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
     }
