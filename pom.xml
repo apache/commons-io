@@ -324,6 +324,7 @@ file comparators, endian transformation classes, and much more.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
+          <version>0.13</version>
           <configuration>
             <excludes>
               <exclude>src/test/resources/**/*.bin</exclude>
@@ -508,6 +509,7 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>prepare-checkout</id>
