@@ -235,6 +235,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/setup-java from v1.4.0 to v1.4.2 #141, #148.
       </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+        Update com.github.siom79.japicmp:japicmp-maven-plugin 0.14.3 -> 0.14.4.
+      </action>      
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
