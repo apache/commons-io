@@ -2090,8 +2090,8 @@ public class FileUtils {
     private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter) throws IOException {
         final boolean isDirFilterSet = dirFilter != null;
-        final FileEqualsFileFilter rootFileFilter = new FileEqualsFileFilter(directory);
-        final PathFilter dirPathFilter = isDirFilterSet ? rootFileFilter.or(dirFilter) : rootFileFilter;
+        final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
+        final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
         final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter,
             dirPathFilter);
         Files.walkFileTree(directory.toPath(), Collections.emptySet(), toMaxDepth(isDirFilterSet), visitor);
