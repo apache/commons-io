@@ -1418,7 +1418,7 @@ public class IOUtils {
      * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
-     * @throws IOException              if an I/O error occurs, such as if the encoding is invalid
+     * @throws IOException not actually thrown
      * @since 2.3
      */
     public static LineIterator lineIterator(final InputStream input, final Charset charset) throws IOException {
@@ -2369,7 +2369,7 @@ public class IOUtils {
      * @param input the <code>String</code> to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
+     * @throws IOException not actually thrown
      * @deprecated 2.5 Use {@link String#getBytes()} instead
      */
     @Deprecated
@@ -2543,7 +2543,7 @@ public class IOUtils {
      * @param input the CharSequence to convert
      * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
-     * @throws IOException                                  if the encoding is invalid
+     * @throws IOException                                  not actually thrown
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
@@ -2590,7 +2590,7 @@ public class IOUtils {
      * @param input the string to convert
      * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
-     * @throws IOException                                  if the encoding is invalid
+     * @throws IOException                                  not actually thrown
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
@@ -2608,7 +2608,7 @@ public class IOUtils {
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
+     * @throws IOException          not actually thrown
      * @deprecated 2.5 Use {@link String#String(byte[])} instead
      */
     @Deprecated
@@ -2628,7 +2628,7 @@ public class IOUtils {
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException          if an I/O error occurs (never occurs)
+     * @throws IOException          not actually thrown
      */
     public static String toString(final byte[] input, final String charsetName) throws IOException {
         return new String(input, Charsets.toCharset(charsetName));
