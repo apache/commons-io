@@ -98,12 +98,29 @@ public final class BufferedFileChannelInputStream extends InputStream {
     }
 
     /**
+     * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause
+     * errors if one attempts to read from the disposed buffer. However, neither the bytes allocated to direct buffers
+     * nor file descriptors opened for memory-mapped buffers put pressure on the garbage collector. Waiting for garbage
+     * collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no
+     * standard API to manually dispose of these kinds of buffers.
+     *
+     * @param buffer the buffer to clean.
+     */
+    private void clean(final ByteBuffer buffer) {
+        if (buffer instanceof sun.nio.ch.DirectBuffer) {
+            clean((sun.nio.ch.DirectBuffer) buffer);
+        }
+    }
+
+    /**
      * In Java 8, the type of DirectBuffer.cleaner() was sun.misc.Cleaner, and it was possible to access the method
      * sun.misc.Cleaner.clean() to invoke it. The type changed to jdk.internal.ref.Cleaner in later JDKs, and the
      * .clean() method is not accessible even with reflection. However sun.misc.Unsafe added a invokeCleaner() method in
      * JDK 9+ and this is still accessible with reflection.
+     * 
+     * @param buffer the buffer to clean.
      */
-    private void bufferCleaner(final DirectBuffer buffer) {
+    private void clean(final DirectBuffer buffer) {
         //
         // Ported from StorageUtils.scala.
         //
@@ -159,20 +176,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
         try {
             fileChannel.close();
         } finally {
-            dispose(byteBuffer);
-        }
-    }
-
-    /**
-     * Attempts to clean up a ByteBuffer if it is direct or memory-mapped. This uses an *unsafe* Sun API that will cause
-     * errors if one attempts to read from the disposed buffer. However, neither the bytes allocated to direct buffers
-     * nor file descriptors opened for memory-mapped buffers put pressure on the garbage collector. Waiting for garbage
-     * collection may lead to the depletion of off-heap memory or huge numbers of open files. There's unfortunately no
-     * standard API to manually dispose of these kinds of buffers.
-     */
-    private void dispose(final ByteBuffer buffer) {
-        if (buffer instanceof sun.nio.ch.DirectBuffer) {
-            bufferCleaner((sun.nio.ch.DirectBuffer) buffer);
+            clean(byteBuffer);
         }
     }
 
