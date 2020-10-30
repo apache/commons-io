@@ -54,11 +54,11 @@ public class ReadAheadInputStream extends InputStream {
 
     /**
      * Creates a new daemon thread.
-     * 
+     *
      * @param r the thread's runnable.
      * @return a new daemon thread.
      */
-    private static Thread newThread(Runnable r) {
+    private static Thread newThread(final Runnable r) {
         final Thread thread = new Thread(r, "commons-io-read-ahead");
         thread.setDaemon(true);
         return thread;
@@ -140,7 +140,7 @@ public class ReadAheadInputStream extends InputStream {
      * @param executorService An executor service for the read-ahead thread.
      * @param shutdownExecutorService Whether or not to shutdown the given ExecutorService on close.
      */
-    public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
+    private ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
         final ExecutorService executorService, final boolean shutdownExecutorService) {
         if (bufferSizeInBytes <= 0) {
             throw new IllegalArgumentException(
