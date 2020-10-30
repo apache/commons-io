@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -105,6 +106,8 @@ public class ReadAheadInputStream extends InputStream {
 
     private final ExecutorService executorService;
 
+    private final boolean shutdownExecutorService;
+
     private final Condition asyncReadComplete = stateChangeLock.newCondition();
 
     /**
@@ -114,7 +117,7 @@ public class ReadAheadInputStream extends InputStream {
      * @param bufferSizeInBytes The buffer size.
      */
     public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes) {
-        this(inputStream, bufferSizeInBytes, newExecutorService());
+        this(inputStream, bufferSizeInBytes, newExecutorService(), true);
     }
 
     /**
@@ -126,14 +129,28 @@ public class ReadAheadInputStream extends InputStream {
      */
     public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
         final ExecutorService executorService) {
+        this(inputStream, bufferSizeInBytes, executorService, false);
+    }
+
+    /**
+     * Creates an instance with the specified buffer size and read-ahead threshold
+     *
+     * @param inputStream The underlying input stream.
+     * @param bufferSizeInBytes The buffer size.
+     * @param executorService An executor service for the read-ahead thread.
+     * @param shutdownExecutorService Whether or not to shutdown the given ExecutorService on close.
+     */
+    public ReadAheadInputStream(final InputStream inputStream, final int bufferSizeInBytes,
+        final ExecutorService executorService, final boolean shutdownExecutorService) {
         if (bufferSizeInBytes <= 0) {
             throw new IllegalArgumentException(
                 "bufferSizeInBytes should be greater than 0, but the value is " + bufferSizeInBytes);
         }
-        this.executorService = executorService;
+        this.executorService = Objects.requireNonNull(executorService, "executorService");
+        this.underlyingInputStream = Objects.requireNonNull(inputStream, "inputStream");
+        this.shutdownExecutorService = shutdownExecutorService;
         this.activeBuffer = ByteBuffer.allocate(bufferSizeInBytes);
         this.readAheadBuffer = ByteBuffer.allocate(bufferSizeInBytes);
-        this.underlyingInputStream = inputStream;
         this.activeBuffer.flip();
         this.readAheadBuffer.flip();
     }
@@ -177,16 +194,18 @@ public class ReadAheadInputStream extends InputStream {
             stateChangeLock.unlock();
         }
 
-        try {
-            executorService.shutdownNow();
-            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
-        } catch (final InterruptedException e) {
-            final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
-            iio.initCause(e);
-            throw iio;
-        } finally {
-            if (isSafeToCloseUnderlyingInputStream) {
-                underlyingInputStream.close();
+        if (shutdownExecutorService) {
+            try {
+                executorService.shutdownNow();
+                executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+            } catch (final InterruptedException e) {
+                final InterruptedIOException iio = new InterruptedIOException(e.getMessage());
+                iio.initCause(e);
+                throw iio;
+            } finally {
+                if (isSafeToCloseUnderlyingInputStream) {
+                    underlyingInputStream.close();
+                }
             }
         }
     }
