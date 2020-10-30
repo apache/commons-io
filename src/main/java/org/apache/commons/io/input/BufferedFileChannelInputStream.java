@@ -26,7 +26,6 @@ import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
-import sun.misc.Cleaner;
 import sun.nio.ch.DirectBuffer;
 
 /**
@@ -129,13 +128,19 @@ public final class BufferedFileChannelInputStream extends InputStream {
         //
         final String specVer = System.getProperty("java.specification.version");
         if ("1.8".equals(specVer)) {
-            // On Java 8.
-            final Cleaner cleaner = buffer.cleaner();
-            if (cleaner != null) {
-                cleaner.clean();
+            // On Java 8, but also compiles on Java 11.
+            try {
+              final Class<?> cls = Class.forName("sun.misc.Cleaner");
+              final Object cleaner = buffer.cleaner();
+              if (cleaner != null) {
+                  final Method cleanMethod = cls.getMethod("clean");
+                  cleanMethod.invoke(cleaner);
+              }
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException(e);
             }
         } else {
-            // On Java 9 and up, but compiled on Java 8.
+            // On Java 9 and up, but compiles on Java 8.
             try {
                 final Class<?> cls = Class.forName("sun.misc.Unsafe");
                 final Method cleanerMethod = cls.getMethod("invokeCleaner", ByteBuffer.class);
