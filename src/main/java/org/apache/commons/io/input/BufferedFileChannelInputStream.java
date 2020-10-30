@@ -130,10 +130,11 @@ public final class BufferedFileChannelInputStream extends InputStream {
         if ("1.8".equals(specVer)) {
             // On Java 8, but also compiles on Java 11.
             try {
-              final Class<?> cls = Class.forName("sun.misc.Cleaner");
-              final Object cleaner = buffer.cleaner();
+              final Class<?> clsCleaner = Class.forName("sun.misc.Cleaner");
+              final Method cleanerMethod = DirectBuffer.class.getMethod("cleaner");
+              final Object cleaner = cleanerMethod.invoke(buffer);
               if (cleaner != null) {
-                  final Method cleanMethod = cls.getMethod("clean");
+                  final Method cleanMethod = clsCleaner.getMethod("clean");
                   cleanMethod.invoke(cleaner);
               }
             } catch (ReflectiveOperationException e) {
@@ -142,9 +143,9 @@ public final class BufferedFileChannelInputStream extends InputStream {
         } else {
             // On Java 9 and up, but compiles on Java 8.
             try {
-                final Class<?> cls = Class.forName("sun.misc.Unsafe");
-                final Method cleanerMethod = cls.getMethod("invokeCleaner", ByteBuffer.class);
-                final Field unsafeField = cls.getDeclaredField("theUnsafe");
+                final Class<?> clsUnsafe = Class.forName("sun.misc.Unsafe");
+                final Method cleanerMethod = clsUnsafe.getMethod("invokeCleaner", ByteBuffer.class);
+                final Field unsafeField = clsUnsafe.getDeclaredField("theUnsafe");
                 unsafeField.setAccessible(true);
                 cleanerMethod.invoke(unsafeField.get(null), buffer);
             } catch (ReflectiveOperationException e) {
