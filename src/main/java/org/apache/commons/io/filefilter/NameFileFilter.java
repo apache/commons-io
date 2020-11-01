@@ -22,6 +22,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.IOCase;
 
@@ -187,7 +188,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(acceptBaseName(file.getFileName().toString()), file);
+        return toFileVisitResult(acceptBaseName(Objects.toString(file.getFileName(), null)), file);
     }
 
     private boolean acceptBaseName(final String baseName) {

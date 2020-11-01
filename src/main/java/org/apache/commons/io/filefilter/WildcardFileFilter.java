@@ -22,6 +22,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -195,7 +196,7 @@ public class WildcardFileFilter extends AbstractFileFilter implements Serializab
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(accept(file.getFileName().toString()), file);
+        return toFileVisitResult(accept(Objects.toString(file.getFileName(), null)), file);
     }
 
     private boolean accept(final String name) {

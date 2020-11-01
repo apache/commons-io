@@ -173,18 +173,9 @@ public class IOCaseTestCase {
         assertFalse(IOCase.SENSITIVE.checkStartsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkStartsWith("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkStartsWith("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkStartsWith(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkStartsWith(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertFalse(IOCase.SENSITIVE.checkStartsWith("ABC", null));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith(null, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkStartsWith(null, null));
     }
 
     @Test
@@ -212,18 +203,9 @@ public class IOCaseTestCase {
         assertFalse(IOCase.SENSITIVE.checkEndsWith("", "ABC"));
         assertTrue(IOCase.SENSITIVE.checkEndsWith("", ""));
 
-        try {
-            IOCase.SENSITIVE.checkEndsWith("ABC", null);
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEndsWith(null, "ABC");
-            fail();
-        } catch (final NullPointerException ignore) {}
-        try {
-            IOCase.SENSITIVE.checkEndsWith(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {}
+        assertFalse(IOCase.SENSITIVE.checkEndsWith("ABC", null));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith(null, "ABC"));
+        assertFalse(IOCase.SENSITIVE.checkEndsWith(null, null));
     }
 
     @Test

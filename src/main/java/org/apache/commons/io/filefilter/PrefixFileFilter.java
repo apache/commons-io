@@ -168,7 +168,7 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public boolean accept(final File file) {
-        return accept(file.getName());
+        return accept(file == null ? null : file.getName());
     }
 
     /**
@@ -192,7 +192,8 @@ public class PrefixFileFilter extends AbstractFileFilter implements Serializable
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        return toFileVisitResult(accept(file.getFileName().toFile()), file);
+        final Path fileName = file.getFileName();
+        return toFileVisitResult(accept(fileName == null ? null : fileName.toFile()), file);
     }
 
     private boolean accept(final String name) {

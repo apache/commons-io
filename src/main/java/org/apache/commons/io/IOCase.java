@@ -171,13 +171,12 @@ public enum IOCase {
      * into account.
      * </p>
      *
-     * @param str  the string to check, not null
-     * @param start  the start to compare against, not null
-     * @return true if equal using the case rules
-     * @throws NullPointerException if either string is null
+     * @param str  the string to check
+     * @param start  the start to compare against
+     * @return true if equal using the case rules, false if either input is null
      */
     public boolean checkStartsWith(final String str, final String start) {
-        return str.regionMatches(!sensitive, 0, start, 0, start.length());
+        return str != null && start != null && str.regionMatches(!sensitive, 0, start, 0, start.length());
     }
 
     /**
@@ -187,12 +186,14 @@ public enum IOCase {
      * into account.
      * </p>
      *
-     * @param str  the string to check, not null
-     * @param end  the end to compare against, not null
-     * @return true if equal using the case rules
-     * @throws NullPointerException if either string is null
+     * @param str  the string to check
+     * @param end  the end to compare against
+     * @return true if equal using the case rules, false if either input is null
      */
     public boolean checkEndsWith(final String str, final String end) {
+        if (str == null || end == null) {
+            return false;
+        }
         final int endLen = end.length();
         return str.regionMatches(!sensitive, str.length() - endLen, end, 0, endLen);
     }

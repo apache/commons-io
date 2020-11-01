@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -158,7 +159,7 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
         }
 
         for (final String wildcard : wildcards) {
-            if (FilenameUtils.wildcardMatch(file.getFileName().toString(), wildcard)) {
+            if (FilenameUtils.wildcardMatch(Objects.toString(file.getFileName(), null), wildcard)) {
                 return FileVisitResult.CONTINUE;
             }
         }
