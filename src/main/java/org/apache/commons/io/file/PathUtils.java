@@ -282,7 +282,7 @@ public final class PathUtils {
 
     /**
      * Gets the current directory.
-     * 
+     *
      * @return the current directory.
      *
      * @since 2.9.0
@@ -290,7 +290,7 @@ public final class PathUtils {
     public static Path current() {
         return Paths.get("");
     }
-    
+
     /**
      * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
      * <p>
