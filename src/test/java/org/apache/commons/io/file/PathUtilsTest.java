@@ -30,10 +30,20 @@ import java.util.Iterator;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * Tests {@link PathUtils}.
+ */
 public class PathUtilsTest extends TestArguments {
 
     private static final String PATH_FIXTURE = "NOTICE.txt";
+
+    /**
+     * A temporary directory managed by JUnit.
+     */
+    @TempDir
+    public Path tempDir;
 
     @Test
     public void testCopyFile() throws IOException {
@@ -47,6 +57,16 @@ public class PathUtilsTest extends TestArguments {
         } finally {
             PathUtils.deleteDirectory(tempDir);
         }
+    }
+
+    @Test
+    public void testCreateDirectoriesAlreadyExists() throws IOException {
+        assertEquals(tempDir.getParent(), PathUtils.createParentDirectories(tempDir));
+    }
+
+    @Test
+    public void testCreateDirectoriesNew() throws IOException {
+        assertEquals(tempDir, PathUtils.createParentDirectories(tempDir.resolve("child")));
     }
 
     @Test

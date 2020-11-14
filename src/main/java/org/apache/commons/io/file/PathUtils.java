@@ -37,6 +37,7 @@ import java.nio.file.attribute.AclEntry;
 import java.nio.file.attribute.AclFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
@@ -280,6 +281,29 @@ public final class PathUtils {
         return visitFileTree(new CountingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
     }
 
+    /**
+     * Creates the parent directories for the given {@code path}. 
+     * <p>
+     * Returns the {@code path}'s parent directory if it already exists.
+     * </p>
+     *
+     * @param path The path to a file (or directory).
+     * @param attrs An optional list of file attributes to set atomically when creating the directories.
+     * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static Path createParentDirectories(final Path path, FileAttribute<?>... attrs) throws IOException {
+        final Path parent = path.getParent();
+        if (parent == null) {
+            return null;
+        }
+        if (Files.isDirectory(parent)) {
+            return parent;
+        }
+        return Files.createDirectories(parent, attrs);
+    }
+    
     /**
      * Gets the current directory.
      *

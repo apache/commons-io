@@ -81,8 +81,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Let org.apache.commons.io.filefilter classes work with java.nio.file.Files#newDirectoryStream(Path, DirectoryStream.Filter).
       </action>
-      <action issue-"IO-510" dev="ggregory" type="add" due-to="Gary Gregory, Apache Spark, David Mollitor">
+      <action issue="IO-510" dev="ggregory" type="add" due-to="Gary Gregory, Apache Spark, David Mollitor">
         Add and adapt ReadAheadInputStream and BufferedFileChannelInputStream from Apache Spark.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.createParentDirectories(Path, FileAttribute...).
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
