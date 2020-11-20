@@ -174,7 +174,6 @@ public class LockableFileWriter extends Writer {
      */
     public LockableFileWriter(File file, final Charset charset, final boolean append,
             String lockDir) throws IOException {
-        super();
         // init file to create/append
         file = file.getAbsoluteFile();
         if (file.getParentFile() != null) {

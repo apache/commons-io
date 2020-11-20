@@ -40,7 +40,6 @@ public class PathEqualsFileFilter extends AbstractFileFilter {
      * @param file The file to match.
      */
     public PathEqualsFileFilter(final Path file) {
-        super();
         this.path = file;
     }
 

@@ -61,7 +61,6 @@ public class FileSystemProviders {
      * Might make public later.
      */
     private FileSystemProviders(final List<FileSystemProvider> providers) {
-        super();
         this.providers = providers;
     }
 

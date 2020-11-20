@@ -36,7 +36,6 @@ public class NullOutputStream extends OutputStream {
      */
     @Deprecated
     public NullOutputStream() {
-        super();
     }
 
     /**

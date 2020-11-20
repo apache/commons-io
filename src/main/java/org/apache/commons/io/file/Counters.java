@@ -45,7 +45,6 @@ public class Counters {
          */
         protected AbstractPathCounters(final Counter byteCounter, final Counter directoryCounter,
             final Counter fileCounter) {
-            super();
             this.byteCounter = byteCounter;
             this.directoryCounter = directoryCounter;
             this.fileCounter = fileCounter;

@@ -113,7 +113,6 @@ public class FileSystemUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public FileSystemUtils() {
-        super();
     }
 
     //-----------------------------------------------------------------------

@@ -50,7 +50,6 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
     }
 
     private StreamIterator(final Stream<E> stream) {
-        super();
         this.stream = Objects.requireNonNull(stream, "stream");
         this.iterator = stream.iterator();
     }

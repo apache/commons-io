@@ -76,7 +76,6 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @since 2.9.0
      */
     public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
-        super();
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
         this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
         this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");

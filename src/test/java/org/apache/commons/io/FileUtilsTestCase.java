@@ -82,7 +82,6 @@ public class FileUtilsTestCase {
     static class ListDirectoryWalker extends DirectoryWalker<File> {
 
         ListDirectoryWalker() {
-            super();
         }
 
         @Override

@@ -43,7 +43,6 @@ public class PathVisitorFileFilter extends AbstractFileFilter {
      * @param pathVisitor visit me.
      */
     public PathVisitorFileFilter(final PathVisitor pathVisitor) {
-        super();
         this.pathVisitor = pathVisitor == null ? NoopPathVisitor.INSTANCE : pathVisitor;
     }
 

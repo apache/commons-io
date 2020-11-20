@@ -42,7 +42,6 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
      * @param pathFilter How to filter paths.
      */
     public DirectoryStreamFilter(final PathFilter pathFilter) {
-        super();
         // TODO Instead of NPE, we could map null to FalseFileFilter.
         this.pathFilter = Objects.requireNonNull(pathFilter, "pathFilter");
     }

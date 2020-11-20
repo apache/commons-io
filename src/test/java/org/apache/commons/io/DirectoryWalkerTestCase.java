@@ -442,7 +442,6 @@ public class DirectoryWalkerTestCase {
         private final boolean suppressCancel;
 
         TestCancelWalker(final String cancelFileName,final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }
@@ -493,7 +492,6 @@ public class DirectoryWalkerTestCase {
         public List<File> results;
 
         TestMultiThreadCancelWalker(final String cancelFileName, final boolean suppressCancel) {
-            super();
             this.cancelFileName = cancelFileName;
             this.suppressCancel = suppressCancel;
         }

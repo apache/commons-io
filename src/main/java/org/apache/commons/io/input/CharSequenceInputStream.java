@@ -60,7 +60,6 @@ public class CharSequenceInputStream extends InputStream {
      * @throws IllegalArgumentException if the buffer is not large enough to hold a complete character
      */
     public CharSequenceInputStream(final CharSequence cs, final Charset charset, final int bufferSize) {
-        super();
         this.encoder = charset.newEncoder()
             .onMalformedInput(CodingErrorAction.REPLACE)
             .onUnmappableCharacter(CodingErrorAction.REPLACE);

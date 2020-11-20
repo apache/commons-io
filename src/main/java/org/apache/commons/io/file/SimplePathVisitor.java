@@ -31,7 +31,6 @@ public abstract class SimplePathVisitor extends SimpleFileVisitor<Path> implemen
      * Constructs a new instance.
      */
     protected SimplePathVisitor() {
-        super();
     }
 
 }
