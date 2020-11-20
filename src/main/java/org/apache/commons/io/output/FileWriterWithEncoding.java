@@ -214,7 +214,7 @@ public class FileWriterWithEncoding extends Writer {
 
     //-----------------------------------------------------------------------
     /**
-     * Initialise the wrapped file writer.
+     * Initialize the wrapped file writer.
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed
