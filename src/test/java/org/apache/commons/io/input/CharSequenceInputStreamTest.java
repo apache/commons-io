@@ -374,10 +374,9 @@ public class CharSequenceInputStreamTest {
         final String input = "test";
         try (InputStream r = new CharSequenceInputStream(input, csName)) {
             int available = checkAvail(r, input.length());
-            byte buff[] = new byte[available];
             assertEquals(available - 1, r.skip(available - 1)); // skip all but one
             available = checkAvail(r, 1);
-            buff = new byte[available];
+            byte[] buff = new byte[available];
             assertEquals(available, r.read(buff, 0, available));
         }
     }

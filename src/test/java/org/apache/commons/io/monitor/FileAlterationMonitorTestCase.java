@@ -59,10 +59,9 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     @Test
     public void testAddRemoveObservers() {
         FileAlterationObserver[] observers = null;
-        FileAlterationMonitor monitor = null;
 
         // Null Observers
-        monitor = new FileAlterationMonitor(123, observers);
+        FileAlterationMonitor monitor = new FileAlterationMonitor(123, observers);
         assertEquals(123, monitor.getInterval(), "Interval");
         assertFalse(monitor.getObservers().iterator().hasNext(), "Observers[1]");
 
