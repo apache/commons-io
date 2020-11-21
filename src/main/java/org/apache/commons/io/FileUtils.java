@@ -2132,7 +2132,7 @@ public class FileUtils {
         try {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
@@ -2180,7 +2180,7 @@ public class FileUtils {
             final List<Path> list = visitor.getFileList();
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalStateException(e);
         }
     }

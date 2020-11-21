@@ -293,7 +293,7 @@ public final class PathUtils {
      * @throws IOException if an I/O error occurs
      * @since 2.9.0
      */
-    public static Path createParentDirectories(final Path path, FileAttribute<?>... attrs) throws IOException {
+    public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
         final Path parent = path.getParent();
         if (parent == null) {
             return null;

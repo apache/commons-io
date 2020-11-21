@@ -154,7 +154,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
                   final Method cleanMethod = clsCleaner.getMethod("clean");
                   cleanMethod.invoke(cleaner);
               }
-            } catch (ReflectiveOperationException e) {
+            } catch (final ReflectiveOperationException e) {
                 throw new IllegalStateException(e);
             }
         } else {
@@ -165,7 +165,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
                 final Field unsafeField = clsUnsafe.getDeclaredField("theUnsafe");
                 unsafeField.setAccessible(true);
                 cleanerMethod.invoke(unsafeField.get(null), buffer);
-            } catch (ReflectiveOperationException e) {
+            } catch (final ReflectiveOperationException e) {
                 throw new IllegalStateException(e);
             }
         }

@@ -68,7 +68,7 @@ public class AndFileFilter
      * 
      * @param initialCapacity the initial capacity.
      */
-    private AndFileFilter(int initialCapacity) {
+    private AndFileFilter(final int initialCapacity) {
         this(new ArrayList<>(initialCapacity));
     }
 
