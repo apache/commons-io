@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.QueueInputStream;
+import org.apache.commons.io.input.QueueInputStreamTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -29,28 +30,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test {@link QueueOutputStream} and {@link QueueInputStream}
+ * 
+ * @see QueueInputStreamTest
  */
 public class QueueOutputStreamTest {
 
-    private static final ExecutorService executorService = Executors.newCachedThreadPool();
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @AfterAll
     public static void afterAll() {
         executorService.shutdown();
     }
-    
+
     @Test
     public void writeString() throws Exception {
         try (final QueueOutputStream outputStream = new QueueOutputStream();
                 final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
-            outputStream.write("ABC".getBytes(StandardCharsets.UTF_8));
-            final String value = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            outputStream.write("ABC".getBytes(UTF_8));
+            final String value = IOUtils.toString(inputStream, UTF_8);
             assertEquals("ABC", value);
         }
     }
@@ -60,11 +65,11 @@ public class QueueOutputStreamTest {
         try (final QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
                 final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
             callInThrowAwayThread(() -> {
-                outputStream.write("ABC".getBytes(StandardCharsets.UTF_8));
+                outputStream.write("ABC".getBytes(UTF_8));
                 return null;
             });
 
-            final String value = callInThrowAwayThread(() -> IOUtils.toString(inputStream, StandardCharsets.UTF_8));
+            final String value = callInThrowAwayThread(() -> IOUtils.toString(inputStream, UTF_8));
             assertEquals("ABC", value);
         }
     }
@@ -100,17 +105,18 @@ public class QueueOutputStreamTest {
         }
     }
 
+    @Test
+    public void testNullArgument() {
+        assertThrows(NullPointerException.class, () -> new QueueOutputStream(null), "queue is required");
+    }
+
     private static <T> T callInThrowAwayThread(final Callable<T> callable) throws Exception {
         final Exchanger<T> exchanger = new Exchanger<>();
         executorService.submit(() -> {
-            try {
-                final T value = callable.call();
-                exchanger.exchange(value);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            final T value = callable.call();
+            exchanger.exchange(value);
+            return null;
         });
         return exchanger.exchange(null);
     }
 }
-

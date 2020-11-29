@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
@@ -42,6 +44,9 @@ import java.util.concurrent.LinkedBlockingDeque;
  * 
  * Closing a {@code QueueInputStream} has no effect. The methods in this class can be called after
  * the stream has been closed without generating an {@code IOException}.
+ * 
+ * @see QueueOutputStream
+ * @since 2.9.0
  */
 public class QueueInputStream extends InputStream {
 
@@ -51,7 +56,7 @@ public class QueueInputStream extends InputStream {
      * Create a {@link QueueInputStream} with no limit to internal buffer size
      */
     public QueueInputStream() {
-        this(new LinkedBlockingDeque<>());
+        this(new LinkedBlockingQueue<>());
     }
 
     /**
@@ -60,7 +65,7 @@ public class QueueInputStream extends InputStream {
      * @param queue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> queue) {
-        this.queue = queue;
+        this.queue = requireNonNull(queue, "queue is required");
     }
 
     /**
@@ -84,4 +89,3 @@ public class QueueInputStream extends InputStream {
     }
 
 }
-
