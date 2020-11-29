@@ -57,22 +57,48 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
         Make `FilenameUtils.equals()` not throw an exception #154.
       </action>
+      <action dev="ggregory" type="fix" due-to="Jan Peter Stotz, Bernd Eckenfels, Gary Gregory">
+        Un-deprecate IOUtils.closeQuietly() methods.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Michiel Kalkman">
+        FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        AccumulatorPathVisitor does not track directories properly.
+      </action>
+      <action issue="IO-597" dev="ggregory" type="fix" due-to="Gary Gregory, Arvind, Rob Spoor">
+        FileUtils.iterateFiles runs out of memory when executed for a directory with large number of files.
+        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO 
+        file tree walking instead of IO file listings to avoid memory consumption issues on large file trees.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Let org.apache.commons.io.filefilter classes work with java.nio.file.Files.walk* APIs.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Let org.apache.commons.io.filefilter classes work with java.nio.file.Files#newDirectoryStream(Path, DirectoryStream.Filter).
+      </action>
+      <action issue="IO-510" dev="ggregory" type="add" due-to="Gary Gregory, Apache Spark, David Mollitor">
+        Add and adapt ReadAheadInputStream and BufferedFileChannelInputStream from Apache Spark.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add PathUtils.createParentDirectories(Path, FileAttribute...).
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update mockito-core from 3.5.9 to 3.5.13 #152, #155, #157.
+        Update mockito-core from 3.5.9 to 3.6.0, #152, #155, #157, #166, #167.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update spotbugs from 4.1.2 to 4.1.3 #158.
+        Update spotbugs from 4.1.2 to 4.1.4 #158, #164, #165.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump spotbugs-maven-plugin from 4.0.4 to 4.1.3 #161.
@@ -81,10 +107,13 @@ The <action> type attribute can be add,update,fix,remove.
         Update org.junit-pioneer:junit-pioneer 0.9.0 -> 1.0.0 #159, #162.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update actions/checkout from v2.3.2 to v2.3.3 #156.
+        Update actions/checkout from v2.3.2 to v2.3.4, #156, #168.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/setup-java from v1.4.2 to v1.4.3 #160.
+      </action>
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
@@ -212,6 +241,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/setup-java from v1.4.0 to v1.4.2 #141, #148.
       </action>
+      <action type="update" dev="ggregory" due-to="Gary Gregory">
+        Update com.github.siom79.japicmp:japicmp-maven-plugin 0.14.3 -> 0.14.4.
+      </action>      
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">

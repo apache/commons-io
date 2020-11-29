@@ -21,11 +21,16 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -36,7 +41,6 @@ import org.apache.commons.io.IOCase;
  * every class you use.
  *
  * @since 1.0
- *
  */
 public class FileFilterUtils {
 
@@ -210,10 +214,10 @@ public class FileFilterUtils {
      * Returns a filter that checks if the file is a file (and not a directory).
      *
      * @return file filter that accepts only files and not directories
-     * @see FileFileFilter#FILE
+     * @see FileFileFilter#INSTANCE
      */
     public static IOFileFilter fileFileFilter() {
-        return FileFileFilter.FILE;
+        return FileFileFilter.INSTANCE;
     }
 
     /**
@@ -221,10 +225,6 @@ public class FileFilterUtils {
      * Applies an {@link IOFileFilter} to the provided {@link File}
      * objects. The resulting array is a subset of the original file list that
      * matches the provided filter.
-     * </p>
-     *
-     * <p>
-     * The {@link Set} returned by this method is not guaranteed to be thread safe.
      * </p>
      *
      * <pre>
@@ -249,16 +249,34 @@ public class FileFilterUtils {
         if (files == null) {
             return FileUtils.EMPTY_FILE_ARRAY;
         }
-        final List<File> acceptedFiles = new ArrayList<>();
-        for (final File file : files) {
-            if (file == null) {
-                throw new IllegalArgumentException("file array contains null");
-            }
-            if (filter.accept(file)) {
-                acceptedFiles.add(file);
-            }
+        return filterFiles(filter, Arrays.stream(files), Collectors.toList()).toArray(FileUtils.EMPTY_FILE_ARRAY);
+    }
+
+    /**
+     * <p>
+     * Applies an {@link IOFileFilter} to the provided {@link File} stream and collects the accepted files.
+     * </p>
+     *
+     * @param filter the filter to apply to the stream of files.
+     * @param stream the stream of files on which to apply the filter.
+     * @param collector how to collect the end result.
+     *
+     * @param <R> the return type.
+     * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
+     * @return a subset of files from the stream that is accepted by the filter.
+     * @throws IllegalArgumentException if the filter is {@code null}.
+     */
+    private static <R, A> R filterFiles(final IOFileFilter filter, final Stream<File> stream,
+        final Collector<? super File, A, R> collector) {
+        //Objects.requireNonNull(filter, "filter");
+        Objects.requireNonNull(collector, "collector");
+        if (filter == null) {
+            throw new IllegalArgumentException("file filter is null");
         }
-        return acceptedFiles.toArray(FileUtils.EMPTY_FILE_ARRAY);
+        if (stream == null) {
+            return Stream.<File>empty().collect(collector);
+        }
+        return stream.filter(filter::accept).collect(collector);
     }
 
     /**
@@ -289,46 +307,6 @@ public class FileFilterUtils {
      */
     public static File[] filter(final IOFileFilter filter, final Iterable<File> files) {
         return filterList(filter, files).toArray(FileUtils.EMPTY_FILE_ARRAY);
-    }
-
-    /**
-     * <p>
-     * Applies an {@link IOFileFilter} to the provided {@link File}
-     * objects and appends the accepted files to the other supplied collection.
-     * </p>
-     *
-     * <pre>
-     * List&lt;File&gt; files = ...
-     * List&lt;File&gt; directories = FileFilterUtils.filterList(files,
-     *     FileFilterUtils.sizeFileFilter(FileUtils.FIFTY_MB),
-     *         new ArrayList&lt;File&gt;());
-     * </pre>
-     * @param filter the filter to apply to the collection of files.
-     * @param files the collection of files to apply the filter to.
-     * @param acceptedFiles the list of files to add accepted files to.
-     *
-     * @param <T> the type of the file collection.
-     * @return a subset of <code>files</code> that is accepted by the
-     *         file filter.
-     * @throws IllegalArgumentException if the filter is {@code null}
-     *         or <code>files</code> contains a {@code null} value.
-     */
-    private static <T extends Collection<File>> T filter(final IOFileFilter filter,
-            final Iterable<File> files, final T acceptedFiles) {
-        if (filter == null) {
-            throw new IllegalArgumentException("file filter is null");
-        }
-        if (files != null) {
-            for (final File file : files) {
-                if (file == null) {
-                    throw new IllegalArgumentException("file collection contains null");
-                }
-                if (filter.accept(file)) {
-                    acceptedFiles.add(file);
-                }
-            }
-        }
-        return acceptedFiles;
     }
 
     /**
@@ -382,11 +360,13 @@ public class FileFilterUtils {
      * @return a subset of <code>files</code> that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
-     *         or <code>files</code> contains a {@code null} value.
      * @since 2.0
      */
     public static List<File> filterList(final IOFileFilter filter, final Iterable<File> files) {
-        return filter(filter, files, new ArrayList<>());
+        if (files == null) {
+            return Collections.emptyList();
+        }
+        return filterFiles(filter, StreamSupport.stream(files.spliterator(), false), Collectors.toList());
     }
 
     /**
@@ -441,12 +421,14 @@ public class FileFilterUtils {
      * @return a subset of <code>files</code> that is accepted by the
      *         file filter.
      * @throws IllegalArgumentException if the filter is {@code null}
-     *         or <code>files</code> contains a {@code null} value.
      *
      * @since 2.0
      */
     public static Set<File> filterSet(final IOFileFilter filter, final Iterable<File> files) {
-        return filter(filter, files, new HashSet<>());
+        if (files == null) {
+            return Collections.emptySet();
+        }
+        return filterFiles(filter, StreamSupport.stream(files.spliterator(), false), Collectors.toSet());
     }
 
     /**
@@ -555,7 +537,7 @@ public class FileFilterUtils {
         if (filter == null) {
             return DirectoryFileFilter.DIRECTORY;
         }
-        return new AndFileFilter(DirectoryFileFilter.DIRECTORY, filter);
+        return DirectoryFileFilter.DIRECTORY.and(filter);
     }
 
     /**
@@ -563,14 +545,14 @@ public class FileFilterUtils {
      *
      * @param filter  the filter to decorate, null means an unrestricted filter
      * @return the decorated filter, never null
-     * @see FileFileFilter#FILE
+     * @see FileFileFilter#INSTANCE
      * @since 1.3
      */
     public static IOFileFilter makeFileOnly(final IOFileFilter filter) {
         if (filter == null) {
-            return FileFileFilter.FILE;
+            return FileFileFilter.INSTANCE;
         }
-        return new AndFileFilter(FileFileFilter.FILE, filter);
+        return FileFileFilter.INSTANCE.and(filter);
     }
 
     /**
@@ -618,7 +600,7 @@ public class FileFilterUtils {
      * @see NotFileFilter
      */
     public static IOFileFilter notFileFilter(final IOFileFilter filter) {
-        return new NotFileFilter(filter);
+        return filter.negate();
     }
 
     /**
@@ -714,7 +696,7 @@ public class FileFilterUtils {
     public static IOFileFilter sizeRangeFileFilter(final long minSizeInclusive, final long maxSizeInclusive ) {
         final IOFileFilter minimumFilter = new SizeFileFilter(minSizeInclusive, true);
         final IOFileFilter maximumFilter = new SizeFileFilter(maxSizeInclusive + 1L, false);
-        return new AndFileFilter(minimumFilter, maximumFilter);
+        return minimumFilter.and(maximumFilter);
     }
 
     /**

@@ -35,7 +35,6 @@ public class HexDump {
      * Instances should NOT be constructed in standard programming.
      */
     public HexDump() {
-        super();
     }
 
     /**

@@ -18,39 +18,40 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter accepts <code>File</code>s that can be written to.
  * <p>
- * Example, showing how to print out a list of the
- * current directory's <i>writable</i> files:
- *
+ * Example, showing how to print out a list of the current directory's <i>writable</i> files:
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( CanWriteFileFilter.CAN_WRITE );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(CanWriteFileFilter.CAN_WRITE);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
  * <p>
- * Example, showing how to print out a list of the
- * current directory's <i>un-writable</i> files:
+ * Example, showing how to print out a list of the current directory's <i>un-writable</i> files:
  *
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( CanWriteFileFilter.CANNOT_WRITE );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(CanWriteFileFilter.CANNOT_WRITE);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
  * <p>
- * <b>N.B.</b> For read-only files, use
- *    <code>CanReadFileFilter.READ_ONLY</code>.
+ * <b>N.B.</b> For read-only files, use <code>CanReadFileFilter.READ_ONLY</code>.
  *
  * @since 1.3
- *
  */
 public class CanWriteFileFilter extends AbstractFileFilter implements Serializable {
 
@@ -58,7 +59,7 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
     public static final IOFileFilter CAN_WRITE = new CanWriteFileFilter();
 
     /** Singleton instance of not <i>writable</i> filter */
-    public static final IOFileFilter CANNOT_WRITE = new NotFileFilter(CAN_WRITE);
+    public static final IOFileFilter CANNOT_WRITE = CAN_WRITE.negate();
 
     private static final long serialVersionUID = 5132005214688990379L;
 
@@ -71,13 +72,24 @@ public class CanWriteFileFilter extends AbstractFileFilter implements Serializab
     /**
      * Checks to see if the file can be written to.
      *
-     * @param file  the File to check
-     * @return {@code true} if the file can be
-     *  written to, otherwise {@code false}.
+     * @param file the File to check
+     * @return {@code true} if the file can be written to, otherwise {@code false}.
      */
     @Override
     public boolean accept(final File file) {
         return file.canWrite();
+    }
+
+    /**
+     * Checks to see if the file can be written to.
+     * @param file the File to check
+     *
+     * @return {@code true} if the file can be written to, otherwise {@code false}.
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        return toFileVisitResult(Files.isWritable(file), file);
     }
 
 }

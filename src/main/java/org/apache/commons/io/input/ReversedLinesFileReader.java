@@ -54,7 +54,7 @@ public class ReversedLinesFileReader implements Closeable {
 
         /**
          * ctor
-         * 
+         *
          * @param no                     the part number
          * @param length                 its length
          * @param leftOverOfLastFilePart remainder

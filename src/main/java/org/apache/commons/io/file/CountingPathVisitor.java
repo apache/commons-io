@@ -25,6 +25,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
  * Counts files, directories, and sizes, as a visit proceeds.
@@ -54,6 +55,8 @@ public class CountingPathVisitor extends SimplePathVisitor {
     }
 
     private final PathCounters pathCounters;
+    private final PathFilter fileFilter;
+    private final PathFilter dirFilter;
 
     /**
      * Constructs a new instance.
@@ -61,8 +64,21 @@ public class CountingPathVisitor extends SimplePathVisitor {
      * @param pathCounter How to count path visits.
      */
     public CountingPathVisitor(final PathCounters pathCounter) {
-        super();
+        this(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounter How to count path visits.
+     * @param fileFilter Filters which files to count.
+     * @param dirFilter Filters which directories to count.
+     * @since 2.9.0
+     */
+    public CountingPathVisitor(final PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
         this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
+        this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
+        this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");
     }
 
     @Override
@@ -93,13 +109,30 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
-        pathCounters.getDirectoryCounter().increment();
+        updateDirCounter(dir, exc);
         return FileVisitResult.CONTINUE;
+    }
+    
+    @Override
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
+        final FileVisitResult accept = dirFilter.accept(dir, attributes);
+        return accept != FileVisitResult.CONTINUE ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
     }
 
     @Override
     public String toString() {
         return pathCounters.toString();
+    }
+
+    /**
+     * Updates the counter for visiting the given directory.
+     *
+     * @param dir the visited directory.
+     * @param exc Encountered exception.
+     * @since 2.9.0
+     */
+    protected void updateDirCounter(final Path dir, final IOException exc) {
+        pathCounters.getDirectoryCounter().increment();
     }
 
     /**
@@ -115,7 +148,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
-        if (Files.exists(file)) {
+        if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
             updateFileCounters(file, attributes);
         }
         return FileVisitResult.CONTINUE;

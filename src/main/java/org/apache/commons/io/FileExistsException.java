@@ -35,7 +35,6 @@ public class FileExistsException extends IOException {
      * Default Constructor.
      */
     public FileExistsException() {
-        super();
     }
 
     /**

@@ -122,7 +122,7 @@ public class RandomAccessFileInputStream extends InputStream {
 
     /**
      * Delegates to the underlying file.
-     * 
+     *
      * @param position See {@link RandomAccessFile#seek(long)}.
      * @throws IOException See {@link RandomAccessFile#seek(long)}.
      * @see RandomAccessFile#seek(long)

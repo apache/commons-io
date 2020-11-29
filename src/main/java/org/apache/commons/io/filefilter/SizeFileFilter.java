@@ -17,7 +17,12 @@
 package org.apache.commons.io.filefilter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * Filters files based on size, can filter either smaller files or
@@ -25,13 +30,33 @@ import java.io.Serializable;
  * <p>
  * For example, to print all files and directories in the
  * current directory whose size is greater than 1 MB:
- *
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new SizeFileFilter(1024 * 1024) );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(new SizeFileFilter(1024 * 1024));
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
+ * </pre>
+ *
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get("");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new SizeFileFilter(1024 * 1024));
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
  * </pre>
  *
  * @since 1.2
@@ -43,11 +68,11 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 7388077430788600069L;
 
-    /** The size threshold. */
-    private final long size;
-
     /** Whether the files accepted will be larger or smaller. */
     private final boolean acceptLarger;
+
+    /** The size threshold. */
+    private final long size;
 
     /**
      * Constructs a new size file filter for files equal to or
@@ -91,7 +116,32 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        return acceptLarger != file.length() < size;
+        return accept(file.length());
+    }
+
+    private boolean accept(final long length) {
+        return acceptLarger != length < size;
+    }
+
+    /**
+     * Checks to see if the size of the file is favorable.
+     * <p>
+     * If size equals threshold and smaller files are required,
+     * file <b>IS NOT</b> selected.
+     * If size equals threshold and larger files are required,
+     * file <b>IS</b> selected.
+     * </p>
+     * @param file  the File to check
+     *
+     * @return true if the file name matches
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        try {
+            return toFileVisitResult(accept(Files.size(file)), file);
+        } catch (final IOException e) {
+            return handle(e);
+        }
     }
 
     /**
@@ -103,6 +153,11 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     public String toString() {
         final String condition = acceptLarger ? ">=" : "<";
         return super.toString() + "(" + condition + size + ")";
+    }
+
+    @Override
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+        return toFileVisitResult(accept(Files.size(file)), file);
     }
 
 }

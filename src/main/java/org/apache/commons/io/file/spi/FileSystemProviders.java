@@ -47,7 +47,7 @@ public class FileSystemProviders {
 
     /**
      * Returns the instance for the installed providers.
-     * 
+     *
      * @return the instance for the installed providers.
      * @see FileSystemProvider#installedProviders()
      */
@@ -60,8 +60,7 @@ public class FileSystemProviders {
     /*
      * Might make public later.
      */
-    private FileSystemProviders(List<FileSystemProvider> providers) {
-        super();
+    private FileSystemProviders(final List<FileSystemProvider> providers) {
         this.providers = providers;
     }
 

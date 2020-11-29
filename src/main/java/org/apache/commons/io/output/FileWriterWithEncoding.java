@@ -155,7 +155,6 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException in case of an I/O error
      */
     public FileWriterWithEncoding(final File file, final String charsetName, final boolean append) throws IOException {
-        super();
         this.out = initWriter(file, charsetName, append);
     }
 
@@ -181,7 +180,6 @@ public class FileWriterWithEncoding extends Writer {
      * @throws IOException in case of an I/O error
      */
     public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
-        super();
         this.out = initWriter(file, encoding, append);
     }
 
@@ -208,13 +206,12 @@ public class FileWriterWithEncoding extends Writer {
      */
     public FileWriterWithEncoding(final File file, final CharsetEncoder charsetEncoder, final boolean append)
             throws IOException {
-        super();
         this.out = initWriter(file, charsetEncoder, append);
     }
 
     //-----------------------------------------------------------------------
     /**
-     * Initialise the wrapped file writer.
+     * Initialize the wrapped file writer.
      * Ensure that a cleanup occurs if the writer creation fails.
      *
      * @param file  the file to be accessed

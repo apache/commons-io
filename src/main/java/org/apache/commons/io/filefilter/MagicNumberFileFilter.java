@@ -20,7 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
 /**
@@ -30,7 +36,7 @@ import java.util.Arrays;
  * For instance, all Java class files begin with the bytes
  * <code>0xCAFEBABE</code>.
  * </p>
- *
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
  * MagicNumberFileFilter javaClassFileFilter =
@@ -56,6 +62,24 @@ import java.util.Arrays;
  * for (String tarFile : tarFiles) {
  *     System.out.println(tarFile);
  * }
+ * </pre>
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get("");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(MagicNumberFileFilter("ustar", 257));
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
  * </pre>
  *
  * @since 2.0
@@ -249,6 +273,42 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
         }
 
         return false;
+    }
+
+    /**
+     * <p>
+     * Accepts the provided file if the file contains the file filter's magic
+     * number at the specified offset.
+     * </p>
+     *
+     * <p>
+     * If any {@link IOException}s occur while reading the file, the file will
+     * be rejected.
+     * </p>
+     * @param file the file to accept or reject.
+     *
+     * @return {@code true} if the file contains the filter's magic number
+     *         at the specified offset, {@code false} otherwise.
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        if (file != null && Files.isRegularFile(file) && Files.isReadable(file)) {
+            try {
+                try (final FileChannel fileChannel = FileChannel.open(file)) {
+                    final ByteBuffer byteBuffer = ByteBuffer.allocate(this.magicNumbers.length);
+                    final int read = fileChannel.read(byteBuffer);
+                    if (read != magicNumbers.length) {
+                        return FileVisitResult.TERMINATE;
+                    }
+                    return toFileVisitResult(Arrays.equals(this.magicNumbers, byteBuffer.array()), file);
+                }
+            }
+            catch (final IOException ioe) {
+                // Do nothing, fall through and do not accept file
+            }
+        }
+        return FileVisitResult.TERMINATE;
     }
 
     /**

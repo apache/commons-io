@@ -18,30 +18,54 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter accepts <code>File</code>s that are directories.
  * <p>
  * For example, here is how to print out a list of the current directory's subdirectories:
+ * </p>
+ * <h2>Using Classic IO</h2>
  *
  * <pre>
  * File dir = new File(".");
  * String[] files = dir.list(DirectoryFileFilter.INSTANCE);
- * for (int i = 0; i &lt; files.length; i++) {
- *     System.out.println(files[i]);
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
+ * <h2>Using NIO</h2>
+ *
+ * <pre>
+ * final Path dir = Paths.get("");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(DirectoryFileFilter.INSTANCE);
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
+ * </pre>
+ *
  * @since 1.0
- *
- *
  * @see FileFilterUtils#directoryFileFilter()
  */
 public class DirectoryFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Singleton instance of directory filter.
-     * 
+     *
      * @since 1.3
      */
     public static final IOFileFilter DIRECTORY = new DirectoryFileFilter();
@@ -70,6 +94,18 @@ public class DirectoryFileFilter extends AbstractFileFilter implements Serializa
     @Override
     public boolean accept(final File file) {
         return file.isDirectory();
+    }
+
+    /**
+     * Checks to see if the file is a directory.
+     * @param file the File to check
+     *
+     * @return true if the file is a directory
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        return toFileVisitResult(Files.isDirectory(file), file);
     }
 
 }

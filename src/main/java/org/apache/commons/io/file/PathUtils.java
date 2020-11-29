@@ -17,6 +17,7 @@
 
 package org.apache.commons.io.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -33,7 +35,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.AclEntry;
 import java.nio.file.attribute.AclFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
@@ -43,12 +47,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
+import org.apache.commons.io.filefilter.IOFileFilter;
 
 /**
  * NIO Path utilities.
@@ -121,6 +128,13 @@ public final class PathUtils {
     }
 
     /**
+     * Empty {@link CopyOption} array.
+     *
+     * @since 2.8.0
+     */
+    public static final CopyOption[] EMPTY_COPY_OPTIONS = new CopyOption[0];
+
+    /**
      * Empty {@link LinkOption} array.
      *
      * @since 2.8.0
@@ -141,6 +155,13 @@ public final class PathUtils {
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = new OpenOption[0];
+
+    /**
+     * Empty {@link Path} array.
+     *
+     * @since 2.9.0
+     */
+    public static final Path[] EMPTY_PATH_ARRAY = new Path[0];
 
     /**
      * Accumulates file tree information in a {@link AccumulatorPathVisitor}.
@@ -258,6 +279,40 @@ public final class PathUtils {
      */
     public static PathCounters countDirectory(final Path directory) throws IOException {
         return visitFileTree(new CountingPathVisitor(Counters.longPathCounters()), directory).getPathCounters();
+    }
+
+    /**
+     * Creates the parent directories for the given {@code path}. 
+     * <p>
+     * Returns the {@code path}'s parent directory if it already exists.
+     * </p>
+     *
+     * @param path The path to a file (or directory).
+     * @param attrs An optional list of file attributes to set atomically when creating the directories.
+     * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
+        final Path parent = path.getParent();
+        if (parent == null) {
+            return null;
+        }
+        if (Files.isDirectory(parent)) {
+            return parent;
+        }
+        return Files.createDirectories(parent, attrs);
+    }
+    
+    /**
+     * Gets the current directory.
+     *
+     * @return the current directory.
+     *
+     * @since 2.9.0
+     */
+    public static Path current() {
+        return Paths.get("");
     }
 
     /**
@@ -535,6 +590,55 @@ public final class PathUtils {
     }
 
     /**
+     * <p>
+     * Applies an {@link IOFileFilter} to the provided {@link File} objects. The resulting array is a subset of the
+     * original file list that matches the provided filter.
+     * </p>
+     *
+     * <p>
+     * The {@link Set} returned by this method is not guaranteed to be thread safe.
+     * </p>
+     *
+     * <pre>
+     * Set&lt;File&gt; allFiles = ...
+     * Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     *     FileFilterUtils.suffixFileFilter(".java"));
+     * </pre>
+     *
+     * @param filter the filter to apply to the set of files.
+     * @param paths the array of files to apply the filter to.
+     *
+     * @return a subset of <code>files</code> that is accepted by the file filter.
+     * @throws IllegalArgumentException if the filter is {@code null} or <code>files</code> contains a {@code null}
+     *         value.
+     *
+     * @since 2.9.0
+     */
+    public static Path[] filter(final PathFilter filter, final Path... paths) {
+        Objects.requireNonNull(filter, "filter");
+        if (paths == null) {
+            return EMPTY_PATH_ARRAY;
+        }
+        return filterPaths(filter, Arrays.stream(paths), Collectors.toList()).toArray(EMPTY_PATH_ARRAY);
+    }
+
+    private static <R, A> R filterPaths(final PathFilter filter, final Stream<Path> stream,
+        final Collector<? super Path, A, R> collector) {
+        Objects.requireNonNull(filter, "filter");
+        Objects.requireNonNull(collector, "collector");
+        if (stream == null) {
+            return Stream.<Path>empty().collect(collector);
+        }
+        return stream.filter(p -> {
+            try {
+                return p != null && filter.accept(p, readBasicFileAttributes(p)) == FileVisitResult.CONTINUE;
+            } catch (final IOException e) {
+                return false;
+            }
+        }).collect(collector);
+    }
+
+    /**
      * Reads the access control list from a file attribute view.
      *
      * @param sourcePath the path to the file.
@@ -587,6 +691,40 @@ public final class PathUtils {
     }
 
     /**
+     * Tests if the specified {@code Path} is newer than the specified time reference.
+     *
+     * @param file the {@code Path} of which the modification date must be compared
+     * @param timeMillis the time reference measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970)
+     * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and
+     *        has been modified after the given time reference.
+     * @return true if the {@code Path} exists and has been modified after the given time reference.
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the file is {@code null}
+     * @since 2.9.0
+     */
+    public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options)
+        throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (!Files.exists(file)) {
+            return false;
+        }
+        return Files.getLastModifiedTime(file, options).toMillis() > timeMillis;
+    }
+
+    /**
+     * Creates a new DirectoryStream for Paths rooted at the given directory.
+     *
+     * @param dir the path to the directory to stream.
+     * @param pathFilter the directory stream filter.
+     * @return a new instance.
+     * @throws IOException if an I/O error occurs.
+     */
+    public static DirectoryStream<Path> newDirectoryStream(final Path dir, final PathFilter pathFilter)
+        throws IOException {
+        return Files.newDirectoryStream(dir, new DirectoryStreamFilter(pathFilter));
+    }
+
+    /**
      * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      *
      * @param options the array to test
@@ -602,6 +740,35 @@ public final class PathUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);}
+     *
+     * @param path the path to read.
+     * @return the path attributes.
+     * @throws IOException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {
+        return Files.readAttributes(path, BasicFileAttributes.class);
+    }
+
+    /**
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);} while wrapping {@link IOException}
+     * as {@link IllegalStateException}.
+     *
+     * @param path the path to read.
+     * @return the path attributes.
+     * @throws IllegalStateException if an I/O error occurs
+     * @since 2.9.0
+     */
+    public static BasicFileAttributes readBasicFileAttributesQuietly(final Path path) {
+        try {
+            return readBasicFileAttributes(path);
+        } catch (final IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
@@ -741,6 +908,24 @@ public final class PathUtils {
     public static <T extends FileVisitor<? super Path>> T visitFileTree(final T visitor, final URI uri)
         throws IOException {
         return visitFileTree(visitor, Paths.get(uri));
+    }
+
+    /**
+     * Returns a stream of filtered paths.
+     *
+     * @param start the start path
+     * @param pathFilter the path filter
+     * @param maxDepth the maximum depth of directories to walk.
+     * @param readAttributes whether to call the filters with file attributes (false passes null).
+     * @param options the options to configure the walk.
+     * @return a filtered stream of paths.
+     * @throws IOException if an I/O error is thrown when accessing the starting file.
+     * @since 2.9.0
+     */
+    public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth,
+        final boolean readAttributes, final FileVisitOption... options) throws IOException {
+        return Files.walk(start, maxDepth, options).filter(path -> pathFilter.accept(path,
+            readAttributes ? readBasicFileAttributesQuietly(path) : null) == FileVisitResult.CONTINUE);
     }
 
     /**

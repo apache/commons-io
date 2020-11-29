@@ -18,7 +18,11 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.IOCase;
 
@@ -27,25 +31,46 @@ import org.apache.commons.io.IOCase;
  * <p>
  * For example, to print all files and directories in the
  * current directory whose name is <code>Test</code>:
- *
+ * </p>
+ * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list( new NameFileFilter("Test") );
- * for ( int i = 0; i &lt; files.length; i++ ) {
- *     System.out.println(files[i]);
+ * String[] files = dir.list(new NameFileFilter("Test"));
+ * for (String file : files) {
+ *     System.out.println(file);
  * }
  * </pre>
  *
- * @since 1.0
+ * <h2>Using NIO</h2>
+ * <pre>
+ * final Path dir = Paths.get("");
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(new NameFileFilter("Test"));
+ * //
+ * // Walk one dir
+ * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getFileList());
+ * //
+ * visitor.getPathCounters().reset();
+ * //
+ * // Walk dir tree
+ * Files.<b>walkFileTree</b>(dir, visitor);
+ * System.out.println(visitor.getPathCounters());
+ * System.out.println(visitor.getDirList());
+ * System.out.println(visitor.getFileList());
+ * </pre>
  *
+ * @since 1.0
  * @see FileFilterUtils#nameFileFilter(String)
  * @see FileFilterUtils#nameFileFilter(String, IOCase)
  */
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 176844364689077340L;
+
     /** The file names to search for */
     private final String[] names;
+
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
 
@@ -73,7 +98,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The list of names must not be null");
         }
         this.names = names.toArray(EMPTY_STRING_ARRAY);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
     /**
@@ -83,7 +108,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * @throws IllegalArgumentException if the name is null
      */
     public NameFileFilter(final String name) {
-        this(name, null);
+        this(name, IOCase.SENSITIVE);
     }
 
     /**
@@ -91,12 +116,13 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
+     * </p>
      *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
     public NameFileFilter(final String... names) {
-        this(names, null);
+        this(names, IOCase.SENSITIVE);
     }
 
     /**
@@ -111,7 +137,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
             throw new IllegalArgumentException("The wildcard must not be null");
         }
         this.names = new String[] {name};
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
     /**
@@ -127,10 +153,9 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
         }
         this.names = new String[names.length];
         System.arraycopy(names, 0, this.names, 0, names.length);
-        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+        this.caseSensitivity = toIOCase(caseSensitivity);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Checks to see if the file name matches.
      *
@@ -139,13 +164,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File file) {
-        final String name = file.getName();
-        for (final String name2 : this.names) {
-            if (caseSensitivity.checkEquals(name, name2)) {
-                return true;
-            }
-        }
-        return false;
+        return acceptBaseName(file.getName());
     }
 
     /**
@@ -157,12 +176,32 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public boolean accept(final File dir, final String name) {
-        for (final String name2 : names) {
-            if (caseSensitivity.checkEquals(name, name2)) {
+        return acceptBaseName(name);
+    }
+
+    /**
+     * Checks to see if the file name matches.
+     * @param file  the File to check
+     *
+     * @return true if the file name matches
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        return toFileVisitResult(acceptBaseName(Objects.toString(file.getFileName(), null)), file);
+    }
+
+    private boolean acceptBaseName(final String baseName) {
+        for (final String testName : names) {
+            if (caseSensitivity.checkEquals(baseName, testName)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private IOCase toIOCase(final IOCase caseSensitivity) {
+        return caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
     }
 
     /**

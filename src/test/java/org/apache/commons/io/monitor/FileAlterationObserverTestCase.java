@@ -73,9 +73,8 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
     @Test
     public void testToString() {
         final File file = new File("/foo");
-        FileAlterationObserver observer = null;
 
-        observer = new FileAlterationObserver(file);
+        FileAlterationObserver observer = new FileAlterationObserver(file);
         assertEquals("FileAlterationObserver[file='" + file.getPath() +  "', listeners=0]",
                 observer.toString());
 

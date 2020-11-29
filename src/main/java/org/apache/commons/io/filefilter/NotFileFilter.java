@@ -18,17 +18,20 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * This filter produces a logical NOT of the filters specified.
  *
  * @since 1.0
- *
  * @see FileFilterUtils#notFileFilter(IOFileFilter)
  */
 public class NotFileFilter extends AbstractFileFilter implements Serializable {
 
     private static final long serialVersionUID = 6131563330944994230L;
+
     /** The filter */
     private final IOFileFilter filter;
 
@@ -69,13 +72,30 @@ public class NotFileFilter extends AbstractFileFilter implements Serializable {
     }
 
     /**
+     * Returns the logical NOT of the underlying filter's return value for the same File.
+     * @param file the File to check
+     *
+     * @return true if the filter returns false
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        return not(filter.accept(file, attributes));
+    }
+
+    private FileVisitResult not(final FileVisitResult accept) {
+        return accept == FileVisitResult.CONTINUE ? FileVisitResult.TERMINATE
+            : FileVisitResult.CONTINUE;
+    }
+
+    /**
      * Provide a String representation of this file filter.
      *
      * @return a String representation
      */
     @Override
     public String toString() {
-        return super.toString() + "(" + filter.toString() + ")";
+        return "NOT (" + filter.toString() + ")";
     }
 
 }

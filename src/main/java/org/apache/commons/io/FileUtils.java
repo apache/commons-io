@@ -45,19 +45,23 @@ import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
+import org.apache.commons.io.file.AccumulatorPathVisitor;
 import org.apache.commons.io.file.Counters;
+import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathUtils;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.FileEqualsFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -236,15 +240,17 @@ public class FileUtils {
      * Checks that the given {@code File} exists and is a directory.
      *
      * @param directory The {@code File} to check.
+     * @return the given directory.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
      */
-    private static void checkDirectory(final File directory) {
+    private static File checkDirectory(final File directory) {
         if (!directory.exists()) {
             throw new IllegalArgumentException(directory + " does not exist");
         }
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory + " is not a directory");
         }
+        return directory;
     }
 
     /**
@@ -1583,66 +1589,6 @@ public class FileUtils {
     }
 
     /**
-     * Finds files within a given directory (and optionally its
-     * subdirectories). All files found are filtered by an IOFileFilter.
-     *
-     * @param files                 the collection of files found.
-     * @param directory             the directory to search in.
-     * @param filter                the filter to apply to files and directories.
-     * @param includeSubDirectories indicates if will include the subdirectories themselves
-     */
-    private static void innerListFiles(final Collection<File> files, final File directory,
-                                       final IOFileFilter filter, final boolean includeSubDirectories) {
-        final File[] found = directory.listFiles((FileFilter) filter);
-
-        if (found != null) {
-            for (final File file : found) {
-                if (file.isDirectory()) {
-                    if (includeSubDirectories) {
-                        files.add(file);
-                    }
-                    innerListFiles(files, file, filter, includeSubDirectories);
-                } else {
-                    files.add(file);
-                }
-            }
-        }
-    }
-
-    /**
-     * Finds files within a given directory (and optionally its
-     * subdirectories). All files found are filtered by an IOFileFilter.
-     *
-     * @param directory             the directory to search in
-     * @param fileFilter            filter to apply when finding files.
-     * @param dirFilter             optional filter to apply when finding subdirectories.
-     *                              If this parameter is {@code null}, subdirectories will not be included in the
-     *                              search. Use TrueFileFilter.INSTANCE to match all directories.
-     * @param includeSubDirectories indicates if will include the subdirectories themselves
-     * @return a collection of java.io.File with the matching files
-     * @see org.apache.commons.io.FileUtils#listFiles
-     * @see org.apache.commons.io.filefilter.FileFilterUtils
-     * @see org.apache.commons.io.filefilter.NameFileFilter
-     */
-    private static Collection<File> innerListFilesOrDirectories(
-            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter,
-            final boolean includeSubDirectories) {
-        validateListFilesParameters(directory, fileFilter);
-
-        final IOFileFilter effFileFilter = setUpEffectiveFileFilter(fileFilter);
-        final IOFileFilter effDirFilter = setUpEffectiveDirFilter(dirFilter);
-
-        //Find files
-        final Collection<File> files = new java.util.LinkedList<>();
-        if (includeSubDirectories) {
-            files.add(directory);
-        }
-        innerListFiles(files, directory,
-                FileFilterUtils.or(effFileFilter, effDirFilter), includeSubDirectories);
-        return files;
-    }
-
-    /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the current time.
      *
@@ -2006,12 +1952,14 @@ public class FileUtils {
     }
 
     /**
-     * Allows iteration over the files in given directory (and optionally
+     * Iterates over the files in given directory (and optionally
      * its subdirectories).
      * <p>
-     * All files found are filtered by an IOFileFilter. This method is
-     * based on {@link #listFiles(File, IOFileFilter, IOFileFilter)},
-     * which supports Iterable ('foreach' loop).
+     * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
+     * </p>
+     * <p>
+     * <p>
+     * All files found are filtered by an IOFileFilter.
      * </p>
      *
      * @param directory  the directory to search in
@@ -2024,16 +1972,18 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      * @since 1.2
      */
-    public static Iterator<File> iterateFiles(
-            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+    public static Iterator<File> iterateFiles(final File directory, final IOFileFilter fileFilter,
+        final IOFileFilter dirFilter) {
         return listFiles(directory, fileFilter, dirFilter).iterator();
     }
 
     /**
-     * Allows iteration over the files in a given directory (and optionally
-     * its subdirectories) which match an array of extensions. This method
-     * is based on {@link #listFiles(File, String[], boolean)},
-     * which supports Iterable ('foreach' loop).
+     * Iterates over the files in a given directory (and optionally
+     * its subdirectories) which match an array of extensions.
+     * <p>
+     * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
+     * </p>
+     * <p>
      *
      * @param directory  the directory to search in
      * @param extensions an array of extensions, ex. {"java","xml"}. If this
@@ -2042,18 +1992,23 @@ public class FileUtils {
      * @return an iterator of java.io.File with the matching files
      * @since 1.2
      */
-    public static Iterator<File> iterateFiles(
-            final File directory, final String[] extensions, final boolean recursive) {
-        return listFiles(directory, extensions, recursive).iterator();
+    public static Iterator<File> iterateFiles(final File directory, final String[] extensions,
+        final boolean recursive) {
+        try {
+            return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
+        } catch (final IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
-     * Allows iteration over the files in given directory (and optionally
+     * Iterates over the files in given directory (and optionally
      * its subdirectories).
      * <p>
-     * All files found are filtered by an IOFileFilter. This method is
-     * based on {@link #listFilesAndDirs(File, IOFileFilter, IOFileFilter)},
-     * which supports Iterable ('foreach' loop).
+     * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
+     * </p>
+     * <p>
+     * All files found are filtered by an IOFileFilter.
      * </p>
      * <p>
      * The resulting iterator includes the subdirectories themselves.
@@ -2070,7 +2025,7 @@ public class FileUtils {
      * @since 2.2
      */
     public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
-                                                     final IOFileFilter dirFilter) {
+        final IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
     }
 
@@ -2132,6 +2087,17 @@ public class FileUtils {
         }
     }
 
+    private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter,
+        final IOFileFilter dirFilter) throws IOException {
+        final boolean isDirFilterSet = dirFilter != null;
+        final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
+        final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
+        final AccumulatorPathVisitor visitor = new AccumulatorPathVisitor(Counters.noopPathCounters(), fileFilter,
+            dirPathFilter);
+        Files.walkFileTree(directory.toPath(), Collections.emptySet(), toMaxDepth(isDirFilterSet), visitor);
+        return visitor;
+    }
+
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
@@ -2162,8 +2128,13 @@ public class FileUtils {
      * @see org.apache.commons.io.filefilter.NameFileFilter
      */
     public static Collection<File> listFiles(
-            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, false);
+        final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+        try {
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
+            return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
+        } catch (final IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     /**
@@ -2176,20 +2147,13 @@ public class FileUtils {
      * @param recursive  if true all subdirectories are searched as well
      * @return a collection of java.io.File with the matching files
      */
-    public static Collection<File> listFiles(
-            final File directory, final String[] extensions, final boolean recursive) {
-        IOFileFilter filter;
-        if (extensions == null) {
-            filter = TrueFileFilter.INSTANCE;
-        } else {
-            final String[] suffixes = toSuffixes(extensions);
-            filter = new SuffixFileFilter(suffixes);
+    public static Collection<File> listFiles(final File directory, final String[] extensions, final boolean recursive) {
+        try {
+            return toList(streamFiles(directory, recursive, extensions));
+        } catch (final IOException e) {
+            throw new IllegalArgumentException(e);
         }
-        return listFiles(directory, filter,
-                recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE);
     }
-
-
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
@@ -2210,8 +2174,15 @@ public class FileUtils {
      * @since 2.2
      */
     public static Collection<File> listFilesAndDirs(
-            final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
-        return innerListFilesOrDirectories(directory, fileFilter, dirFilter, true);
+        final File directory, final IOFileFilter fileFilter, final IOFileFilter dirFilter) {
+        try {
+            final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
+            final List<Path> list = visitor.getFileList();
+            list.addAll(visitor.getDirList());
+            return list.stream().map(Path::toFile).collect(Collectors.toList());
+        } catch (final IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
@@ -2408,7 +2379,6 @@ public class FileUtils {
         return new FileInputStream(file);
     }
 
-
     /**
      * Opens a {@link FileOutputStream} for the specified file, checking and
      * creating the parent directory if it does not exist.
@@ -2510,6 +2480,7 @@ public class FileUtils {
         return readFileToString(file, Charset.defaultCharset());
     }
 
+
     /**
      * Reads the contents of a file into a String.
      * The file is always closed.
@@ -2601,27 +2572,6 @@ public class FileUtils {
     }
 
     /**
-     * Returns a filter that accepts directories in addition to the {@link File} objects accepted by the given filter.
-     *
-     * @param dirFilter a base filter to add to
-     * @return a filter that accepts directories
-     */
-    private static IOFileFilter setUpEffectiveDirFilter(final IOFileFilter dirFilter) {
-        return dirFilter == null ? FalseFileFilter.INSTANCE : FileFilterUtils.and(dirFilter,
-                DirectoryFileFilter.INSTANCE);
-    }
-
-    /**
-     * Returns a filter that accepts files in addition to the {@link File} objects accepted by the given filter.
-     *
-     * @param fileFilter a base filter to add to
-     * @return a filter that accepts files
-     */
-    private static IOFileFilter setUpEffectiveFileFilter(final IOFileFilter fileFilter) {
-        return FileFilterUtils.and(fileFilter, FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
-    }
-
-    /**
      * Returns the size of the specified file or directory. If the provided
      * {@link File} is a regular file, then the file's length is returned.
      * If the argument is a directory, then the size of the directory is
@@ -2645,17 +2595,14 @@ public class FileUtils {
      * @since 2.0
      */
     public static long sizeOf(final File file) {
-
         if (!file.exists()) {
             final String message = file + " does not exist";
             throw new IllegalArgumentException(message);
         }
-
         if (file.isDirectory()) {
             return sizeOfDirectory0(file); // private method; expects directory
         }
         return file.length();
-
     }
 
     /**
@@ -2689,17 +2636,14 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
-
         if (!file.exists()) {
             final String message = file + " does not exist";
             throw new IllegalArgumentException(message);
         }
-
         if (file.isDirectory()) {
             return sizeOfDirectoryBig0(file); // internal method
         }
         return BigInteger.valueOf(file.length());
-
     }
 
     /**
@@ -2728,8 +2672,7 @@ public class FileUtils {
      * @throws NullPointerException if the directory is {@code null}
      */
     public static long sizeOfDirectory(final File directory) {
-        checkDirectory(directory);
-        return sizeOfDirectory0(directory);
+        return sizeOfDirectory0(checkDirectory(directory));
     }
 
     /**
@@ -2765,8 +2708,7 @@ public class FileUtils {
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        checkDirectory(directory);
-        return sizeOfDirectoryBig0(directory);
+        return sizeOfDirectoryBig0(checkDirectory(directory));
     }
 
     /**
@@ -2789,6 +2731,30 @@ public class FileUtils {
         }
 
         return size;
+    }
+
+    /**
+     * Streams over the files in a given directory (and optionally
+     * its subdirectories) which match an array of extensions.
+     *
+     * @param directory  the directory to search in
+     * @param recursive  if true all subdirectories are searched as well
+     * @param extensions an array of extensions, ex. {"java","xml"}. If this
+     *                   parameter is {@code null}, all files are returned.
+     * @return an iterator of java.io.File with the matching files
+     * @throws IOException if an I/O error is thrown when accessing the starting file.
+     * @since 2.9.0
+     */
+    public static Stream<File> streamFiles(final File directory, final boolean recursive, final String... extensions)
+        throws IOException {
+        IOFileFilter filter;
+        if (extensions == null) {
+            filter = FileFileFilter.INSTANCE;
+        } else {
+            filter = FileFileFilter.INSTANCE.and(new SuffixFileFilter(toSuffixes(extensions)));
+        }
+        // We use filters that do not need file attributes so pass false.
+        return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false).map(Path::toFile);
     }
 
     /**
@@ -2854,6 +2820,20 @@ public class FileUtils {
         return files;
     }
 
+    private static List<File> toList(final Stream<File> stream) {
+        return stream.collect(Collectors.toList());
+    }
+
+    /**
+     * Converts whether or not to recurse into a recursion max depth.
+     *
+     * @param recursive whether or not to recurse 
+     * @return the recursion depth
+     */
+    private static int toMaxDepth(final boolean recursive) {
+        return recursive ? Integer.MAX_VALUE : 1;
+    }
+
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
@@ -2911,23 +2891,6 @@ public class FileUtils {
         }
 
         return urls;
-    }
-
-    /**
-     * Validates the given arguments.
-     * <ul>
-     * <li>Throws {@link IllegalArgumentException} if {@code directory} is not a directory</li>
-     * <li>Throws {@link NullPointerException} if {@code fileFilter} is null</li>
-     * </ul>
-     *
-     * @param directory  The File to test
-     * @param fileFilter The IOFileFilter to test
-     */
-    private static void validateListFilesParameters(final File directory, final IOFileFilter fileFilter) {
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter 'directory' is not a directory: " + directory);
-        }
-        Objects.requireNonNull(fileFilter, "fileFilter");
     }
 
     /**
@@ -3435,6 +3398,6 @@ public class FileUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public FileUtils() { //NOSONAR
-        super();
+        
     }
 }

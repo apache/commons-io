@@ -18,15 +18,19 @@ package org.apache.commons.io.filefilter;
 
 import java.io.File;
 import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * A file filter that always returns true.
  *
  * @since 1.0
- *
  * @see FileFilterUtils#trueFileFilter()
  */
 public class TrueFileFilter implements IOFileFilter, Serializable {
+
+    private static final String TO_STRING = Boolean.TRUE.toString();
 
     private static final long serialVersionUID = 8782512160909720199L;
 
@@ -72,4 +76,37 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
         return true;
     }
 
+    /**
+     * Returns true.
+     * @param file the file to check (ignored)
+     *
+     * @return true
+     * @since 2.9.0
+     */
+    @Override
+    public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public IOFileFilter negate() {
+        return FalseFileFilter.INSTANCE;
+    }
+
+    @Override
+    public IOFileFilter or(final IOFileFilter fileFilter) {
+        // TRUE OR expression <=> true 
+        return INSTANCE;
+    }
+
+    @Override
+    public IOFileFilter and(final IOFileFilter fileFilter) {
+        // TRUE AND expression <=> expression
+        return fileFilter;
+    }
+
+    @Override
+    public String toString() {
+        return TO_STRING;
+    }
 }

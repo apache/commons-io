@@ -52,7 +52,7 @@ file comparators, endian transformation classes, and much more.
     <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-io.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-io.git</url>
-    <tag>commons-io-2.8.0</tag>
+    <tag>rel/commons-io-2.9.0</tag>
   </scm>
 
   <developers>
@@ -249,9 +249,15 @@ file comparators, endian transformation classes, and much more.
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.7.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.5.13</version>
+      <version>3.6.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -273,9 +279,9 @@ file comparators, endian transformation classes, and much more.
     <maven.compiler.target>1.8</maven.compiler.target>
     <commons.componentid>io</commons.componentid>
     <commons.module.name>org.apache.commons.io</commons.module.name>
-    <commons.rc.version>RC2</commons.rc.version>
-    <commons.bc.version>2.7</commons.bc.version>
-    <commons.release.version>2.8.0</commons.release.version>
+    <commons.rc.version>RC1</commons.rc.version>
+    <commons.bc.version>2.8.0</commons.bc.version>
+    <commons.release.version>2.9.0</commons.release.version>
     <commons.release.desc>(requires Java 8)</commons.release.desc>
     <commons.jira.id>IO</commons.jira.id>
     <commons.jira.pid>12310477</commons.jira.pid>
@@ -298,11 +304,13 @@ file comparators, endian transformation classes, and much more.
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <checkstyle.plugin.version>3.1.1</checkstyle.plugin.version>
     <commons.jacoco.version>0.8.6</commons.jacoco.version>
-    <commons.surefire.version>2.22.2</commons.surefire.version>
-    <commons.japicmp.version>0.14.3</commons.japicmp.version>
-    <spotbugs.plugin.version>4.1.3</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.1.3</spotbugs.impl.version>    
+    <commons.surefire.version>3.0.0-M5</commons.surefire.version>
+    <commons.japicmp.version>0.14.4</commons.japicmp.version>
+    <spotbugs.plugin.version>4.1.4</spotbugs.plugin.version>
+    <spotbugs.impl.version>4.1.4</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
+    <!-- generate report even if there are binary incompatible changes -->
+    <commons.japicmp.breakBuildOnBinaryIncompatibleModifications>false</commons.japicmp.breakBuildOnBinaryIncompatibleModifications>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>    
@@ -317,6 +325,7 @@ file comparators, endian transformation classes, and much more.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
+          <version>0.13</version>
           <configuration>
             <excludes>
               <exclude>src/test/resources/**/*.bin</exclude>
@@ -432,6 +441,22 @@ file comparators, endian transformation classes, and much more.
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+        <configuration>
+          <parameter>
+            <overrideCompatibilityChangeParameters>
+              <overrideCompatibilityChangeParameter>
+                <compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
+                <binaryCompatible>true</binaryCompatible>
+                <sourceCompatible>true</sourceCompatible>
+                <semanticVersionLevel>PATCH</semanticVersionLevel>
+              </overrideCompatibilityChangeParameter>
+            </overrideCompatibilityChangeParameters>
+          </parameter>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -454,6 +479,22 @@ file comparators, endian transformation classes, and much more.
           <excludeFilterFile>${basedir}/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+        <configuration>
+          <parameter>
+            <overrideCompatibilityChangeParameters>
+              <overrideCompatibilityChangeParameter>
+                <compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
+                <binaryCompatible>true</binaryCompatible>
+                <sourceCompatible>true</sourceCompatible>
+                <semanticVersionLevel>PATCH</semanticVersionLevel>
+              </overrideCompatibilityChangeParameter>
+            </overrideCompatibilityChangeParameters>
+          </parameter>
+        </configuration>
+      </plugin>    
     </plugins>
   </reporting>
   <profiles>
@@ -469,6 +510,7 @@ file comparators, endian transformation classes, and much more.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>prepare-checkout</id>

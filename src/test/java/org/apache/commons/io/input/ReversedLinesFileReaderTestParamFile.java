@@ -49,8 +49,8 @@ public class ReversedLinesFileReaderTestParamFile {
 
     public static Stream<Arguments> testDataIntegrityWithBufferedReader() throws IOException, URISyntaxException {
         // Make a file using the default encoding.
-        Path sourcePath = TestResources.getPath("test-file-utf8-win-linebr.bin");
-        Path targetPath = Files.createTempFile("ReversedLinesFileReaderTestParamFile", ".bin");
+        final Path sourcePath = TestResources.getPath("test-file-utf8-win-linebr.bin");
+        final Path targetPath = Files.createTempFile("ReversedLinesFileReaderTestParamFile", ".bin");
         try (Reader input = Files.newBufferedReader(sourcePath, StandardCharsets.UTF_8);
                 Writer output = Files.newBufferedWriter(targetPath, Charset.defaultCharset())) {
             IOUtils.copyLarge(input, output);
