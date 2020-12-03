@@ -92,7 +92,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update mockito-core from 3.5.9 to 3.6.0, #152, #155, #157, #166, #167.
+        Update mockito-core from 3.5.9 to 3.6.28, #152, #155, #157, #166, #167, #169.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
