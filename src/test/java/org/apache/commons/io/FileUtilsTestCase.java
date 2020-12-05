@@ -1465,6 +1465,24 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testForceDeleteReadOnlyFile() throws Exception {
+        File destination = File.createTempFile("test-", ".txt");
+        assertTrue(destination.setReadOnly());
+        assertTrue(destination.canRead());
+        assertFalse(destination.canWrite());
+        // sanity check
+        assertTrue(destination.delete());
+        destination = File.createTempFile("test-", ".txt");
+        // real test
+        assertTrue(destination.setReadOnly());
+        assertTrue(destination.canRead());
+        assertFalse(destination.canWrite());
+        assertTrue(destination.exists(), "File doesn't exist to delete");
+        FileUtils.forceDelete(destination);
+        assertTrue(!destination.exists(), "Check deletion");
+    }
+
+    @Test
     public void testForceMkdir() throws Exception {
         // Tests with existing directory
         FileUtils.forceMkdir(temporaryFolder);
