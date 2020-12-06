@@ -481,7 +481,7 @@ public final class PathUtils {
         }
         final PathCounters pathCounts = Counters.longPathCounters();
         final boolean exists = Files.exists(file, linkOptions);
-        final long size = exists ? Files.size(file) : 0;
+        final long size = exists && !Files.isSymbolicLink(file) ? Files.size(file) : 0;
         if (overrideReadOnly(deleteOptions) && exists) {
             setReadOnly(file, false, linkOptions);
         }

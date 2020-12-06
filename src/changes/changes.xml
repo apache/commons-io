@@ -74,6 +74,10 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
         FileUtils.forceDelete(File) actually forces deletion of read-only files as it did in version 2.6.
       </action>
+      <action issue="IO-692" dev="ebourg" type="fix" due-to="Matthew Rooney, Emmanuel Bourg">
+        PathUtils.deleteFile() no longer throws a NoSuchFileException when applied on a symbolic link pointing
+        to a file that doesn't exist.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
