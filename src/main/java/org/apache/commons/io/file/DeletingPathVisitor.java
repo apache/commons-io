@@ -55,6 +55,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     private final String[] skip;
     private final boolean overrideReadOnly;
+    private final LinkOption[] linkOptions;
 
     /**
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
@@ -70,6 +71,8 @@ public class DeletingPathVisitor extends CountingPathVisitor {
         Arrays.sort(temp);
         this.skip = temp;
         this.overrideReadOnly = StandardDeleteOption.overrideReadOnly(deleteOption);
+        // TODO Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
+        this.linkOptions = PathUtils.NOFOLLOW_LINK_OPTION_ARRAY.clone();
     }
 
     /**
@@ -133,10 +136,9 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+        if (accept(file) && Files.exists(file, linkOptions)) {
             if (overrideReadOnly) {
-                PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+                PathUtils.setReadOnly(file, false, linkOptions);
             }
             Files.deleteIfExists(file);
         }
