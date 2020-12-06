@@ -16,9 +16,10 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.output.CloseShieldOutputStream.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -45,7 +46,7 @@ public class CloseShieldOutputStreamTest {
                 closed = true;
             }
         };
-        shielded = new CloseShieldOutputStream(original);
+        shielded = dontClose(original);
         closed = false;
     }
 
@@ -53,12 +54,7 @@ public class CloseShieldOutputStreamTest {
     public void testClose() throws IOException {
         shielded.close();
         assertFalse(closed, "closed");
-        try {
-            shielded.write('x');
-            fail("write(b)");
-        } catch (final IOException ignore) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> shielded.write('x'), "write(b)");
         original.write('y');
         assertEquals(1, original.size());
         assertEquals('y', original.toByteArray()[0]);

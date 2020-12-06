@@ -35,7 +35,11 @@ public class CloseShieldInputStream extends ProxyInputStream {
      * closed.
      *
      * @param in underlying input stream
+     * @deprecated Using this constructor prevents IDEs from warning if
+     *             the underlying input stream is never closed.
+     *             Use {@link #dontClose(InputStream)} instead.
      */
+    @Deprecated
     public CloseShieldInputStream(final InputStream in) {
         super(in);
     }
@@ -48,6 +52,18 @@ public class CloseShieldInputStream extends ProxyInputStream {
     @Override
     public void close() {
         in = ClosedInputStream.CLOSED_INPUT_STREAM;
+    }
+
+    /**
+     * Creates a proxy that shields the given input stream from being
+     * closed.
+     *
+     * @param in underlying input stream
+     * @return the created proxy
+     * @since 2.9.0
+     */
+    public static CloseShieldInputStream dontClose(final InputStream in) {
+        return new CloseShieldInputStream(in);
     }
 
 }

@@ -16,8 +16,9 @@
  */
 package org.apache.commons.io.output;
 
+import static org.apache.commons.io.output.CloseShieldWriter.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -40,19 +41,14 @@ public class CloseShieldWriterTest {
     @BeforeEach
     public void setUp() {
         original = spy(new StringBuilderWriter());
-        shielded = new CloseShieldWriter(original);
+        shielded = dontClose(original);
     }
 
     @Test
     public void testClose() throws IOException {
         shielded.close();
         verify(original, never()).close();
-        try {
-            shielded.write('x');
-            fail("write(c)");
-        } catch (final IOException ignore) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> shielded.write('x'), "write(c)");
         original.write('y');
         assertEquals(1, original.getBuilder().length());
         assertEquals('y', original.toString().charAt(0));

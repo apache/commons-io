@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.input.CloseShieldInputStream.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -48,7 +49,7 @@ public class CloseShieldInputStreamTest {
                 closed = true;
             }
         };
-        shielded = new CloseShieldInputStream(original);
+        shielded = dontClose(original);
         closed = false;
     }
 
