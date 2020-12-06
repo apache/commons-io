@@ -118,12 +118,13 @@ public class FileUtilsTestCase {
         }
     }
 
+    /** Test data. */
     private static final long DATE3 = 1000000002000L;
 
+    /** Test data. */
     private static final long DATE2 = 1000000001000L;
 
-    // Test data
-
+    /** Test data. */
     private static final long DATE1 = 1000000000000L;
 
     /**
@@ -1470,7 +1471,7 @@ public class FileUtilsTestCase {
         assertTrue(destination.setReadOnly());
         assertTrue(destination.canRead());
         assertFalse(destination.canWrite());
-        // sanity check
+        // sanity check that File.delete() in deletes read-only files.
         assertTrue(destination.delete());
         destination = File.createTempFile("test-", ".txt");
         // real test

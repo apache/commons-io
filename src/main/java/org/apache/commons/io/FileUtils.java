@@ -60,6 +60,7 @@ import org.apache.commons.io.file.AccumulatorPathVisitor;
 import org.apache.commons.io.file.Counters;
 import org.apache.commons.io.file.PathFilter;
 import org.apache.commons.io.file.PathUtils;
+import org.apache.commons.io.file.StandardDeleteOption;
 import org.apache.commons.io.filefilter.FileEqualsFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -1410,14 +1411,13 @@ public class FileUtils {
     }
 
     /**
-     * Deletes a file. If file is a directory, delete it and all sub-directories.
+     * Deletes a file or directory. For a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
      * </p>
      * <ul>
      * <li>The directory does not have to be empty.</li>
-     * <li>You get exceptions when a file or directory cannot be delete;
-     * {@link java.io.File#delete()} returns a boolean.</li>
+     * <li>You get an exception when a file or directory cannot be deleted.</li>
      * </ul>
      *
      * @param file file or directory to delete, must not be {@code null}
@@ -1428,7 +1428,7 @@ public class FileUtils {
     public static void forceDelete(final File file) throws IOException {
         final Counters.PathCounters deleteCounters;
         try {
-            deleteCounters = PathUtils.delete(file.toPath());
+            deleteCounters = PathUtils.delete(file.toPath(), StandardDeleteOption.OVERRIDE_READ_ONLY);
         } catch (final IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }
