@@ -1216,9 +1216,7 @@ public class FileUtils {
         }
 
         if (!directory.delete()) {
-            final String message =
-                    "Unable to delete directory " + directory + ".";
-            throw new IOException(message);
+            throw new IOException("Unable to delete directory " + directory + ".");
         }
     }
 
