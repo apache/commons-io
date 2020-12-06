@@ -238,55 +238,6 @@ public class FileUtils {
     }
 
     /**
-     * Checks that the given {@code File} exists and is a directory.
-     *
-     * @param directory The {@code File} to check.
-     * @return the given directory.
-     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
-     */
-    private static File checkDirectory(final File directory) {
-        if (!directory.exists()) {
-            throw new IllegalArgumentException(directory + " does not exist");
-        }
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory + " is not a directory");
-        }
-        return directory;
-    }
-
-    /**
-     * Checks that two file lengths are equal.
-     *
-     * @param srcFile Source file.
-     * @param destFile Destination file.
-     * @param srcLen Source file length.
-     * @param dstLen Destination file length
-     * @throws IOException Thrown when the given sizes are not equal.
-     */
-    private static void checkEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
-            throws IOException {
-        if (srcLen != dstLen) {
-            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
-                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
-        }
-    }
-
-    /**
-     * Checks requirements for file copy.
-     *
-     * @param source the source file
-     * @param destination the destination
-     * @throws FileNotFoundException if the destination does not exist
-     */
-    private static void checkFileRequirements(final File source, final File destination) throws FileNotFoundException {
-        Objects.requireNonNull(source, "source");
-        Objects.requireNonNull(destination, "target");
-        if (!source.exists()) {
-            throw new FileNotFoundException("Source '" + source + "' does not exist");
-        }
-    }
-
-    /**
      * Computes the checksum of a file using the specified checksum object.
      * Multiple files may be checked using one <code>Checksum</code> instance
      * if desired simply by reusing the same checksum object.
@@ -304,9 +255,7 @@ public class FileUtils {
      * @since 1.3
      */
     public static Checksum checksum(final File file, final Checksum checksum) throws IOException {
-        if (file.isDirectory()) {
-            throw new IllegalArgumentException("Checksums can't be computed on directories");
-        }
+        requireFile(file, "file");
         try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
             IOUtils.consume(in);
         }
@@ -717,7 +666,7 @@ public class FileUtils {
      */
     public static void copyDirectory(final File srcDir, final File destDir, final FileFilter filter,
         final boolean preserveFileDate, final CopyOption... copyOptions) throws IOException {
-        checkFileRequirements(srcDir, destDir);
+        requireFileRequirements(srcDir, destDir);
         if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
         }
@@ -875,7 +824,7 @@ public class FileUtils {
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
         throws IOException {
-        checkFileRequirements(srcFile, destFile);
+        requireFileRequirements(srcFile, destFile);
         if (srcFile.isDirectory()) {
             throw new IOException("Source '" + srcFile + "' exists but is a directory");
         }
@@ -1041,7 +990,6 @@ public class FileUtils {
         }
     }
 
-
     /**
      * Copies a files to a directory preserving each file's date.
      * <p>
@@ -1121,6 +1069,7 @@ public class FileUtils {
             copyInputStreamToFile(stream, destination);
         }
     }
+
 
     /**
      * Copies bytes from the URL <code>source</code> to a file
@@ -1291,20 +1240,12 @@ public class FileUtils {
      * @param child     the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
      * @throws IOException              if an IO error occurs while checking the files.
-     * @throws IllegalArgumentException if {@code directory} is null or not a directory.
+     * @throws IllegalArgumentException if {@code directory} is not a directory.
      * @see FilenameUtils#directoryContains(String, String)
      * @since 2.2
      */
     public static boolean directoryContains(final File directory, final File child) throws IOException {
-
-        // Fail fast against NullPointerException
-        if (directory == null) {
-            throw new IllegalArgumentException("Directory must not be null");
-        }
-
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Not a directory: " + directory);
-        }
+        requireDirectory(directory, "directory");
 
         if (child == null) {
             return false;
@@ -1399,9 +1340,9 @@ public class FileUtils {
         Files.copy(srcPath, destPath, copyOptions);
 
         // TODO IO-386: Do we still need this check?
-        checkEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
+        requireEqualSizes(srcFile, destFile, Files.size(srcPath), Files.size(destPath));
         // TODO IO-386: Do we still need this check?
-        checkEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
+        requireEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
 
         if (preserveFileDate) {
             setLastModified(srcFile, destFile);
@@ -1426,7 +1367,8 @@ public class FileUtils {
     public static void forceDelete(final File file) throws IOException {
         final Counters.PathCounters deleteCounters;
         try {
-            deleteCounters = PathUtils.delete(file.toPath(), StandardDeleteOption.OVERRIDE_READ_ONLY);
+            deleteCounters = PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY,
+                StandardDeleteOption.OVERRIDE_READ_ONLY);
         } catch (final IOException e) {
             throw new IOException("Unable to delete file: " + file, e);
         }
@@ -1713,11 +1655,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileNewer(final File file, final File reference) {
-        Objects.requireNonNull(reference, "reference");
-        if (!reference.exists()) {
-            throw new IllegalArgumentException("The reference file '"
-                    + reference + "' doesn't exist");
-        }
+        requireExists(reference, "reference");
         return isFileNewer(file, reference.lastModified());
     }
 
@@ -1882,10 +1820,7 @@ public class FileUtils {
      * @throws IllegalArgumentException if the reference file doesn't exist
      */
     public static boolean isFileOlder(final File file, final File reference) {
-        if (!Objects.requireNonNull(reference, "reference").exists()) {
-            throw new IllegalArgumentException("The reference file '"
-                    + reference + "' doesn't exist");
-        }
+        requireExists(reference, "reference");
         return isFileOlder(file, reference.lastModified());
     }
 
@@ -1955,7 +1890,6 @@ public class FileUtils {
      * <p>
      * The resulting iterator MUST be consumed in its entirety in order to close its underlying stream.
      * </p>
-     * <p>
      * <p>
      * All files found are filtered by an IOFileFilter.
      * </p>
@@ -2152,6 +2086,7 @@ public class FileUtils {
             throw new IllegalArgumentException(e);
         }
     }
+
     /**
      * Finds files within a given directory (and optionally its
      * subdirectories). All files found are filtered by an IOFileFilter.
@@ -2249,7 +2184,6 @@ public class FileUtils {
         }
         moveDirectory(src, new File(destDir, src.getName()));
     }
-
     /**
      * Moves a file.
      * <p>
@@ -2478,7 +2412,6 @@ public class FileUtils {
         return readFileToString(file, Charset.defaultCharset());
     }
 
-
     /**
      * Reads the contents of a file into a String.
      * The file is always closed.
@@ -2525,6 +2458,7 @@ public class FileUtils {
         return readLines(file, Charset.defaultCharset());
     }
 
+
     /**
      * Reads the contents of a file line by line to a List of Strings.
      * The file is always closed.
@@ -2554,6 +2488,86 @@ public class FileUtils {
      */
     public static List<String> readLines(final File file, final String charsetName) throws IOException {
         return readLines(file, Charsets.toCharset(charsetName));
+    }
+
+    /**
+     * Requires that the given {@code File} exists and is a directory.
+     *
+     * @param directory The {@code File} to check.
+     * @param param The param name to use in the exception message in case of null input.
+     * @return the given directory.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     */
+    private static File requireDirectory(final File directory, String param) {
+        requireExists(directory, param);
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(directory + " is not a directory");
+        }
+        return directory;
+    }
+
+    /**
+     * Requires that two file lengths are equal.
+     *
+     * @param srcFile Source file.
+     * @param destFile Destination file.
+     * @param srcLen Source file length.
+     * @param dstLen Destination file length
+     * @throws IOException Thrown when the given sizes are not equal.
+     */
+    private static void requireEqualSizes(final File srcFile, final File destFile, final long srcLen, final long dstLen)
+            throws IOException {
+        if (srcLen != dstLen) {
+            throw new IOException("Failed to copy full contents from '" + srcFile + "' to '" + destFile
+                    + "' Expected length: " + srcLen + " Actual: " + dstLen);
+        }
+    }
+
+    /**
+     * Requires that the given {@code File} exists.
+     *
+     * @param file The {@code File} to check.
+     * @param param The param name to use in the exception message in case of null input.
+     * @return the given file.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     */
+    private static File requireExists(final File file, String param) {
+        Objects.requireNonNull(file, param);
+        if (!file.exists()) {
+            throw new IllegalArgumentException(file + " does not exist");
+        }
+        return file;
+    }
+
+    /**
+     * Requires that the given {@code File} exists and is a file.
+     *
+     * @param file The {@code File} to check.
+     * @param param The param name to use in the exception message in case of null input.
+     * @return the given file.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     */
+    private static File requireFile(final File file, String param) {
+        requireExists(file, param);
+        if (!file.isFile()) {
+            throw new IllegalArgumentException(file + " is not a file");
+        }
+        return file;
+    }
+
+    /**
+     * Requires requirements for file copy.
+     *
+     * @param source the source file
+     * @param destination the destination
+     * @throws FileNotFoundException if the destination does not exist
+     */
+    private static void requireFileRequirements(final File source, final File destination) throws FileNotFoundException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "target");
+        if (!source.exists()) {
+            throw new FileNotFoundException("Source '" + source + "' does not exist");
+        }
     }
 
     /**
@@ -2587,16 +2601,13 @@ public class FileUtils {
      * @return the length of the file, or recursive size of the directory,
      * provided (in bytes).
      *
-     * @throws NullPointerException     if the file is {@code null}
+     * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      *
      * @since 2.0
      */
     public static long sizeOf(final File file) {
-        if (!file.exists()) {
-            final String message = file + " does not exist";
-            throw new IllegalArgumentException(message);
-        }
+        requireExists(file, "file");
         if (file.isDirectory()) {
             return sizeOfDirectory0(file); // private method; expects directory
         }
@@ -2628,16 +2639,13 @@ public class FileUtils {
      * @return the length of the file, or recursive size of the directory,
      * provided (in bytes).
      *
-     * @throws NullPointerException     if the file is {@code null}
+     * @throws NullPointerException     if the file is {@code null}.
      * @throws IllegalArgumentException if the file does not exist.
      *
      * @since 2.4
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
-        if (!file.exists()) {
-            final String message = file + " does not exist";
-            throw new IllegalArgumentException(message);
-        }
+        requireExists(file, "file");
         if (file.isDirectory()) {
             return sizeOfDirectoryBig0(file); // internal method
         }
@@ -2664,13 +2672,13 @@ public class FileUtils {
      * method that does not overflow.
      * </p>
      *
-     * @param directory directory to inspect, must not be {@code null}
+     * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
      * is greater than {@link Long#MAX_VALUE}.
-     * @throws NullPointerException if the directory is {@code null}
+     * @throws NullPointerException if the directory is {@code null}.
      */
     public static long sizeOfDirectory(final File directory) {
-        return sizeOfDirectory0(checkDirectory(directory));
+        return sizeOfDirectory0(requireDirectory(directory, "directory"));
     }
 
     /**
@@ -2700,13 +2708,13 @@ public class FileUtils {
     /**
      * Counts the size of a directory recursively (sum of the length of all files).
      *
-     * @param directory directory to inspect, must not be {@code null}
+     * @param directory directory to inspect, must not be {@code null}.
      * @return size of directory in bytes, 0 if directory is security restricted.
-     * @throws NullPointerException if the directory is {@code null}
+     * @throws NullPointerException if the directory is {@code null}.
      * @since 2.4
      */
     public static BigInteger sizeOfDirectoryAsBigInteger(final File directory) {
-        return sizeOfDirectoryBig0(checkDirectory(directory));
+        return sizeOfDirectoryBig0(requireDirectory(directory, "directory"));
     }
 
     /**
@@ -2919,16 +2927,7 @@ public class FileUtils {
      * @throws IOException if an I/O error occurs
      */
     private static File[] verifiedListFiles(final File directory) throws IOException {
-        if (!directory.exists()) {
-            final String message = directory + " does not exist";
-            throw new IllegalArgumentException(message);
-        }
-
-        if (!directory.isDirectory()) {
-            final String message = directory + " is not a directory";
-            throw new IllegalArgumentException(message);
-        }
-
+        requireDirectory(directory, "directory");
         final File[] files = directory.listFiles();
         if (files == null) {  // null if security restricted
             throw new IOException("Failed to list contents of " + directory);

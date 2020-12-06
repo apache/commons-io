@@ -152,6 +152,13 @@ public final class PathUtils {
     public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = new LinkOption[0];
 
     /**
+     * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
+     * 
+     * @since 2.9.0
+     */
+    public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = new LinkOption[] {LinkOption.NOFOLLOW_LINKS};
+
+    /**
      * Empty {@link OpenOption} array.
      */
     public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = new OpenOption[0];
@@ -193,13 +200,14 @@ public final class PathUtils {
      * Cleans a directory including sub-directories without deleting directories.
      *
      * @param directory directory to clean.
-     * @param options options indicating how deletion is handled.
+     * @param deleteOptions How deletion is handled.
      * @return The visitation path counters.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @since 2.8.0
      */
-    public static PathCounters cleanDirectory(final Path directory, final DeleteOption... options) throws IOException {
-        return visitFileTree(new CleaningPathVisitor(Counters.longPathCounters(), options), directory)
+    public static PathCounters cleanDirectory(final Path directory, final DeleteOption... deleteOptions)
+        throws IOException {
+        return visitFileTree(new CleaningPathVisitor(Counters.longPathCounters(), deleteOptions), directory)
             .getPathCounters();
     }
 
@@ -347,16 +355,42 @@ public final class PathUtils {
      * </ul>
      *
      * @param path file or directory to delete, must not be {@code null}
-     * @param options options indicating how deletion is handled.
+     * @param deleteOptions How deletion is handled.
      * @return The visitor used to delete the given directory.
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
      * @since 2.8.0
      */
-    public static PathCounters delete(final Path path, final DeleteOption... options) throws IOException {
+    public static PathCounters delete(final Path path, final DeleteOption... deleteOptions) throws IOException {
         // File deletion through Files deletes links, not targets, so use LinkOption.NOFOLLOW_LINKS.
-        return Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) ? deleteDirectory(path, options)
-            : deleteFile(path, options);
+        return Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) ? deleteDirectory(path, deleteOptions)
+            : deleteFile(path, deleteOptions);
+    }
+
+    /**
+     * Deletes a file or directory. If the path is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * </p>
+     * <ul>
+     * <li>A directory to delete does not have to be empty.</li>
+     * <li>You get exceptions when a file or directory cannot be deleted; {@link java.io.File#delete()} returns a
+     * boolean.
+     * </ul>
+     *
+     * @param path file or directory to delete, must not be {@code null}
+     * @param linkOptions configures how symbolic links are handled.
+     * @param deleteOptions How deletion is handled.
+     * @return The visitor used to delete the given directory.
+     * @throws NullPointerException if the directory is {@code null}
+     * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static PathCounters delete(final Path path, final LinkOption[] linkOptions,
+        final DeleteOption... deleteOptions) throws IOException {
+        // File deletion through Files deletes links, not targets, so use LinkOption.NOFOLLOW_LINKS.
+        return Files.isDirectory(path, linkOptions) ? deleteDirectory(path, linkOptions, deleteOptions)
+            : deleteFile(path, linkOptions, deleteOptions);
     }
 
     /**
@@ -374,14 +408,32 @@ public final class PathUtils {
      * Deletes a directory including sub-directories.
      *
      * @param directory directory to delete.
-     * @param options options indicating how deletion is handled.
+     * @param deleteOptions How deletion is handled.
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @since 2.8.0
      */
-    public static PathCounters deleteDirectory(final Path directory, final DeleteOption... options) throws IOException {
-        return visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), options), directory)
-            .getPathCounters();
+    public static PathCounters deleteDirectory(final Path directory, final DeleteOption... deleteOptions)
+        throws IOException {
+        return visitFileTree(
+            new DeletingPathVisitor(Counters.longPathCounters(), PathUtils.NOFOLLOW_LINK_OPTION_ARRAY, deleteOptions),
+            directory).getPathCounters();
+    }
+
+    /**
+     * Deletes a directory including sub-directories.
+     *
+     * @param directory directory to delete.
+     * @param linkOptions configures how symbolic links are handled.
+     * @param deleteOptions How deletion is handled.
+     * @return The visitor used to delete the given directory.
+     * @throws IOException if an I/O error is thrown by a visitor method.
+     * @since 2.9.0
+     */
+    public static PathCounters deleteDirectory(final Path directory, final LinkOption[] linkOptions,
+        final DeleteOption... deleteOptions) throws IOException {
+        return visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), linkOptions, deleteOptions),
+            directory).getPathCounters();
     }
 
     /**
@@ -400,22 +452,38 @@ public final class PathUtils {
      * Deletes the given file.
      *
      * @param file The file to delete.
-     * @param options options indicating how deletion is handled.
+     * @param deleteOptions How deletion is handled.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException if an I/O error occurs.
      * @throws NoSuchFileException if the file is a directory.
      * @since 2.8.0
      */
-    public static PathCounters deleteFile(final Path file, final DeleteOption... options) throws IOException {
+    public static PathCounters deleteFile(final Path file, final DeleteOption... deleteOptions) throws IOException {
         // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        if (Files.isDirectory(file, LinkOption.NOFOLLOW_LINKS)) {
+        return deleteFile(file, NOFOLLOW_LINK_OPTION_ARRAY, deleteOptions);
+    }
+
+    /**
+     * Deletes the given file.
+     *
+     * @param file The file to delete.
+     * @param linkOptions configures how symbolic links are handled.
+     * @param deleteOptions How deletion is handled.
+     * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
+     * @throws IOException if an I/O error occurs.
+     * @throws NoSuchFileException if the file is a directory.
+     * @since 2.9.0
+     */
+    public static PathCounters deleteFile(final Path file, final LinkOption[] linkOptions,
+        final DeleteOption... deleteOptions) throws NoSuchFileException, IOException {
+        if (Files.isDirectory(file, linkOptions)) {
             throw new NoSuchFileException(file.toString());
         }
         final PathCounters pathCounts = Counters.longPathCounters();
-        final boolean exists = Files.exists(file, LinkOption.NOFOLLOW_LINKS);
+        final boolean exists = Files.exists(file, linkOptions);
         final long size = exists ? Files.size(file) : 0;
-        if (overrideReadOnly(options) && exists) {
-            setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+        if (overrideReadOnly(deleteOptions) && exists) {
+            setReadOnly(file, false, linkOptions);
         }
         if (Files.deleteIfExists(file)) {
             pathCounts.getFileCounter().increment();
@@ -727,14 +795,14 @@ public final class PathUtils {
     /**
      * Returns true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      *
-     * @param options the array to test
+     * @param deleteOptions the array to test
      * @return true if the given options contain {@link StandardDeleteOption#OVERRIDE_READ_ONLY}.
      */
-    private static boolean overrideReadOnly(final DeleteOption[] options) {
-        if (options == null) {
+    private static boolean overrideReadOnly(final DeleteOption... deleteOptions) {
+        if (deleteOptions == null) {
             return false;
         }
-        for (final DeleteOption deleteOption : options) {
+        for (final DeleteOption deleteOption : deleteOptions) {
             if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
                 return true;
             }
@@ -797,21 +865,21 @@ public final class PathUtils {
      *
      * @param path The path to set.
      * @param readOnly true for read-only, false for not read-only.
-     * @param options options indicating how symbolic links are handled.
+     * @param linkOptions options indicating how symbolic links are handled.
      * @return The given path.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
-    public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... options)
+    public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions)
         throws IOException {
         final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class,
-            options);
+            linkOptions);
         if (fileAttributeView != null) {
             fileAttributeView.setReadOnly(readOnly);
             return path;
         }
         final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path,
-            PosixFileAttributeView.class, options);
+            PosixFileAttributeView.class, linkOptions);
         if (posixFileAttributeView != null) {
             // Works on Windows but not on Ubuntu:
             // Files.setAttribute(path, "unix:readonly", readOnly, options);

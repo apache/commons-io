@@ -60,7 +60,7 @@ public class CleaningPathVisitor extends CountingPathVisitor {
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     * @param deleteOption options indicating how deletion is handled.
+     * @param deleteOption How deletion is handled.
      * @param skip The files to skip deleting.
      * @since 2.8.0
      */
