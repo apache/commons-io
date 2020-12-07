@@ -22,10 +22,9 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedOutputStream}; queue input stream provides what's
@@ -67,7 +66,7 @@ public class QueueOutputStream extends OutputStream {
      * @param queue backing queue for the stream
      */
     public QueueOutputStream(final BlockingQueue<Integer> queue) {
-        this.queue = requireNonNull(queue, "queue is required");
+        this.queue = Objects.requireNonNull(queue, "queue is required");
     }
 
     /**

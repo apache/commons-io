@@ -21,10 +21,9 @@ import org.apache.commons.io.output.QueueOutputStream;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
@@ -65,7 +64,7 @@ public class QueueInputStream extends InputStream {
      * @param queue backing queue for the stream
      */
     public QueueInputStream(final BlockingQueue<Integer> queue) {
-        this.queue = requireNonNull(queue, "queue is required");
+        this.queue = Objects.requireNonNull(queue, "queue is required");
     }
 
     /**
