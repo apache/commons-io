@@ -37,7 +37,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      * @param out underlying output stream
      * @deprecated Using this constructor prevents IDEs from warning if
      *             the underlying output stream is never closed.
-     *             Use {@link #dontClose(OutputStream)} instead.
+     *             Use {@link #wrap(OutputStream)} instead.
      */
     @Deprecated
     public CloseShieldOutputStream(final OutputStream out) {
@@ -62,7 +62,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      * @return the created proxy
      * @since 2.9.0
      */
-    public static CloseShieldOutputStream dontClose(final OutputStream out) {
+    public static CloseShieldOutputStream wrap(final OutputStream out) {
         return new CloseShieldOutputStream(out);
     }
 

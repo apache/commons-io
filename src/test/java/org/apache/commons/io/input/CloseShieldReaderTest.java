@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.input;
 
-import static org.apache.commons.io.input.CloseShieldReader.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -43,7 +42,7 @@ public class CloseShieldReaderTest {
     public void setUp() {
         data = "xyz";
         original = spy(new CharSequenceReader(data));
-        shielded = dontClose(original);
+        shielded = CloseShieldReader.wrap(original);
     }
 
     @Test

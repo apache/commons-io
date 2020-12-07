@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.output;
 
-import static org.apache.commons.io.output.CloseShieldWriter.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
@@ -41,7 +40,7 @@ public class CloseShieldWriterTest {
     @BeforeEach
     public void setUp() {
         original = spy(new StringBuilderWriter());
-        shielded = dontClose(original);
+        shielded = CloseShieldWriter.wrap(original);
     }
 
     @Test

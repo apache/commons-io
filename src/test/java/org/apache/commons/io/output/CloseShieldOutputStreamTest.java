@@ -16,7 +16,6 @@
  */
 package org.apache.commons.io.output;
 
-import static org.apache.commons.io.output.CloseShieldOutputStream.dontClose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,7 +45,7 @@ public class CloseShieldOutputStreamTest {
                 closed = true;
             }
         };
-        shielded = dontClose(original);
+        shielded = CloseShieldOutputStream.wrap(original);
         closed = false;
     }
 
