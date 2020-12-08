@@ -58,12 +58,12 @@ public class CloseShieldInputStream extends ProxyInputStream {
      * Creates a proxy that shields the given input stream from being
      * closed.
      *
-     * @param in underlying input stream
+     * @param inputStream the input stream to wrap
      * @return the created proxy
      * @since 2.9.0
      */
-    public static CloseShieldInputStream wrap(final InputStream in) {
-        return new CloseShieldInputStream(in);
+    public static CloseShieldInputStream wrap(final InputStream inputStream) {
+        return new CloseShieldInputStream(inputStream);
     }
 
 }

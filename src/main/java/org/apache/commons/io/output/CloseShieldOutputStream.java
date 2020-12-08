@@ -58,12 +58,12 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      * Creates a proxy that shields the given output stream from being
      * closed.
      *
-     * @param out underlying output stream
+     * @param outputStream the output stream to wrap
      * @return the created proxy
      * @since 2.9.0
      */
-    public static CloseShieldOutputStream wrap(final OutputStream out) {
-        return new CloseShieldOutputStream(out);
+    public static CloseShieldOutputStream wrap(final OutputStream outputStream) {
+        return new CloseShieldOutputStream(outputStream);
     }
 
 }
