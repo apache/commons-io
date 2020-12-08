@@ -52,14 +52,14 @@ public class QueueInputStream extends InputStream {
     private final BlockingQueue<Integer> queue;
 
     /**
-     * Create a {@link QueueInputStream} with no limit to internal buffer size
+     * Constructs a QueueInputStream with no limit to internal buffer size
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Create a {@link QueueInputStream} with given buffer
+     * Constructs a QueueInputStream with given buffer
      * 
      * @param queue backing queue for the stream
      */
@@ -68,7 +68,7 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Create an QueueOutputStream connected to this. Writes to the output stream will be visible to this input stream.
+     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this input stream.
      * 
      * @return QueueOutputStream connected to this stream
      */
@@ -77,9 +77,9 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Read a single byte.
+     * Reads a single byte.
      *
-     * @return either the byte read or <code>-1</code> if the end of the stream has been reached
+     * @return either the byte read or {@code -1} if the end of the stream has been reached
      */
     @Override
     public int read() {

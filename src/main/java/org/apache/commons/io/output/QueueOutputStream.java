@@ -54,14 +54,14 @@ public class QueueOutputStream extends OutputStream {
     private final BlockingQueue<Integer> queue;
 
     /**
-     * Create a {@link QueueOutputStream} with no limit to internal buffer size
+     * Constructs a QueueOutputStream with no limit to internal buffer size
      */
     public QueueOutputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Create a {@link QueueOutputStream} with given buffer
+     * Constructs a QueueOutputStream with given buffer
      * 
      * @param queue backing queue for the stream
      */
@@ -70,7 +70,7 @@ public class QueueOutputStream extends OutputStream {
     }
 
     /**
-     * Create an QueueInputStream connected to this. Writes to this output stream will be visible to the input stream.
+     * Creates a new QueueInputStream instance connected to this. Writes to this output stream will be visible to the input stream.
      * 
      * @return QueueInputStream connected to this stream
      */
@@ -79,7 +79,7 @@ public class QueueOutputStream extends OutputStream {
     }
 
     /**
-     * Write a single byte.
+     * Writes a single byte.
      *
      * @throws InterruptedIOException if the thread is interrupted while writing to the queue.
      */
@@ -89,7 +89,9 @@ public class QueueOutputStream extends OutputStream {
             queue.put(0xFF & b);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new InterruptedIOException();
+            final InterruptedIOException interruptedIoException = new InterruptedIOException();
+            interruptedIoException.initCause(e);
+            throw interruptedIoException;
         }
     }
 }
