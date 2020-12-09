@@ -20,8 +20,11 @@ package org.apache.commons.io.file;
 import static org.apache.commons.io.file.CounterAssertions.assertCounts;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -141,5 +144,21 @@ public class PathUtilsDeleteFileTest {
         PathUtils.deleteFile(resolved);
         // This will throw if not empty.
         Files.deleteIfExists(tempDir);
+    }
+
+    @Test
+    public void testDeleteBrokenLink() throws IOException {
+        assumeFalse(SystemUtils.IS_OS_WINDOWS);
+
+        Path missingFile = tempDir.resolve("missing.txt");
+        Path brokenLink = tempDir.resolve("broken.txt");
+        Files.createSymbolicLink(brokenLink, missingFile);
+
+        assertTrue(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS));
+        assertFalse(Files.exists(missingFile, LinkOption.NOFOLLOW_LINKS));
+
+        PathUtils.deleteFile(brokenLink);
+
+        assertFalse(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS), "Symbolic link not removed");
     }
 }

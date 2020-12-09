@@ -55,21 +55,38 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     private final String[] skip;
     private final boolean overrideReadOnly;
+    private final LinkOption[] linkOptions;
 
     /**
      * Constructs a new visitor that deletes files except for the files and directories explicitly given.
      *
      * @param pathCounter How to count visits.
-     * @param deleteOption options indicating how deletion is handled.
+     * @param deleteOption How deletion is handled.
      * @param skip The files to skip deleting.
      * @since 2.8.0
      */
     public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption, final String... skip) {
+        this(pathCounter, PathUtils.NOFOLLOW_LINK_OPTION_ARRAY, deleteOption, skip);
+    }
+
+    /**
+     * Constructs a new visitor that deletes files except for the files and directories explicitly given.
+     *
+     * @param pathCounter How to count visits.
+     * @param linkOptions How symbolic links are handled.
+     * @param deleteOption How deletion is handled.
+     * @param skip The files to skip deleting.
+     * @since 2.9.0
+     */
+    public DeletingPathVisitor(final PathCounters pathCounter, final LinkOption[] linkOptions,
+        final DeleteOption[] deleteOption, final String... skip) {
         super(pathCounter);
         final String[] temp = skip != null ? skip.clone() : EMPTY_STRING_ARRAY;
         Arrays.sort(temp);
         this.skip = temp;
         this.overrideReadOnly = StandardDeleteOption.overrideReadOnly(deleteOption);
+        // TODO Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
+        this.linkOptions = linkOptions == null ? PathUtils.NOFOLLOW_LINK_OPTION_ARRAY : linkOptions.clone();
     }
 
     /**
@@ -133,10 +150,9 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        // Files.deleteIfExists() never follows links, so use LinkOption.NOFOLLOW_LINKS in other calls to Files.
-        if (accept(file) && Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+        if (accept(file) && Files.exists(file, linkOptions)) {
             if (overrideReadOnly) {
-                PathUtils.setReadOnly(file, false, LinkOption.NOFOLLOW_LINKS);
+                PathUtils.setReadOnly(file, false, linkOptions);
             }
             Files.deleteIfExists(file);
         }
