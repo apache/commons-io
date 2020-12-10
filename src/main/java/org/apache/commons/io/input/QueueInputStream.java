@@ -26,9 +26,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue output stream.
+ * Simple alternative to JDK {@link java.io.PipedInputStream}; queue input stream provides what's written in queue
+ * output stream.
  * 
+ * <p>
  * Example usage:
+ * </p>
+ * 
  * <pre>
  * QueueInputStream inputStream = new QueueInputStream();
  * QueueOutputStream outputStream = inputStream.newQueueOutputStream();
@@ -37,12 +41,14 @@ import java.util.concurrent.LinkedBlockingQueue;
  * inputStream.read();
  * </pre>
  * 
- * Unlike JDK {@link PipedInputStream} and {@link PipedOutputStream}, queue input/output streams may be
- * used safely in a single thread or multiple threads. Also, unlike JDK classes, no special meaning is
- * attached to initial or current thread. Instances can be used longer after initial threads exited.
+ * Unlike JDK {@link PipedInputStream} and {@link PipedOutputStream}, queue input/output streams may be used safely in a
+ * single thread or multiple threads. Also, unlike JDK classes, no special meaning is attached to initial or current
+ * thread. Instances can be used longer after initial threads exited.
  * 
- * Closing a {@code QueueInputStream} has no effect. The methods in this class can be called after
- * the stream has been closed without generating an {@code IOException}.
+ * <p>
+ * Closing a {@code QueueInputStream} has no effect. The methods in this class can be called after the stream has been
+ * closed without generating an {@code IOException}.
+ * </p>
  * 
  * @see QueueOutputStream
  * @since 2.9.0
@@ -52,14 +58,14 @@ public class QueueInputStream extends InputStream {
     private final BlockingQueue<Integer> queue;
 
     /**
-     * Constructs a QueueInputStream with no limit to internal buffer size
+     * Constructs a new instance with no limit to its internal buffer size.
      */
     public QueueInputStream() {
         this(new LinkedBlockingQueue<>());
     }
 
     /**
-     * Constructs a QueueInputStream with given buffer
+     * Constructs a new instance with given buffer
      * 
      * @param queue backing queue for the stream
      */
@@ -68,7 +74,8 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this input stream.
+     * Creates a new QueueOutputStream instance connected to this. Writes to the output stream will be visible to this
+     * input stream.
      * 
      * @return QueueOutputStream connected to this stream
      */
@@ -77,7 +84,7 @@ public class QueueInputStream extends InputStream {
     }
 
     /**
-     * Reads a single byte.
+     * Reads and returns a single byte.
      *
      * @return either the byte read or {@code -1} if the end of the stream has been reached
      */

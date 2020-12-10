@@ -50,28 +50,19 @@ public class QueueOutputStreamTest {
         executorService.shutdown();
     }
 
-    @Test
-    public void writeString() throws Exception {
-        try (final QueueOutputStream outputStream = new QueueOutputStream();
-                final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
-            outputStream.write("ABC".getBytes(UTF_8));
-            final String value = IOUtils.toString(inputStream, UTF_8);
-            assertEquals("ABC", value);
-        }
+    private static <T> T callInThrowAwayThread(final Callable<T> callable) throws Exception {
+        final Exchanger<T> exchanger = new Exchanger<>();
+        executorService.submit(() -> {
+            final T value = callable.call();
+            exchanger.exchange(value);
+            return null;
+        });
+        return exchanger.exchange(null);
     }
 
     @Test
-    public void writeStringMultiThread() throws Exception {
-        try (final QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
-                final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
-            callInThrowAwayThread(() -> {
-                outputStream.write("ABC".getBytes(UTF_8));
-                return null;
-            });
-
-            final String value = callInThrowAwayThread(() -> IOUtils.toString(inputStream, UTF_8));
-            assertEquals("ABC", value);
-        }
+    public void testNullArgument() {
+        assertThrows(NullPointerException.class, () -> new QueueOutputStream(null), "queue is required");
     }
 
     @Test
@@ -106,17 +97,26 @@ public class QueueOutputStreamTest {
     }
 
     @Test
-    public void testNullArgument() {
-        assertThrows(NullPointerException.class, () -> new QueueOutputStream(null), "queue is required");
+    public void writeString() throws Exception {
+        try (final QueueOutputStream outputStream = new QueueOutputStream();
+                final QueueInputStream inputStream = outputStream.newQueueInputStream()) {
+            outputStream.write("ABC".getBytes(UTF_8));
+            final String value = IOUtils.toString(inputStream, UTF_8);
+            assertEquals("ABC", value);
+        }
     }
 
-    private static <T> T callInThrowAwayThread(final Callable<T> callable) throws Exception {
-        final Exchanger<T> exchanger = new Exchanger<>();
-        executorService.submit(() -> {
-            final T value = callable.call();
-            exchanger.exchange(value);
-            return null;
-        });
-        return exchanger.exchange(null);
+    @Test
+    public void writeStringMultiThread() throws Exception {
+        try (final QueueOutputStream outputStream = callInThrowAwayThread(QueueOutputStream::new);
+                final QueueInputStream inputStream = callInThrowAwayThread(outputStream::newQueueInputStream)) {
+            callInThrowAwayThread(() -> {
+                outputStream.write("ABC".getBytes(UTF_8));
+                return null;
+            });
+
+            final String value = callInThrowAwayThread(() -> IOUtils.toString(inputStream, UTF_8));
+            assertEquals("ABC", value);
+        }
     }
 }
