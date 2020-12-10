@@ -55,7 +55,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class QueueInputStream extends InputStream {
 
-    private final BlockingQueue<Integer> queue;
+    private final BlockingQueue<Integer> blockingQueue;
 
     /**
      * Constructs a new instance with no limit to its internal buffer size.
@@ -67,10 +67,10 @@ public class QueueInputStream extends InputStream {
     /**
      * Constructs a new instance with given buffer
      * 
-     * @param queue backing queue for the stream
+     * @param blockingQueue backing queue for the stream
      */
-    public QueueInputStream(final BlockingQueue<Integer> queue) {
-        this.queue = Objects.requireNonNull(queue, "queue is required");
+    public QueueInputStream(final BlockingQueue<Integer> blockingQueue) {
+        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
     }
 
     /**
@@ -80,7 +80,7 @@ public class QueueInputStream extends InputStream {
      * @return QueueOutputStream connected to this stream
      */
     public QueueOutputStream newQueueOutputStream() {
-        return new QueueOutputStream(queue);
+        return new QueueOutputStream(blockingQueue);
     }
 
     /**
@@ -90,7 +90,7 @@ public class QueueInputStream extends InputStream {
      */
     @Override
     public int read() {
-        final Integer value = queue.poll();
+        final Integer value = blockingQueue.poll();
         return value == null ? -1 : ((0xFF) & value);
     }
 

@@ -54,7 +54,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class QueueOutputStream extends OutputStream {
 
-    private final BlockingQueue<Integer> queue;
+    private final BlockingQueue<Integer> blockingQueue;
 
     /**
      * Constructs a new instance with no limit to internal buffer size.
@@ -66,10 +66,10 @@ public class QueueOutputStream extends OutputStream {
     /**
      * Constructs a new instance with given buffer.
      * 
-     * @param queue backing queue for the stream
+     * @param blockingQueue backing queue for the stream
      */
-    public QueueOutputStream(final BlockingQueue<Integer> queue) {
-        this.queue = Objects.requireNonNull(queue, "queue is required");
+    public QueueOutputStream(final BlockingQueue<Integer> blockingQueue) {
+        this.blockingQueue = Objects.requireNonNull(blockingQueue, "blockingQueue");
     }
 
     /**
@@ -79,7 +79,7 @@ public class QueueOutputStream extends OutputStream {
      * @return QueueInputStream connected to this stream
      */
     public QueueInputStream newQueueInputStream() {
-        return new QueueInputStream(queue);
+        return new QueueInputStream(blockingQueue);
     }
 
     /**
@@ -90,7 +90,7 @@ public class QueueOutputStream extends OutputStream {
     @Override
     public void write(final int b) throws InterruptedIOException {
         try {
-            queue.put(0xFF & b);
+            blockingQueue.put(0xFF & b);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             final InterruptedIOException interruptedIoException = new InterruptedIOException();
