@@ -44,14 +44,14 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
     /**
      * Creates a proxy that shields the given output stream from being closed.
      *
-     * @param out underlying output stream
+     * @param outputStream underlying output stream
      * @deprecated Using this constructor prevents IDEs from warning if the
      *             underlying output stream is never closed. Use
      *             {@link #wrap(OutputStream)} instead.
      */
     @Deprecated
-    public CloseShieldOutputStream(final OutputStream out) {
-        super(out);
+    public CloseShieldOutputStream(final OutputStream outputStream) {
+        super(outputStream);
     }
 
     /**
