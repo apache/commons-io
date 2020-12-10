@@ -42,7 +42,7 @@ public class CloseShieldReaderTest {
     public void setUp() {
         data = "xyz";
         original = spy(new CharSequenceReader(data));
-        shielded = new CloseShieldReader(original);
+        shielded = CloseShieldReader.wrap(original);
     }
 
     @Test

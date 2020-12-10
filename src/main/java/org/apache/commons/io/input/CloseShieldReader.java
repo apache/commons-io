@@ -35,7 +35,11 @@ public class CloseShieldReader extends ProxyReader {
      * closed.
      *
      * @param in underlying reader
+     * @deprecated Using this constructor prevents IDEs from warning if
+     *             the underlying reader is never closed.
+     *             Use {@link #wrap(Reader)} instead.
      */
+    @Deprecated
     public CloseShieldReader(final Reader in) {
         super(in);
     }
@@ -48,6 +52,18 @@ public class CloseShieldReader extends ProxyReader {
     @Override
     public void close() {
         in = ClosedReader.CLOSED_READER;
+    }
+
+    /**
+     * Creates a proxy that shields the given reader from being
+     * closed.
+     *
+     * @param reader the reader to wrap
+     * @return the created proxy
+     * @since 2.9.0
+     */
+    public static CloseShieldReader wrap(final Reader reader) {
+        return new CloseShieldReader(reader);
     }
 
 }

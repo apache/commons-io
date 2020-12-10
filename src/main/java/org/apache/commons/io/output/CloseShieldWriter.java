@@ -33,7 +33,11 @@ public class CloseShieldWriter extends ProxyWriter {
      * Creates a proxy that shields the given writer from being closed.
      *
      * @param out underlying writer
+     * @deprecated Using this constructor prevents IDEs from warning if
+     *             the underlying writer is never closed.
+     *             Use {@link #wrap(Writer)} instead.
      */
+    @Deprecated
     public CloseShieldWriter(final Writer out) {
         super(out);
     }
@@ -45,6 +49,17 @@ public class CloseShieldWriter extends ProxyWriter {
     @Override
     public void close() {
         out = ClosedWriter.CLOSED_WRITER;
+    }
+
+    /**
+     * Creates a proxy that shields the given writer from being closed.
+     *
+     * @param writer the writer to wrap
+     * @return the created proxy
+     * @since 2.9.0
+     */
+    public static CloseShieldWriter wrap(final Writer writer) {
+        return new CloseShieldWriter(writer);
     }
 
 }

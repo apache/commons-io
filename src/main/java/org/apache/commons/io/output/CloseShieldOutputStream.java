@@ -35,7 +35,11 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      * closed.
      *
      * @param out underlying output stream
+     * @deprecated Using this constructor prevents IDEs from warning if
+     *             the underlying output stream is never closed.
+     *             Use {@link #wrap(OutputStream)} instead.
      */
+    @Deprecated
     public CloseShieldOutputStream(final OutputStream out) {
         super(out);
     }
@@ -48,6 +52,18 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
     @Override
     public void close() {
         out = ClosedOutputStream.CLOSED_OUTPUT_STREAM;
+    }
+
+    /**
+     * Creates a proxy that shields the given output stream from being
+     * closed.
+     *
+     * @param outputStream the output stream to wrap
+     * @return the created proxy
+     * @since 2.9.0
+     */
+    public static CloseShieldOutputStream wrap(final OutputStream outputStream) {
+        return new CloseShieldOutputStream(outputStream);
     }
 
 }
