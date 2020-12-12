@@ -441,7 +441,7 @@ public class Tailer implements Runnable {
                         // Finish scanning the old file and then we'll start with the new one
                         try {
                             readLines(save);
-                        }  catch (final IOException ioe) {
+                        } catch (final IOException ioe) {
                             listener.handle(ioe);
                         }
                         position = 0;
@@ -489,8 +489,7 @@ public class Tailer implements Runnable {
                 if (reader != null) {
                     reader.close();
                 }
-            }
-            catch (final IOException e) {
+            } catch (final IOException e) {
                 listener.handle(e);
             }
             stop();
@@ -520,27 +519,27 @@ public class Tailer implements Runnable {
             while (getRun() && ((num = reader.read(inbuf)) != EOF)) {
                 for (int i = 0; i < num; i++) {
                     final byte ch = inbuf[i];
-                    switch ( ch ) {
-                        case '\n':
-                            seenCR = false; // swallow CR before LF
+                    switch (ch) {
+                    case '\n':
+                        seenCR = false; // swallow CR before LF
+                        listener.handle(new String(lineBuf.toByteArray(), charset));
+                        lineBuf.reset();
+                        rePos = pos + i + 1;
+                        break;
+                    case '\r':
+                        if (seenCR) {
+                            lineBuf.write('\r');
+                        }
+                        seenCR = true;
+                        break;
+                    default:
+                        if (seenCR) {
+                            seenCR = false; // swallow final CR
                             listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
                             rePos = pos + i + 1;
-                            break;
-                        case '\r':
-                            if (seenCR) {
-                                lineBuf.write('\r');
-                            }
-                            seenCR = true;
-                            break;
-                        default:
-                            if (seenCR) {
-                                seenCR = false; // swallow final CR
-                                listener.handle(new String(lineBuf.toByteArray(), charset));
-                                lineBuf.reset();
-                                rePos = pos + i + 1;
-                            }
-                            lineBuf.write(ch);
+                        }
+                        lineBuf.write(ch);
                     }
                 }
                 pos = reader.getFilePointer();
