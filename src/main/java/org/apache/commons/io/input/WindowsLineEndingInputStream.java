@@ -57,7 +57,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
         eofSeen = target == -1;
-        if ( eofSeen ) {
+        if (eofSeen) {
             return target;
         }
         slashRSeen = target == '\r';
@@ -70,20 +70,19 @@ public class WindowsLineEndingInputStream  extends InputStream {
      */
     @Override
     public int read() throws IOException {
-        if ( eofSeen ) {
+        if (eofSeen) {
             return eofGame();
-        } else if ( injectSlashN ) {
+        } else if (injectSlashN) {
             injectSlashN = false;
             return '\n';
         } else {
             final boolean prevWasSlashR = slashRSeen;
             final int target = readWithUpdate();
-            if ( eofSeen ) {
+            if (eofSeen) {
                 return eofGame();
             }
-            if ( target == '\n' ) {
-                if ( !prevWasSlashR )
-                {
+            if (target == '\n') {
+                if (!prevWasSlashR) {
                     injectSlashN = true;
                     return '\r';
                 }
@@ -98,14 +97,14 @@ public class WindowsLineEndingInputStream  extends InputStream {
      */
 
     private int eofGame() {
-        if ( !ensureLineFeedAtEndOfFile ) {
+        if (!ensureLineFeedAtEndOfFile) {
             return -1;
         }
-        if ( !slashNSeen && !slashRSeen ) {
+        if (!slashNSeen && !slashRSeen) {
             slashRSeen = true;
             return '\r';
         }
-        if ( !slashNSeen ) {
+        if (!slashNSeen) {
             slashRSeen = false;
             slashNSeen = true;
             return '\n';
@@ -127,7 +126,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark( final int readlimit ) {
-        throw new UnsupportedOperationException( "Mark not supported" );
+    public synchronized void mark(final int readlimit) {
+        throw new UnsupportedOperationException("Mark not supported");
     }
 }
