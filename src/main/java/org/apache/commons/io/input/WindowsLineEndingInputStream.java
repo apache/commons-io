@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A filtering input stream that ensures the content will have windows line endings, CRLF.
+ * A filtering input stream that ensures the content will have Windows line endings, CRLF.
  *
  * @since 2.5
  */
