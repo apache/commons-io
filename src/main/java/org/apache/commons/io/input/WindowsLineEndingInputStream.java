@@ -97,7 +97,6 @@ public class WindowsLineEndingInputStream  extends InputStream {
      * Handles the EOF-handling at the end of the stream
      * @return The next char to output to the stream
      */
-
     private int eofGame() {
         if (!ensureLineFeedAtEndOfFile) {
             return EOF;
