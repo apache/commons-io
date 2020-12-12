@@ -16,7 +16,9 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.CR;
 import static org.apache.commons.io.IOUtils.EOF;
+import static org.apache.commons.io.IOUtils.LF;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -520,15 +522,15 @@ public class Tailer implements Runnable {
                 for (int i = 0; i < num; i++) {
                     final byte ch = inbuf[i];
                     switch (ch) {
-                    case '\n':
+                    case LF:
                         seenCR = false; // swallow CR before LF
                         listener.handle(new String(lineBuf.toByteArray(), charset));
                         lineBuf.reset();
                         rePos = pos + i + 1;
                         break;
-                    case '\r':
+                    case CR:
                         if (seenCR) {
-                            lineBuf.write('\r');
+                            lineBuf.write(CR);
                         }
                         seenCR = true;
                         break;

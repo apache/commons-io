@@ -16,7 +16,9 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.CR;
 import static org.apache.commons.io.IOUtils.EOF;
+import static org.apache.commons.io.IOUtils.LF;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,8 +62,8 @@ public class UnixLineEndingInputStream extends InputStream {
         if (eofSeen) {
             return target;
         }
-        slashNSeen = target == '\n';
-        slashRSeen = target == '\r';
+        slashNSeen = target == LF;
+        slashRSeen = target == CR;
         return target;
     }
 
@@ -79,7 +81,7 @@ public class UnixLineEndingInputStream extends InputStream {
             return eofGame(previousWasSlashR);
         }
         if (slashRSeen) {
-            return '\n';
+            return LF;
         }
 
         if (previousWasSlashR && slashNSeen) {
@@ -100,7 +102,7 @@ public class UnixLineEndingInputStream extends InputStream {
         }
         if (!slashNSeen) {
             slashNSeen = true;
-            return '\n';
+            return LF;
         }
         return EOF;
     }

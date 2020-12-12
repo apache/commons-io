@@ -128,6 +128,20 @@ public class IOUtils {
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
 
     /**
+     * CR char.
+     *
+     * @since 2.9.0
+     */
+    public static final int CR = '\r';
+
+    /**
+     * LF char.
+     *
+     * @since 2.9.0
+     */
+    public static final int LF = '\n';
+
+    /**
      * Represents the end-of-file (or stream).
      * @since 2.5 (made public)
      */

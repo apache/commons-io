@@ -450,6 +450,9 @@ public class IOUtilsTestCase {
             assertEquals('/', IOUtils.DIR_SEPARATOR);
             assertEquals("\n", IOUtils.LINE_SEPARATOR);
         }
+        assertEquals('\r', IOUtils.CR);
+        assertEquals('\n', IOUtils.LF);
+        assertEquals(-1, IOUtils.EOF);
     }
 
     @Test
