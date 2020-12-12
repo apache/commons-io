@@ -152,7 +152,7 @@ public class ReversedLinesFileReader implements Closeable {
                     final byte[] lineData = new byte[lineLengthBytes];
                     System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
 
-                    line = new String(lineData, encoding);
+                    line = new String(lineData, charset);
 
                     currentLastBytePos = i - newLineMatchByteCount;
                     break; // found line
@@ -171,7 +171,7 @@ public class ReversedLinesFileReader implements Closeable {
             // --- last file part handling ---
             if (isLastFilePart && leftOver != null) {
                 // there will be no line break anymore, this is the first line of the file
-                line = new String(leftOver, encoding);
+                line = new String(leftOver, charset);
                 leftOver = null;
             }
 
@@ -197,7 +197,7 @@ public class ReversedLinesFileReader implements Closeable {
             // NO 1 was the last FilePart, we're finished
             if (leftOver != null) {
                 throw new IllegalStateException("Unexpected leftover of the last block: leftOverOfThisFilePart="
-                        + new String(leftOver, encoding));
+                        + new String(leftOver, charset));
             }
             return null;
         }
@@ -207,7 +207,7 @@ public class ReversedLinesFileReader implements Closeable {
     private static final int DEFAULT_BLOCK_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     private final int blockSize;
-    private final Charset encoding;
+    private final Charset charset;
     private final SeekableByteChannel channel;
     private final long totalByteLength;
     private final long totalBlockCount;
@@ -303,32 +303,32 @@ public class ReversedLinesFileReader implements Closeable {
      */
     public ReversedLinesFileReader(final Path file, final int blockSize, final Charset charset) throws IOException {
         this.blockSize = blockSize;
-        this.encoding = Charsets.toCharset(charset);
+        this.charset = Charsets.toCharset(charset);
 
         // --- check & prepare encoding ---
-        final CharsetEncoder charsetEncoder = this.encoding.newEncoder();
+        final CharsetEncoder charsetEncoder = this.charset.newEncoder();
         final float maxBytesPerChar = charsetEncoder.maxBytesPerChar();
         if (maxBytesPerChar == 1f) {
             // all one byte encodings are no problem
             byteDecrement = 1;
-        } else if (this.encoding == StandardCharsets.UTF_8) {
+        } else if (this.charset == StandardCharsets.UTF_8) {
             // UTF-8 works fine out of the box, for multibyte sequences a second UTF-8 byte
             // can never be a newline byte
             // http://en.wikipedia.org/wiki/UTF-8
             byteDecrement = 1;
-        } else if (this.encoding == Charset.forName("Shift_JIS") || // Same as for UTF-8
+        } else if (this.charset == Charset.forName("Shift_JIS") || // Same as for UTF-8
         // http://www.herongyang.com/Unicode/JIS-Shift-JIS-Encoding.html
-                this.encoding == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
-                this.encoding == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
-                this.encoding == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
-                this.encoding == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
+                this.charset == Charset.forName("windows-31j") || // Windows code page 932 (Japanese)
+                this.charset == Charset.forName("x-windows-949") || // Windows code page 949 (Korean)
+                this.charset == Charset.forName("gbk") || // Windows code page 936 (Simplified Chinese)
+                this.charset == Charset.forName("x-windows-950")) { // Windows code page 950 (Traditional Chinese)
             byteDecrement = 1;
-        } else if (this.encoding == StandardCharsets.UTF_16BE || this.encoding == StandardCharsets.UTF_16LE) {
+        } else if (this.charset == StandardCharsets.UTF_16BE || this.charset == StandardCharsets.UTF_16LE) {
             // UTF-16 new line sequences are not allowed as second tuple of four byte
             // sequences,
             // however byte order has to be specified
             byteDecrement = 2;
-        } else if (this.encoding == StandardCharsets.UTF_16) {
+        } else if (this.charset == StandardCharsets.UTF_16) {
             throw new UnsupportedEncodingException(
                     "For UTF-16, you need to specify the byte order (use UTF-16BE or " + "UTF-16LE)");
         } else {
@@ -338,8 +338,8 @@ public class ReversedLinesFileReader implements Closeable {
 
         // NOTE: The new line sequences are matched in the order given, so it is
         // important that \r\n is BEFORE \n
-        this.newLineSequences = new byte[][] { "\r\n".getBytes(this.encoding), "\n".getBytes(this.encoding),
-                "\r".getBytes(this.encoding) };
+        this.newLineSequences = new byte[][] { "\r\n".getBytes(this.charset), "\n".getBytes(this.charset),
+                "\r".getBytes(this.charset) };
 
         this.avoidNewlineSplitBufferSize = newLineSequences[0].length;
 
