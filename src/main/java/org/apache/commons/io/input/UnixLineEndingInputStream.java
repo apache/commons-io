@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A filtering input stream that ensures the content will have unix-style line endings, LF.
+ * A filtering input stream that ensures the content will have UNIX-style line endings, LF.
  *
  * @since 2.5
  */
