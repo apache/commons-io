@@ -143,13 +143,17 @@ public class IOUtils {
 
     /**
      * The Unix line separator string.
+     * 
+     * @see StandardLineSeparator#LF
      */
-    public static final String LINE_SEPARATOR_UNIX = "\n";
+    public static final String LINE_SEPARATOR_UNIX = StandardLineSeparator.LF.getString();
 
     /**
      * The Windows line separator string.
+     * 
+     * @see StandardLineSeparator#CRLF
      */
-    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+    public static final String LINE_SEPARATOR_WINDOWS = StandardLineSeparator.CRLF.getString();
 
     /**
      * The default buffer to use for the skip() methods.

@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.StandardLineSeparator;
 
 /**
  * Reads lines in a file reversely (similar to a BufferedReader, but starting at
@@ -337,8 +338,11 @@ public class ReversedLinesFileReader implements Closeable {
 
         // NOTE: The new line sequences are matched in the order given, so it is
         // important that \r\n is BEFORE \n
-        this.newLineSequences = new byte[][] { "\r\n".getBytes(this.charset), "\n".getBytes(this.charset),
-                "\r".getBytes(this.charset) };
+        this.newLineSequences = new byte[][] { 
+            StandardLineSeparator.CRLF.getBytes(this.charset), 
+            StandardLineSeparator.LF.getBytes(this.charset),
+            StandardLineSeparator.CR.getBytes(this.charset) 
+        };
 
         this.avoidNewlineSplitBufferSize = newLineSequences[0].length;
 

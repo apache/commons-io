@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.StandardLineSeparator.CR;
+import static org.apache.commons.io.StandardLineSeparator.LF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -237,8 +239,8 @@ public class ReversedLinesFileReaderTestParamBlockSize {
 
     static void assertEqualsAndNoLineBreaks(final String msg, final String expected, final String actual) {
         if (actual != null) {
-            assertFalse(actual.contains("\n"), "Line contains \\n: line=" + actual);
-            assertFalse(actual.contains("\r"), "Line contains \\r: line=" + actual);
+            assertFalse(actual.contains(LF.getString()), "Line contains \\n: line=" + actual);
+            assertFalse(actual.contains(CR.getString()), "Line contains \\r: line=" + actual);
         }
         assertEquals(expected, actual, msg);
     }
