@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
-        eofSeen = target == -1;
+        eofSeen = target == EOF;
         if (eofSeen) {
             return target;
         }
@@ -95,13 +96,13 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     private int eofGame(final boolean previousWasSlashR) {
         if (previousWasSlashR || !ensureLineFeedAtEndOfFile) {
-            return -1;
+            return EOF;
         }
         if (!slashNSeen) {
             slashNSeen = true;
             return '\n';
         }
-        return -1;
+        return EOF;
     }
 
     /**
