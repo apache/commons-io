@@ -38,7 +38,7 @@ public class UnixLineEndingInputStream extends InputStream {
     private final boolean ensureLineFeedAtEndOfFile;
 
     /**
-     * Create an input stream that filters another stream
+     * Creates an input stream that filters another stream
      *
      * @param in                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
@@ -89,7 +89,7 @@ public class UnixLineEndingInputStream extends InputStream {
     }
 
     /**
-     * Handles the eof-handling at the end of the stream
+     * Handles the EOF-handling at the end of the stream
      * @param previousWasSlashR Indicates if the last seen was a \r
      * @return The next char to output to the stream
      */
