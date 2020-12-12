@@ -44,7 +44,7 @@ public class WindowsLineEndingInputStream  extends InputStream {
      * @param in                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with CRLF
      */
-    public WindowsLineEndingInputStream( final InputStream in, final boolean ensureLineFeedAtEndOfFile ) {
+    public WindowsLineEndingInputStream(final InputStream in, final boolean ensureLineFeedAtEndOfFile) {
         this.target = in;
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
