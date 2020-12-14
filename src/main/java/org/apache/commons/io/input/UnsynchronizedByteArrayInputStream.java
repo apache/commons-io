@@ -65,8 +65,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param data the buffer
      */
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
-        Objects.requireNonNull(data);
-        this.data = data;
+        this.data = Objects.requireNonNull(data);
         this.offset = 0;
         this.eod = data.length;
         this.markedOffset = this.offset;
@@ -86,7 +85,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
             throw new IllegalArgumentException("offset cannot be negative");
         }
         this.data = data;
-        this.offset = min(offset, data.length > 0 ? data.length: offset);
+        this.offset = min(offset, data.length > 0 ? data.length : offset);
         this.eod = data.length;
         this.markedOffset = this.offset;
     }
@@ -102,14 +101,13 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @throws IllegalArgumentException if the offset or length less than zero
      */
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset, final int length) {
-        Objects.requireNonNull(data);
         if (offset < 0) {
             throw new IllegalArgumentException("offset cannot be negative");
         }
         if (length < 0) {
             throw new IllegalArgumentException("length cannot be negative");
         }
-        this.data = data;
+        this.data = Objects.requireNonNull(data);
         this.offset = min(offset, data.length > 0 ? data.length : offset);
         this.eod = min(this.offset + length, data.length);
         this.markedOffset = this.offset;
@@ -126,15 +124,15 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
     }
 
     @Override
-    public int read(final byte[] b) {
-        Objects.requireNonNull(b);
-        return read(b, 0, b.length);
+    public int read(final byte[] dest) {
+        Objects.requireNonNull(dest);
+        return read(dest, 0, dest.length);
     }
 
     @Override
-    public int read(final byte[] b, final int off, final int len) {
-        Objects.requireNonNull(b);
-        if (off < 0 || len < 0 || off + len > b.length) {
+    public int read(final byte[] dest, final int off, final int len) {
+        Objects.requireNonNull(dest);
+        if (off < 0 || len < 0 || off + len > dest.length) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -149,14 +147,14 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         if (actualLen <= 0) {
             return 0;
         }
-        System.arraycopy(data, offset, b, off, actualLen);
+        System.arraycopy(data, offset, dest, off, actualLen);
         offset += actualLen;
         return actualLen;
     }
 
     @Override
     public long skip(final long n) {
-        if(n < 0) {
+        if (n < 0) {
             throw new IllegalArgumentException("Skipping backward is not supported");
         }
 
