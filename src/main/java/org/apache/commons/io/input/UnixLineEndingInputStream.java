@@ -16,12 +16,15 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.CR;
+import static org.apache.commons.io.IOUtils.EOF;
+import static org.apache.commons.io.IOUtils.LF;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A filtering input stream that ensures the content will have unix-style line endings, LF.
+ * A filtering input stream that ensures the content will have UNIX-style line endings, LF.
  *
  * @since 2.5
  */
@@ -38,12 +41,12 @@ public class UnixLineEndingInputStream extends InputStream {
     private final boolean ensureLineFeedAtEndOfFile;
 
     /**
-     * Create an input stream that filters another stream
+     * Creates an input stream that filters another stream
      *
      * @param in                        The input stream to wrap
      * @param ensureLineFeedAtEndOfFile true to ensure that the file ends with LF
      */
-    public UnixLineEndingInputStream( final InputStream in, final boolean ensureLineFeedAtEndOfFile ) {
+    public UnixLineEndingInputStream(final InputStream in, final boolean ensureLineFeedAtEndOfFile) {
         this.target = in;
         this.ensureLineFeedAtEndOfFile = ensureLineFeedAtEndOfFile;
     }
@@ -55,12 +58,12 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     private int readWithUpdate() throws IOException {
         final int target = this.target.read();
-        eofSeen = target == -1;
-        if ( eofSeen ) {
+        eofSeen = target == EOF;
+        if (eofSeen) {
             return target;
         }
-        slashNSeen = target == '\n';
-        slashRSeen = target == '\r';
+        slashNSeen = target == LF;
+        slashRSeen = target == CR;
         return target;
     }
 
@@ -70,19 +73,18 @@ public class UnixLineEndingInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         final boolean previousWasSlashR = slashRSeen;
-        if ( eofSeen ) {
+        if (eofSeen) {
             return eofGame(previousWasSlashR);
         }
         final int target = readWithUpdate();
-        if ( eofSeen ) {
+        if (eofSeen) {
             return eofGame(previousWasSlashR);
         }
-        if (slashRSeen)
-        {
-            return '\n';
+        if (slashRSeen) {
+            return LF;
         }
 
-        if ( previousWasSlashR && slashNSeen){
+        if (previousWasSlashR && slashNSeen) {
             return read();
         }
 
@@ -90,19 +92,19 @@ public class UnixLineEndingInputStream extends InputStream {
     }
 
     /**
-     * Handles the eof-handling at the end of the stream
+     * Handles the EOF-handling at the end of the stream
      * @param previousWasSlashR Indicates if the last seen was a \r
      * @return The next char to output to the stream
      */
     private int eofGame(final boolean previousWasSlashR) {
-        if ( previousWasSlashR || !ensureLineFeedAtEndOfFile ) {
-            return -1;
+        if (previousWasSlashR || !ensureLineFeedAtEndOfFile) {
+            return EOF;
         }
-        if ( !slashNSeen ) {
+        if (!slashNSeen) {
             slashNSeen = true;
-            return '\n';
+            return LF;
         }
-        return -1;
+        return EOF;
     }
 
     /**
@@ -119,7 +121,7 @@ public class UnixLineEndingInputStream extends InputStream {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void mark( final int readlimit ) {
-        throw new UnsupportedOperationException( "Mark notsupported" );
+    public synchronized void mark(final int readlimit) {
+        throw new UnsupportedOperationException("Mark not supported");
     }
 }

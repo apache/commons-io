@@ -78,6 +78,9 @@ The <action> type attribute can be add,update,fix,remove.
         PathUtils.deleteFile() no longer throws a NoSuchFileException when applied on a symbolic link pointing
         to a file that doesn't exist.
       </action>
+      <action issue="IO-694" dev="ggregory" type="fix" due-to="Tan Yee Fan, Gary Gregory">
+        Behavior change in FileUtils.copyDirectory() file last modified timestamp preservation. Match Javadoc to code.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
@@ -93,6 +96,18 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add PathUtils.createParentDirectories(Path, FileAttribute...).
+      </action>
+      <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add factory methods to CloseShieldInputStream, CloseShieldReader, CloseShieldOutputStream, CloseShieldWriter, #173.
+      </action>
+      <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+        Add QueueInputStream and QueueOutputStream as simpler alternatives to PipedInputStream and PipedOutputStream #171.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add StandardLineSeparator.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Replace magic numbers with constants with the new IOUtils.CR and LF.
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">

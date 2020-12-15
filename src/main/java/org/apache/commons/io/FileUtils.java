@@ -462,7 +462,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcDir  an existing directory to copy, must not be {@code null}
@@ -493,7 +493,7 @@ public class FileUtils {
      * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcDir           an existing directory to copy, must not be {@code null}
@@ -526,7 +526,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
      * <pre>
@@ -578,7 +578,7 @@ public class FileUtils {
      * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
      * <pre>
@@ -631,7 +631,7 @@ public class FileUtils {
      * {@code true} tries to preserve the files' last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
      * <pre>
@@ -706,7 +706,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param sourceDir  an existing directory to copy, must not be {@code null}
@@ -742,7 +742,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcFile  an existing file to copy, must not be {@code null}
@@ -773,7 +773,7 @@ public class FileUtils {
      * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcFile          an existing file to copy, must not be {@code null}
@@ -806,7 +806,7 @@ public class FileUtils {
      * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcFile          an existing file to copy, must not be {@code null}
@@ -874,7 +874,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param srcFile an existing file to copy, must not be {@code null}
@@ -902,7 +902,7 @@ public class FileUtils {
      * {@code true} tries to preserve the file's last modified
      * date/times using {@link File#setLastModified(long)}, however it is
      * not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param sourceFile          an existing file to copy, must not be {@code null}
@@ -966,7 +966,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the files' last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that those operations will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param sourceFile      an existing file or directory to copy, must not be {@code null}
@@ -1002,7 +1002,7 @@ public class FileUtils {
      * <strong>Note:</strong> This method tries to preserve the file's last
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
-     * If the modification operation fails, no indication is provided.
+     * If the modification operation fails, the methods throws IOException.
      * </p>
      *
      * @param sourceIterable     a existing files to copy, must not be {@code null}

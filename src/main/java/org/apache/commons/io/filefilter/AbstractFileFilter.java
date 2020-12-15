@@ -32,7 +32,7 @@ import org.apache.commons.io.file.PathVisitor;
  * Abstracts the implementation of the {@link FileFilter} (IO), {@link FilenameFilter} (IO), {@link PathFilter} (NIO)
  * interfaces via our own {@link IOFileFilter} interface.
  * <p>
- * Note that a subclass MUST override one of the {@code accept} methods, otherwise your class will infinitely loop.
+ * Note that a subclass MUST override one of the {@code accept} methods, otherwise that subclass will infinitely loop.
  * </p>
  *
  * @since 1.0
@@ -71,7 +71,7 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
     /**
      * Handles exceptions caught while accepting.
      *
-     * @param t the caught exception.
+     * @param t the caught Throwable.
      * @return the given Throwable.
      * @since 2.9.0
      */

@@ -128,6 +128,20 @@ public class IOUtils {
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
 
     /**
+     * CR char.
+     *
+     * @since 2.9.0
+     */
+    public static final int CR = '\r';
+
+    /**
+     * LF char.
+     *
+     * @since 2.9.0
+     */
+    public static final int LF = '\n';
+
+    /**
      * Represents the end-of-file (or stream).
      * @since 2.5 (made public)
      */
@@ -143,13 +157,17 @@ public class IOUtils {
 
     /**
      * The Unix line separator string.
+     * 
+     * @see StandardLineSeparator#LF
      */
-    public static final String LINE_SEPARATOR_UNIX = "\n";
+    public static final String LINE_SEPARATOR_UNIX = StandardLineSeparator.LF.getString();
 
     /**
      * The Windows line separator string.
+     * 
+     * @see StandardLineSeparator#CRLF
      */
-    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+    public static final String LINE_SEPARATOR_WINDOWS = StandardLineSeparator.CRLF.getString();
 
     /**
      * The default buffer to use for the skip() methods.

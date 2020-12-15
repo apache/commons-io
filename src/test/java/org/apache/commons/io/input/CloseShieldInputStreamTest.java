@@ -48,7 +48,7 @@ public class CloseShieldInputStreamTest {
                 closed = true;
             }
         };
-        shielded = new CloseShieldInputStream(original);
+        shielded = CloseShieldInputStream.wrap(original);
         closed = false;
     }
 
