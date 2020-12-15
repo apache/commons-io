@@ -2170,8 +2170,10 @@ public class FileUtils {
     public static void moveDirectoryToDirectory(final File src, final File destDir, final boolean createDestDir)
             throws IOException {
         validateMoveParameters(src, destDir);
-        if (!destDir.exists()) {
-            if( createDestDir) {
+        if (!destDir.isDirectory()) {
+            if (destDir.exists()) {
+                throw new IOException("Destination '" + destDir + "' is not a directory");
+            } else if (createDestDir) {
                 if (!destDir.mkdirs()) {
                     throw new IOException("Could not create destination directories '" + destDir + "'");
                 }
@@ -2179,8 +2181,6 @@ public class FileUtils {
                 throw new FileNotFoundException("Destination directory '" + destDir +
                         "' does not exist [createDestDir=" + createDestDir + "]");
             }
-        } else if (!destDir.isDirectory()) {
-            throw new IOException("Destination '" + destDir + "' is not a directory");
         }
         moveDirectory(src, new File(destDir, src.getName()));
     }
