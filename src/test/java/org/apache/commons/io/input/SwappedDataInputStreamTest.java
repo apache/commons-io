@@ -65,7 +65,7 @@ public class SwappedDataInputStreamTest {
         bytes = new byte[] {0x00, 0x01, 0x02,};
         try (
             final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            final SwappedDataInputStream sdis = new SwappedDataInputStream(bais);
+            final SwappedDataInputStream sdis = new SwappedDataInputStream(bais)
         ) {
             assertEquals(false, sdis.readBoolean());
             assertEquals(true, sdis.readBoolean());

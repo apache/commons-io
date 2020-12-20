@@ -24,12 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Iterator;
 
-import org.apache.commons.io.file.DirectoryStreamFilter;
-import org.apache.commons.io.file.PathFilter;
-import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
 

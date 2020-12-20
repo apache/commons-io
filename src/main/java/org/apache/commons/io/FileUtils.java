@@ -198,7 +198,7 @@ public class FileUtils {
      */
     // See https://issues.apache.org/jira/browse/IO-226 - should the rounding be changed?
     public static String byteCountToDisplaySize(final BigInteger size) {
-        String displaySize;
+        final String displaySize;
 
         if (size.divide(ONE_EB_BI).compareTo(BigInteger.ZERO) > 0) {
             displaySize = String.valueOf(size.divide(ONE_EB_BI)) + " EB";
@@ -2711,7 +2711,7 @@ public class FileUtils {
      */
     public static Stream<File> streamFiles(final File directory, final boolean recursive, final String... extensions)
         throws IOException {
-        IOFileFilter filter;
+        final IOFileFilter filter;
         if (extensions == null) {
             filter = FileFileFilter.INSTANCE;
         } else {

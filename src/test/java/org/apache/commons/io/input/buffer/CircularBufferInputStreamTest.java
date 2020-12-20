@@ -82,7 +82,7 @@ public class CircularBufferInputStreamTest {
 		final byte[] buffer = new byte[]{0,1,-2,-2,-1,4};
 		try (
 			final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais);
+			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)
 		){
 			int b;
 			int i = 0;

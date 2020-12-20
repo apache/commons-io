@@ -32,7 +32,7 @@ import java.util.Objects;
  */
 public class FileSystemProviders {
 
-    private static FileSystemProviders INSTALLED = new FileSystemProviders(FileSystemProvider.installedProviders());
+    private static final FileSystemProviders INSTALLED = new FileSystemProviders(FileSystemProvider.installedProviders());
 
     /**
      * Gets the {@link FileSystemProvider} for the given Path.

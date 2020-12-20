@@ -130,7 +130,7 @@ public class FileUtilsCleanDirectoryTestCase {
         args.add(Integer.toString(mode));
         args.add(file.getAbsolutePath());
 
-        Process proc;
+        final Process proc;
 
         try {
             proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));

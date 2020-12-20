@@ -310,7 +310,7 @@ public class XmlStreamReaderTest {
         for (final String encoding : encodings) {
             final String xml = getXML("no-bom", XML3, encoding, encoding);
             try (final ByteArrayInputStream is = new ByteArrayInputStream(xml.getBytes(encoding));
-                    final XmlStreamReader xmlReader = new XmlStreamReader(is);) {
+                    final XmlStreamReader xmlReader = new XmlStreamReader(is)) {
                 assertTrue(encoding.equalsIgnoreCase(xmlReader.getEncoding()), "Check encoding : " + encoding);
                 assertEquals(xml, IOUtils.toString(xmlReader), "Check content");
             }

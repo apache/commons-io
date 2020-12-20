@@ -445,7 +445,7 @@ public class XmlStreamReader extends Reader {
     // InputStream is passed for XmlStreamReaderException creation only
     String calculateRawEncoding(final String bomEnc, final String xmlGuessEnc,
             final String xmlEnc, final InputStream is) throws IOException {
-        String encoding;
+        final String encoding;
         if (bomEnc == null) {
             if (xmlGuessEnc == null || xmlEnc == null) {
                 encoding = defaultEncoding == null ? UTF_8 : defaultEncoding;
@@ -508,7 +508,7 @@ public class XmlStreamReader extends Reader {
     String calculateHttpEncoding(final String cTMime, final String cTEnc,
             final String bomEnc, final String xmlGuessEnc, final String xmlEnc, final InputStream is,
             final boolean lenient) throws IOException {
-        String encoding;
+        final String encoding;
         if (lenient && (xmlEnc != null)) {
             encoding = xmlEnc;
         } else {

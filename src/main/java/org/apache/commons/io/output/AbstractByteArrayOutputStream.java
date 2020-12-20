@@ -91,7 +91,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             currentBuffer = buffers.get(currentBufferIndex);
         } else {
             //Creating new buffer
-            int newBufferSize;
+            final int newBufferSize;
             if (currentBuffer == null) {
                 newBufferSize = newcount;
                 filledBufferSum = 0;

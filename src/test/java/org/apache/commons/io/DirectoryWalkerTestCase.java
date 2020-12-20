@@ -31,7 +31,6 @@ import java.util.List;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
-import org.apache.commons.io.filefilter.OrFileFilter;
 import org.junit.jupiter.api.Test;
 
 /**

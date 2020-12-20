@@ -113,7 +113,7 @@ public class LineIteratorTestCase {
     public void testConstructor() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> {
             try (
-                LineIterator li = new LineIterator(null);
+                LineIterator li = new LineIterator(null)
             ) { }
         });
     }
@@ -143,7 +143,7 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, "dummy-missing-file.txt");
 
         try (
-            LineIterator iterator = FileUtils.lineIterator(testFile, "UTF-8");
+            LineIterator iterator = FileUtils.lineIterator(testFile, "UTF-8")
         ){
             fail("Expected FileNotFoundException");
         } catch (final FileNotFoundException expected) {
@@ -159,7 +159,7 @@ public class LineIteratorTestCase {
         createLinesFile(testFile, encoding, 3);
 
         try (
-            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)
         ){
             int count = 0;
             while (iterator.hasNext()) {
@@ -178,7 +178,7 @@ public class LineIteratorTestCase {
         createLinesFile(testFile, "UTF-8", 3);
 
         try (
-            LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+            LineIterator iterator = FileUtils.lineIterator(testFile, encoding)
         ) {
             fail("Expected UnsupportedCharsetException");
         } catch (final UnsupportedCharsetException expected) {
@@ -225,7 +225,7 @@ public class LineIteratorTestCase {
         final List<String> lines = createLinesFile(testFile, encoding, 3);
 
         try (
-            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)
         ){
             for (int i = 0; i < lines.size(); i++) {
                 final String line = iterator.next();
@@ -244,7 +244,7 @@ public class LineIteratorTestCase {
             }
         };
         try (
-            LineIterator li = new LineIterator(reader);
+            LineIterator li = new LineIterator(reader)
         ) {
             assertThrows(IllegalStateException.class, () -> {
                 li.hasNext();
@@ -260,7 +260,7 @@ public class LineIteratorTestCase {
         createLinesFile(testFile, encoding, 3);
 
         try (
-            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)
         ) {
             // get
             assertNotNull("Line expected", iterator.next());
@@ -314,7 +314,7 @@ public class LineIteratorTestCase {
         final List<String> lines = createLinesFile(testFile, encoding, lineCount);
 
         try (
-            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding);
+            final LineIterator iterator = FileUtils.lineIterator(testFile, encoding)
         ){
             try {
                 iterator.remove();
