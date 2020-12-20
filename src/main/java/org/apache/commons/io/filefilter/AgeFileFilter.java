@@ -176,7 +176,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      */
     @Override
     public FileVisitResult accept(final Path file, final BasicFileAttributes attributes) {
-        boolean newer;
+        final boolean newer;
         try {
             newer = PathUtils.isNewer(file, cutoffMillis);
         } catch (final IOException e) {

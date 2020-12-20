@@ -253,7 +253,7 @@ public class FileUtilsCleanSymlinksTestCase {
         args.add(res.getAbsolutePath());
         args.add(link.getAbsolutePath());
 
-        Process proc;
+        final Process proc;
 
         proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
         return proc.waitFor() == 0;

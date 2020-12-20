@@ -733,7 +733,7 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_CharSkipInvalid() throws IOException {
         try (
             CharArrayReader is = new CharArrayReader(carr);
-            CharArrayWriter os = new CharArrayWriter();
+            CharArrayWriter os = new CharArrayWriter()
         ) {
             assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
         }
@@ -742,7 +742,7 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_ExtraLength() throws IOException {
         try (
             ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ByteArrayOutputStream os = new ByteArrayOutputStream()
         ) {
             // Create streams
 
@@ -763,7 +763,7 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_FullLength() throws IOException {
         try (
             ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ByteArrayOutputStream os = new ByteArrayOutputStream()
         ) {
             // Test our copy method
             assertEquals(200, IOUtils.copyLarge(is, os, 0, -1));
@@ -781,8 +781,8 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_NoSkip() throws IOException {
         try (
             ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-         ) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream()
+        ) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 0, 100));
             final byte[] oarr = os.toByteArray();
@@ -799,7 +799,7 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_Skip() throws IOException {
         try (
             ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ByteArrayOutputStream os = new ByteArrayOutputStream()
         ) {
             // Test our copy method
             assertEquals(100, IOUtils.copyLarge(is, os, 10, 100));
@@ -817,7 +817,7 @@ public class IOUtilsTestCase {
     @Test public void testCopyLarge_SkipInvalid() throws IOException {
         try (
             ByteArrayInputStream is = new ByteArrayInputStream(iarr);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ByteArrayOutputStream os = new ByteArrayOutputStream()
         ) {
             // Test our copy method
             assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));

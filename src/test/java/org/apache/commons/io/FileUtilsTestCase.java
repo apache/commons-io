@@ -222,7 +222,7 @@ public class FileUtilsTestCase {
 
     private void iterateFilesAndDirs(final File dir, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter, final Collection<File> expectedFilesAndDirs) {
-        Iterator<File> iterator;
+        final Iterator<File> iterator;
         int filesCount = 0;
         iterator = FileUtils.iterateFilesAndDirs(dir, fileFilter, dirFilter);
         try {
