@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 
@@ -77,12 +78,12 @@ public class UnixLineEndingInputStreamTest
     }
 
     private String roundtrip( final String msg, final boolean ensure ) throws IOException {
-        final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes( "UTF-8" ) );
+        final ByteArrayInputStream baos = new ByteArrayInputStream( msg.getBytes(StandardCharsets.UTF_8) );
         final UnixLineEndingInputStream lf = new UnixLineEndingInputStream( baos, ensure );
         final byte[] buf = new byte[100];
         final int read = lf.read( buf );
         lf.close();
-        return new String( buf, 0, read, "UTF-8" );
+        return new String( buf, 0, read, StandardCharsets.UTF_8);
     }
 
 }

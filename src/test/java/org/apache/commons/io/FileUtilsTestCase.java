@@ -473,7 +473,7 @@ public class FileUtilsTestCase {
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
-        expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
+        expectedChecksum.update(text.getBytes(StandardCharsets.US_ASCII), 0, text.length());
         final long expectedValue = expectedChecksum.getValue();
 
         // compute the checksum of the file
@@ -495,7 +495,7 @@ public class FileUtilsTestCase {
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
-        expectedChecksum.update(text.getBytes("US-ASCII"), 0, text.length());
+        expectedChecksum.update(text.getBytes(StandardCharsets.US_ASCII), 0, text.length());
         final long expectedValue = expectedChecksum.getValue();
 
         // compute the checksum of the file
@@ -518,8 +518,8 @@ public class FileUtilsTestCase {
 
         // compute the expected checksum
         final Checksum expectedChecksum = new CRC32();
-        expectedChecksum.update(text1.getBytes("US-ASCII"), 0, text1.length());
-        expectedChecksum.update(text2.getBytes("US-ASCII"), 0, text2.length());
+        expectedChecksum.update(text1.getBytes(StandardCharsets.US_ASCII), 0, text1.length());
+        expectedChecksum.update(text2.getBytes(StandardCharsets.US_ASCII), 0, text2.length());
         final long expectedValue = expectedChecksum.getValue();
 
         // compute the checksum of the file
@@ -1409,7 +1409,7 @@ public class FileUtilsTestCase {
 
         //Create test file on-the-fly (used to be in CVS)
         try (OutputStream out = new FileOutputStream(file1)) {
-            out.write("This is a test".getBytes("UTF-8"));
+            out.write("This is a test".getBytes(StandardCharsets.UTF_8));
         }
 
         final File file2 = new File(temporaryFolder, "test2.txt");
@@ -2530,7 +2530,7 @@ public class FileUtilsTestCase {
     public void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(temporaryFolder, "read.obj");
         final FileOutputStream out = new FileOutputStream(file);
-        final byte[] text = "Hello /u1234".getBytes("UTF8");
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         out.write(text);
         out.close();
 
@@ -2957,7 +2957,7 @@ public class FileUtilsTestCase {
     public void testWriteCharSequence1() throws Exception {
         final File file = new File(temporaryFolder, "write.txt");
         FileUtils.write(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes("UTF8");
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 
@@ -3177,7 +3177,7 @@ public class FileUtilsTestCase {
     public void testWriteStringToFile1() throws Exception {
         final File file = new File(temporaryFolder, "write.txt");
         FileUtils.writeStringToFile(file, "Hello /u1234", "UTF8");
-        final byte[] text = "Hello /u1234".getBytes("UTF8");
+        final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         TestUtils.assertEqualContent(text, file);
     }
 

@@ -27,5 +27,5 @@ public class NoopPathVisitor extends SimplePathVisitor {
     /**
      * The singleton instance.
      */
-    public static NoopPathVisitor INSTANCE = new NoopPathVisitor();
+    public static final NoopPathVisitor INSTANCE = new NoopPathVisitor();
 }
