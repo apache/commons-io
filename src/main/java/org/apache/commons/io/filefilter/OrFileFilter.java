@@ -201,7 +201,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
                 if (i > 0) {
                     buffer.append(",");
                 }
-                buffer.append(Objects.toString(fileFilters.get(i)));
+                buffer.append(fileFilters.get(i));
             }
         }
         buffer.append(")");

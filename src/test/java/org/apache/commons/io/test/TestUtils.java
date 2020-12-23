@@ -33,6 +33,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
@@ -157,7 +158,7 @@ public abstract class TestUtils {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             for (final String element : data) {
                 output.println(element);
             }

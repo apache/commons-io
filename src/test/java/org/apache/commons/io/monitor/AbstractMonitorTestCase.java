@@ -46,7 +46,7 @@ public abstract class AbstractMonitorTestCase {
     protected File testDir;
 
     /** Time in milliseconds to pause in tests */
-    protected long pauseTime = 100L;
+    protected final long pauseTime = 100L;
 
     @BeforeEach
     public void setUp() throws Exception {

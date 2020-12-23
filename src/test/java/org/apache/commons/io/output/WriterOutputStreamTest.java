@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -131,7 +132,7 @@ public class WriterOutputStreamTest {
     public void testFlush() throws IOException {
         final StringWriter writer = new StringWriter();
         try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, false)) {
-            out.write("abc".getBytes("us-ascii"));
+            out.write("abc".getBytes(StandardCharsets.US_ASCII));
             assertEquals(0, writer.getBuffer().length());
             out.flush();
             assertEquals("abc", writer.toString());
@@ -142,7 +143,7 @@ public class WriterOutputStreamTest {
     public void testWriteImmediately() throws IOException {
         final StringWriter writer = new StringWriter();
         try (final WriterOutputStream out = new WriterOutputStream(writer, "us-ascii", 1024, true)) {
-            out.write("abc".getBytes("us-ascii"));
+            out.write("abc".getBytes(StandardCharsets.US_ASCII));
             assertEquals("abc", writer.toString());
         }
     }

@@ -23,6 +23,7 @@ import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -138,7 +139,7 @@ public class ReaderInputStreamTest {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
         final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         // Charset charset = Charset.forName("UTF-8"); // works
-        final Charset charset = Charset.forName("ASCII"); // infinite loop
+        final Charset charset = StandardCharsets.US_ASCII; // infinite loop
         try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {
             while (stream.read() != -1) {
             }

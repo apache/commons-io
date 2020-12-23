@@ -871,7 +871,7 @@ public class IOUtilsTestCase {
         }}
 
     @Test public void testReadFully_InputStream__ReturnByteArray() throws Exception {
-        final byte[] bytes = "abcd1234".getBytes("UTF-8");
+        final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
         final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 
         final byte[] result = IOUtils.readFully(stream, bytes.length);
@@ -906,11 +906,11 @@ public class IOUtilsTestCase {
     }
 
     @Test public void testReadFully_InputStream_Offset() throws Exception {
-        final byte[] bytes = "abcd1234".getBytes("UTF-8");
+        final byte[] bytes = "abcd1234".getBytes(StandardCharsets.UTF_8);
         final ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-        final byte[] buffer = "wx00000000".getBytes("UTF-8");
+        final byte[] buffer = "wx00000000".getBytes(StandardCharsets.UTF_8);
         IOUtils.readFully(stream, buffer, 2, 8);
-        assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, "UTF-8"));
+        assertEquals("wxabcd1234", new String(buffer, 0, buffer.length, StandardCharsets.UTF_8));
         IOUtils.closeQuietly(stream);
     }
 
@@ -1475,7 +1475,7 @@ public class IOUtilsTestCase {
         assertEqualContent(csq.toString().getBytes(), bytes);
         inStream = IOUtils.toInputStream(csq, "UTF-8");
         bytes = IOUtils.toByteArray(inStream);
-        assertEqualContent(csq.toString().getBytes("UTF-8"), bytes);
+        assertEqualContent(csq.toString().getBytes(StandardCharsets.UTF_8), bytes);
     }
 
     /**
@@ -1496,7 +1496,7 @@ public class IOUtilsTestCase {
         assertEqualContent(str.getBytes(), bytes);
         inStream = IOUtils.toInputStream(str, "UTF-8");
         bytes = IOUtils.toByteArray(inStream);
-        assertEqualContent(str.getBytes("UTF-8"), bytes);
+        assertEqualContent(str.getBytes(StandardCharsets.UTF_8), bytes);
     }
 
     @Test public void testToString_ByteArray() throws Exception {
