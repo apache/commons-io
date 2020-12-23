@@ -77,7 +77,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-692" dev="ebourg" type="fix" due-to="Matthew Rooney, Emmanuel Bourg">
         PathUtils.deleteFile() no longer throws a NoSuchFileException when applied on a symbolic link pointing
         to a file that doesn't exist.
-      </action>
+      </action>s
       <action issue="IO-694" dev="ggregory" type="fix" due-to="Tan Yee Fan, Gary Gregory">
         Behavior change in FileUtils.copyDirectory() file last modified timestamp preservation. Match Javadoc to code.
       </action>
@@ -138,7 +138,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5.
       </action>
       <action dev="ggregory" type="update" due-to="Arturo Bernal">
-        Minor improvements #176.
+        Minor improvements #176, 177.s
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
