@@ -30,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -407,7 +408,7 @@ public class XmlStreamReaderTest {
     @Test
     public void testEncodingAttributeXML() throws Exception {
         final InputStream is = new ByteArrayInputStream(ENCODING_ATTRIBUTE_XML
-                .getBytes("UTF-8"));
+                .getBytes(StandardCharsets.UTF_8));
         final XmlStreamReader xmlReader = new XmlStreamReader(is, "", true);
         assertEquals(xmlReader.getEncoding(), "UTF-8");
         xmlReader.close();

@@ -110,7 +110,6 @@ public class ProxyWriterTest {
         try (final ProxyWriter proxy = new ProxyWriter(NullWriter.NULL_WRITER)) {
             proxy.write((String) null);
             proxy.write((String) null, 0, 0);
-            proxy.close();
         }
     }
 
@@ -126,7 +125,6 @@ public class ProxyWriterTest {
     public void nullCharSequence() throws Exception {
         try (final ProxyWriter proxy = new ProxyWriter(NullWriter.NULL_WRITER)) {
             proxy.append(null);
-            proxy.close();
         }
     }
 

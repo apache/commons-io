@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -78,7 +79,7 @@ public class CopyUtilsTest {
     public void copy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(inData, writer);
         writer.flush();
@@ -121,7 +122,7 @@ public class CopyUtilsTest {
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(in, writer);
         writer.flush();
@@ -145,7 +146,7 @@ public class CopyUtilsTest {
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
@@ -167,11 +168,11 @@ public class CopyUtilsTest {
     public void copy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
         in = new ThrowOnCloseInputStream(in);
-        final Reader reader = new java.io.InputStreamReader(in, "US-ASCII");
+        final Reader reader = new java.io.InputStreamReader(in, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         final int count = CopyUtils.copy(reader, writer);
         writer.flush();
@@ -182,7 +183,7 @@ public class CopyUtilsTest {
 
     @Test
     public void copy_stringToOutputStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
@@ -201,11 +202,11 @@ public class CopyUtilsTest {
 
     @Test
     public void copy_stringToWriter() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, false, true);
-        final Writer writer = new java.io.OutputStreamWriter(out, "US-ASCII");
+        final Writer writer = new java.io.OutputStreamWriter(out, StandardCharsets.US_ASCII);
 
         CopyUtils.copy(str, writer);
         writer.flush();

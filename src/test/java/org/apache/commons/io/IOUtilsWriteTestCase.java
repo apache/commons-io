@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(inData, writer);
         out.off();
@@ -103,7 +104,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write((byte[]) null, writer);
         out.off();
@@ -127,14 +128,14 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(inData, writer, "UTF8");
         out.off();
         writer.flush();
 
         byte[] bytes = baout.toByteArray();
-        bytes = new String(bytes, "UTF8").getBytes("US-ASCII");
+        bytes = new String(bytes, StandardCharsets.UTF_8).getBytes(StandardCharsets.US_ASCII);
         assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
@@ -143,7 +144,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(null, writer, "UTF8");
         out.off();
@@ -166,7 +167,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(inData, writer, (String) null);
         out.off();
@@ -179,7 +180,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToOutputStream() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -206,7 +207,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charSequenceToOutputStream_nullStream() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         try {
             IOUtils.write(csq, (OutputStream) null);
             fail();
@@ -217,7 +218,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -227,7 +228,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         byte[] bytes = baout.toByteArray();
-        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
         assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
@@ -245,7 +246,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charSequenceToOutputStream_Encoding_nullStream() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         try {
             IOUtils.write(csq, (OutputStream) null);
             fail();
@@ -255,7 +256,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charSequenceToOutputStream_nullEncoding() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -271,12 +272,12 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToWriter() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(csq, writer);
         out.off();
@@ -291,7 +292,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write((CharSequence) null, writer);
         out.off();
@@ -302,7 +303,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charSequenceToWriter_Encoding_nullStream() throws Exception {
-        final CharSequence csq = new StringBuilder(new String(inData, "US-ASCII"));
+        final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
         try {
             IOUtils.write(csq, (Writer) null);
             fail();
@@ -313,7 +314,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToOutputStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -340,7 +341,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_stringToOutputStream_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str, (OutputStream) null);
             fail();
@@ -351,7 +352,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToOutputStream_Encoding() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -361,7 +362,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         byte[] bytes = baout.toByteArray();
-        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
         assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
@@ -379,7 +380,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_stringToOutputStream_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str, (OutputStream) null);
             fail();
@@ -389,7 +390,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_stringToOutputStream_nullEncoding() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -405,12 +406,12 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToWriter() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(str, writer);
         out.off();
@@ -425,7 +426,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write((String) null, writer);
         out.off();
@@ -436,7 +437,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_stringToWriter_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str, (Writer) null);
             fail();
@@ -447,7 +448,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToOutputStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -474,7 +475,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charArrayToOutputStream_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str.toCharArray(), (OutputStream) null);
             fail();
@@ -485,7 +486,7 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -495,7 +496,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         byte[] bytes = baout.toByteArray();
-        bytes = new String(bytes, "UTF16").getBytes("US-ASCII");
+        bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
         assertTrue(Arrays.equals(inData, bytes), "Content differs");
     }
 
@@ -513,7 +514,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charArrayToOutputStream_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str.toCharArray(), (OutputStream) null);
             fail();
@@ -523,7 +524,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charArrayToOutputStream_nullEncoding() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
@@ -539,12 +540,12 @@ public class IOUtilsWriteTestCase {
     //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToWriter() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write(str.toCharArray(), writer);
         out.off();
@@ -559,7 +560,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.write((char[]) null, writer);
         out.off();
@@ -570,7 +571,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWrite_charArrayToWriter_Encoding_nullStream() throws Exception {
-        final String str = new String(inData, "US-ASCII");
+        final String str = new String(inData, StandardCharsets.US_ASCII);
         try {
             IOUtils.write(str.toCharArray(), (Writer) null);
             fail();
@@ -727,7 +728,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.writeLines(list, "*", writer);
 
@@ -744,7 +745,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.writeLines(null, "*", writer);
         out.off();
@@ -761,7 +762,7 @@ public class IOUtilsWriteTestCase {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         @SuppressWarnings("resource") // deliberately not closed
         final ThrowOnFlushAndCloseOutputStream out = new ThrowOnFlushAndCloseOutputStream(baout, true, true);
-        final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
+        final Writer writer = new OutputStreamWriter(baout, StandardCharsets.US_ASCII);
 
         IOUtils.writeLines(list, null, writer);
         out.off();
