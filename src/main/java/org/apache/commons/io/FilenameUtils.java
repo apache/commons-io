@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io;
 
+import org.apache.commons.lang3.SystemUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -665,7 +666,10 @@ public class FilenameUtils {
         if (ch1 == ':') {
             ch0 = Character.toUpperCase(ch0);
             if (ch0 >= 'A' && ch0 <= 'Z') {
-                if (len == 2 || isSeparator(fileName.charAt(2)) == false) {
+                if (len == 2 && SystemUtils.IS_OS_LINUX) {
+                    return 0;
+                }
+                if (len == 2 || !isSeparator(fileName.charAt(2))) {
                     return 2;
                 }
                 return 3;
