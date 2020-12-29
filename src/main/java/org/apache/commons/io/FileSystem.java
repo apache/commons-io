@@ -36,7 +36,7 @@ public enum FileSystem {
     /**
      * Generic file system.
      */
-    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}),
+    GENERIC(false, false, Integer.MAX_VALUE, Integer.MAX_VALUE, new char[] { 0 }, new String[] {}, false),
 
     /**
      * Linux file system.
@@ -48,7 +48,7 @@ public enum FileSystem {
             0,
              '/'
             // @formatter:on
-    }, new String[] {}),
+    }, new String[] {}, false),
 
     /**
      * MacOS file system.
@@ -61,7 +61,7 @@ public enum FileSystem {
             '/',
              ':'
             // @formatter:on
-    }, new String[] {}),
+    }, new String[] {}, false),
 
     /**
      * Windows file system.
@@ -79,7 +79,7 @@ public enum FileSystem {
                     // @formatter:on
             }, // KEEP THIS ARRAY SORTED!
             new String[] { "AUX", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "CON", "LPT1",
-                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" });
+                    "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "NUL", "PRN" }, true);
 
     /**
      * <p>
@@ -194,31 +194,29 @@ public enum FileSystem {
     private final int maxFileNameLength;
     private final int maxPathLength;
     private final String[] reservedFileNames;
+    private final boolean supportsDriveLetter;
 
     /**
      * Constructs a new instance.
      *
-     * @param caseSensitive
-     *            Whether this file system is case sensitive.
-     * @param casePreserving
-     *            Whether this file system is case preserving.
-     * @param maxFileLength
-     *            The maximum length for file names. The file name does not include folders.
-     * @param maxPathLength
-     *            The maximum length of the path to a file. This can include folders.
-     * @param illegalFileNameChars
-     *            Illegal characters for this file system.
-     * @param reservedFileNames
-     *            The reserved file names.
+     * @param caseSensitive Whether this file system is case sensitive.
+     * @param casePreserving Whether this file system is case preserving.
+     * @param maxFileLength The maximum length for file names. The file name does not include folders.
+     * @param maxPathLength The maximum length of the path to a file. This can include folders.
+     * @param illegalFileNameChars Illegal characters for this file system.
+     * @param reservedFileNames The reserved file names.
+     * @param supportsDriveLetter Whether this file system support driver letters.
      */
     FileSystem(final boolean caseSensitive, final boolean casePreserving, final int maxFileLength,
-               final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames) {
+        final int maxPathLength, final char[] illegalFileNameChars, final String[] reservedFileNames,
+        final boolean supportsDriveLetter) {
         this.maxFileNameLength = maxFileLength;
         this.maxPathLength = maxPathLength;
         this.illegalFileNameChars = Objects.requireNonNull(illegalFileNameChars, "illegalFileNameChars");
         this.reservedFileNames = Objects.requireNonNull(reservedFileNames, "reservedFileNames");
         this.caseSensitive = caseSensitive;
         this.casePreserving = casePreserving;
+        this.supportsDriveLetter = supportsDriveLetter;
     }
 
     /**
@@ -319,6 +317,22 @@ public enum FileSystem {
      */
     public boolean isReservedFileName(final CharSequence candidate) {
         return Arrays.binarySearch(reservedFileNames, candidate) >= 0;
+    }
+
+    /**
+     * Tests whether this file system support driver letters.
+     * <p>
+     * Windows supports driver letters as do other operating systems. Whether these other OS's still support Java like
+     * OS/2, is a different matter.
+     * </p>
+     *
+     * @return whether this file system support driver letters.
+     * @since 2.9.0
+     * @see <a href="https://en.wikipedia.org/wiki/Drive_letter_assignment">Operating systems that use drive letter
+     *      assignment</a>
+     */
+    public boolean supportsDriveLetter() {
+        return supportsDriveLetter;
     }
 
     /**
