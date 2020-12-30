@@ -34,6 +34,12 @@ jobs:
           - java: 16-ea
             os: windows-latest
             experimental: true        
+          - java: 17-ea
+            os: ubuntu-latest
+            experimental: true        
+          - java: 17-ea
+            os: windows-latest
+            experimental: true        
       fail-fast: false
         
     steps:
