@@ -605,22 +605,23 @@ public class FilenameUtils {
      * than the length of the input string.
      * <pre>
      * Windows:
-     * a\b\c.txt           --&gt; ""          --&gt; relative
-     * \a\b\c.txt          --&gt; "\"         --&gt; current drive absolute
-     * C:a\b\c.txt         --&gt; "C:"        --&gt; drive relative
-     * C:\a\b\c.txt        --&gt; "C:\"       --&gt; absolute
-     * \\server\a\b\c.txt  --&gt; "\\server\" --&gt; UNC
-     * \\\a\b\c.txt        --&gt;  error, length = -1
+     * a\b\c.txt           --&gt; 0           --&gt; relative
+     * \a\b\c.txt          --&gt; 1           --&gt; current drive absolute
+     * C:a\b\c.txt         --&gt; 2           --&gt; drive relative
+     * C:\a\b\c.txt        --&gt; 3           --&gt; absolute
+     * \\server\a\b\c.txt  --&gt; 9           --&gt; UNC
+     * \\\a\b\c.txt        --&gt; -1          --&gt; error
      *
      * Unix:
-     * a/b/c.txt           --&gt; ""          --&gt; relative
-     * /a/b/c.txt          --&gt; "/"         --&gt; absolute
-     * ~/a/b/c.txt         --&gt; "~/"        --&gt; current user
-     * ~                   --&gt; "~/"        --&gt; current user (slash added)
-     * ~user/a/b/c.txt     --&gt; "~user/"    --&gt; named user
-     * ~user               --&gt; "~user/"    --&gt; named user (slash added)
-     * //server/a/b/c.txt  --&gt; "//server/"
-     * ///a/b/c.txt        --&gt; error, length = -1
+     * a/b/c.txt           --&gt; 0           --&gt; relative
+     * /a/b/c.txt          --&gt; 1           --&gt; absolute
+     * ~/a/b/c.txt         --&gt; 2           --&gt; current user
+     * ~                   --&gt; 2           --&gt; current user (slash added)
+     * ~user/a/b/c.txt     --&gt; 6           --&gt; named user
+     * ~user               --&gt; 6           --&gt; named user (slash added)
+     * //server/a/b/c.txt  --&gt; 9
+     * ///a/b/c.txt        --&gt; -1          --&gt; error
+     * C:                  --&gt; 0           --&gt; valid filename as only null byte and / are reserved characters
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
@@ -665,7 +666,10 @@ public class FilenameUtils {
         if (ch1 == ':') {
             ch0 = Character.toUpperCase(ch0);
             if (ch0 >= 'A' && ch0 <= 'Z') {
-                if (len == 2 || isSeparator(fileName.charAt(2)) == false) {
+                if (len == 2 && !FileSystem.getCurrent().supportsDriveLetter()) {
+                    return 0;
+                }
+                if (len == 2 || !isSeparator(fileName.charAt(2))) {
                     return 2;
                 }
                 return 3;

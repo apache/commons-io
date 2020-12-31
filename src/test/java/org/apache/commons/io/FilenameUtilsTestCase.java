@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.io.test.TestUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -554,7 +555,14 @@ public class FilenameUtilsTestCase {
 
         assertEquals(0, FilenameUtils.getPrefixLength(""));
         assertEquals(1, FilenameUtils.getPrefixLength("\\"));
-        assertEquals(2, FilenameUtils.getPrefixLength("C:"));
+
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals(2, FilenameUtils.getPrefixLength("C:"));
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals(0, FilenameUtils.getPrefixLength("C:"));
+        }
+
         assertEquals(3, FilenameUtils.getPrefixLength("C:\\"));
         assertEquals(9, FilenameUtils.getPrefixLength("//server/"));
         assertEquals(2, FilenameUtils.getPrefixLength("~"));
@@ -645,7 +653,14 @@ public class FilenameUtilsTestCase {
 
         assertEquals("", FilenameUtils.getPrefix(""));
         assertEquals("\\", FilenameUtils.getPrefix("\\"));
-        assertEquals("C:", FilenameUtils.getPrefix("C:"));
+
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals("C:", FilenameUtils.getPrefix("C:"));
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals("", FilenameUtils.getPrefix("C:"));
+        }
+
         assertEquals("C:\\", FilenameUtils.getPrefix("C:\\"));
         assertEquals("//server/", FilenameUtils.getPrefix("//server/"));
         assertEquals("~/", FilenameUtils.getPrefix("~"));
@@ -786,7 +801,14 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.getFullPath("//a"));
 
         assertEquals("", FilenameUtils.getFullPath(""));
-        assertEquals("C:", FilenameUtils.getFullPath("C:"));
+
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals("C:", FilenameUtils.getFullPath("C:"));
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals("", FilenameUtils.getFullPath("C:"));
+        }
+
         assertEquals("C:/", FilenameUtils.getFullPath("C:/"));
         assertEquals("//server/", FilenameUtils.getFullPath("//server/"));
         assertEquals("~/", FilenameUtils.getFullPath("~"));
@@ -821,7 +843,14 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.getFullPathNoEndSeparator("//a"));
 
         assertEquals("", FilenameUtils.getFullPathNoEndSeparator(""));
-        assertEquals("C:", FilenameUtils.getFullPathNoEndSeparator("C:"));
+
+        if (SystemUtils.IS_OS_WINDOWS) {
+            assertEquals("C:", FilenameUtils.getFullPathNoEndSeparator("C:"));
+        }
+        if (SystemUtils.IS_OS_LINUX) {
+            assertEquals("", FilenameUtils.getFullPathNoEndSeparator("C:"));
+        }
+
         assertEquals("C:/", FilenameUtils.getFullPathNoEndSeparator("C:/"));
         assertEquals("//server/", FilenameUtils.getFullPathNoEndSeparator("//server/"));
         assertEquals("~", FilenameUtils.getFullPathNoEndSeparator("~"));
