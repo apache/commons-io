@@ -304,7 +304,7 @@ file comparators, endian transformation classes, and much more.
     <checkstyle.plugin.version>3.1.1</checkstyle.plugin.version>
     <commons.jacoco.version>0.8.6</commons.jacoco.version>
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
-    <commons.japicmp.version>0.14.4</commons.japicmp.version>
+    <commons.japicmp.version>0.15.1</commons.japicmp.version>
     <spotbugs.plugin.version>4.1.4</spotbugs.plugin.version>
     <spotbugs.impl.version>4.2.0</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
