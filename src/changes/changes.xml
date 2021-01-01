@@ -152,6 +152,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Michiel Kalkman">
         Tiny performance improvement in FileUtils#moveDirectoryToDirectory() #174.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump checkstyle from 8.38 to 8.39 #689.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
