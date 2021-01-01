@@ -32,29 +32,32 @@ public class ByteOrderMark implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** UTF-8 BOM */
-    public static final ByteOrderMark UTF_8    = new ByteOrderMark("UTF-8",    0xEF, 0xBB, 0xBF);
+    /** UTF-8 BOM. */
+    public static final ByteOrderMark UTF_8    = new ByteOrderMark("UTF-8", 0xEF, 0xBB, 0xBF);
 
-    /** UTF-16BE BOM (Big-Endian) */
+    /** UTF-16BE BOM (Big-Endian). */
     public static final ByteOrderMark UTF_16BE = new ByteOrderMark("UTF-16BE", 0xFE, 0xFF);
 
-    /** UTF-16LE BOM (Little-Endian) */
+    /** UTF-16LE BOM (Little-Endian). */
     public static final ByteOrderMark UTF_16LE = new ByteOrderMark("UTF-16LE", 0xFF, 0xFE);
 
     /**
-     * UTF-32BE BOM (Big-Endian)
+     * UTF-32BE BOM (Big-Endian).
+     *
      * @since 2.2
      */
     public static final ByteOrderMark UTF_32BE = new ByteOrderMark("UTF-32BE", 0x00, 0x00, 0xFE, 0xFF);
 
     /**
-     * UTF-32LE BOM (Little-Endian)
+     * UTF-32LE BOM (Little-Endian).
+     *
      * @since 2.2
      */
     public static final ByteOrderMark UTF_32LE = new ByteOrderMark("UTF-32LE", 0xFF, 0xFE, 0x00, 0x00);
 
     /**
      * Unicode BOM character; external form depends on the encoding.
+     *
      * @see <a href="http://unicode.org/faq/utf_bom.html#BOM">Byte Order Mark (BOM) FAQ</a>
      * @since 2.5
      */
@@ -64,7 +67,7 @@ public class ByteOrderMark implements Serializable {
     private final int[] bytes;
 
     /**
-     * Construct a new BOM.
+     * Constructs a new BOM.
      *
      * @param charsetName The name of the charset the BOM represents
      * @param bytes The BOM's bytes
@@ -86,7 +89,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Return the name of the {@link java.nio.charset.Charset} the BOM represents.
+     * Gets the name of the {@link java.nio.charset.Charset} the BOM represents.
      *
      * @return the character set name
      */
@@ -95,7 +98,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Return the length of the BOM's bytes.
+     * Gets the length of the BOM's bytes.
      *
      * @return the length of the BOM's bytes
      */
@@ -104,7 +107,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * The byte at the specified position.
+     * Gets the byte at the specified position.
      *
      * @param pos The position
      * @return The specified byte
@@ -114,7 +117,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Return a copy of the BOM's bytes.
+     * Gets a copy of the BOM's bytes.
      *
      * @return a copy of the BOM's bytes
      */
@@ -151,7 +154,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Return the hashcode for this BOM.
+     * Computes the hashcode for this BOM.
      *
      * @return the hashcode for this BOM.
      * @see java.lang.Object#hashCode()
@@ -166,7 +169,7 @@ public class ByteOrderMark implements Serializable {
     }
 
     /**
-     * Provide a String representation of the BOM.
+     * Converts this instance to a String representation of the BOM.
      *
      * @return the length of the BOM's bytes
      */
