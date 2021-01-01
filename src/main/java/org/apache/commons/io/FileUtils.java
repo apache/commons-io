@@ -2860,14 +2860,14 @@ public class FileUtils {
     /**
      * Validates the given arguments.
      * <ul>
-     * <li>Throws {@link NullPointerException} if {@code src} is null</li>
-     * <li>Throws {@link NullPointerException} if {@code dest} is null</li>
-     * <li>Throws {@link FileNotFoundException} if {@code src} does not exist</li>
+     * <li>Throws {@link NullPointerException} if {@code source} is null</li>
+     * <li>Throws {@link NullPointerException} if {@code destination} is null</li>
+     * <li>Throws {@link FileNotFoundException} if {@code source} does not exist</li>
      * </ul>
      *
-     * @param source                       the file or directory to be moved
-     * @param destination                      the destination file or directory
-     * @throws FileNotFoundException    if {@code src} file does not exist
+     * @param source      the file or directory to be moved
+     * @param destination the destination file or directory
+     * @throws FileNotFoundException if {@code source} file does not exist
      */
     private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {
         Objects.requireNonNull(source, "source");
