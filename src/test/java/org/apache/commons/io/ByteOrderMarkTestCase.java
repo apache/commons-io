@@ -80,6 +80,8 @@ public class ByteOrderMarkTestCase  {
     @Test
     public void getBytes() {
         assertTrue(Arrays.equals(TEST_BOM_1.getBytes(), new byte[] {(byte)1}), "test1 bytes");
+        TEST_BOM_1.getBytes()[0] = 2;
+        assertTrue(Arrays.equals(TEST_BOM_1.getBytes(), new byte[] {(byte)1}), "test1 bytes");
         assertTrue(Arrays.equals(TEST_BOM_2.getBytes(), new byte[] {(byte)1, (byte)2}), "test1 bytes");
         assertTrue(Arrays.equals(TEST_BOM_3.getBytes(), new byte[] {(byte)1, (byte)2, (byte)3}), "test1 bytes");
     }
