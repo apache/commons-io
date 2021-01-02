@@ -20,17 +20,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Classic splitter of {@link OutputStream}. Named after the Unix 'tee' command. It allows a stream to be branched off so there
- * are now two streams.
+ * Classic splitter of {@link OutputStream}. Named after the Unix 'tee' command. It allows a stream to be branched off
+ * so there are now two streams.
  */
 public class TeeOutputStream extends ProxyOutputStream {
 
-    /** the second OutputStream to write to */
-    protected final OutputStream branch; //TODO consider making this private
+    /**
+     * The second OutputStream to write to.
+     *
+     * TODO Make private and final in 3.0.
+     */
+    protected OutputStream branch;
 
     /**
      * Constructs a TeeOutputStream.
-     * @param out the main OutputStream
+     *
+     * @param out    the main OutputStream
      * @param branch the second OutputStream
      */
     public TeeOutputStream(final OutputStream out, final OutputStream branch) {
@@ -39,7 +44,8 @@ public class TeeOutputStream extends ProxyOutputStream {
     }
 
     /**
-     * Write the bytes to both streams.
+     * Writes the bytes to both streams.
+     *
      * @param b the bytes to write
      * @throws IOException if an I/O error occurs
      */
@@ -50,8 +56,9 @@ public class TeeOutputStream extends ProxyOutputStream {
     }
 
     /**
-     * Write the specified bytes to both streams.
-     * @param b the bytes to write
+     * Writes the specified bytes to both streams.
+     *
+     * @param b   the bytes to write
      * @param off The start offset
      * @param len The number of bytes to write
      * @throws IOException if an I/O error occurs
@@ -63,7 +70,8 @@ public class TeeOutputStream extends ProxyOutputStream {
     }
 
     /**
-     * Write a byte to both streams.
+     * Writes a byte to both streams.
+     *
      * @param b the byte to write
      * @throws IOException if an I/O error occurs
      */
@@ -75,6 +83,7 @@ public class TeeOutputStream extends ProxyOutputStream {
 
     /**
      * Flushes both streams.
+     *
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -85,14 +94,16 @@ public class TeeOutputStream extends ProxyOutputStream {
 
     /**
      * Closes both output streams.
-     *
+     * <p>
      * If closing the main output stream throws an exception, attempt to close the branch output stream.
+     * </p>
      *
+     * <p>
      * If closing the main and branch output streams both throw exceptions, which exceptions is thrown by this method is
      * currently unspecified and subject to change.
+     * </p>
      *
-     * @throws IOException
-     *             if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public void close() throws IOException {

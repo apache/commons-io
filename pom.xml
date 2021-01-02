@@ -308,8 +308,6 @@ file comparators, endian transformation classes, and much more.
     <spotbugs.plugin.version>4.1.4</spotbugs.plugin.version>
     <spotbugs.impl.version>4.2.0</spotbugs.impl.version>    
     <japicmp.skip>false</japicmp.skip>
-    <!-- generate report even if there are binary incompatible changes -->
-    <commons.japicmp.breakBuildOnBinaryIncompatibleModifications>false</commons.japicmp.breakBuildOnBinaryIncompatibleModifications>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <commons.releaseManagerName>Gary Gregory</commons.releaseManagerName>    
