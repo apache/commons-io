@@ -2259,9 +2259,9 @@ public class IOUtils {
      * @param input the <code>InputStream</code> to read from
      * @param size the size of <code>InputStream</code>
      * @return the requested byte array
-     * @throws IOException              if an I/O error occurs or <code>InputStream</code> size differ from parameter
+     * @throws IOException              if an I/O error occurs
+     * @throws IllegalArgumentException if size is less than zero or <code>InputStream</code> size differ from parameter
      * size
-     * @throws IllegalArgumentException if size is less than zero
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
@@ -2283,7 +2283,7 @@ public class IOUtils {
         }
 
         if (offset != size) {
-            throw new IOException("Unexpected read size. current: " + offset + ", expected: " + size);
+            throw new IllegalArgumentException("Unexpected read size. current: " + offset + ", expected: " + size);
         }
 
         return data;

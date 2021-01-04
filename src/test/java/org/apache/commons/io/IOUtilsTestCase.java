@@ -1357,8 +1357,8 @@ public class IOUtilsTestCase {
 
         try (FileInputStream fin = new FileInputStream(m_testFile)) {
             IOUtils.toByteArray(fin, m_testFile.length() + 1);
-            fail("IOException expected");
-        } catch (final IOException exc) {
+            fail("IllegalArgumentException expected");
+        } catch (final IllegalArgumentException exc) {
             assertTrue(exc.getMessage().startsWith("Unexpected read size"),
                     "Exception message does not start with \"Unexpected read size\"");
         }
