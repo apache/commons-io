@@ -1366,21 +1366,17 @@ public class FileUtils {
     public static void forceMkdir(final File directory) throws IOException {
         if (directory.exists()) {
             if (!directory.isDirectory()) {
-                final String message =
-                        "File "
-                                + directory
-                                + " exists and is "
-                                + "not a directory. Unable to create directory.";
-                throw new IOException(message);
+                throw new IOException("File "
+                        + directory
+                        + " exists and is "
+                        + "not a directory. Unable to create directory.");
             }
         } else {
             if (!directory.mkdirs()) {
                 // Double-check that some other thread or process hasn't made
                 // the directory in the background
                 if (!directory.isDirectory()) {
-                    final String message =
-                            "Unable to create directory " + directory;
-                    throw new IOException(message);
+                    throw new IOException("Unable to create directory " + directory);
                 }
             }
         }
