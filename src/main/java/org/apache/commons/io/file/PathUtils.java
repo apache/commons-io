@@ -740,11 +740,8 @@ public final class PathUtils {
      */
     public static boolean isEmptyDirectory(final Path directory) throws IOException {
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
-            if (directoryStream.iterator().hasNext()) {
-                return false;
-            }
+            return !directoryStream.iterator().hasNext();
         }
-        return true;
     }
 
     /**
