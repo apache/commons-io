@@ -723,8 +723,8 @@ public final class PathUtils {
     /**
      * Returns whether the given file or directory is empty.
      *
-     * @param path the the given file or directory to query.
-     * @return whether the given file or directory is empty.
+     * @param path the file or directory to query.
+     * @return whether the file or directory is empty.
      * @throws IOException if an I/O error occurs
      */
     public static boolean isEmpty(final Path path) throws IOException {
@@ -734,8 +734,8 @@ public final class PathUtils {
     /**
      * Returns whether the directory is empty.
      *
-     * @param directory the the given directory to query.
-     * @return whether the given directory is empty.
+     * @param directory the directory to query.
+     * @return whether the directory is empty.
      * @throws IOException if an I/O error occurs
      */
     public static boolean isEmptyDirectory(final Path directory) throws IOException {
@@ -747,8 +747,8 @@ public final class PathUtils {
     /**
      * Returns whether the given file is empty.
      *
-     * @param file the the given file to query.
-     * @return whether the given file is empty.
+     * @param file the file to query.
+     * @return whether the file is empty.
      * @throws IOException if an I/O error occurs
      */
     public static boolean isEmptyFile(final Path file) throws IOException {
