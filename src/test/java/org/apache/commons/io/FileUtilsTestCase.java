@@ -1332,6 +1332,12 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testDelete() throws Exception {
+        assertEquals(testFile1, FileUtils.delete(testFile1));
+        assertThrows(IOException.class, () -> FileUtils.delete(new File("does not exist.nope")));
+    }
+
+    @Test
     public void testDeleteQuietlyDir() throws IOException {
         final File testDirectory = new File(temporaryFolder, "testDeleteQuietlyDir");
         final File testFile = new File(testDirectory, "testDeleteQuietlyFile");

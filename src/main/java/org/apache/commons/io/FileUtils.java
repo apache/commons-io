@@ -1109,6 +1109,22 @@ public class FileUtils {
     }
 
     /**
+     * Deletes the given File but throws IOException if it cannot, unlike {@link File#delete()}.
+     *
+     * @param file The file to delete.
+     * @return the given file.
+     * @throws IOException if the file cannot be deleted.
+     * @see File#delete()
+     * @since 2.9.0
+     */
+    public static File delete(final File file) throws IOException {
+        if (!file.delete()) {
+            throw new IOException("Unable to delete " + file);
+        }
+        return file;
+    }
+
+    /**
      * Deletes a directory recursively.
      *
      * @param directory directory to delete
@@ -1124,9 +1140,7 @@ public class FileUtils {
             cleanDirectory(directory);
         }
 
-        if (!directory.delete()) {
-            throw new IOException("Unable to delete directory " + directory + ".");
-        }
+        delete(directory);
     }
 
     /**

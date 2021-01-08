@@ -135,16 +135,17 @@ public class FileDeleteStrategy {
      * A check has been made to ensure that the file will exist.
      * </p>
      * <p>
-     * This implementation uses {@link File#delete()}.
+     * This implementation uses {@link FileUtils#delete(File)}.
      * </p>
      *
-     * @param fileToDelete  the file to delete, exists, not null
+     * @param file  the file to delete, exists, not null
      * @return true if the file was deleted
      * @throws NullPointerException if the file is null
      * @throws IOException if an error occurs during file deletion
      */
-    protected boolean doDelete(final File fileToDelete) throws IOException {
-        return fileToDelete.delete();
+    protected boolean doDelete(final File file) throws IOException {
+        FileUtils.delete(file);
+        return true;
     }
 
     /**
