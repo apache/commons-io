@@ -206,7 +206,7 @@ public class DeferredFileOutputStream
 
     /**
      * Switches the underlying output stream from a memory based stream to one
-     * that is backed by disk. This is the point at which we realise that too
+     * that is backed by disk. This is the point at which we realize that too
      * much data is being written to keep in memory, so we elect to switch to
      * disk-based storage.
      *
