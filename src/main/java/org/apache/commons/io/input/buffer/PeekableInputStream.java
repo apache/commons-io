@@ -20,29 +20,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-
 /**
- * Implementation of a buffered input stream, which allows to peek into
- * the buffers first bytes. This comes in handy when manually implementing
- * scanners, lexers, parsers, or the like.
+ * Implements a buffered input stream, which allows to peek into the buffers first bytes. This comes in handy when
+ * manually implementing scanners, lexers, parsers, and the like.
  */
 public class PeekableInputStream extends CircularBufferInputStream {
 
     /**
-     * Creates a new instance, which filters the given input stream, and
-     * uses the given buffer size.
+     * Creates a new instance, which filters the given input stream, and uses the given buffer size.
      *
-     * @param inputStream         The input stream, which is being buffered.
-     * @param bufferSize The size of the {@link CircularByteBuffer}, which is
-     *                    used internally.
+     * @param inputStream The input stream, which is being buffered.
+     * @param bufferSize The size of the {@link CircularByteBuffer}, which is used internally.
      */
     public PeekableInputStream(final InputStream inputStream, final int bufferSize) {
         super(inputStream, bufferSize);
     }
 
     /**
-     * Creates a new instance, which filters the given input stream, and
-     * uses a reasonable default buffer size (8192).
+     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size (8192).
      *
      * @param inputStream The input stream, which is being buffered.
      */
@@ -51,29 +46,21 @@ public class PeekableInputStream extends CircularBufferInputStream {
     }
 
     /**
-     * Returns, whether the next bytes in the buffer are as given by
-     * {@code sourceBuffer}. This is equivalent to {@link #peek(byte[], int, int)}
-     * with {@code offset} == 0, and {@code length} == {@code sourceBuffer.length}
+     * Returns whether the next bytes in the buffer are as given by {@code sourceBuffer}. This is equivalent to
+     * {@link #peek(byte[], int, int)} with {@code offset} == 0, and {@code length} == {@code sourceBuffer.length}
      *
      * @param sourceBuffer the buffer to compare against
      * @return true if the next bytes are as given
      * @throws IOException Refilling the buffer failed.
      */
     public boolean peek(final byte[] sourceBuffer) throws IOException {
-        Objects.requireNonNull(sourceBuffer, "Buffer");
-        if (sourceBuffer.length > bufferSize) {
-            throw new IllegalArgumentException("Peek request size of " + sourceBuffer.length
-                    + " bytes exceeds buffer size of " + bufferSize + " bytes");
-        }
-        if (buffer.getCurrentNumberOfBytes() < sourceBuffer.length) {
-            fillBuffer();
-        }
-        return buffer.peek(sourceBuffer, 0, sourceBuffer.length);
+        Objects.requireNonNull(sourceBuffer, "sourceBuffer");
+        return peek(sourceBuffer, 0, sourceBuffer.length);
     }
 
     /**
-     * Returns, whether the next bytes in the buffer are as given by
-     * {@code sourceBuffer}, {code offset}, and {@code length}.
+     * Returns whether the next bytes in the buffer are as given by {@code sourceBuffer}, {code offset}, and
+     * {@code length}.
      *
      * @param sourceBuffer the buffer to compare against
      * @param offset the start offset
@@ -82,10 +69,10 @@ public class PeekableInputStream extends CircularBufferInputStream {
      * @throws IOException if there is a problem calling fillBuffer()
      */
     public boolean peek(final byte[] sourceBuffer, final int offset, final int length) throws IOException {
-        Objects.requireNonNull(sourceBuffer, "Buffer");
+        Objects.requireNonNull(sourceBuffer, "sourceBuffer");
         if (sourceBuffer.length > bufferSize) {
             throw new IllegalArgumentException("Peek request size of " + sourceBuffer.length
-                    + " bytes exceeds buffer size of " + bufferSize + " bytes");
+                + " bytes exceeds buffer size of " + bufferSize + " bytes");
         }
         if (buffer.getCurrentNumberOfBytes() < sourceBuffer.length) {
             fillBuffer();

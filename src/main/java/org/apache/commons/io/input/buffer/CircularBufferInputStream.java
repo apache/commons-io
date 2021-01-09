@@ -16,31 +16,37 @@
  */
 package org.apache.commons.io.input.buffer;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
-
 /**
- * Implementation of a buffered input stream, which is internally based on the
- * {@link CircularByteBuffer}. Unlike the {@link java.io.BufferedInputStream}, this one
- * doesn't need to reallocate byte arrays internally.
+ * Implements a buffered input stream, which is internally based on a {@link CircularByteBuffer}. Unlike the
+ * {@link java.io.BufferedInputStream}, this one doesn't need to reallocate byte arrays internally.
  */
 public class CircularBufferInputStream extends InputStream {
+
+    /** What we are streaming, used to fill the internal buffer. */
     protected final InputStream in;
+    
+    /** Internal buffer. */
     protected final CircularByteBuffer buffer;
+
+    /** Internal buffer size. */
     protected final int bufferSize;
-    private boolean eofSeen;
+    
+    /** Whether we've see the input stream EOF. */
+    private boolean eof;
 
     /**
-     * Creates a new instance, which filters the given input stream, and
-     * uses the given buffer size.
+     * Creates a new instance, which filters the given input stream, and uses the given buffer size.
      *
-     * @param inputStream         The input stream, which is being buffered.
-     * @param bufferSize The size of the {@link CircularByteBuffer}, which is
-     *                    used internally.
+     * @param inputStream The input stream, which is being buffered.
+     * @param bufferSize The size of the {@link CircularByteBuffer}, which is used internally.
      */
     public CircularBufferInputStream(final InputStream inputStream, final int bufferSize) {
         if (bufferSize <= 0) {
@@ -49,12 +55,12 @@ public class CircularBufferInputStream extends InputStream {
         this.in = Objects.requireNonNull(inputStream, "inputStream");
         this.buffer = new CircularByteBuffer(bufferSize);
         this.bufferSize = bufferSize;
-        this.eofSeen = false;
+        this.eof = false;
     }
 
     /**
-     * Creates a new instance, which filters the given input stream, and
-     * uses a reasonable default buffer size ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
+     * Creates a new instance, which filters the given input stream, and uses a reasonable default buffer size
+     * ({@link IOUtils#DEFAULT_BUFFER_SIZE}).
      *
      * @param inputStream The input stream, which is being buffered.
      */
@@ -68,15 +74,15 @@ public class CircularBufferInputStream extends InputStream {
      * @throws IOException in case of an error while reading from the input stream.
      */
     protected void fillBuffer() throws IOException {
-        if (eofSeen) {
+        if (eof) {
             return;
         }
         int space = buffer.getSpace();
         final byte[] buf = new byte[space];
         while (space > 0) {
             final int res = in.read(buf, 0, space);
-            if (res == -1) {
-                eofSeen = true;
+            if (res == EOF) {
+                eof = true;
                 return;
             } else if (res > 0) {
                 buffer.add(buf, 0, res);
@@ -102,7 +108,7 @@ public class CircularBufferInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         if (!haveBytes(1)) {
-            return -1;
+            return EOF;
         }
         return buffer.read() & 0xFF; // return unsigned byte
     }
@@ -114,7 +120,7 @@ public class CircularBufferInputStream extends InputStream {
 
     @Override
     public int read(final byte[] targetBuffer, final int offset, final int length) throws IOException {
-        Objects.requireNonNull(targetBuffer, "Buffer");
+        Objects.requireNonNull(targetBuffer, "targetBuffer");
         if (offset < 0) {
             throw new IllegalArgumentException("Offset must not be negative");
         }
@@ -122,7 +128,7 @@ public class CircularBufferInputStream extends InputStream {
             throw new IllegalArgumentException("Length must not be negative");
         }
         if (!haveBytes(length)) {
-            return -1;
+            return EOF;
         }
         final int result = Math.min(length, buffer.getCurrentNumberOfBytes());
         for (int i = 0; i < result; i++) {
@@ -134,7 +140,7 @@ public class CircularBufferInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         in.close();
-        eofSeen = true;
+        eof = true;
         buffer.clear();
     }
 }

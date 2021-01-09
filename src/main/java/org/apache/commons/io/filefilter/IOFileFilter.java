@@ -43,8 +43,8 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * Defined in {@link java.io.FileFilter}.
      * </p>
      *
-     * @param file the File to check
-     * @return true if this file matches the test
+     * @param file the File to check.
+     * @return true if this file matches the test.
      */
     @Override
     boolean accept(File file);
@@ -55,9 +55,9 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * Defined in {@link java.io.FilenameFilter}.
      * </p>
      *
-     * @param dir the directory File to check
-     * @param name the file name within the directory to check
-     * @return true if this file matches the test
+     * @param dir the directory File to check.
+     * @param name the file name within the directory to check.
+     * @return true if this file matches the test.
      */
     @Override
     boolean accept(File dir, String name);
@@ -65,8 +65,8 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     /**
      * Checks to see if the Path should be accepted by this filter.
      *
-     * @param path the Path to check
-     * @return true if this path matches the test
+     * @param path the Path to check.
+     * @return true if this path matches the test.
      * @since 2.9.0
      */
     @Override
@@ -78,7 +78,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * Creates a new "and" filter with this filter.
      *
      * @param fileFilter the filter to "and".
-     * @return a new filter
+     * @return a new filter.
      * @since 2.9.0
      */
     default IOFileFilter and(final IOFileFilter fileFilter) {
@@ -88,7 +88,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     /**
      * Creates a new "not" filter with this filter.
      *
-     * @return a new filter
+     * @return a new filter.
      * @since 2.9.0
      */
     default IOFileFilter negate() {
@@ -99,7 +99,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
      * Creates a new "or" filter with this filter.
      *
      * @param fileFilter the filter to "or".
-     * @return a new filter
+     * @return a new filter.
      * @since 2.9.0
      */
     default IOFileFilter or(final IOFileFilter fileFilter) {
