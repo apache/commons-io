@@ -853,15 +853,15 @@ public class IOUtils {
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * @param inputStream the <code>InputStream</code> to read from
+     * @param outputStream the <code>OutputStream</code> to write to
      * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE, or {@code 0} if {@code input is null}.
-     * @throws NullPointerException if the output is null
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs
      * @since 1.1
      */
-    public static int copy(final InputStream input, final OutputStream output) throws IOException {
-        final long count = copyLarge(input, output);
+    public static int copy(final InputStream inputStream, final OutputStream outputStream) throws IOException {
+        final long count = copyLarge(inputStream, outputStream);
         if (count > Integer.MAX_VALUE) {
             return -1;
         }
@@ -875,17 +875,17 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * @param inputStream the <code>InputStream</code> to read, may be {@code null}.
+     * @param outputStream the <code>OutputStream</code> to write to
      * @param bufferSize the bufferSize used to copy from the input to the output
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
-     * @throws NullPointerException if the output is null
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 2.5
      */
-    public static long copy(final InputStream input, final OutputStream output, final int bufferSize)
+    public static long copy(final InputStream inputStream, final OutputStream outputStream, final int bufferSize)
             throws IOException {
-        return copyLarge(input, output, new byte[bufferSize]);
+        return copyLarge(inputStream, outputStream, new byte[bufferSize]);
     }
 
     /**
@@ -1133,16 +1133,16 @@ public class IOUtils {
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * @param inputStream the <code>InputStream</code> to read from
+     * @param outputStream the <code>OutputStream</code> to write to
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
-     * @throws NullPointerException if the output is null
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 1.3
      */
-    public static long copyLarge(final InputStream input, final OutputStream output)
+    public static long copyLarge(final InputStream inputStream, final OutputStream outputStream)
             throws IOException {
-        return copy(input, output, DEFAULT_BUFFER_SIZE);
+        return copy(inputStream, outputStream, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -1153,20 +1153,23 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * @param inputStream the <code>InputStream</code> to read, may be {@code null}.
+     * @param outputStream the <code>OutputStream</code> to write 
      * @param buffer the buffer to use for the copy
-     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @return the number of bytes copied. or {@code 0} if {@code input} is {@code null}.
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 2.2
      */
-    public static long copyLarge(final InputStream input, final OutputStream output, final byte[] buffer)
+    @SuppressWarnings("resource") // streams are closed by the caller.
+    public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {
+        Objects.requireNonNull(outputStream, "outputStream");
         long count = 0;
-        if (input != null) {
+        if (inputStream != null) {
             int n;
-            while (EOF != (n = input.read(buffer))) {
-                output.write(buffer, 0, n);
+            while (EOF != (n = inputStream.read(buffer))) {
+                outputStream.write(buffer, 0, n);
                 count += n;
             }
         }
