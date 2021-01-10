@@ -40,8 +40,6 @@ import org.apache.commons.io.IOUtils;
 public class DeferredFileOutputStream
     extends ThresholdingOutputStream
 {
-    // ----------------------------------------------------------- Data members
-
 
     /**
      * The output stream to which data will be written prior to the threshold
@@ -49,14 +47,12 @@ public class DeferredFileOutputStream
      */
     private ByteArrayOutputStream memoryOutputStream;
 
-
     /**
      * The output stream to which data will be written at any given time. This
      * will always be one of <code>memoryOutputStream</code> or
      * <code>diskOutputStream</code>.
      */
     private OutputStream currentOutputStream;
-
 
     /**
      * The file to which output will be directed if the threshold is exceeded.
@@ -78,14 +74,10 @@ public class DeferredFileOutputStream
      */
     private final File directory;
 
-
     /**
      * True when close() has been called successfully.
      */
     private boolean closed = false;
-
-    // ----------------------------------------------------------- Constructors
-
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a
@@ -185,10 +177,6 @@ public class DeferredFileOutputStream
         currentOutputStream = memoryOutputStream;
     }
 
-
-    // --------------------------------------- ThresholdingOutputStream methods
-
-
     /**
      * Returns the current output stream. This may be memory based or disk
      * based, depending on the current state with respect to the threshold.
@@ -202,7 +190,6 @@ public class DeferredFileOutputStream
     {
         return currentOutputStream;
     }
-
 
     /**
      * Switches the underlying output stream from a memory based stream to one
@@ -230,10 +217,6 @@ public class DeferredFileOutputStream
         memoryOutputStream = null;
     }
 
-
-    // --------------------------------------------------------- Public methods
-
-
     /**
      * Determines whether or not the data for this output stream has been
      * retained in memory.
@@ -246,7 +229,6 @@ public class DeferredFileOutputStream
         return !isThresholdExceeded();
     }
 
-
     /**
      * Returns the data for this output stream as an array of bytes, assuming
      * that the data has been retained in memory. If the data was written to
@@ -257,13 +239,8 @@ public class DeferredFileOutputStream
      */
     public byte[] getData()
     {
-        if (memoryOutputStream != null)
-        {
-            return memoryOutputStream.toByteArray();
-        }
-        return null;
+        return memoryOutputStream != null ? memoryOutputStream.toByteArray() : null;
     }
-
 
     /**
      * Returns either the output file specified in the constructor or
@@ -284,7 +261,6 @@ public class DeferredFileOutputStream
         return outputFile;
     }
 
-
     /**
      * Closes underlying output stream, and mark this as closed
      *
@@ -297,15 +273,15 @@ public class DeferredFileOutputStream
         closed = true;
     }
 
-
     /**
      * Writes the data from this output stream to the specified output stream,
      * after it has been closed.
      *
-     * @param out output stream to write to.
+     * @param outputStream output stream to write to.
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if this stream is not yet closed or an error occurs.
      */
-    public void writeTo(final OutputStream out) throws IOException
+    public void writeTo(final OutputStream outputStream) throws IOException
     {
         // we may only need to check if this is closed if we are working with a file
         // but we should force the habit of closing whether we are working with
@@ -315,10 +291,10 @@ public class DeferredFileOutputStream
         }
 
         if (isInMemory()) {
-            memoryOutputStream.writeTo(out);
+            memoryOutputStream.writeTo(outputStream);
         } else {
             try (FileInputStream fis = new FileInputStream(outputFile)) {
-                IOUtils.copy(fis, out);
+                IOUtils.copy(fis, outputStream);
             }
         }
     }
