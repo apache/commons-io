@@ -1337,9 +1337,9 @@ public class FileUtils {
      * Schedules a file to be deleted when JVM exits.
      * If file is directory delete it and all sub-directories.
      *
-     * @param file file or directory to delete, must not be {@code null}
-     * @throws NullPointerException if the file is {@code null}
-     * @throws IOException          in case deletion is unsuccessful
+     * @param file file or directory to delete, must not be {@code null}.
+     * @throws NullPointerException if the file is {@code null}.
+     * @throws IOException          in case deletion is unsuccessful.
      */
     public static void forceDeleteOnExit(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
@@ -1357,7 +1357,7 @@ public class FileUtils {
      * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
      *
-     * @param directory directory to create, must not be {@code null}
+     * @param directory directory to create, must not be {@code null}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
@@ -1370,9 +1370,9 @@ public class FileUtils {
      * Makes any necessary but nonexistent parent directories for a given File. If the parent directory cannot be
      * created then an IOException is thrown.
      *
-     * @param file file with parent to create, must not be {@code null}
-     * @throws NullPointerException if the file is {@code null}
-     * @throws IOException          if the parent directory cannot be created
+     * @param file file with parent to create, must not be {@code null}.
+     * @throws NullPointerException if the file is {@code null}.
+     * @throws IOException          if the parent directory cannot be created.
      * @since 2.5
      */
     public static void forceMkdirParent(final File file) throws IOException {
@@ -1387,9 +1387,9 @@ public class FileUtils {
     /**
      * Construct a file from the set of name elements.
      *
-     * @param directory the parent directory
-     * @param names the name elements
-     * @return the new file
+     * @param directory the parent directory.
+     * @param names the name elements.
+     * @return the new file.
      * @since 2.1
      */
     public static File getFile(final File directory, final String... names) {
@@ -1405,8 +1405,8 @@ public class FileUtils {
     /**
      * Construct a file from the set of name elements.
      *
-     * @param names the name elements
-     * @return the file
+     * @param names the name elements.
+     * @return the file.
      * @since 2.1
      */
     public static File getFile(final String... names) {
@@ -1486,11 +1486,11 @@ public class FileUtils {
      * isFileNewer(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
      * {@code zoneId} is a valid {@link ZoneId}.
      *
-     * @param file            the {@code File} of which the modification date must be compared
-     * @param chronoLocalDate the date reference
+     * @param file            the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDate the date reference.
      * @return true if the {@code File} exists and has been modified after the given
      * {@code ChronoLocalDate} at the current time.
-     * @throws NullPointerException if the file or local date is {@code null}
+     * @throws NullPointerException if the file or local date is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1507,12 +1507,12 @@ public class FileUtils {
      * isFileNewer(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
      *
-     * @param file            the {@code File} of which the modification date must be compared
-     * @param chronoLocalDate the date reference
-     * @param localTime       the time reference
+     * @param file            the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDate the date reference.
+     * @param localTime       the time reference.
      * @return true if the {@code File} exists and has been modified after the given
      * {@code ChronoLocalDate} at the given time.
-     * @throws NullPointerException if the file, local date or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date or zone ID is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1531,11 +1531,11 @@ public class FileUtils {
      * isFileNewer(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
      *
-     * @param file                the {@code File} of which the modification date must be compared
-     * @param chronoLocalDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDateTime the date reference.
      * @return true if the {@code File} exists and has been modified after the given
      * {@code ChronoLocalDateTime} at the system-default time zone.
-     * @throws NullPointerException if the file or local date time is {@code null}
+     * @throws NullPointerException if the file or local date time is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1547,12 +1547,12 @@ public class FileUtils {
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDateTime}
      * at the specified {@code ZoneId}.
      *
-     * @param file                the {@code File} of which the modification date must be compared
-     * @param chronoLocalDateTime the date reference
-     * @param zoneId              the time zone
+     * @param file                the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDateTime the date reference.
+     * @param zoneId              the time zone.
      * @return true if the {@code File} exists and has been modified after the given
      * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
-     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1565,11 +1565,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoZonedDateTime}.
      *
-     * @param file                the {@code File} of which the modification date must be compared
-     * @param chronoZonedDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared.
+     * @param chronoZonedDateTime the date reference.
      * @return true if the {@code File} exists and has been modified after the given
      * {@code ChronoZonedDateTime}.
-     * @throws NullPointerException if the file or zoned date time is {@code null}
+     * @throws NullPointerException if the file or zoned date time is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1581,11 +1581,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code Date}.
      *
-     * @param file the {@code File} of which the modification date must be compared
-     * @param date the date reference
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param date the date reference.
      * @return true if the {@code File} exists and has been modified
      * after the given {@code Date}.
-     * @throws NullPointerException if the file or date is {@code null}
+     * @throws NullPointerException if the file or date is {@code null}.
      */
     public static boolean isFileNewer(final File file, final Date date) {
         Objects.requireNonNull(date, "date");
@@ -1595,12 +1595,12 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the reference {@code File}.
      *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param reference the {@code File} of which the modification date is used
+     * @param file      the {@code File} of which the modification date must be compared.
+     * @param reference the {@code File} of which the modification date is used.
      * @return true if the {@code File} exists and has been modified more
-     * recently than the reference {@code File}
-     * @throws NullPointerException if the file or reference file is {@code null}
-     * @throws IllegalArgumentException if the reference file doesn't exist
+     * recently than the reference {@code File}.
+     * @throws NullPointerException if the file or reference file is {@code null}.
+     * @throws IllegalArgumentException if the reference file doesn't exist.
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
@@ -1610,10 +1610,10 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified {@code Instant}.
      *
-     * @param file    the {@code File} of which the modification date must be compared
-     * @param instant the date reference
+     * @param file    the {@code File} of which the modification date must be compared.
+     * @param instant the date reference.
      * @return true if the {@code File} exists and has been modified after the given {@code Instant}.
-     * @throws NullPointerException if the file or instant is {@code null}
+     * @throws NullPointerException if the file or instant is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1625,11 +1625,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is newer than the specified time reference.
      *
-     * @param file       the {@code File} of which the modification date must be compared
+     * @param file       the {@code File} of which the modification date must be compared.
      * @param timeMillis the time reference measured in milliseconds since the
-     *                   epoch (00:00:00 GMT, January 1, 1970)
+     *                   epoch (00:00:00 GMT, January 1, 1970).
      * @return true if the {@code File} exists and has been modified after the given time reference.
-     * @throws NullPointerException if the file is {@code null}
+     * @throws NullPointerException if the file is {@code null}.
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
@@ -1649,11 +1649,11 @@ public class FileUtils {
      * isFileOlder(file, chronoLocalDate.atTime(LocalTime.now(zoneId)), zoneId)} where
      * {@code zoneId} is a valid {@link ZoneId}.
      *
-     * @param file            the {@code File} of which the modification date must be compared
-     * @param chronoLocalDate the date reference
+     * @param file            the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDate the date reference.
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoLocalDate} at the current time.
-     * @throws NullPointerException if the file or local date is {@code null}
+     * @throws NullPointerException if the file or local date is {@code null}.
      * @see ZoneId#systemDefault()
      * @see LocalTime#now()
      *
@@ -1672,12 +1672,12 @@ public class FileUtils {
      * isFileOlder(file, chronoLocalDate.atTime(localTime), zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
      *
-     * @param file            the {@code File} of which the modification date must be compared
-     * @param chronoLocalDate the date reference
-     * @param localTime       the time reference
+     * @param file            the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDate the date reference.
+     * @param localTime       the time reference.
      * @return true if the {@code File} exists and has been modified before the
      * given {@code ChronoLocalDate} at the specified time.
-     * @throws NullPointerException if the file, local date or local time is {@code null}
+     * @throws NullPointerException if the file, local date or local time is {@code null}.
      * @see ZoneId#systemDefault()
      *
      * @since 2.8.0
@@ -1697,11 +1697,11 @@ public class FileUtils {
      * isFileOlder(file, chronoLocalDateTime, zoneId)} where {@code zoneId} is a valid
      * {@link ZoneId}.
      *
-     * @param file                the {@code File} of which the modification date must be compared
-     * @param chronoLocalDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDateTime the date reference.
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoLocalDateTime} at the system-default time zone.
-     * @throws NullPointerException if the file or local date time is {@code null}
+     * @throws NullPointerException if the file or local date time is {@code null}.
      * @see ZoneId#systemDefault()
      *
      * @since 2.8.0
@@ -1714,12 +1714,12 @@ public class FileUtils {
      * Tests if the specified {@code File} is older than the specified {@code ChronoLocalDateTime}
      * at the specified {@code ZoneId}.
      *
-     * @param file          the {@code File} of which the modification date must be compared
-     * @param chronoLocalDateTime the date reference
-     * @param zoneId        the time zone
+     * @param file          the {@code File} of which the modification date must be compared.
+     * @param chronoLocalDateTime the date reference.
+     * @param zoneId        the time zone.
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoLocalDateTime} at the given {@code ZoneId}.
-     * @throws NullPointerException if the file, local date time or zone ID is {@code null}
+     * @throws NullPointerException if the file, local date time or zone ID is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1732,11 +1732,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is older than the specified {@code ChronoZonedDateTime}.
      *
-     * @param file                the {@code File} of which the modification date must be compared
-     * @param chronoZonedDateTime the date reference
+     * @param file                the {@code File} of which the modification date must be compared.
+     * @param chronoZonedDateTime the date reference.
      * @return true if the {@code File} exists and has been modified before the given
      * {@code ChronoZonedDateTime}.
-     * @throws NullPointerException if the file or zoned date time is {@code null}
+     * @throws NullPointerException if the file or zoned date time is {@code null}.
      *
      * @since 2.8.0
      */
@@ -1748,10 +1748,10 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is older than the specified {@code Date}.
      *
-     * @param file the {@code File} of which the modification date must be compared
-     * @param date the date reference
+     * @param file the {@code File} of which the modification date must be compared.
+     * @param date the date reference.
      * @return true if the {@code File} exists and has been modified before the given {@code Date}.
-     * @throws NullPointerException if the file or date is {@code null}
+     * @throws NullPointerException if the file or date is {@code null}.
      */
     public static boolean isFileOlder(final File file, final Date date) {
         Objects.requireNonNull(date, "date");
@@ -1761,11 +1761,11 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is older than the reference {@code File}.
      *
-     * @param file      the {@code File} of which the modification date must be compared
-     * @param reference the {@code File} of which the modification date is used
-     * @return true if the {@code File} exists and has been modified before the reference {@code File}
-     * @throws NullPointerException if the file or reference file is {@code null}
-     * @throws IllegalArgumentException if the reference file doesn't exist
+     * @param file      the {@code File} of which the modification date must be compared.
+     * @param reference the {@code File} of which the modification date is used.
+     * @return true if the {@code File} exists and has been modified before the reference {@code File}.
+     * @throws NullPointerException if the file or reference file is {@code null}.
+     * @throws IllegalArgumentException if the reference file doesn't exist.
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
@@ -1775,10 +1775,10 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is older than the specified {@code Instant}.
      *
-     * @param file    the {@code File} of which the modification date must be compared
-     * @param instant the date reference
+     * @param file    the {@code File} of which the modification date must be compared.
+     * @param instant the date reference.
      * @return true if the {@code File} exists and has been modified before the given {@code Instant}.
-     * @throws NullPointerException if the file or instant is {@code null}
+     * @throws NullPointerException if the file or instant is {@code null}.
      * @since 2.8.0
      */
     public static boolean isFileOlder(final File file, final Instant instant) {
@@ -1789,9 +1789,9 @@ public class FileUtils {
     /**
      * Tests if the specified {@code File} is older than the specified time reference.
      *
-     * @param file       the {@code File} of which the modification date must be compared
+     * @param file       the {@code File} of which the modification date must be compared.
      * @param timeMillis the time reference measured in milliseconds since the
-     *                   epoch (00:00:00 GMT, January 1, 1970)
+     *                   epoch (00:00:00 GMT, January 1, 1970).
      * @return true if the {@code File} exists and has been modified before the given time reference.
      * @throws NullPointerException if the file is {@code null}.
      */
