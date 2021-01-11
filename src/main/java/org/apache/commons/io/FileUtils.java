@@ -1312,10 +1312,10 @@ public class FileUtils {
      * <li>You get an exception when a file or directory cannot be deleted.</li>
      * </ul>
      *
-     * @param file file or directory to delete, must not be {@code null}
-     * @throws NullPointerException  if the directory is {@code null}
-     * @throws FileNotFoundException if the file was not found
-     * @throws IOException           in case deletion is unsuccessful
+     * @param file file or directory to delete, must not be {@code null}.
+     * @throws NullPointerException  if the file is {@code null}.
+     * @throws FileNotFoundException if the file was not found.
+     * @throws IOException           in case deletion is unsuccessful.
      */
     public static void forceDelete(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
