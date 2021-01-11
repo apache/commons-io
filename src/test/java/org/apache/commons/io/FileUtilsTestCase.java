@@ -327,11 +327,7 @@ public class FileUtilsTestCase {
     public void test_openInputStream_existsButIsDirectory() throws Exception {
         final File directory = new File(temporaryFolder, "subdir");
         directory.mkdirs();
-        try (FileInputStream in = FileUtils.openInputStream(directory)) {
-            fail();
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
     }
 
     @Test
@@ -358,11 +354,7 @@ public class FileUtilsTestCase {
     public void test_openOutputStream_existsButIsDirectory() throws Exception {
         final File directory = new File(temporaryFolder, "subdir");
         directory.mkdirs();
-        try (FileOutputStream out = FileUtils.openOutputStream(directory)) {
-            fail();
-        } catch (final IOException ioe) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
     }
 
     @Test
@@ -593,12 +585,7 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.contentEquals(file2, file));
 
         // Directories
-        try {
-            FileUtils.contentEquals(temporaryFolder, temporaryFolder);
-            fail("Comparing directories should fail with an IOException");
-        } catch (final IOException ioe) {
-            //expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.contentEquals(temporaryFolder, temporaryFolder));
 
         // Different files
         final File objFile1 =
@@ -652,12 +639,8 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.contentEqualsIgnoreEOL(file2, file1, null));
 
         // Directories
-        try {
-            FileUtils.contentEqualsIgnoreEOL(temporaryFolder, temporaryFolder, null);
-            fail("Comparing directories should fail with an IOException");
-        } catch (final IOException ioe) {
-            //expected
-        }
+        assertThrows(IllegalArgumentException.class,
+            () -> FileUtils.contentEqualsIgnoreEOL(temporaryFolder, temporaryFolder, null));
 
         // Different files
         final File tfile1 = new File(temporaryFolder, getName() + ".txt1");
@@ -720,42 +703,22 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void testCopyDirectoryErrors() throws Exception {
-        try {
-            FileUtils.copyDirectory(null, null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(new File("a"), null);
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(null, new File("a"));
-            fail();
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(new File("doesnt-exist"), new File("a"));
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(testFile1, new File("a"));
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(temporaryFolder, testFile1);
-            fail();
-        } catch (final IOException ignore) {
-        }
-        try {
-            FileUtils.copyDirectory(temporaryFolder, temporaryFolder);
-            fail();
-        } catch (final IOException ignore) {
-        }
+    public void testCopyDirectoryExceptions() throws Exception {
+        //
+        // NullPointerException
+        assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, null));
+        assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, testFile1));
+        assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(testFile1, null));
+        assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, new File("a")));
+        //
+        // IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(testFile1, new File("a")));
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(temporaryFolder, temporaryFolder));
+        //
+        // IOException
+        assertThrows(IOException.class, () -> FileUtils.copyDirectory(new File("doesnt-exist"), new File("a")));
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyDirectory(temporaryFolder, testFile1));
     }
 
     @Test
@@ -1057,8 +1020,7 @@ public class FileUtilsTestCase {
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
         assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
 
-        assertThrows(IOException.class,
-            () -> FileUtils.copyFileToDirectory(destination, directory),
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyFileToDirectory(destination, directory),
             "Should not be able to copy a file into the same directory as itself");
     }
 
@@ -1245,13 +1207,7 @@ public class FileUtilsTestCase {
         final File destination = new File(temporaryFolder, "copy3.txt");
         //Prepare a test file
         FileUtils.copyFile(testFile1, destination);
-
-        try {
-            FileUtils.copyFile(destination, destination);
-            fail("file copy to self should not be possible");
-        } catch (final IOException ioe) {
-            //we want the exception, copy to self should be illegal
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.copyFile(destination, destination));
     }
 
     @Test
@@ -1501,11 +1457,7 @@ public class FileUtilsTestCase {
         assertTrue(testFile.exists(), "Test file does not exist.");
 
         // Tests with existing file
-        try {
-            FileUtils.forceMkdir(testFile);
-            fail("Exception expected.");
-        } catch (final IOException ignore) {
-        }
+        assertThrows(IOException.class, () -> FileUtils.forceMkdir(testFile));
 
         testFile.delete();
 
@@ -1774,6 +1726,7 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime), "New File - Older - LocalDate plus one day,LocalTime");
 
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
         try {
             FileUtils.isFileOlder(newFile, invalidFile);
             fail("Should have cause IllegalArgumentException");
@@ -1785,71 +1738,29 @@ public class FileUtilsTestCase {
 
         // ----- Test isFileNewer() exceptions -----
         // Null File
-        try {
-            FileUtils.isFileNewer(null, now);
-            fail("Newer Null, expected NullPointerException");
-        } catch (final NullPointerException expected) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(null, now));
 
         // Null reference File
-        try {
-            FileUtils.isFileNewer(oldFile, (File) null);
-            fail("Newer Null reference, expected NullPointerException");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (File) null));
 
         // Invalid reference File
-        try {
-            FileUtils.isFileNewer(oldFile, invalidFile);
-            fail("Newer invalid reference, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected result
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
 
         // Null reference Date
-        try {
-            FileUtils.isFileNewer(oldFile, (Date) null);
-            fail("Newer Null date, expected NullPointerException");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
-
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
 
         // ----- Test isFileOlder() exceptions -----
         // Null File
-        try {
-            FileUtils.isFileOlder(null, now);
-            fail("Older Null, expected NullPointerException");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(null, now));
 
         // Null reference File
-        try {
-            FileUtils.isFileOlder(oldFile, (File) null);
-            fail("Older Null reference, expected NullPointerException");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
-
-        // Invalid reference File
-        try {
-            FileUtils.isFileOlder(oldFile, invalidFile);
-            fail("Older invalid reference, expected IllegalArgumentException");
-        } catch (final IllegalArgumentException ignore) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(oldFile, (File) null));
 
         // Null reference Date
-        try {
-            FileUtils.isFileOlder(oldFile, (Date) null);
-            fail("Older Null date, expected NullPointerException");
-        } catch (final NullPointerException ignore) {
-            // expected result
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(oldFile, (Date) null));
 
+        // Invalid reference File
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
     }
 
     @Test
@@ -2094,18 +2005,8 @@ public class FileUtilsTestCase {
 
     @Test
     public void testMoveDirectory_Errors() throws Exception {
-        try {
-            FileUtils.moveDirectory(null, new File("foo"));
-            fail("Expected NullPointerException when source is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.moveDirectory(new File("foo"), null);
-            fail("Expected NullPointerException when destination is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(null, new File("foo")));
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectory(new File("foo"), null));
         try {
             FileUtils.moveDirectory(new File("nonexistant"), new File("foo"));
             fail("Expected FileNotFoundException for source");
@@ -2124,12 +2025,7 @@ public class FileUtilsTestCase {
         } finally {
             IOUtils.closeQuietly(output);
         }
-        try {
-            FileUtils.moveDirectory(testFile, new File("foo"));
-            fail("Expected IOException when source is not a directory");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveDirectory(testFile, new File("foo")));
         final File testSrcFile = new File(temporaryFolder, "testMoveDirectorySource");
         final File testDestFile = new File(temporaryFolder, "testMoveDirectoryDest");
         testSrcFile.mkdir();
@@ -2213,37 +2109,23 @@ public class FileUtilsTestCase {
 
     @Test
     public void testMoveDirectoryToDirectory_Errors() throws Exception {
-        try {
-            FileUtils.moveDirectoryToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.moveDirectoryToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(null, new File("foo"), true));
+        assertThrows(NullPointerException.class, () -> FileUtils.moveDirectoryToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(temporaryFolder, "testMoveFileFile1");
         final File testFile2 = new File(temporaryFolder, "testMoveFileFile2");
         if (!testFile1.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile1
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
+        final BufferedOutputStream output1 = new BufferedOutputStream(new FileOutputStream(testFile1));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
             IOUtils.closeQuietly(output1);
         }
         if (!testFile2.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + testFile2
-                    + " as the parent directory does not exist");
+            throw new IOException("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
+        final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(testFile2));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2303,42 +2185,23 @@ public class FileUtilsTestCase {
             }
 
         };
-        try {
-            FileUtils.moveFile(src, destination);
-            fail("move should have failed as src has not been deleted");
-        } catch (final IOException e) {
-            // exepected
-            assertTrue(!destination.exists(), "Check Rollback");
-            assertTrue(src.exists(), "Original exists");
-        }
+        assertThrows(IOException.class, () -> FileUtils.moveFile(src, destination));
+        // expected
+        assertTrue(!destination.exists(), "Check Rollback");
+        assertTrue(src.exists(), "Original exists");
     }
 
     @Test
     public void testMoveFile_Errors() throws Exception {
-        try {
-            FileUtils.moveFile(null, new File("foo"));
-            fail("Expected NullPointerException when source is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.moveFile(new File("foo"), null);
-            fail("Expected NullPointerException when destination is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.moveFile(null, new File("foo")));
+        assertThrows(NullPointerException.class, () -> FileUtils.moveFile(new File("foo"), null));
         try {
             FileUtils.moveFile(new File("nonexistant"), new File("foo"));
             fail("Expected FileNotFoundException for source");
         } catch (final FileNotFoundException e) {
             // expected
         }
-        try {
-            FileUtils.moveFile(temporaryFolder, new File("foo"));
-            fail("Expected IOException when source is a directory");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFile(temporaryFolder, new File("foo")));
         final File testSourceFile = new File(temporaryFolder, "testMoveFileSource");
         final File testDestFile = new File(temporaryFolder, "testMoveFileSource");
         if (!testSourceFile.getParentFile().exists()) {
@@ -2394,18 +2257,8 @@ public class FileUtilsTestCase {
 
     @Test
     public void testMoveFileToDirectory_Errors() throws Exception {
-        try {
-            FileUtils.moveFileToDirectory(null, new File("foo"), true);
-            fail("Expected NullPointerException when source is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
-        try {
-            FileUtils.moveFileToDirectory(new File("foo"), null, true);
-            fail("Expected NullPointerException when destination is null");
-        } catch (final NullPointerException e) {
-            // expected
-        }
+        assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(null, new File("foo"), true));
+        assertThrows(NullPointerException.class, () -> FileUtils.moveFileToDirectory(new File("foo"), null, true));
         final File testFile1 = new File(temporaryFolder, "testMoveFileFile1");
         final File testFile2 = new File(temporaryFolder, "testMoveFileFile2");
         if (!testFile1.getParentFile().exists()) {
@@ -2430,12 +2283,7 @@ public class FileUtilsTestCase {
         } finally {
             IOUtils.closeQuietly(output);
         }
-        try {
-            FileUtils.moveFileToDirectory(testFile1, testFile2, true);
-            fail("Expected IOException when dest not a directory");
-        } catch (final IOException e) {
-            // expected
-        }
+        assertThrows(IllegalArgumentException.class, () -> FileUtils.moveFileToDirectory(testFile1, testFile2, true));
 
         final File nonexistant = new File(temporaryFolder, "testMoveFileNonExistant");
         try {

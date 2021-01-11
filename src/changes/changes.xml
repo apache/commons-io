@@ -84,6 +84,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-600" dev="ggregory" type="fix" due-to="Abhyankar Chaubey, Gary Gregory">
         Fix getPrefixLength method for Linux filename #179.
       </action>
+      <action issue="IO-699" dev="ggregory" type="fix" due-to="tza, Gary Gregory">
+        Wrong logging in FileUtils.setLastModified.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
