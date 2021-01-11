@@ -1476,6 +1476,16 @@ public class IOUtilsTestCase {
     }
 
     @Test
+    public void testToByteArray_InputStream_SizeOne() throws Exception {
+
+        try (FileInputStream fin = new FileInputStream(m_testFile)) {
+            final byte[] out = IOUtils.toByteArray(fin, 1);
+            assertNotNull(out, "Out cannot be null");
+            assertEquals(1, out.length, "Out length must be 1");
+        }
+    }
+
+    @Test
     public void testToByteArray_Reader() throws IOException {
         final String charsetName = "UTF-8";
         final byte[] expecteds = charsetName.getBytes(charsetName);
