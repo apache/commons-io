@@ -868,15 +868,15 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions)
-        throws IOException {
+            throws IOException {
         final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class,
-            linkOptions);
+                linkOptions);
         if (fileAttributeView != null) {
             fileAttributeView.setReadOnly(readOnly);
             return path;
         }
         final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path,
-            PosixFileAttributeView.class, linkOptions);
+                PosixFileAttributeView.class, linkOptions);
         if (posixFileAttributeView != null) {
             // Works on Windows but not on Ubuntu:
             // Files.setAttribute(path, "unix:readonly", readOnly, options);
@@ -888,7 +888,9 @@ public final class PathUtils {
             permissions.remove(PosixFilePermission.OTHERS_WRITE);
             return Files.setPosixFilePermissions(path, permissions);
         }
-        throw new IOException("No DosFileAttributeView or PosixFileAttributeView for " + path);
+        throw new IOException(
+                String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path,
+                        Arrays.toString(linkOptions)));
     }
 
     /**
