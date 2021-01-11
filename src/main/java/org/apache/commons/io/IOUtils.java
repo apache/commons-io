@@ -863,7 +863,7 @@ public class IOUtils {
     public static int copy(final InputStream inputStream, final OutputStream outputStream) throws IOException {
         final long count = copyLarge(inputStream, outputStream);
         if (count > Integer.MAX_VALUE) {
-            return -1;
+            return EOF;
         }
         return (int) count;
     }
@@ -1117,7 +1117,7 @@ public class IOUtils {
     public static int copy(final Reader input, final Writer output) throws IOException {
         final long count = copyLarge(input, output);
         if (count > Integer.MAX_VALUE) {
-            return -1;
+            return EOF;
         }
         return (int) count;
     }
@@ -2255,16 +2255,14 @@ public class IOUtils {
     }
 
     /**
-     * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>.
-     * Use this method instead of <code>toByteArray(InputStream)</code>
-     * when <code>InputStream</code> size is known
+     * Gets the contents of an <code>InputStream</code> as a <code>byte[]</code>. Use this method instead of
+     * <code>toByteArray(InputStream)</code> when <code>InputStream</code> size is known
      *
-     * @param input the <code>InputStream</code> to read from
-     * @param size the size of <code>InputStream</code>
-     * @return the requested byte array
-     * @throws IOException              if an I/O error occurs or <code>InputStream</code> size differ from parameter
-     * size
-     * @throws IllegalArgumentException if size is less than zero
+     * @param input the <code>InputStream</code> to read.
+     * @param size the size of <code>InputStream</code>.
+     * @return the requested byte array.
+     * @throws IOException if an I/O error occurs or <code>InputStream</code> size differ from parameter size.
+     * @throws IllegalArgumentException if size is less than zero.
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
