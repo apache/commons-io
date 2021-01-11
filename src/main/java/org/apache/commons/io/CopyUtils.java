@@ -103,7 +103,7 @@ import java.nio.charset.Charset;
  * <p>
  * Origin of code: Excalibur.
  *
- * @deprecated Use IOUtils. Will be removed in 2.0.
+ * @deprecated Use IOUtils. Will be removed in 3.0.
  *  Methods renamed to IOUtils.write() or IOUtils.copy().
  *  Null handling behavior changed in IOUtils (null data does not
  *  throw NullPointerException).
