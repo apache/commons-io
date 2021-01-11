@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -102,13 +103,11 @@ public class Charsets {
     /**
      * Returns a Charset for the named charset. If the name is null, return the default Charset.
      *
-     * @param charsetName
-     *            The name of the requested charset, may be null.
-     * @return a Charset for the named charset
-     * @throws java.nio.charset.UnsupportedCharsetException
-     *             If the named charset is unavailable
+     * @param charsetName The name of the requested charset, may be null.
+     * @return a Charset for the named charset.
+     * @throws UnsupportedCharsetException If the named charset is unavailable (unchecked exception).
      */
-    public static Charset toCharset(final String charsetName) {
+    public static Charset toCharset(final String charsetName) throws UnsupportedCharsetException {
         return charsetName == null ? Charset.defaultCharset() : Charset.forName(charsetName);
     }
 
