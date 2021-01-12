@@ -141,7 +141,7 @@ public class XmlStreamReader extends Reader {
      * @throws IOException thrown if there is a problem reading the file.
      */
     public XmlStreamReader(final File file) throws IOException {
-        this(new FileInputStream(Objects.requireNonNull(file)));
+        this(new FileInputStream(Objects.requireNonNull(file, "file")));
     }
 
     /**

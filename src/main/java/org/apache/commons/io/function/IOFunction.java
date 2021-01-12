@@ -59,7 +59,7 @@ public interface IOFunction<T, R> {
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final IOFunction<? super V, ? extends T> before) {
-        Objects.requireNonNull(before);
+        Objects.requireNonNull(before, "before");
         return (final V v) -> apply(before.apply(v));
     }
 
@@ -79,7 +79,7 @@ public interface IOFunction<T, R> {
      * @see #andThen(IOFunction)
      */
     default <V> IOFunction<V, R> compose(final Function<? super V, ? extends T> before) {
-        Objects.requireNonNull(before);
+        Objects.requireNonNull(before, "before");
         return (final V v) -> apply(before.apply(v));
     }
 
@@ -97,7 +97,7 @@ public interface IOFunction<T, R> {
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final IOSupplier<? extends T> before) {
-        Objects.requireNonNull(before);
+        Objects.requireNonNull(before, "before");
         return () -> apply(before.get());
     }
 
@@ -115,7 +115,7 @@ public interface IOFunction<T, R> {
      * @see #andThen(IOFunction)
      */
     default IOSupplier<R> compose(final Supplier<? extends T> before) {
-        Objects.requireNonNull(before);
+        Objects.requireNonNull(before, "before");
         return () -> apply(before.get());
     }
 
@@ -135,7 +135,7 @@ public interface IOFunction<T, R> {
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final IOFunction<? super R, ? extends V> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t) -> after.apply(apply(t));
     }
 
@@ -155,7 +155,7 @@ public interface IOFunction<T, R> {
      * @see #compose(IOFunction)
      */
     default <V> IOFunction<T, V> andThen(final Function<? super R, ? extends V> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t) -> after.apply(apply(t));
     }
 
@@ -173,7 +173,7 @@ public interface IOFunction<T, R> {
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final IOConsumer<? super R> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t) -> after.accept(apply(t));
     }
 
@@ -191,7 +191,7 @@ public interface IOFunction<T, R> {
      * @see #compose(IOFunction)
      */
     default IOConsumer<T> andThen(final Consumer<? super R> after) {
-        Objects.requireNonNull(after);
+        Objects.requireNonNull(after, "after");
         return (final T t) -> after.accept(apply(t));
     }
 

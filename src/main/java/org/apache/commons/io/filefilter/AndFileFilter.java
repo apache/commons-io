@@ -60,7 +60,7 @@ public class AndFileFilter
      * @param initialList the initial list.
      */
     private AndFileFilter(final ArrayList<IOFileFilter> initialList) {
-        this.fileFilters = Objects.requireNonNull(initialList);
+        this.fileFilters = Objects.requireNonNull(initialList, "initialList");
     }
 
     /**
@@ -104,7 +104,7 @@ public class AndFileFilter
      * @since 1.1
      */
     public AndFileFilter(final List<IOFileFilter> fileFilters) {
-        this(new ArrayList<>(Objects.requireNonNull(fileFilters)));
+        this(new ArrayList<>(Objects.requireNonNull(fileFilters, "fileFilters")));
     }
 
     /**

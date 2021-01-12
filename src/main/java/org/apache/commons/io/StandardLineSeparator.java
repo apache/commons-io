@@ -50,7 +50,7 @@ public enum StandardLineSeparator {
      * @param lineSeparator a non-null line separator.
      */
     StandardLineSeparator(final String lineSeparator) {
-        this.lineSeparator = Objects.requireNonNull(lineSeparator);
+        this.lineSeparator = Objects.requireNonNull(lineSeparator, "lineSeparator");
     }
 
     /**

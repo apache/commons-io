@@ -56,7 +56,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      * @param initialList the initial list.
      */
     private OrFileFilter(final ArrayList<IOFileFilter> initialList) {
-        this.fileFilters = Objects.requireNonNull(initialList);
+        this.fileFilters = Objects.requireNonNull(initialList, "initialList");
     }
 
     /**
@@ -99,7 +99,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
      * @since 1.1
      */
     public OrFileFilter(final List<IOFileFilter> fileFilters) {
-        this(new ArrayList<>(Objects.requireNonNull(fileFilters)));
+        this(new ArrayList<>(Objects.requireNonNull(fileFilters, "fileFilters")));
     }
 
     /**

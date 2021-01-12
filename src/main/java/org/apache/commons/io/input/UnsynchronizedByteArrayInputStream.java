@@ -65,7 +65,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @param data the buffer
      */
     public UnsynchronizedByteArrayInputStream(final byte[] data) {
-        this.data = Objects.requireNonNull(data);
+        this.data = Objects.requireNonNull(data, "data");
         this.offset = 0;
         this.eod = data.length;
         this.markedOffset = this.offset;
@@ -80,7 +80,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
      * @throws IllegalArgumentException if the offset is less than zero
      */
     public UnsynchronizedByteArrayInputStream(final byte[] data, final int offset) {
-        Objects.requireNonNull(data);
+        Objects.requireNonNull(data, "data");
         if (offset < 0) {
             throw new IllegalArgumentException("offset cannot be negative");
         }
@@ -107,7 +107,7 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
         if (length < 0) {
             throw new IllegalArgumentException("length cannot be negative");
         }
-        this.data = Objects.requireNonNull(data);
+        this.data = Objects.requireNonNull(data, "data");
         this.offset = min(offset, data.length > 0 ? data.length : offset);
         this.eod = min(this.offset + length, data.length);
         this.markedOffset = this.offset;
@@ -125,13 +125,13 @@ public class UnsynchronizedByteArrayInputStream extends InputStream {
 
     @Override
     public int read(final byte[] dest) {
-        Objects.requireNonNull(dest);
+        Objects.requireNonNull(dest, "dest");
         return read(dest, 0, dest.length);
     }
 
     @Override
     public int read(final byte[] dest, final int off, final int len) {
-        Objects.requireNonNull(dest);
+        Objects.requireNonNull(dest, "dest");
         if (off < 0 || len < 0 || off + len > dest.length) {
             throw new IndexOutOfBoundsException();
         }

@@ -87,7 +87,7 @@ public class CircularByteBuffer {
      *                                  exception.
      */
     public void read(final byte[] targetBuffer, final int targetOffset, final int length) {
-        Objects.requireNonNull(targetBuffer);
+        Objects.requireNonNull(targetBuffer, "targetBuffer");
         if (targetOffset < 0 || targetOffset >= targetBuffer.length) {
             throw new IllegalArgumentException("Invalid offset: " + targetOffset);
         }
