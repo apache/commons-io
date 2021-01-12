@@ -19,127 +19,117 @@ package org.apache.commons.io;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Objects;
 
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 /**
- * Abstract class that walks through a directory hierarchy and provides
- * subclasses with convenient hooks to add specific behavior.
+ * Abstract class that walks through a directory hierarchy and provides subclasses with convenient hooks to add specific
+ * behavior.
  * <p>
- * This class operates with a {@link FileFilter} and maximum depth to
- * limit the files and directories visited.
- * Commons IO supplies many common filter implementations in the
- * <a href="filefilter/package-summary.html"> filefilter</a> package.
+ * This class operates with a {@link FileFilter} and maximum depth to limit the files and directories visited. Commons
+ * IO supplies many common filter implementations in the <a href="filefilter/package-summary.html"> filefilter</a>
+ * package.
  * </p>
  * <p>
  * The following sections describe:
  * </p>
- *   <ul>
- *      <li><a href="#example">1. Example Implementation</a> - example
- *          <code>FileCleaner</code> implementation.</li>
- *      <li><a href="#filter">2. Filter Example</a> - using
- *          {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
- *      <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation
- *          behavior.</li>
- *   </ul>
+ * <ul>
+ * <li><a href="#example">1. Example Implementation</a> - example <code>FileCleaner</code> implementation.</li>
+ * <li><a href="#filter">2. Filter Example</a> - using {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
+ * <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation behavior.</li>
+ * </ul>
  *
  * <h2 id="example">1. Example Implementation</h2>
  *
- * There are many possible extensions, for example, to delete all
- * files and '.svn' directories, and return a list of deleted files:
+ * There are many possible extensions, for example, to delete all files and '.svn' directories, and return a list of
+ * deleted files:
+ * 
  * <pre>
- *  public class FileCleaner extends DirectoryWalker {
+ * public class FileCleaner extends DirectoryWalker {
  *
- *    public FileCleaner() {
- *      super();
- *    }
+ *     public FileCleaner() {
+ *         super();
+ *     }
  *
- *    public List clean(File startDirectory) {
- *      List results = new ArrayList();
- *      walk(startDirectory, results);
- *      return results;
- *    }
+ *     public List clean(File startDirectory) {
+ *         List results = new ArrayList();
+ *         walk(startDirectory, results);
+ *         return results;
+ *     }
  *
- *    protected boolean handleDirectory(File directory, int depth, Collection results) {
- *      // delete svn directories and then skip
- *      if (".svn".equals(directory.getName())) {
- *        directory.delete();
- *        return false;
- *      } else {
- *        return true;
- *      }
+ *     protected boolean handleDirectory(File directory, int depth, Collection results) {
+ *         // delete svn directories and then skip
+ *         if (".svn".equals(directory.getName())) {
+ *             directory.delete();
+ *             return false;
+ *         } else {
+ *             return true;
+ *         }
  *
- *    }
+ *     }
  *
- *    protected void handleFile(File file, int depth, Collection results) {
- *      // delete file and add to list of deleted
- *      file.delete();
- *      results.add(file);
- *    }
- *  }
+ *     protected void handleFile(File file, int depth, Collection results) {
+ *         // delete file and add to list of deleted
+ *         file.delete();
+ *         results.add(file);
+ *     }
+ * }
  * </pre>
  *
  * <h2 id="filter">2. Filter Example</h2>
  *
  * <p>
- * Choosing which directories and files to process can be a key aspect
- * of using this class. This information can be setup in three ways,
- * via three different constructors.
+ * Choosing which directories and files to process can be a key aspect of using this class. This information can be
+ * setup in three ways, via three different constructors.
  * </p>
  * <p>
- * The first option is to visit all directories and files.
- * This is achieved via the no-args constructor.
+ * The first option is to visit all directories and files. This is achieved via the no-args constructor.
  * </p>
  * <p>
- * The second constructor option is to supply a single {@link FileFilter}
- * that describes the files and directories to visit. Care must be taken
- * with this option as the same filter is used for both directories
- * and files.
+ * The second constructor option is to supply a single {@link FileFilter} that describes the files and directories to
+ * visit. Care must be taken with this option as the same filter is used for both directories and files.
  * </p>
  * <p>
- * For example, if you wanted all directories which are not hidden
- * and files which end in ".txt":
+ * For example, if you wanted all directories which are not hidden and files which end in ".txt":
  * </p>
+ * 
  * <pre>
- *  public class FooDirectoryWalker extends DirectoryWalker {
- *    public FooDirectoryWalker(FileFilter filter) {
- *      super(filter, -1);
- *    }
- *  }
+ * public class FooDirectoryWalker extends DirectoryWalker {
+ *     public FooDirectoryWalker(FileFilter filter) {
+ *         super(filter, -1);
+ *     }
+ * }
  *
- *  // Build up the filters and create the walker
- *    // Create a filter for Non-hidden directories
- *    IOFileFilter fooDirFilter =
- *        FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
- *                                      HiddenFileFilter.VISIBLE);
+ * // Build up the filters and create the walker
+ * // Create a filter for Non-hidden directories
+ * IOFileFilter fooDirFilter = FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
+ *     HiddenFileFilter.VISIBLE);
  *
- *    // Create a filter for Files ending in ".txt"
- *    IOFileFilter fooFileFilter =
- *        FileFilterUtils.andFileFilter(FileFilterUtils.fileFileFilter,
- *                                      FileFilterUtils.suffixFileFilter(".txt"));
+ * // Create a filter for Files ending in ".txt"
+ * IOFileFilter fooFileFilter = FileFilterUtils.andFileFilter(FileFilterUtils.fileFileFilter,
+ *     FileFilterUtils.suffixFileFilter(".txt"));
  *
- *    // Combine the directory and file filters using an OR condition
- *    java.io.FileFilter fooFilter =
- *        FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
+ * // Combine the directory and file filters using an OR condition
+ * java.io.FileFilter fooFilter = FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
  *
- *    // Use the filter to construct a DirectoryWalker implementation
- *    FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter);
+ * // Use the filter to construct a DirectoryWalker implementation
+ * FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter);
  * </pre>
  * <p>
- * The third constructor option is to specify separate filters, one for
- * directories and one for files. These are combined internally to form
- * the correct <code>FileFilter</code>, something which is very easy to
- * get wrong when attempted manually, particularly when trying to
- * express constructs like 'any file in directories named docs'.
+ * The third constructor option is to specify separate filters, one for directories and one for files. These are
+ * combined internally to form the correct <code>FileFilter</code>, something which is very easy to get wrong when
+ * attempted manually, particularly when trying to express constructs like 'any file in directories named docs'.
  * </p>
  * <p>
- * For example, if you wanted all directories which are not hidden
- * and files which end in ".txt":
+ * For example, if you wanted all directories which are not hidden and files which end in ".txt":
  * </p>
+ * 
  * <pre>
  *  public class FooDirectoryWalker extends DirectoryWalker {
  *    public FooDirectoryWalker(IOFileFilter dirFilter, IOFileFilter fileFilter) {
@@ -154,117 +144,114 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *  );
  * </pre>
  * <p>
- * This is much simpler than the previous example, and is why it is the preferred
- * option for filtering.
+ * This is much simpler than the previous example, and is why it is the preferred option for filtering.
  * </p>
  *
  * <h2 id="cancel">3. Cancellation</h2>
  *
  * <p>
- * The DirectoryWalker contains some of the logic required for cancel processing.
- * Subclasses must complete the implementation.
+ * The DirectoryWalker contains some of the logic required for cancel processing. Subclasses must complete the
+ * implementation.
  * </p>
  * <p>
  * What <code>DirectoryWalker</code> does provide for cancellation is:
  * </p>
  * <ul>
- *    <li>{@link CancelException} which can be thrown in any of the
- *        <i>lifecycle</i> methods to stop processing.</li>
- *    <li>The <code>walk()</code> method traps thrown {@link CancelException}
- *        and calls the <code>handleCancelled()</code> method, providing
- *        a place for custom cancel processing.</li>
+ * <li>{@link CancelException} which can be thrown in any of the <i>lifecycle</i> methods to stop processing.</li>
+ * <li>The <code>walk()</code> method traps thrown {@link CancelException} and calls the <code>handleCancelled()</code>
+ * method, providing a place for custom cancel processing.</li>
  * </ul>
  * <p>
  * Implementations need to provide:
  * </p>
  * <ul>
- *    <li>The decision logic on whether to cancel processing or not.</li>
- *    <li>Constructing and throwing a {@link CancelException}.</li>
- *    <li>Custom cancel processing in the <code>handleCancelled()</code> method.
+ * <li>The decision logic on whether to cancel processing or not.</li>
+ * <li>Constructing and throwing a {@link CancelException}.</li>
+ * <li>Custom cancel processing in the <code>handleCancelled()</code> method.
  * </ul>
  * <p>
  * Two possible scenarios are envisaged for cancellation:
  * </p>
  * <ul>
- *    <li><a href="#external">3.1 External / Multi-threaded</a> - cancellation being
- *        decided/initiated by an external process.</li>
- *    <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated
- *        from within a DirectoryWalker implementation.</li>
+ * <li><a href="#external">3.1 External / Multi-threaded</a> - cancellation being decided/initiated by an external
+ * process.</li>
+ * <li><a href="#internal">3.2 Internal</a> - cancellation being decided/initiated from within a DirectoryWalker
+ * implementation.</li>
  * </ul>
  * <p>
- * The following sections provide example implementations for these two different
- * scenarios.
+ * The following sections provide example implementations for these two different scenarios.
  * </p>
  *
  * <h3 id="external">3.1 External / Multi-threaded</h3>
  *
  * <p>
- * This example provides a public <code>cancel()</code> method that can be
- * called by another thread to stop the processing. A typical example use-case
- * would be a cancel button on a GUI. Calling this method sets a
- * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930">
- * volatile</a> flag to ensure it will work properly in a multi-threaded environment.
- * The flag is returned by the <code>handleIsCancelled()</code> method, which
- * will cause the walk to stop immediately. The <code>handleCancelled()</code>
- * method will be the next, and last, callback method received once cancellation
- * has occurred.
+ * This example provides a public <code>cancel()</code> method that can be called by another thread to stop the
+ * processing. A typical example use-case would be a cancel button on a GUI. Calling this method sets a
+ * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930"> volatile</a> flag to ensure
+ * it will work properly in a multi-threaded environment. The flag is returned by the <code>handleIsCancelled()</code>
+ * method, which will cause the walk to stop immediately. The <code>handleCancelled()</code> method will be the next,
+ * and last, callback method received once cancellation has occurred.
  * </p>
  *
  * <pre>
- *  public class FooDirectoryWalker extends DirectoryWalker {
+ * public class FooDirectoryWalker extends DirectoryWalker {
  *
- *    private volatile boolean cancelled = false;
+ *     private volatile boolean cancelled = false;
  *
- *    public void cancel() {
- *        cancelled = true;
- *    }
+ *     public void cancel() {
+ *         cancelled = true;
+ *     }
  *
- *    protected boolean handleIsCancelled(File file, int depth, Collection results) {
- *        return cancelled;
- *    }
+ *     protected boolean handleIsCancelled(File file, int depth, Collection results) {
+ *         return cancelled;
+ *     }
  *
- *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
- *        // implement processing required when a cancellation occurs
- *    }
- *  }
+ *     protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
+ *         // implement processing required when a cancellation occurs
+ *     }
+ * }
  * </pre>
  *
  * <h3 id="internal">3.2 Internal</h3>
  *
  * <p>
- * This shows an example of how internal cancellation processing could be implemented.
- * <b>Note</b> the decision logic and throwing a {@link CancelException} could be implemented
- * in any of the <i>lifecycle</i> methods.
+ * This shows an example of how internal cancellation processing could be implemented. <b>Note</b> the decision logic
+ * and throwing a {@link CancelException} could be implemented in any of the <i>lifecycle</i> methods.
  * </p>
  *
  * <pre>
- *  public class BarDirectoryWalker extends DirectoryWalker {
+ * public class BarDirectoryWalker extends DirectoryWalker {
  *
- *    protected boolean handleDirectory(File directory, int depth, Collection results) throws IOException {
- *        // cancel if hidden directory
- *        if (directory.isHidden()) {
- *            throw new CancelException(file, depth);
- *        }
- *        return true;
- *    }
+ *     protected boolean handleDirectory(File directory, int depth, Collection results) throws IOException {
+ *         // cancel if hidden directory
+ *         if (directory.isHidden()) {
+ *             throw new CancelException(file, depth);
+ *         }
+ *         return true;
+ *     }
  *
- *    protected void handleFile(File file, int depth, Collection results) throws IOException {
- *        // cancel if read-only file
- *        if (!file.canWrite()) {
- *            throw new CancelException(file, depth);
- *        }
- *        results.add(file);
- *    }
+ *     protected void handleFile(File file, int depth, Collection results) throws IOException {
+ *         // cancel if read-only file
+ *         if (!file.canWrite()) {
+ *             throw new CancelException(file, depth);
+ *         }
+ *         results.add(file);
+ *     }
  *
- *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
- *        // implement processing required when a cancellation occurs
- *    }
- *  }
+ *     protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
+ *         // implement processing required when a cancellation occurs
+ *     }
+ * }
  * </pre>
  *
  * @param <T> The result type, like {@link File}.
  * @since 1.3
+ * @deprecated Apache Commons IO no longer uses this class. Instead, use
+ *             {@link PathUtils#walk(java.nio.file.Path, org.apache.commons.io.file.PathFilter, int, boolean, java.nio.file.FileVisitOption...)}
+ *             or {@link Files#walkFileTree(java.nio.file.Path, java.util.Set, int, java.nio.file.FileVisitor)}, and
+ *             friends.
  */
+@Deprecated
 public abstract class DirectoryWalker<T> {
 
     /**
