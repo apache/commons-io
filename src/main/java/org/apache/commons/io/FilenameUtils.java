@@ -42,8 +42,8 @@ import java.util.regex.Pattern;
  * Most methods on this class are designed to work the same on both Unix and Windows.
  * Those that don't include 'System', 'Unix' or 'Windows' in their name.
  * <p>
- * Most methods recognise both separators (forward and back), and both
- * sets of prefixes. See the javadoc of each method for details.
+ * Most methods recognize both separators (forward and back), and both
+ * sets of prefixes. See the Javadoc of each method for details.
  * <p>
  * This class defines six components within a file name
  * (example C:\dev\project\file.txt):
@@ -359,7 +359,7 @@ public class FilenameUtils {
             return null;
         }
 
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         int size = fileName.length();
         if (size == 0) {
@@ -551,7 +551,6 @@ public class FilenameUtils {
         return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Converts all separators to the Unix separator of forward slash.
      *
@@ -591,7 +590,6 @@ public class FilenameUtils {
         return isSystemWindows() ? separatorsToWindows(path) : separatorsToUnix(path);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns the length of the fileName prefix, such as <code>C:/</code> or <code>~/</code>.
      * <p>
@@ -789,11 +787,11 @@ public class FilenameUtils {
             return null;
         }
         if (len > fileName.length()) {
-            failIfNullBytePresent(fileName + UNIX_SEPARATOR);
+            requireNonNullChars(fileName + UNIX_SEPARATOR);
             return fileName + UNIX_SEPARATOR;
         }
         final String path = fileName.substring(0, len);
-        failIfNullBytePresent(path);
+        requireNonNullChars(path);
         return path;
     }
 
@@ -873,7 +871,7 @@ public class FilenameUtils {
             return EMPTY_STRING;
         }
         final String path = fileName.substring(prefix, endIndex);
-        failIfNullBytePresent(path);
+        requireNonNullChars(path);
         return path;
     }
 
@@ -990,7 +988,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
         final int index = indexOfLastSeparator(fileName);
         return fileName.substring(index + 1);
     }
@@ -1001,7 +999,7 @@ public class FilenameUtils {
      * This may be used for poison byte attacks.
      * @param path the path to check
      */
-    private static void failIfNullBytePresent(final String path) {
+    private static void requireNonNullChars(final String path) {
         final int len = path.length();
         for (int i = 0; i < len; i++) {
             if (path.charAt(i) == 0) {
@@ -1116,7 +1114,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return null;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         final int index = indexOfExtension(fileName);
         if (index == NOT_FOUND) {
@@ -1240,7 +1238,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extension == null || extension.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;
@@ -1265,7 +1263,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extensions == null || extensions.length == 0) {
             return indexOfExtension(fileName) == NOT_FOUND;
@@ -1295,7 +1293,7 @@ public class FilenameUtils {
         if (fileName == null) {
             return false;
         }
-        failIfNullBytePresent(fileName);
+        requireNonNullChars(fileName);
 
         if (extensions == null || extensions.isEmpty()) {
             return indexOfExtension(fileName) == NOT_FOUND;

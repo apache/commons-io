@@ -1226,10 +1226,7 @@ public class FileUtils {
         }
 
         // Canonicalize paths (normalizes relative paths)
-        final String canonicalParent = directory.getCanonicalPath();
-        final String canonicalChild = child.getCanonicalPath();
-
-        return FilenameUtils.directoryContains(canonicalParent, canonicalChild);
+        return FilenameUtils.directoryContains(directory.getCanonicalPath(), child.getCanonicalPath());
     }
 
     /**
