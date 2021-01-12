@@ -2164,6 +2164,67 @@ public class FileUtilsTestCase {
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
     }
+    
+    @Test
+    public void testMoveFile_CopyDelete_WithFileDatePreservation() throws Exception {
+        final File destination = new File(temporaryFolder, "move2.txt");
+        
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
+        
+        final File src = new File(testFile1.getAbsolutePath()) {
+            private static final long serialVersionUID = 1L;
+
+            // Force renameTo to fail, as if destination is on another
+            // filesystem
+            @Override
+            public boolean renameTo(final File f) {
+                return false;
+            }
+        };
+        final long expected = getLastModifiedMillis(testFile1);
+        
+        FileUtils.moveFile(src, destination, true);
+        assertTrue(destination.exists(), "Check Exist");
+        assertTrue(!src.exists(), "Original deleted");
+        
+        final long destLastMod = getLastModifiedMillis(destination);
+        final long delta = destLastMod - expected;
+        assertEquals(expected, destLastMod, "Check last modified date same as input, delta " + delta);
+    }
+    
+    @Test
+    public void testMoveFile_CopyDelete_WithoutFileDatePreservation() throws Exception {
+        final File destination = new File(temporaryFolder, "move2.txt");
+        
+        backDateFile10Minutes(testFile1); // set test file back 10 minutes
+        
+        // destination file time should not be less than this (allowing for granularity)
+        final long now = System.currentTimeMillis() - 1000L;
+        
+        final File src = new File(testFile1.getAbsolutePath()) {
+            private static final long serialVersionUID = 1L;
+
+            // Force renameTo to fail, as if destination is on another
+            // filesystem
+            @Override
+            public boolean renameTo(final File f) {
+                return false;
+            }
+        };
+        final long unexpected = getLastModifiedMillis(testFile1);
+        
+        FileUtils.moveFile(src, destination, false);
+        assertTrue(destination.exists(), "Check Exist");
+        assertTrue(!src.exists(), "Original deleted");
+        
+        // On Windows, the last modified time is copied by default.
+        if (!SystemUtils.IS_OS_WINDOWS) {
+            final long destLastMod = getLastModifiedMillis(destination);
+            final long delta = destLastMod - unexpected;
+            assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
+            assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
+        }
+    }
 
     @Test
     public void testMoveFile_CopyDelete_Failed() throws Exception {

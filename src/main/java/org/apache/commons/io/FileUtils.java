@@ -2159,6 +2159,11 @@ public class FileUtils {
      * <p>
      * When the destination file is on another file system, do a "copy and delete".
      * </p>
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last modified date/times using
+     * {@link File#setLastModified(long)} when destination is another file system, however it is not guaranteed that the
+     * operation will succeed. If the modification operation fails, the methods throws IOException.
+     * </p>
      *
      * @param srcFile the file to be moved.
      * @param destFile the destination file.
@@ -2169,12 +2174,39 @@ public class FileUtils {
      * @since 1.4
      */
     public static void moveFile(final File srcFile, final File destFile) throws IOException {
+        moveFile(srcFile, destFile, true);
+    }
+
+    /**
+     * Moves a file.
+     * <p>
+     * When the destination file is on another file system, do a "copy and delete".
+     * </p>
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to {@code true} tries to preserve the files' last
+     * modified date/times using {@link File#setLastModified(long)} when destination is another file system, however it
+     * is not guaranteed that those operations will succeed. If the modification operation fails, the methods throws
+     * IOException.
+     * </p>
+     *
+     * @param srcFile the file to be moved.
+     * @param destFile the destination file.
+     * @param preserveFileDate true if the file date of the "copy and delete" should be the same as the original when
+     *            destination is on another file system. Param is not used if destination is on same file system.
+     * @throws NullPointerException if any of the given {@code File}s are {@code null}.
+     * @throws FileExistsException if the destination file exists.
+     * @throws IOException if source or destination is invalid.
+     * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
+     * @since 2.9.0
+     */
+    public static void moveFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+            throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireAbsent(destFile, null);
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
-            copyFile(srcFile, destFile);
+            copyFile(srcFile, destFile, preserveFileDate);
             if (!srcFile.delete()) {
                 FileUtils.deleteQuietly(destFile);
                 throw new IOException("Failed to delete original file '" + srcFile +
