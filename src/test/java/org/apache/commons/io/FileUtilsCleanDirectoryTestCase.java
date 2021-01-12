@@ -112,7 +112,7 @@ public class FileUtilsCleanDirectoryTestCase {
             fail("expected IOException");
         } catch (final IOException e) {
             final IOExceptionList list = (IOExceptionList) e;
-            assertEquals("Unable to delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
+            assertEquals("Cannot delete file: " + file.getAbsolutePath(), list.getCause(0).getMessage());
         } finally {
             chmod(top, 755, false);
         }
