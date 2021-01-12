@@ -808,7 +808,7 @@ public final class PathUtils {
     }
 
     /**
-     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);}
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class)}
      *
      * @param path the path to read.
      * @return the path attributes.
@@ -820,7 +820,7 @@ public final class PathUtils {
     }
 
     /**
-     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class);} while wrapping {@link IOException}
+     * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class)} while wrapping {@link IOException}
      * as {@link IllegalStateException}.
      *
      * @param path the path to read.
