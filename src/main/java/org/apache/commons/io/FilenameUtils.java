@@ -994,18 +994,16 @@ public class FilenameUtils {
     }
 
     /**
-     * Check the input for null bytes, a sign of unsanitized data being passed to to file level functions.
+     * Checks the input for null bytes, a sign of unsanitized data being passed to to file level functions.
      *
      * This may be used for poison byte attacks.
+     * 
      * @param path the path to check
      */
     private static void requireNonNullChars(final String path) {
-        final int len = path.length();
-        for (int i = 0; i < len; i++) {
-            if (path.charAt(i) == 0) {
-                throw new IllegalArgumentException("Null byte present in file/path name. There are no " +
-                        "known legitimate use cases for such data, but several injection attacks may use it");
-            }
+        if (path.indexOf(0) >= 0) {
+            throw new IllegalArgumentException("Null byte present in file/path name. There are no "
+                + "known legitimate use cases for such data, but several injection attacks may use it");
         }
     }
 
