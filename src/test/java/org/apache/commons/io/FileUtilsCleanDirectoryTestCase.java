@@ -92,7 +92,7 @@ public class FileUtilsCleanDirectoryTestCase {
             FileUtils.cleanDirectory(top);
             fail("expected IOException");
         } catch (final IOException e) {
-            assertEquals("Failed to list contents of " + top.getAbsolutePath(), e.getMessage());
+            assertEquals("Unknown I/O error listing contents of directory: " + top.getAbsolutePath(), e.getMessage());
         } finally {
             chmod(top, 755, false);
         }
