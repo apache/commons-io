@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -537,11 +538,7 @@ public class FilenameUtils {
      */
     public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
             throws IOException {
-
-        // Fail fast against NullPointerException
-        if (canonicalParent == null) {
-            throw new IllegalArgumentException("Directory must not be null");
-        }
+        Objects.requireNonNull(canonicalParent, "canonicalParent");
 
         if (canonicalChild == null) {
             return false;
