@@ -39,6 +39,8 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.CopyOption;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -58,6 +60,7 @@ import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import org.apache.commons.io.file.PathUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -2183,7 +2186,7 @@ public class FileUtilsTestCase {
         };
         final long expected = getLastModifiedMillis(testFile1);
         
-        FileUtils.moveFile(src, destination, true);
+        FileUtils.moveFile(src, destination, StandardCopyOption.COPY_ATTRIBUTES);
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
         
@@ -2213,7 +2216,7 @@ public class FileUtilsTestCase {
         };
         final long unexpected = getLastModifiedMillis(testFile1);
         
-        FileUtils.moveFile(src, destination, false);
+        FileUtils.moveFile(src, destination, PathUtils.EMPTY_COPY_OPTIONS);
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
         

@@ -45,6 +45,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -674,7 +675,8 @@ public class FileUtils {
                 }
             }
         }
-        doCopyDirectory(srcDir, destDir, fileFilter, preserveFileDate, exclusionList, copyOptions);
+        doCopyDirectory(srcDir, destDir, fileFilter, exclusionList,
+            preserveFileDate, preserveFileDate ? addCopyAttributes(copyOptions) : copyOptions);
     }
 
     /**
@@ -730,7 +732,7 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean)
      */
     public static void copyFile(final File srcFile, final File destFile) throws IOException {
-        copyFile(srcFile, destFile, true);
+        copyFile(srcFile, destFile, StandardCopyOption.REPLACE_EXISTING);
     }
 
     /**
@@ -757,15 +759,18 @@ public class FileUtils {
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate)
         throws IOException {
-        copyFile(srcFile, destFile, preserveFileDate, StandardCopyOption.REPLACE_EXISTING);
+        copyFile(srcFile, destFile,
+            preserveFileDate
+                ? new CopyOption[] {StandardCopyOption.COPY_ATTRIBUTES, StandardCopyOption.REPLACE_EXISTING}
+                : new CopyOption[] {StandardCopyOption.REPLACE_EXISTING});
     }
 
     /**
      * Copies a file to a new location.
      * <p>
      * This method copies the contents of the specified source file to the specified destination file. The directory
-     * holding the destination file is created if it does not exist. If the destination file exists, then this method
-     * will overwrite it.
+     * holding the destination file is created if it does not exist. If the destination file exists, you can overwrite
+     * it with {@link StandardCopyOption#REPLACE_EXISTING}.
      * </p>
      * <p>
      * <strong>Note:</strong> Setting <code>preserveFileDate</code> to {@code true} tries to preserve the file's last
@@ -787,15 +792,61 @@ public class FileUtils {
      */
     public static void copyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
         throws IOException {
+        copyFile(srcFile, destFile, preserveFileDate ? addCopyAttributes(copyOptions) : copyOptions);
+    }
+
+    /**
+     * Copies a file to a new location.
+     * <p>
+     * This method copies the contents of the specified source file to the specified destination file. The directory
+     * holding the destination file is created if it does not exist. If the destination file exists, you can overwrite
+     * it if you use {@link StandardCopyOption#REPLACE_EXISTING}.
+     * </p>
+     *
+     * @param srcFile an existing file to copy, must not be {@code null}.
+     * @param destFile the new file, must not be {@code null}.
+     * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}..
+     * @throws NullPointerException if any of the given {@code File}s are {@code null}.
+     * @throws FileNotFoundException if the source does not exist.
+     * @throws IllegalArgumentException if source is not a file.
+     * @throws IOException if the output file length is not the same as the input file length after the copy completes.
+     * @throws IOException if an I/O error occurs.
+     * @see StandardCopyOption
+     * @since 2.9.0
+     */
+    public static void copyFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
+        throws IOException {
         requireFileCopy(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireCanonicalPathsNotEquals(srcFile, destFile);
         createParentDirectories(destFile);
-
+        requireFileIfExists(destFile, "destFile");
         if (destFile.exists()) {
             requireCanWrite(destFile, "destFile");
         }
-        doCopyFile(srcFile, destFile, preserveFileDate, copyOptions);
+
+        // On Windows, the last modified time is copied by default.
+        Files.copy(srcFile.toPath(), destFile.toPath(), copyOptions);
+
+        // TODO IO-386: Do we still need this check?
+        requireEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
+    }
+
+    /**
+     * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
+     * 
+     * @param copyOptions sorted copy options.
+     * @return a new array.
+     */
+    private static CopyOption[] addCopyAttributes(final CopyOption... copyOptions) {
+        // Make a copy first since we don't want to sort the call site's version.
+        final CopyOption[] actual = Arrays.copyOf(copyOptions, copyOptions.length + 1);
+        Arrays.sort(actual, 0, copyOptions.length);
+        if (Arrays.binarySearch(copyOptions, 0, copyOptions.length, StandardCopyOption.COPY_ATTRIBUTES) >= 0) {
+            return copyOptions;
+        }
+        actual[actual.length - 1] = StandardCopyOption.COPY_ATTRIBUTES;
+        return actual;
     }
 
     /**
@@ -861,14 +912,14 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @throws IOException if the output file length is not the same as the input file length after the copy completes.
-     * @see #copyFile(File, File, boolean)
+     * @see #copyFile(File, File, CopyOption...)
      * @since 1.3
      */
     public static void copyFileToDirectory(final File sourceFile, final File destinationDir, final boolean preserveFileDate)
             throws IOException {
+        Objects.requireNonNull(sourceFile, "sourceFile");
         requireDirectoryIfExists(destinationDir, "destinationDir");
-        final File destFile = new File(destinationDir, sourceFile.getName());
-        copyFile(sourceFile, destFile, preserveFileDate);
+        copyFile(sourceFile, new File(destinationDir, sourceFile.getName()), preserveFileDate);
     }
 
     /**
@@ -1235,16 +1286,15 @@ public class FileUtils {
      * @param srcDir the validated source directory, must not be {@code null}.
      * @param destDir the validated destination directory, must not be {@code null}.
      * @param fileFilter the filter to apply, null means copy all directories and files.
-     * @param preserveFileDate whether to preserve the file date.
      * @param exclusionList List of files and directories to exclude from the copy, may be null.
-     * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
+     * @param preserveDirDate preserve the directories last modified dates.
+     * @param copyOptions options specifying how the copy should be done, see {@link StandardCopyOption}.
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      */
     private static void doCopyDirectory(final File srcDir, final File destDir, final FileFilter fileFilter,
-        final boolean preserveFileDate, final List<String> exclusionList, final CopyOption... copyOptions)
-        throws IOException {
-        // recurse
+        final List<String> exclusionList, boolean preserveDirDate, final CopyOption... copyOptions) throws IOException {
+        // recurse dirs, copy files.
         final File[] srcFiles = listFiles(srcDir, fileFilter);
         requireDirectoryIfExists(destDir, "destDir");
         mkdirs(destDir);
@@ -1253,49 +1303,15 @@ public class FileUtils {
             final File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, dstFile, fileFilter, preserveFileDate, exclusionList, copyOptions);
+                    doCopyDirectory(srcFile, dstFile, fileFilter, exclusionList, preserveDirDate, copyOptions);
                 } else {
-                    doCopyFile(srcFile, dstFile, preserveFileDate, copyOptions);
+                    copyFile(srcFile, dstFile, copyOptions);
                 }
             }
         }
-
         // Do this last, as the above has probably affected directory metadata
-        if (preserveFileDate) {
+        if (preserveDirDate) {
             setLastModified(srcDir, destDir);
-        }
-    }
-
-    /**
-     * Internal copy file method. This uses the original file length, and throws an IOException if the output file
-     * length is different from the current input file length. So it may fail if the file changes size. It may also fail
-     * with "IllegalArgumentException: Negative size" if the input file is truncated part way through copying the data
-     * and the new file size is less than the current position.
-     *
-     * @param srcFile the validated source file, must not be {@code null}
-     * @param destFile the validated destination file, must not be {@code null}
-     * @param preserveFileDate whether to preserve the file date
-     * @param copyOptions options specifying how the copy should be done, for example {@link StandardCopyOption}.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
-     * @throws IOException if the output file length is not the same as the input file length after the copy completes
-     * @throws IllegalArgumentException "Negative size" if the file is truncated so that the size is less than the
-     *         position
-     */
-    private static void doCopyFile(final File srcFile, final File destFile, final boolean preserveFileDate, final CopyOption... copyOptions)
-        throws IOException {
-        Objects.requireNonNull(srcFile, "srcFile");
-        requireFileIfExists(destFile, "destFile");
-
-        final Path srcPath = srcFile.toPath();
-        final Path destPath = destFile.toPath();
-        // On Windows, the last modified time is copied by default.
-        Files.copy(srcPath, destPath, copyOptions);
-
-        // TODO IO-386: Do we still need this check?
-        requireEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
-
-        if (preserveFileDate) {
-            setLastModified(srcFile, destFile);
         }
     }
 
@@ -2155,14 +2171,12 @@ public class FileUtils {
     }
 
     /**
-     * Moves a file.
+     * Moves a file preserving attributes.
      * <p>
-     * When the destination file is on another file system, do a "copy and delete".
+     * Shorthand for {@code moveFile(srcFile, destFile, StandardCopyOption.COPY_ATTRIBUTES)}.
      * </p>
      * <p>
-     * <strong>Note:</strong> This method tries to preserve the file's last modified date/times using
-     * {@link File#setLastModified(long)} when destination is another file system, however it is not guaranteed that the
-     * operation will succeed. If the modification operation fails, the methods throws IOException.
+     * When the destination file is on another file system, do a "copy and delete".
      * </p>
      *
      * @param srcFile the file to be moved.
@@ -2170,11 +2184,11 @@ public class FileUtils {
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws IOException if source or destination is invalid.
-     * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
+     * @throws IOException if an error occurs.
      * @since 1.4
      */
     public static void moveFile(final File srcFile, final File destFile) throws IOException {
-        moveFile(srcFile, destFile, true);
+        moveFile(srcFile, destFile, StandardCopyOption.COPY_ATTRIBUTES);
     }
 
     /**
@@ -2182,31 +2196,24 @@ public class FileUtils {
      * <p>
      * When the destination file is on another file system, do a "copy and delete".
      * </p>
-     * <p>
-     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to {@code true} tries to preserve the files' last
-     * modified date/times using {@link File#setLastModified(long)} when destination is another file system, however it
-     * is not guaranteed that those operations will succeed. If the modification operation fails, the methods throws
-     * IOException.
-     * </p>
      *
      * @param srcFile the file to be moved.
      * @param destFile the destination file.
-     * @param preserveFileDate true if the file date of the "copy and delete" should be the same as the original when
-     *            destination is on another file system. Param is not used if destination is on same file system.
+     * @param copyOptions Copy options.
      * @throws NullPointerException if any of the given {@code File}s are {@code null}.
      * @throws FileExistsException if the destination file exists.
      * @throws IOException if source or destination is invalid.
      * @throws IOException if an error occurs or setting the last-modified time didn't succeeded.
      * @since 2.9.0
      */
-    public static void moveFile(final File srcFile, final File destFile, final boolean preserveFileDate)
+    public static void moveFile(final File srcFile, final File destFile, final CopyOption... copyOptions)
             throws IOException {
         validateMoveParameters(srcFile, destFile);
         requireFile(srcFile, "srcFile");
         requireAbsent(destFile, null);
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
-            copyFile(srcFile, destFile, preserveFileDate);
+            copyFile(srcFile, destFile, copyOptions);
             if (!srcFile.delete()) {
                 FileUtils.deleteQuietly(destFile);
                 throw new IOException("Failed to delete original file '" + srcFile +
@@ -2505,7 +2512,8 @@ public class FileUtils {
     }
 
     /**
-     * Throws an {@link IllegalArgumentException} if the file is not writable.
+     * Throws an {@link IllegalArgumentException} if the file is not writable. This provides a more precise exception
+     * message than a plain access denied.
      * 
      * @param file The file to test.
      * @param name The parameter name to use in the exception message.
@@ -2515,7 +2523,7 @@ public class FileUtils {
     private static void requireCanWrite(final File file, String name) {
         Objects.requireNonNull(file, "file");
         if (!file.canWrite()) {
-            throw new IllegalArgumentException("File parameter '" + name + " is non-writable: '" + file + "'");
+            throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
         }
     }
 
