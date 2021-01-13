@@ -41,6 +41,7 @@ import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,6 +54,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -869,11 +871,17 @@ public final class PathUtils {
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions)
             throws IOException {
+        final List<Exception> causeList = new ArrayList<>(2);
         final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class,
                 linkOptions);
         if (fileAttributeView != null) {
-            fileAttributeView.setReadOnly(readOnly);
-            return path;
+            try {
+                fileAttributeView.setReadOnly(readOnly);
+                return path;
+            } catch (IOException e) {
+                //ignore for now, retry with PosixFileAttributeView
+                causeList.add(e);
+            }
         }
         final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path,
                 PosixFileAttributeView.class, linkOptions);
@@ -886,7 +894,14 @@ public final class PathUtils {
             permissions.remove(PosixFilePermission.OWNER_WRITE);
             permissions.remove(PosixFilePermission.GROUP_WRITE);
             permissions.remove(PosixFilePermission.OTHERS_WRITE);
-            return Files.setPosixFilePermissions(path, permissions);
+            try {
+                 return Files.setPosixFilePermissions(path, permissions);
+            } catch (IOException e) {
+                causeList.add(e);
+            }
+        }
+        if (!causeList.isEmpty()) {
+             throw new IOExceptionList(causeList);
         }
         throw new IOException(
                 String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path,

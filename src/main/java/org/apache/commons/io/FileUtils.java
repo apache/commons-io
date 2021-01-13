@@ -1167,9 +1167,7 @@ public class FileUtils {
      */
     public static File delete(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        if (!file.delete()) {
-            throw new IOException("Unable to delete " + file);
-        }
+        java.nio.file.Files.delete(file.toPath());
         return file;
     }
 
