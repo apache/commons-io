@@ -25,8 +25,11 @@ import java.util.List;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+/**
+ * Requires Windows admin karma.
+ */
 @EnabledOnOs(OS.WINDOWS)
-public class FileUtilsDeleteDirectoryWinTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
+public class FileUtilsDeleteDirectoryWindowsTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
 
     @Override
     protected boolean setupSymlink(final File res, final File link) throws Exception {
