@@ -52,7 +52,7 @@ public class PathUtilsIsEmptyTest {
     }
 
     @Test
-    public void testisEmptyDirectory() throws IOException {
+    public void testIsEmptyDirectory() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
             Assertions.assertTrue(PathUtils.isEmptyDirectory(tempDir));
