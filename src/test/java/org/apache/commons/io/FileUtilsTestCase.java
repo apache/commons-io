@@ -1281,6 +1281,12 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testDelete() throws Exception {
+        assertEquals(testFile1, FileUtils.delete(testFile1));
+        assertThrows(IOException.class, () -> FileUtils.delete(new File("does not exist.nope")));
+    }
+
+    @Test
     public void testDeleteDirectoryWithNonDirectory() throws Exception {
         try {
             FileUtils.deleteDirectory(testFile1);
@@ -1288,12 +1294,6 @@ public class FileUtilsTestCase {
         } catch (final IllegalArgumentException ex) {
             // expected
         }
-    }
-
-    @Test
-    public void testDelete() throws Exception {
-        assertEquals(testFile1, FileUtils.delete(testFile1));
-        assertThrows(IOException.class, () -> FileUtils.delete(new File("does not exist.nope")));
     }
 
     @Test
@@ -2169,6 +2169,32 @@ public class FileUtilsTestCase {
     }
     
     @Test
+    public void testMoveFile_CopyDelete_Failed() throws Exception {
+        final File destination = new File(temporaryFolder, "move3.txt");
+        final File src = new File(testFile1.getAbsolutePath()) {
+            private static final long serialVersionUID = 1L;
+
+            // Force delete failure
+            @Override
+            public boolean delete() {
+                return false;
+            }
+
+            // Force renameTo to fail, as if destination is on another
+            // filesystem
+            @Override
+            public boolean renameTo(final File f) {
+                return false;
+            }
+
+        };
+        assertThrows(IOException.class, () -> FileUtils.moveFile(src, destination));
+        // expected
+        assertTrue(!destination.exists(), "Check Rollback");
+        assertTrue(src.exists(), "Original exists");
+    }
+    
+    @Test
     public void testMoveFile_CopyDelete_WithFileDatePreservation() throws Exception {
         final File destination = new File(temporaryFolder, "move2.txt");
         
@@ -2194,7 +2220,7 @@ public class FileUtilsTestCase {
         final long delta = destLastMod - expected;
         assertEquals(expected, destLastMod, "Check last modified date same as input, delta " + delta);
     }
-    
+
     @Test
     public void testMoveFile_CopyDelete_WithoutFileDatePreservation() throws Exception {
         final File destination = new File(temporaryFolder, "move2.txt");
@@ -2227,32 +2253,6 @@ public class FileUtilsTestCase {
             assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
             assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
         }
-    }
-
-    @Test
-    public void testMoveFile_CopyDelete_Failed() throws Exception {
-        final File destination = new File(temporaryFolder, "move3.txt");
-        final File src = new File(testFile1.getAbsolutePath()) {
-            private static final long serialVersionUID = 1L;
-
-            // Force delete failure
-            @Override
-            public boolean delete() {
-                return false;
-            }
-
-            // Force renameTo to fail, as if destination is on another
-            // filesystem
-            @Override
-            public boolean renameTo(final File f) {
-                return false;
-            }
-
-        };
-        assertThrows(IOException.class, () -> FileUtils.moveFile(src, destination));
-        // expected
-        assertTrue(!destination.exists(), "Check Rollback");
-        assertTrue(src.exists(), "Original exists");
     }
 
     @Test
