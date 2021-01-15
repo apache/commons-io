@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
@@ -150,11 +151,23 @@ public class DeletingPathVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-        if (accept(file) && Files.exists(file, linkOptions)) {
-            if (overrideReadOnly) {
-                PathUtils.setReadOnly(file, false, linkOptions);
+        if (accept(file)) {
+            // delete files and valid links, respecting linkOptions
+            if (Files.exists(file, linkOptions)) {
+                if (overrideReadOnly) {
+                    PathUtils.setReadOnly(file, false, linkOptions);
+                }
+                Files.deleteIfExists(file);
             }
-            Files.deleteIfExists(file);
+            // invalid links will survive previous delete, different approach needed:
+            if (Files.isSymbolicLink(file)) {
+                try {
+                    // deleteIfExists does not work for this case
+                    Files.delete(file);
+                } catch (NoSuchFileException e) {
+                    // ignore
+                }
+            }
         }
         updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;
