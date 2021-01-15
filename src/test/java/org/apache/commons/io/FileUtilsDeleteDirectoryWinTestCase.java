@@ -17,6 +17,8 @@
 package org.apache.commons.io;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,25 +28,26 @@ import org.junit.jupiter.api.condition.OS;
 @EnabledOnOs(OS.WINDOWS)
 public class FileUtilsDeleteDirectoryWinTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
 
-	@Override
-	protected boolean setupSymlink(File res, File link) throws Exception {
-		// create symlink
-		final List<String> args = new ArrayList<>();
-		args.add("cmd");
-		args.add("/C");
-		args.add("mklink");
+    @Override
+    protected boolean setupSymlink(final File res, final File link) throws Exception {
+        // create symlink
+        final List<String> args = new ArrayList<>();
+        args.add("cmd");
+        args.add("/C");
+        args.add("mklink");
 
-		if (res.isDirectory()) {
-			args.add("/D");
-		}
+        if (res.isDirectory()) {
+            args.add("/D");
+        }
 
-		args.add(link.getAbsolutePath());
-		args.add(res.getAbsolutePath());
+        args.add(link.getAbsolutePath());
+        args.add(res.getAbsolutePath());
 
-		final Process proc;
-
-		proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
-		return proc.waitFor() == 0;
-	}
+        final Process proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
+        final InputStream errorStream = proc.getErrorStream();
+        final int rc = proc.waitFor();
+        System.err.println(IOUtils.toString(errorStream, Charset.defaultCharset()));
+        return rc == 0;
+    }
 
 }

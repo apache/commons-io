@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.attribute.FileAttribute;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -35,69 +33,7 @@ public abstract class FileUtilsDeleteDirectoryBaseTestCase {
     @TempDir
     public File top;
 
-    // -----------------------------------------------------------------------
-
-    @Test
-    public void testDeletesRegular() throws Exception {
-        final File nested = new File(top, "nested");
-        assertTrue(nested.mkdirs());
-
-        assertEquals(1, top.list().length);
-
-        assertEquals(0, nested.list().length);
-
-        FileUtils.deleteDirectory(nested);
-
-        assertEquals(0, top.list().length);
-    }
-
-    @Test
-    public void testDeletesNested() throws Exception {
-        final File nested = new File(top, "nested");
-        assertTrue(nested.mkdirs());
-
-        assertEquals(1, top.list().length);
-
-        FileUtils.touch(new File(nested, "regular"));
-        FileUtils.touch(new File(nested, ".hidden"));
-
-        assertEquals(2, nested.list().length);
-
-		FileUtils.deleteDirectory(nested);
-
-        assertEquals(0, top.list().length);
-    }
-
-    @Test
-    public void testDeleteDirWithSymlinkFile() throws Exception {
-        final File realOuter = new File(top, "realouter");
-        assertTrue(realOuter.mkdirs());
-
-        final File realInner = new File(realOuter, "realinner");
-        assertTrue(realInner.mkdirs());
-
-        final File realFile = new File(realInner, "file1");
-        FileUtils.touch(realFile);
-
-        assertEquals(1, realInner.list().length);
-
-        final File randomFile = new File(top, "randomfile");
-        FileUtils.touch(randomFile);
-
-        final File symlinkFile = new File(realInner, "fakeinner");
-        assertTrue(setupSymlink(randomFile, symlinkFile));
-
-        assertEquals(2, realInner.list().length);
-        assertEquals(2, top.list().length);
-
-        // assert the real directory were removed including the symlink
-        FileUtils.deleteDirectory(realOuter);
-        assertEquals(1, top.list().length);
-
-        // ensure that the contents of the symlink were NOT removed.
-        assertTrue(randomFile.exists());
-        assertFalse(symlinkFile.exists());
-    }
+    protected abstract boolean setupSymlink(final File res, final File link) throws Exception;
 
     @Test
     public void testDeleteDirWithASymlinkDir() throws Exception {
@@ -160,7 +96,38 @@ public abstract class FileUtilsDeleteDirectoryBaseTestCase {
         // ensure that the contents of the symlink were NOT removed.
         assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
     }
-    
+
+    @Test
+    public void testDeleteDirWithSymlinkFile() throws Exception {
+        final File realOuter = new File(top, "realouter");
+        assertTrue(realOuter.mkdirs());
+
+        final File realInner = new File(realOuter, "realinner");
+        assertTrue(realInner.mkdirs());
+
+        final File realFile = new File(realInner, "file1");
+        FileUtils.touch(realFile);
+
+        assertEquals(1, realInner.list().length);
+
+        final File randomFile = new File(top, "randomfile");
+        FileUtils.touch(randomFile);
+
+        final File symlinkFile = new File(realInner, "fakeinner");
+        assertTrue(setupSymlink(randomFile, symlinkFile));
+
+        assertEquals(2, realInner.list().length);
+        assertEquals(2, top.list().length);
+
+        // assert the real directory were removed including the symlink
+        FileUtils.deleteDirectory(realOuter);
+        assertEquals(1, top.list().length);
+
+        // ensure that the contents of the symlink were NOT removed.
+        assertTrue(randomFile.exists());
+        assertFalse(symlinkFile.exists());
+    }
+
     @Test
     public void testDeleteParentSymlink() throws Exception {
         final File realParent = new File(top, "realparent");
@@ -227,7 +194,35 @@ public abstract class FileUtilsDeleteDirectoryBaseTestCase {
         assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
     }
 
-    protected abstract boolean setupSymlink(final File res, final File link) throws Exception;
+    @Test
+    public void testDeletesNested() throws Exception {
+        final File nested = new File(top, "nested");
+        assertTrue(nested.mkdirs());
+
+        assertEquals(1, top.list().length);
+
+        FileUtils.touch(new File(nested, "regular"));
+        FileUtils.touch(new File(nested, ".hidden"));
+
+        assertEquals(2, nested.list().length);
+
+        FileUtils.deleteDirectory(nested);
+
+        assertEquals(0, top.list().length);
+    }
+
+    @Test
+    public void testDeletesRegular() throws Exception {
+        final File nested = new File(top, "nested");
+        assertTrue(nested.mkdirs());
+
+        assertEquals(1, top.list().length);
+
+        assertEquals(0, nested.list().length);
+
+        FileUtils.deleteDirectory(nested);
+
+        assertEquals(0, top.list().length);
+    }
 
 }
-

@@ -870,21 +870,21 @@ public final class PathUtils {
      * @since 2.8.0
      */
     public static Path setReadOnly(final Path path, final boolean readOnly, final LinkOption... linkOptions)
-            throws IOException {
+        throws IOException {
         final List<Exception> causeList = new ArrayList<>(2);
         final DosFileAttributeView fileAttributeView = Files.getFileAttributeView(path, DosFileAttributeView.class,
-                linkOptions);
+            linkOptions);
         if (fileAttributeView != null) {
             try {
                 fileAttributeView.setReadOnly(readOnly);
                 return path;
             } catch (IOException e) {
-                //ignore for now, retry with PosixFileAttributeView
+                // ignore for now, retry with PosixFileAttributeView
                 causeList.add(e);
             }
         }
         final PosixFileAttributeView posixFileAttributeView = Files.getFileAttributeView(path,
-                PosixFileAttributeView.class, linkOptions);
+            PosixFileAttributeView.class, linkOptions);
         if (posixFileAttributeView != null) {
             // Works on Windows but not on Ubuntu:
             // Files.setAttribute(path, "unix:readonly", readOnly, options);
@@ -895,17 +895,17 @@ public final class PathUtils {
             permissions.remove(PosixFilePermission.GROUP_WRITE);
             permissions.remove(PosixFilePermission.OTHERS_WRITE);
             try {
-                 return Files.setPosixFilePermissions(path, permissions);
+                return Files.setPosixFilePermissions(path, permissions);
             } catch (IOException e) {
                 causeList.add(e);
             }
         }
         if (!causeList.isEmpty()) {
-             throw new IOExceptionList(causeList);
+            throw new IOExceptionList(causeList);
         }
         throw new IOException(
-                String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path,
-                        Arrays.toString(linkOptions)));
+            String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path,
+                Arrays.toString(linkOptions)));
     }
 
     /**
