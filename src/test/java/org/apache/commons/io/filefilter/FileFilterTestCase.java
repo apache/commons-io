@@ -1541,14 +1541,14 @@ public class FileFilterTestCase {
     @Test
     public void testSizeFilterOnPaths() throws Exception {
         final Path smallFile = Paths.get(temporaryFolder.toString(), "small.txt");
-        if (!Files.exists(smallFile.getParent())) {
+        if (Files.notExists(smallFile.getParent())) {
             fail("Cannot create file " + smallFile + " as the parent directory does not exist");
         }
         try (OutputStream output = Files.newOutputStream(smallFile)) {
             TestUtils.generateTestData(output, 32);
         }
         final Path largeFile = Paths.get(temporaryFolder.toString(), "large.txt");
-        if (!Files.exists(largeFile.getParent())) {
+        if (Files.notExists(largeFile.getParent())) {
             fail("Cannot create file " + largeFile + " as the parent directory does not exist");
         }
         try (OutputStream output = Files.newOutputStream(largeFile)) {

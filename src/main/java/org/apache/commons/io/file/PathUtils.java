@@ -99,10 +99,10 @@ public final class PathUtils {
             } else if (dir1 == null ^ dir2 == null) {
                 equals = false;
             } else {
-                final boolean parentDirExists1 = Files.exists(dir1, linkOptions);
-                final boolean parentDirExists2 = Files.exists(dir2, linkOptions);
-                if (!parentDirExists1 || !parentDirExists2) {
-                    equals = !parentDirExists1 && !parentDirExists2;
+                final boolean parentDirNotExists1 = Files.notExists(dir1, linkOptions);
+                final boolean parentDirNotExists2 = Files.notExists(dir2, linkOptions);
+                if (parentDirNotExists1 || parentDirNotExists2) {
+                    equals = parentDirNotExists1 && parentDirNotExists2;
                 } else {
                     final AccumulatorPathVisitor visitor1 = accumulate(dir1, maxDepth, fileVisitOptions);
                     final AccumulatorPathVisitor visitor2 = accumulate(dir2, maxDepth, fileVisitOptions);
@@ -530,7 +530,7 @@ public final class PathUtils {
         if (path1 == null || path2 == null) {
             return false;
         }
-        if (!Files.exists(path1) && !Files.exists(path2)) {
+        if (Files.notExists(path1) && Files.notExists(path2)) {
             return true;
         }
         final RelativeSortedPaths relativeSortedPaths = new RelativeSortedPaths(path1, path2, Integer.MAX_VALUE,
@@ -772,7 +772,7 @@ public final class PathUtils {
     public static boolean isNewer(final Path file, final long timeMillis, final LinkOption... options)
         throws IOException {
         Objects.requireNonNull(file, "file");
-        if (!Files.exists(file)) {
+        if (Files.notExists(file)) {
             return false;
         }
         return Files.getLastModifiedTime(file, options).toMillis() > timeMillis;
