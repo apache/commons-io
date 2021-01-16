@@ -1488,6 +1488,18 @@ public class FileUtils {
     }
 
     /**
+     * Tests whether the directory is empty.
+     *
+     * @param directory the directory to query.
+     * @return whether the directory is empty.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static boolean isEmptyDirectory(final File directory) throws IOException {
+        return PathUtils.isEmptyDirectory(directory.toPath());
+    }
+    
+    /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the current time.
      *
