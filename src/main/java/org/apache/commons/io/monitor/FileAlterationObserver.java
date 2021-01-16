@@ -324,7 +324,7 @@ public class FileAlterationObserver implements Serializable {
      */
     private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {
         int c = 0;
-        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
+        final FileEntry[] current = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (final FileEntry entry : previous) {
             while (c < files.length && comparator.compare(entry.getFile(), files[c]) > 0) {
                 current[c] = createFileEntry(parent, files[c]);
@@ -371,7 +371,7 @@ public class FileAlterationObserver implements Serializable {
      */
     private FileEntry[] doListFiles(final File file, final FileEntry entry) {
         final File[] files = listFiles(file);
-        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;
+        final FileEntry[] children = files.length > 0 ? new FileEntry[files.length] : FileEntry.EMPTY_FILE_ENTRY_ARRAY;
         for (int i = 0; i < files.length; i++) {
             children[i] = createFileEntry(entry, files[i]);
         }

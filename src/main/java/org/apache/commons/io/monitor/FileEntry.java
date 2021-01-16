@@ -44,7 +44,7 @@ public class FileEntry implements Serializable {
 
     private static final long serialVersionUID = -2505664948818681153L;
 
-    static final FileEntry[] EMPTY_ENTRIES = new FileEntry[0];
+    static final FileEntry[] EMPTY_FILE_ENTRY_ARRAY = new FileEntry[0];
 
     private final FileEntry parent;
     private FileEntry[] children;
@@ -154,7 +154,7 @@ public class FileEntry implements Serializable {
      * directory is empty
      */
     public FileEntry[] getChildren() {
-        return children != null ? children : EMPTY_ENTRIES;
+        return children != null ? children : EMPTY_FILE_ENTRY_ARRAY;
     }
 
     /**
