@@ -129,6 +129,29 @@ public abstract class FileUtilsDeleteDirectoryBaseTestCase {
     }
 
     @Test
+    public void testDeleteInvalidLinks() throws Exception {
+        final File aFile = new File(top, "realParentDirA");
+        assertTrue(aFile.mkdir());
+        final File bFile = new File(aFile, "realChildDirB");
+        assertTrue(bFile.mkdir());
+
+        final File cFile = new File(top, "realParentDirC");
+        assertTrue(cFile.mkdir());
+        final File dFile = new File(cFile, "realChildDirD");
+        assertTrue(dFile.mkdir());
+
+        final File linkToC = new File(bFile, "linkToC");
+        Files.createSymbolicLink(linkToC.toPath(), cFile.toPath());
+
+        final File linkToB = new File(dFile, "linkToB");
+        Files.createSymbolicLink(linkToB.toPath(), bFile.toPath());
+
+        FileUtils.deleteDirectory(aFile);
+        FileUtils.deleteDirectory(cFile);
+        assertEquals(0, top.list().length);
+    }
+
+    @Test
     public void testDeleteParentSymlink() throws Exception {
         final File realParent = new File(top, "realparent");
         assertTrue(realParent.mkdirs());
@@ -192,29 +215,6 @@ public abstract class FileUtilsDeleteDirectoryBaseTestCase {
 
         // ensure that the contents of the symlink were NOT removed.
         assertEquals(1, randomDirectory.list().length, "Contents of sym link should not have been removed");
-    }
-
-    @Test
-    public void testDeleteInvalidLinks() throws Exception {
-        File aFile = new File(top, "realParentDirA");
-        assertTrue(aFile.mkdir());
-        File bFile = new File(aFile, "realChildDirB");
-        assertTrue(bFile.mkdir());
-
-        File cFile = new File(top, "realParentDirC");
-        assertTrue(cFile.mkdir());
-        File dFile = new File(cFile, "realChildDirD");
-        assertTrue(dFile.mkdir());
-
-        File linkToC = new File(bFile, "linkToC");
-        Files.createSymbolicLink(linkToC.toPath(), cFile.toPath());
-
-        File linkToB = new File(dFile, "linkToB");
-        Files.createSymbolicLink(linkToB.toPath(), bFile.toPath());
-
-        FileUtils.deleteDirectory(aFile);
-        FileUtils.deleteDirectory(cFile);
-        assertEquals(0, top.list().length);
     }
 
     @Test

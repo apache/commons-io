@@ -66,7 +66,8 @@ public class DeletingPathVisitor extends CountingPathVisitor {
      * @param skip The files to skip deleting.
      * @since 2.8.0
      */
-    public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption, final String... skip) {
+    public DeletingPathVisitor(final PathCounters pathCounter, final DeleteOption[] deleteOption,
+        final String... skip) {
         this(pathCounter, PathUtils.NOFOLLOW_LINK_OPTION_ARRAY, deleteOption, skip);
     }
 

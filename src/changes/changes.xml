@@ -93,6 +93,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-701" dev="ggregory" type="fix" due-to="Gary Gregory">
         Make PathUtils.setReadOnly deal with LinuxDosFileAttributeView #186.
       </action>
+      <action issue="IO-702" dev="ggregory" type="fix" due-to="Boris Unckel, Gary Gregory">
+        FileUtils.forceDelete does not delete invalid links. #187.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
