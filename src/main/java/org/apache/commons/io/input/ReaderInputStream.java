@@ -49,10 +49,11 @@ import java.util.Objects;
  * sequence as reading from {@code in} (provided that the initial byte sequence is legal
  * with respect to the charset encoding):
  * <pre>
- * InputStream in = ...
+ * InputStream inputStream = ...
  * Charset cs = ...
- * InputStreamReader reader = new InputStreamReader(in, cs);
+ * InputStreamReader reader = new InputStreamReader(inputStream, cs);
  * ReaderInputStream in2 = new ReaderInputStream(reader, cs);</pre>
+ *
  * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter},
  * except that the control flow is reversed: both classes transform a character stream
  * into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream,

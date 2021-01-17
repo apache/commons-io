@@ -121,24 +121,15 @@ public class CopyUtils {
      */
     public CopyUtils() { }
 
-    // ----------------------------------------------------------------
-    // byte[] -> OutputStream
-    // ----------------------------------------------------------------
-
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      * @param input the byte array to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(final byte[] input, final OutputStream output)
-            throws IOException {
+    public static void copy(final byte[] input, final OutputStream output) throws IOException {
         output.write(input);
     }
-
-    // ----------------------------------------------------------------
-    // byte[] -> Writer
-    // ----------------------------------------------------------------
 
     /**
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
@@ -150,12 +141,10 @@ public class CopyUtils {
      * @deprecated 2.5 use {@link #copy(byte[], Writer, String)} instead
      */
     @Deprecated
-    public static void copy(final byte[] input, final Writer output)
-            throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(input);
-        copy(in, output);
+    public static void copy(final byte[] input, final Writer output) throws IOException {
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
+        copy(inputStream, output);
     }
-
 
     /**
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
@@ -167,19 +156,10 @@ public class CopyUtils {
      * Charset Registry</a> for a list of valid encoding types.
      * @throws IOException In case of an I/O problem
      */
-    public static void copy(
-            final byte[] input,
-            final Writer output,
-            final String encoding)
-                throws IOException {
-        final ByteArrayInputStream in = new ByteArrayInputStream(input);
-        copy(in, output, encoding);
+    public static void copy(final byte[] input, final Writer output, final String encoding) throws IOException {
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
+        copy(inputStream, output, encoding);
     }
-
-
-    // ----------------------------------------------------------------
-    // Core copy methods
-    // ----------------------------------------------------------------
 
     /**
      * Copy bytes from an <code>InputStream</code> to an
@@ -189,10 +169,7 @@ public class CopyUtils {
      * @return the number of bytes copied
      * @throws IOException In case of an I/O problem
      */
-    public static int copy(
-            final InputStream input,
-            final OutputStream output)
-                throws IOException {
+    public static int copy(final InputStream input, final OutputStream output) throws IOException {
         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;

@@ -50,7 +50,8 @@ public class FileUtilsDeleteDirectoryWindowsTestCase extends FileUtilsDeleteDire
         final Process proc = Runtime.getRuntime().exec(args.toArray(new String[args.size()]));
         final InputStream errorStream = proc.getErrorStream();
         final int rc = proc.waitFor();
-        System.err.println(IOUtils.toString(errorStream, Charset.defaultCharset()));
+        System.err.print(IOUtils.toString(errorStream, Charset.defaultCharset()));
+        System.err.flush();
         return rc == 0;
     }
 

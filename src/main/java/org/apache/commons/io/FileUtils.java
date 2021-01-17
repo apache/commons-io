@@ -264,8 +264,8 @@ public class FileUtils {
         requireExistsChecked(file, "file");
         requireFile(file, "file");
         Objects.requireNonNull(checksum, "checksum");
-        try (InputStream in = new CheckedInputStream(new FileInputStream(file), checksum)) {
-            IOUtils.consume(in);
+        try (InputStream inputStream = new CheckedInputStream(new FileInputStream(file), checksum)) {
+            IOUtils.consume(inputStream);
         }
         return checksum;
     }
@@ -944,8 +944,8 @@ public class FileUtils {
      * @since 2.0
      */
     public static void copyInputStreamToFile(final InputStream source, final File destination) throws IOException {
-        try (InputStream in = source) {
-            copyToFile(in, destination);
+        try (InputStream inputStream = source) {
+            copyToFile(inputStream, destination);
         }
     }
 
@@ -2381,10 +2381,10 @@ public class FileUtils {
      * @since 1.1
      */
     public static byte[] readFileToByteArray(final File file) throws IOException {
-        try (InputStream in = openInputStream(file)) {
+        try (InputStream inputStream = openInputStream(file)) {
             final long fileLength = file.length();
             // file.length() may return 0 for system-dependent entities, treat 0 as unknown length - see IO-453
-            return fileLength > 0 ? IOUtils.toByteArray(in, fileLength) : IOUtils.toByteArray(in);
+            return fileLength > 0 ? IOUtils.toByteArray(inputStream, fileLength) : IOUtils.toByteArray(inputStream);
         }
     }
 
@@ -2420,8 +2420,8 @@ public class FileUtils {
      * @since 2.3
      */
     public static String readFileToString(final File file, final Charset charsetName) throws IOException {
-        try (InputStream in = openInputStream(file)) {
-            return IOUtils.toString(in, Charsets.toCharset(charsetName));
+        try (InputStream inputStream = openInputStream(file)) {
+            return IOUtils.toString(inputStream, Charsets.toCharset(charsetName));
         }
     }
 
@@ -2475,8 +2475,8 @@ public class FileUtils {
      * @since 2.3
      */
     public static List<String> readLines(final File file, final Charset charset) throws IOException {
-        try (InputStream in = openInputStream(file)) {
-            return IOUtils.readLines(in, Charsets.toCharset(charset));
+        try (InputStream inputStream = openInputStream(file)) {
+            return IOUtils.readLines(inputStream, Charsets.toCharset(charset));
         }
     }
 

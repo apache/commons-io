@@ -2450,7 +2450,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param is the <code>InputStream</code> to read from
+     * @param inputStream the <code>InputStream</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
@@ -2458,8 +2458,8 @@ public class IOUtils {
      * @deprecated 2.5 use {@link #toCharArray(InputStream, Charset)} instead
      */
     @Deprecated
-    public static char[] toCharArray(final InputStream is) throws IOException {
-        return toCharArray(is, Charset.defaultCharset());
+    public static char[] toCharArray(final InputStream inputStream) throws IOException {
+        return toCharArray(inputStream, Charset.defaultCharset());
     }
 
     /**
@@ -2469,17 +2469,17 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param is the <code>InputStream</code> to read from
+     * @param inputStream the <code>InputStream</code> to read from
      * @param charset the charset to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
      * @throws IOException          if an I/O error occurs
      * @since 2.3
      */
-    public static char[] toCharArray(final InputStream is, final Charset charset)
+    public static char[] toCharArray(final InputStream inputStream, final Charset charset)
             throws IOException {
         final CharArrayWriter writer = new CharArrayWriter();
-        copy(is, writer, charset);
+        copy(inputStream, writer, charset);
         return writer.toCharArray();
     }
 
@@ -2493,7 +2493,7 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param is the <code>InputStream</code> to read from
+     * @param inputStream the <code>InputStream</code> to read from
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested character array
      * @throws NullPointerException                         if the input is null
@@ -2503,8 +2503,8 @@ public class IOUtils {
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static char[] toCharArray(final InputStream is, final String charsetName) throws IOException {
-        return toCharArray(is, Charsets.toCharset(charsetName));
+    public static char[] toCharArray(final InputStream inputStream, final String charsetName) throws IOException {
+        return toCharArray(inputStream, Charsets.toCharset(charsetName));
     }
 
     /**
