@@ -304,7 +304,7 @@ public class FileSystemUtils {
         if (normPath == null) {
             throw new IllegalArgumentException(path);
         }
-        if (normPath.length() > 0 && normPath.charAt(0) != '"') {
+        if (!normPath.isEmpty() && normPath.charAt(0) != '"') {
             normPath = "\"" + normPath + "\"";
         }
 
@@ -320,7 +320,7 @@ public class FileSystemUtils {
         // not, still assuming it is on the last non-blank line)
         for (int i = lines.size() - 1; i >= 0; i--) {
             final String line = lines.get(i);
-            if (line.length() > 0) {
+            if (!line.isEmpty()) {
                 return parseDir(line, normPath);
             }
         }
