@@ -1586,7 +1586,7 @@ public class FilenameUtils {
         int emptyOctets = 0; // consecutive empty chunks
         for (int index = 0; index < octets.length; index++) {
             final String octet = octets[index];
-            if (octet.length() == 0) {
+            if (octet.isEmpty()) {
                 emptyOctets++;
                 if (emptyOctets > 1) {
                     return false;
@@ -1632,7 +1632,7 @@ public class FilenameUtils {
     private static boolean isRFC3986HostName(final String name) {
         final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
-            if (parts[i].length() == 0) {
+            if (parts[i].isEmpty()) {
                 // trailing dot is legal, otherwise we've hit a .. sequence
                 return i == parts.length - 1;
             }
