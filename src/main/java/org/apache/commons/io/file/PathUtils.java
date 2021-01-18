@@ -712,7 +712,7 @@ public final class PathUtils {
      * Reads the access control list from a file attribute view.
      *
      * @param sourcePath the path to the file.
-     * @return a file attribute view of the specified type, or null ifthe attribute view type is not available.
+     * @return a file attribute view of the specified type, or null if the attribute view type is not available.
      * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
