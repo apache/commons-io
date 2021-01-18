@@ -1259,7 +1259,8 @@ public class FileUtils {
      * @param child     the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
      * @throws IOException              if an IO error occurs while checking the files.
-     * @throws IllegalArgumentException if {@code directory} is not a directory.
+     * @throws NullPointerException if the given {@code File} is {@code null}.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
      * @see FilenameUtils#directoryContains(String, String)
      * @since 2.2
      */
