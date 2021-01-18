@@ -855,8 +855,8 @@ public class FileUtils {
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param input  the <code>File</code> to read from
-     * @param output the <code>OutputStream</code> to write to
+     * @param input  the <code>File</code> to read.
+     * @param output the <code>OutputStream</code> to write.
      * @return the number of bytes copied
      * @throws NullPointerException if the File is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
@@ -1017,25 +1017,26 @@ public class FileUtils {
     }
 
     /**
-     * Copies bytes from an {@link InputStream} <code>source</code> to a file
-     * <code>destination</code>. The directories up to <code>destination</code>
-     * will be created if they don't already exist. <code>destination</code>
-     * will be overwritten if it already exists.
-     * The {@code source} stream is left open, e.g. for use with {@link java.util.zip.ZipInputStream ZipInputStream}.
-     * See {@link #copyInputStreamToFile(InputStream, File)} for a method that closes the input stream.
+     * Copies bytes from an {@link InputStream} source to a {@link File} destination. The directories
+     * up to <code>destination</code> will be created if they don't already exist. <code>destination</code> will be
+     * overwritten if it already exists. The {@code source} stream is left open, e.g. for use with
+     * {@link java.util.zip.ZipInputStream ZipInputStream}. See {@link #copyInputStreamToFile(InputStream, File)} for a
+     * method that closes the input stream.
      *
-     * @param source      the <code>InputStream</code> to copy bytes from, must not be {@code null}
-     * @param destination the non-directory <code>File</code> to write bytes to
-     *                    (possibly overwriting), must not be {@code null}
+     * @param inputStream the <code>InputStream</code> to copy bytes from, must not be {@code null}
+     * @param file the non-directory <code>File</code> to write bytes to (possibly overwriting), must not be
+     *        {@code null}
+     * @throws NullPointerException if the InputStream is {@code null}.
+     * @throws NullPointerException if the File is {@code null}.
      * @throws IOException if <code>destination</code> is a directory
      * @throws IOException if <code>destination</code> cannot be written
      * @throws IOException if <code>destination</code> needs creating but can't be
      * @throws IOException if an IO error occurs during copying
      * @since 2.5
      */
-    public static void copyToFile(final InputStream source, final File destination) throws IOException {
-        try (OutputStream out = openOutputStream(destination)) {
-            IOUtils.copy(source, out);
+    public static void copyToFile(final InputStream inputStream, final File file) throws IOException {
+        try (OutputStream out = openOutputStream(file)) {
+            IOUtils.copy(inputStream, out);
         }
     }
 
@@ -2324,9 +2325,10 @@ public class FileUtils {
      *
      * @param file the file to open for output, must not be {@code null}
      * @return a new {@link FileOutputStream} for the specified file
-     * @throws IOException if the file object is a directory
-     * @throws IOException if the file cannot be written to
-     * @throws IOException if a parent directory needs creating but that fails
+     * @throws NullPointerException if the file object is {@code null}.
+     * @throws IllegalArgumentException if the file object is a directory
+     * @throws IllegalArgumentException if the file is not writable.
+     * @throws IOException if the directories could not be created.
      * @since 1.3
      */
     public static FileOutputStream openOutputStream(final File file) throws IOException {

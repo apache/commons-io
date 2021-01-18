@@ -717,8 +717,10 @@ public class IOUtils {
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read.
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @throws NullPointerException if the InputStream is {@code null}.
+     * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 2.8.0
      */
@@ -853,9 +855,10 @@ public class IOUtils {
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
      * </p>
      *
-     * @param inputStream the <code>InputStream</code> to read from
-     * @param outputStream the <code>OutputStream</code> to write to
-     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE, or {@code 0} if {@code input is null}.
+     * @param inputStream the <code>InputStream</code> to read.
+     * @param outputStream the <code>OutputStream</code> to write.
+     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE.
+     * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException          if an I/O error occurs
      * @since 1.1
@@ -875,10 +878,11 @@ public class IOUtils {
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param inputStream the <code>InputStream</code> to read, may be {@code null}.
+     * @param inputStream the <code>InputStream</code> to read.
      * @param outputStream the <code>OutputStream</code> to write to
      * @param bufferSize the bufferSize used to copy from the input to the output
-     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 2.5
@@ -1133,9 +1137,10 @@ public class IOUtils {
      * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
      * </p>
      *
-     * @param inputStream the <code>InputStream</code> to read from
-     * @param outputStream the <code>OutputStream</code> to write to
-     * @return the number of bytes copied. or {@code 0} if {@code input is null}.
+     * @param inputStream the <code>InputStream</code> to read.
+     * @param outputStream the <code>OutputStream</code> to write.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 1.3
@@ -1153,10 +1158,11 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param inputStream the <code>InputStream</code> to read, may be {@code null}.
-     * @param outputStream the <code>OutputStream</code> to write 
+     * @param inputStream the <code>InputStream</code> to read.
+     * @param outputStream the <code>OutputStream</code> to write. 
      * @param buffer the buffer to use for the copy
-     * @return the number of bytes copied. or {@code 0} if {@code input} is {@code null}.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs
      * @since 2.2
@@ -1164,14 +1170,13 @@ public class IOUtils {
     @SuppressWarnings("resource") // streams are closed by the caller.
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream, final byte[] buffer)
         throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
         Objects.requireNonNull(outputStream, "outputStream");
         long count = 0;
-        if (inputStream != null) {
-            int n;
-            while (EOF != (n = inputStream.read(buffer))) {
-                outputStream.write(buffer, 0, n);
-                count += n;
-            }
+        int n;
+        while (EOF != (n = inputStream.read(buffer))) {
+            outputStream.write(buffer, 0, n);
+            count += n;
         }
         return count;
     }
