@@ -2246,7 +2246,7 @@ public class IOUtils {
      * </p>
      *
      * @param inputStream the {@code InputStream} to read.
-     * @return the requested byte array
+     * @return the requested byte array.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws IOException if an I/O error occurs.
      */
