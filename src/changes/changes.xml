@@ -146,6 +146,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update mockito-core from 3.5.9 to 3.7.0, #152, #155, #157, #166, #167, #169, #182.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.7.0 to 3.7.7 #188.
+      </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
       </action>
