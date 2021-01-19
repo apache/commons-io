@@ -860,7 +860,7 @@ public class FileUtils {
      * @return the number of bytes copied
      * @throws NullPointerException if the File is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException          if an I/O error occurs
+     * @throws IOException          if an I/O error occurs.
      * @since 2.1
      */
     public static long copyFile(final File input, final OutputStream output) throws IOException {
@@ -1028,10 +1028,10 @@ public class FileUtils {
      *        {@code null}
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the File is {@code null}.
-     * @throws IOException if <code>destination</code> is a directory
-     * @throws IOException if <code>destination</code> cannot be written
-     * @throws IOException if <code>destination</code> needs creating but can't be
-     * @throws IOException if an IO error occurs during copying
+     * @throws IllegalArgumentException if the file object is a directory.
+     * @throws IllegalArgumentException if the file is not writable.
+     * @throws IOException if the directories could not be created.
+     * @throws IOException if an IO error occurs during copying.
      * @since 2.5
      */
     public static void copyToFile(final InputStream inputStream, final File file) throws IOException {

@@ -721,7 +721,7 @@ public class IOUtils {
      * @return the number of bytes copied. or {@code 0} if {@code input is null}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
     public static long consume(final InputStream input)
@@ -842,17 +842,14 @@ public class IOUtils {
     }
 
     /**
-     * Copies bytes from an <code>InputStream</code> to an
-     * <code>OutputStream</code>.
+     * Copies bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      * <p>
-     * This method buffers the input internally, so there is no need to use a
-     * <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * </p>
      * <p>
-     * Large streams (over 2GB) will return a bytes copied value of
-     * <code>-1</code> after the copy has completed since the correct
-     * number of bytes cannot be returned as an int. For large streams
-     * use the <code>copyLarge(InputStream, OutputStream)</code> method.
+     * Large streams (over 2GB) will return a bytes copied value of <code>-1</code> after the copy has completed since
+     * the correct number of bytes cannot be returned as an int. For large streams use the
+     * <code>copyLarge(InputStream, OutputStream)</code> method.
      * </p>
      *
      * @param inputStream the <code>InputStream</code> to read.
@@ -860,7 +857,7 @@ public class IOUtils {
      * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException          if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 1.1
      */
     public static int copy(final InputStream inputStream, final OutputStream outputStream) throws IOException {
@@ -884,7 +881,7 @@ public class IOUtils {
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.5
      */
     public static long copy(final InputStream inputStream, final OutputStream outputStream, final int bufferSize)
@@ -1142,7 +1139,7 @@ public class IOUtils {
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 1.3
      */
     public static long copyLarge(final InputStream inputStream, final OutputStream outputStream)
@@ -1164,7 +1161,7 @@ public class IOUtils {
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.2
      */
     @SuppressWarnings("resource") // streams are closed by the caller.
@@ -2248,13 +2245,14 @@ public class IOUtils {
      * <code>BufferedInputStream</code>.
      * </p>
      *
-     * @param input the <code>InputStream</code> to read from
+     * @param inputStream the <code>InputStream</code> to read.
      * @return the requested byte array
-     * @throws IOException          if an I/O error occurs
+     * @throws NullPointerException if the InputStream is {@code null}.
+     * @throws IOException if an I/O error occurs.
      */
-    public static byte[] toByteArray(final InputStream input) throws IOException {
+    public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            copy(input, output);
+            copy(inputStream, output);
             return output.toByteArray();
         }
     }
@@ -2436,10 +2434,10 @@ public class IOUtils {
     /**
      * Gets the contents of a <code>URLConnection</code> as a <code>byte[]</code>.
      *
-     * @param urlConn the <code>URLConnection</code> to read
-     * @return the requested byte array
-     * @throws NullPointerException if the urlConn is null
-     * @throws IOException          if an I/O exception occurs
+     * @param urlConn the <code>URLConnection</code> to read.
+     * @return the requested byte array.
+     * @throws NullPointerException if the urlConn is null.
+     * @throws IOException if an I/O exception occurs.
      * @since 2.4
      */
     public static byte[] toByteArray(final URLConnection urlConn) throws IOException {
