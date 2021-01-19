@@ -92,7 +92,9 @@ public class ObservableInputStream extends ProxyInputStream {
          * @param pException the exception to throw
          * @throws IOException if an i/o-error occurs
          */
-        public void error(final IOException pException) throws IOException { throw pException; }
+        public void error(final IOException pException) throws IOException {
+            throw pException;
+        }
     }
 
     private final List<Observer> observers = new ArrayList<>();

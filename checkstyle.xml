@@ -38,6 +38,7 @@ limitations under the License.
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
     <module name="NeedBraces"/>
+    <module name="LeftCurly"/>
     <module name="JavadocMethod">
     </module>
  </module>
