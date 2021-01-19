@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 public class DirectoryFileComparatorTest extends ComparatorAbstractTestCase {
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         comparator = (AbstractFileComparator) DirectoryFileComparator.DIRECTORY_COMPARATOR;
         reverse = DirectoryFileComparator.DIRECTORY_REVERSE;
         final File currentDir = new File(".");

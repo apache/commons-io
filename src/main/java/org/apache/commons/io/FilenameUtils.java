@@ -997,7 +997,7 @@ public class FilenameUtils {
      * Checks the input for null bytes, a sign of unsanitized data being passed to to file level functions.
      *
      * This may be used for poison byte attacks.
-     * 
+     *
      * @param path the path to check
      */
     private static void requireNonNullChars(final String path) {

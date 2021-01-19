@@ -49,7 +49,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  *
  * There are many possible extensions, for example, to delete all files and '.svn' directories, and return a list of
  * deleted files:
- * 
+ *
  * <pre>
  * public class FileCleaner extends DirectoryWalker {
  *
@@ -98,7 +98,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * For example, if you wanted all directories which are not hidden and files which end in ".txt":
  * </p>
- * 
+ *
  * <pre>
  * public class FooDirectoryWalker extends DirectoryWalker {
  *     public FooDirectoryWalker(FileFilter filter) {
@@ -129,7 +129,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <p>
  * For example, if you wanted all directories which are not hidden and files which end in ".txt":
  * </p>
- * 
+ *
  * <pre>
  *  public class FooDirectoryWalker extends DirectoryWalker {
  *    public FooDirectoryWalker(IOFileFilter dirFilter, IOFileFilter fileFilter) {

@@ -393,7 +393,7 @@ public class ReadAheadInputStream extends InputStream {
     /**
      * Internal skip function which should be called only from skip(). The assumption is that the stateChangeLock is
      * already acquired in the caller before calling this function.
-     * 
+     *
      * @param n the number of bytes to be skipped.
      * @return the actual number of bytes skipped.
      */

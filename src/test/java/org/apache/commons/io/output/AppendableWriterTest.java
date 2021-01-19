@@ -30,7 +30,7 @@ public class AppendableWriterTest {
     private AppendableWriter<StringBuilder> out;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         out = new AppendableWriter<>(new StringBuilder());
     }
 

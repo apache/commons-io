@@ -29,10 +29,9 @@ public class ClosedWriterTest {
 
     /**
      * Test the {@code write(cbuf, off, len)} method.
-     * @throws Exception
      */
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
         try (ClosedWriter cw = new ClosedWriter()) {
             cw.write(new char[0], 0, 0);
             fail("write(cbuf, off, len)");
@@ -43,10 +42,9 @@ public class ClosedWriterTest {
 
     /**
      * Test the {@code flush()} method.
-     * @throws Exception
      */
     @Test
-    public void testFlush() throws Exception {
+    public void testFlush() {
         try (ClosedWriter cw = new ClosedWriter()) {
             cw.flush();
             fail("flush()");

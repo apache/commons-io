@@ -30,7 +30,7 @@ public class AppendableOutputStreamTest {
     private AppendableOutputStream<StringBuilder> out;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         out = new AppendableOutputStream<>(new StringBuilder());
     }
 

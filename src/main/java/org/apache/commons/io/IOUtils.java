@@ -157,14 +157,14 @@ public class IOUtils {
 
     /**
      * The Unix line separator string.
-     * 
+     *
      * @see StandardLineSeparator#LF
      */
     public static final String LINE_SEPARATOR_UNIX = StandardLineSeparator.LF.getString();
 
     /**
      * The Windows line separator string.
-     * 
+     *
      * @see StandardLineSeparator#CRLF
      */
     public static final String LINE_SEPARATOR_WINDOWS = StandardLineSeparator.CRLF.getString();
@@ -1156,7 +1156,7 @@ public class IOUtils {
      * </p>
      *
      * @param inputStream the {@code InputStream} to read.
-     * @param outputStream the {@code OutputStream} to write. 
+     * @param outputStream the {@code OutputStream} to write.
      * @param buffer the buffer to use for the copy
      * @return the number of bytes copied.
      * @throws NullPointerException if the InputStream is {@code null}.
@@ -3385,7 +3385,7 @@ public class IOUtils {
      * Instances should NOT be constructed in standard programming.
      */
     public IOUtils() { //NOSONAR
-        
+
     }
 
 }

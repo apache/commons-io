@@ -53,7 +53,7 @@ public class DirectoryStreamFilter implements DirectoryStream.Filter<Path> {
 
     /**
      * Gets the path filter.
-     * 
+     *
      * @return the path filter.
      */
     public PathFilter getPathFilter() {

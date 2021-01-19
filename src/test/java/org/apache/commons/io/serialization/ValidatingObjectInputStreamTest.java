@@ -199,7 +199,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     }
 
     @Test
-    public void rejectOnly() throws Exception {
+    public void rejectOnly() {
         assertThrows(InvalidClassException.class,
                 () -> assertSerialization(
                 willClose(new ValidatingObjectInputStream(testStream))
@@ -208,7 +208,7 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
     }
 
     @Test
-    public void customInvalidMethod() throws Exception {
+    public void customInvalidMethod() {
         class CustomVOIS extends ValidatingObjectInputStream {
             CustomVOIS(final InputStream is) throws IOException {
                 super(is);

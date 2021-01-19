@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 public class NameFileComparatorTest extends ComparatorAbstractTestCase {
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         comparator = (AbstractFileComparator) NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
         reverse = NameFileComparator.NAME_REVERSE;
         equalFile1 = new File("a/foo.txt");

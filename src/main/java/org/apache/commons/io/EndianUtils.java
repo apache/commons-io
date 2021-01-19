@@ -304,7 +304,7 @@ public class EndianUtils {
 
     /**
      * Writes a "int" value to an OutputStream. The value is converted to the opposed endian system while writing.
-     * 
+     *
      * @param output target OutputStream
      * @param value value to write
      * @throws IOException in case of an I/O problem

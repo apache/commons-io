@@ -155,7 +155,7 @@ public final class PathUtils {
 
     /**
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
-     * 
+     *
      * @since 2.9.0
      */
     public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = new LinkOption[] {LinkOption.NOFOLLOW_LINKS};
@@ -292,7 +292,7 @@ public final class PathUtils {
     }
 
     /**
-     * Creates the parent directories for the given {@code path}. 
+     * Creates the parent directories for the given {@code path}.
      * <p>
      * Returns the {@code path}'s parent directory if it already exists.
      * </p>
@@ -313,7 +313,7 @@ public final class PathUtils {
         }
         return Files.createDirectories(parent, attrs);
     }
-    
+
     /**
      * Gets the current directory.
      *

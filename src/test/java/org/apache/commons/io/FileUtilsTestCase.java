@@ -482,7 +482,7 @@ public class FileUtilsTestCase {
         assertSame(testChecksum, resultChecksum);
         assertEquals(expectedValue, resultValue);
     }
-    
+
     //-----------------------------------------------------------------------
     @Test
     public void testChecksumCRC32() throws Exception {
@@ -2182,7 +2182,7 @@ public class FileUtilsTestCase {
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
     }
-    
+
     @Test
     public void testMoveFile_CopyDelete_Failed() throws Exception {
         final File destination = new File(temporaryFolder, "move3.txt");
@@ -2208,13 +2208,13 @@ public class FileUtilsTestCase {
         assertTrue(!destination.exists(), "Check Rollback");
         assertTrue(src.exists(), "Original exists");
     }
-    
+
     @Test
     public void testMoveFile_CopyDelete_WithFileDatePreservation() throws Exception {
         final File destination = new File(temporaryFolder, "move2.txt");
-        
+
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
-        
+
         final File src = new File(testFile1.getAbsolutePath()) {
             private static final long serialVersionUID = 1L;
 
@@ -2226,11 +2226,11 @@ public class FileUtilsTestCase {
             }
         };
         final long expected = getLastModifiedMillis(testFile1);
-        
+
         FileUtils.moveFile(src, destination, StandardCopyOption.COPY_ATTRIBUTES);
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
-        
+
         final long destLastMod = getLastModifiedMillis(destination);
         final long delta = destLastMod - expected;
         assertEquals(expected, destLastMod, "Check last modified date same as input, delta " + delta);
@@ -2239,12 +2239,12 @@ public class FileUtilsTestCase {
     @Test
     public void testMoveFile_CopyDelete_WithoutFileDatePreservation() throws Exception {
         final File destination = new File(temporaryFolder, "move2.txt");
-        
+
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
-        
+
         // destination file time should not be less than this (allowing for granularity)
         final long now = System.currentTimeMillis() - 1000L;
-        
+
         final File src = new File(testFile1.getAbsolutePath()) {
             private static final long serialVersionUID = 1L;
 
@@ -2256,11 +2256,11 @@ public class FileUtilsTestCase {
             }
         };
         final long unexpected = getLastModifiedMillis(testFile1);
-        
+
         FileUtils.moveFile(src, destination, PathUtils.EMPTY_COPY_OPTIONS);
         assertTrue(destination.exists(), "Check Exist");
         assertTrue(!src.exists(), "Original deleted");
-        
+
         // On Windows, the last modified time is copied by default.
         if (!SystemUtils.IS_OS_WINDOWS) {
             final long destLastMod = getLastModifiedMillis(destination);

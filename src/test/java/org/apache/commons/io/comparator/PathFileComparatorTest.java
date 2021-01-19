@@ -31,7 +31,7 @@ public class PathFileComparatorTest extends ComparatorAbstractTestCase {
 
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         comparator = (AbstractFileComparator) PathFileComparator.PATH_COMPARATOR;
         reverse = PathFileComparator.PATH_REVERSE;
         equalFile1 = new File("foo/file.txt");

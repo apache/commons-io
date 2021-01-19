@@ -52,7 +52,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
 
     /**
      * Constructs a new instance with the given initial list.
-     * 
+     *
      * @param initialList the initial list.
      */
     private OrFileFilter(final ArrayList<IOFileFilter> initialList) {
@@ -61,7 +61,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
 
     /**
      * Constructs a new instance with the given initial capacity.
-     * 
+     *
      * @param initialCapacity the initial capacity.
      */
     private OrFileFilter(final int initialCapacity) {

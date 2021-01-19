@@ -26,7 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 public class DefaultFileComparatorTest extends ComparatorAbstractTestCase {
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         comparator = (AbstractFileComparator) DefaultFileComparator.DEFAULT_COMPARATOR;
         reverse = DefaultFileComparator.DEFAULT_REVERSE;
         equalFile1 = new File("foo");

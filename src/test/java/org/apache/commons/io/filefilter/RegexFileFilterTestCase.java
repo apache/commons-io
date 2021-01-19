@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  */
 public class RegexFileFilterTestCase {
 
-    public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) throws Exception {
+    public void assertFiltering(final IOFileFilter filter, final File file, final boolean expected) {
         // Note. This only tests the (File, String) version if the parent of
         //       the File passed in is not null
         assertEquals(expected, filter.accept(file),
@@ -47,7 +47,7 @@ public class RegexFileFilterTestCase {
         }
     }
 
-    public void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) throws Exception {
+    public void assertFiltering(final IOFileFilter filter, final Path path, final boolean expected) {
         // Note. This only tests the (Path, Path) version if the parent of
         // the Path passed in is not null
         final FileVisitResult expectedFileVisitResult = AbstractFileFilter.toFileVisitResult(expected, path);
@@ -65,7 +65,7 @@ public class RegexFileFilterTestCase {
     }
 
     @Test
-    public void testRegex() throws Exception {
+    public void testRegex() {
         IOFileFilter filter = new RegexFileFilter("^.*[tT]est(-\\d+)?\\.java$");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("test-10.java"), true);

@@ -36,7 +36,7 @@ public class PathEqualsFileFilter extends AbstractFileFilter {
 
     /**
      * Constructs a new instance for the given {@link Path}.
-     * 
+     *
      * @param file The file to match.
      */
     public PathEqualsFileFilter(final Path file) {

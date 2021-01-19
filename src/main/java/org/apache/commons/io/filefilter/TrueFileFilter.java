@@ -95,7 +95,7 @@ public class TrueFileFilter implements IOFileFilter, Serializable {
 
     @Override
     public IOFileFilter or(final IOFileFilter fileFilter) {
-        // TRUE OR expression <=> true 
+        // TRUE OR expression <=> true
         return INSTANCE;
     }
 

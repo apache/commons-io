@@ -112,7 +112,7 @@ public class CountingPathVisitor extends SimplePathVisitor {
         updateDirCounter(dir, exc);
         return FileVisitResult.CONTINUE;
     }
-    
+
     @Override
     public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
         final FileVisitResult accept = dirFilter.accept(dir, attributes);

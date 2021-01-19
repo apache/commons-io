@@ -246,7 +246,7 @@ public class FileUtils {
     /**
      * Computes the checksum of a file using the specified checksum object. Multiple files may be checked using one
      * {@code Checksum} instance if desired simply by reusing the same checksum object. For example:
-     * 
+     *
      * <pre>
      * long checksum = FileUtils.checksum(file, new CRC32()).getValue();
      * </pre>
@@ -525,14 +525,14 @@ public class FileUtils {
      * modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
-     * 
+     *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY);
      * </pre>
      *
      * <b>Example: Copy directories and txt files</b>
-     * 
+     *
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
@@ -574,14 +574,14 @@ public class FileUtils {
      * will succeed. If the modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
-     * 
+     *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
      * </pre>
      *
      * <b>Example: Copy directories and txt files</b>
-     * 
+     *
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
@@ -624,14 +624,14 @@ public class FileUtils {
      * will succeed. If the modification operation fails, the methods throws IOException.
      * </p>
      * <b>Example: Copy directories only</b>
-     * 
+     *
      * <pre>
      * // only copy the directory structure
      * FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
      * </pre>
      *
      * <b>Example: Copy directories and txt files</b>
-     * 
+     *
      * <pre>
      * // Create a filter for ".txt" files
      * IOFileFilter txtSuffixFilter = FileFilterUtils.suffixFileFilter(".txt");
@@ -834,7 +834,7 @@ public class FileUtils {
 
     /**
      * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
-     * 
+     *
      * @param copyOptions sorted copy options.
      * @return a new array.
      */
@@ -1437,7 +1437,7 @@ public class FileUtils {
 
     /**
      * Gets the parent of the given file. The given file may be bull and a file's parent may as well be null.
-     * 
+     *
      * @param file The file to query.
      * @return The parent file or {@code null}.
      */
@@ -1500,7 +1500,7 @@ public class FileUtils {
     public static boolean isEmptyDirectory(final File directory) throws IOException {
         return PathUtils.isEmptyDirectory(directory.toPath());
     }
-    
+
     /**
      * Tests if the specified {@code File} is newer than the specified {@code ChronoLocalDate}
      * at the current time.
@@ -1833,7 +1833,7 @@ public class FileUtils {
      * <p>
      * This method delegates to {@link Files#isSymbolicLink(Path path)}
      * </p>
-     * 
+     *
      * @param file the file to test.
      * @return true if the file is a symbolic link, see {@link Files#isSymbolicLink(Path path)}.
      * @since 2.0
@@ -2511,7 +2511,7 @@ public class FileUtils {
 
     /**
      * Throws IllegalArgumentException if the given files' canonical representations are equal.
-     * 
+     *
      * @param file1 The first file to compare.
      * @param file2 The second file to compare.
      * @throws IllegalArgumentException if the given files' canonical representations are equal.
@@ -2527,7 +2527,7 @@ public class FileUtils {
     /**
      * Throws an {@link IllegalArgumentException} if the file is not writable. This provides a more precise exception
      * message than a plain access denied.
-     * 
+     *
      * @param file The file to test.
      * @param name The parameter name to use in the exception message.
      * @throws NullPointerException if the given {@code File} is {@code null}.
@@ -2544,7 +2544,7 @@ public class FileUtils {
      * Requires that the given {@code File} is a directory.
      *
      * @param directory The {@code File} to check.
-     * @param name 
+     * @param name
      * @return the given directory.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
@@ -2959,7 +2959,7 @@ public class FileUtils {
     /**
      * Converts whether or not to recurse into a recursion max depth.
      *
-     * @param recursive whether or not to recurse 
+     * @param recursive whether or not to recurse
      * @return the recursion depth
      */
     private static int toMaxDepth(final boolean recursive) {
@@ -2993,7 +2993,7 @@ public class FileUtils {
      * </p>
      *
      * @param file the File to touch.
-     * @throws IOException if an I/O problem occurs. 
+     * @throws IOException if an I/O problem occurs.
      * @throws IOException if setting the last-modified time failed.
      */
     public static void touch(final File file) throws IOException {
@@ -3502,6 +3502,6 @@ public class FileUtils {
      */
     @Deprecated
     public FileUtils() { //NOSONAR
-        
+
     }
 }

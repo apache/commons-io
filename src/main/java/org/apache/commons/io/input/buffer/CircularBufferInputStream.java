@@ -32,13 +32,13 @@ public class CircularBufferInputStream extends InputStream {
 
     /** What we are streaming, used to fill the internal buffer. */
     protected final InputStream in;
-    
+
     /** Internal buffer. */
     protected final CircularByteBuffer buffer;
 
     /** Internal buffer size. */
     protected final int bufferSize;
-    
+
     /** Whether we've see the input stream EOF. */
     private boolean eof;
 

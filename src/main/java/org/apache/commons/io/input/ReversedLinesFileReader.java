@@ -338,10 +338,10 @@ public class ReversedLinesFileReader implements Closeable {
 
         // NOTE: The new line sequences are matched in the order given, so it is
         // important that \r\n is BEFORE \n
-        this.newLineSequences = new byte[][] { 
-            StandardLineSeparator.CRLF.getBytes(this.charset), 
+        this.newLineSequences = new byte[][] {
+            StandardLineSeparator.CRLF.getBytes(this.charset),
             StandardLineSeparator.LF.getBytes(this.charset),
-            StandardLineSeparator.CR.getBytes(this.charset) 
+            StandardLineSeparator.CR.getBytes(this.charset)
         };
 
         this.avoidNewlineSplitBufferSize = newLineSequences[0].length;

@@ -39,7 +39,7 @@ class StreamIterator<E> implements Iterator<E>, Closeable {
      * In order to close the stream, the call site MUST either close the stream it allocated OR call the iterator until
      * the end.
      * </p>
-     * 
+     *
      * @param <T> The stream and iterator type.
      * @param stream The stream iterate.
      * @return A new iterator.

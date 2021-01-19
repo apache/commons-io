@@ -74,8 +74,7 @@ public class BOMInputStreamTest {
         }
     }
 
-    private void assertData(final byte[] expected, final byte[] actual, final int len)
-        throws Exception {
+    private void assertData(final byte[] expected, final byte[] actual, final int len) {
         assertEquals(expected.length, len, "length");
         for (int ii = 0; ii < expected.length; ii++) {
             assertEquals(expected[ii], actual[ii], "byte " + ii);

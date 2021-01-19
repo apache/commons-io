@@ -46,7 +46,7 @@ public class TeeReaderTest  {
     private Reader tee;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         final Reader input = new CharSequenceReader("abc");
         output = new StringBuilderWriter();
         tee = new TeeReader(input, output);
@@ -123,7 +123,7 @@ public class TeeReaderTest  {
     }
 
     @Test
-    public void testReadNothing() throws Exception {
+    public void testReadNothing() {
         assertEquals("", output.toString());
     }
 

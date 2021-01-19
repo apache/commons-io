@@ -32,15 +32,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  * <p>
  * Example usage:
  * </p>
- * 
+ *
  * <pre>
  * QueueOutputStream outputStream = new QueueOutputStream();
  * QueueInputStream inputStream = outputStream.newPipeInputStream();
- * 
+ *
  * outputStream.write("hello world".getBytes(UTF_8));
  * inputStream.read();
  * </pre>
- * 
+ *
  * Unlike JDK {@link PipedInputStream} and {@link PipedOutputStream}, queue input/output streams may be used safely in a
  * single thread or multiple threads. Also, unlike JDK classes, no special meaning is attached to initial or current
  * thread. Instances can be used longer after initial threads exited.
@@ -48,7 +48,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Closing a {@code QueueOutputStream} has no effect. The methods in this class can be called after the stream has been
  * closed without generating an {@code IOException}.
  * </p>
- * 
+ *
  * @see QueueInputStream
  * @since 2.9.0
  */
@@ -65,7 +65,7 @@ public class QueueOutputStream extends OutputStream {
 
     /**
      * Constructs a new instance with given buffer.
-     * 
+     *
      * @param blockingQueue backing queue for the stream
      */
     public QueueOutputStream(final BlockingQueue<Integer> blockingQueue) {
@@ -75,7 +75,7 @@ public class QueueOutputStream extends OutputStream {
     /**
      * Creates a new QueueInputStream instance connected to this. Writes to this output stream will be visible to the
      * input stream.
-     * 
+     *
      * @return QueueInputStream connected to this stream
      */
     public QueueInputStream newQueueInputStream() {

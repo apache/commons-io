@@ -117,7 +117,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
      * sun.misc.Cleaner.clean() to invoke it. The type changed to jdk.internal.ref.Cleaner in later JDKs, and the
      * .clean() method is not accessible even with reflection. However sun.misc.Unsafe added a invokeCleaner() method in
      * JDK 9+ and this is still accessible with reflection.
-     * 
+     *
      * @param buffer the buffer to clean.
      */
     private void clean(final DirectBuffer buffer) {

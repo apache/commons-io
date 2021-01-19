@@ -63,7 +63,7 @@ public class TailerTest {
     private Tailer tailer;
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (tailer != null) {
             tailer.stop();
         }

@@ -56,7 +56,7 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance with the given initial list.
-     * 
+     *
      * @param initialList the initial list.
      */
     private AndFileFilter(final ArrayList<IOFileFilter> initialList) {
@@ -65,7 +65,7 @@ public class AndFileFilter
 
     /**
      * Constructs a new instance with the given initial capacity.
-     * 
+     *
      * @param initialCapacity the initial capacity.
      */
     private AndFileFilter(final int initialCapacity) {

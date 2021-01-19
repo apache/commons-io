@@ -146,10 +146,9 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception
      */
     @Test
-    public void testFileCreate() throws Exception {
+    public void testFileCreate() {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -206,10 +205,9 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
-     * @throws Exception
      */
     @Test
-    public void testFileUpdate() throws Exception {
+    public void testFileUpdate() {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -263,10 +261,9 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() deleting
-     * @throws Exception
      */
     @Test
-    public void testFileDelete() throws Exception {
+    public void testFileDelete() {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -323,10 +320,9 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
-     * @throws Exception
      */
     @Test
-    public void testObserveSingleFile() throws Exception {
+    public void testObserveSingleFile() {
         final File testDirA = new File(testDir, "test-dir-A");
         File testDirAFile1 = new File(testDirA, "A-file1.java");
         testDirA.mkdir();
@@ -376,10 +372,8 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Call {@link FileAlterationObserver#checkAndNotify()}.
-     *
-     * @throws Exception if an error occurs
      */
-    protected void checkAndNotify() throws Exception {
+    protected void checkAndNotify() {
         observer.checkAndNotify();
     }
 }

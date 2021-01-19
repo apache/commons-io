@@ -137,7 +137,7 @@ public abstract class AbstractInputStreamTest {
         final byte[] buf = new byte[1024];
         int read;
         while ((read = is.read(buf, 0, buf.length)) != -1) {
-            
+
         }
 
         final int readAfterEOF = is.read(buf, 0, buf.length);

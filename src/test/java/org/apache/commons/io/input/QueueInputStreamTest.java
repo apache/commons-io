@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test {@link QueueInputStream}.
- * 
+ *
  * @see {@link QueueOutputStreamTest}
  */
 public class QueueInputStreamTest {

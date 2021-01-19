@@ -74,7 +74,7 @@ public class RandomAccessFileInputStreamTest {
     }
 
     @Test
-    public void testCtorNullFile() throws FileNotFoundException {
+    public void testCtorNullFile() {
         assertThrows(NullPointerException.class, () -> new RandomAccessFileInputStream(null));
     }
 
