@@ -294,7 +294,7 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceWindows_String_EmptyResponse() throws Exception {
+    public void testGetFreeSpaceWindows_String_EmptyResponse() {
         final String lines = "";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
@@ -435,7 +435,7 @@ public class FileSystemUtilsTestCase {
     }
     @Test
 
-    public void testGetFreeSpaceUnix_String_EmptyResponse() throws Exception {
+    public void testGetFreeSpaceUnix_String_EmptyResponse() {
         final String lines = "";
         final FileSystemUtils fsu = new MockFileSystemUtils(0, lines);
         try {
@@ -461,7 +461,7 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceUnix_String_InvalidResponse1() throws Exception {
+    public void testGetFreeSpaceUnix_String_InvalidResponse1() {
         final String lines =
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "                      14428928  12956424       100";
@@ -489,7 +489,7 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceUnix_String_InvalidResponse2() throws Exception {
+    public void testGetFreeSpaceUnix_String_InvalidResponse2() {
         final String lines =
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx:/home/users/s     14428928  12956424   nnnnnnn  90% /home/users/s";
@@ -517,7 +517,7 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceUnix_String_InvalidResponse3() throws Exception {
+    public void testGetFreeSpaceUnix_String_InvalidResponse3() {
         final String lines =
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx:/home/users/s     14428928  12956424        -1  90% /home/users/s";
@@ -545,7 +545,7 @@ public class FileSystemUtilsTestCase {
     }
 
     @Test
-    public void testGetFreeSpaceUnix_String_InvalidResponse4() throws Exception {
+    public void testGetFreeSpaceUnix_String_InvalidResponse4() {
         final String lines =
                 "Filesystem           1K-blocks      Used Available Use% Mounted on\n" +
                         "xxx-yyyyyyy-zzz:/home/users/s";

@@ -65,8 +65,7 @@ public class DemuxTestCase {
         return thread.getData();
     }
 
-    private void doStart()
-            throws Exception {
+    private void doStart() {
         for (final String name : m_threadMap.keySet()) {
             final Thread thread = m_threadMap.get(name);
             thread.start();
@@ -83,8 +82,7 @@ public class DemuxTestCase {
 
     private void startWriter(final String name,
                              final String data,
-                             final DemuxOutputStream demux)
-            throws Exception {
+                             final DemuxOutputStream demux) {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         m_outputMap.put(name, output);
         final WriterThread thread =
@@ -94,8 +92,7 @@ public class DemuxTestCase {
 
     private void startReader(final String name,
                              final String data,
-                             final DemuxInputStream demux)
-            throws Exception {
+                             final DemuxInputStream demux) {
         final ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
         final ReaderThread thread = new ReaderThread(name, input, demux);
         m_threadMap.put(name, thread);

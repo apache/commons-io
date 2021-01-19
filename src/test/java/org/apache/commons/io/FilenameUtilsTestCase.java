@@ -98,7 +98,7 @@ public class FilenameUtilsTestCase {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testNormalize() throws Exception {
+    public void testNormalize() {
         assertEquals(null, FilenameUtils.normalize(null));
         assertEquals(null, FilenameUtils.normalize(":"));
         assertEquals(null, FilenameUtils.normalize("1:\\a\\b\\c.txt"));
@@ -274,8 +274,10 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.normalize("\\\\1:2\\a\\b\\c.txt"));
     }
 
+    /**
+     */
     @Test
-    public void testNormalize_with_nullbytes() throws Exception {
+    public void testNormalize_with_nullbytes() {
         try {
             assertEquals("a" + SEP + "b" + SEP + "c.txt", FilenameUtils.normalize("a\\b/c\u0000.txt"));
         } catch (final IllegalArgumentException ignore) {
@@ -288,7 +290,7 @@ public class FilenameUtilsTestCase {
     }
 
     @Test
-    public void testNormalizeUnixWin() throws Exception {
+    public void testNormalizeUnixWin() {
 
         // Normalize (Unix Separator)
         assertEquals("/a/c/", FilenameUtils.normalize("/a/b/../c/", true));
@@ -301,7 +303,7 @@ public class FilenameUtilsTestCase {
 
     //-----------------------------------------------------------------------
     @Test
-    public void testNormalizeNoEndSeparator() throws Exception {
+    public void testNormalizeNoEndSeparator() {
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator(null));
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator(":"));
         assertEquals(null, FilenameUtils.normalizeNoEndSeparator("1:\\a\\b\\c.txt"));
@@ -451,7 +453,7 @@ public class FilenameUtilsTestCase {
     }
 
     @Test
-    public void testNormalizeNoEndSeparatorUnixWin() throws Exception {
+    public void testNormalizeNoEndSeparatorUnixWin() {
 
         // Normalize (Unix Separator)
         assertEquals("/a/c", FilenameUtils.normalizeNoEndSeparator("/a/b/../c/", true));

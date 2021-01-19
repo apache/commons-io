@@ -471,7 +471,7 @@ public class IOUtilsTestCase {
     }
 
     @Test
-    public void testConstants() throws Exception {
+    public void testConstants() {
         assertEquals('/', IOUtils.DIR_SEPARATOR_UNIX);
         assertEquals('\\', IOUtils.DIR_SEPARATOR_WINDOWS);
         assertEquals("\n", IOUtils.LINE_SEPARATOR_UNIX);
@@ -776,7 +776,7 @@ public class IOUtilsTestCase {
     }
 
     @Test
-    public void testCopyLarge_CharSkipInvalid() throws IOException {
+    public void testCopyLarge_CharSkipInvalid() {
         try (CharArrayReader is = new CharArrayReader(carr); CharArrayWriter os = new CharArrayWriter()) {
             assertThrows(EOFException.class, () -> IOUtils.copyLarge(is, os, 1000, 100));
         }

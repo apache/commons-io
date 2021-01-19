@@ -110,7 +110,7 @@ public class LineIteratorTestCase {
     // -----------------------------------------------------------------------
 
     @Test
-    public void testConstructor() throws Exception {
+    public void testConstructor() {
         assertThrows(IllegalArgumentException.class, () -> {
             try (
                 LineIterator li = new LineIterator(null)

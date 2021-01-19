@@ -89,7 +89,7 @@ public class FileUtilsListFilesTestCase {
     }
 
     @Test
-    public void testIterateFilesByExtension() throws Exception {
+    public void testIterateFilesByExtension() {
         final String[] extensions = { "xml", "txt" };
 
         Iterator<File> files = FileUtils.iterateFiles(temporaryFolder, extensions, false);
@@ -114,7 +114,7 @@ public class FileUtilsListFilesTestCase {
     }
 
     @Test
-    public void testListFilesByExtension() throws Exception {
+    public void testListFilesByExtension() {
         final String[] extensions = {"xml", "txt"};
 
         Collection<File> files = FileUtils.listFiles(temporaryFolder, extensions, false);
@@ -139,7 +139,7 @@ public class FileUtilsListFilesTestCase {
     }
 
     @Test
-    public void testListFiles() throws Exception {
+    public void testListFiles() {
         Collection<File> files;
         Collection<String> filenames;
         IOFileFilter fileFilter;

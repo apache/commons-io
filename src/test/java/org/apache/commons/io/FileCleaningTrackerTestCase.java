@@ -53,14 +53,16 @@ public class FileCleaningTrackerTestCase {
     private File testFile;
     private FileCleaningTracker theInstance;
 
+    /**
+     */
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         testFile = new File(temporaryFolder, "file-test.txt");
         theInstance = newInstance();
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
         // reset file cleaner class, so as not to break other tests
 
@@ -175,7 +177,7 @@ public class FileCleaningTrackerTestCase {
     }
 
     @Test
-    public void testFileCleanerNull() throws Exception {
+    public void testFileCleanerNull() {
         try {
             theInstance.track((File) null, new Object());
             fail();
@@ -217,7 +219,7 @@ public class FileCleaningTrackerTestCase {
     }
 
     @Test
-    public void testFileCleanerExitWhenFinished_NoTrackAfter() throws Exception {
+    public void testFileCleanerExitWhenFinished_NoTrackAfter() {
         assertFalse(theInstance.exitWhenFinished);
         theInstance.exitWhenFinished();
         assertTrue(theInstance.exitWhenFinished);
@@ -313,12 +315,11 @@ public class FileCleaningTrackerTestCase {
             file = new File(file.getPath());
         }
     }
-    private String showFailures() throws Exception {
+    private String showFailures() {
         if (theInstance.deleteFailures.size() == 1) {
             return "[Delete Failed: " + theInstance.deleteFailures.get(0) + "]";
-        } else {
-            return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
         }
+        return "[Delete Failures: " + theInstance.deleteFailures.size() + "]";
     }
 
     private void waitUntilTrackCount() throws Exception {
