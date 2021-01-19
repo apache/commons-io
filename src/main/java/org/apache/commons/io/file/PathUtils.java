@@ -202,7 +202,7 @@ public final class PathUtils {
      * Cleans a directory including sub-directories without deleting directories.
      *
      * @param directory directory to clean.
-     * @param deleteOptions How deletion is handled.
+     * @param deleteOptions How to handle deletion.
      * @return The visitation path counters.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @since 2.8.0
@@ -357,7 +357,7 @@ public final class PathUtils {
      * </ul>
      *
      * @param path file or directory to delete, must not be {@code null}
-     * @param deleteOptions How deletion is handled.
+     * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
@@ -381,8 +381,8 @@ public final class PathUtils {
      * </ul>
      *
      * @param path file or directory to delete, must not be {@code null}
-     * @param linkOptions configures how symbolic links are handled.
-     * @param deleteOptions How deletion is handled.
+     * @param linkOptions How to handle symbolic links.
+     * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException if an I/O error is thrown by a visitor method or if an I/O error occurs.
@@ -410,7 +410,7 @@ public final class PathUtils {
      * Deletes a directory including sub-directories.
      *
      * @param directory directory to delete.
-     * @param deleteOptions How deletion is handled.
+     * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @since 2.8.0
@@ -426,8 +426,8 @@ public final class PathUtils {
      * Deletes a directory including sub-directories.
      *
      * @param directory directory to delete.
-     * @param linkOptions configures how symbolic links are handled.
-     * @param deleteOptions How deletion is handled.
+     * @param linkOptions How to handle symbolic links.
+     * @param deleteOptions How to handle deletion.
      * @return The visitor used to delete the given directory.
      * @throws IOException if an I/O error is thrown by a visitor method.
      * @since 2.9.0
@@ -454,7 +454,7 @@ public final class PathUtils {
      * Deletes the given file.
      *
      * @param file The file to delete.
-     * @param deleteOptions How deletion is handled.
+     * @param deleteOptions How to handle deletion.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException if an I/O error occurs.
      * @throws NoSuchFileException if the file is a directory.
@@ -469,8 +469,8 @@ public final class PathUtils {
      * Deletes the given file.
      *
      * @param file The file to delete.
-     * @param linkOptions configures how symbolic links are handled.
-     * @param deleteOptions How deletion is handled.
+     * @param linkOptions How to handle symbolic links.
+     * @param deleteOptions How to handle deletion.
      * @return A visitor with path counts set to 1 file, 0 directories, and the size of the deleted file.
      * @throws IOException if an I/O error occurs.
      * @throws NoSuchFileException if the file is a directory.
