@@ -32,9 +32,9 @@ import org.apache.commons.io.IOUtils;
 /**
  * Writer of files that allows the encoding to be set.
  * <p>
- * This class provides a simple alternative to <code>FileWriter</code>
+ * This class provides a simple alternative to {@code FileWriter}
  * that allows an encoding to be set. Unfortunately, it cannot subclass
- * <code>FileWriter</code>.
+ * {@code FileWriter}.
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
  * <p>

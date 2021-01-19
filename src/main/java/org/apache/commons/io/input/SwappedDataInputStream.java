@@ -62,7 +62,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Invokes the delegate's <code>read()</code> method.
+     * Invokes the delegate's {@code read()} method.
      * @return the byte read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      * @throws EOFException if an end of file is reached unexpectedly
@@ -114,7 +114,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
+     * Invokes the delegate's {@code read(byte[] data, int, int)} method.
      *
      * @param data the buffer to read the bytes into
      * @throws EOFException if an end of file is reached unexpectedly
@@ -129,7 +129,7 @@ public class SwappedDataInputStream extends ProxyInputStream
 
 
     /**
-     * Invokes the delegate's <code>read(byte[] data, int, int)</code> method.
+     * Invokes the delegate's {@code read(byte[] data, int, int)} method.
      *
      * @param data the buffer to read the bytes into
      * @param offset The start offset
@@ -211,7 +211,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Invokes the delegate's <code>read()</code> method.
+     * Invokes the delegate's {@code read()} method.
      * @return the byte read or -1 if the end of stream
      * @throws EOFException if an end of file is reached unexpectedly
      * @throws IOException if an I/O error occurs
@@ -251,7 +251,7 @@ public class SwappedDataInputStream extends ProxyInputStream
     }
 
     /**
-     * Invokes the delegate's <code>skip(int)</code> method.
+     * Invokes the delegate's {@code skip(int)} method.
      * @param count the number of bytes to skip
      * @return the number of bytes to skipped or -1 if the end of stream
      * @throws EOFException if an end of file is reached unexpectedly

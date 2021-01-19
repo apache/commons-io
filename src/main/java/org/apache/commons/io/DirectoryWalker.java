@@ -40,8 +40,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * The following sections describe:
  * </p>
  * <ul>
- * <li><a href="#example">1. Example Implementation</a> - example <code>FileCleaner</code> implementation.</li>
- * <li><a href="#filter">2. Filter Example</a> - using {@link FileFilter}(s) with <code>DirectoryWalker</code>.</li>
+ * <li><a href="#example">1. Example Implementation</a> - example {@code FileCleaner} implementation.</li>
+ * <li><a href="#filter">2. Filter Example</a> - using {@link FileFilter}(s) with {@code DirectoryWalker}.</li>
  * <li><a href="#cancel">3. Cancellation</a> - how to implement cancellation behavior.</li>
  * </ul>
  *
@@ -123,7 +123,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * </pre>
  * <p>
  * The third constructor option is to specify separate filters, one for directories and one for files. These are
- * combined internally to form the correct <code>FileFilter</code>, something which is very easy to get wrong when
+ * combined internally to form the correct {@code FileFilter}, something which is very easy to get wrong when
  * attempted manually, particularly when trying to express constructs like 'any file in directories named docs'.
  * </p>
  * <p>
@@ -154,11 +154,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * implementation.
  * </p>
  * <p>
- * What <code>DirectoryWalker</code> does provide for cancellation is:
+ * What {@code DirectoryWalker} does provide for cancellation is:
  * </p>
  * <ul>
  * <li>{@link CancelException} which can be thrown in any of the <i>lifecycle</i> methods to stop processing.</li>
- * <li>The <code>walk()</code> method traps thrown {@link CancelException} and calls the <code>handleCancelled()</code>
+ * <li>The {@code walk()} method traps thrown {@link CancelException} and calls the {@code handleCancelled()}
  * method, providing a place for custom cancel processing.</li>
  * </ul>
  * <p>
@@ -167,7 +167,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <ul>
  * <li>The decision logic on whether to cancel processing or not.</li>
  * <li>Constructing and throwing a {@link CancelException}.</li>
- * <li>Custom cancel processing in the <code>handleCancelled()</code> method.
+ * <li>Custom cancel processing in the {@code handleCancelled()} method.
  * </ul>
  * <p>
  * Two possible scenarios are envisaged for cancellation:
@@ -185,11 +185,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  * <h3 id="external">3.1 External / Multi-threaded</h3>
  *
  * <p>
- * This example provides a public <code>cancel()</code> method that can be called by another thread to stop the
+ * This example provides a public {@code cancel()} method that can be called by another thread to stop the
  * processing. A typical example use-case would be a cancel button on a GUI. Calling this method sets a
  * <a href="http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930"> volatile</a> flag to ensure
- * it will work properly in a multi-threaded environment. The flag is returned by the <code>handleIsCancelled()</code>
- * method, which will cause the walk to stop immediately. The <code>handleCancelled()</code> method will be the next,
+ * it will work properly in a multi-threaded environment. The flag is returned by the {@code handleIsCancelled()}
+ * method, which will cause the walk to stop immediately. The {@code handleCancelled()} method will be the next,
  * and last, callback method received once cancellation has occurred.
  * </p>
  *
@@ -326,7 +326,7 @@ public abstract class DirectoryWalker<T> {
      * <p>
      * Writers of subclasses should call this method to start the directory walk.
      * Once called, this method will emit events as it walks the hierarchy.
-     * The event methods have the prefix <code>handle</code>.
+     * The event methods have the prefix {@code handle}.
      * </p>
      *
      * @param startDirectory  the directory to start from, not null
@@ -384,7 +384,7 @@ public abstract class DirectoryWalker<T> {
     //-----------------------------------------------------------------------
     /**
      * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
-     * throwing a <code>CancelException</code> if it has.
+     * throwing a {@code CancelException} if it has.
      * <p>
      * Writers of subclasses should not normally call this method as it is called
      * automatically by the walk of the tree. However, sometimes a single method,
@@ -409,7 +409,7 @@ public abstract class DirectoryWalker<T> {
      * operation should be immediately cancelled.
      * <p>
      * This method should be implemented by those subclasses that want to
-     * provide a public <code>cancel()</code> method available from another
+     * provide a public {@code cancel()} method available from another
      * thread. The design pattern for the subclass should be as follows:
      * </p>
      * <pre>
@@ -616,7 +616,7 @@ public abstract class DirectoryWalker<T> {
         private final int depth;
 
         /**
-         * Constructs a <code>CancelException</code> with
+         * Constructs a {@code CancelException} with
          * the file and depth when cancellation occurred.
          *
          * @param file  the file when the operation was cancelled, may be null
@@ -627,7 +627,7 @@ public abstract class DirectoryWalker<T> {
         }
 
         /**
-         * Constructs a <code>CancelException</code> with
+         * Constructs a {@code CancelException} with
          * an appropriate message and the file and depth when
          * cancellation occurred.
          *

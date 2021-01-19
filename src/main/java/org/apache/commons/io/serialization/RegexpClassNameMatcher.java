@@ -43,7 +43,7 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
      * Constructs an object based on the specified pattern.
      *
      * @param pattern a pattern for evaluating acceptable class names
-     * @throws IllegalArgumentException if <code>pattern</code> is null
+     * @throws IllegalArgumentException if {@code pattern} is null
      */
     public RegexpClassNameMatcher(final Pattern pattern) {
         if (pattern == null) {

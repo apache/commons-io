@@ -41,7 +41,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>append(char)</code> method.
+     * Invokes the delegate's {@code append(char)} method.
      * @param c The character to write
      * @return this writer
      * @throws IOException if an I/O error occurs
@@ -60,7 +60,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>append(CharSequence, int, int)</code> method.
+     * Invokes the delegate's {@code append(CharSequence, int, int)} method.
      * @param csq The character sequence to write
      * @param start The index of the first character to write
      * @param end  The index of the first character to write (exclusive)
@@ -81,7 +81,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>append(CharSequence)</code> method.
+     * Invokes the delegate's {@code append(CharSequence)} method.
      * @param csq The character sequence to write
      * @return this writer
      * @throws IOException if an I/O error occurs
@@ -101,7 +101,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>write(int)</code> method.
+     * Invokes the delegate's {@code write(int)} method.
      * @param c the character to write
      * @throws IOException if an I/O error occurs
      */
@@ -117,7 +117,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>write(char[])</code> method.
+     * Invokes the delegate's {@code write(char[])} method.
      * @param cbuf the characters to write
      * @throws IOException if an I/O error occurs
      */
@@ -134,7 +134,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>write(char[], int, int)</code> method.
+     * Invokes the delegate's {@code write(char[], int, int)} method.
      * @param cbuf the characters to write
      * @param off The start offset
      * @param len The number of characters to write
@@ -152,7 +152,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>write(String)</code> method.
+     * Invokes the delegate's {@code write(String)} method.
      * @param str the string to write
      * @throws IOException if an I/O error occurs
      */
@@ -169,7 +169,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>write(String)</code> method.
+     * Invokes the delegate's {@code write(String)} method.
      * @param str the string to write
      * @param off The start offset
      * @param len The number of characters to write
@@ -187,7 +187,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>flush()</code> method.
+     * Invokes the delegate's {@code flush()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -200,7 +200,7 @@ public class ProxyWriter extends FilterWriter {
     }
 
     /**
-     * Invokes the delegate's <code>close()</code> method.
+     * Invokes the delegate's {@code close()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override

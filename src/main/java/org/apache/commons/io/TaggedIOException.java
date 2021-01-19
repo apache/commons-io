@@ -42,7 +42,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * the argument types are intentionally more generic to make it easier
      * to use this method without type casts.
      * <p>
-     * A typical use for this method is in a <code>catch</code> block to
+     * A typical use for this method is in a {@code catch} block to
      * determine how a caught exception should be handled:
      * <pre>
      * Serializable tag = ...;
@@ -74,7 +74,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      * if the given throwable is of a different type or if it is tagged
      * with some other tag.
      * <p>
-     * This method is typically used in a <code>catch</code> block to
+     * This method is typically used in a {@code catch} block to
      * selectively rethrow tagged exceptions.
      * <pre>
      * Serializable tag = ...;

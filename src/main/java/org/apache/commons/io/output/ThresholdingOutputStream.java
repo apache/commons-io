@@ -26,7 +26,7 @@ import java.io.OutputStream;
  * an exception if a maximum has been reached, or to switch the underlying
  * stream type when the threshold is exceeded.
  * <p>
- * This class overrides all <code>OutputStream</code> methods. However, these
+ * This class overrides all {@code OutputStream} methods. However, these
  * overrides ultimately call the corresponding methods in the underlying output
  * stream implementation.
  * <p>
@@ -94,7 +94,7 @@ public abstract class ThresholdingOutputStream
 
 
     /**
-     * Writes <code>b.length</code> bytes from the specified byte array to this
+     * Writes {@code b.length} bytes from the specified byte array to this
      * output stream.
      *
      * @param b The array of bytes to be written.
@@ -111,8 +111,8 @@ public abstract class ThresholdingOutputStream
 
 
     /**
-     * Writes <code>len</code> bytes from the specified byte array starting at
-     * offset <code>off</code> to this output stream.
+     * Writes {@code len} bytes from the specified byte array starting at
+     * offset {@code off} to this output stream.
      *
      * @param b   The byte array from which the data will be written.
      * @param off The start offset in the byte array.
@@ -252,7 +252,7 @@ public abstract class ThresholdingOutputStream
 
     /**
      * Returns the underlying output stream, to which the corresponding
-     * <code>OutputStream</code> methods in this class will ultimately delegate.
+     * {@code OutputStream} methods in this class will ultimately delegate.
      *
      * @return The underlying output stream.
      *

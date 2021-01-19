@@ -58,8 +58,8 @@ public class CountingOutputStream extends ProxyOutputStream {
      * The number of bytes that have passed through this stream.
      * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
-     * count is greater than can be expressed by an <code>int</code>.
-     * See {@link #getByteCount()} for a method using a <code>long</code>.
+     * count is greater than can be expressed by an {@code int}.
+     * See {@link #getByteCount()} for a method using a {@code long}.
      *
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
@@ -76,8 +76,8 @@ public class CountingOutputStream extends ProxyOutputStream {
      * Set the byte count back to 0.
      * <p>
      * NOTE: From v1.3 this method throws an ArithmeticException if the
-     * count is greater than can be expressed by an <code>int</code>.
-     * See {@link #resetByteCount()} for a method using a <code>long</code>.
+     * count is greater than can be expressed by an {@code int}.
+     * See {@link #resetByteCount()} for a method using a {@code long}.
      *
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
@@ -93,7 +93,7 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * The number of bytes that have passed through this stream.
      * <p>
-     * NOTE: This method is an alternative for <code>getCount()</code>.
+     * NOTE: This method is an alternative for {@code getCount()}.
      * It was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
      *
@@ -107,7 +107,7 @@ public class CountingOutputStream extends ProxyOutputStream {
     /**
      * Set the byte count back to 0.
      * <p>
-     * NOTE: This method is an alternative for <code>resetCount()</code>.
+     * NOTE: This method is an alternative for {@code resetCount()}.
      * It was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
      *

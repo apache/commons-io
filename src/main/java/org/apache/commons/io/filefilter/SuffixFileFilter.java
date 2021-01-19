@@ -30,7 +30,7 @@ import org.apache.commons.io.IOCase;
  * Filters files based on the suffix (what the file name ends with).
  * This is used in retrieving all the files of a particular type.
  * <p>
- * For example, to retrieve and print all <code>*.java</code> files
+ * For example, to retrieve and print all {@code *.java} files
  * in the current directory:
  * </p>
  * <h2>Using Classic IO</h2>

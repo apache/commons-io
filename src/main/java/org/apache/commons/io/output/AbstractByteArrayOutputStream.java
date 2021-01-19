@@ -35,8 +35,8 @@ import static org.apache.commons.io.IOUtils.EOF;
  * is written into a byte array. The buffer automatically grows as data
  * is written to it.
  * <p>
- * The data can be retrieved using <code>toByteArray()</code> and
- * <code>toString()</code>.
+ * The data can be retrieved using {@code toByteArray()} and
+ * {@code toString()}.
  * Closing an {@code AbstractByteArrayOutputStream} has no effect. The methods in
  * this class can be called after the stream has been closed without
  * generating an {@code IOException}.
@@ -278,7 +278,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     /**
      * Gets the current contents of this byte stream as a Input Stream. The
-     * returned stream is backed by buffers of <code>this</code> stream,
+     * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
      * @return the current contents of this output stream.
@@ -290,7 +290,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     /**
      * Gets the current contents of this byte stream as a Input Stream. The
-     * returned stream is backed by buffers of <code>this</code> stream,
+     * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
      * @param <T> the type of the InputStream which makes up

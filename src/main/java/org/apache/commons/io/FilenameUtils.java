@@ -460,9 +460,9 @@ public class FilenameUtils {
      * <p>
      * The first argument is the base path, the second is the path to concatenate.
      * The returned path is always normalized via {@link #normalize(String)},
-     * thus <code>..</code> is handled.
+     * thus {@code ..} is handled.
      * <p>
-     * If <code>pathToAdd</code> is absolute (has an absolute prefix), then
+     * If {@code pathToAdd} is absolute (has an absolute prefix), then
      * it will be normalized and returned.
      * Otherwise, the paths will be joined, normalized and returned.
      * <p>
@@ -591,7 +591,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Returns the length of the fileName prefix, such as <code>C:/</code> or <code>~/</code>.
+     * Returns the length of the fileName prefix, such as {@code C:/} or {@code ~/}.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * <p>
@@ -750,8 +750,8 @@ public class FilenameUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Gets the prefix from a full fileName, such as <code>C:/</code>
-     * or <code>~/</code>.
+     * Gets the prefix from a full fileName, such as {@code C:/}
+     * or {@code ~/}.
      * <p>
      * This method will handle a file in either Unix or Windows format.
      * The prefix includes the first slash in the full fileName where applicable.

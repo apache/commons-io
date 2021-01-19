@@ -68,7 +68,7 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, *)</code> methods which a "normal" file.
+     * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
@@ -89,7 +89,7 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, *)</code> methods which a not existing file.
+     * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
@@ -106,15 +106,15 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, *)</code> methods which the specified conditions.
+     * Tests the {@code isFileNewer(File, *)} methods which the specified conditions.
      *
      * Creates :
      * <ul>
-     * <li>a <code>Date</code> which represents the time reference</li>
+     * <li>a {@code Date} which represents the time reference</li>
      * <li>a temporary file with the same last modification date as the time reference</li>
      * </ul>
-     * Then compares (with the needed <code>isFileNewer</code> method) the last modification date of
-     * the specified file with the specified time reference, the created <code>Date</code> and the temporary
+     * Then compares (with the needed {@code isFileNewer} method) the last modification date of
+     * the specified file with the specified time reference, the created {@code Date} and the temporary
      * file.
      * <br>
      * The test is successful if the three comparisons return the specified wanted result.
@@ -140,9 +140,9 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, long)</code> method without specifying a <code>File</code>.
+     * Tests the {@code isFileNewer(File, long)} method without specifying a {@code File}.
      * <br>
-     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an {@code IllegalArgumentException}.
      */
     @Test
     public void testIsFileNewerNoFile() {
@@ -151,9 +151,9 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, Date)</code> method without specifying a <code>Date</code>.
+     * Tests the {@code isFileNewer(File, Date)} method without specifying a {@code Date}.
      * <br>
-     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an {@code IllegalArgumentException}.
      */
     @Test
     public void testIsFileNewerNoDate() {
@@ -162,9 +162,9 @@ public class FileUtilsFileNewerTestCase {
     }
 
     /**
-     * Tests the <code>isFileNewer(File, File)</code> method without specifying a reference <code>File</code>.
+     * Tests the {@code isFileNewer(File, File)} method without specifying a reference {@code File}.
      * <br>
-     * The test is successful if the method throws an <code>IllegalArgumentException</code>.
+     * The test is successful if the method throws an {@code IllegalArgumentException}.
      */
     @Test
     public void testIsFileNewerNoFileReference() {

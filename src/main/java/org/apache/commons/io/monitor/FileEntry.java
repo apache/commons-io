@@ -83,12 +83,12 @@ public class FileEntry implements Serializable {
      * Refresh the attributes from the {@link File}, indicating
      * whether the file has changed.
      * <p>
-     * This implementation refreshes the <code>name</code>, <code>exists</code>,
-     * <code>directory</code>, <code>lastModified</code> and <code>length</code>
+     * This implementation refreshes the {@code name}, {@code exists},
+     * {@code directory}, {@code lastModified} and {@code length}
      * properties.
      * <p>
-     * The <code>exists</code>, <code>directory</code>, <code>lastModified</code>
-     * and <code>length</code> properties are compared for changes
+     * The {@code exists}, {@code directory}, {@code lastModified}
+     * and {@code length} properties are compared for changes
      *
      * @param file the file instance to compare to
      * @return {@code true} if the file has changed, otherwise {@code false}

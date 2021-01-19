@@ -30,7 +30,7 @@ import org.apache.commons.io.IOCase;
  * Filters file names for a certain name.
  * <p>
  * For example, to print all files and directories in the
- * current directory whose name is <code>Test</code>:
+ * current directory whose name is {@code Test}:
  * </p>
  * <h2>Using Classic IO</h2>
  * <pre>

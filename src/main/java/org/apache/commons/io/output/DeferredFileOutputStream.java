@@ -42,7 +42,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
     /**
      * The output stream to which data will be written at any given time. This will always be one of
-     * <code>memoryOutputStream</code> or <code>diskOutputStream</code>.
+     * {@code memoryOutputStream} or {@code diskOutputStream}.
      */
     private OutputStream currentOutputStream;
 

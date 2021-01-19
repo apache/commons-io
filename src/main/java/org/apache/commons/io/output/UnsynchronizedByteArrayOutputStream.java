@@ -90,7 +90,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent same data as result InputStream.
+     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -100,7 +100,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
@@ -111,7 +111,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     }
 
     /**
-     * Fetches entire contents of an <code>InputStream</code> and represent same data as result InputStream.
+     * Fetches entire contents of an {@code InputStream} and represent same data as result InputStream.
      * <p>
      * This method is useful where,
      * </p>
@@ -121,7 +121,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
      * <li>It has network timeout associated.</li>
      * </ul>
      * It can be used in favor of {@link #toByteArray()}, since it avoids unnecessary allocation and copy of byte[].<br>
-     * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
      *
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size

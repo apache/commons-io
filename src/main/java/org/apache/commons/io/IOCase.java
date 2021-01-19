@@ -30,7 +30,7 @@ import java.util.Objects;
  * methods that use the enumeration to perform comparisons.
  * </p>
  * <p>
- * Wherever possible, you should use the <code>check</code> methods in this
+ * Wherever possible, you should use the {@code check} methods in this
  * class to compare file names.
  * </p>
  *

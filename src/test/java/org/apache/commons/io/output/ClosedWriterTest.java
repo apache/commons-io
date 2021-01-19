@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 public class ClosedWriterTest {
 
     /**
-     * Test the <code>write(cbuf, off, len)</code> method.
+     * Test the {@code write(cbuf, off, len)} method.
      * @throws Exception
      */
     @Test
@@ -42,7 +42,7 @@ public class ClosedWriterTest {
     }
 
     /**
-     * Test the <code>flush()</code> method.
+     * Test the {@code flush()} method.
      * @throws Exception
      */
     @Test

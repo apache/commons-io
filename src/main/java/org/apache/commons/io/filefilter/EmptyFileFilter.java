@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * This filter accepts files or directories that are empty.
  * <p>
- * If the <code>File</code> is a directory it checks that it contains no files.
+ * If the {@code File} is a directory it checks that it contains no files.
  * </p>
  * <p>
  * Example, showing how to print out a list of the current directory's empty files/directories:

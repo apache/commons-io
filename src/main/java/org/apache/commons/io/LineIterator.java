@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * An Iterator over the lines in a <code>Reader</code>.
+ * An Iterator over the lines in a {@code Reader}.
  * <p>
- * <code>LineIterator</code> holds a reference to an open <code>Reader</code>.
+ * {@code LineIterator} holds a reference to an open {@code Reader}.
  * When you have finished with the iterator you should close the reader
  * to free internal resources. This can be done by closing the reader directly,
  * or by calling the {@link #close()} or {@link #closeQuietly(LineIterator)}
@@ -59,9 +59,9 @@ public class LineIterator implements Iterator<String>, Closeable {
     private boolean finished = false;
 
     /**
-     * Constructs an iterator of the lines for a <code>Reader</code>.
+     * Constructs an iterator of the lines for a {@code Reader}.
      *
-     * @param reader the <code>Reader</code> to read from, not null
+     * @param reader the {@code Reader} to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
     public LineIterator(final Reader reader) throws IllegalArgumentException {
@@ -77,8 +77,8 @@ public class LineIterator implements Iterator<String>, Closeable {
 
     //-----------------------------------------------------------------------
     /**
-     * Indicates whether the <code>Reader</code> has more lines.
-     * If there is an <code>IOException</code> then {@link #close()} will
+     * Indicates whether the {@code Reader} has more lines.
+     * If there is an {@code IOException} then {@link #close()} will
      * be called on this instance.
      *
      * @return {@code true} if the Reader has more lines
@@ -120,7 +120,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Returns the next line in the wrapped <code>Reader</code>.
+     * Returns the next line in the wrapped {@code Reader}.
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
@@ -131,7 +131,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     }
 
     /**
-     * Returns the next line in the wrapped <code>Reader</code>.
+     * Returns the next line in the wrapped {@code Reader}.
      *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return

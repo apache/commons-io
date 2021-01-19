@@ -21,7 +21,7 @@ package org.apache.commons.io;
  * <p>
  * This works by sleeping until the specified timeout amount and then
  * interrupting the thread being monitored. If the thread being monitored
- * completes its work before being interrupted, it should <code>interrupt()</code>
+ * completes its work before being interrupted, it should {@code interrupt()}
  * the <i>monitor</i> thread.
  * </p>
  *

@@ -51,7 +51,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>read()</code> method.
+     * Invokes the delegate's {@code read()} method.
      * @return the byte read or -1 if the end of stream
      * @throws IOException if an I/O error occurs
      */
@@ -69,7 +69,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>read(byte[])</code> method.
+     * Invokes the delegate's {@code read(byte[])} method.
      * @param bts the buffer to read the bytes into
      * @return the number of bytes read or EOF if the end of stream
      * @throws IOException if an I/O error occurs
@@ -88,7 +88,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>read(byte[], int, int)</code> method.
+     * Invokes the delegate's {@code read(byte[], int, int)} method.
      * @param bts the buffer to read the bytes into
      * @param off The start offset
      * @param len The number of bytes to read
@@ -109,7 +109,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>skip(long)</code> method.
+     * Invokes the delegate's {@code skip(long)} method.
      * @param ln the number of bytes to skip
      * @return the actual number of bytes skipped
      * @throws IOException if an I/O error occurs
@@ -125,7 +125,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>available()</code> method.
+     * Invokes the delegate's {@code available()} method.
      * @return the number of available bytes
      * @throws IOException if an I/O error occurs
      */
@@ -140,7 +140,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>close()</code> method.
+     * Invokes the delegate's {@code close()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -149,7 +149,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>mark(int)</code> method.
+     * Invokes the delegate's {@code mark(int)} method.
      * @param readlimit read ahead limit
      */
     @Override
@@ -158,7 +158,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>reset()</code> method.
+     * Invokes the delegate's {@code reset()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -171,7 +171,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     }
 
     /**
-     * Invokes the delegate's <code>markSupported()</code> method.
+     * Invokes the delegate's {@code markSupported()} method.
      * @return true if mark is supported, otherwise false
      */
     @Override

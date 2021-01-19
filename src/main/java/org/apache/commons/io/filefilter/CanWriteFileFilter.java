@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * This filter accepts <code>File</code>s that can be written to.
+ * This filter accepts {@code File}s that can be written to.
  * <p>
  * Example, showing how to print out a list of the current directory's <i>writable</i> files:
  * </p>
@@ -49,7 +49,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * </pre>
  *
  * <p>
- * <b>N.B.</b> For read-only files, use <code>CanReadFileFilter.READ_ONLY</code>.
+ * <b>N.B.</b> For read-only files, use {@code CanReadFileFilter.READ_ONLY}.
  *
  * @since 1.3
  */

@@ -50,7 +50,7 @@ public class FileUtilsCopyToFileTestCase {
     }
 
     /**
-     * Tests that <code>copyToFile(InputStream, File)</code> does not close the input stream.
+     * Tests that {@code copyToFile(InputStream, File)} does not close the input stream.
      *
      * @throws IOException
      * @see FileUtils#copyToFile(InputStream, File)
@@ -65,7 +65,7 @@ public class FileUtilsCopyToFileTestCase {
     }
 
     /**
-     * Tests that <code>copyInputStreamToFile(InputStream, File)</code> closes the input stream.
+     * Tests that {@code copyInputStreamToFile(InputStream, File)} closes the input stream.
      *
      * @throws IOException
      * @see FileUtils#copyInputStreamToFile(InputStream, File)

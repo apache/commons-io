@@ -23,10 +23,10 @@ import java.io.Writer;
  * {@link Writer} implementation that outputs to a {@link StringBuilder}.
  * <p>
  * <strong>NOTE:</strong> This implementation, as an alternative to
- * <code>java.io.StringWriter</code>, provides an <i>un-synchronized</i>
+ * {@code java.io.StringWriter}, provides an <i>un-synchronized</i>
  * (i.e. for use in a single thread) implementation for better performance.
  * For safe usage with multiple {@link Thread}s then
- * <code>java.io.StringWriter</code> should be used.
+ * {@code java.io.StringWriter} should be used.
  *
  * @since 2.0
  */

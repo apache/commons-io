@@ -46,11 +46,11 @@ public class FileCleaningTracker {
     // Note: fields are package protected to allow use by test cases
 
     /**
-     * Queue of <code>Tracker</code> instances being watched.
+     * Queue of {@code Tracker} instances being watched.
      */
     ReferenceQueue<Object> q = new ReferenceQueue<>();
     /**
-     * Collection of <code>Tracker</code> instances in existence.
+     * Collection of {@code Tracker} instances in existence.
      */
     final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
     /**

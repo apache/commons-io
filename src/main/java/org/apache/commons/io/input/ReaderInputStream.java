@@ -222,7 +222,7 @@ public class ReaderInputStream extends InputStream {
      * @param array the byte array to read into
      * @param off the offset to start reading bytes into
      * @param len the number of bytes to read
-     * @return the number of bytes read or <code>-1</code>
+     * @return the number of bytes read or {@code -1}
      *         if the end of the stream has been reached
      * @throws IOException if an I/O error occurs
      */
@@ -258,7 +258,7 @@ public class ReaderInputStream extends InputStream {
      * Read the specified number of bytes into an array.
      *
      * @param b the byte array to read into
-     * @return the number of bytes read or <code>-1</code>
+     * @return the number of bytes read or {@code -1}
      *         if the end of the stream has been reached
      * @throws IOException if an I/O error occurs
      */
@@ -270,7 +270,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Read a single byte.
      *
-     * @return either the byte read or <code>-1</code> if the end of the stream
+     * @return either the byte read or {@code -1} if the end of the stream
      *         has been reached
      * @throws IOException if an I/O error occurs
      */

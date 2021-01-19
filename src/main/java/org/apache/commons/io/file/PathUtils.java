@@ -678,8 +678,8 @@ public final class PathUtils {
      * @param filter the filter to apply to the set of files.
      * @param paths the array of files to apply the filter to.
      *
-     * @return a subset of <code>files</code> that is accepted by the file filter.
-     * @throws IllegalArgumentException if the filter is {@code null} or <code>files</code> contains a {@code null}
+     * @return a subset of {@code files} that is accepted by the file filter.
+     * @throws IllegalArgumentException if the filter is {@code null} or {@code files} contains a {@code null}
      *         value.
      *
      * @since 2.9.0

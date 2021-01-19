@@ -14,45 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io.output;
 
-import static org.junit.jupiter.api.Assertions.fail;
+package org.apache.commons.io.filefilter;
 
 import java.io.IOException;
-
-import org.junit.jupiter.api.Test;
+import java.nio.file.FileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * JUnit Test Case for {@link ClosedOutputStream}.
+ * Enumerates visitation methods from {@link FileVisitor}.
+ * 
+ * @since 2.9.0
+ * @see FileVisitor
  */
-public class ClosedOutputStreamTest {
+public enum FileVisitorMethod {
 
     /**
-     * Test the {@code write(b)} method.
-     * @throws Exception
+     * Matches {@link FileVisitor#visitFile(Object, BasicFileAttributes)}.
      */
-    @Test
-    public void testWrite() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.write('x');
-            fail("write(b)");
-        } catch (final IOException e) {
-            // expected
-        }
-    }
+    FILE,
 
     /**
-     * Test the {@code flush()} method.
-     * @throws Exception
+     * Matches {@link FileVisitor#visitFileFailed(Object, IOException)}.
      */
-    @Test
-    public void testFlush() throws Exception {
-        try (ClosedOutputStream cos = new ClosedOutputStream()) {
-            cos.flush();
-            fail("flush()");
-        } catch (final IOException e) {
-            // expected
-        }
-    }
+    FILE_FAILED,
 
+    /**
+     * Matches {@link FileVisitor#postVisitDirectory(Object, IOException)}.
+     */
+    POST_DIR,
+
+    /**
+     * Matches {@link FileVisitor#preVisitDirectory(Object, BasicFileAttributes)}.
+     */
+    PRE_DIR
 }

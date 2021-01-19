@@ -36,7 +36,7 @@ public class IOExceptionWithCause extends IOException {
     /**
      * Constructs a new instance with the given message and cause.
      * <p>
-     * As specified in {@link Throwable}, the message in the given <code>cause</code> is not used in this instance's
+     * As specified in {@link Throwable}, the message in the given {@code cause} is not used in this instance's
      * message.
      * </p>
      *
@@ -52,8 +52,8 @@ public class IOExceptionWithCause extends IOException {
     /**
      * Constructs a new instance with the given cause.
      * <p>
-     * The message is set to <code>cause==null ? null : cause.toString()</code>, which by default contains the class
-     * and message of <code>cause</code>. This constructor is useful for call sites that just wrap another throwable.
+     * The message is set to {@code cause==null ? null : cause.toString()}, which by default contains the class
+     * and message of {@code cause}. This constructor is useful for call sites that just wrap another throwable.
      * </p>
      *
      * @param cause

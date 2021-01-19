@@ -41,8 +41,8 @@ import java.io.Reader;
  * This implementation returns a space from the method that
  * reads a character and leaves the array unchanged in the read
  * methods that are passed a character array.
- * If alternative data is required the <code>processChar()</code> and
- * <code>processChars()</code> methods can be implemented to generate
+ * If alternative data is required the {@code processChar()} and
+ * {@code processChars()} methods can be implemented to generate
  * data, for example:
  * </p>
  *
@@ -100,7 +100,7 @@ public class NullReader extends Reader {
      *
      * @param size The size of the reader to emulate.
      * @param markSupported Whether this instance will support
-     * the <code>mark()</code> functionality.
+     * the {@code mark()} functionality.
      * @param throwEofException Whether this implementation
      * will throw an {@link EOFException} or return -1 when the
      * end of file is reached.
@@ -171,11 +171,11 @@ public class NullReader extends Reader {
     /**
      * Reads a character.
      *
-     * @return Either The character value returned by <code>processChar()</code>
-     * or <code>-1</code> if the end of file has been reached and
-     * <code>throwEofException</code> is set to {@code false}.
+     * @return Either The character value returned by {@code processChar()}
+     * or {@code -1} if the end of file has been reached and
+     * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to {@code true}.
+     * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -194,11 +194,11 @@ public class NullReader extends Reader {
      * Reads some characters into the specified array.
      *
      * @param chars The character array to read into
-     * @return The number of characters read or <code>-1</code>
+     * @return The number of characters read or {@code -1}
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to {@code false}.
+     * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to {@code true}.
+     * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -212,11 +212,11 @@ public class NullReader extends Reader {
      * @param chars The character array to read into.
      * @param offset The offset to start reading characters into.
      * @param length The number of characters to read.
-     * @return The number of characters read or <code>-1</code>
+     * @return The number of characters read or {@code -1}
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to {@code false}.
+     * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to {@code true}.
+     * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -266,11 +266,11 @@ public class NullReader extends Reader {
      * Skips a specified number of characters.
      *
      * @param numberOfChars The number of characters to skip.
-     * @return The number of characters skipped or <code>-1</code>
+     * @return The number of characters skipped or {@code -1}
      * if the end of file has been reached and
-     * <code>throwEofException</code> is set to {@code false}.
+     * {@code throwEofException} is set to {@code false}.
      * @throws EOFException if the end of file is reached and
-     * <code>throwEofException</code> is set to {@code true}.
+     * {@code throwEofException} is set to {@code true}.
      * @throws IOException if trying to read past the end of file.
      */
     @Override
@@ -291,7 +291,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Returns a character value for the  <code>read()</code> method.
+     * Returns a character value for the  {@code read()} method.
      * <p>
      * This implementation returns zero.
      * </p>
@@ -304,7 +304,7 @@ public class NullReader extends Reader {
     }
 
     /**
-     * Process the characters for the <code>read(char[], offset, length)</code>
+     * Process the characters for the {@code read(char[], offset, length)}
      * method.
      * <p>
      * This implementation leaves the character array unchanged.
@@ -321,9 +321,9 @@ public class NullReader extends Reader {
     /**
      * Handles End of File.
      *
-     * @return <code>-1</code> if <code>throwEofException</code> is
+     * @return {@code -1} if {@code throwEofException} is
      * set to {@code false}
-     * @throws EOFException if <code>throwEofException</code> is set
+     * @throws EOFException if {@code throwEofException} is set
      * to {@code true}.
      */
     private int doEndOfFile() throws EOFException {

@@ -35,7 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Unit tests for the <code>DeferredFileOutputStream</code> class.
+ * Unit tests for the {@code DeferredFileOutputStream} class.
  *
  */
 public class DeferredFileOutputStreamTest {
@@ -127,7 +127,7 @@ public class DeferredFileOutputStreamTest {
 
     /**
      * Tests the case where there are multiple writes beyond the threshold, to ensure that the
-     * <code>thresholdReached()</code> method is only called once, as the threshold is crossed for the first time.
+     * {@code thresholdReached()} method is only called once, as the threshold is crossed for the first time.
      */
     @ParameterizedTest(name = "initialBufferSize = {0}")
     @MethodSource("data")

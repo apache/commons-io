@@ -42,7 +42,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     private final List<IOFileFilter> fileFilters;
 
     /**
-     * Constructs a new instance of <code>OrFileFilter</code>.
+     * Constructs a new instance of {@code OrFileFilter}.
      *
      * @since 1.1
      */
@@ -93,7 +93,7 @@ public class OrFileFilter extends AbstractFileFilter implements ConditionalFileF
     }
 
     /**
-     * Constructs a new instance of <code>OrFileFilter</code> with the specified filters.
+     * Constructs a new instance of {@code OrFileFilter} with the specified filters.
      *
      * @param fileFilters the file filters for this filter, copied.
      * @since 1.1

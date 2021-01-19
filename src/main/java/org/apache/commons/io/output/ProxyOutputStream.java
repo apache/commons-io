@@ -45,7 +45,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's <code>write(int)</code> method.
+     * Invokes the delegate's {@code write(int)} method.
      * @param idx the byte to write
      * @throws IOException if an I/O error occurs
      */
@@ -61,7 +61,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's <code>write(byte[])</code> method.
+     * Invokes the delegate's {@code write(byte[])} method.
      * @param bts the bytes to write
      * @throws IOException if an I/O error occurs
      */
@@ -78,7 +78,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's <code>write(byte[])</code> method.
+     * Invokes the delegate's {@code write(byte[])} method.
      * @param bts the bytes to write
      * @param st The start offset
      * @param end The number of bytes to write
@@ -96,7 +96,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's <code>flush()</code> method.
+     * Invokes the delegate's {@code flush()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override
@@ -109,7 +109,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Invokes the delegate's <code>close()</code> method.
+     * Invokes the delegate's {@code close()} method.
      * @throws IOException if an I/O error occurs
      */
     @Override

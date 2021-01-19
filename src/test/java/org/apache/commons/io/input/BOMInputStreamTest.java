@@ -54,7 +54,7 @@ public class BOMInputStreamTest {
     //----------------------------------------------------------------------------
 
     /**
-     *  A mock InputStream that expects <code>close()</code> to be called.
+     *  A mock InputStream that expects {@code close()} to be called.
      */
     private static class ExpectCloseInputStream extends InputStream {
         private boolean _closeCalled;

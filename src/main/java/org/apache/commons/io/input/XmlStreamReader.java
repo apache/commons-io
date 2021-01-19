@@ -398,7 +398,7 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * Invokes the underlying reader's <code>read(char[], int, int)</code> method.
+     * Invokes the underlying reader's {@code read(char[], int, int)} method.
      * @param buf the buffer to read the characters into
      * @param offset The start offset
      * @param len The number of bytes to read

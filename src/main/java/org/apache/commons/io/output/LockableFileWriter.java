@@ -30,7 +30,7 @@ import org.apache.commons.io.FileUtils;
  * FileWriter that will create and honor lock files to allow simple
  * cross thread file lock handling.
  * <p>
- * This class provides a simple alternative to <code>FileWriter</code>
+ * This class provides a simple alternative to {@code FileWriter}
  * that will use a lock file to prevent duplicate writes.
  * </p>
  * <p>
@@ -43,7 +43,7 @@ import org.apache.commons.io.FileUtils;
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
  * The lock directory may be specified, but defaults to the system property
- * <code>java.io.tmpdir</code>.
+ * {@code java.io.tmpdir}.
  * The encoding may also be specified, and defaults to the platform default.
  * </p>
  */

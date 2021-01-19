@@ -19,7 +19,7 @@ package org.apache.commons.io.input;
 import java.io.Reader;
 
 /**
- * A filter reader that filters out a given character represented as an <code>int</code> code point, handy to remove
+ * A filter reader that filters out a given character represented as an {@code int} code point, handy to remove
  * known junk characters from CSV files for example. This class is the most efficient way to filter out a single
  * character, as opposed to using a {@link CharacterSetFilterReader}. You can also nest {@link CharacterFilterReader}s.
  */

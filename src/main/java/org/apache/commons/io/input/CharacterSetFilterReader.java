@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * A filter reader that removes a given set of characters represented as <code>int</code> code points, handy to remove
+ * A filter reader that removes a given set of characters represented as {@code int} code points, handy to remove
  * known junk characters from CSV files for example.
  * <p>
- * This class must convert each <code>int</code> read to an <code>Integer</code>. You can increase the Integer cache
+ * This class must convert each {@code int} read to an {@code Integer}. You can increase the Integer cache
  * with a system property, see {@link Integer}.
  * </p>
  */
