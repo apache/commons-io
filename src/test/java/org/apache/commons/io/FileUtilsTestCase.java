@@ -39,7 +39,6 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -168,7 +167,7 @@ public class FileUtilsTestCase {
 
     private long testFile2Size;
 
-    private void backDateFile10Minutes(final File testFile) throws IOException {
+    private void backDateFile10Minutes(final File testFile) {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
         assertTrue(setLastModifiedMillis(testFile, lastModified1 - mins10));
@@ -217,7 +216,7 @@ public class FileUtilsTestCase {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
-    private long getLastModifiedMillis(final File file) throws IOException {
+    private long getLastModifiedMillis(final File file) {
         return file.lastModified();
         //https://bugs.openjdk.java.net/browse/JDK-8177809
         //return Files.getLastModifiedTime(file.toPath()).toMillis();
@@ -331,14 +330,14 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openInputStream_existsButIsDirectory() throws Exception {
+    public void test_openInputStream_existsButIsDirectory() {
         final File directory = new File(temporaryFolder, "subdir");
         directory.mkdirs();
         assertThrows(IOException.class, () -> FileUtils.openInputStream(directory));
     }
 
     @Test
-    public void test_openInputStream_notExists() throws Exception {
+    public void test_openInputStream_notExists() {
         final File directory = new File(temporaryFolder, "test.txt");
         try (FileInputStream in = FileUtils.openInputStream(directory)) {
             fail();
@@ -358,7 +357,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openOutputStream_existsButIsDirectory() throws Exception {
+    public void test_openOutputStream_existsButIsDirectory() {
         final File directory = new File(temporaryFolder, "subdir");
         directory.mkdirs();
         assertThrows(IllegalArgumentException.class, () -> FileUtils.openOutputStream(directory));
@@ -384,7 +383,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void test_openOutputStream_notExistsCannotCreate() throws Exception {
+    public void test_openOutputStream_notExistsCannotCreate() {
         // according to Wikipedia, most filing systems have a 256 limit on filename
         final String longStr =
                 "abcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyzabcdevwxyz" +
@@ -710,7 +709,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void testCopyDirectoryExceptions() throws Exception {
+    public void testCopyDirectoryExceptions() {
         //
         // NullPointerException
         assertThrows(NullPointerException.class, () -> FileUtils.copyDirectory(null, null));
@@ -1565,7 +1564,7 @@ public class FileUtilsTestCase {
 
     // This test relies on FileUtils.copyFile using File.length to check the output size
     @Test
-    public void testIncorrectOutputSize() throws Exception {
+    public void testIncorrectOutputSize() {
         final File inFile = new File("pom.xml");
         final File outFile = new ShorterFile("target/pom.tmp"); // it will report a shorter file
         try {
@@ -1590,7 +1589,7 @@ public class FileUtilsTestCase {
     }
 
     @Test
-    public void testIO300() throws Exception {
+    public void testIO300() {
         final File testDirectory = temporaryFolder;
         final File src = new File(testDirectory, "dir1");
         final File dest = new File(src, "dir2");
