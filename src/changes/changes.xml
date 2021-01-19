@@ -87,6 +87,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-699" dev="ggregory" type="fix" due-to="tza, Gary Gregory">
         Wrong logging in FileUtils.setLastModified.
       </action>
+      <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Sebb, Gary Gregory">
+        IOUtils.toByteArray(InputStream) Javadoc does not match code.
+      </action>
       <action issue="IO-688" dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
         CopyUtils deprecation message gives wrong version.
       </action>
