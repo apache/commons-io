@@ -99,9 +99,9 @@ public class IOUtilsTestCase {
     @TempDir
     public File temporaryFolder;
 
-    private char[] carr = null;
+    private char[] carr;
 
-    private byte[] iarr = null;
+    private byte[] iarr;
 
     private File m_testFile;
 

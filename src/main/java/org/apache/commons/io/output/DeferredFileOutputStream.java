@@ -69,7 +69,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
     /**
      * True when close() has been called successfully.
      */
-    private boolean closed = false;
+    private boolean closed;
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a

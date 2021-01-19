@@ -60,7 +60,7 @@ public class FileCleaningTracker {
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
-    volatile boolean exitWhenFinished = false;
+    volatile boolean exitWhenFinished;
     /**
      * The thread that will clean up registered files.
      */

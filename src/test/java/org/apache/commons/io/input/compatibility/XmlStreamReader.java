@@ -83,7 +83,7 @@ public class XmlStreamReader extends Reader {
 
     private static final String EBCDIC = "CP1047";
 
-    private static String staticDefaultEncoding = null;
+    private static String staticDefaultEncoding;
 
     private Reader reader;
 

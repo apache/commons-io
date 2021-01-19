@@ -31,9 +31,9 @@ public final class FileAlterationMonitor implements Runnable {
 
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
-    private Thread thread = null;
+    private Thread thread;
     private ThreadFactory threadFactory;
-    private volatile boolean running = false;
+    private volatile boolean running;
 
     /**
      * Constructs a monitor with a default interval of 10 seconds.

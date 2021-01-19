@@ -214,9 +214,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
                 nRead = fileChannel.read(byteBuffer);
             }
             byteBuffer.flip();
-            if (nRead < 0) {
-                return false;
-            }
+            return nRead >= 0;
         }
         return true;
     }

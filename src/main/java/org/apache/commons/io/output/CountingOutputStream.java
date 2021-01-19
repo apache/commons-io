@@ -29,7 +29,7 @@ import java.io.OutputStream;
 public class CountingOutputStream extends ProxyOutputStream {
 
     /** The count of bytes that have passed. */
-    private long count = 0;
+    private long count;
 
     /**
      * Constructs a new CountingOutputStream.

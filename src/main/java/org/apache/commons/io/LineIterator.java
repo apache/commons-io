@@ -56,7 +56,7 @@ public class LineIterator implements Iterator<String>, Closeable {
     /** The current line. */
     private String cachedLine;
     /** A flag indicating if the iterator has been fully read. */
-    private boolean finished = false;
+    private boolean finished;
 
     /**
      * Constructs an iterator of the lines for a {@code Reader}.

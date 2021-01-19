@@ -30,13 +30,13 @@ import java.io.InputStream;
  */
 public class WindowsLineEndingInputStream  extends InputStream {
 
-    private boolean slashRSeen = false;
+    private boolean slashRSeen;
 
-    private boolean slashNSeen = false;
+    private boolean slashNSeen;
 
-    private boolean injectSlashN = false;
+    private boolean injectSlashN;
 
-    private boolean eofSeen = false;
+    private boolean eofSeen;
 
     private final InputStream target;
 
