@@ -91,7 +91,7 @@ public class QueueOutputStream extends OutputStream {
     public void write(final int b) throws InterruptedIOException {
         try {
             blockingQueue.put(0xFF & b);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
             final InterruptedIOException interruptedIoException = new InterruptedIOException();
             interruptedIoException.initCause(e);

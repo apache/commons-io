@@ -878,7 +878,7 @@ public final class PathUtils {
             try {
                 fileAttributeView.setReadOnly(readOnly);
                 return path;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 // ignore for now, retry with PosixFileAttributeView
                 causeList.add(e);
             }
@@ -896,7 +896,7 @@ public final class PathUtils {
             permissions.remove(PosixFilePermission.OTHERS_WRITE);
             try {
                 return Files.setPosixFilePermissions(path, permissions);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 causeList.add(e);
             }
         }

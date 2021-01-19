@@ -30,11 +30,11 @@ import java.io.InputStream;
  */
 public class UnixLineEndingInputStream extends InputStream {
 
-    private boolean slashNSeen = false;
+    private boolean slashNSeen;
 
-    private boolean slashRSeen = false;
+    private boolean slashRSeen;
 
-    private boolean eofSeen = false;
+    private boolean eofSeen;
 
     private final InputStream target;
 

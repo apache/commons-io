@@ -53,7 +53,7 @@ public class ObservableInputStreamTest {
     }
 
     private static class LastBytesKeepingObserver extends Observer {
-        private byte[] buffer = null;
+        private byte[] buffer;
         private int offset = -1;
         private int length = -1;
 

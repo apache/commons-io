@@ -38,7 +38,7 @@ public class BoundedReader extends Reader {
 
     private final Reader target;
 
-    private int charsRead = 0;
+    private int charsRead;
 
     private int markedAt = INVALID;
 
