@@ -59,6 +59,6 @@ public class MarkShieldInputStream extends ProxyInputStream {
     @SuppressWarnings("sync-override")
     @Override
     public void reset() throws IOException {
-        throw new IOException("mark/reset not supported");
+        throw UnsupportedOperationExceptions.reset();
     }
 }
