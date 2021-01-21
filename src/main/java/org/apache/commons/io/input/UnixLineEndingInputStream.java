@@ -122,6 +122,6 @@ public class UnixLineEndingInputStream extends InputStream {
      */
     @Override
     public synchronized void mark(final int readlimit) {
-        throw new UnsupportedOperationException("Mark not supported");
+        throw UnsupportedOperationExceptions.mark();
     }
 }

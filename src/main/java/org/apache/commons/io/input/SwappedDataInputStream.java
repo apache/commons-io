@@ -162,7 +162,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public String readLine() throws IOException, EOFException {
-        throw new UnsupportedOperationException("Operation not supported: readLine()");
+        throw UnsupportedOperationExceptions.method("readLine");
     }
 
     /**
@@ -222,7 +222,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
      */
     @Override
     public String readUTF() throws IOException, EOFException {
-        throw new UnsupportedOperationException("Operation not supported: readUTF()");
+        throw UnsupportedOperationExceptions.method("readUTF");
     }
 
     /**

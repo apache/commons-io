@@ -167,7 +167,7 @@ public class NullInputStream extends InputStream {
     @Override
     public synchronized void mark(final int readlimit) {
         if (!markSupported) {
-            throw new UnsupportedOperationException("Mark not supported");
+            throw UnsupportedOperationExceptions.mark();
         }
         mark = position;
         this.readlimit = readlimit;
@@ -263,7 +263,7 @@ public class NullInputStream extends InputStream {
     @Override
     public synchronized void reset() throws IOException {
         if (!markSupported) {
-            throw new UnsupportedOperationException("Mark not supported");
+            throw UnsupportedOperationExceptions.reset();
         }
         if (mark < 0) {
             throw new IOException("No position has been marked");

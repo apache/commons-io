@@ -33,6 +33,9 @@ import org.junit.jupiter.api.Test;
  */
 public class NullReaderTest {
 
+    // Use the same message as in java.io.InputStream.reset() in OpenJDK 8.0.275-1.
+    private static final String MARK_RESET_NOT_SUPPORTED = "mark/reset not supported";
+
     @Test
     public void testRead() throws Exception {
         final int size = 5;
@@ -175,14 +178,14 @@ public class NullReaderTest {
             reader.mark(5);
             fail("mark() should throw UnsupportedOperationException");
         } catch (final UnsupportedOperationException e) {
-            assertEquals("Mark not supported", e.getMessage(), "mark() error message");
+            assertEquals(MARK_RESET_NOT_SUPPORTED, e.getMessage(), "mark() error message");
         }
 
         try {
             reader.reset();
             fail("reset() should throw UnsupportedOperationException");
         } catch (final UnsupportedOperationException e) {
-            assertEquals("Mark not supported", e.getMessage(), "reset() error message");
+            assertEquals(MARK_RESET_NOT_SUPPORTED, e.getMessage(), "reset() error message");
         }
         reader.close();
     }
