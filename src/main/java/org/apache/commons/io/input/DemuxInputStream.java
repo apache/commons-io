@@ -27,7 +27,7 @@ import org.apache.commons.io.IOUtils;
  * Data written to this stream is forwarded to a stream that has been associated with this thread.
  */
 public class DemuxInputStream extends InputStream {
-    private final InheritableThreadLocal<InputStream> inputStream = new InheritableThreadLocal<>();
+    private final InheritableThreadLocal<InputStream> inputStreamLocal = new InheritableThreadLocal<>();
 
     /**
      * Binds the specified stream to the current thread.
@@ -36,8 +36,8 @@ public class DemuxInputStream extends InputStream {
      * @return the InputStream that was previously active
      */
     public InputStream bindStream(final InputStream input) {
-        final InputStream oldValue = inputStream.get();
-        inputStream.set(input);
+        final InputStream oldValue = inputStreamLocal.get();
+        inputStreamLocal.set(input);
         return oldValue;
     }
 
@@ -46,9 +46,10 @@ public class DemuxInputStream extends InputStream {
      *
      * @throws IOException if an error occurs
      */
+    @SuppressWarnings("resource") // we actually close the stream here
     @Override
     public void close() throws IOException {
-        IOUtils.close(inputStream.get());
+        IOUtils.close(inputStreamLocal.get());
     }
 
     /**
@@ -57,11 +58,12 @@ public class DemuxInputStream extends InputStream {
      * @return the byte read from stream
      * @throws IOException if an error occurs
      */
+    @SuppressWarnings("resource")
     @Override
     public int read() throws IOException {
-        final InputStream input = inputStream.get();
-        if (null != input) {
-            return input.read();
+        final InputStream inputStream = inputStreamLocal.get();
+        if (null != inputStream) {
+            return inputStream.read();
         }
         return EOF;
     }
