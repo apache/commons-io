@@ -277,6 +277,7 @@ public class XmlStreamReader extends Reader {
      * @param file File to create a Reader from.
      * @throws IOException thrown if there is a problem reading the file.
      */
+    @SuppressWarnings("resource") // FileInputStream is managed through another reader in this instance.
     public XmlStreamReader(final File file) throws IOException {
         this(new FileInputStream(Objects.requireNonNull(file, "file")));
     }
@@ -355,6 +356,7 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
+    @SuppressWarnings("resource") // InputStream is managed through a InputStreamReader in this instance.
     public XmlStreamReader(final InputStream inputStream, final boolean lenient, final String defaultEncoding)
             throws IOException {
         Objects.requireNonNull(inputStream, "inputStream");
@@ -460,6 +462,7 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
+    @SuppressWarnings("resource") // InputStream is managed through a InputStreamReader in this instance.
     public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient, final String defaultEncoding) throws IOException {
         Objects.requireNonNull(inputStream, "inputStream");
@@ -516,6 +519,7 @@ public class XmlStreamReader extends Reader {
         final boolean lenient = true;
         final String contentType = conn.getContentType();
         final InputStream inputStream = conn.getInputStream();
+        @SuppressWarnings("resource") // managed by the InputStreamReader tracked by this instance
         final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
