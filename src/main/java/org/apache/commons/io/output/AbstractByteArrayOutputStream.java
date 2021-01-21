@@ -303,6 +303,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @see #reset()
      * @since 2.7
      */
+    @SuppressWarnings("resource") // The result InputStream MUIST be managed by the call site.
     protected <T extends InputStream> InputStream toInputStream(
             final InputStreamConstructor<T> isConstructor) {
         int remaining = count;

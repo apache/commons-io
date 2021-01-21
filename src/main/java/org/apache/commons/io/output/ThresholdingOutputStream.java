@@ -69,6 +69,7 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
+    @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final int b) throws IOException {
         checkThreshold(1);
@@ -83,6 +84,7 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
+    @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final byte[] b) throws IOException {
         checkThreshold(b.length);
@@ -99,6 +101,7 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
+    @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
         checkThreshold(len);
@@ -111,6 +114,7 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
+    @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
     public void flush() throws IOException {
         getStream().flush();

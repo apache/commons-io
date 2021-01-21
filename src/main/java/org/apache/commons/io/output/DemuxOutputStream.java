@@ -47,6 +47,7 @@ public class DemuxOutputStream extends OutputStream {
      * @throws IOException
      *             if an error occurs
      */
+    @SuppressWarnings("resource") // we actually close the stream here
     @Override
     public void close() throws IOException {
         IOUtils.close(outputStreamThreadLocal.get());
