@@ -40,7 +40,7 @@ public class AutoCloseInputStreamTest {
 
     @BeforeEach
     public void setUp() {
-        data = new byte[] { 'x', 'y', 'z' };
+        data = new byte[] {'x', 'y', 'z'};
         stream = new AutoCloseInputStream(new ByteArrayInputStream(data) {
             @Override
             public void close() {
@@ -56,7 +56,6 @@ public class AutoCloseInputStreamTest {
         assertTrue(closed, "closed");
         assertEquals(-1, stream.read(), "read()");
     }
-
 
     @Test
     public void testRead() throws IOException {
@@ -98,6 +97,28 @@ public class AutoCloseInputStreamTest {
         }
         assertTrue(closed, "closed");
         assertEquals(-1, stream.read(b, 0, b.length), "read(b, off, len)");
+    }
+
+    @Test
+    public void testResetBeforeEnd() throws IOException {
+        final String inputStr = "1234";
+        AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(inputStr.getBytes()));
+        inputStream.mark(1);
+        assertEquals('1', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
+        assertEquals('2', inputStream.read());
+        assertEquals('3', inputStream.read());
+        assertEquals('4', inputStream.read());
+        inputStream.reset();
+        assertEquals('1', inputStream.read());
     }
 
 }
