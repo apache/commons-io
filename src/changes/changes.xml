@@ -55,7 +55,7 @@ The <action> type attribute can be add,update,fix,remove.
         FileUtils: Remove Instant->ZonedDateTime->Instant round-trip.
       </action>
       <action dev="ggregory" type="fix" due-to="Michael Ernst, Gary Gregory">
-        Make `FilenameUtils.equals()` not throw an exception #154.
+        Make FilenameUtils.equals() not throw an exception #154.
       </action>
       <action dev="ggregory" type="fix" due-to="Jan Peter Stotz, Bernd Eckenfels, Gary Gregory">
         Un-deprecate IOUtils.closeQuietly() methods.
