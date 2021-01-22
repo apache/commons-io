@@ -42,27 +42,27 @@ public class FileUtilsFileNewerTestCase {
     private static final int FILE1_SIZE = 1;
     private static final int FILE2_SIZE = 1024 * 4 + 1;
 
-    private File m_testFile1;
-    private File m_testFile2;
+    private File testFile1;
+    private File testFile2;
 
     @BeforeEach
     public void setUp() throws Exception {
-        m_testFile1 = new File(temporaryFolder, "file1-test.txt");
-        m_testFile2 = new File(temporaryFolder, "file2-test.txt");
-        if (!m_testFile1.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + m_testFile1
+        testFile1 = new File(temporaryFolder, "file1-test.txt");
+        testFile2 = new File(temporaryFolder, "file2-test.txt");
+        if (!testFile1.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(m_testFile1))) {
+                new BufferedOutputStream(new FileOutputStream(testFile1))) {
             TestUtils.generateTestData(output1, FILE1_SIZE);
         }
-        if (!m_testFile2.getParentFile().exists()) {
-            throw new IOException("Cannot create file " + m_testFile2
+        if (!testFile2.getParentFile().exists()) {
+            throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(m_testFile2))) {
+                new BufferedOutputStream(new FileOutputStream(testFile2))) {
             TestUtils.generateTestData(output, FILE2_SIZE);
         }
     }
@@ -76,16 +76,16 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewer() {
-        if (!m_testFile1.exists()) {
-            throw new IllegalStateException("The m_testFile1 should exist");
+        if (!testFile1.exists()) {
+            throw new IllegalStateException("The testFile1 should exist");
         }
 
-        final long fileLastModified = m_testFile1.lastModified();
+        final long fileLastModified = testFile1.lastModified();
         final long TWO_SECOND = 2000;
 
-        testIsFileNewer("two second earlier is not newer" , m_testFile1, fileLastModified + TWO_SECOND, false);
-        testIsFileNewer("same time is not newer" , m_testFile1, fileLastModified, false);
-        testIsFileNewer("two second later is newer" , m_testFile1, fileLastModified - TWO_SECOND, true);
+        testIsFileNewer("two second earlier is not newer" , testFile1, fileLastModified + TWO_SECOND, false);
+        testIsFileNewer("same time is not newer" , testFile1, fileLastModified, false);
+        testIsFileNewer("two second later is newer" , testFile1, fileLastModified - TWO_SECOND, true);
     }
 
     /**
@@ -102,7 +102,7 @@ public class FileUtilsFileNewerTestCase {
             throw new IllegalStateException("The imaginary File exists");
         }
 
-        testIsFileNewer("imaginary file can be newer" , imaginaryFile, m_testFile2.lastModified(), false);
+        testIsFileNewer("imaginary file can be newer" , imaginaryFile, testFile2.lastModified(), false);
     }
 
     /**
@@ -132,7 +132,7 @@ public class FileUtilsFileNewerTestCase {
         assertEquals(wantedResult, FileUtils.isFileNewer(file, time), description + " - time");
         assertEquals(wantedResult, FileUtils.isFileNewer(file, new Date(time)), description + " - date");
 
-        final File temporaryFile = m_testFile2;
+        final File temporaryFile = testFile2;
 
         temporaryFile.setLastModified(time);
         assertEquals(time, temporaryFile.lastModified(), "The temporary file hasn't the right last modification date");
@@ -157,7 +157,7 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerNoDate() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(m_testFile1, (Date) null),
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (Date) null),
                 "date");
     }
 
@@ -168,7 +168,7 @@ public class FileUtilsFileNewerTestCase {
      */
     @Test
     public void testIsFileNewerNoFileReference() {
-        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(m_testFile1, (File) null),
+        assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(testFile1, (File) null),
                 "reference");
     }
 }

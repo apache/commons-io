@@ -47,35 +47,35 @@ public class DemuxTestCase {
     private static final String DATA4 = "Data for thread4";
 
     private static final Random c_random = new Random();
-    private final HashMap<String, ByteArrayOutputStream> m_outputMap = new HashMap<>();
-    private final HashMap<String, Thread> m_threadMap = new HashMap<>();
+    private final HashMap<String, ByteArrayOutputStream> outputMap = new HashMap<>();
+    private final HashMap<String, Thread> threadMap = new HashMap<>();
 
     private String getOutput(final String threadName) {
         final ByteArrayOutputStream output =
-                m_outputMap.get(threadName);
+                outputMap.get(threadName);
         assertNotNull(output, "getOutput()");
 
         return output.toString(StandardCharsets.UTF_8);
     }
 
     private String getInput(final String threadName) {
-        final ReaderThread thread = (ReaderThread) m_threadMap.get(threadName);
+        final ReaderThread thread = (ReaderThread) threadMap.get(threadName);
         assertNotNull(thread, "getInput()");
 
         return thread.getData();
     }
 
     private void doStart() {
-        for (final String name : m_threadMap.keySet()) {
-            final Thread thread = m_threadMap.get(name);
+        for (final String name : threadMap.keySet()) {
+            final Thread thread = threadMap.get(name);
             thread.start();
         }
     }
 
     private void doJoin()
             throws Exception {
-        for (final String name : m_threadMap.keySet()) {
-            final Thread thread = m_threadMap.get(name);
+        for (final String name : threadMap.keySet()) {
+            final Thread thread = threadMap.get(name);
             thread.join();
         }
     }
@@ -84,10 +84,10 @@ public class DemuxTestCase {
                              final String data,
                              final DemuxOutputStream demux) {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        m_outputMap.put(name, output);
+        outputMap.put(name, output);
         final WriterThread thread =
                 new WriterThread(name, data, output, demux);
-        m_threadMap.put(name, thread);
+        threadMap.put(name, thread);
     }
 
     private void startReader(final String name,
@@ -95,7 +95,7 @@ public class DemuxTestCase {
                              final DemuxInputStream demux) {
         final ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
         final ReaderThread thread = new ReaderThread(name, input, demux);
-        m_threadMap.put(name, thread);
+        threadMap.put(name, thread);
     }
 
     @Test
@@ -136,35 +136,35 @@ public class DemuxTestCase {
 
     private static class ReaderThread
             extends Thread {
-        private final StringBuffer m_buffer = new StringBuffer();
-        private final InputStream m_input;
-        private final DemuxInputStream m_demux;
+        private final StringBuffer stringBuffer = new StringBuffer();
+        private final InputStream inputStream;
+        private final DemuxInputStream demuxInputStream;
 
         ReaderThread(final String name,
                      final InputStream input,
                      final DemuxInputStream demux) {
             super(name);
-            m_input = input;
-            m_demux = demux;
+            inputStream = input;
+            demuxInputStream = demux;
         }
 
         public String getData() {
-            return m_buffer.toString();
+            return stringBuffer.toString();
         }
 
         @Override
         public void run() {
-            m_demux.bindStream(m_input);
+            demuxInputStream.bindStream(inputStream);
 
             try {
-                int ch = m_demux.read();
+                int ch = demuxInputStream.read();
                 while (-1 != ch) {
                     //System.out.println( "Reading: " + (char)ch );
-                    m_buffer.append((char) ch);
+                    stringBuffer.append((char) ch);
 
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
                     TestUtils.sleep(sleepTime);
-                    ch = m_demux.read();
+                    ch = demuxInputStream.read();
                 }
             } catch (final Exception e) {
                 e.printStackTrace();
@@ -174,27 +174,27 @@ public class DemuxTestCase {
 
     private static class WriterThread
             extends Thread {
-        private final byte[] m_data;
-        private final OutputStream m_output;
-        private final DemuxOutputStream m_demux;
+        private final byte[] byteArray;
+        private final OutputStream outputStream;
+        private final DemuxOutputStream demuxOutputStream;
 
         WriterThread(final String name,
                      final String data,
                      final OutputStream output,
                      final DemuxOutputStream demux) {
             super(name);
-            m_output = output;
-            m_demux = demux;
-            m_data = data.getBytes();
+            outputStream = output;
+            demuxOutputStream = demux;
+            byteArray = data.getBytes();
         }
 
         @Override
         public void run() {
-            m_demux.bindStream(m_output);
-            for (final byte element : m_data) {
+            demuxOutputStream.bindStream(outputStream);
+            for (final byte element : byteArray) {
                 try {
-                    //System.out.println( "Writing: " + (char)m_data[ i ] );
-                    m_demux.write(element);
+                    //System.out.println( "Writing: " + (char)byteArray[ i ] );
+                    demuxOutputStream.write(element);
                     final int sleepTime = Math.abs(c_random.nextInt() % 10);
                     TestUtils.sleep(sleepTime);
                 } catch (final Exception e) {
