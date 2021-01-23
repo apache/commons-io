@@ -797,7 +797,7 @@ public class XmlStreamReader extends Reader {
      * @param offset The start offset
      * @param len The number of bytes to read
      * @return the number of characters read or -1 if the end of stream
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final char[] buf, final int offset, final int len) throws IOException {

@@ -80,7 +80,7 @@ public class BoundedInputStream extends InputStream {
      * the current position is less than the limit.
      * @return the byte read or -1 if the end of stream or
      * the limit has been reached.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -97,7 +97,7 @@ public class BoundedInputStream extends InputStream {
      * @param b the buffer to read the bytes into
      * @return the number of bytes read or -1 if the end of stream or
      * the limit has been reached.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b) throws IOException {
@@ -111,7 +111,7 @@ public class BoundedInputStream extends InputStream {
      * @param len The number of bytes to read
      * @return the number of bytes read or -1 if the end of stream or
      * the limit has been reached.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
@@ -133,7 +133,7 @@ public class BoundedInputStream extends InputStream {
      * Invokes the delegate's {@code skip(long)} method.
      * @param n the number of bytes to skip
      * @return the actual number of bytes skipped
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public long skip(final long n) throws IOException {
@@ -166,7 +166,7 @@ public class BoundedInputStream extends InputStream {
     /**
      * Invokes the delegate's {@code close()} method
      * if {@link #isPropagateClose()} is {@code true}.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -177,7 +177,7 @@ public class BoundedInputStream extends InputStream {
 
     /**
      * Invokes the delegate's {@code reset()} method.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public synchronized void reset() throws IOException {

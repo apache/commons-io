@@ -47,7 +47,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      * Writes the bytes to both streams.
      *
      * @param b the bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public synchronized void write(final byte[] b) throws IOException {
@@ -61,7 +61,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      * @param b   the bytes to write
      * @param off The start offset
      * @param len The number of bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public synchronized void write(final byte[] b, final int off, final int len) throws IOException {
@@ -73,7 +73,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      * Writes a byte to both streams.
      *
      * @param b the byte to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public synchronized void write(final int b) throws IOException {
@@ -84,7 +84,7 @@ public class TeeOutputStream extends ProxyOutputStream {
     /**
      * Flushes both streams.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -103,7 +103,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      * currently unspecified and subject to change.
      * </p>
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {

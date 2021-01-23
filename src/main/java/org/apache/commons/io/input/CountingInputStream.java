@@ -51,7 +51,7 @@ public class CountingInputStream extends ProxyInputStream {
      *
      * @param length  the number of bytes to skip
      * @return the actual number of bytes skipped
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @see java.io.InputStream#skip(long)
      */
     @Override

@@ -1852,7 +1852,7 @@ public class IOUtils {
      *
      * @param name name of the desired resource
      * @return the requested byte array
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -1871,7 +1871,7 @@ public class IOUtils {
      * @param name name of the desired resource
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested byte array
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -1891,7 +1891,7 @@ public class IOUtils {
      * @param name     name of the desired resource
      * @param charset the charset to use, null means platform default
      * @return the requested String
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -1912,7 +1912,7 @@ public class IOUtils {
      * @param charset the charset to use, null means platform default
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested String
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -1930,7 +1930,7 @@ public class IOUtils {
      *
      * @param name name of the desired resource
      * @return the requested URL
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -1949,7 +1949,7 @@ public class IOUtils {
      * @param name        name of the desired resource
      * @param classLoader the class loader that the resolution of the resource is delegated to
      * @return the requested URL
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      *
      * @since 2.6
      */
@@ -2176,7 +2176,7 @@ public class IOUtils {
      *
      * @param input Stream to be fully buffered.
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
     public static InputStream toBufferedInputStream(final InputStream input) throws IOException {
@@ -2202,7 +2202,7 @@ public class IOUtils {
      * @param input Stream to be fully buffered.
      * @param size the initial buffer size
      * @return A fully buffered stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {

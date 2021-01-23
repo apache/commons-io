@@ -209,7 +209,7 @@ public class WriterOutputStream extends OutputStream {
      * @param b the byte array containing the bytes to write
      * @param off the start offset in the byte array
      * @param len the number of bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b, int off, int len) throws IOException {
@@ -229,7 +229,7 @@ public class WriterOutputStream extends OutputStream {
      * Write bytes from the specified byte array to the stream.
      *
      * @param b the byte array containing the bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] b) throws IOException {
@@ -240,7 +240,7 @@ public class WriterOutputStream extends OutputStream {
      * Write a single byte to the stream.
      *
      * @param b the byte to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final int b) throws IOException {
@@ -251,7 +251,7 @@ public class WriterOutputStream extends OutputStream {
      * Flush the stream. Any remaining content accumulated in the output buffer
      * will be written to the underlying {@link Writer}. After that
      * {@link Writer#flush()} will be called.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -263,7 +263,7 @@ public class WriterOutputStream extends OutputStream {
      * Close the stream. Any remaining content accumulated in the output buffer
      * will be written to the underlying {@link Writer}. After that
      * {@link Writer#close()} will be called.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -276,7 +276,7 @@ public class WriterOutputStream extends OutputStream {
      * Decode the contents of the input ByteBuffer into a CharBuffer.
      *
      * @param endOfInput indicates end of input
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     private void processInput(final boolean endOfInput) throws IOException {
         // Prepare decoderIn for reading
@@ -301,7 +301,7 @@ public class WriterOutputStream extends OutputStream {
     /**
      * Flush the output.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     private void flushOutput() throws IOException {
         if (decoderOut.position() > 0) {

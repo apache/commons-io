@@ -53,7 +53,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@code read()} method.
      * @return the byte read or -1 if the end of stream
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -72,7 +72,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Invokes the delegate's {@code read(byte[])} method.
      * @param bts the buffer to read the bytes into
      * @return the number of bytes read or EOF if the end of stream
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] bts) throws IOException {
@@ -93,7 +93,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param off The start offset
      * @param len The number of bytes to read
      * @return the number of bytes read or -1 if the end of stream
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] bts, final int off, final int len) throws IOException {
@@ -112,7 +112,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * Invokes the delegate's {@code skip(long)} method.
      * @param ln the number of bytes to skip
      * @return the actual number of bytes skipped
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public long skip(final long ln) throws IOException {
@@ -127,7 +127,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
     /**
      * Invokes the delegate's {@code available()} method.
      * @return the number of available bytes
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int available() throws IOException {
@@ -141,7 +141,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Invokes the delegate's {@code close()} method.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -159,7 +159,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
 
     /**
      * Invokes the delegate's {@code reset()} method.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -228,7 +228,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * This method provides a point to implement custom exception
      * handling. The default behavior is to re-throw the exception.
      * @param e The IOException thrown
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {

@@ -224,7 +224,7 @@ public class ReaderInputStream extends InputStream {
      * @param len the number of bytes to read
      * @return the number of bytes read or {@code -1}
      *         if the end of the stream has been reached
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] array, int off, int len) throws IOException {
@@ -260,7 +260,7 @@ public class ReaderInputStream extends InputStream {
      * @param b the byte array to read into
      * @return the number of bytes read or {@code -1}
      *         if the end of the stream has been reached
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read(final byte[] b) throws IOException {
@@ -272,7 +272,7 @@ public class ReaderInputStream extends InputStream {
      *
      * @return either the byte read or {@code -1} if the end of the stream
      *         has been reached
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int read() throws IOException {
@@ -290,7 +290,7 @@ public class ReaderInputStream extends InputStream {
     /**
      * Close the stream. This method will cause the underlying {@link Reader}
      * to be closed.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {

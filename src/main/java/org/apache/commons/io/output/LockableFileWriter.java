@@ -280,7 +280,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Closes the file writer and deletes the lock file.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -294,7 +294,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes a character.
      * @param c the character to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final int c) throws IOException {
@@ -304,7 +304,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the characters from an array.
      * @param cbuf the characters to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final char[] cbuf) throws IOException {
@@ -316,7 +316,7 @@ public class LockableFileWriter extends Writer {
      * @param cbuf the characters to write
      * @param off The start offset
      * @param len The number of characters to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
@@ -326,7 +326,7 @@ public class LockableFileWriter extends Writer {
     /**
      * Writes the characters from a string.
      * @param str the string to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final String str) throws IOException {
@@ -338,7 +338,7 @@ public class LockableFileWriter extends Writer {
      * @param str the string to write
      * @param off The start offset
      * @param len The number of characters to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final String str, final int off, final int len) throws IOException {
@@ -347,7 +347,7 @@ public class LockableFileWriter extends Writer {
 
     /**
      * Flushes the stream.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {

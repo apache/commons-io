@@ -236,7 +236,7 @@ public final class PathUtils {
      * @param targetFile The target file.
      * @param copyOptions Specifies how the copying should be done.
      * @return The target file
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFile(final URL sourceFile, final Path targetFile, final CopyOption... copyOptions)
@@ -254,7 +254,7 @@ public final class PathUtils {
      * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.
      * @return The target file
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @see Files#copy(Path, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final Path sourceFile, final Path targetDirectory,
@@ -269,7 +269,7 @@ public final class PathUtils {
      * @param targetDirectory The target directory.
      * @param copyOptions Specifies how the copying should be done.
      * @return The target file
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @see Files#copy(InputStream, Path, CopyOption...)
      */
     public static Path copyFileToDirectory(final URL sourceFile, final Path targetDirectory,
@@ -300,7 +300,7 @@ public final class PathUtils {
      * @param path The path to a file (or directory).
      * @param attrs An optional list of file attributes to set atomically when creating the directories.
      * @return The Path for the {@code path}'s parent directory or null if the given path has no parent.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static Path createParentDirectories(final Path path, final FileAttribute<?>... attrs) throws IOException {
@@ -727,7 +727,7 @@ public final class PathUtils {
      *
      * @param path the file or directory to query.
      * @return whether the file or directory is empty.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static boolean isEmpty(final Path path) throws IOException {
         return Files.isDirectory(path) ? isEmptyDirectory(path) : isEmptyFile(path);
@@ -738,7 +738,7 @@ public final class PathUtils {
      *
      * @param directory the directory to query.
      * @return whether the directory is empty.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static boolean isEmptyDirectory(final Path directory) throws IOException {
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
@@ -751,7 +751,7 @@ public final class PathUtils {
      *
      * @param file the file to query.
      * @return whether the file is empty.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public static boolean isEmptyFile(final Path file) throws IOException {
         return Files.size(file) <= 0;
@@ -765,7 +765,7 @@ public final class PathUtils {
      * @param options options indicating how symbolic links are handled * @return true if the {@code Path} exists and
      *        has been modified after the given time reference.
      * @return true if the {@code Path} exists and has been modified after the given time reference.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @throws NullPointerException if the file is {@code null}
      * @since 2.9.0
      */
@@ -814,7 +814,7 @@ public final class PathUtils {
      *
      * @param path the path to read.
      * @return the path attributes.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static BasicFileAttributes readBasicFileAttributes(final Path path) throws IOException {

@@ -222,7 +222,7 @@ public class ReversedLinesFileReader implements Closeable {
      * platform's default encoding.
      *
      * @param file the file to be read
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @deprecated 2.5 use {@link #ReversedLinesFileReader(File, Charset)} instead
      */
     @Deprecated
@@ -236,7 +236,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file    the file to be read
      * @param charset the charset to use, null uses the default Charset.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.5
      */
     public ReversedLinesFileReader(final File file, final Charset charset) throws IOException {
@@ -251,7 +251,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                  should match with the block size of the underlying file
      *                  system).
      * @param charset  the encoding of the file, null uses the default Charset.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.3
      */
     public ReversedLinesFileReader(final File file, final int blockSize, final Charset charset) throws IOException {
@@ -283,7 +283,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param file    the file to be read
      * @param charset the charset to use, null uses the default Charset.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.7
      */
     public ReversedLinesFileReader(final Path file, final Charset charset) throws IOException {
@@ -298,7 +298,7 @@ public class ReversedLinesFileReader implements Closeable {
      *                  should match with the block size of the underlying file
      *                  system).
      * @param charset  the encoding of the file, null uses the default Charset.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.7
      */
     public ReversedLinesFileReader(final Path file, final int blockSize, final Charset charset) throws IOException {
@@ -385,7 +385,7 @@ public class ReversedLinesFileReader implements Closeable {
     /**
      * Closes underlying resources.
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -396,7 +396,7 @@ public class ReversedLinesFileReader implements Closeable {
      * Returns the lines of the file from bottom to top.
      *
      * @return the next line or null if the start of the file is reached
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public String readLine() throws IOException {
 
@@ -432,7 +432,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param lineCount How many lines to read.
      * @return A new list
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
     public List<String> readLines(final int lineCount) throws IOException {
@@ -459,7 +459,7 @@ public class ReversedLinesFileReader implements Closeable {
      *
      * @param lineCount How many lines to read.
      * @return A String.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.8.0
      */
     public String toString(final int lineCount) throws IOException {

@@ -47,7 +47,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Invokes the delegate's {@code write(int)} method.
      * @param idx the byte to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final int idx) throws IOException {
@@ -63,7 +63,7 @@ public class ProxyOutputStream extends FilterOutputStream {
     /**
      * Invokes the delegate's {@code write(byte[])} method.
      * @param bts the bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] bts) throws IOException {
@@ -82,7 +82,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param bts the bytes to write
      * @param st The start offset
      * @param end The number of bytes to write
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void write(final byte[] bts, final int st, final int end) throws IOException {
@@ -97,7 +97,7 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code flush()} method.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void flush() throws IOException {
@@ -110,7 +110,7 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Invokes the delegate's {@code close()} method.
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void close() throws IOException {
@@ -158,7 +158,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * This method provides a point to implement custom exception
      * handling. The default behavior is to re-throw the exception.
      * @param e The IOException thrown
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      * @since 2.0
      */
     protected void handleIOException(final IOException e) throws IOException {
