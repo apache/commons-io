@@ -37,8 +37,7 @@ import org.apache.commons.io.FileUtils;
  * <b>Note:</b> The lock file is deleted when {@link #close()} is called
  * - or if the main file cannot be opened initially.
  * In the (unlikely) event that the lock file cannot be deleted,
- * this is not reported, and subsequent requests using
- * the same lock file will fail.
+ * an exception is thrown.
  * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
