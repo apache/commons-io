@@ -279,7 +279,7 @@ public class LockableFileWriter extends Writer {
     }
 
     /**
-     * Closes the file writer and deletes the lock file (if possible).
+     * Closes the file writer and deletes the lock file.
      *
      * @throws IOException if an I/O error occurs
      */
@@ -288,7 +288,7 @@ public class LockableFileWriter extends Writer {
         try {
             out.close();
         } finally {
-            lockFile.delete();
+            FileUtils.delete(lockFile);
         }
     }
 
