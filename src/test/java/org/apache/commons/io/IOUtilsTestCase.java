@@ -536,6 +536,20 @@ public class IOUtilsTestCase {
             new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
         assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
             new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8))));
+        // Tests with larger inputs that DEFAULT_BUFFER_SIZE in case internal buffers are used.
+        final byte[] bytes2XDefaultA = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
+        final byte[] bytes2XDefaultB = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
+        final byte[] bytes2XDefaultA2 = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
+        Arrays.fill(bytes2XDefaultA, (byte) 'a');
+        Arrays.fill(bytes2XDefaultB, (byte) 'b');
+        Arrays.fill(bytes2XDefaultA2, (byte) 'a');
+        bytes2XDefaultA2[bytes2XDefaultA2.length - 1] = 'd';
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(bytes2XDefaultA),
+            new ByteArrayInputStream(bytes2XDefaultB)));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(bytes2XDefaultA),
+            new ByteArrayInputStream(bytes2XDefaultA2)));
+        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream(bytes2XDefaultA),
+            new ByteArrayInputStream(bytes2XDefaultA)));
     }
 
     @Test
