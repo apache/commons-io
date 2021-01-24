@@ -509,33 +509,31 @@ public class IOUtilsTestCase {
         {
             assertTrue(IOUtils.contentEquals((InputStream) null, null));
         }
+        final byte[] dataEmpty = "".getBytes(StandardCharsets.UTF_8);
+        final byte[] dataAbc = "ABC".getBytes(StandardCharsets.UTF_8);
+        final byte[] dataAbcd = "ABCD".getBytes(StandardCharsets.UTF_8);
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream(dataEmpty);
             assertFalse(IOUtils.contentEquals(input1, null));
         }
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream(dataEmpty);
             assertFalse(IOUtils.contentEquals(null, input1));
         }
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream(dataEmpty);
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
         {
-            final ByteArrayInputStream input1 = new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8));
+            final ByteArrayInputStream input1 = new ByteArrayInputStream(dataAbc);
             assertTrue(IOUtils.contentEquals(input1, input1));
         }
-        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)),
-            new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8))));
-        assertTrue(IOUtils.contentEquals(
-            new BufferedInputStream(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8))),
-            new BufferedInputStream(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)))));
-        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
-            new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
-        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8)),
-            new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8))));
-        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream("ABC".getBytes(StandardCharsets.UTF_8)),
-            new ByteArrayInputStream("ABCD".getBytes(StandardCharsets.UTF_8))));
+        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream(dataEmpty), new ByteArrayInputStream(dataEmpty)));
+        assertTrue(IOUtils.contentEquals(new BufferedInputStream(new ByteArrayInputStream(dataEmpty)),
+            new BufferedInputStream(new ByteArrayInputStream(dataEmpty))));
+        assertTrue(IOUtils.contentEquals(new ByteArrayInputStream(dataAbc), new ByteArrayInputStream(dataAbc)));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(dataAbcd), new ByteArrayInputStream(dataAbc)));
+        assertFalse(IOUtils.contentEquals(new ByteArrayInputStream(dataAbc), new ByteArrayInputStream(dataAbcd)));
         // Tests with larger inputs that DEFAULT_BUFFER_SIZE in case internal buffers are used.
         final byte[] bytes2XDefaultA = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
         final byte[] bytes2XDefaultB = new byte[IOUtils.DEFAULT_BUFFER_SIZE * 2];
