@@ -548,6 +548,14 @@ public class IOUtilsTestCase {
             new ByteArrayInputStream(bytes2XDefaultA2)));
         assertTrue(IOUtils.contentEquals(new ByteArrayInputStream(bytes2XDefaultA),
             new ByteArrayInputStream(bytes2XDefaultA)));
+        // FileInputStream a bit more than 16 k.
+        try (
+            final FileInputStream input1 = new FileInputStream(
+                "src/test/resources/org/apache/commons/io/abitmorethan16k.txt");
+            final FileInputStream input2 = new FileInputStream(
+                "src/test/resources/org/apache/commons/io/abitmorethan16kcopy.txt")) {
+            assertTrue(IOUtils.contentEquals(input1, input1));
+        }
     }
 
     @Test

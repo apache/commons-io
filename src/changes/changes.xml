@@ -194,6 +194,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jimfs from 1.1 to 1.2 #183.
       </action>
+      <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
+        Improved performance of IOUtils.contentEquals(InputStream, InputStream).
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
