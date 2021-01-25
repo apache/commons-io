@@ -2936,7 +2936,7 @@ public class FileUtils {
      * @since 1.1
      */
     public static File[] toFiles(final URL... urls) {
-        if (urls == null || urls.length == 0) {
+        if (IOUtils.length(urls) == 0) {
             return EMPTY_FILE_ARRAY;
         }
         final File[] files = new File[urls.length];
