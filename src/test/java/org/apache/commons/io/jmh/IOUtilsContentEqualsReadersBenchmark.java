@@ -22,7 +22,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
@@ -43,15 +42,15 @@ import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 /**
- * Test different implementations of {@link IOUtils#contentEquals(InputStream, InputStream)}.
+ * Test different implementations of {@link IOUtils#contentEquals(Reader, Reader)}.
  *
  * <pre>
- * IOUtilsContentEqualsReadersBenchmark.testFileCurrent               avgt    5      1788514.748 ▒     725103.413  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFilePr118                 avgt    5      1786345.992 ▒     636923.719  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFileRelease_2_8_0         avgt    5      2113268.805 ▒     670263.275  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringCurrent             avgt    5   4773229733.333 ▒  198489493.236  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringPr118               avgt    5   1158805764.444 ▒   49390259.195  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringRelease_2_8_0       avgt    5   4692235120.000 ▒  315543521.826  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFileCurrent               avgt    5      1984542.440 ▒     741983.929  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFilePr118                 avgt    5      1903047.996 ▒    1126067.279  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFileRelease_2_8_0         avgt    5      2000614.270 ▒     577200.820  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringCurrent             avgt    5   4833065053.333 ▒  313253734.966  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringPr118               avgt    5   1032292548.000 ▒   32968762.278  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringRelease_2_8_0       avgt    5   4810962660.000 ▒  221405909.807  ns/op
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -149,16 +148,17 @@ public class IOUtilsContentEqualsReadersBenchmark {
     @Benchmark
     public boolean[] testFileCurrent() throws IOException {
         final boolean[] res = new boolean[3];
-        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_A);
-            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_B)) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
             res[0] = IOUtils.contentEquals(input1, input1);
         }
-        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_A);
-            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_A)) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
             res[1] = IOUtils.contentEquals(input1, input2);
         }
-        try (InputStream input1 = getClass().getResourceAsStream(TEST_PATH_16K_A);
-            InputStream input2 = getClass().getResourceAsStream(TEST_PATH_16K_A_COPY)) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY),
+                DEFAULT_CHARSET)) {
             res[2] = IOUtils.contentEquals(input1, input2);
         }
         return res;
@@ -167,12 +167,12 @@ public class IOUtilsContentEqualsReadersBenchmark {
     @Benchmark
     public boolean[] testFilePr118() throws IOException {
         final boolean[] res = new boolean[3];
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B))) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
             res[0] = contentEqualsPr118(input1, input1);
         }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A))) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
             res[1] = contentEqualsPr118(input1, input2);
         }
         try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A));
@@ -185,16 +185,17 @@ public class IOUtilsContentEqualsReadersBenchmark {
     @Benchmark
     public boolean[] testFileRelease_2_8_0() throws IOException {
         final boolean[] res = new boolean[3];
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B))) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_B), DEFAULT_CHARSET)) {
             res[0] = contentEquals_release_2_8_0(input1, input1);
         }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A))) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_A), DEFAULT_CHARSET)) {
             res[1] = contentEquals_release_2_8_0(input1, input2);
         }
-        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A));
-            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY))) {
+        try (Reader input1 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A), DEFAULT_CHARSET);
+            Reader input2 = new InputStreamReader(getClass().getResourceAsStream(TEST_PATH_16K_A_COPY),
+                DEFAULT_CHARSET)) {
             res[2] = contentEquals_release_2_8_0(input1, input2);
         }
         return res;
