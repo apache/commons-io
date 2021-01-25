@@ -215,9 +215,9 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     public void testStringPr118(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                try (InputStream inputReader1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
-                    InputStream inputReader2 = IOUtils.toInputStream(STRINGS[j], DEFAULT_CHARSET)) {
-                    blackhole.consume(contentEqualsPr118(inputReader1, inputReader2));
+                try (InputStream inputStream1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
+                    InputStream inputStream2 = IOUtils.toInputStream(STRINGS[j], DEFAULT_CHARSET)) {
+                    blackhole.consume(contentEqualsPr118(inputStream1, inputStream2));
                 }
             }
         }
@@ -227,9 +227,9 @@ public class IOUtilsContentEqualsInputStreamsBenchmark {
     public void testStringRelease_2_8_0(final Blackhole blackhole) throws IOException {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                try (InputStream inputReader1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
-                    InputStream inputReader2 = IOUtils.toInputStream(STRINGS[j], DEFAULT_CHARSET)) {
-                    blackhole.consume(contentEquals_release_2_8_0(inputReader1, inputReader2));
+                try (InputStream inputStream1 = IOUtils.toInputStream(STRINGS[i], DEFAULT_CHARSET);
+                    InputStream inputStream2 = IOUtils.toInputStream(STRINGS[j], DEFAULT_CHARSET)) {
+                    blackhole.consume(contentEquals_release_2_8_0(inputStream1, inputStream2));
                 }
             }
         }
