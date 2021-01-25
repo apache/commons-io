@@ -16,6 +16,9 @@
  */
 package org.apache.commons.io;
 
+import static org.apache.commons.io.IOUtils.DEFAULT_BUFFER_SIZE;
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -790,43 +793,60 @@ public class IOUtils {
     }
 
     /**
-     * Compares the contents of two Readers to determine if they are equal or
-     * not.
+     * Compares the contents of two Readers to determine if they are equal or not.
      * <p>
-     * This method buffers the input internally using
-     * {@code BufferedReader} if they are not already buffered.
+     * This method buffers the input internally using {@code BufferedReader} if they are not already buffered.
      * </p>
      *
-     * @param reader1 the first reader
-     * @param reader2 the second reader
-     * @return true if the content of the readers are equal or they both don't
-     * exist, false otherwise
+     * @param input1 the first reader
+     * @param input2 the second reader
+     * @return true if the content of the readers are equal or they both don't exist, false otherwise
      * @throws NullPointerException if either input is null
-     * @throws IOException          if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      * @since 1.1
      */
     @SuppressWarnings("resource")
-    public static boolean contentEquals(final Reader reader1, final Reader reader2)
-            throws IOException {
-        if (reader1 == reader2) {
+    public static boolean contentEquals(final Reader input1, final Reader input2) throws IOException {
+        if (input1 == input2) {
             return true;
         }
-        if (reader1 == null ^ reader2 == null) {
+        if (input1 == null || input2 == null) {
             return false;
         }
-        final BufferedReader bufferedInput1 = toBufferedReader(reader1);
-        final BufferedReader bufferedInput2 = toBufferedReader(reader2);
 
-        int ch = bufferedInput1.read();
-        while (EOF != ch) {
-            final int ch2 = bufferedInput2.read();
-            if (ch != ch2) {
-                return false;
+        final char[] array1 = new char[DEFAULT_BUFFER_SIZE];
+        final char[] array2 = new char[DEFAULT_BUFFER_SIZE];
+        int pos1;
+        int pos2;
+        int count1;
+        int count2;
+        while (true) {
+            pos1 = 0;
+            pos2 = 0;
+            for (int index = 0; index < DEFAULT_BUFFER_SIZE; index++) {
+                if (pos1 == index) {
+                    do {
+                        count1 = input1.read(array1, pos1, DEFAULT_BUFFER_SIZE - pos1);
+                    } while (count1 == 0);
+                    if (count1 == EOF) {
+                        return pos2 == index && input2.read() == EOF;
+                    }
+                    pos1 += count1;
+                }
+                if (pos2 == index) {
+                    do {
+                        count2 = input2.read(array2, pos2, DEFAULT_BUFFER_SIZE - pos2);
+                    } while (count2 == 0);
+                    if (count2 == EOF) {
+                        return pos1 == index && input1.read() == EOF;
+                    }
+                    pos2 += count2;
+                }
+                if (array1[index] != array2[index]) {
+                    return false;
+                }
             }
-            ch = bufferedInput1.read();
         }
-
-        return bufferedInput2.read() == EOF;
     }
 
     /**

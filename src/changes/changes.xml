@@ -195,7 +195,10 @@ The <action> type attribute can be add,update,fix,remove.
         Bump jimfs from 1.1 to 1.2 #183.
       </action>
       <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
-        Improved performance of IOUtils.contentEquals(InputStream, InputStream).
+        Improve performance of IOUtils.contentEquals(InputStream, InputStream).
+      </action>
+      <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
+        Improve performance of IOUtils.contentEquals(Reader, Reader).
       </action>
     </release>
     <!-- The release date is the date RC is cut -->

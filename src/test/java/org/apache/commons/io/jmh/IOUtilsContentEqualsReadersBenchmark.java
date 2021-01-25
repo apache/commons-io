@@ -45,12 +45,12 @@ import org.openjdk.jmh.infra.Blackhole;
  * Test different implementations of {@link IOUtils#contentEquals(Reader, Reader)}.
  *
  * <pre>
- * IOUtilsContentEqualsReadersBenchmark.testFileCurrent               avgt    5      1984542.440 ▒     741983.929  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFilePr118                 avgt    5      1903047.996 ▒    1126067.279  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testFileRelease_2_8_0         avgt    5      2000614.270 ▒     577200.820  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringCurrent             avgt    5   4833065053.333 ▒  313253734.966  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringPr118               avgt    5   1032292548.000 ▒   32968762.278  ns/op
- * IOUtilsContentEqualsReadersBenchmark.testStringRelease_2_8_0       avgt    5   4810962660.000 ▒  221405909.807  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFileCurrent               avgt    5      1670968.050 ▒     67526.308  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFilePr118                 avgt    5      1660143.543 ▒    733178.893  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testFileRelease_2_8_0         avgt    5      1785283.975 ▒    214177.764  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringCurrent             avgt    5   1144495273.333 ▒  50706166.907  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringPr118               avgt    5   1075059231.455 ▒ 275364676.487  ns/op
+ * IOUtilsContentEqualsReadersBenchmark.testStringRelease_2_8_0       avgt    5   4767157193.333 ▒ 139567775.251  ns/op
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -61,6 +61,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @Fork(value = 1, jvmArgs = {"-server"})
 public class IOUtilsContentEqualsReadersBenchmark {
 
+    private static final int STRING_LEN = 1 << 24;
     private static final String TEST_PATH_A = "/org/apache/commons/io/testfileBOM.xml";
     private static final String TEST_PATH_16K_A = "/org/apache/commons/io/abitmorethan16k.txt";
     private static final String TEST_PATH_16K_A_COPY = "/org/apache/commons/io/abitmorethan16kcopy.txt";
@@ -69,15 +70,15 @@ public class IOUtilsContentEqualsReadersBenchmark {
     static String[] STRINGS = new String[5];
 
     static {
-        STRINGS[0] = StringUtils.repeat("ab", 1 << 24);
+        STRINGS[0] = StringUtils.repeat("ab", STRING_LEN);
         STRINGS[1] = STRINGS[0] + 'c';
         STRINGS[2] = STRINGS[0] + 'd';
-        STRINGS[3] = StringUtils.repeat("ab\rab\n", 1 << 24);
-        STRINGS[4] = StringUtils.repeat("ab\r\nab\r", 1 << 24);
+        STRINGS[3] = StringUtils.repeat("ab\rab\n", STRING_LEN);
+        STRINGS[4] = StringUtils.repeat("ab\r\nab\r", STRING_LEN);
     }
 
-    static String SPECIAL_CASE_STRING_0 = StringUtils.repeat(StringUtils.repeat("ab", 1 << 24) + '\n', 2);
-    static String SPECIAL_CASE_STRING_1 = StringUtils.repeat(StringUtils.repeat("cd", 1 << 24) + '\n', 2);
+    static String SPECIAL_CASE_STRING_0 = StringUtils.repeat(StringUtils.repeat("ab", STRING_LEN) + '\n', 2);
+    static String SPECIAL_CASE_STRING_1 = StringUtils.repeat(StringUtils.repeat("cd", STRING_LEN) + '\n', 2);
 
     @SuppressWarnings("resource")
     public static boolean contentEquals_release_2_8_0(final Reader input1, final Reader input2) throws IOException {
