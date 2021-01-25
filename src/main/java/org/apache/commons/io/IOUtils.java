@@ -16,9 +16,6 @@
  */
 package org.apache.commons.io;
 
-import static org.apache.commons.io.IOUtils.DEFAULT_BUFFER_SIZE;
-import static org.apache.commons.io.IOUtils.EOF;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -805,7 +802,6 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs
      * @since 1.1
      */
-    @SuppressWarnings("resource")
     public static boolean contentEquals(final Reader input1, final Reader input2) throws IOException {
         if (input1 == input2) {
             return true;
