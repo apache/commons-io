@@ -293,9 +293,6 @@ public final class PathUtils {
 
     /**
      * Creates the parent directories for the given {@code path}.
-     * <p>
-     * Returns the {@code path}'s parent directory if it already exists.
-     * </p>
      *
      * @param path The path to a file (or directory).
      * @param attrs An optional list of file attributes to set atomically when creating the directories.
