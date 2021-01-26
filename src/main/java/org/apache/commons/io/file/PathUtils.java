@@ -308,9 +308,6 @@ public final class PathUtils {
         if (parent == null) {
             return null;
         }
-        if (Files.isDirectory(parent)) {
-            return parent;
-        }
         return Files.createDirectories(parent, attrs);
     }
 
