@@ -30,6 +30,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -732,7 +733,12 @@ public final class PathUtils {
      *
      * @param directory the directory to query.
      * @return whether the directory is empty.
-     * @throws IOException if an I/O error occurs.
+     * @throws NotDirectoryException if the file could not otherwise be opened because it is not a directory
+     *                               <i>(optional specific exception)</i>.
+     * @throws IOException           if an I/O error occurs.
+     * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
+     *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
+     *                               access to the directory.
      */
     public static boolean isEmptyDirectory(final Path directory) throws IOException {
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
@@ -745,7 +751,10 @@ public final class PathUtils {
      *
      * @param file the file to query.
      * @return whether the file is empty.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException       if an I/O error occurs.
+     * @throws SecurityException In the case of the default provider, and a security manager is installed, its
+     *                           {@link SecurityManager#checkRead(String) checkRead} method denies read access to the
+     *                           file.
      */
     public static boolean isEmptyFile(final Path file) throws IOException {
         return Files.size(file) <= 0;
