@@ -20,9 +20,11 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * Compare the <b>last modified date/time</b> of two files for order
- * (see {@link File#lastModified()}).
+ * (see {@link FileUtils#lastModifiedUnchecked(File)}).
  * <p>
  * This comparator can be used to sort lists or arrays of files
  * by their last modified date/time.
@@ -65,7 +67,7 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
      */
     @Override
     public int compare(final File file1, final File file2) {
-        final long result = file1.lastModified() - file2.lastModified();
+        final long result = FileUtils.lastModifiedUnchecked(file1) - FileUtils.lastModifiedUnchecked(file2);
         if (result < 0) {
             return -1;
         } else if (result > 0) {

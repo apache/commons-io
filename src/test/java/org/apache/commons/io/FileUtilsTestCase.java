@@ -167,7 +167,7 @@ public class FileUtilsTestCase {
 
     private long testFile2Size;
 
-    private void backDateFile10Minutes(final File testFile) {
+    private void backDateFile10Minutes(final File testFile) throws IOException {
         final long mins10 = 1000 * 60 * 10;
         final long lastModified1 = getLastModifiedMillis(testFile);
         assertTrue(setLastModifiedMillis(testFile, lastModified1 - mins10));
@@ -216,10 +216,8 @@ public class FileUtilsTestCase {
         FileUtils.writeStringToFile(file6, "File 6 in grandChild2", "UTF8");
     }
 
-    private long getLastModifiedMillis(final File file) {
-        return file.lastModified();
-        //https://bugs.openjdk.java.net/browse/JDK-8177809
-        //return Files.getLastModifiedTime(file.toPath()).toMillis();
+    private long getLastModifiedMillis(final File file) throws IOException {
+        return FileUtils.lastModified(file);
     }
 
     private String getName() {
@@ -1024,7 +1022,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile1Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
+        assertEquals(FileUtils.lastModified(testFile1), FileUtils.lastModified(destination), "Check last modified date preserved");
 
         assertThrows(IllegalArgumentException.class, () -> FileUtils.copyFileToDirectory(destination, directory),
             "Should not be able to copy a file into the same directory as itself");
@@ -1057,7 +1055,7 @@ public class FileUtilsTestCase {
         FileUtils.copyFileToDirectory(testFile1, directory);
         assertTrue(destination.exists(), "Check Exist");
         assertEquals(testFile2Size, destination.length(), "Check Full copy");
-        assertEquals(testFile1.lastModified(), destination.lastModified(), "Check last modified date preserved");
+        assertEquals(FileUtils.lastModified(testFile1), FileUtils.lastModified(destination), "Check last modified date preserved");
     }
 
     @Test

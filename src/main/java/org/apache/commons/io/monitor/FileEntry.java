@@ -17,7 +17,11 @@
 package org.apache.commons.io.monitor;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * The state of a file or directory, capturing the following {@link File} attributes at a point in time.
@@ -25,7 +29,7 @@ import java.io.Serializable;
  *   <li>File Name (see {@link File#getName()})</li>
  *   <li>Exists - whether the file exists or not (see {@link File#exists()})</li>
  *   <li>Directory - whether the file is a directory or not (see {@link File#isDirectory()})</li>
- *   <li>Last Modified Date/Time (see {@link File#lastModified()})</li>
+ *   <li>Last Modified Date/Time (see {@link FileUtils#lastModifiedUnchecked(File)})</li>
  *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
@@ -94,25 +98,26 @@ public class FileEntry implements Serializable {
      * @return {@code true} if the file has changed, otherwise {@code false}
      */
     public boolean refresh(final File file) {
-
         // cache original values
-        final boolean origExists       = exists;
-        final long    origLastModified = lastModified;
-        final boolean origDirectory    = directory;
-        final long    origLength       = length;
+        final boolean origExists = exists;
+        final long origLastModified = lastModified;
+        final boolean origDirectory = directory;
+        final long origLength = length;
 
         // refresh the values
-        name         = file.getName();
-        exists       = file.exists();
-        directory    = exists && file.isDirectory();
-        lastModified = exists ? file.lastModified() : 0;
-        length       = exists && !directory ? file.length() : 0;
+        name = file.getName();
+        exists = Files.exists(file.toPath());
+        directory = exists && file.isDirectory();
+        try {
+            lastModified = exists ? FileUtils.lastModified(file) : 0;
+        } catch (IOException e) {
+            lastModified = 0;
+        }
+        length = exists && !directory ? file.length() : 0;
 
         // Return if there are changes
-        return exists != origExists ||
-                lastModified != origLastModified ||
-                directory != origDirectory ||
-                length != origLength;
+        return exists != origExists || lastModified != origLastModified || directory != origDirectory
+            || length != origLength;
     }
 
     /**

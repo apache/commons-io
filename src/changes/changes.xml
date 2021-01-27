@@ -148,6 +148,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-700" dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileUtils.isEmptyDirectory(File).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add FileUtils.lastModified[Unchecked](File) to workaround https://bugs.openjdk.java.net/browse/JDK-8177809.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.

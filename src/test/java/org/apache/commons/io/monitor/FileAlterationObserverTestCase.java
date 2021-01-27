@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
@@ -146,9 +147,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileCreate() {
+    public void testFileCreate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -205,9 +207,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() creating
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileUpdate() {
+    public void testFileUpdate() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -261,9 +264,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() deleting
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testFileDelete() {
+    public void testFileDelete() throws IOException {
         checkAndNotify();
         checkCollectionsEmpty("A");
         File testDirA = new File(testDir, "test-dir-A");
@@ -320,9 +324,10 @@ public class FileAlterationObserverTestCase extends AbstractMonitorTestCase {
 
     /**
      * Test checkAndNotify() method
+     * @throws IOException if an I/O error occurs.
      */
     @Test
-    public void testObserveSingleFile() {
+    public void testObserveSingleFile() throws IOException {
         final File testDirA = new File(testDir, "test-dir-A");
         File testDirAFile1 = new File(testDirA, "A-file1.java");
         testDirA.mkdir();

@@ -69,18 +69,19 @@ public class FileUtilsFileNewerTestCase {
 
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
+     * @throws IOException 
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
     @Test
-    public void testIsFileNewer() {
+    public void testIsFileNewer() throws IOException {
         if (!testFile1.exists()) {
             throw new IllegalStateException("The testFile1 should exist");
         }
 
-        final long fileLastModified = testFile1.lastModified();
+        final long fileLastModified = FileUtils.lastModified(testFile1);
         final long TWO_SECOND = 2000;
 
         testIsFileNewer("two second earlier is not newer" , testFile1, fileLastModified + TWO_SECOND, false);
@@ -90,19 +91,20 @@ public class FileUtilsFileNewerTestCase {
 
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a not existing file.
+     * @throws IOException if an I/O error occurs.
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
     @Test
-    public void testIsFileNewerImaginaryFile() {
+    public void testIsFileNewerImaginaryFile() throws IOException {
         final File imaginaryFile = new File(temporaryFolder, "imaginaryFile");
         if (imaginaryFile.exists()) {
             throw new IllegalStateException("The imaginary File exists");
         }
 
-        testIsFileNewer("imaginary file can be newer" , imaginaryFile, testFile2.lastModified(), false);
+        testIsFileNewer("imaginary file can be newer" , imaginaryFile, FileUtils.lastModified(testFile2), false);
     }
 
     /**
@@ -123,19 +125,20 @@ public class FileUtilsFileNewerTestCase {
      * @param file the file of which the last modification date is compared
      * @param time the time reference measured in milliseconds since the epoch
      * @param wantedResult the expected result
+     * @throws IOException if an I/O error occurs.
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
      * @see FileUtils#isFileNewer(File, File)
      */
-    protected void testIsFileNewer(final String description, final File file, final long time, final boolean wantedResult)  {
+    protected void testIsFileNewer(final String description, final File file, final long time, final boolean wantedResult) throws IOException  {
         assertEquals(wantedResult, FileUtils.isFileNewer(file, time), description + " - time");
         assertEquals(wantedResult, FileUtils.isFileNewer(file, new Date(time)), description + " - date");
 
         final File temporaryFile = testFile2;
 
         temporaryFile.setLastModified(time);
-        assertEquals(time, temporaryFile.lastModified(), "The temporary file hasn't the right last modification date");
+        assertEquals(time, FileUtils.lastModified(temporaryFile), "The temporary file hasn't the right last modification date");
         assertEquals(wantedResult, FileUtils.isFileNewer(file, temporaryFile), description + " - file");
     }
 

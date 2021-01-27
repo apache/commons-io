@@ -36,6 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
@@ -1629,7 +1630,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileNewer(file, reference.lastModified());
+        return isFileNewer(file, lastModifiedUnchecked(reference));
     }
 
     /**
@@ -1658,10 +1659,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        if (!file.exists()) {
-            return false;
-        }
-        return file.lastModified() > timeMillis;
+        return file.exists() ? lastModifiedUnchecked(file) > timeMillis : false;
     }
 
     /**
@@ -1794,7 +1792,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final File reference) {
         requireExists(reference, "reference");
-        return isFileOlder(file, reference.lastModified());
+        return isFileOlder(file, lastModifiedUnchecked(reference));
     }
 
     /**
@@ -1822,10 +1820,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        if (!file.exists()) {
-            return false;
-        }
-        return file.lastModified() < timeMillis;
+        return file.exists() ? lastModifiedUnchecked(file) < timeMillis : false;
     }
 
     /**
@@ -1918,6 +1913,52 @@ public class FileUtils {
     public static Iterator<File> iterateFilesAndDirs(final File directory, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter) {
         return listFilesAndDirs(directory, fileFilter, dirFilter).iterator();
+    }
+
+    /**
+     * Returns the last modification time in milliseconds via
+     * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * <p>
+     * Use this method to avoid issues with {@link File#lastModified()} like
+     * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
+     * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
+     * </p>
+     * 
+     * @param file The File to query.
+     * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static long lastModified(final File file) throws IOException {
+        // https://bugs.openjdk.java.net/browse/JDK-8177809
+        // File.lastModified() is losing milliseconds (always ends in 000)
+        // This bug is in OpenJDK 8 and 9, and fixed in 10.
+        return Files.getLastModifiedTime(Objects.requireNonNull(file.toPath(), "file")).toMillis();
+    }
+
+    /**
+     * Returns the last modification time in milliseconds via
+     * {@link java.nio.file.Files#getLastModifiedTime(Path, LinkOption...)}.
+     * <p>
+     * Use this method to avoid issues with {@link File#lastModified()} like
+     * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
+     * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
+     * </p>
+     * 
+     * @param file The File to query.
+     * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
+     * @throws IllegalArgumentException if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static long lastModifiedUnchecked(final File file) {
+        // https://bugs.openjdk.java.net/browse/JDK-8177809
+        // File.lastModified() is losing milliseconds (always ends in 000)
+        // This bug is in OpenJDK 8 and 9, and fixed in 10.
+        try {
+            return lastModified(file);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(file.toString(), e);
+        }
     }
 
     /**
@@ -2697,7 +2738,7 @@ public class FileUtils {
      */
     private static void setLastModified(final File sourceFile, final File targetFile) throws IOException {
         Objects.requireNonNull(sourceFile, "sourceFile");
-        setLastModified(targetFile, sourceFile.lastModified());
+        setLastModified(targetFile, lastModified(sourceFile));
     }
 
     /**
