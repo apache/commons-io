@@ -107,7 +107,6 @@ public class FileFilterUtils {
         return new AgeFileFilter(cutoffReference, acceptOlder);
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a filter that returns true if the file was last modified before
      * or at the specified cutoff time.
@@ -746,7 +745,6 @@ public class FileFilterUtils {
         return list;
     }
 
-    //-----------------------------------------------------------------------
     /**
      * Returns a filter that always returns true.
      *
