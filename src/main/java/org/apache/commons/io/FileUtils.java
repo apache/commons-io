@@ -186,6 +186,23 @@ public class FileUtils {
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
     /**
+     * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
+     *
+     * @param copyOptions sorted copy options.
+     * @return a new array.
+     */
+    private static CopyOption[] addCopyAttributes(final CopyOption... copyOptions) {
+        // Make a copy first since we don't want to sort the call site's version.
+        final CopyOption[] actual = Arrays.copyOf(copyOptions, copyOptions.length + 1);
+        Arrays.sort(actual, 0, copyOptions.length);
+        if (Arrays.binarySearch(copyOptions, 0, copyOptions.length, StandardCopyOption.COPY_ATTRIBUTES) >= 0) {
+            return copyOptions;
+        }
+        actual[actual.length - 1] = StandardCopyOption.COPY_ATTRIBUTES;
+        return actual;
+    }
+
+    /**
      * Returns a human-readable version of the file size, where the input represents a specific number of bytes.
      * <p>
      * If the size is over 1GB, the size is returned as the number of whole GB, i.e. the size is rounded down to the
@@ -830,23 +847,6 @@ public class FileUtils {
 
         // TODO IO-386: Do we still need this check?
         requireEqualSizes(srcFile, destFile, srcFile.length(), destFile.length());
-    }
-
-    /**
-     * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.
-     *
-     * @param copyOptions sorted copy options.
-     * @return a new array.
-     */
-    private static CopyOption[] addCopyAttributes(final CopyOption... copyOptions) {
-        // Make a copy first since we don't want to sort the call site's version.
-        final CopyOption[] actual = Arrays.copyOf(copyOptions, copyOptions.length + 1);
-        Arrays.sort(actual, 0, copyOptions.length);
-        if (Arrays.binarySearch(copyOptions, 0, copyOptions.length, StandardCopyOption.COPY_ATTRIBUTES) >= 0) {
-            return copyOptions;
-        }
-        actual[actual.length - 1] = StandardCopyOption.COPY_ATTRIBUTES;
-        return actual;
     }
 
     /**
