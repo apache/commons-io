@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -1229,7 +1230,7 @@ public class FileUtils {
             return false;
         }
         try {
-            if (file.isDirectory()) {
+            if (FileUtils.isDirectory(file)) {
                 cleanDirectory(file);
             }
         } catch (final Exception ignored) {
@@ -1237,7 +1238,8 @@ public class FileUtils {
         }
 
         try {
-            return file.delete();
+            FileUtils.delete(file);
+            return true;
         } catch (final Exception ignored) {
             return false;
         }
@@ -1499,6 +1501,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static boolean isEmptyDirectory(final File directory) throws IOException {
+        Objects.requireNonNull(directory, "directory");
         return PathUtils.isEmptyDirectory(directory.toPath());
     }
 
@@ -1659,7 +1662,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() ? lastModifiedUnchecked(file) > timeMillis : false;
+        return Files.exists(file.toPath()) ? lastModifiedUnchecked(file) > timeMillis : false;
     }
 
     /**
@@ -1820,7 +1823,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() ? lastModifiedUnchecked(file) < timeMillis : false;
+        return Files.exists(file.toPath()) ? lastModifiedUnchecked(file) < timeMillis : false;
     }
 
     /**
@@ -1836,6 +1839,36 @@ public class FileUtils {
      */
     public static boolean isSymlink(final File file) {
         return file != null ? Files.isSymbolicLink(file.toPath()) : false;
+    }
+
+    /**
+     * Tests whether the specified file is an actual file.
+     * <p>
+     * This method delegates to {@link Files#isRegularFile(Path, LinkOption...)}
+     * </p>
+     *
+     * @param file the file to test.
+     * @return true if the file is a regular file, see {@link Files#isRegularFile(Path, LinkOption...)}.
+     * @since 2.9
+     * @see Files#isRegularFile(Path, LinkOption...)
+     */
+    public static boolean isRegularFile(final File file) {
+        return file != null ? Files.isRegularFile(file.toPath()) : false;
+    }
+
+    /**
+     * Tests whether the specified file is a directory rather than an actual file.
+     * <p>
+     * This method delegates to {@link Files#isDirectory(Path, LinkOption...)}
+     * </p>
+     *
+     * @param directory the file to test.
+     * @return true if the file is a directory, see {@link Files#isDirectory(Path, LinkOption...)}.
+     * @since 2.9
+     * @see Files#isDirectory(Path, LinkOption...)
+     */
+    public static boolean isDirectory(final File directory) {
+        return directory != null ? Files.isDirectory(directory.toPath()) : false;
     }
 
     /**
@@ -1947,7 +1980,7 @@ public class FileUtils {
      * 
      * @param file The File to query.
      * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
-     * @throws IllegalArgumentException if an I/O error occurs.
+     * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static long lastModifiedUnchecked(final File file) {
@@ -1957,7 +1990,7 @@ public class FileUtils {
         try {
             return lastModified(file);
         } catch (IOException e) {
-            throw new IllegalArgumentException(file.toString(), e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -2091,7 +2124,7 @@ public class FileUtils {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -2109,7 +2142,7 @@ public class FileUtils {
         try {
             return toList(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -2140,12 +2173,12 @@ public class FileUtils {
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
     /**
-     * Calls {@link File#mkdirs()} and throws an exception on failure.
+     * Calls {@link Files#createDirectories(Path path)} and throws an exception on failure.
      *
      * @param directory the receiver for {@code mkdirs()}, may be null.
      * @return the given file, may be null.
@@ -2156,7 +2189,8 @@ public class FileUtils {
      */
     private static File mkdirs(final File directory) throws IOException {
         if (directory != null) {
-            if (!directory.mkdirs() && !directory.isDirectory()) {
+            Files.createDirectories(directory.toPath());
+            if (!FileUtils.isDirectory(directory)) {
                 throw new IOException("Cannot create directory '" + directory + "'.");
             }
         }
@@ -2267,10 +2301,12 @@ public class FileUtils {
         final boolean rename = srcFile.renameTo(destFile);
         if (!rename) {
             copyFile(srcFile, destFile, copyOptions);
-            if (!srcFile.delete()) {
+            try {
+                FileUtils.delete(srcFile);
+            } catch (IOException e) {
                 FileUtils.deleteQuietly(destFile);
                 throw new IOException("Failed to delete original file '" + srcFile +
-                        "' after copy to '" + destFile + "'");
+                        "' after copy to '" + destFile + "'",e);
             }
         }
     }
@@ -2291,7 +2327,7 @@ public class FileUtils {
     public static void moveFileToDirectory(final File srcFile, final File destDir, final boolean createDestDir)
             throws IOException {
         validateMoveParameters(srcFile, destDir);
-        if (!destDir.exists() && createDestDir) {
+        if (Files.notExists(destDir.toPath()) && createDestDir) {
             mkdirs(destDir);
         }
         requireExistsChecked(destDir, "destDir");
@@ -2543,7 +2579,8 @@ public class FileUtils {
     }
 
     private static void requireAbsent(final File file, final String name) throws FileExistsException {
-        if (file.exists()) {
+        Objects.requireNonNull(file, "file");
+        if (Files.exists(file.toPath())) {
             throw new FileExistsException(
                 String.format("File element in parameter '%s' already exists: '%s'", name, file));
         }
@@ -2576,7 +2613,7 @@ public class FileUtils {
      */
     private static void requireCanWrite(final File file, final String name) {
         Objects.requireNonNull(file, "file");
-        if (!file.canWrite()) {
+        if (!Files.isWritable(file.toPath())) {
             throw new IllegalArgumentException("File parameter '" + name + " is not writable: '" + file + "'");
         }
     }
@@ -2592,8 +2629,8 @@ public class FileUtils {
      */
     private static File requireDirectory(final File directory, final String name) {
         Objects.requireNonNull(directory, name);
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter '" + name + "' is not a directory: '" + directory + "'");
+        if (!FileUtils.isDirectory(directory)) {
+            throw new IllegalArgumentException("Parameter '" + name + "' does not exist or is not a directory: '" + directory + "'");
         }
         return directory;
     }
@@ -2624,7 +2661,8 @@ public class FileUtils {
      */
     private static File requireDirectoryIfExists(final File directory, final String name) {
         Objects.requireNonNull(directory, name);
-        if (directory.exists()) {
+        // Can't use FileUtils.requireDirectory directly here
+        if (Files.exists(directory.toPath())) {
             requireDirectory(directory, name);
         }
         return directory;
@@ -2658,7 +2696,7 @@ public class FileUtils {
      */
     private static File requireExists(final File file, final String fileParamName) {
         Objects.requireNonNull(file, fileParamName);
-        if (!file.exists()) {
+        if (Files.notExists(file.toPath())) {
             throw new IllegalArgumentException(
                 "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
@@ -2676,7 +2714,7 @@ public class FileUtils {
      */
     private static File requireExistsChecked(final File file, final String fileParamName) throws FileNotFoundException {
         Objects.requireNonNull(file, fileParamName);
-        if (!file.exists()) {
+        if (Files.notExists(file.toPath())) {
             throw new FileNotFoundException(
                 "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
         }
@@ -2694,7 +2732,7 @@ public class FileUtils {
      */
     private static File requireFile(final File file, final String name) {
         Objects.requireNonNull(file, name);
-        if (!file.isFile()) {
+        if (!FileUtils.isRegularFile(file)) {
             throw new IllegalArgumentException("Parameter '" + name + "' is not a file: " + file);
         }
         return file;
@@ -2714,17 +2752,21 @@ public class FileUtils {
     }
 
     /**
-     * Requires that the given {@code File} is a file if it exists.
+     * Requires that the given {@code File} is a file.
      *
      * @param file The {@code File} to check.
      * @param name The parameter name to use in the exception message in case of null input.
-     * @return the given directory.
+     * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does exists but is not a directory.
+     * @throws IllegalArgumentException if the given {@code File} exists but is not a file.
      */
     private static File requireFileIfExists(final File file, final String name) {
         Objects.requireNonNull(file, name);
-        return file.exists() ? requireFile(file, name) : file;
+        //Can't use requireFile directly here
+        if(Files.exists(file.toPath()) ) {
+            requireFile(file, name);
+        }
+        return file;
     }
 
     /**
@@ -2819,7 +2861,11 @@ public class FileUtils {
      */
     public static BigInteger sizeOfAsBigInteger(final File file) {
         requireExists(file, "file");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
+        try {
+            return FileUtils.isDirectory(file) ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(Files.size(file.toPath()));
+        } catch (IOException e) {
+           throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -2830,7 +2876,11 @@ public class FileUtils {
      */
     private static BigInteger sizeOfBig0(final File file) {
         Objects.requireNonNull(file, "fileOrDir");
-        return file.isDirectory() ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(file.length());
+        try {
+            return FileUtils.isDirectory(file) ? sizeOfDirectoryBig0(file) : BigInteger.valueOf(Files.size(file.toPath()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -3080,7 +3130,7 @@ public class FileUtils {
     private static void validateMoveParameters(final File source, final File destination) throws FileNotFoundException {
         Objects.requireNonNull(source, "source");
         Objects.requireNonNull(destination, "destination");
-        if (!source.exists()) {
+        if (Files.notExists(source.toPath())) {
             throw new FileNotFoundException("Source '" + source + "' does not exist");
         }
     }
