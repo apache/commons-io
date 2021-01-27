@@ -309,6 +309,7 @@ public class FileUtils {
         if (!causeList.isEmpty()) {
             throw new IOExceptionList(causeList);
         }
+        assert isEmptyDirectory(directory) : "Directory is not empty " + directory;
     }
 
     /**
@@ -1168,7 +1169,9 @@ public class FileUtils {
      */
     public static File delete(final File file) throws IOException {
         Objects.requireNonNull(file, "file");
-        Files.delete(file.toPath());
+        Path path = file.toPath();
+        Files.delete(path);
+        assert Files.notExists(path, PathUtils.NOFOLLOW_LINK_OPTION_ARRAY) : "File still exists " + path;
         return file;
     }
 
@@ -1188,6 +1191,7 @@ public class FileUtils {
             cleanDirectory(directory);
         }
         delete(directory);
+        assert Files.notExists(directory.toPath(), PathUtils.NOFOLLOW_LINK_OPTION_ARRAY) : "Directory still exists " + directory;
     }
 
     /**
@@ -1344,6 +1348,7 @@ public class FileUtils {
             // didn't find a file to delete.
             throw new FileNotFoundException("File does not exist: " + file);
         }
+        assert Files.notExists(file.toPath(), PathUtils.NOFOLLOW_LINK_OPTION_ARRAY) :  "File still exists " + file;
     }
 
     /**
@@ -3002,6 +3007,7 @@ public class FileUtils {
             openOutputStream(file).close();
         }
         setLastModified(file, System.currentTimeMillis());
+        assert Files.exists(file.toPath(), PathUtils.NOFOLLOW_LINK_OPTION_ARRAY) : "File not created " + file;
     }
 
     /**

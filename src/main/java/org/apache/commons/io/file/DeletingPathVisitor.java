@@ -140,6 +140,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
     public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
         if (PathUtils.isEmptyDirectory(dir)) {
             Files.deleteIfExists(dir);
+            assert Files.notExists(dir, linkOptions) : "Directory still exists " + dir;
         }
         return super.postVisitDirectory(dir, exc);
     }
@@ -169,6 +170,7 @@ public class DeletingPathVisitor extends CountingPathVisitor {
                     // ignore
                 }
             }
+            assert Files.notExists(file, linkOptions) : "File still exists " + file;
         }
         updateFileCounters(file, attrs);
         return FileVisitResult.CONTINUE;

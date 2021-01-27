@@ -394,6 +394,7 @@ file comparators, endian transformation classes, and much more.
           </classpathDependencyExcludes>
           <forkCount>1</forkCount>
           <reuseForks>false</reuseForks>
+          <enableAssertions>true</enableAssertions>
           <!-- limit memory size see IO-161 -->
           <argLine>${argLine} -Xmx25M</argLine>
           <includes>
