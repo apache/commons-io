@@ -1962,7 +1962,7 @@ public class FileUtils {
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
      * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
      * </p>
-     * 
+     *
      * @param file The File to query.
      * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
      * @throws IOException if an I/O error occurs.
@@ -1983,7 +1983,7 @@ public class FileUtils {
      * <a href="https://bugs.openjdk.java.net/browse/JDK-8177809">JDK-8177809</a> where {@link File#lastModified()} is
      * losing milliseconds (always ends in 000). This bug exists in OpenJDK 8 and 9, and is fixed in 10.
      * </p>
-     * 
+     *
      * @param file The File to query.
      * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
      * @throws IllegalArgumentException if an I/O error occurs.

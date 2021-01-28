@@ -69,7 +69,7 @@ public class FileUtilsFileNewerTestCase {
 
     /**
      * Tests the {@code isFileNewer(File, *)} methods which a "normal" file.
-     * @throws IOException 
+     * @throws IOException
      *
      * @see FileUtils#isFileNewer(File, long)
      * @see FileUtils#isFileNewer(File, Date)
