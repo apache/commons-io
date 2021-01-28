@@ -74,7 +74,7 @@ public class PathUtilsTest extends TestArguments {
         assertFalse(PathUtils.isDirectory(null));
 
         assertTrue(PathUtils.isDirectory(tempDir));
-        Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
+        final Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
         assertFalse(PathUtils.isDirectory(testFile1));
 
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
@@ -87,7 +87,7 @@ public class PathUtilsTest extends TestArguments {
         assertFalse(PathUtils.isRegularFile(null));
 
         assertFalse(PathUtils.isRegularFile(tempDir));
-        Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
+        final Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
         assertTrue(PathUtils.isRegularFile(testFile1));
 
         Files.delete(testFile1);

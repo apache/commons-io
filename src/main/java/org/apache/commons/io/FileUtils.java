@@ -1995,7 +1995,7 @@ public class FileUtils {
         // This bug is in OpenJDK 8 and 9, and fixed in 10.
         try {
             return lastModified(file);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IllegalArgumentException(file.toString(), e);
         }
     }

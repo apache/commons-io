@@ -150,8 +150,8 @@ public class PathUtilsDeleteFileTest {
     public void testDeleteBrokenLink() throws IOException {
         assumeFalse(SystemUtils.IS_OS_WINDOWS);
 
-        Path missingFile = tempDir.resolve("missing.txt");
-        Path brokenLink = tempDir.resolve("broken.txt");
+        final Path missingFile = tempDir.resolve("missing.txt");
+        final Path brokenLink = tempDir.resolve("broken.txt");
         Files.createSymbolicLink(brokenLink, missingFile);
 
         assertTrue(Files.exists(brokenLink, LinkOption.NOFOLLOW_LINKS));

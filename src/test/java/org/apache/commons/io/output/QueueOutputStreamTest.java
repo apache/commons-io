@@ -83,7 +83,7 @@ public class QueueOutputStreamTest {
                 try {
                     writerThreadExchanger.exchange(Thread.currentThread(), timeout, SECONDS);
                     outputStream.write("ABC".getBytes(StandardCharsets.UTF_8));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     Thread.interrupted(); //clear interrupt
                     exceptionExchanger.exchange(e, timeout, SECONDS);
                 }

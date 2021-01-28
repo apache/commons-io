@@ -121,7 +121,7 @@ public class QueueInputStreamTest {
 
     private void writeUnbuffered(final QueueOutputStream outputStream, final String inputData) throws InterruptedIOException {
         final byte[] bytes = inputData.getBytes(UTF_8);
-        for (byte oneByte : bytes) {
+        for (final byte oneByte : bytes) {
             outputStream.write(oneByte);
         }
     }

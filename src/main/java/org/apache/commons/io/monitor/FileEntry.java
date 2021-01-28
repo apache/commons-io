@@ -110,7 +110,7 @@ public class FileEntry implements Serializable {
         directory = exists && file.isDirectory();
         try {
             lastModified = exists ? FileUtils.lastModified(file) : 0;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             lastModified = 0;
         }
         length = exists && !directory ? file.length() : 0;

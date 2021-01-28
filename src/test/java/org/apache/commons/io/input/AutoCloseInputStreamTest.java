@@ -102,7 +102,7 @@ public class AutoCloseInputStreamTest {
     @Test
     public void testResetBeforeEnd() throws IOException {
         final String inputStr = "1234";
-        AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(inputStr.getBytes()));
+        final AutoCloseInputStream inputStream = new AutoCloseInputStream(new ByteArrayInputStream(inputStr.getBytes()));
         inputStream.mark(1);
         assertEquals('1', inputStream.read());
         inputStream.reset();
