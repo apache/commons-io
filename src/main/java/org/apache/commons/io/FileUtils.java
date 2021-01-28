@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -352,7 +353,7 @@ public class FileUtils {
         }
 
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(directory.toString(), causeList);
+            throw new IOExceptionList(causeList);
         }
     }
 
@@ -1922,7 +1923,7 @@ public class FileUtils {
         try {
             return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(directory.toString(), e);
         }
     }
 
@@ -1986,7 +1987,7 @@ public class FileUtils {
      *
      * @param file The File to query.
      * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
-     * @throws IllegalArgumentException if an I/O error occurs.
+     * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static long lastModifiedUnchecked(final File file) {
@@ -1996,7 +1997,7 @@ public class FileUtils {
         try {
             return lastModified(file);
         } catch (final IOException e) {
-            throw new IllegalArgumentException(file.toString(), e);
+            throw new UncheckedIOException(file.toString(), e);
         }
     }
 
@@ -2130,7 +2131,7 @@ public class FileUtils {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException(directory.toString(), e);
         }
     }
 
@@ -2148,7 +2149,7 @@ public class FileUtils {
         try {
             return toList(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException(directory.toString(), e);
         }
     }
 
@@ -2179,7 +2180,7 @@ public class FileUtils {
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException(directory.toString(), e);
         }
     }
 
