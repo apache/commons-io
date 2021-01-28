@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * Proxy stream that prevents the underlying output stream from being closed.
@@ -51,7 +52,7 @@ public class CloseShieldOutputStream extends ProxyOutputStream {
      */
     @Deprecated
     public CloseShieldOutputStream(final OutputStream outputStream) {
-        super(outputStream);
+        super(Objects.requireNonNull(outputStream, "outputStream"));
     }
 
     /**

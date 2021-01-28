@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * A decorating output stream that counts the number of bytes that have passed
@@ -37,7 +38,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * @param out  the OutputStream to write to
      */
     public CountingOutputStream( final OutputStream out ) {
-        super(out);
+        super(Objects.requireNonNull(out, "out"));
     }
 
     //-----------------------------------------------------------------------

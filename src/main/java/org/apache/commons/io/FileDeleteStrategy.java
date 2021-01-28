@@ -18,6 +18,7 @@ package org.apache.commons.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Strategy for deleting files.
@@ -57,6 +58,7 @@ public class FileDeleteStrategy {
          */
         @Override
         protected boolean doDelete(final File fileToDelete) throws IOException {
+            Objects.requireNonNull(fileToDelete, "fileToDelete");
             FileUtils.forceDelete(fileToDelete);
             return true;
         }
@@ -98,6 +100,7 @@ public class FileDeleteStrategy {
      * @throws IOException if an error occurs during file deletion
      */
     public void delete(final File fileToDelete) throws IOException {
+        Objects.requireNonNull(fileToDelete, "fileToDelete");
         if (fileToDelete.exists() && doDelete(fileToDelete) == false) {
             throw new IOException("Deletion failed: " + fileToDelete);
         }
@@ -144,6 +147,7 @@ public class FileDeleteStrategy {
      * @throws IOException if an error occurs during file deletion
      */
     protected boolean doDelete(final File file) throws IOException {
+        Objects.requireNonNull(file, "file");
         FileUtils.delete(file);
         return true;
     }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
@@ -93,7 +94,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException in case of an I/O error
      */
     public LockableFileWriter(final String fileName, final boolean append, final String lockDir) throws IOException {
-        this(new File(fileName), append, lockDir);
+        this(new File(Objects.requireNonNull(fileName, "fileName")), append, lockDir);
     }
 
     /**
@@ -176,6 +177,7 @@ public class LockableFileWriter extends Writer {
      */
     public LockableFileWriter(File file, final Charset charset, final boolean append,
             String lockDir) throws IOException {
+        Objects.requireNonNull(file, "file");
         // init file to create/append
         file = file.getAbsoluteFile();
         if (file.getParentFile() != null) {
@@ -227,6 +229,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if we cannot find the lock file
      */
     private void testLockDir(final File lockDir) throws IOException {
+        Objects.requireNonNull(lockDir, "lockDir");
         if (!lockDir.exists()) {
             throw new IOException(
                     "Could not find lockDir: " + lockDir.getAbsolutePath());
@@ -263,6 +266,7 @@ public class LockableFileWriter extends Writer {
      * @throws IOException if an error occurs
      */
     private Writer initWriter(final File file, final Charset charset, final boolean append) throws IOException {
+        Objects.requireNonNull(file, "file");
         final boolean fileExistedAlready = file.exists();
         try {
             return new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath(), append),

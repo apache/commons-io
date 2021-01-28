@@ -1509,6 +1509,9 @@ public class FilenameUtils {
      * @return true if the given name is a valid host name
      */
     private static boolean isValidHostName(final String name) {
+        if (name == null) {
+            return false;
+        }
         return isIPv6Address(name) || isRFC3986HostName(name);
     }
 

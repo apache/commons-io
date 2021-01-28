@@ -43,7 +43,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
      * @param appendable the appendable to write to
      */
     public AppendableWriter(final T appendable) {
-        this.appendable = appendable;
+        this.appendable = Objects.requireNonNull(appendable, "appendable");
     }
 
     /**

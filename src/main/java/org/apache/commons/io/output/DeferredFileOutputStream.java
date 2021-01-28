@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -114,10 +115,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      */
     public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix,
         final File directory) {
-        this(threshold, null, prefix, suffix, directory, AbstractByteArrayOutputStream.DEFAULT_SIZE);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Temporary file prefix is missing");
-        }
+        this(threshold, null, Objects.requireNonNull(prefix, "prefix"), suffix, directory, AbstractByteArrayOutputStream.DEFAULT_SIZE);
     }
 
     /**
@@ -134,10 +132,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      */
     public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
         final String suffix, final File directory) {
-        this(threshold, null, prefix, suffix, directory, initialBufferSize);
-        if (prefix == null) {
-            throw new IllegalArgumentException("Temporary file prefix is missing");
-        }
+        this(threshold, null, Objects.requireNonNull(prefix, "prefix"), suffix, directory, initialBufferSize);
         if (initialBufferSize < 0) {
             throw new IllegalArgumentException("Initial buffer size must be atleast 0.");
         }
@@ -256,6 +251,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
      * @throws IOException if this stream is not yet closed or an error occurs.
      */
     public void writeTo(final OutputStream outputStream) throws IOException {
+        Objects.requireNonNull(outputStream, "outputStream");
         // we may only need to check if this is closed if we are working with a file
         // but we should force the habit of closing whether we are working with
         // a file or memory.

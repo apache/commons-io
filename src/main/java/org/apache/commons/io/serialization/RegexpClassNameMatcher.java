@@ -18,6 +18,7 @@
  */
 package org.apache.commons.io.serialization;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -36,20 +37,17 @@ final class RegexpClassNameMatcher implements ClassNameMatcher {
      * @param regex a regular expression for evaluating acceptable class names
      */
     public RegexpClassNameMatcher(final String regex) {
-        this(Pattern.compile(regex));
+        this(Pattern.compile(Objects.requireNonNull(regex, "regex")));
     }
 
     /**
      * Constructs an object based on the specified pattern.
      *
      * @param pattern a pattern for evaluating acceptable class names
-     * @throws IllegalArgumentException if {@code pattern} is null
+     * @throws NullPointerException if {@code pattern} is null
      */
     public RegexpClassNameMatcher(final Pattern pattern) {
-        if (pattern == null) {
-            throw new IllegalArgumentException("Null pattern");
-        }
-        this.pattern = pattern;
+        this.pattern = Objects.requireNonNull(pattern, "pattern");
     }
 
     @Override

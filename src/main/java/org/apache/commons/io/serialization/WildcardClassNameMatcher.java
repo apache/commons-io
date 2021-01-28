@@ -18,6 +18,8 @@
  */
 package org.apache.commons.io.serialization;
 
+import java.util.Objects;
+
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -37,7 +39,7 @@ final class WildcardClassNameMatcher implements ClassNameMatcher {
      * @param pattern a {@link FilenameUtils#wildcardMatch} pattern.
      */
     public WildcardClassNameMatcher(final String pattern) {
-        this.pattern = pattern;
+        this.pattern = Objects.requireNonNull(pattern, "pattern");
     }
 
     @Override

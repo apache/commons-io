@@ -867,6 +867,8 @@ public class FileUtils {
      * @since 2.1
      */
     public static long copyFile(final File input, final OutputStream output) throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(output, "output");
         try (FileInputStream fis = new FileInputStream(input)) {
             return IOUtils.copyLarge(fis, output);
         }
@@ -1038,6 +1040,8 @@ public class FileUtils {
      * @since 2.5
      */
     public static void copyToFile(final InputStream inputStream, final File file) throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
+        Objects.requireNonNull(file, "file");
         try (OutputStream out = openOutputStream(file)) {
             IOUtils.copy(inputStream, out);
         }
@@ -1064,6 +1068,8 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      */
     public static void copyURLToFile(final URL source, final File destination) throws IOException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "destination");
         try (final InputStream stream = source.openStream()) {
             copyInputStreamToFile(stream, destination);
         }
@@ -1090,6 +1096,8 @@ public class FileUtils {
      */
     public static void copyURLToFile(final URL source, final File destination,
         final int connectionTimeoutMillis, final int readTimeoutMillis) throws IOException {
+        Objects.requireNonNull(source, "source");
+        Objects.requireNonNull(destination, "destination");
         final URLConnection connection = source.openConnection();
         connection.setConnectTimeout(connectionTimeoutMillis);
         connection.setReadTimeout(readTimeoutMillis);
@@ -1920,6 +1928,7 @@ public class FileUtils {
      */
     public static Iterator<File> iterateFiles(final File directory, final String[] extensions,
         final boolean recursive) {
+        Objects.requireNonNull(directory, "directory");
         try {
             return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
@@ -2055,6 +2064,7 @@ public class FileUtils {
      * @since 1.2
      */
     public static LineIterator lineIterator(final File file, final String charsetName) throws IOException {
+        Objects.requireNonNull(file, "file");
         InputStream inputStream = null;
         try {
             inputStream = openInputStream(file);
@@ -2067,6 +2077,7 @@ public class FileUtils {
 
     private static AccumulatorPathVisitor listAccumulate(final File directory, final IOFileFilter fileFilter,
         final IOFileFilter dirFilter) throws IOException {
+        Objects.requireNonNull(directory, "directory");
         final boolean isDirFilterSet = dirFilter != null;
         final FileEqualsFileFilter rootDirFilter = new FileEqualsFileFilter(directory);
         final PathFilter dirPathFilter = isDirFilterSet ? rootDirFilter.or(dirFilter) : rootDirFilter;
@@ -2598,6 +2609,8 @@ public class FileUtils {
      * @throws IllegalArgumentException if the given files' canonical representations are equal.
      */
     private static void requireCanonicalPathsNotEquals(final File file1, final File file2) throws IOException {
+        Objects.requireNonNull(file1, "file1");
+        Objects.requireNonNull(file2, "file2");
         final String canonicalPath = file1.getCanonicalPath();
         if (canonicalPath.equals(file2.getCanonicalPath())) {
             throw new IllegalArgumentException(String
@@ -2967,6 +2980,7 @@ public class FileUtils {
      */
     public static Stream<File> streamFiles(final File directory, final boolean recursive, final String... extensions)
         throws IOException {
+        Objects.requireNonNull(directory, "directory");
         final IOFileFilter filter = extensions == null ? FileFileFilter.INSTANCE
             : FileFileFilter.INSTANCE.and(new SuffixFileFilter(toSuffixes(extensions)));
         return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false).map(Path::toFile);

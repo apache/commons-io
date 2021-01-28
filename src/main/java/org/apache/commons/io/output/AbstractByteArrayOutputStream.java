@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.commons.io.IOUtils.EOF;
 
@@ -186,6 +187,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
      * @since 2.7
      */
     protected int writeImpl(final InputStream in) throws IOException {
+        Objects.requireNonNull(in, "in");
         int readCount = 0;
         int inBufferPos = count - filledBufferSum;
         int n = in.read(currentBuffer, inBufferPos, currentBuffer.length - inBufferPos);

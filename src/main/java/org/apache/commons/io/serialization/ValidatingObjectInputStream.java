@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +57,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * @throws IOException if an I/O error occurs while reading stream header
      */
     public ValidatingObjectInputStream(final InputStream input) throws IOException {
-        super(input);
+        super(Objects.requireNonNull(input, "input"));
     }
 
     /** Check that the classname conforms to requirements.

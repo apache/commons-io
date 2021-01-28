@@ -96,12 +96,12 @@ public class FileSystemUtilsTestCase {
         try {
             fsu.freeSpaceOS(null, 1, false, -1);
             fail();
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final NullPointerException ignore) {
         }
         try {
             fsu.freeSpaceOS(null, 1, true, -1);
             fail();
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final NullPointerException ignore) {
         }
     }
 

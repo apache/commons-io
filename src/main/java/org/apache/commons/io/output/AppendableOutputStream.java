@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * OutputStream implementation that writes the data to an {@link Appendable}
@@ -41,7 +42,7 @@ public class AppendableOutputStream <T extends Appendable> extends OutputStream 
      * @param appendable the appendable to write to
      */
     public AppendableOutputStream(final T appendable) {
-        this.appendable = appendable;
+        this.appendable = Objects.requireNonNull(appendable, "appendable");
     }
 
     /**

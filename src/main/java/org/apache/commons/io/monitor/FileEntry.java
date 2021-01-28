@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
@@ -75,9 +76,7 @@ public class FileEntry implements Serializable {
      * @param file The file being monitored
      */
     public FileEntry(final FileEntry parent, final File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("File is missing");
-        }
+        Objects.requireNonNull(file, "file");
         this.file = file;
         this.parent = parent;
         this.name = file.getName();
@@ -98,6 +97,7 @@ public class FileEntry implements Serializable {
      * @return {@code true} if the file has changed, otherwise {@code false}
      */
     public boolean refresh(final File file) {
+        Objects.requireNonNull(file, "file");
         // cache original values
         final boolean origExists = exists;
         final long origLastModified = lastModified;

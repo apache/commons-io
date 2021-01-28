@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 /**
@@ -271,9 +272,8 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs when finding the free space
      */
     long freeSpaceOS(final String path, final int os, final boolean kb, final long timeout) throws IOException {
-        if (path == null) {
-            throw new IllegalArgumentException("Path must not be null");
-        }
+        Objects.requireNonNull(path, "path");
+
         switch (os) {
             case WINDOWS:
                 return kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout);
@@ -396,6 +396,7 @@ public class FileSystemUtils {
      */
     long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout)
             throws IOException {
+        Objects.requireNonNull(path, "path");
         if (path.isEmpty()) {
             throw new IllegalArgumentException("Path must not be empty");
         }

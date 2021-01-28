@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * Broken output stream. This stream always throws an {@link IOException} from
@@ -41,7 +42,7 @@ public class BrokenOutputStream extends OutputStream {
      * @param exception the exception to be thrown
      */
     public BrokenOutputStream(final IOException exception) {
-        this.exception = exception;
+        this.exception = Objects.requireNonNull(exception, "exception");
     }
 
     /**

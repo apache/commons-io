@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.util.Objects;
 
 /**
  * {@link OutputStream} implementation that transforms a byte stream to a
@@ -120,7 +121,7 @@ public class WriterOutputStream extends OutputStream {
     public WriterOutputStream(final Writer writer, final CharsetDecoder decoder, final int bufferSize,
                               final boolean writeImmediately) {
         checkIbmJdkWithBrokenUTF16( decoder.charset());
-        this.writer = writer;
+        this.writer = Objects.requireNonNull(writer, "writer");
         this.decoder = decoder;
         this.writeImmediately = writeImmediately;
         decoderOut = CharBuffer.allocate(bufferSize);

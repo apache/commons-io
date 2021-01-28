@@ -25,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +70,7 @@ public class XmlStreamWriter extends Writer {
      * @param defaultEncoding The default encoding if not encoding could be detected
      */
     public XmlStreamWriter(final OutputStream out, final String defaultEncoding) {
-        this.out = out;
+        this.out = Objects.requireNonNull(out, "out");
         this.defaultEncoding = defaultEncoding != null ? defaultEncoding : "UTF-8";
     }
 
@@ -96,7 +97,7 @@ public class XmlStreamWriter extends Writer {
      */
     @SuppressWarnings("resource")
     public XmlStreamWriter(final File file, final String defaultEncoding) throws FileNotFoundException {
-        this(new FileOutputStream(file), defaultEncoding);
+        this(new FileOutputStream(Objects.requireNonNull(file, "file")), defaultEncoding);
     }
 
     /**

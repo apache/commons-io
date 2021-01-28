@@ -1037,6 +1037,9 @@ public class IOUtils {
      * @since 2.7
      */
     public static long copy(final Reader reader, final Appendable output, final CharBuffer buffer) throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(output, "output");
+        Objects.requireNonNull(buffer, "buffer");
         long count = 0;
         int n;
         while (EOF != (n = reader.read(buffer))) {
@@ -1098,6 +1101,8 @@ public class IOUtils {
      */
     public static void copy(final Reader reader, final OutputStream output, final Charset outputCharset)
             throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(output, "output");
         final OutputStreamWriter writer = new OutputStreamWriter(output, Charsets.toCharset(outputCharset));
         copy(reader, writer);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter,
@@ -1272,6 +1277,9 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output,
                                  final long inputOffset, final long length, final byte[] buffer) throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(output, "output");
+        Objects.requireNonNull(buffer, "buffer");
         if (inputOffset > 0) {
             skipFully(input, inputOffset);
         }
@@ -1331,6 +1339,9 @@ public class IOUtils {
      * @since 2.2
      */
     public static long copyLarge(final Reader reader, final Writer writer, final char[] buffer) throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(writer, "writer");
+        Objects.requireNonNull(buffer, "buffer");
         long count = 0;
         int n;
         while (EOF != (n = reader.read(buffer))) {
@@ -1386,6 +1397,9 @@ public class IOUtils {
     public static long copyLarge(final Reader reader, final Writer writer, final long inputOffset, final long length,
                                  final char[] buffer)
             throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(writer, "writer");
+        Objects.requireNonNull(buffer, "buffer");
         if (inputOffset > 0) {
             skipFully(reader, inputOffset);
         }
@@ -1479,11 +1493,12 @@ public class IOUtils {
      * @param input the {@code InputStream} to read from, not null
      * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException if the input is null
+     * @throws NullPointerException if the input is null
      * @throws IOException Never thrown.
      * @since 2.3
      */
     public static LineIterator lineIterator(final InputStream input, final Charset charset) throws IOException {
+        Objects.requireNonNull(input, "input");
         return new LineIterator(new InputStreamReader(input, Charsets.toCharset(charset)));
     }
 
@@ -1513,7 +1528,7 @@ public class IOUtils {
      * @param input the {@code InputStream} to read from, not null
      * @param charsetName the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException                     if the input is null
+     * @throws NullPointerException                     if the input is null
      * @throws IOException                                  if an I/O error occurs, such as if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
@@ -1548,10 +1563,11 @@ public class IOUtils {
      *
      * @param reader the {@code Reader} to read from, not null
      * @return an Iterator of the lines in the reader, never null
-     * @throws IllegalArgumentException if the reader is null
+     * @throws NullPointerException if the reader is null
      * @since 1.2
      */
     public static LineIterator lineIterator(final Reader reader) {
+        Objects.requireNonNull(reader, "input");
         return new LineIterator(reader);
     }
 
@@ -1587,6 +1603,8 @@ public class IOUtils {
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(buffer, "buffer");
         if (length < 0) {
             throw new IllegalArgumentException("Length must not be negative: " + length);
         }
@@ -1616,6 +1634,8 @@ public class IOUtils {
      * @since 2.5
      */
     public static int read(final ReadableByteChannel input, final ByteBuffer buffer) throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(buffer, "buffer");
         final int length = buffer.remaining();
         while (buffer.remaining() > 0) {
             final int count = input.read(buffer);
@@ -1639,6 +1659,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static int read(final Reader reader, final char[] buffer) throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(buffer, "buffer");
         return read(reader, buffer, 0, buffer.length);
     }
 
@@ -1658,6 +1680,8 @@ public class IOUtils {
      */
     public static int read(final Reader reader, final char[] buffer, final int offset, final int length)
             throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(buffer, "buffer");
         if (length < 0) {
             throw new IllegalArgumentException("Length must not be negative: " + length);
         }
@@ -1688,6 +1712,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static void readFully(final InputStream input, final byte[] buffer) throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(buffer, "buffer");
         readFully(input, buffer, 0, buffer.length);
     }
 
@@ -1730,6 +1756,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static byte[] readFully(final InputStream input, final int length) throws IOException {
+        Objects.requireNonNull(input, "input");
         final byte[] buffer = new byte[length];
         readFully(input, buffer, 0, buffer.length);
         return buffer;
@@ -1748,6 +1775,8 @@ public class IOUtils {
      * @since 2.5
      */
     public static void readFully(final ReadableByteChannel input, final ByteBuffer buffer) throws IOException {
+        Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(buffer, "buffer");
         final int expected = buffer.remaining();
         final int actual = read(input, buffer);
         if (actual != expected) {
@@ -1769,6 +1798,8 @@ public class IOUtils {
      * @since 2.2
      */
     public static void readFully(final Reader reader, final char[] buffer) throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(buffer, "buffer");
         readFully(reader, buffer, 0, buffer.length);
     }
 
@@ -1789,6 +1820,8 @@ public class IOUtils {
      */
     public static void readFully(final Reader reader, final char[] buffer, final int offset, final int length)
             throws IOException {
+        Objects.requireNonNull(reader, "reader");
+        Objects.requireNonNull(buffer, "buffer");
         final int actual = read(reader, buffer, offset, length);
         if (actual != length) {
             throw new EOFException("Length to read: " + length + " actual: " + actual);
@@ -1829,6 +1862,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static List<String> readLines(final InputStream input, final Charset charset) throws IOException {
+        Objects.requireNonNull(input, "input");
         final InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(charset));
         return readLines(reader);
     }
@@ -1872,6 +1906,7 @@ public class IOUtils {
      */
     @SuppressWarnings("resource") // reader wraps input and is the responsibility of the caller.
     public static List<String> readLines(final Reader reader) throws IOException {
+        Objects.requireNonNull(reader, "reader");
         final BufferedReader bufReader = toBufferedReader(reader);
         final List<String> list = new ArrayList<>();
         String line;
@@ -2026,6 +2061,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final InputStream input, final long toSkip) throws IOException {
+        Objects.requireNonNull(input, "input");
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
@@ -2060,6 +2096,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static long skip(final ReadableByteChannel input, final long toSkip) throws IOException {
+        Objects.requireNonNull(input, "input");
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
@@ -2099,6 +2136,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final Reader reader, final long toSkip) throws IOException {
+        Objects.requireNonNull(reader, "reader");
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
@@ -2219,6 +2257,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static InputStream toBufferedInputStream(final InputStream input) throws IOException {
+        Objects.requireNonNull(input, "input");
         return ByteArrayOutputStream.toBufferedInputStream(input);
     }
 
@@ -2245,6 +2284,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static InputStream toBufferedInputStream(final InputStream input, final int size) throws IOException {
+        Objects.requireNonNull(input, "input");
         return ByteArrayOutputStream.toBufferedInputStream(input, size);
     }
 
@@ -2259,6 +2299,7 @@ public class IOUtils {
      * @since 2.2
      */
     public static BufferedReader toBufferedReader(final Reader reader) {
+        Objects.requireNonNull(reader, "reader");
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
     }
 
@@ -2274,6 +2315,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static BufferedReader toBufferedReader(final Reader reader, final int size) {
+        Objects.requireNonNull(reader, "reader");
         return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader, size);
     }
 
@@ -2290,6 +2332,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             copy(inputStream, output);
             return output.toByteArray();
@@ -2308,7 +2351,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-
+        Objects.requireNonNull(input, "input");
         if (size < 0) {
             throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
         }
@@ -2350,7 +2393,6 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final long size) throws IOException {
-
         if (size > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
         }
@@ -2391,6 +2433,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static byte[] toByteArray(final Reader reader, final Charset charset) throws IOException {
+        Objects.requireNonNull(reader, "reader");
         try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             copy(reader, output, charset);
             return output.toByteArray();
@@ -2520,6 +2563,7 @@ public class IOUtils {
      */
     public static char[] toCharArray(final InputStream inputStream, final Charset charset)
             throws IOException {
+        Objects.requireNonNull(inputStream, "inputStream");
         final CharArrayWriter writer = new CharArrayWriter();
         copy(inputStream, writer, charset);
         return writer.toCharArray();
@@ -2562,6 +2606,7 @@ public class IOUtils {
      * @since 1.1
      */
     public static char[] toCharArray(final Reader reader) throws IOException {
+        Objects.requireNonNull(reader, "reader");
         final CharArrayWriter sw = new CharArrayWriter();
         copy(reader, sw);
         return sw.toCharArray();
@@ -2638,6 +2683,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static InputStream toInputStream(final String input, final Charset charset) {
+        Objects.requireNonNull(input, "input");
         return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(charset)));
     }
 
@@ -2674,6 +2720,7 @@ public class IOUtils {
      */
     @Deprecated
     public static String toString(final byte[] input) throws IOException {
+        Objects.requireNonNull(input, "input");
         // make explicit the use of the default charset
         return new String(input, Charset.defaultCharset());
     }
@@ -2692,6 +2739,7 @@ public class IOUtils {
      * @throws IOException Never thrown.
      */
     public static String toString(final byte[] input, final String charsetName) throws IOException {
+        Objects.requireNonNull(input, "input");
         return new String(input, Charsets.toCharset(charsetName));
     }
 
@@ -2729,6 +2777,7 @@ public class IOUtils {
      * @since 2.3
      */
     public static String toString(final InputStream input, final Charset charset) throws IOException {
+        Objects.requireNonNull(input, "input");
         try (final StringBuilderWriter sw = new StringBuilderWriter()) {
             copy(input, sw, charset);
             return sw.toString();
@@ -2771,6 +2820,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static String toString(final Reader reader) throws IOException {
+        Objects.requireNonNull(reader, "reader");
         try (final StringBuilderWriter sw = new StringBuilderWriter()) {
             copy(reader, sw);
             return sw.toString();
@@ -3334,6 +3384,7 @@ public class IOUtils {
      */
     public static void writeLines(final Collection<?> lines, String lineEnding, final OutputStream output,
                                   final Charset charset) throws IOException {
+        Objects.requireNonNull(output, "output");
         if (lines == null) {
             return;
         }
@@ -3386,6 +3437,7 @@ public class IOUtils {
      */
     public static void writeLines(final Collection<?> lines, String lineEnding,
                                   final Writer writer) throws IOException {
+        Objects.requireNonNull(writer, "writer");
         if (lines == null) {
             return;
         }

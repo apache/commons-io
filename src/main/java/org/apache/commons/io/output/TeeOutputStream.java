@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * Classic splitter of {@link OutputStream}. Named after the Unix 'tee' command. It allows a stream to be branched off
@@ -40,7 +41,7 @@ public class TeeOutputStream extends ProxyOutputStream {
      */
     public TeeOutputStream(final OutputStream out, final OutputStream branch) {
         super(out);
-        this.branch = branch;
+        this.branch = Objects.requireNonNull(branch);
     }
 
     /**

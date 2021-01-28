@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
@@ -40,7 +41,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param proxy  the OutputStream to delegate to
      */
     public ProxyOutputStream(final OutputStream proxy) {
-        super(proxy);
+        super(Objects.requireNonNull(proxy, "proxy"));
         // the proxy is stored in a protected superclass variable named 'out'
     }
 

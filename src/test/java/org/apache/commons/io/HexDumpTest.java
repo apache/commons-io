@@ -216,8 +216,8 @@ public class HexDumpTest {
         // verify proper behavior with null stream
         try {
             HexDump.dump(testArray, 0x10000000, null, 0);
-            fail("should have caught IllegalArgumentException on negative index");
-        } catch (final IllegalArgumentException ignored_exception) {
+            fail("should have caught NullPointerException on null stream");
+        } catch (final NullPointerException ignored_exception) {
 
             // as expected
         }

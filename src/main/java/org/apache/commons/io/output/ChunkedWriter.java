@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * Writer which breaks larger output blocks into chunks.
@@ -47,7 +48,7 @@ public class ChunkedWriter extends FilterWriter {
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
      */
     public ChunkedWriter(final Writer writer, final int chunkSize) {
-       super(writer);
+       super(Objects.requireNonNull(writer, "writer"));
        if (chunkSize <= 0) {
            throw new IllegalArgumentException();
        }

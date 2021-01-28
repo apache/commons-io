@@ -17,6 +17,7 @@
 package org.apache.commons.io.output;
 
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * Proxy writer that prevents the underlying writer from being closed.
@@ -51,7 +52,7 @@ public class CloseShieldWriter extends ProxyWriter {
      */
     @Deprecated
     public CloseShieldWriter(final Writer writer) {
-        super(writer);
+        super(Objects.requireNonNull(writer, "writer"));
     }
 
     /**

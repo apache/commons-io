@@ -333,7 +333,7 @@ public class DeferredFileOutputStreamTest {
         try {
             new DeferredFileOutputStream(testBytes.length - 5, prefix, suffix, tempDir).close();
             fail("Expected IllegalArgumentException ");
-        } catch (final IllegalArgumentException e) {
+        } catch (final NullPointerException e) {
             // expected
         }
     }

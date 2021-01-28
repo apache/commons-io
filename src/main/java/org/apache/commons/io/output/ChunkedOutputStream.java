@@ -19,6 +19,7 @@ package org.apache.commons.io.output;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * OutputStream which breaks larger output blocks into chunks.
@@ -47,7 +48,7 @@ public class ChunkedOutputStream extends FilterOutputStream {
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
      */
     public ChunkedOutputStream(final OutputStream stream, final int chunkSize) {
-       super(stream);
+       super(Objects.requireNonNull(stream, "stream"));
        if (chunkSize <= 0) {
            throw new IllegalArgumentException();
        }

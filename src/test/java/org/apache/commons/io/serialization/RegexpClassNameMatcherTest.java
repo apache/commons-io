@@ -57,6 +57,6 @@ public class RegexpClassNameMatcherTest {
 
     @Test
     public void testNullPatternPattern() {
-        assertThrows(IllegalArgumentException.class, () -> new RegexpClassNameMatcher((Pattern)null));
+        assertThrows(NullPointerException.class, () -> new RegexpClassNameMatcher((Pattern)null));
     }
 }

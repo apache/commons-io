@@ -18,6 +18,7 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * Broken writer. This writer always throws an {@link IOException} from
@@ -41,7 +42,7 @@ public class BrokenWriter extends Writer {
      * @param exception the exception to be thrown
      */
     public BrokenWriter(final IOException exception) {
-        this.exception = exception;
+        this.exception = Objects.requireNonNull(exception, "exception");
     }
 
     /**
