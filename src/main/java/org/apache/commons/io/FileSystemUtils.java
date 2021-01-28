@@ -101,7 +101,9 @@ public class FileSystemUtils {
             } else {
                 os = OTHER;
             }
-
+        } catch (final SecurityException secex) {
+            // Permission should be granted instead of defaulting
+            throw secex;
         } catch (final Exception ex) {
             os = INIT_PROBLEM;
         }

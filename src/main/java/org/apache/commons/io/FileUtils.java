@@ -1211,7 +1211,7 @@ public class FileUtils {
     }
 
     /**
-     * Deletes a file, never throwing an exception. If file is a directory, delete it and all sub-directories.
+     * Deletes a file, throwing only {@code SecurityException}. If file is a directory, delete it and all sub-directories.
      * <p>
      * The difference between File.delete() and this method are:
      * </p>
@@ -1223,7 +1223,7 @@ public class FileUtils {
      * @param file file or directory to delete, can be {@code null}
      * @return {@code true} if the file or directory was deleted, otherwise
      * {@code false}
-     *
+     * @throws SecurityException if underlying calls fail due to missing permissions.
      * @since 1.4
      */
     public static boolean deleteQuietly(final File file) {
@@ -1234,12 +1234,16 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cleanDirectory(file);
             }
+        } catch (final SecurityException secex) {
+            throw secex;
         } catch (final Exception ignored) {
             // ignore
         }
 
         try {
             return file.delete();
+        } catch (final SecurityException secex) {
+            throw secex;
         } catch (final Exception ignored) {
             return false;
         }
