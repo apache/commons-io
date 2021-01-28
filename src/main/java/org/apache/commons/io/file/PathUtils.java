@@ -20,6 +20,7 @@ package org.apache.commons.io.file;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.CopyOption;
@@ -862,18 +863,18 @@ public final class PathUtils {
 
     /**
      * Shorthand for {@code Files.readAttributes(path, BasicFileAttributes.class)} while wrapping {@link IOException}
-     * as {@link IllegalStateException}.
+     * as {@link UncheckedIOException}.
      *
      * @param path the path to read.
      * @return the path attributes.
-     * @throws IllegalStateException if an I/O error occurs
+     * @throws UncheckedIOException if an I/O error occurs
      * @since 2.9.0
      */
     public static BasicFileAttributes readBasicFileAttributesQuietly(final Path path) {
         try {
             return readBasicFileAttributes(path);
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException("Path is " + String.valueOf(path) + " " + e.getMessage(),e);
         }
     }
 

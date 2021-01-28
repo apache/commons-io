@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -1233,12 +1234,16 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cleanDirectory(file);
             }
+        } catch (final SecurityException sec) {
+            throw sec;
         } catch (final Exception ignored) {
             // ignore
         }
 
         try {
             return file.delete();
+        } catch (final SecurityException sec) {
+            throw sec;
         } catch (final Exception ignored) {
             return false;
         }
@@ -1922,7 +1927,7 @@ public class FileUtils {
         try {
             return StreamIterator.iterator(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException("Directory is " + String.valueOf(directory) + " " + e.getMessage(),e);
         }
     }
 
@@ -1986,7 +1991,7 @@ public class FileUtils {
      *
      * @param file The File to query.
      * @return See {@link java.nio.file.attribute.FileTime#toMillis()}.
-     * @throws IllegalArgumentException if an I/O error occurs.
+     * @throws UncheckedIOException if an I/O error occurs.
      * @since 2.9.0
      */
     public static long lastModifiedUnchecked(final File file) {
@@ -1996,7 +2001,7 @@ public class FileUtils {
         try {
             return lastModified(file);
         } catch (final IOException e) {
-            throw new IllegalArgumentException(file.toString(), e);
+            throw new UncheckedIOException("File is " + String.valueOf(file) + " " + e.getMessage(),e);
         }
     }
 
@@ -2130,7 +2135,7 @@ public class FileUtils {
             final AccumulatorPathVisitor visitor = listAccumulate(directory, fileFilter, dirFilter);
             return visitor.getFileList().stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException("Directory is " + String.valueOf(directory) + " " + e.getMessage(),e);
         }
     }
 
@@ -2148,7 +2153,7 @@ public class FileUtils {
         try {
             return toList(streamFiles(directory, recursive, extensions));
         } catch (final IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new UncheckedIOException("Directory is " + String.valueOf(directory) + " " + e.getMessage(),e);
         }
     }
 
@@ -2179,7 +2184,7 @@ public class FileUtils {
             list.addAll(visitor.getDirList());
             return list.stream().map(Path::toFile).collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new IllegalStateException(e);
+            throw new UncheckedIOException("Directory is " + String.valueOf(directory) + " " + e.getMessage(),e);
         }
     }
 
@@ -2687,19 +2692,20 @@ public class FileUtils {
     }
 
     /**
-     * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     * Requires that the given {@code File} exists and throws an {@link UncheckedIOException} if it doesn't.
      *
      * @param file The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @return the given file.
      * @throws NullPointerException if the given {@code File} is {@code null}.
-     * @throws IllegalArgumentException if the given {@code File} does not exist.
+     * @throws UncheckedIOException if the given {@code File} does not exist.
      */
     private static File requireExists(final File file, final String fileParamName) {
         Objects.requireNonNull(file, fileParamName);
-        if (!file.exists()) {
-            throw new IllegalArgumentException(
-                "File system element for parameter '" + fileParamName + "' does not exist: '" + file + "'");
+        try {
+            requireExistsChecked(file, fileParamName);
+        } catch (FileNotFoundException e) {
+            throw new UncheckedIOException(e.getMessage(),e);
         }
         return file;
     }

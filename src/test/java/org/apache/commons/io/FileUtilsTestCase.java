@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -1710,9 +1711,9 @@ public class FileUtilsTestCase {
         final String invalidFileName = invalidFile.getName();
         try {
             FileUtils.isFileNewer(newFile, invalidFile);
-            fail("Should have cause IllegalArgumentException");
-        } catch (final IllegalArgumentException iae) {
-            final String message = iae.getMessage();
+            fail("Should have cause UncheckedIOException");
+        } catch (final UncheckedIOException iae) {
+            final String message = iae.getCause().getMessage();
             assertTrue(message.contains(invalidFileName), "Message should contain: " + invalidFileName + " but was: " + message);
         }
 
@@ -1742,12 +1743,12 @@ public class FileUtilsTestCase {
         assertTrue(FileUtils.isFileOlder(newFile, localDatePlusDay, localTime), "New File - Older - LocalDate plus one day,LocalTime");
 
         assertFalse(FileUtils.isFileOlder(invalidFile, reference), "Invalid - Older - File");
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(newFile, invalidFile));
         try {
             FileUtils.isFileOlder(newFile, invalidFile);
-            fail("Should have cause IllegalArgumentException");
-        } catch (final IllegalArgumentException iae) {
-            final String message = iae.getMessage();
+            fail("Should have cause UncheckedIOException");
+        } catch (final UncheckedIOException iae) {
+            final String message = iae.getCause().getMessage();
             assertTrue(message.contains(invalidFileName), "Message should contain: " + invalidFileName + " but was: " + message);
         }
 
@@ -1760,7 +1761,7 @@ public class FileUtilsTestCase {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (File) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileNewer(oldFile, invalidFile));
 
         // Null reference Date
         assertThrows(NullPointerException.class, () -> FileUtils.isFileNewer(oldFile, (Date) null));
@@ -1776,7 +1777,7 @@ public class FileUtilsTestCase {
         assertThrows(NullPointerException.class, () -> FileUtils.isFileOlder(oldFile, (Date) null));
 
         // Invalid reference File
-        assertThrows(IllegalArgumentException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
+        assertThrows(UncheckedIOException.class, () -> FileUtils.isFileOlder(oldFile, invalidFile));
     }
 
     @Test
@@ -2522,7 +2523,7 @@ public class FileUtilsTestCase {
         try {
             FileUtils.sizeOf(file);
             fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final UncheckedIOException ignore) {
         }
 
         // Creates file
@@ -2555,7 +2556,7 @@ public class FileUtilsTestCase {
         try {
             FileUtils.sizeOfAsBigInteger(file);
             fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final UncheckedIOException ignore) {
         }
 
         // Creates file
@@ -2584,7 +2585,7 @@ public class FileUtilsTestCase {
         try {
             FileUtils.sizeOfDirectory(file);
             fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final UncheckedIOException ignore) {
         }
 
         // Creates file
@@ -2615,7 +2616,7 @@ public class FileUtilsTestCase {
         try {
             FileUtils.sizeOfDirectoryAsBigInteger(file);
             fail("Exception expected.");
-        } catch (final IllegalArgumentException ignore) {
+        } catch (final UncheckedIOException ignore) {
         }
 
         // Creates file

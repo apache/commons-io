@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -117,8 +118,8 @@ public class FileUtilsDirectoryContainsTestCase {
         assertFalse(dir.exists());
         try {
             assertFalse(FileUtils.directoryContains(dir, file1));
-            fail("Expected " + IllegalArgumentException.class.getName());
-        } catch (final IllegalArgumentException e) {
+            fail("Expected " + UncheckedIOException.class.getName());
+        } catch (final UncheckedIOException e) {
             // expected
         }
     }
@@ -167,7 +168,7 @@ public class FileUtilsDirectoryContainsTestCase {
         assertFalse(file.exists());
         try {
             assertTrue(FileUtils.directoryContains(dir, file));
-        } catch (final IllegalArgumentException e) {
+        } catch (final UncheckedIOException e) {
             // expected
         }
     }
