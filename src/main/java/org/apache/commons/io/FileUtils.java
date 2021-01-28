@@ -37,6 +37,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
@@ -1491,11 +1492,31 @@ public class FileUtils {
     }
 
     /**
+     * Tests whether the specified {@code File} is a directory or not. Implemented as a
+     * null-safe delegate to {@code Files.isDirectory(Path path, LinkOption... options)}.
+     *
+     * @param   file the path to the file.
+     * @param   options options indicating how symbolic links are handled
+     * @return  {@code true} if the file is a directory; {@code false} if
+     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          be determined if the file is a directory or not.
+     * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
+     *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
+     *                               access to the directory.
+     * @since 2.9.0
+     */
+    public static boolean isDirectory(final File file, final LinkOption... options) {
+        return file != null ? Files.isDirectory(file.toPath(), options) : false;
+    }
+
+    /**
      * Tests whether the directory is empty.
      *
      * @param directory the directory to query.
      * @return whether the directory is empty.
      * @throws IOException if an I/O error occurs.
+     * @throws NotDirectoryException if the file could not otherwise be opened because it is not a directory
+     *                               <i>(optional specific exception)</i>.
      * @since 2.9.0
      */
     public static boolean isEmptyDirectory(final File directory) throws IOException {
@@ -1821,6 +1842,24 @@ public class FileUtils {
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
         return file.exists() ? lastModifiedUnchecked(file) < timeMillis : false;
+    }
+
+    /**
+     * Tests whether the specified {@code File} is a regular file or not. Implemented as a
+     * null-safe delegate to {@code Files.isRegularFile(Path path, LinkOption... options)}.
+     *
+     * @param   file the path to the file.
+     * @param   options options indicating how symbolic links are handled
+     * @return  {@code true} if the file is a regular file; {@code false} if
+     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          be determined if the file is a regular file or not.
+     * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
+     *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
+     *                               access to the directory.
+     * @since 2.9.0
+     */
+    public static boolean isRegularFile(final File file, final LinkOption... options) {
+        return file != null ? Files.isRegularFile(file.toPath(), options) : false;
     }
 
     /**

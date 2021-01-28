@@ -70,6 +70,31 @@ public class PathUtilsTest extends TestArguments {
     }
 
     @Test
+    public void testIsDirectory() throws IOException {
+        assertFalse(PathUtils.isDirectory(null));
+
+        assertTrue(PathUtils.isDirectory(tempDir));
+        Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
+        assertFalse(PathUtils.isDirectory(testFile1));
+
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        Files.delete(tempDir);
+        assertFalse(PathUtils.isDirectory(tempDir));
+    }
+
+    @Test
+    public void testIsRegularFile() throws IOException {
+        assertFalse(PathUtils.isRegularFile(null));
+
+        assertFalse(PathUtils.isRegularFile(tempDir));
+        Path testFile1 = Files.createTempFile(tempDir, "prefix", null);
+        assertTrue(PathUtils.isRegularFile(testFile1));
+
+        Files.delete(testFile1);
+        assertFalse(PathUtils.isRegularFile(testFile1));
+    }
+
+    @Test
     public void testNewDirectoryStream() throws Exception {
         final PathFilter pathFilter = new NameFileFilter(PATH_FIXTURE);
         try (final DirectoryStream<Path> stream = PathUtils.newDirectoryStream(PathUtils.current(), pathFilter)) {

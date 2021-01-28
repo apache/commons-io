@@ -718,6 +718,24 @@ public final class PathUtils {
     }
 
     /**
+     * Tests whether the specified {@code Path} is a directory or not. Implemented as a
+     * null-safe delegate to {@code Files.isDirectory(Path path, LinkOption... options)}.
+     *
+     * @param   path the path to the file.
+     * @param   options options indicating how symbolic links are handled
+     * @return  {@code true} if the file is a directory; {@code false} if
+     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          be determined if the file is a directory or not.
+     * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
+     *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
+     *                               access to the directory.
+     * @since 2.9.0
+     */
+    public static boolean isDirectory(final Path path, final LinkOption... options) {
+        return path != null ? Files.isDirectory(path, options) : false;
+    }
+
+    /**
      * Tests whether the given file or directory is empty.
      *
      * @param path the file or directory to query.
@@ -779,6 +797,24 @@ public final class PathUtils {
             return false;
         }
         return Files.getLastModifiedTime(file, options).toMillis() > timeMillis;
+    }
+
+    /**
+     * Tests whether the specified {@code Path} is a regular file or not. Implemented as a
+     * null-safe delegate to {@code Files.isRegularFile(Path path, LinkOption... options)}.
+     *
+     * @param   path the path to the file.
+     * @param   options options indicating how symbolic links are handled
+     * @return  {@code true} if the file is a regular file; {@code false} if
+     *          the path is null, the file does not exist, is not a directory, or it cannot
+     *          be determined if the file is a regular file or not.
+     * @throws SecurityException     In the case of the default provider, and a security manager is installed, the
+     *                               {@link SecurityManager#checkRead(String) checkRead} method is invoked to check read
+     *                               access to the directory.
+     * @since 2.9.0
+     */
+    public static boolean isRegularFile(final Path path, final LinkOption... options) {
+        return path != null ? Files.isRegularFile(path, options) : false;
     }
 
     /**
