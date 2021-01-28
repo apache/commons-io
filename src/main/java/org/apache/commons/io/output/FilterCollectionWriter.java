@@ -88,7 +88,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("append", causeList);
         }
         return this;
     }
@@ -108,7 +108,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("append", causeList);
         }
         return this;
     }
@@ -129,7 +129,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("append", causeList);
         }
         return this;
     }
@@ -149,7 +149,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("close", causeList);
         }
 
     }
@@ -174,7 +174,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("flush", causeList);
         }
 
     }
@@ -203,7 +203,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("write", causeList);
         }
     }
 
@@ -222,7 +222,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("write", causeList);
         }
     }
 
@@ -246,7 +246,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("write", causeList);
         }
     }
 
@@ -265,7 +265,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("write", causeList);
         }
 
     }
@@ -294,7 +294,7 @@ public class FilterCollectionWriter extends Writer {
             i++;
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList("write", causeList);
         }
 
     }

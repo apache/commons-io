@@ -41,19 +41,19 @@ public class IOExceptionList extends IOException {
      * @param causeList a list of cause exceptions.
      */
     public IOExceptionList(final List<? extends Throwable> causeList) {
-        super(String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList),
-                causeList == null ? null : causeList.get(0));
-        this.causeList = causeList == null ? Collections.emptyList() : causeList;
+        this(String.format("%,d exceptions: %s", causeList == null ? 0 : causeList.size(), causeList), causeList);
     }
 
     /**
-     * Gets the cause list.
+     * Creates a new exception caused by a list of exceptions.
      *
-     * @param <T> type of exception to return.
-     * @return The list of causes.
+     * @param message The detail message, see {@link #getMessage()}.
+     * @param causeList a list of cause exceptions.
+     * @since 2.9.0
      */
-    public <T extends Throwable> List<T> getCauseList() {
-        return (List<T>) causeList;
+    public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
+        super(message, causeList == null ? null : causeList.get(0));
+        this.causeList = causeList == null ? Collections.emptyList() : causeList;
     }
 
     /**
@@ -77,6 +77,16 @@ public class IOExceptionList extends IOException {
      */
     public <T extends Throwable> T getCause(final int index, final Class<T> clazz) {
         return (T) causeList.get(index);
+    }
+
+    /**
+     * Gets the cause list.
+     *
+     * @param <T> type of exception to return.
+     * @return The list of causes.
+     */
+    public <T extends Throwable> List<T> getCauseList() {
+        return (List<T>) causeList;
     }
 
     /**

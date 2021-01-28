@@ -326,7 +326,7 @@ public class FileUtils {
         }
 
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList(directory.toString(), causeList);
         }
     }
 
@@ -352,7 +352,7 @@ public class FileUtils {
         }
 
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList(directory.toString(), causeList);
         }
     }
 

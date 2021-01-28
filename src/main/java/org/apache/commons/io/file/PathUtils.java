@@ -940,7 +940,7 @@ public final class PathUtils {
             }
         }
         if (!causeList.isEmpty()) {
-            throw new IOExceptionList(causeList);
+            throw new IOExceptionList(path.toString(), causeList);
         }
         throw new IOException(
             String.format("No DosFileAttributeView or PosixFileAttributeView for '%s' (linkOptions=%s)", path,

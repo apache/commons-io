@@ -154,6 +154,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-709" dev="ggregory" type="add" due-to="Boris Unckel, Gary Gregory">
         Add null safe variants of isDirectory and isRegularFile.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOExceptionList(String, List).
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.

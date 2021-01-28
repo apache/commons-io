@@ -29,6 +29,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests {@link IOExceptionList}.
+ */
 public class IOExceptionListTestCase {
 
     @Test
@@ -36,6 +39,23 @@ public class IOExceptionListTestCase {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
         final IOExceptionList sqlExceptionList = new IOExceptionList(list);
+        assertEquals(cause, sqlExceptionList.getCause());
+        assertEquals(cause, sqlExceptionList.getCause(0));
+        assertEquals(list, sqlExceptionList.getCauseList());
+        assertEquals(list, sqlExceptionList.getCauseList(EOFException.class));
+        assertEquals(cause, sqlExceptionList.getCause(0, EOFException.class));
+        // No CCE:
+        final List<EOFException> causeList = sqlExceptionList.getCauseList();
+        assertEquals(list, causeList);
+    }
+
+    @Test
+    public void testMessageCause() {
+        final EOFException cause = new EOFException();
+        final List<EOFException> list = Collections.singletonList(cause);
+        final IOExceptionList sqlExceptionList = new IOExceptionList("Hello", list);
+        assertEquals("Hello", sqlExceptionList.getMessage());
+        //
         assertEquals(cause, sqlExceptionList.getCause());
         assertEquals(cause, sqlExceptionList.getCause(0));
         assertEquals(list, sqlExceptionList.getCauseList());
