@@ -41,7 +41,7 @@ public class FileEqualsFileFilter extends AbstractFileFilter {
      * @param file The file to match.
      */
     public FileEqualsFileFilter(final File file) {
-        this.file = file;
+        this.file = Objects.requireNonNull(file, "file");
         this.path = file.toPath();
     }
 
