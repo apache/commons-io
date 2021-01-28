@@ -1780,6 +1780,30 @@ public class FileUtilsTestCase {
     }
 
     @Test
+    public void testIsDirectory() throws IOException {
+        assertFalse(FileUtils.isDirectory(null));
+
+        assertTrue(FileUtils.isDirectory(temporaryFolder));
+        assertFalse(FileUtils.isDirectory(testFile1));
+
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        final File tempDirAsFile = tempDir.toFile();
+        Files.delete(tempDir);
+        assertFalse(FileUtils.isDirectory(tempDirAsFile));
+    }
+
+    @Test
+    public void testIsRegularFile() throws IOException {
+        assertFalse(FileUtils.isRegularFile(null));
+
+        assertFalse(FileUtils.isRegularFile(temporaryFolder));
+        assertTrue(FileUtils.isRegularFile(testFile1));
+
+        Files.delete(testFile1.toPath());
+        assertFalse(FileUtils.isRegularFile(testFile1));
+    }
+
+    @Test
     public void testIterateFiles() throws Exception {
         final File srcDir = temporaryFolder;
         final File subDir = new File(srcDir, "list_test");
