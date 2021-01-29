@@ -197,7 +197,7 @@ public class FilterCollectionWriter extends Writer {
 
     /**
      * Tests if the given list is empty in a null-safe manner.
-     * 
+     *
      * @param causeList the list to test.
      * @return true if empty or null.
      */

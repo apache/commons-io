@@ -31,7 +31,7 @@ import org.apache.commons.io.IOUtils;
  * application may be the generation of a {@link java.security.MessageDigest} on the fly. {@code Note}: The
  * {@link ObservableInputStream} is <em>not</em> thread safe, as instances of InputStream usually aren't. If you must
  * access the stream from multiple threads, then synchronization, locking, or a similar means must be used.
- * 
+ *
  * @see MessageDigestCalculatingInputStream
  */
 public class ObservableInputStream extends ProxyInputStream {
@@ -43,7 +43,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
         /**
          * Called to indicate that the {@link ObservableInputStream} has been closed.
-         * 
+         *
          * @throws IOException if an I/O error occurs.
          */
         @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -54,7 +54,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate that {@link InputStream#read(byte[])}, or {@link InputStream#read(byte[], int, int)} have
          * been called, and are about to invoke data.
-         * 
+         *
          * @param buffer The byte array, which has been passed to the read call, and where data has been stored.
          * @param offset The offset within the byte array, where data has been stored.
          * @param length The number of bytes, which have been stored in the byte array.
@@ -68,7 +68,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate, that {@link InputStream#read()} has been invoked on the {@link ObservableInputStream},
          * and will return a value.
-         * 
+         *
          * @param value The value, which is being returned. This will never be -1 (EOF), because, in that case,
          *        {@link #finished()} will be invoked instead.
          * @throws IOException if an I/O error occurs.
@@ -80,7 +80,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
         /**
          * Called to indicate that an error occurred on the underlying stream.
-         * 
+         *
          * @param exception the exception to throw
          * @throws IOException if an I/O error occurs.
          */
@@ -91,7 +91,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate that EOF has been seen on the underlying stream. This method may be called multiple times,
          * if the reader keeps invoking either of the read methods, and they will consequently keep returning EOF.
-         * 
+         *
          * @throws IOException if an I/O error occurs.
          */
         @SuppressWarnings("unused") // Possibly thrown from subclasses.
@@ -104,7 +104,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Creates a new ObservableInputStream for the given InputStream.
-     * 
+     *
      * @param inputStream the input stream to proxy.
      */
     public ObservableInputStream(final InputStream inputStream) {
@@ -113,7 +113,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Adds an Observer.
-     * 
+     *
      * @param observer the observer to add
      */
     public void add(final Observer observer) {
@@ -137,7 +137,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Reads all data from the underlying {@link InputStream}, while notifying the observers.
-     * 
+     *
      * @throws IOException The underlying {@link InputStream}, or either of the observers has thrown an exception.
      */
     public void consume() throws IOException {
@@ -149,7 +149,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Gets all currently registered observers.
-     * 
+     *
      * @return a list of the currently registered observers
      */
     protected List<Observer> getObservers() {
@@ -158,7 +158,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Notifies the observers by invoking {@link Observer#finished()}.
-     * 
+     *
      * @throws IOException Some observer has thrown an exception, which is being passed down.
      */
     protected void noteClosed() throws IOException {
@@ -169,7 +169,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Notifies the observers by invoking {@link Observer#data(int)} with the given arguments.
-     * 
+     *
      * @param value Passed to the observers.
      * @throws IOException Some observer has thrown an exception, which is being passed down.
      */
@@ -181,7 +181,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Notifies the observers by invoking {@link Observer#data(byte[],int,int)} with the given arguments.
-     * 
+     *
      * @param buffer Passed to the observers.
      * @param offset Passed to the observers.
      * @param length Passed to the observers.
@@ -195,7 +195,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Notifies the observers by invoking {@link Observer#error(IOException)} with the given argument.
-     * 
+     *
      * @param exception Passed to the observers.
      * @throws IOException Some observer has thrown an exception, which is being passed down. This may be the same
      *         exception, which has been passed as an argument.
@@ -208,7 +208,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Notifies the observers by invoking {@link Observer#finished()}.
-     * 
+     *
      * @throws IOException Some observer has thrown an exception, which is being passed down.
      */
     protected void noteFinished() throws IOException {
@@ -274,7 +274,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
     /**
      * Removes an Observer.
-     * 
+     *
      * @param observer the observer to remove
      */
     public void remove(final Observer observer) {
