@@ -129,6 +129,7 @@ public class XmlStreamReader extends Reader {
      * @param file File to create a Reader from.
      * @throws IOException thrown if there is a problem reading the file.
      */
+    @SuppressWarnings("resource") // FileInputStream is closed when this closed when this object is closed.
     public XmlStreamReader(final File file) throws IOException {
         this(new FileInputStream(file));
     }
@@ -141,11 +142,11 @@ public class XmlStreamReader extends Reader {
      * It does a lenient charset encoding detection, check the constructor with
      * the lenient parameter for details.
      *
-     * @param is InputStream to create a Reader from.
+     * @param inputStream InputStream to create a Reader from.
      * @throws IOException thrown if there is a problem reading the stream.
      */
-    public XmlStreamReader(final InputStream is) throws IOException {
-        this(is, true);
+    public XmlStreamReader(final InputStream inputStream) throws IOException {
+        this(inputStream, true);
     }
 
     /**
@@ -168,18 +169,18 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create a Reader from.
+     * @param inputStream InputStream to create a Reader from.
      * @param lenient indicates if the charset encoding detection should be
      *        relaxed.
      * @throws IOException thrown if there is a problem reading the stream.
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final boolean lenient) throws IOException,
+    public XmlStreamReader(final InputStream inputStream, final boolean lenient) throws IOException,
             XmlStreamReaderException {
         defaultEncoding = staticDefaultEncoding;
         try {
-            doRawStream(is);
+            doRawStream(inputStream);
         } catch (final XmlStreamReaderException ex) {
             if (!lenient) {
                 throw ex;
@@ -265,14 +266,14 @@ public class XmlStreamReader extends Reader {
      * It does a lenient charset encoding detection, check the constructor with
      * the lenient parameter for details.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @throws IOException thrown if there is a problem reading the file.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType)
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType)
             throws IOException {
-        this(is, httpContentType, true);
+        this(inputStream, httpContentType, true);
     }
 
     /**
@@ -299,7 +300,7 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @param lenient indicates if the charset encoding detection should be
@@ -309,13 +310,13 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType,
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient, final String defaultEncoding) throws IOException,
             XmlStreamReaderException {
         this.defaultEncoding = defaultEncoding == null ? staticDefaultEncoding
                 : defaultEncoding;
         try {
-            doHttpStream(is, httpContentType, lenient);
+            doHttpStream(inputStream, httpContentType, lenient);
         } catch (final XmlStreamReaderException ex) {
             if (!lenient) {
                 throw ex;
@@ -348,7 +349,7 @@ public class XmlStreamReader extends Reader {
      * If lenient detection is indicated an XmlStreamReaderException is never
      * thrown.
      *
-     * @param is InputStream to create the reader from.
+     * @param inputStream InputStream to create the reader from.
      * @param httpContentType content-type header to use for the resolution of
      *        the charset encoding.
      * @param lenient indicates if the charset encoding detection should be
@@ -357,9 +358,9 @@ public class XmlStreamReader extends Reader {
      * @throws XmlStreamReaderException thrown if the charset encoding could not
      *         be determined according to the specs.
      */
-    public XmlStreamReader(final InputStream is, final String httpContentType,
+    public XmlStreamReader(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException, XmlStreamReaderException {
-        this(is, httpContentType, lenient, null);
+        this(inputStream, httpContentType, lenient, null);
     }
 
     private void doLenientDetection(String httpContentType,
@@ -413,9 +414,9 @@ public class XmlStreamReader extends Reader {
         reader.close();
     }
 
-    private void doRawStream(final InputStream is)
+    private void doRawStream(final InputStream inputStream)
             throws IOException {
-        final BufferedInputStream pis = new BufferedInputStream(is, BUFFER_SIZE);
+        final BufferedInputStream pis = new BufferedInputStream(inputStream, BUFFER_SIZE);
         final String bomEnc = getBOMEncoding(pis);
         final String xmlGuessEnc = getXMLGuessEncoding(pis);
         final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
@@ -423,9 +424,9 @@ public class XmlStreamReader extends Reader {
         prepareReader(pis, encoding);
     }
 
-    private void doHttpStream(final InputStream is, final String httpContentType,
+    private void doHttpStream(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException {
-        final BufferedInputStream pis = new BufferedInputStream(is, BUFFER_SIZE);
+        final BufferedInputStream pis = new BufferedInputStream(inputStream, BUFFER_SIZE);
         final String cTMime = getContentTypeMime(httpContentType);
         final String cTEnc = getContentTypeEncoding(httpContentType);
         final String bomEnc = getBOMEncoding(pis);
@@ -436,9 +437,9 @@ public class XmlStreamReader extends Reader {
         prepareReader(pis, encoding);
     }
 
-    private void prepareReader(final InputStream is, final String encoding)
+    private void prepareReader(final InputStream inputStream, final String encoding)
             throws IOException {
-        reader = new InputStreamReader(is, encoding);
+        reader = new InputStreamReader(inputStream, encoding);
         this.encoding = encoding;
     }
 
