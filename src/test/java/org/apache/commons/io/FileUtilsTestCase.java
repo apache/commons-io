@@ -1815,7 +1815,7 @@ public class FileUtilsTestCase {
         Iterator<File> iterator = null;
         try {
             // Need list to be appendable
-            final List<String> expectedFileNames = new ArrayList(
+            final List<String> expectedFileNames = new ArrayList<>(
                 Arrays.asList("a.txt", "b.txt", "c.txt", "d.txt", "e.txt", "f.txt"));
             final int[] fileSizes = {123, 234, 345, 456, 678, 789};
             assertEquals(expectedFileNames.size(), fileSizes.length);
