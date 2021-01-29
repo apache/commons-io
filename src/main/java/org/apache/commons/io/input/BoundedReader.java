@@ -51,7 +51,7 @@ public class BoundedReader extends Reader {
      *
      * @param target                   The target stream that will be used
      * @param maxCharsFromTargetReader The maximum number of characters that can be read from target
-     * @throws IOException never thrown
+     * @throws IOException Never thrown.
      */
     public BoundedReader(final Reader target, final int maxCharsFromTargetReader) throws IOException {
         this.target = target;
