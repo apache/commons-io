@@ -468,9 +468,8 @@ public class FileSystemUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
     /**
-     * Performs the os command.
+     * Performs an OS command.
      *
      * @param cmdAttribs  the command line parameters
      * @param max The maximum limit for the lines returned
