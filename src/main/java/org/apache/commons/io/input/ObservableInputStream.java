@@ -48,7 +48,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * on the {@link ObservableInputStream}, and will return a value.
          * @param pByte The value, which is being returned. This will never be -1 (EOF),
          *    because, in that case, {@link #finished()} will be invoked instead.
-         * @throws IOException if an i/o-error occurs
+         * @throws IOException if an I/O error occurs
          */
         public void data(final int pByte) throws IOException {
             // noop
@@ -62,7 +62,7 @@ public class ObservableInputStream extends ProxyInputStream {
          *   data has been stored.
          * @param pOffset The offset within the byte array, where data has been stored.
          * @param pLength The number of bytes, which have been stored in the byte array.
-         * @throws IOException if an i/o-error occurs
+         * @throws IOException if an I/O error occurs
          */
         public void data(final byte[] pBuffer, final int pOffset, final int pLength) throws IOException {
             // noop
@@ -73,7 +73,7 @@ public class ObservableInputStream extends ProxyInputStream {
          * This method may be called multiple times, if the reader keeps invoking
          * either of the read methods, and they will consequently keep returning
          * EOF.
-         * @throws IOException if an i/o-error occurs
+         * @throws IOException if an I/O error occurs
          */
         public void finished() throws IOException {
             // noop
@@ -81,7 +81,7 @@ public class ObservableInputStream extends ProxyInputStream {
 
         /**
          * Called to indicate that the {@link ObservableInputStream} has been closed.
-         * @throws IOException if an i/o-error occurs
+         * @throws IOException if an I/O error occurs
          */
         public void closed() throws IOException {
             // noop
@@ -90,7 +90,7 @@ public class ObservableInputStream extends ProxyInputStream {
         /**
          * Called to indicate that an error occurred on the underlying stream.
          * @param pException the exception to throw
-         * @throws IOException if an i/o-error occurs
+         * @throws IOException if an I/O error occurs
          */
         public void error(final IOException pException) throws IOException {
             throw pException;
