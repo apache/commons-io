@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import org.apache.commons.io.output.QueueOutputStream;
 
 import java.io.InputStream;
@@ -91,7 +93,7 @@ public class QueueInputStream extends InputStream {
     @Override
     public int read() {
         final Integer value = blockingQueue.poll();
-        return value == null ? -1 : ((0xFF) & value);
+        return value == null ? EOF : ((0xFF) & value);
     }
 
 }

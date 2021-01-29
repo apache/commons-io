@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,7 +124,7 @@ public class CopyUtils {
     public CopyUtils() { }
 
     /**
-     * Copy bytes from a {@code byte[]} to an {@code OutputStream}.
+     * Copies bytes from a {@code byte[]} to an {@code OutputStream}.
      * @param input the byte array to read from
      * @param output the {@code OutputStream} to write to
      * @throws IOException In case of an I/O problem
@@ -132,7 +134,7 @@ public class CopyUtils {
     }
 
     /**
-     * Copy and convert bytes from a {@code byte[]} to chars on a
+     * Copies and convert bytes from a {@code byte[]} to chars on a
      * {@code Writer}.
      * The platform's default encoding is used for the byte-to-char conversion.
      * @param input the byte array to read from
@@ -147,7 +149,7 @@ public class CopyUtils {
     }
 
     /**
-     * Copy and convert bytes from a {@code byte[]} to chars on a
+     * Copies and convert bytes from a {@code byte[]} to chars on a
      * {@code Writer}, using the specified encoding.
      * @param input the byte array to read from
      * @param output the {@code Writer} to write to
@@ -162,7 +164,7 @@ public class CopyUtils {
     }
 
     /**
-     * Copy bytes from an {@code InputStream} to an
+     * Copies bytes from an {@code InputStream} to an
      * {@code OutputStream}.
      * @param input the {@code InputStream} to read from
      * @param output the {@code OutputStream} to write to
@@ -173,7 +175,7 @@ public class CopyUtils {
         final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -185,7 +187,7 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Copy chars from a {@code Reader} to a {@code Writer}.
+     * Copies chars from a {@code Reader} to a {@code Writer}.
      * @param input the {@code Reader} to read from
      * @param output the {@code Writer} to write to
      * @return the number of characters copied
@@ -198,7 +200,7 @@ public class CopyUtils {
         final char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
         }
@@ -210,7 +212,7 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Copy and convert bytes from an {@code InputStream} to chars on a
+     * Copies and convert bytes from an {@code InputStream} to chars on a
      * {@code Writer}.
      * The platform's default encoding is used for the byte-to-char conversion.
      * @param input the {@code InputStream} to read from
@@ -229,7 +231,7 @@ public class CopyUtils {
     }
 
     /**
-     * Copy and convert bytes from an {@code InputStream} to chars on a
+     * Copies and convert bytes from an {@code InputStream} to chars on a
      * {@code Writer}, using the specified encoding.
      * @param input the {@code InputStream} to read from
      * @param output the {@code Writer} to write to
@@ -355,7 +357,7 @@ public class CopyUtils {
     // ----------------------------------------------------------------
 
     /**
-     * Copy chars from a {@code String} to a {@code Writer}.
+     * Copies chars from a {@code String} to a {@code Writer}.
      * @param input the {@code String} to read from
      * @param output the {@code Writer} to write to
      * @throws IOException In case of an I/O problem

@@ -13,6 +13,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -183,7 +185,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
     @Override
     public synchronized int read() throws IOException {
         if (!refill()) {
-            return -1;
+            return EOF;
         }
         return byteBuffer.get() & 0xFF;
     }
@@ -194,7 +196,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
             throw new IndexOutOfBoundsException();
         }
         if (!refill()) {
-            return -1;
+            return EOF;
         }
         len = Math.min(len, byteBuffer.remaining());
         byteBuffer.get(b, offset, len);

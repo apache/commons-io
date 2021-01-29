@@ -853,7 +853,7 @@ public class FileUtils {
     }
 
     /**
-     * Copy bytes from a {@code File} to an {@code OutputStream}.
+     * Copies bytes from a {@code File} to an {@code OutputStream}.
      * <p>
      * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
      * </p>

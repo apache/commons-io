@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.FilterReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -56,8 +58,8 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     @Override
     public int read(final char[] cbuf, final int off, final int len) throws IOException {
         final int read = super.read(cbuf, off, len);
-        if (read == -1) {
-            return -1;
+        if (read == EOF) {
+            return EOF;
         }
         int pos = off - 1;
         for (int readPos = off; readPos < off + read; readPos++) {

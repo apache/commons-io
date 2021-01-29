@@ -18,6 +18,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 import java.io.IOException;
 import java.io.Reader;
 
@@ -102,7 +104,7 @@ public class BoundedReader extends Reader {
     /**
      * Reads a single character
      *
-     * @return -1 on eof or the character read
+     * @return -1 on EOF or the character read
      * @throws IOException If an I/O error occurs while calling the underlying reader's read method
      * @see java.io.Reader#read()
      */
@@ -110,11 +112,11 @@ public class BoundedReader extends Reader {
     public int read() throws IOException {
 
         if (charsRead >= maxCharsFromTargetReader) {
-            return -1;
+            return EOF;
         }
 
         if (markedAt >= 0 && (charsRead - markedAt) >= readAheadLimit) {
-            return -1;
+            return EOF;
         }
         charsRead++;
         return target.read();
@@ -135,8 +137,8 @@ public class BoundedReader extends Reader {
         int c;
         for (int i = 0; i < len; i++) {
             c = read();
-            if (c == -1) {
-                return i == 0 ? -1 : i;
+            if (c == EOF) {
+                return i == 0 ? EOF : i;
             }
             cbuf[off + i] = (char) c;
         }

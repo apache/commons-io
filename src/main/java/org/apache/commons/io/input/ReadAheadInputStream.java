@@ -13,6 +13,8 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
+
 // import javax.annotation.concurrent.GuardedBy;
 import java.io.EOFException;
 import java.io.IOException;
@@ -242,7 +244,7 @@ public class ReadAheadInputStream extends InputStream {
             return activeBuffer.get() & 0xFF;
         }
         final byte[] oneByteArray = oneByte.get();
-        return read(oneByteArray, 0, 1) == -1 ? -1 : oneByteArray[0] & 0xFF;
+        return read(oneByteArray, 0, 1) == EOF ? -1 : oneByteArray[0] & 0xFF;
     }
 
     @Override
@@ -264,7 +266,7 @@ public class ReadAheadInputStream extends InputStream {
                     readAsync();
                     waitForAsyncReadComplete();
                     if (isEndOfStream()) {
-                        return -1;
+                        return EOF;
                     }
                 }
                 // Swap the newly read read ahead buffer in place of empty active buffer.
