@@ -42,15 +42,12 @@ public class ObservableInputStream extends ProxyInputStream {
     public static abstract class Observer {
 
         /**
-         * Called to indicate, that {@link InputStream#read()} has been invoked on the {@link ObservableInputStream},
-         * and will return a value.
+         * Called to indicate that the {@link ObservableInputStream} has been closed.
          * 
-         * @param value The value, which is being returned. This will never be -1 (EOF), because, in that case,
-         *        {@link #finished()} will be invoked instead.
          * @throws IOException if an I/O error occurs.
          */
         @SuppressWarnings("unused") // Possibly thrown from subclasses.
-        public void data(final int value) throws IOException {
+        public void closed() throws IOException {
             // noop
         }
 
@@ -69,23 +66,15 @@ public class ObservableInputStream extends ProxyInputStream {
         }
 
         /**
-         * Called to indicate that EOF has been seen on the underlying stream. This method may be called multiple times,
-         * if the reader keeps invoking either of the read methods, and they will consequently keep returning EOF.
+         * Called to indicate, that {@link InputStream#read()} has been invoked on the {@link ObservableInputStream},
+         * and will return a value.
          * 
+         * @param value The value, which is being returned. This will never be -1 (EOF), because, in that case,
+         *        {@link #finished()} will be invoked instead.
          * @throws IOException if an I/O error occurs.
          */
         @SuppressWarnings("unused") // Possibly thrown from subclasses.
-        public void finished() throws IOException {
-            // noop
-        }
-
-        /**
-         * Called to indicate that the {@link ObservableInputStream} has been closed.
-         * 
-         * @throws IOException if an I/O error occurs.
-         */
-        @SuppressWarnings("unused") // Possibly thrown from subclasses.
-        public void closed() throws IOException {
+        public void data(final int value) throws IOException {
             // noop
         }
 
@@ -97,6 +86,17 @@ public class ObservableInputStream extends ProxyInputStream {
          */
         public void error(final IOException exception) throws IOException {
             throw exception;
+        }
+
+        /**
+         * Called to indicate that EOF has been seen on the underlying stream. This method may be called multiple times,
+         * if the reader keeps invoking either of the read methods, and they will consequently keep returning EOF.
+         * 
+         * @throws IOException if an I/O error occurs.
+         */
+        @SuppressWarnings("unused") // Possibly thrown from subclasses.
+        public void finished() throws IOException {
+            // noop
         }
     }
 
@@ -120,20 +120,111 @@ public class ObservableInputStream extends ProxyInputStream {
         observers.add(observer);
     }
 
-    /**
-     * Removes an Observer.
-     * 
-     * @param observer the observer to remove
-     */
-    public void remove(final Observer observer) {
-        observers.remove(observer);
+    @Override
+    public void close() throws IOException {
+        IOException ioe = null;
+        try {
+            super.close();
+        } catch (final IOException e) {
+            ioe = e;
+        }
+        if (ioe == null) {
+            noteClosed();
+        } else {
+            noteError(ioe);
+        }
     }
 
     /**
-     * Removes all Observers.
+     * Reads all data from the underlying {@link InputStream}, while notifying the observers.
+     * 
+     * @throws IOException The underlying {@link InputStream}, or either of the observers has thrown an exception.
      */
-    public void removeAllObservers() {
-        observers.clear();
+    public void consume() throws IOException {
+        final byte[] buffer = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+        while (read(buffer) != EOF) {
+            // empty
+        }
+    }
+
+    /**
+     * Gets all currently registered observers.
+     * 
+     * @return a list of the currently registered observers
+     */
+    protected List<Observer> getObservers() {
+        return observers;
+    }
+
+    /**
+     * Notifies the observers by invoking {@link Observer#finished()}.
+     * 
+     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     */
+    protected void noteClosed() throws IOException {
+        for (final Observer observer : getObservers()) {
+            observer.closed();
+        }
+    }
+
+    /**
+     * Notifies the observers by invoking {@link Observer#data(int)} with the given arguments.
+     * 
+     * @param value Passed to the observers.
+     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     */
+    protected void noteDataByte(final int value) throws IOException {
+        for (final Observer observer : getObservers()) {
+            observer.data(value);
+        }
+    }
+
+    /**
+     * Notifies the observers by invoking {@link Observer#data(byte[],int,int)} with the given arguments.
+     * 
+     * @param buffer Passed to the observers.
+     * @param offset Passed to the observers.
+     * @param length Passed to the observers.
+     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     */
+    protected void noteDataBytes(final byte[] buffer, final int offset, final int length) throws IOException {
+        for (final Observer observer : getObservers()) {
+            observer.data(buffer, offset, length);
+        }
+    }
+
+    /**
+     * Notifies the observers by invoking {@link Observer#error(IOException)} with the given argument.
+     * 
+     * @param exception Passed to the observers.
+     * @throws IOException Some observer has thrown an exception, which is being passed down. This may be the same
+     *         exception, which has been passed as an argument.
+     */
+    protected void noteError(final IOException exception) throws IOException {
+        for (final Observer observer : getObservers()) {
+            observer.error(exception);
+        }
+    }
+
+    /**
+     * Notifies the observers by invoking {@link Observer#finished()}.
+     * 
+     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     */
+    protected void noteFinished() throws IOException {
+        for (final Observer observer : getObservers()) {
+            observer.finished();
+        }
+    }
+
+    private void notify(final byte[] buffer, final int offset, int result, IOException ioe) throws IOException {
+        if (ioe != null) {
+            noteError(ioe);
+        } else if (result == EOF) {
+            noteFinished();
+        } else if (result > 0) {
+            noteDataBytes(buffer, offset, result);
+        }
     }
 
     @Override
@@ -164,13 +255,7 @@ public class ObservableInputStream extends ProxyInputStream {
         } catch (final IOException pException) {
             ioe = pException;
         }
-        if (ioe != null) {
-            noteError(ioe);
-        } else if (result == EOF) {
-            noteFinished();
-        } else if (result > 0) {
-            noteDataBytes(buffer, 0, result);
-        }
+        notify(buffer, 0, result, ioe);
         return result;
     }
 
@@ -183,111 +268,24 @@ public class ObservableInputStream extends ProxyInputStream {
         } catch (final IOException pException) {
             ioe = pException;
         }
-        if (ioe != null) {
-            noteError(ioe);
-        } else if (result == EOF) {
-            noteFinished();
-        } else if (result > 0) {
-            noteDataBytes(buffer, offset, result);
-        }
+        notify(buffer, offset, result, ioe);
         return result;
     }
 
     /**
-     * Notifies the observers by invoking {@link Observer#data(byte[],int,int)} with the given arguments.
+     * Removes an Observer.
      * 
-     * @param buffer Passed to the observers.
-     * @param offset Passed to the observers.
-     * @param length Passed to the observers.
-     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     * @param observer the observer to remove
      */
-    protected void noteDataBytes(final byte[] buffer, final int offset, final int length) throws IOException {
-        for (final Observer observer : getObservers()) {
-            observer.data(buffer, offset, length);
-        }
+    public void remove(final Observer observer) {
+        observers.remove(observer);
     }
 
     /**
-     * Notifies the observers by invoking {@link Observer#finished()}.
-     * 
-     * @throws IOException Some observer has thrown an exception, which is being passed down.
+     * Removes all Observers.
      */
-    protected void noteFinished() throws IOException {
-        for (final Observer observer : getObservers()) {
-            observer.finished();
-        }
-    }
-
-    /**
-     * Notifies the observers by invoking {@link Observer#data(int)} with the given arguments.
-     * 
-     * @param value Passed to the observers.
-     * @throws IOException Some observer has thrown an exception, which is being passed down.
-     */
-    protected void noteDataByte(final int value) throws IOException {
-        for (final Observer observer : getObservers()) {
-            observer.data(value);
-        }
-    }
-
-    /**
-     * Notifies the observers by invoking {@link Observer#error(IOException)} with the given argument.
-     * 
-     * @param exception Passed to the observers.
-     * @throws IOException Some observer has thrown an exception, which is being passed down. This may be the same
-     *         exception, which has been passed as an argument.
-     */
-    protected void noteError(final IOException exception) throws IOException {
-        for (final Observer observer : getObservers()) {
-            observer.error(exception);
-        }
-    }
-
-    /**
-     * Notifies the observers by invoking {@link Observer#finished()}.
-     * 
-     * @throws IOException Some observer has thrown an exception, which is being passed down.
-     */
-    protected void noteClosed() throws IOException {
-        for (final Observer observer : getObservers()) {
-            observer.closed();
-        }
-    }
-
-    /**
-     * Gets all currently registered observers.
-     * 
-     * @return a list of the currently registered observers
-     */
-    protected List<Observer> getObservers() {
-        return observers;
-    }
-
-    @Override
-    public void close() throws IOException {
-        IOException ioe = null;
-        try {
-            super.close();
-        } catch (final IOException e) {
-            ioe = e;
-        }
-        if (ioe == null) {
-            noteClosed();
-        } else {
-            noteError(ioe);
-        }
-    }
-
-    /**
-     * Reads all data from the underlying {@link InputStream}, while notifying the observers.
-     * 
-     * @throws IOException The underlying {@link InputStream}, or either of the observers has thrown an exception.
-     */
-    public void consume() throws IOException {
-        final byte[] buffer = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
-        while (read(buffer) != EOF) {
-            // empty
-        }
+    public void removeAllObservers() {
+        observers.clear();
     }
 
 }
