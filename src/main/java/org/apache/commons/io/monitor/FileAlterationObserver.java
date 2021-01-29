@@ -274,6 +274,7 @@ public class FileAlterationObserver implements Serializable {
      *
      * @throws Exception if an error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void initialize() throws Exception {
         rootEntry.refresh(rootEntry.getFile());
         final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);
@@ -285,6 +286,7 @@ public class FileAlterationObserver implements Serializable {
      *
      * @throws Exception if an error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     public void destroy() throws Exception {
         // noop
     }

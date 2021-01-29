@@ -130,6 +130,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param n number of bytes to be written
      * @throws IOException if the pre-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeWrite(final int n) throws IOException {
         // noop
     }
@@ -148,6 +149,7 @@ public class ProxyOutputStream extends FilterOutputStream {
      * @param n number of bytes written
      * @throws IOException if the post-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterWrite(final int n) throws IOException {
         // noop
     }

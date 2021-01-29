@@ -64,6 +64,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
      * @param n number of chars written
      * @throws IOException if the post-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterWrite(final int n) throws IOException {
         // noop
     }
@@ -140,6 +141,7 @@ public class ProxyCollectionWriter extends FilterCollectionWriter {
      * @param n number of chars to be written
      * @throws IOException if the pre-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeWrite(final int n) throws IOException {
         // noop
     }

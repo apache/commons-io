@@ -442,6 +442,7 @@ public abstract class DirectoryWalker<T> {
      * @return true if the walk has been cancelled
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected boolean handleIsCancelled(
             final File file, final int depth, final Collection<T> results) throws IOException {
         // do nothing - overridable by subclass
@@ -479,6 +480,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleStart(final File startDirectory, final Collection<T> results) throws IOException {
         // do nothing - overridable by subclass
     }
@@ -500,6 +502,7 @@ public abstract class DirectoryWalker<T> {
      * @return true to process this directory, false to skip this directory
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected boolean handleDirectory(final File directory, final int depth, final Collection<T> results) throws
             IOException {
         // do nothing - overridable by subclass
@@ -517,6 +520,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleDirectoryStart(final File directory, final int depth, final Collection<T> results) throws
             IOException {
         // do nothing - overridable by subclass
@@ -535,6 +539,7 @@ public abstract class DirectoryWalker<T> {
      * @throws IOException if an I/O Error occurs
      * @since 2.0
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected File[] filterDirectoryContents(final File directory, final int depth, final File... files) throws
             IOException {
         return files;
@@ -551,6 +556,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleFile(final File file, final int depth, final Collection<T> results) throws IOException {
         // do nothing - overridable by subclass
     }
@@ -566,6 +572,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleRestricted(final File directory, final int depth, final Collection<T> results) throws
             IOException {
         // do nothing - overridable by subclass
@@ -582,6 +589,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleDirectoryEnd(final File directory, final int depth, final Collection<T> results) throws
             IOException {
         // do nothing - overridable by subclass
@@ -596,6 +604,7 @@ public abstract class DirectoryWalker<T> {
      * @param results  the collection of result objects, may be updated
      * @throws IOException if an I/O Error occurs
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void handleEnd(final Collection<T> results) throws IOException {
         // do nothing - overridable by subclass
     }

@@ -197,6 +197,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param n number of bytes that the caller asked to be read
      * @throws IOException if the pre-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void beforeRead(final int n) throws IOException {
         // no-op
     }
@@ -218,6 +219,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
      * @param n number of bytes read, or -1 if the end of stream was reached
      * @throws IOException if the post-processing fails
      */
+    @SuppressWarnings("unused") // Possibly thrown from subclasses.
     protected void afterRead(final int n) throws IOException {
         // no-op
     }
