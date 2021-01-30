@@ -21,6 +21,7 @@ import static org.apache.commons.io.IOUtils.EOF;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -100,7 +101,7 @@ public class ObservableInputStream extends ProxyInputStream {
         }
     }
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers;
 
     /**
      * Creates a new ObservableInputStream for the given InputStream.
@@ -108,7 +109,29 @@ public class ObservableInputStream extends ProxyInputStream {
      * @param inputStream the input stream to proxy.
      */
     public ObservableInputStream(final InputStream inputStream) {
+        this(inputStream, new ArrayList<>());
+    }
+
+    /**
+     * Creates a new ObservableInputStream for the given InputStream.
+     *
+     * @param inputStream the input stream to proxy.
+     * @param observers List of callbacks.
+     */
+    private ObservableInputStream(final InputStream inputStream, final List<Observer> observers) {
         super(inputStream);
+        this.observers = observers;
+    }
+
+    /**
+     * Creates a new ObservableInputStream for the given InputStream.
+     *
+     * @param inputStream the input stream to proxy.
+     * @param observers List of callbacks.
+     * @since 2.9.0
+     */
+    public ObservableInputStream(final InputStream inputStream, final Observer... observers) {
+        this(inputStream, Arrays.asList(observers));
     }
 
     /**

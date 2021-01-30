@@ -61,12 +61,11 @@ public class MessageDigestCalculatingInputStream extends ObservableInputStream {
     /** Creates a new instance, which calculates a signature on the given stream,
      * using the given {@link MessageDigest}.
      * @param inputStream the stream to calculate the message digest for
-     * @param MessageDigest the message digest to use
+     * @param messageDigest the message digest to use
      */
-    public MessageDigestCalculatingInputStream(final InputStream inputStream, final MessageDigest MessageDigest) {
-        super(inputStream);
-        this.messageDigest = MessageDigest;
-        add(new MessageDigestMaintainingObserver(MessageDigest));
+    public MessageDigestCalculatingInputStream(final InputStream inputStream, final MessageDigest messageDigest) {
+        super(inputStream, new MessageDigestMaintainingObserver(messageDigest));
+        this.messageDigest = messageDigest;
     }
 
     /**
