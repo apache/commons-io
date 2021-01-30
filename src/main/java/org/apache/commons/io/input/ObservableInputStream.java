@@ -174,8 +174,9 @@ public class ObservableInputStream extends ProxyInputStream {
      * Gets all currently registered observers.
      *
      * @return a list of the currently registered observers
+     * @since 2.9.0
      */
-    protected List<Observer> getObservers() {
+    public List<Observer> getObservers() {
         return observers;
     }
 

@@ -160,6 +160,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add and use ObservableInputStream.ObservableInputStream(InputStream, Observer...).
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Make ObservableInputStream.getObservers() public.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.
