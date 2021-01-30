@@ -34,6 +34,12 @@ public class ObservableInputStreamTest {
         private boolean closed;
 
         @Override
+        public void closed() throws IOException {
+            super.closed();
+            closed = true;
+        }
+
+        @Override
         public void data(final int pByte) throws IOException {
             super.data(pByte);
             lastByteSeen = pByte;
@@ -43,12 +49,6 @@ public class ObservableInputStreamTest {
         public void finished() throws IOException {
             super.finished();
             finished = true;
-        }
-
-        @Override
-        public void closed() throws IOException {
-            super.closed();
-            closed = true;
         }
     }
 
