@@ -30,7 +30,7 @@ import org.apache.commons.io.input.ObservableInputStream.Observer;
  * </p>
  * 
  * <pre>
- * final TimetampedObserver timetampedObserver = new TimetampedObserver();
+ * final TimestampedObserver timetampedObserver = new TimestampedObserver();
  * try (final ObservableInputStream inputStream = new ObservableInputStream(...),
  *     timetampedObserver)) {
  *     ...
@@ -40,7 +40,7 @@ import org.apache.commons.io.input.ObservableInputStream.Observer;
  *
  * @since 2.9.0
  */
-public class TimetampedObserver extends Observer {
+public class TimestampedObserver extends Observer {
 
     private volatile Instant closeInstant;
     private final Instant openInstant = Instant.now();
