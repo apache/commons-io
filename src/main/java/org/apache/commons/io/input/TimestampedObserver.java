@@ -86,4 +86,9 @@ public class TimestampedObserver extends Observer {
         return openInstant;
     }
 
+    @Override
+    public String toString() {
+        return "TimestampedObserver [openInstant=" + openInstant + ", closeInstant=" + closeInstant + "]";
+    }
+
 }

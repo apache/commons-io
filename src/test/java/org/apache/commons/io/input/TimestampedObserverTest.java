@@ -18,6 +18,7 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -37,6 +38,8 @@ public class TimestampedObserverTest {
         final Instant before = Instant.now();
         Thread.sleep(20); // Some OS' clock granularity may be high.
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
+        // toString() should not blow up before close().
+        assertNotNull(timestampedObserver.toString());
         assertTrue(timestampedObserver.getOpenInstant().isAfter(before));
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertNull(timestampedObserver.getCloseInstant());
@@ -51,6 +54,7 @@ public class TimestampedObserverTest {
         assertTrue(timestampedObserver.getOpenToNowDuration().toNanos() > 0);
         assertTrue(timestampedObserver.getCloseInstant().isAfter(timestampedObserver.getOpenInstant()));
         assertTrue(timestampedObserver.getOpenToCloseDuration().toNanos() > 0);
+        assertNotNull(timestampedObserver.toString());
     }
 
     @Test
@@ -62,7 +66,8 @@ public class TimestampedObserverTest {
             timestampedObserver)) {
             //
         }
-        System.out.printf("IO duration: %s%n", timestampedObserver.getOpenToCloseDuration());
+        // System.out.printf("IO duration: %s%n", timestampedObserver);
+        // System.out.printf("IO duration: %s%n", timestampedObserver.getOpenToCloseDuration());
     }
 
 }
