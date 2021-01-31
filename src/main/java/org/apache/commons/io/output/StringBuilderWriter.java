@@ -27,6 +27,7 @@ import java.io.Writer;
  * (i.e. for use in a single thread) implementation for better performance.
  * For safe usage with multiple {@link Thread}s then
  * {@code java.io.StringWriter} should be used.
+ * </p>
  *
  * @since 2.0
  */

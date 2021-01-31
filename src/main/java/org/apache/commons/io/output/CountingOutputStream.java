@@ -24,6 +24,7 @@ import java.io.OutputStream;
  * <p>
  * A typical use case would be during debugging, to ensure that data is being
  * written as expected.
+ * </p>
  *
  */
 public class CountingOutputStream extends ProxyOutputStream {

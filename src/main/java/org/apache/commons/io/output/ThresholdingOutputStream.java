@@ -26,9 +26,11 @@ import java.io.OutputStream;
  * <p>
  * This class overrides all {@code OutputStream} methods. However, these overrides ultimately call the corresponding
  * methods in the underlying output stream implementation.
+ * </p>
  * <p>
  * NOTE: This implementation may trigger the event <em>before</em> the threshold is actually reached, since it triggers
  * when a pending write operation would cause the threshold to be exceeded.
+ * </p>
  */
 public abstract class ThresholdingOutputStream extends OutputStream {
 

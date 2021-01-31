@@ -25,6 +25,7 @@ import java.io.OutputStream;
  * <p>
  * This class is mostly useful for testing error handling in code that uses an
  * output stream.
+ * </p>
  *
  * @since 2.0
  */

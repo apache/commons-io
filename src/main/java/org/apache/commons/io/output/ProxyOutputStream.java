@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
  * <p>
  * See the protected methods for ways in which a subclass can easily decorate
  * a stream with custom pre-, post- or error processing functionality.
+ * </p>
  *
  */
 public class ProxyOutputStream extends FilterOutputStream {

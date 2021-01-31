@@ -32,6 +32,7 @@ import org.apache.commons.io.IOUtils;
  * This class originated in FileUpload processing. In this use case, you do not know in advance the size of the file
  * being uploaded. If the file is small you want to store it in memory (for speed), but if the file is large you want to
  * store it to file (to avoid memory issues).
+ * </p>
  */
 public class DeferredFileOutputStream extends ThresholdingOutputStream {
 

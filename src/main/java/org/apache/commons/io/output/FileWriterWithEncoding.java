@@ -35,18 +35,18 @@ import org.apache.commons.io.IOUtils;
  * This class provides a simple alternative to {@code FileWriter}
  * that allows an encoding to be set. Unfortunately, it cannot subclass
  * {@code FileWriter}.
+ * </p>
  * <p>
  * By default, the file will be overwritten, but this may be changed to append.
+ * </p>
  * <p>
  * The encoding must be specified using either the name of the {@link Charset},
  * the {@link Charset}, or a {@link CharsetEncoder}. If the default encoding
  * is required then use the {@link java.io.FileWriter} directly, rather than
  * this implementation.
- * <p>
- *
+ * </p>
  *
  * @since 1.4
- *
  */
 public class FileWriterWithEncoding extends Writer {
     // Cannot extend ProxyWriter, as requires writer to be

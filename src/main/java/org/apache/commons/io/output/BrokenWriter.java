@@ -25,6 +25,7 @@ import java.io.Writer;
  * <p>
  * This class is mostly useful for testing error handling in code that uses a
  * writer.
+ * </p>
  *
  * @since 2.0
  */

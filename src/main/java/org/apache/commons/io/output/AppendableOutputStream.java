@@ -25,6 +25,7 @@ import java.io.OutputStream;
  * <p>
  * For example, can be used with any {@link java.io.Writer} or a {@link java.lang.StringBuilder}
  * or {@link java.lang.StringBuffer}.
+ * </p>
  *
  * @since 2.5
  * @see java.lang.Appendable

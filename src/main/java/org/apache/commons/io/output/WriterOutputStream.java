@@ -63,11 +63,12 @@ import java.nio.charset.CodingErrorAction;
  * in the design of the code. This class is typically used in situations where an existing
  * API only accepts an {@link OutputStream} object, but where the stream is known to represent
  * character data that must be decoded for further use.
+ * </p>
  * <p>
  * Instances of {@link WriterOutputStream} are not thread safe.
+ * </p>
  *
  * @see org.apache.commons.io.input.ReaderInputStream
- *
  * @since 2.0
  */
 public class WriterOutputStream extends OutputStream {
