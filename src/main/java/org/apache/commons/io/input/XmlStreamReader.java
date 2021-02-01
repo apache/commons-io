@@ -186,7 +186,7 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
-            final byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            final byte[] bytes = IOUtils.byteArray();
             inputStream.mark(IOUtils.DEFAULT_BUFFER_SIZE);
             int offset = 0;
             int max = IOUtils.DEFAULT_BUFFER_SIZE;

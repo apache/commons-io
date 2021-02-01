@@ -90,7 +90,7 @@ public class ReversedLinesFileReader implements Closeable {
             final int lineLengthBytes = currentLastBytePos + 1;
             if (lineLengthBytes > 0) {
                 // create left over for next block
-                leftOver = new byte[lineLengthBytes];
+                leftOver = IOUtils.byteArray(lineLengthBytes);
                 System.arraycopy(data, 0, leftOver, 0, lineLengthBytes);
             } else {
                 leftOver = null;
@@ -149,7 +149,7 @@ public class ReversedLinesFileReader implements Closeable {
                     if (lineLengthBytes < 0) {
                         throw new IllegalStateException("Unexpected negative line length=" + lineLengthBytes);
                     }
-                    final byte[] lineData = new byte[lineLengthBytes];
+                    final byte[] lineData = IOUtils.byteArray(lineLengthBytes);
                     System.arraycopy(data, lineStart, lineData, 0, lineLengthBytes);
 
                     line = new String(lineData, charset);

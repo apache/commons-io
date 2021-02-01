@@ -39,7 +39,7 @@ public class CircularByteBuffer {
      * @param size the size of buffer to create
      */
     public CircularByteBuffer(final int size) {
-        buffer = new byte[size];
+        buffer = IOUtils.byteArray(size);
         startOffset = 0;
         endOffset = 0;
         currentNumberOfBytes = 0;

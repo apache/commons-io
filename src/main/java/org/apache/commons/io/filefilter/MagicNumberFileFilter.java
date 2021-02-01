@@ -29,6 +29,8 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * <p>
  * File filter for matching files containing a "magic number". A magic number
@@ -171,7 +173,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
             throw new IllegalArgumentException("The offset cannot be negative");
         }
 
-        this.magicNumbers = new byte[magicNumber.length];
+        this.magicNumbers = IOUtils.byteArray(magicNumber.length);
         System.arraycopy(magicNumber, 0, this.magicNumbers, 0, magicNumber.length);
         this.byteOffset = offset;
     }
@@ -258,7 +260,7 @@ public class MagicNumberFileFilter extends AbstractFileFilter implements
         if (file != null && file.isFile() && file.canRead()) {
             try {
                 try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-                    final byte[] fileBytes = new byte[this.magicNumbers.length];
+                    final byte[] fileBytes = IOUtils.byteArray(this.magicNumbers.length);
                     randomAccessFile.seek(byteOffset);
                     final int read = randomAccessFile.read(fileBytes);
                     if (read != magicNumbers.length) {

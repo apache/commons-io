@@ -166,6 +166,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action  issue="IO-706" dev="ggregory" type="add" due-to="Gary Gregory">
         Add TimetampedObserver.
       </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOUtils.byteArray(*).
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.

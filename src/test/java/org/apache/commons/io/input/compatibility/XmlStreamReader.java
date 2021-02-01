@@ -68,8 +68,6 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * @see XmlStreamWriter
  */
 public class XmlStreamReader extends Reader {
-    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
-
     private static final String UTF_8 = "UTF-8";
 
     private static final String US_ASCII = "US-ASCII";
@@ -421,7 +419,7 @@ public class XmlStreamReader extends Reader {
 
     private void doRawStream(final InputStream inputStream)
             throws IOException {
-        final BufferedInputStream pis = new BufferedInputStream(inputStream, BUFFER_SIZE);
+        final BufferedInputStream pis = new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE);
         final String bomEnc = getBOMEncoding(pis);
         final String xmlGuessEnc = getXMLGuessEncoding(pis);
         final String xmlEnc = getXmlProlog(pis, xmlGuessEnc);
@@ -431,7 +429,7 @@ public class XmlStreamReader extends Reader {
 
     private void doHttpStream(final InputStream inputStream, final String httpContentType,
             final boolean lenient) throws IOException {
-        final BufferedInputStream pis = new BufferedInputStream(inputStream, BUFFER_SIZE);
+        final BufferedInputStream pis = new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE);
         final String cTMime = getContentTypeMime(httpContentType);
         final String cTEnc = getContentTypeEncoding(httpContentType);
         final String bomEnc = getBOMEncoding(pis);
@@ -669,14 +667,14 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
-            final byte[] bytes = new byte[BUFFER_SIZE];
-            is.mark(BUFFER_SIZE);
+            final byte[] bytes = IOUtils.byteArray();
+            is.mark(IOUtils.DEFAULT_BUFFER_SIZE);
             int offset = 0;
-            int max = BUFFER_SIZE;
+            int max = IOUtils.DEFAULT_BUFFER_SIZE;
             int c = is.read(bytes, offset, max);
             int firstGT = -1;
             String xmlProlog = ""; // avoid possible NPE warning (cannot happen; this just silences the warning)
-            while (c != -1 && firstGT == -1 && offset < BUFFER_SIZE) {
+            while (c != -1 && firstGT == -1 && offset < IOUtils.DEFAULT_BUFFER_SIZE) {
                 offset += c;
                 max -= c;
                 c = is.read(bytes, offset, max);

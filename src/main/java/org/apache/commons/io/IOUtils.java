@@ -172,7 +172,7 @@ public class IOUtils {
     /**
      * The default buffer to use for the skip() methods.
      */
-    private static final byte[] SKIP_BYTE_BUFFER = new byte[DEFAULT_BUFFER_SIZE];
+    private static final byte[] SKIP_BYTE_BUFFER = byteArray();
 
     // Allocated in the relevant skip method if necessary.
     /*
@@ -313,6 +313,29 @@ public class IOUtils {
      */
     public static BufferedWriter buffer(final Writer writer, final int size) {
         return writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer, size);
+    }
+
+    /**
+     * Returns a new byte array of size {@link #DEFAULT_BUFFER_SIZE}.
+     *
+     * @return a new byte array of size {@link #DEFAULT_BUFFER_SIZE}.
+     * @since 2.9.0
+     */
+    public static byte[] byteArray() {
+        return byteArray(DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Returns a new byte array of the given size.
+     *
+     * TODO Consider guarding or warning against large allocations...
+     *
+     * @param size array size.
+     * @return a new byte array of the given size.
+     * @since 2.9.0
+     */
+    public static byte[] byteArray(final int size) {
+        return new byte[size];
     }
 
     /**
@@ -754,8 +777,8 @@ public class IOUtils {
             return false;
         }
 
-        final byte[] array1 = new byte[DEFAULT_BUFFER_SIZE];
-        final byte[] array2 = new byte[DEFAULT_BUFFER_SIZE];
+        final byte[] array1 = byteArray();
+        final byte[] array2 = byteArray();
         int pos1;
         int pos2;
         int count1;
@@ -925,7 +948,7 @@ public class IOUtils {
      */
     public static long copy(final InputStream inputStream, final OutputStream outputStream, final int bufferSize)
             throws IOException {
-        return copyLarge(inputStream, outputStream, new byte[bufferSize]);
+        return copyLarge(inputStream, outputStream, IOUtils.byteArray(bufferSize));
     }
 
     /**
@@ -1243,7 +1266,7 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset,
                                  final long length) throws IOException {
-        return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);
+        return copyLarge(input, output, inputOffset, length, byteArray());
     }
 
     /**
@@ -1730,7 +1753,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static byte[] readFully(final InputStream input, final int length) throws IOException {
-        final byte[] buffer = new byte[length];
+        final byte[] buffer = IOUtils.byteArray(length);
         readFully(input, buffer, 0, buffer.length);
         return buffer;
     }
@@ -2317,7 +2340,7 @@ public class IOUtils {
             return EMPTY_BYTE_ARRAY;
         }
 
-        final byte[] data = new byte[size];
+        final byte[] data = IOUtils.byteArray(size);
         int offset = 0;
         int read;
 

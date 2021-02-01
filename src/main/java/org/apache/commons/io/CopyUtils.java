@@ -114,11 +114,6 @@ import java.nio.charset.Charset;
 public class CopyUtils {
 
     /**
-     * The default size of the buffer.
-     */
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
-
-    /**
      * Instances should NOT be constructed in standard programming.
      */
     public CopyUtils() { }
@@ -172,7 +167,7 @@ public class CopyUtils {
      * @throws IOException In case of an I/O problem
      */
     public static int copy(final InputStream input, final OutputStream output) throws IOException {
-        final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+        final byte[] buffer = IOUtils.byteArray();
         int count = 0;
         int n = 0;
         while (EOF != (n = input.read(buffer))) {
@@ -197,7 +192,7 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+        final char[] buffer = new char[IOUtils.DEFAULT_BUFFER_SIZE];
         int count = 0;
         int n = 0;
         while (EOF != (n = input.read(buffer))) {

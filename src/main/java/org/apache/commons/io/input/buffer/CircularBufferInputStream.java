@@ -78,7 +78,7 @@ public class CircularBufferInputStream extends InputStream {
             return;
         }
         int space = buffer.getSpace();
-        final byte[] buf = new byte[space];
+        final byte[] buf = IOUtils.byteArray(space);
         while (space > 0) {
             final int res = in.read(buf, 0, space);
             if (res == EOF) {

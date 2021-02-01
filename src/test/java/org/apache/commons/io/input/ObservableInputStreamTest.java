@@ -254,7 +254,7 @@ public class ObservableInputStreamTest {
     }
 
     private void testNotificationCallbacks(final int bufferSize) throws IOException {
-        final byte[] buffer = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+        final byte[] buffer = IOUtils.byteArray();
         final LengthObserver lengthObserver = new LengthObserver();
         final MethodCountObserver methodCountObserver = new MethodCountObserver();
         try (final ObservableInputStream ois = new ObservableInputStream(new ByteArrayInputStream(buffer),

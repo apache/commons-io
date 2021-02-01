@@ -259,7 +259,7 @@ public class Tailer implements Runnable {
         this.delayMillis = delayMillis;
         this.end = end;
 
-        this.inbuf = new byte[bufSize];
+        this.inbuf = IOUtils.byteArray(bufSize);
 
         // Save and prepare the listener
         this.listener = listener;

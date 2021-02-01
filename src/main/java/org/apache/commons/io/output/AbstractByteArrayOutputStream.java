@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.output;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ClosedInputStream;
 
 import java.io.InputStream;
@@ -103,7 +104,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
             }
 
             currentBufferIndex++;
-            currentBuffer = new byte[newBufferSize];
+            currentBuffer = IOUtils.byteArray(newBufferSize);
             buffers.add(currentBuffer);
         }
     }
@@ -364,7 +365,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
         if (remaining == 0) {
             return EMPTY_BYTE_ARRAY;
         }
-        final byte[] newbuf = new byte[remaining];
+        final byte[] newbuf = IOUtils.byteArray(remaining);
         int pos = 0;
         for (final byte[] buf : buffers) {
             final int c = Math.min(buf.length, remaining);
