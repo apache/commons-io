@@ -70,8 +70,6 @@ import org.apache.commons.io.IOUtils;
  * @since 2.0
  */
 public class XmlStreamReader extends Reader {
-    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
-
     private static final String UTF_8 = "UTF-8";
 
     private static final String US_ASCII = "US-ASCII";
@@ -188,14 +186,14 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         String encoding = null;
         if (guessedEnc != null) {
-            final byte[] bytes = new byte[BUFFER_SIZE];
-            inputStream.mark(BUFFER_SIZE);
+            final byte[] bytes = new byte[IOUtils.DEFAULT_BUFFER_SIZE];
+            inputStream.mark(IOUtils.DEFAULT_BUFFER_SIZE);
             int offset = 0;
-            int max = BUFFER_SIZE;
+            int max = IOUtils.DEFAULT_BUFFER_SIZE;
             int c = inputStream.read(bytes, offset, max);
             int firstGT = -1;
             String xmlProlog = ""; // avoid possible NPE warning (cannot happen; this just silences the warning)
-            while (c != -1 && firstGT == -1 && offset < BUFFER_SIZE) {
+            while (c != -1 && firstGT == -1 && offset < IOUtils.DEFAULT_BUFFER_SIZE) {
                 offset += c;
                 max -= c;
                 c = inputStream.read(bytes, offset, max);
@@ -361,7 +359,7 @@ public class XmlStreamReader extends Reader {
             throws IOException {
         Objects.requireNonNull(inputStream, "inputStream");
         this.defaultEncoding = defaultEncoding;
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         this.encoding = doRawStream(bom, pis, lenient);
         this.reader = new InputStreamReader(pis, encoding);
@@ -467,7 +465,7 @@ public class XmlStreamReader extends Reader {
             final boolean lenient, final String defaultEncoding) throws IOException {
         Objects.requireNonNull(inputStream, "inputStream");
         this.defaultEncoding = defaultEncoding;
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         this.encoding = processHttpStream(bom, pis, httpContentType, lenient);
         this.reader = new InputStreamReader(pis, encoding);
@@ -520,7 +518,7 @@ public class XmlStreamReader extends Reader {
         final String contentType = conn.getContentType();
         final InputStream inputStream = conn.getInputStream();
         @SuppressWarnings("resource") // managed by the InputStreamReader tracked by this instance
-        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, BUFFER_SIZE), false, BOMS);
+        final BOMInputStream bom = new BOMInputStream(new BufferedInputStream(inputStream, IOUtils.DEFAULT_BUFFER_SIZE), false, BOMS);
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         if (conn instanceof HttpURLConnection || contentType != null) {
             this.encoding = processHttpStream(bom, pis, contentType, lenient);
