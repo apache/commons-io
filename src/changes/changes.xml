@@ -210,6 +210,9 @@ The <action> type attribute can be add,update,fix,remove.
         Bump checkstyle from 8.38 to 8.39 #689.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump maven-checkstyle-plugin from 3.1.1 to 3.1.2 #198.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
         Bump jimfs from 1.1 to 1.2 #183.
       </action>
       <action dev="ggregory" type="update" due-to="XenoAmess, Gary Gregory">
