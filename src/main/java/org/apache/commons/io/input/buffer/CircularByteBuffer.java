@@ -36,10 +36,10 @@ public class CircularByteBuffer {
     /**
      * Creates a new instance with the given buffer size.
      *
-     * @param pSize the size of buffer to create
+     * @param size the size of buffer to create
      */
-    public CircularByteBuffer(final int pSize) {
-        buffer = new byte[pSize];
+    public CircularByteBuffer(final int size) {
+        buffer = new byte[size];
         startOffset = 0;
         endOffset = 0;
         currentNumberOfBytes = 0;
