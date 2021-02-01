@@ -19,6 +19,7 @@ package org.apache.commons.io.input;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -123,6 +124,27 @@ public class ObservableInputStreamTest {
             return finishedCount;
         }
 
+    }
+
+    @Test
+    public void testBrokenInputStreamRead() throws IOException {
+        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+            assertThrows(IOException.class, () -> ois.read());
+        }
+    }
+
+    @Test
+    public void testBrokenInputStreamReadBuffer() throws IOException {
+        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+            assertThrows(IOException.class, () -> ois.read(new byte[1]));
+        }
+    }
+
+    @Test
+    public void testBrokenInputStreamReadSubBuffer() throws IOException {
+        try (final ObservableInputStream ois = new ObservableInputStream(new BrokenInputStream())) {
+            assertThrows(IOException.class, () -> ois.read(new byte[2], 0, 1));
+        }
     }
 
     /**

@@ -244,6 +244,7 @@ public class ObservableInputStream extends ProxyInputStream {
     private void notify(final byte[] buffer, final int offset, int result, IOException ioe) throws IOException {
         if (ioe != null) {
             noteError(ioe);
+            throw ioe;
         } else if (result == EOF) {
             noteFinished();
         } else if (result > 0) {
@@ -257,11 +258,12 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read();
-        } catch (final IOException pException) {
-            ioe = pException;
+        } catch (final IOException ex) {
+            ioe = ex;
         }
         if (ioe != null) {
             noteError(ioe);
+            throw ioe;
         } else if (result == EOF) {
             noteFinished();
         } else {
@@ -276,8 +278,8 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read(buffer);
-        } catch (final IOException pException) {
-            ioe = pException;
+        } catch (final IOException ex) {
+            ioe = ex;
         }
         notify(buffer, 0, result, ioe);
         return result;
@@ -289,8 +291,8 @@ public class ObservableInputStream extends ProxyInputStream {
         IOException ioe = null;
         try {
             result = super.read(buffer, offset, length);
-        } catch (final IOException pException) {
-            ioe = pException;
+        } catch (final IOException ex) {
+            ioe = ex;
         }
         notify(buffer, offset, result, ioe);
         return result;
