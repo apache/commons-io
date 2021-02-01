@@ -344,6 +344,22 @@ file comparators, endian transformation classes, and much more.
             </excludes>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${checkstyle.plugin.version}</version>
+          <configuration>
+            <configLocation>${basedir}/checkstyle.xml</configLocation>
+            <enableRulesSummary>false</enableRulesSummary>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>8.40</version>
+            </dependency>
+          </dependencies>
+        </plugin>      
       </plugins>
     </pluginManagement>
     <plugins>
@@ -421,11 +437,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
-        <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -475,11 +486,11 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
-        <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-        </configuration>
+<!--         <version>${checkstyle.plugin.version}</version> -->
+<!--         <configuration> -->
+<!--           <configLocation>${basedir}/checkstyle.xml</configLocation> -->
+<!--           <enableRulesSummary>false</enableRulesSummary> -->
+<!--         </configuration> -->
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
