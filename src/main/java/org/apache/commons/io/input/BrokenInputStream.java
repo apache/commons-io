@@ -25,6 +25,7 @@ import java.io.InputStream;
  * <p>
  * This class is mostly useful for testing error handling in code that uses an
  * input stream.
+ * </p>
  *
  * @since 2.0
  */

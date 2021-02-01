@@ -29,12 +29,14 @@ import java.io.InputStream;
  * This implementation provides a light weight
  * object for testing with an {@link InputStream}
  * where the contents don't matter.
+ * </p>
  * <p>
  * One use case would be for testing the handling of
  * large {@link InputStream} as it can emulate that
  * scenario without the overhead of actually processing
  * large numbers of bytes - significantly speeding up
  * test execution times.
+ * </p>
  * <p>
  * This implementation returns zero from the method that
  * reads a byte and leaves the array unchanged in the read
@@ -42,6 +44,7 @@ import java.io.InputStream;
  * If alternative data is required the {@code processByte()} and
  * {@code processBytes()} methods can be implemented to generate
  * data, for example:
+ * </p>
  *
  * <pre>
  *  public class TestInputStream extends NullInputStream {

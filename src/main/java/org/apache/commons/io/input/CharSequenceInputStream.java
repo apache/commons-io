@@ -35,6 +35,7 @@ import java.util.Objects;
  * StringBuilder or CharBuffer.
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
+ * </p>
  *
  * @since 2.2
  */

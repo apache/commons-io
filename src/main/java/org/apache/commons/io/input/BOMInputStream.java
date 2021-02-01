@@ -28,11 +28,13 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
- *
+ * <p>
  * This class detects these bytes and, if required, can automatically skip them and return the subsequent byte as the
  * first byte in the stream.
- *
+ * </p>
+ * <p>
  * The {@link ByteOrderMark} implementation has the following pre-defined BOMs:
+ * </p>
  * <ul>
  * <li>UTF-8 - {@link ByteOrderMark#UTF_8}</li>
  * <li>UTF-16BE - {@link ByteOrderMark#UTF_16LE}</li>
@@ -40,7 +42,6 @@ import org.apache.commons.io.IOUtils;
  * <li>UTF-32BE - {@link ByteOrderMark#UTF_32LE}</li>
  * <li>UTF-32LE - {@link ByteOrderMark#UTF_32BE}</li>
  * </ul>
- *
  *
  * <h2>Example 1 - Detect and exclude a UTF-8 BOM</h2>
  *

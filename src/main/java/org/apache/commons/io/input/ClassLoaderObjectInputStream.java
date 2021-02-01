@@ -28,6 +28,7 @@ import java.lang.reflect.Proxy;
  * {@code ClassLoader} rather than the system default.
  * <p>
  * This is useful in dynamic container environments.
+ * </p>
  *
  * @since 1.1
  */

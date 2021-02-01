@@ -48,6 +48,7 @@ import org.apache.commons.io.TaggedIOException;
  * used to let higher levels of code handle the exception caused by this
  * stream while other processing errors are being taken care of at this
  * lower level.
+ * </p>
  * <pre>
  * TaggedInputStream stream = new TaggedInputStream(...);
  * try {

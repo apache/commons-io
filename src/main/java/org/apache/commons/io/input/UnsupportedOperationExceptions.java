@@ -20,7 +20,9 @@ package org.apache.commons.io.input;
 /**
  * Package-private factory for {@link UnsupportedOperationException} to provide messages with consistent formatting.
  *
+ * <p>
  * TODO Consider making this public and use from LineIterator but this feels like it belongs in LANG rather than IO.
+ * </p>
  */
 class UnsupportedOperationExceptions {
 

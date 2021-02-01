@@ -42,23 +42,28 @@ import org.apache.commons.io.output.XmlStreamWriter;
  * <p>
  * IMPORTANT: This class is not related in any way to the org.xml.sax.XMLReader.
  * This one IS a character stream.
+ * </p>
  * <p>
  * All this has to be done without consuming characters from the stream, if not
  * the XML parser will not recognized the document as a valid XML. This is not
  * 100% true, but it's close enough (UTF-8 BOM is not handled by all parsers
  * right now, XmlStreamReader handles it and things work in all parsers).
+ * </p>
  * <p>
  * The XmlStreamReader class handles the charset encoding of XML documents in
  * Files, raw streams and HTTP streams by offering a wide set of constructors.
+ * </p>
  * <p>
  * By default the charset encoding detection is lenient, the constructor with
  * the lenient flag can be used for a script (following HTTP MIME and XML
  * specifications). All this is nicely explained by Mark Pilgrim in his blog, <a
  * href="http://diveintomark.org/archives/2004/02/13/xml-media-types">
  * Determining the character encoding of a feed</a>.
+ * </p>
  * <p>
  * Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
  * Apache License 2.0.
+ * </p>
  *
  * @see XmlStreamWriter
  */

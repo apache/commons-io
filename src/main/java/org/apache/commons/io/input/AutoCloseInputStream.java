@@ -32,6 +32,7 @@ import java.io.InputStream;
  * stream as soon as possible even if the client application (by not explicitly
  * closing the stream when no longer needed) or the underlying stream (by not
  * releasing resources once the last byte has been read) do not do that.
+ * </p>
  *
  * @since 1.4
  */

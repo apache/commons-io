@@ -31,6 +31,7 @@ import java.io.InputStream;
  * So, one of these, initialized with the Content-length sent in the
  * ServletInputStream's header, will stop it blocking, providing it's been sent
  * with a correct content length.
+ * </p>
  *
  * @since 2.0
  */

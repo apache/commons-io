@@ -27,6 +27,7 @@ import java.io.InputStream;
  * do an alternate processing with the stream. Note that the original
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
+ * </p>
  *
  */
 public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStreamReaderException {
