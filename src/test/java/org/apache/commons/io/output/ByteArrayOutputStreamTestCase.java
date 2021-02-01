@@ -16,6 +16,13 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,13 +34,6 @@ import org.apache.commons.io.input.ClosedInputStream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Basic unit tests for the alternative ByteArrayOutputStream implementations.
@@ -106,7 +106,7 @@ public class ByteArrayOutputStreamTestCase {
     @MethodSource("baosFactories")
     public void testWriteZero(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
-            baout.write(new byte[0], 0, 0);
+            baout.write(IOUtils.EMPTY_BYTE_ARRAY, 0, 0);
             assertTrue(true, "Dummy");
         }
     }
@@ -123,7 +123,7 @@ public class ByteArrayOutputStreamTestCase {
     @MethodSource("baosFactories")
     public void testInvalidWriteOffsetOver(final String baosName, final BAOSFactory<?> baosFactory) throws IOException {
         try (final AbstractByteArrayOutputStream baout = baosFactory.newInstance()) {
-            assertThrows(IndexOutOfBoundsException.class, () -> baout.write(new byte[0], 1, 0));
+            assertThrows(IndexOutOfBoundsException.class, () -> baout.write(IOUtils.EMPTY_BYTE_ARRAY, 1, 0));
         }
     }
 
@@ -174,7 +174,7 @@ public class ByteArrayOutputStreamTestCase {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("toBufferedInputStreamFunctionFactories")
     public void testToBufferedInputStreamEmpty(final String baosName, final IOFunction<InputStream, InputStream> toBufferedInputStreamFunction) throws IOException {
-        try (final ByteArrayInputStream bain = new ByteArrayInputStream(new byte[0])) {
+        try (final ByteArrayInputStream bain = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY)) {
             assertEquals(0, bain.available());
 
             try (final InputStream buffered = toBufferedInputStreamFunction.apply(bain)) {

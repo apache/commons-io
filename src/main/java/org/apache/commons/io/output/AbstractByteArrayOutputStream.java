@@ -61,9 +61,6 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
 
     static final int DEFAULT_SIZE = 1024;
 
-    /** A singleton empty byte array. */
-    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();
     /** The index of the current buffer. */
@@ -363,7 +360,7 @@ public abstract class AbstractByteArrayOutputStream extends OutputStream {
     protected byte[] toByteArrayImpl() {
         int remaining = count;
         if (remaining == 0) {
-            return EMPTY_BYTE_ARRAY;
+            return IOUtils.EMPTY_BYTE_ARRAY;
         }
         final byte[] newbuf = IOUtils.byteArray(remaining);
         int pos = 0;

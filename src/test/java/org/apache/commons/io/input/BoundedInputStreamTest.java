@@ -68,7 +68,7 @@ public class BoundedInputStreamTest {
         compare("limit = -1", helloWorld, IOUtils.toByteArray(bounded));
 
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), 0);
-        compare("limit = 0", new byte[0], IOUtils.toByteArray(bounded));
+        compare("limit = 0", IOUtils.EMPTY_BYTE_ARRAY, IOUtils.toByteArray(bounded));
 
         bounded = new BoundedInputStream(new ByteArrayInputStream(helloWorld), helloWorld.length);
         compare("limit = length", helloWorld, IOUtils.toByteArray(bounded));

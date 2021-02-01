@@ -105,7 +105,12 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
-    private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    /** 
+     * A singleton empty byte array.
+     *
+     *  @since 2.9.0
+     */
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /**
      * The default buffer size ({@value}) to use in copy methods.

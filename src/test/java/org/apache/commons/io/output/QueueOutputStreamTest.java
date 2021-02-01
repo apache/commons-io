@@ -16,11 +16,11 @@
  */
 package org.apache.commons.io.output;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.QueueInputStream;
-import org.apache.commons.io.input.QueueInputStreamTest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
@@ -30,11 +30,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.QueueInputStream;
+import org.apache.commons.io.input.QueueInputStreamTest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link QueueOutputStream} and {@link QueueInputStream}

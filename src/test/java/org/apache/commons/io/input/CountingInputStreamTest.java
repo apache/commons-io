@@ -118,7 +118,7 @@ public class CountingInputStreamTest {
 
     @Test
     public void testZeroLength1() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (final CountingInputStream cis = new CountingInputStream(bais)) {
 
             final int found = cis.read();
@@ -129,7 +129,7 @@ public class CountingInputStreamTest {
 
     @Test
     public void testZeroLength2() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (final CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
@@ -142,7 +142,7 @@ public class CountingInputStreamTest {
 
     @Test
     public void testZeroLength3() throws Exception {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(new byte[0]);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.EMPTY_BYTE_ARRAY);
         try (final CountingInputStream cis = new CountingInputStream(bais)) {
 
             final byte[] result = new byte[10];
