@@ -3139,16 +3139,16 @@ public class FileUtils {
      */
     public static boolean waitFor(final File file, final int seconds) {
         Objects.requireNonNull(file, "file");
-        final long finishAt = System.currentTimeMillis() + (seconds * 1000L);
+        final long finishAtMillis = System.currentTimeMillis() + (seconds * 1000L);
         boolean wasInterrupted = false;
         try {
             while (!file.exists()) {
-                final long remaining = finishAt -  System.currentTimeMillis();
-                if (remaining < 0){
+                final long remainingMillis = finishAtMillis -  System.currentTimeMillis();
+                if (remainingMillis < 0){
                     return false;
                 }
                 try {
-                    Thread.sleep(Math.min(100, remaining));
+                    Thread.sleep(Math.min(100, remainingMillis));
                 } catch (final InterruptedException ignore) {
                     wasInterrupted = true;
                 } catch (final Exception ex) {

@@ -1065,17 +1065,19 @@ public class FileUtilsTestCase {
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         // destination file time should not be less than this (allowing for granularity)
-        final long now = System.currentTimeMillis() - 1000L;
+        final long nowMillis = System.currentTimeMillis() - 1000L;
         // On Windows, the last modified time is copied by default.
         FileUtils.copyFile(testFile1, destFile, false);
         assertTrue(destFile.exists(), "Check Exist");
         assertEquals(testFile1Size, destFile.length(), "Check Full copy");
-        final long destLastMod = getLastModifiedMillis(destFile);
-        final long unexpected = getLastModifiedMillis(testFile1);
+        final long destLastModMillis = getLastModifiedMillis(destFile);
+        final long unexpectedMillis = getLastModifiedMillis(testFile1);
         if (!SystemUtils.IS_OS_WINDOWS) {
-            final long delta = destLastMod - unexpected;
-            assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
-            assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
+            final long deltaMillis = destLastModMillis - unexpectedMillis;
+            assertNotEquals(unexpectedMillis, destLastModMillis,
+                "Check last modified date not same as input, delta " + deltaMillis);
+            assertTrue(destLastModMillis > nowMillis,
+                destLastModMillis + " > " + nowMillis + " (delta " + deltaMillis + ")");
         }
     }
 
@@ -2265,7 +2267,7 @@ public class FileUtilsTestCase {
         backDateFile10Minutes(testFile1); // set test file back 10 minutes
 
         // destination file time should not be less than this (allowing for granularity)
-        final long now = System.currentTimeMillis() - 1000L;
+        final long nowMillis = System.currentTimeMillis() - 1000L;
 
         final File src = new File(testFile1.getAbsolutePath()) {
             private static final long serialVersionUID = 1L;
@@ -2277,7 +2279,7 @@ public class FileUtilsTestCase {
                 return false;
             }
         };
-        final long unexpected = getLastModifiedMillis(testFile1);
+        final long unexpectedMillis = getLastModifiedMillis(testFile1);
 
         FileUtils.moveFile(src, destination, PathUtils.EMPTY_COPY_OPTIONS);
         assertTrue(destination.exists(), "Check Exist");
@@ -2285,10 +2287,12 @@ public class FileUtilsTestCase {
 
         // On Windows, the last modified time is copied by default.
         if (!SystemUtils.IS_OS_WINDOWS) {
-            final long destLastMod = getLastModifiedMillis(destination);
-            final long delta = destLastMod - unexpected;
-            assertNotEquals(unexpected, destLastMod, "Check last modified date not same as input, delta " + delta);
-            assertTrue(destLastMod > now, destLastMod + " > " + now + " (delta " + delta + ")");
+            final long destLastModMillis = getLastModifiedMillis(destination);
+            final long deltaMillis = destLastModMillis - unexpectedMillis;
+            assertNotEquals(unexpectedMillis, destLastModMillis,
+                "Check last modified date not same as input, delta " + deltaMillis);
+            assertTrue(destLastModMillis > nowMillis,
+                destLastModMillis + " > " + nowMillis + " (delta " + deltaMillis + ")");
         }
     }
 
@@ -2778,12 +2782,13 @@ public class FileUtilsTestCase {
         final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98
         assertEquals(true, res, "Bad test: set lastModified failed");
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
-        final long now = System.currentTimeMillis();
+        final long nowMillis = System.currentTimeMillis();
         FileUtils.touch(file);
         assertEquals(1, file.length(), "FileUtils.touch() didn't empty the file.");
         assertEquals(false, y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
-        assertEquals(true, getLastModifiedMillis(file) >= now - 3000, "FileUtils.touch() changed lastModified to more than now-3s");
-        assertEquals(true, getLastModifiedMillis(file) <= now + 3000, "FileUtils.touch() changed lastModified to less than now+3s");
+        final int delta = 3000;
+        assertEquals(true, getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
+        assertEquals(true, getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
     }
 
     @Test
