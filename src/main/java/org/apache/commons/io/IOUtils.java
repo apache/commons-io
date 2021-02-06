@@ -105,12 +105,12 @@ public class IOUtils {
     // Writer. Each method should take at least one of these as a parameter,
     // or return one of them.
 
-    /** 
-     * A singleton empty byte array.
+    /**
+     * CR char.
      *
-     *  @since 2.9.0
+     * @since 2.9.0
      */
-    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    public static final int CR = '\r';
 
     /**
      * The default buffer size ({@value}) to use in copy methods.
@@ -132,12 +132,18 @@ public class IOUtils {
      */
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
 
-    /**
-     * CR char.
+    /** 
+     * A singleton empty byte array.
      *
-     * @since 2.9.0
+     *  @since 2.9.0
      */
-    public static final int CR = '\r';
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
+    /**
+     * Represents the end-of-file (or stream).
+     * @since 2.5 (made public)
+     */
+    public static final int EOF = -1;
 
     /**
      * LF char.
@@ -145,12 +151,6 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static final int LF = '\n';
-
-    /**
-     * Represents the end-of-file (or stream).
-     * @since 2.5 (made public)
-     */
-    public static final int EOF = -1;
 
     /**
      * The system line separator string.
