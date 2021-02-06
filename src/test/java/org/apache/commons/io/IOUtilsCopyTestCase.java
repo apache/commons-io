@@ -59,7 +59,6 @@ public class IOUtilsCopyTestCase {
 
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_inputStreamToOutputStream() throws Exception {
@@ -77,7 +76,7 @@ public class IOUtilsCopyTestCase {
         assertEquals(inData.length,count);
     }
 
-    /*
+    /**
      * Test Copying file > 2GB  - see issue# IO-84
      */
     @Test
@@ -143,7 +142,6 @@ public class IOUtilsCopyTestCase {
         assertEquals(inData.length,count);
     }
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     @Test
     public void testCopy_inputStreamToWriter() throws Exception {
@@ -163,7 +161,6 @@ public class IOUtilsCopyTestCase {
         assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_inputStreamToWriter_Encoding() throws Exception {
@@ -286,7 +283,6 @@ public class IOUtilsCopyTestCase {
         assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (Appendable) null));
     }
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings({ "resource", "deprecation" }) // 'in' is deliberately not closed
     @Test
     public void testCopy_readerToOutputStream() throws Exception {
@@ -309,7 +305,6 @@ public class IOUtilsCopyTestCase {
         assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_readerToOutputStream_Encoding() throws Exception {
@@ -380,7 +375,6 @@ public class IOUtilsCopyTestCase {
         assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (OutputStream) null)); // deliberately testing deprecated method
     }
 
-    //-----------------------------------------------------------------------
     @SuppressWarnings("resource") // 'in' is deliberately not closed
     @Test
     public void testCopy_readerToWriter() throws Exception {
