@@ -16,7 +16,9 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,7 +29,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.apache.commons.io.input.NullInputStream;
@@ -429,6 +435,34 @@ public class IOUtilsCopyTestCase {
         in = new ThrowOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, StandardCharsets.US_ASCII);
         assertThrows(NullPointerException.class, () -> IOUtils.copy(reader, (Writer) null));
+    }
+
+    @Test
+    public void testCopy_URLToFile() throws Exception {
+        final String name = "/org/apache/commons/io/abitmorethan16k.txt";
+        URL in = getClass().getResource(name);
+        assertNotNull(in, name);
+
+        Path path = Files.createTempFile("testCopy_URLToFile", ".txt");
+        try {
+            IOUtils.copy(in, path.toFile());
+
+            assertArrayEquals(Files.readAllBytes(Paths.get("src/test/resources" + name)), Files.readAllBytes(path));
+        } finally {
+            Files.delete(path);
+        }
+    }
+
+    @Test
+    public void testCopy_URLToOutputStream() throws Exception {
+        final String name = "/org/apache/commons/io/abitmorethan16k.txt";
+        URL in = getClass().getResource(name);
+        assertNotNull(in, name);
+
+        final ByteArrayOutputStream baout = new ByteArrayOutputStream();
+        IOUtils.copy(in, baout);
+
+        assertArrayEquals(Files.readAllBytes(Paths.get("src/test/resources" + name)), baout.toByteArray());
     }
 
 }

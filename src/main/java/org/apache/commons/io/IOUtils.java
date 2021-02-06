@@ -25,6 +25,7 @@ import java.io.CharArrayWriter;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1188,6 +1189,52 @@ public class IOUtils {
             return EOF;
         }
         return (int) count;
+    }
+
+    /**
+     * Copies bytes from a {@code URL} to an {@code OutputStream}.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * </p>
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
+     *
+     * @param url the {@code URL} to read.
+     * @param file the {@code OutputStream} to write.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the URL is {@code null}.
+     * @throws NullPointerException if the OutputStream is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static long copy(final URL url, final File file) throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream(Objects.requireNonNull(file, "file"))) {
+            return copy(url, outputStream);
+        }
+    }
+
+    /**
+     * Copies bytes from a {@code URL} to an {@code OutputStream}.
+     * <p>
+     * This method buffers the input internally, so there is no need to use a {@code BufferedInputStream}.
+     * </p>
+     * <p>
+     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+     * </p>
+     *
+     * @param url the {@code URL} to read.
+     * @param outputStream the {@code OutputStream} to write.
+     * @return the number of bytes copied.
+     * @throws NullPointerException if the URL is {@code null}.
+     * @throws NullPointerException if the OutputStream is {@code null}.
+     * @throws IOException if an I/O error occurs.
+     * @since 2.9.0
+     */
+    public static long copy(final URL url, final OutputStream outputStream) throws IOException {
+        try (InputStream inputStream = Objects.requireNonNull(url, "url").openStream()) {
+            return copyLarge(inputStream, outputStream);
+        }
     }
 
     /**
