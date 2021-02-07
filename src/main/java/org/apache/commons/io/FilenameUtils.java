@@ -1430,7 +1430,7 @@ public class FilenameUtils {
                     } else {
                         // matching from current position
                         if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
-                            // couldnt match token
+                            // couldn't match token
                             break;
                         }
                     }

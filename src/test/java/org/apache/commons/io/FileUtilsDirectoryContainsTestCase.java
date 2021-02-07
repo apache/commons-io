@@ -156,7 +156,7 @@ public class FileUtilsDirectoryContainsTestCase {
         final File file = new File(top, "DOESNOTEXIST");
         assertTrue(top.exists(), "Check directory exists");
         assertFalse(file.exists(), "Check file does not exist");
-        assertFalse(FileUtils.directoryContains(top, file), "Direcory does not contain unrealized file");
+        assertFalse(FileUtils.directoryContains(top, file), "Directory does not contain unrealized file");
     }
 
     @Test

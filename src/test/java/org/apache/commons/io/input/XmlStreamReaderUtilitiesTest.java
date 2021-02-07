@@ -171,7 +171,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditonalUTF16() throws IOException {
+    public void testCalculateRawEncodingAdditionalUTF16() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-16BE", "UTF-16",   null,       null);
         checkRawEncoding("UTF-16BE", "UTF-16BE", null,       "UTF-16",   null);
@@ -186,7 +186,7 @@ public class XmlStreamReaderUtilitiesTest {
     }
 
     @Test
-    public void testCalculateRawEncodingAdditonalUTF32() throws IOException {
+    public void testCalculateRawEncodingAdditionalUTF32() throws IOException {
         //                           BOM         Guess       XML         Default
         checkRawError(RAWMGS1,       "UTF-32BE", "UTF-32",   null,       null);
         checkRawEncoding("UTF-32BE", "UTF-32BE", null,       "UTF-32",   null);
