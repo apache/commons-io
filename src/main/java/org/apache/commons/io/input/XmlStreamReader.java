@@ -512,7 +512,7 @@ public class XmlStreamReader extends Reader {
      *         the URLConnection.
      */
     public XmlStreamReader(final URLConnection conn, final String defaultEncoding) throws IOException {
-        Objects.requireNonNull(conn, "conm");
+        Objects.requireNonNull(conn, "conn");
         this.defaultEncoding = defaultEncoding;
         final boolean lenient = true;
         final String contentType = conn.getContentType();
