@@ -52,6 +52,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.buffer.LineEndUnifiedBufferedReader;
 import org.apache.commons.io.input.QueueInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -935,16 +936,90 @@ public class IOUtils {
         if (reader1 == null ^ reader2 == null) {
             return false;
         }
-        final BufferedReader br1 = toBufferedReader(reader1);
-        final BufferedReader br2 = toBufferedReader(reader2);
 
-        String line1 = br1.readLine();
-        String line2 = br2.readLine();
-        while (line1 != null && line1.equals(line2)) {
-            line1 = br1.readLine();
-            line2 = br2.readLine();
+        final LineEndUnifiedBufferedReader bufferedInput1;
+        if (reader1 instanceof LineEndUnifiedBufferedReader) {
+            bufferedInput1 = (LineEndUnifiedBufferedReader) reader1;
+        } else {
+            bufferedInput1 = new LineEndUnifiedBufferedReader(reader1);
         }
-        return Objects.equals(line1, line2);
+
+        final LineEndUnifiedBufferedReader bufferedInput2;
+        if (reader2 instanceof LineEndUnifiedBufferedReader) {
+            bufferedInput2 = (LineEndUnifiedBufferedReader) reader2;
+        } else {
+            bufferedInput2 = new LineEndUnifiedBufferedReader(reader2);
+        }
+
+        /*
+         * We use this variable to mark if last char be '\n'.
+         * Because "a" and "a\n" is thought contentEqualsIgnoreEOL,
+         * but "\n" and "\n\n" is thought not contentEqualsIgnoreEOL.
+         */
+        boolean justNewLine = true;
+
+        int currentChar1;
+        int currentChar2;
+
+        while (true) {
+            currentChar1 = bufferedInput1.peek();
+            currentChar2 = bufferedInput2.peek();
+
+            if (currentChar1 == EOF) {
+                if (currentChar2 == EOF) {
+                    return true;
+                } else {
+                    if (!justNewLine) {
+                        return inputOnlyHaveCRLForEOF( bufferedInput2, currentChar2);
+                    }
+                    return false;
+                }
+            } else if (currentChar2 == EOF) {
+                if (!justNewLine) {
+                    return inputOnlyHaveCRLForEOF(bufferedInput1, currentChar1);
+                }
+                return false;
+            }
+            if (currentChar1 != currentChar2) {
+                return false;
+            }
+            justNewLine = currentChar1 == '\n';
+            bufferedInput1.eat();
+            bufferedInput2.eat();
+        }
+    }
+
+    /**
+     * private function used only in contentEqualsIgnoreEOL.
+     * used in contentEqualsIgnoreEOL to detect whether a input only have CRLF or EOF.
+     * @param input input reader
+     * @param currentChar current peek char of input
+     * @return true/false
+     * @throws IOException by input.read(), not me.
+     * @see #contentEqualsIgnoreEOL(Reader, Reader)
+     */
+    private static boolean inputOnlyHaveCRLForEOF(LineEndUnifiedBufferedReader input, int currentChar) throws IOException {
+
+        /*
+         * logically there should be some code like
+         *
+         *  if (char1 == EOF) {
+         *      return true;
+         *  }
+         *
+         * here.
+         *
+         * But actually, if this input's read() is EOF, then we will not invoke this function at all.
+         * So the check is deleted.
+         *
+         * You can go contentEqualsIgnoreEOL for details.
+         */
+
+        if (currentChar == '\n') {
+            input.eat();
+            return input.read() == EOF;
+        }
+        return false;
     }
 
     /**
