@@ -115,7 +115,7 @@ public class PathUtilsTest extends TestArguments {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName()).toAbsolutePath();
         try {
             final Path archivePath = Paths.get("src/test/resources/org/apache/commons/io/test.jar");
-            try (final FileSystem archive = FileSystems.newFileSystem(archivePath, (ClassLoader) null)) {
+            try (final FileSystem archive = openArchive(archivePath, false)) {
                 // relative jar -> absolute dir
                 Path sourceDir = archive.getPath("dir1");
                 PathUtils.copyDirectory(sourceDir, tempDir);
@@ -135,11 +135,7 @@ public class PathUtilsTest extends TestArguments {
     public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            final Path archivePath = tempDir.resolve("test.jar");
-            final URI uri = URI.create("jar:file:" + archivePath.toAbsolutePath().toString());
-            final Map<String, String> env = new HashMap<>();
-            env.put("create", "true");
-            try (final FileSystem archive = FileSystems.newFileSystem(uri, env, null)) {
+            try (final FileSystem archive = openArchive(tempDir.resolve("test.jar"), true)) {
                 // absolute dir -> relative jar
                 Path targetDir = archive.getPath("target");
                 Files.createDirectory(targetDir);
@@ -160,21 +156,22 @@ public class PathUtilsTest extends TestArguments {
 
     @Test
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
-        Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
-        final Path cwd = Paths.get("").toAbsolutePath();
-        tempDir = cwd.relativize(tempDir);
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
             final Path archivePath = Paths.get("src/test/resources/org/apache/commons/io/test.jar");
-            try (final FileSystem archive = FileSystems.newFileSystem(archivePath, (ClassLoader) null)) {
+            try (final FileSystem archive = openArchive(archivePath, false);
+                    final FileSystem targetArchive = openArchive(tempDir.resolve("test.jar"), true)) {
+                Path targetDir = targetArchive.getPath("targetDir");
+                Files.createDirectory(targetDir);
                 // relative jar -> relative dir
                 Path sourceDir = archive.getPath("next");
-                PathUtils.copyDirectory(sourceDir, tempDir);
-                assertTrue(Files.exists(tempDir.resolve("dir")));
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dir")));
 
                 // absolute jar -> relative dir
                 sourceDir = archive.getPath("/dir1");
-                PathUtils.copyDirectory(sourceDir, tempDir);
-                assertTrue(Files.exists(tempDir.resolve("f1")));
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("f1")));
             }
         } finally {
             PathUtils.deleteDirectory(tempDir);
@@ -185,11 +182,7 @@ public class PathUtilsTest extends TestArguments {
     public void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
         final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
         try {
-            final Path archivePath = tempDir.resolve("test.jar");
-            final URI uri = URI.create("jar:file:" + archivePath.toAbsolutePath().toString());
-            final Map<String, String> env = new HashMap<>();
-            env.put("create", "true");
-            try (final FileSystem archive = FileSystems.newFileSystem(uri, env, null)) {
+            try (final FileSystem archive = openArchive(tempDir.resolve("test.jar"), true)) {
                 // relative dir -> relative jar
                 Path targetDir = archive.getPath("target");
                 Files.createDirectory(targetDir);
@@ -205,6 +198,20 @@ public class PathUtilsTest extends TestArguments {
         } finally {
             PathUtils.deleteDirectory(tempDir);
         }
+    }
+    
+    private FileSystem openArchive(Path p, boolean createNew) throws IOException {
+        final FileSystem archive;
+        if (createNew) {
+            Map<String, String> env = new HashMap<>();
+            env.put("create", "true");
+            URI fileUri = p.toAbsolutePath().toUri();
+            final URI uri = URI.create("jar:" + fileUri.toASCIIString());
+            archive = FileSystems.newFileSystem(uri, env, null);
+        } else {
+            archive = FileSystems.newFileSystem(p, (ClassLoader) null);
+        }
+        return archive;
     }
 
 }
