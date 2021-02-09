@@ -115,7 +115,7 @@ public class PathUtilsTest extends TestArguments {
 		final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName()).toAbsolutePath();
 		try {
 			final Path archivePath = Paths.get("src/test/resources/org/apache/commons/io/test.jar");
-			try (final FileSystem archive = FileSystems.newFileSystem(archivePath, null)) {
+			try (final FileSystem archive = FileSystems.newFileSystem(archivePath, (ClassLoader)null)) {
 				// relative jar -> absolute dir
 				Path sourceDir = archive.getPath("dir1");
 				PathUtils.copyDirectory(sourceDir, tempDir);
@@ -164,7 +164,7 @@ public class PathUtilsTest extends TestArguments {
 		tempDir = cwd.relativize(tempDir);
 		try {
 			final Path archivePath = Paths.get("src/test/resources/org/apache/commons/io/test.jar");
-			try (final FileSystem archive = FileSystems.newFileSystem(archivePath, null)) {
+			try (final FileSystem archive = FileSystems.newFileSystem(archivePath, (ClassLoader)null)) {
 				// relative jar -> relative dir
 				Path sourceDir = archive.getPath("next");
 				PathUtils.copyDirectory(sourceDir, tempDir);
