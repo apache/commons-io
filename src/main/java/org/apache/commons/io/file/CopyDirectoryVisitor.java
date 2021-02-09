@@ -144,7 +144,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
         throws IOException {
-        final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory));
+        final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory).toString());
         if (Files.notExists(newTargetDir)) {
             Files.createDirectory(newTargetDir);
         }
@@ -153,7 +153,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
-        final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile));
+        final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile).toString());
         copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
     }
