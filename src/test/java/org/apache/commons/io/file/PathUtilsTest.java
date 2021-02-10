@@ -22,11 +22,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.junit.jupiter.api.Test;
@@ -37,6 +42,10 @@ import org.junit.jupiter.api.io.TempDir;
  */
 public class PathUtilsTest extends TestArguments {
 
+    private static final String TEST_JAR_NAME = "test.jar";
+
+    private static final String TEST_JAR_PATH = "src/test/resources/org/apache/commons/io/test.jar";
+
     private static final String PATH_FIXTURE = "NOTICE.txt";
 
     /**
@@ -44,6 +53,110 @@ public class PathUtilsTest extends TestArguments {
      */
     @TempDir
     public Path tempDir;
+
+    private FileSystem openArchive(final Path p, final boolean createNew) throws IOException {
+        final FileSystem archive;
+        if (createNew) {
+            final Map<String, String> env = new HashMap<>();
+            env.put("create", "true");
+            final URI fileUri = p.toAbsolutePath().toUri();
+            final URI uri = URI.create("jar:" + fileUri.toASCIIString());
+            archive = FileSystems.newFileSystem(uri, env, null);
+        } else {
+            archive = FileSystems.newFileSystem(p, (ClassLoader) null);
+        }
+        return archive;
+    }
+
+    @Test
+    public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePath() throws IOException {
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName()).toAbsolutePath();
+        try {
+            final Path archivePath = Paths.get(TEST_JAR_PATH);
+            try (final FileSystem archive = openArchive(archivePath, false)) {
+                // relative jar -> absolute dir
+                Path sourceDir = archive.getPath("dir1");
+                PathUtils.copyDirectory(sourceDir, tempDir);
+                assertTrue(Files.exists(tempDir.resolve("f1")));
+
+                // absolute jar -> absolute dir
+                sourceDir = archive.getPath("/next");
+                PathUtils.copyDirectory(sourceDir, tempDir);
+                assertTrue(Files.exists(tempDir.resolve("dir")));
+            }
+        } finally {
+            PathUtils.deleteDirectory(tempDir);
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryForDifferentFilesystemsWithAbsolutePathReverse() throws IOException {
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        try {
+            try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+                // absolute dir -> relative jar
+                Path targetDir = archive.getPath("target");
+                Files.createDirectory(targetDir);
+                final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2")
+                        .toAbsolutePath();
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+
+                // absolute dir -> absolute jar
+                targetDir = archive.getPath("/");
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+            }
+        } finally {
+            PathUtils.deleteDirectory(tempDir);
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryForDifferentFilesystemsWithRelativePath() throws IOException {
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        try {
+            final Path archivePath = Paths.get(TEST_JAR_PATH);
+            try (final FileSystem archive = openArchive(archivePath, false);
+                    final FileSystem targetArchive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+                final Path targetDir = targetArchive.getPath("targetDir");
+                Files.createDirectory(targetDir);
+                // relative jar -> relative dir
+                Path sourceDir = archive.getPath("next");
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dir")));
+
+                // absolute jar -> relative dir
+                sourceDir = archive.getPath("/dir1");
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("f1")));
+            }
+        } finally {
+            PathUtils.deleteDirectory(tempDir);
+        }
+    }
+
+    @Test
+    public void testCopyDirectoryForDifferentFilesystemsWithRelativePathReverse() throws IOException {
+        final Path tempDir = Files.createTempDirectory(getClass().getCanonicalName());
+        try {
+            try (final FileSystem archive = openArchive(tempDir.resolve(TEST_JAR_NAME), true)) {
+                // relative dir -> relative jar
+                Path targetDir = archive.getPath("target");
+                Files.createDirectory(targetDir);
+                final Path sourceDir = Paths.get("src/test/resources/org/apache/commons/io/dirs-2-file-size-2");
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+
+                // relative dir -> absolute jar
+                targetDir = archive.getPath("/");
+                PathUtils.copyDirectory(sourceDir, targetDir);
+                assertTrue(Files.exists(targetDir.resolve("dirs-a-file-size-1")));
+            }
+        } finally {
+            PathUtils.deleteDirectory(tempDir);
+        }
+    }
 
     @Test
     public void testCopyFile() throws IOException {

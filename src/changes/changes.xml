@@ -111,6 +111,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-705" dev="ggregory" type="fix" due-to="Hao Zhong, Gary Gregory">
         Fix infinite loops in ObservableInputStream read(*) when an exception is caught but not re-thrown.
       </action>
+      <action issue="IO-719" dev="ggregory" type="fix" due-to="Andrew Shcheglov, Gary Gregory">
+        Fixed error of copying directories between different file systems #203.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.

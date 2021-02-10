@@ -22,6 +22,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.ProviderMismatchException;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Objects;
@@ -99,7 +100,7 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
         }
         final CopyDirectoryVisitor other = (CopyDirectoryVisitor) obj;
         return Arrays.equals(copyOptions, other.copyOptions) && Objects.equals(sourceDirectory, other.sourceDirectory)
-                && Objects.equals(targetDirectory, other.targetDirectory);
+            && Objects.equals(targetDirectory, other.targetDirectory);
     }
 
     /**
@@ -144,16 +145,29 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
     @Override
     public FileVisitResult preVisitDirectory(final Path directory, final BasicFileAttributes attributes)
         throws IOException {
-        final Path newTargetDir = targetDirectory.resolve(sourceDirectory.relativize(directory));
+        final Path newTargetDir = resolveRelativeAsString(directory);
         if (Files.notExists(newTargetDir)) {
             Files.createDirectory(newTargetDir);
         }
         return super.preVisitDirectory(directory, attributes);
     }
 
+    /**
+     * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
+     * 
+     * We have to call {@link Path#toString()} relative value because we cannot use paths belonging to different
+     * FileSystems in the Path methods, usually this leads to {@link ProviderMismatchException}.
+     * 
+     * @param directory the directory to relativize.
+     * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
+     */
+    private Path resolveRelativeAsString(final Path directory) {
+        return targetDirectory.resolve(sourceDirectory.relativize(directory).toString());
+    }
+
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
-        final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile));
+        final Path targetFile = resolveRelativeAsString(sourceFile);
         copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
     }
