@@ -226,9 +226,10 @@ public final class PathUtils {
      */
     public static PathCounters copyDirectory(final Path sourceDirectory, final Path targetDirectory,
         final CopyOption... copyOptions) throws IOException {
+        final Path absoluteSource = sourceDirectory.toAbsolutePath();
         return visitFileTree(
-            new CopyDirectoryVisitor(Counters.longPathCounters(), sourceDirectory, targetDirectory, copyOptions),
-            sourceDirectory).getPathCounters();
+            new CopyDirectoryVisitor(Counters.longPathCounters(), absoluteSource, targetDirectory, copyOptions),
+            absoluteSource).getPathCounters();
     }
 
     /**
