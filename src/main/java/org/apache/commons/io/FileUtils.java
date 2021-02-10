@@ -2192,7 +2192,7 @@ public class FileUtils {
      * @throws IOException if the directory was not created along with all its parent directories.
      * @throws IOException if the given file object is not a directory.
      * @throws SecurityException See {@link File#mkdirs()}.
-     * @see @see File#mkdirs()
+     * @see File#mkdirs()
      */
     private static File mkdirs(final File directory) throws IOException {
         if (directory != null) {
@@ -2625,7 +2625,7 @@ public class FileUtils {
      * Requires that the given {@code File} is a directory.
      *
      * @param directory The {@code File} to check.
-     * @param name
+     * @param name The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @return the given directory.
      * @throws NullPointerException if the given {@code File} is {@code null}.
      * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
@@ -3052,7 +3052,7 @@ public class FileUtils {
      *
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
-     * @throws NullPointerException
+     * @throws NullPointerException if the parameter is null
      */
     private static String[] toSuffixes(final String... extensions) {
         Objects.requireNonNull(extensions, "extensions");

@@ -215,7 +215,7 @@ public class DeferredFileOutputStreamTest {
 
             try {
                 dfos.writeTo(baos);
-                fail("Should not have been able to write before closeing");
+                fail("Should not have been able to write before closing");
             } catch (final IOException ioe) {
                 // ok, as expected
             }

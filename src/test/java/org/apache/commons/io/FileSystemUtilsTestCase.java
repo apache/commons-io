@@ -72,7 +72,7 @@ public class FileSystemUtilsTestCase {
             final long kb = FileSystemUtils.freeSpaceKb("/");
             // Assume disk space does not fluctuate
             // more than 1% between the above two calls;
-            // this also also small enough to verifiy freeSpaceKb uses
+            // this also also small enough to verify freeSpaceKb uses
             // kibibytes (1024) instead of SI kilobytes (1000)
             final double acceptableDelta = kb * 0.01d;
             if (kilobyteBlock) {

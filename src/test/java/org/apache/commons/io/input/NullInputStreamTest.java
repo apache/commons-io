@@ -46,7 +46,7 @@ public class NullInputStreamTest {
         }
         assertEquals(0, input.available(), "Available after contents all read");
 
-        // Check availabale is zero after End of file
+        // Check available is zero after End of file
         assertEquals(-1, input.read(), "End of File");
         assertEquals(0, input.available(), "Available after End of File");
 

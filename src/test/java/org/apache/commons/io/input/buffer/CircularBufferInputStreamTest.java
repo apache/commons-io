@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 public class CircularBufferInputStreamTest {
 	private final Random rnd = new Random(1530960934483L); // System.currentTimeMillis(), when this test was written.
-	                                                       // Always using the same seed should ensure a reproducable test.
+	                                                       // Always using the same seed should ensure a reproducible test.
 
 	@Test
 	public void testRandomRead() throws Exception {

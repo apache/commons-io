@@ -481,7 +481,7 @@ public class XmlStreamReaderTest {
         final String xmlDoc = getXML(bomType, xmlType, streamEnc, prologEnc);
         writer.write(xmlDoc);
 
-        // PADDDING TO TEST THINGS WORK BEYOND PUSHBACK_SIZE
+        // PADDING TO TEST THINGS WORK BEYOND PUSHBACK_SIZE
         writer.write("<da>\n");
         for (int i = 0; i < 10000; i++) {
             writer.write("<do/>\n");

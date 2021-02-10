@@ -333,14 +333,14 @@ public class WriterOutputStream extends OutputStream {
             try {
                 charsetDecoder2.decode(bb2, cb2, i == (len - 1));
             } catch ( final IllegalArgumentException e){
-                throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
+                throw new UnsupportedOperationException("UTF-16 requested when running on an IBM JDK with broken UTF-16 support. " +
                         "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
             }
             bb2.compact();
         }
         cb2.rewind();
         if (!TEST_STRING_2.equals(cb2.toString())){
-            throw new UnsupportedOperationException("UTF-16 requested when runninng on an IBM JDK with broken UTF-16 support. " +
+            throw new UnsupportedOperationException("UTF-16 requested when running on an IBM JDK with broken UTF-16 support. " +
                     "Please find a JDK that supports UTF-16 if you intend to use UF-16 with WriterOutputStream");
         }
 
