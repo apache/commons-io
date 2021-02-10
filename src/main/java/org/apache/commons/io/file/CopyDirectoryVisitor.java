@@ -155,6 +155,8 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     @Override
     public FileVisitResult visitFile(final Path sourceFile, final BasicFileAttributes attributes) throws IOException {
+        // We have to stringize relative value because we cannot use paths belonging to different filesystems
+        // in the Path methods (usually this leads to ProviderMismatchException)
         final Path targetFile = targetDirectory.resolve(sourceDirectory.relativize(sourceFile).toString());
         copy(sourceFile, targetFile);
         return super.visitFile(targetFile, attributes);
