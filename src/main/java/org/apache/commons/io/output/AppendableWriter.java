@@ -128,7 +128,7 @@ public class AppendableWriter <T extends Appendable> extends Writer {
     public void write(final char[] cbuf, final int off, final int len) throws IOException {
         Objects.requireNonNull(cbuf, "Character array is missing");
         if (len < 0 || (off + len) > cbuf.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + cbuf.length +
+            throw new ArrayIndexOutOfBoundsException("Array Size=" + cbuf.length +
                     ", offset=" + off + ", length=" + len);
         }
         for (int i = 0; i < len; i++) {
