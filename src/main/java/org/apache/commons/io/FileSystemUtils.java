@@ -145,7 +145,7 @@ public class FileSystemUtils {
      */
     @Deprecated
     public static long freeSpace(final String path) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS, false, -1);
+        return INSTANCE.freeSpaceOS(path, OS, false, Duration.ofMillis(-1));
     }
 
     //-----------------------------------------------------------------------
@@ -207,7 +207,7 @@ public class FileSystemUtils {
      */
     @Deprecated
     public static long freeSpaceKb(final String path, final long timeout) throws IOException {
-        return INSTANCE.freeSpaceOS(path, OS, true, timeout);
+        return INSTANCE.freeSpaceOS(path, OS, true, Duration.ofMillis(timeout));
     }
 
     /**
@@ -271,7 +271,7 @@ public class FileSystemUtils {
      * @throws IllegalStateException if an error occurred in initialisation
      * @throws IOException if an error occurs when finding the free space
      */
-    long freeSpaceOS(final String path, final int os, final boolean kb, final long timeout) throws IOException {
+    long freeSpaceOS(final String path, final int os, final boolean kb, final Duration timeout) throws IOException {
         if (path == null) {
             throw new IllegalArgumentException("Path must not be null");
         }
@@ -300,7 +300,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
      */
-    long freeSpaceWindows(final String path, final long timeout) throws IOException {
+    long freeSpaceWindows(final String path, final Duration timeout) throws IOException {
         String normPath = FilenameUtils.normalize(path, false);
         if (normPath == null) {
             throw new IllegalArgumentException(path);
@@ -395,7 +395,7 @@ public class FileSystemUtils {
      * @return the amount of free drive space on the volume
      * @throws IOException if an error occurs
      */
-    long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout)
+    long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final Duration timeout)
             throws IOException {
         if (path.isEmpty()) {
             throw new IllegalArgumentException("Path must not be empty");
@@ -479,7 +479,7 @@ public class FileSystemUtils {
      * @return the lines returned by the command, converted to lower-case
      * @throws IOException if an error occurs
      */
-    List<String> performCommand(final String[] cmdAttribs, final int max, final long timeout) throws IOException {
+    List<String> performCommand(final String[] cmdAttribs, final int max, final Duration timeout) throws IOException {
         // this method does what it can to avoid the 'Too many open files' error
         // based on trial and error and these links:
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
@@ -496,7 +496,7 @@ public class FileSystemUtils {
         BufferedReader inr = null;
         try {
 
-            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(timeout));
+            final Thread monitor = ThreadMonitor.start(timeout);
 
             proc = openProcess(cmdAttribs);
             in = proc.getInputStream();
