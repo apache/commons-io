@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -495,7 +496,7 @@ public class FileSystemUtils {
         BufferedReader inr = null;
         try {
 
-            final Thread monitor = ThreadMonitor.start(timeout);
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(timeout));
 
             proc = openProcess(cmdAttribs);
             in = proc.getInputStream();

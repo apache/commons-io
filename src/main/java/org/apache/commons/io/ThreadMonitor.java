@@ -16,6 +16,8 @@
  */
 package org.apache.commons.io;
 
+import java.time.Duration;
+
 /**
  * Monitors a thread, interrupting it if it reaches the specified timeout.
  * <p>
@@ -40,7 +42,7 @@ package org.apache.commons.io;
 class ThreadMonitor implements Runnable {
 
     private final Thread thread;
-    private final long timeout;
+    private final Duration timeout;
 
     /**
      * Start monitoring the current thread.
@@ -50,7 +52,7 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static Thread start(final long timeout) {
+    static Thread start(final Duration timeout) {
         return start(Thread.currentThread(), timeout);
     }
 
@@ -63,14 +65,14 @@ class ThreadMonitor implements Runnable {
      * @return The monitor thread or {@code null}
      * if the timeout amount is not greater than zero
      */
-    public static Thread start(final Thread thread, final long timeout) {
-        Thread monitor = null;
-        if (timeout > 0) {
-            final ThreadMonitor timout = new ThreadMonitor(thread, timeout);
-            monitor = new Thread(timout, ThreadMonitor.class.getSimpleName());
-            monitor.setDaemon(true);
-            monitor.start();
+    static Thread start(final Thread thread, final Duration timeout) {
+        if (timeout.isZero() || timeout.isNegative()) {
+            return null;
         }
+        final ThreadMonitor timout = new ThreadMonitor(thread, timeout);
+        final Thread monitor = new Thread(timout, ThreadMonitor.class.getSimpleName());
+        monitor.setDaemon(true);
+        monitor.start();
         return monitor;
     }
 
@@ -79,19 +81,19 @@ class ThreadMonitor implements Runnable {
      *
      * @param thread The monitor thread, may be {@code null}
      */
-    public static void stop(final Thread thread) {
+    static void stop(final Thread thread) {
         if (thread != null) {
             thread.interrupt();
         }
     }
 
     /**
-     * Construct and new monitor.
+     * Constructs a new monitor.
      *
      * @param thread The thread to monitor
      * @param timeout The timeout amount in milliseconds
      */
-    private ThreadMonitor(final Thread thread, final long timeout) {
+    private ThreadMonitor(final Thread thread, final Duration timeout) {
         this.thread = thread;
         this.timeout = timeout;
     }
@@ -113,15 +115,17 @@ class ThreadMonitor implements Runnable {
     }
 
     /**
-     * Sleep for a guaranteed minimum number of milliseconds unless interrupted.
+     * Sleeps for a guaranteed minimum duration unless interrupted.
      *
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
      * it deems appropriate. Read the docs on Thread.sleep for further interesting details.
      *
-     * @param millis the number of milliseconds to sleep for
+     * @param duration the sleep duration.
      * @throws InterruptedException if interrupted
      */
-    private static void sleep(final long millis) throws InterruptedException {
+    private static void sleep(final Duration duration) throws InterruptedException {
+        // Ignore nanos for now.
+        final long millis = duration.toMillis();
         final long finishAtMillis = System.currentTimeMillis() + millis;
         long remainingMillis = millis;
         do {

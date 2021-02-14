@@ -19,6 +19,8 @@ package org.apache.commons.io;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.time.Duration;
+
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +35,7 @@ public class ThreadMonitorTestCase {
     @Test
     public void testTimeout() {
         try {
-            final Thread monitor = ThreadMonitor.start(100);
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(100));
             TestUtils.sleep(200);
             ThreadMonitor.stop(monitor);
             fail("Expected InterruptedException");
@@ -48,7 +50,7 @@ public class ThreadMonitorTestCase {
     @Test
     public void testCompletedWithoutTimeout() {
         try {
-            final Thread monitor = ThreadMonitor.start(200);
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(200));
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
         } catch (final InterruptedException e) {
@@ -64,7 +66,7 @@ public class ThreadMonitorTestCase {
 
         // timeout = -1
         try {
-            final Thread monitor = ThreadMonitor.start(-1);
+            final Thread monitor = ThreadMonitor.start(Duration.ofMillis(-1));
             assertNull(monitor,"Timeout -1, Monitor should be null");
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
@@ -74,7 +76,7 @@ public class ThreadMonitorTestCase {
 
         // timeout = 0
         try {
-            final Thread monitor = ThreadMonitor.start(0);
+            final Thread monitor = ThreadMonitor.start(Duration.ZERO);
             assertNull(monitor, "Timeout 0, Monitor should be null");
             TestUtils.sleep(100);
             ThreadMonitor.stop(monitor);
