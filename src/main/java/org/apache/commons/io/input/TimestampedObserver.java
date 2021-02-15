@@ -28,7 +28,7 @@ import org.apache.commons.io.input.ObservableInputStream.Observer;
  * <p>
  * For example:
  * </p>
- * 
+ *
  * <pre>
  * final TimestampedObserver timetampedObserver = new TimestampedObserver();
  * try (final ObservableInputStream inputStream = new ObservableInputStream(...),
@@ -61,7 +61,7 @@ public class TimestampedObserver extends Observer {
 
     /**
      * Gets the Duration between creation and close.
-     * 
+     *
      * @return the Duration between creation and close.
      */
     public Duration getOpenToCloseDuration() {
@@ -70,7 +70,7 @@ public class TimestampedObserver extends Observer {
 
     /**
      * Gets the Duration between creation and now.
-     * 
+     *
      * @return the Duration between creation and now.
      */
     public Duration getOpenToNowDuration() {

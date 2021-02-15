@@ -133,7 +133,7 @@ public class IOUtils {
      */
     public static final char DIR_SEPARATOR_WINDOWS = '\\';
 
-    /** 
+    /**
      * A singleton empty byte array.
      *
      *  @since 2.9.0

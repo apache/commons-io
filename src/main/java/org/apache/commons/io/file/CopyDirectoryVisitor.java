@@ -154,10 +154,10 @@ public class CopyDirectoryVisitor extends CountingPathVisitor {
 
     /**
      * Relativizes against {@code sourceDirectory}, then resolves against {@code targetDirectory}.
-     * 
+     *
      * We have to call {@link Path#toString()} relative value because we cannot use paths belonging to different
      * FileSystems in the Path methods, usually this leads to {@link ProviderMismatchException}.
-     * 
+     *
      * @param directory the directory to relativize.
      * @return a new path, relativized against sourceDirectory, then resolved against targetDirectory.
      */
