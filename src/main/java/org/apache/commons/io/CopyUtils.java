@@ -192,7 +192,7 @@ public class CopyUtils {
             final Reader input,
             final Writer output)
                 throws IOException {
-        final char[] buffer = new char[IOUtils.DEFAULT_BUFFER_SIZE];
+        final char[] buffer = IOUtils.getCharArray();
         int count = 0;
         int n = 0;
         while (EOF != (n = input.read(buffer))) {

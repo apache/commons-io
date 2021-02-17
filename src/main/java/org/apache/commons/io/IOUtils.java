@@ -176,23 +176,15 @@ public class IOUtils {
     public static final String LINE_SEPARATOR_WINDOWS = StandardLineSeparator.CRLF.getString();
 
     /**
-     * The default buffer to use for the skip() methods.
+     * Internal byte array buffer.
      */
-    private static final byte[] SKIP_BYTE_BUFFER = byteArray();
-
-    // Allocated in the relevant skip method if necessary.
-    /*
-     * These buffers are static and are shared between threads.
-     * This is possible because the buffers are write-only - the contents are never read.
-     *
-     * N.B. there is no need to synchronize when creating these because:
-     * - we don't care if the buffer is created multiple times (the data is ignored)
-     * - we always use the same size buffer, so if it it is recreated it will still be OK
-     * (if the buffer size were variable, we would need to synch. to ensure some other thread
-     * did not create a smaller one)
+    private static final ThreadLocal<byte[]> SKIP_BYTE_BUFFER = ThreadLocal.withInitial(() -> byteArray());
+    
+    /**
+     * Internal byte array buffer.
      */
-    private static char[] SKIP_CHAR_BUFFER;
-
+    private static final ThreadLocal<char[]> SKIP_CHAR_BUFFER = ThreadLocal.withInitial(() -> charArray());
+    
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.
@@ -342,6 +334,29 @@ public class IOUtils {
      */
     public static byte[] byteArray(final int size) {
         return new byte[size];
+    }
+
+    /**
+     * Returns a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
+     *
+     * @return a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
+     * @since 2.9.0
+     */
+    private static char[] charArray() {
+        return charArray(DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Returns a new char array of the given size.
+     *
+     * TODO Consider guarding or warning against large allocations...
+     *
+     * @param size array size.
+     * @return a new char array of the given size.
+     * @since 2.9.0
+     */
+    private static char[] charArray(final int size) {
+        return new char[size];
     }
 
     /**
@@ -755,7 +770,7 @@ public class IOUtils {
      */
     public static long consume(final InputStream input)
             throws IOException {
-        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, SKIP_BYTE_BUFFER);
+        return copyLarge(input, NullOutputStream.NULL_OUTPUT_STREAM, getByteArray());
     }
 
     /**
@@ -783,7 +798,9 @@ public class IOUtils {
             return false;
         }
 
-        final byte[] array1 = byteArray();
+        // reuse one
+        final byte[] array1 = getByteArray();
+        // allocate another
         final byte[] array2 = byteArray();
         int pos1;
         int pos2;
@@ -839,8 +856,10 @@ public class IOUtils {
             return false;
         }
 
-        final char[] array1 = new char[DEFAULT_BUFFER_SIZE];
-        final char[] array2 = new char[DEFAULT_BUFFER_SIZE];
+        // reuse one
+        final char[] array1 = getCharArray();
+        // but allocate another
+        final char[] array2 = charArray();
         int pos1;
         int pos2;
         int count1;
@@ -1318,7 +1337,7 @@ public class IOUtils {
      */
     public static long copyLarge(final InputStream input, final OutputStream output, final long inputOffset,
                                  final long length) throws IOException {
-        return copyLarge(input, output, inputOffset, length, byteArray());
+        return copyLarge(input, output, inputOffset, length, getByteArray());
     }
 
     /**
@@ -1387,7 +1406,7 @@ public class IOUtils {
      * @since 1.3
      */
     public static long copyLarge(final Reader reader, final Writer writer) throws IOException {
-        return copyLarge(reader, writer, new char[DEFAULT_BUFFER_SIZE]);
+        return copyLarge(reader, writer, getCharArray());
     }
 
     /**
@@ -1436,7 +1455,7 @@ public class IOUtils {
      */
     public static long copyLarge(final Reader reader, final Writer writer, final long inputOffset, final long length)
             throws IOException {
-        return copyLarge(reader, writer, inputOffset, length, new char[DEFAULT_BUFFER_SIZE]);
+        return copyLarge(reader, writer, inputOffset, length, getCharArray());
     }
 
     /**
@@ -1482,6 +1501,24 @@ public class IOUtils {
             }
         }
         return totalRead;
+    }
+
+    /**
+     * Gets the thread local byte array.
+     *
+     * @return the thread local byte array.
+     */
+    static byte[] getByteArray() {
+        return SKIP_BYTE_BUFFER.get();
+    }
+
+    /**
+     * Gets the thread local char array.
+     *
+     * @return the thread local char array.
+     */
+    static char[] getCharArray() {
+        return SKIP_CHAR_BUFFER.get();
     }
 
     /**
@@ -2113,7 +2150,8 @@ public class IOUtils {
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
+            final byte[] byteArray = getByteArray();
+            final long n = input.read(byteArray, 0, (int) Math.min(remain, byteArray.length));
             if (n < 0) { // EOF
                 break;
             }
@@ -2138,11 +2176,11 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, SKIP_BYTE_BUFFER.length));
+        final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, DEFAULT_BUFFER_SIZE));
         long remain = toSkip;
         while (remain > 0) {
             skipByteBuffer.position(0);
-            skipByteBuffer.limit((int) Math.min(remain, SKIP_BYTE_BUFFER.length));
+            skipByteBuffer.limit((int) Math.min(remain, DEFAULT_BUFFER_SIZE));
             final int n = input.read(skipByteBuffer);
             if (n == EOF) {
                 break;
@@ -2177,18 +2215,11 @@ public class IOUtils {
         if (toSkip < 0) {
             throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
         }
-        /*
-         * N.B. no need to synchronize this because: - we don't care if the buffer is created multiple times (the data
-         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
-         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
-         */
-        if (SKIP_CHAR_BUFFER == null) {
-            SKIP_CHAR_BUFFER = new char[SKIP_BYTE_BUFFER.length];
-        }
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
-            final long n = reader.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BYTE_BUFFER.length));
+            final char[] charArray = getCharArray();
+            final long n = reader.read(charArray, 0, (int) Math.min(remain, charArray.length));
             if (n < 0) { // EOF
                 break;
             }
