@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.output;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,9 +28,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -364,5 +369,46 @@ public class DeferredFileOutputStreamTest {
         } catch (final IOException e) {
             fail("Unexpected IOException");
         }
+    }
+
+    /**
+     * Tests the case where the amount of data falls below the threshold, and is therefore confined to memory.
+     * Testing the getInputStream() method.
+     */
+    @ParameterizedTest(name = "initialBufferSize = {0}")
+    @MethodSource("data")
+    public void testBelowThresholdGetInputStream(final int initialBufferSize) throws IOException {
+        final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length + 42, initialBufferSize,
+            null);
+        dfos.write(testBytes, 0, testBytes.length);
+        dfos.close();
+        assertTrue(dfos.isInMemory());
+
+        try (InputStream is = dfos.toInputStream()) {
+            assertArrayEquals(testBytes, IOUtils.toByteArray(is));
+        }
+    }
+
+    /**
+     * Tests the case where the amount of data exceeds the threshold, and is therefore written to disk. The actual data
+     * written to disk is verified, as is the file itself.
+     * Testing the getInputStream() method.
+     */
+    @ParameterizedTest(name = "initialBufferSize = {0}")
+    @MethodSource("data")
+    public void testAboveThresholdGetInputStream(final int initialBufferSize, final @TempDir Path tempDir) throws IOException {
+        final File testFile = tempDir.resolve("testAboveThreshold.dat").toFile();
+
+        final DeferredFileOutputStream dfos = new DeferredFileOutputStream(testBytes.length - 5, initialBufferSize,
+            testFile);
+        dfos.write(testBytes, 0, testBytes.length);
+        dfos.close();
+        assertFalse(dfos.isInMemory());
+
+        try (InputStream is = dfos.toInputStream()) {
+            assertArrayEquals(testBytes, IOUtils.toByteArray(is));
+        }
+
+        verifyResultFile(testFile);
     }
 }
