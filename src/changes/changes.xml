@@ -119,7 +119,10 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-718" dev="ggregory" type="fix" due-to="Robert Cooper, Gary Gregory">
         FileUtils.checksumCRC32 and FileUtils.checksum are not thread safe.
-      </action>      
+      </action>
+      <action issue="IO-720" dev="ggregory" type="fix" due-to="XenoAmess">
+        Fix error about usage of DirectBuffer in JRE 16/17 #205.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
