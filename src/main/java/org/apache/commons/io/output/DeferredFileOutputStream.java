@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -270,6 +272,35 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
             try (FileInputStream fis = new FileInputStream(outputFile)) {
                 IOUtils.copy(fis, outputStream);
             }
+        }
+    }
+
+    /**
+     * Gets the current contents of this byte stream as an {@link InputStream}.
+     * If the data for this output stream has been retained in memory, the
+     * returned stream is backed by buffers of {@code this} stream,
+     * avoiding memory allocation and copy, thus saving space and time.<br>
+     * Otherwise, the returned stream will be one that is created from the data
+     * that has been committed to disk.
+     *
+     * @return the current contents of this output stream.
+     * @throws IOException if this stream is not yet closed or an error occurs.
+     * @see org.apache.commons.io.output.ByteArrayOutputStream#toInputStream()
+     * 
+     * @since 2.9
+     */
+    public InputStream toInputStream() throws IOException {
+        // we may only need to check if this is closed if we are working with a file
+        // but we should force the habit of closing whether we are working with
+        // a file or memory.
+        if (!closed) {
+            throw new IOException("Stream not closed");
+        }
+
+        if (isInMemory()) {
+            return memoryOutputStream.toInputStream();
+        } else {
+            return Files.newInputStream(outputFile.toPath());
         }
     }
 }
