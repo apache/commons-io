@@ -68,7 +68,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action issue="IO-597" dev="ggregory" type="fix" due-to="Gary Gregory, Arvind, Rob Spoor">
         FileUtils.iterateFiles runs out of memory when executed for a directory with large number of files.
-        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO 
+        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO
         file tree walking instead of IO file listings to avoid memory consumption issues on large file trees.
       </action>
       <action dev="ggregory" type="fix" due-to="Gary Gregory">
@@ -192,6 +192,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add copy(URL, OutputStream).
+      </action>
+      <action  issue="IO-651" dev="ggregory" type="add" due-to="jmark109, Gary Gregory">
+        Add DeferredFileOutputStream.toInputStream() #206.
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
@@ -385,7 +388,7 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
         Update com.github.siom79.japicmp:japicmp-maven-plugin 0.14.3 -> 0.14.4.
-      </action>      
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.7" date="2020-05-24" description="Java 8 required.">
