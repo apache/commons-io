@@ -85,11 +85,9 @@ public class WindowsLineEndingInputStream  extends InputStream {
             if (eofSeen) {
                 return eofGame();
             }
-            if (target == LF) {
-                if (!prevWasSlashR) {
-                    injectSlashN = true;
-                    return CR;
-                }
+            if ((target == LF) && !prevWasSlashR) {
+                injectSlashN = true;
+                return CR;
             }
             return target;
         }

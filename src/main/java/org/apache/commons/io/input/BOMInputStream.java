@@ -218,13 +218,11 @@ public class BOMInputStream extends ProxyInputStream {
             }
             // match BOM in firstBytes
             byteOrderMark = find();
-            if (byteOrderMark != null) {
-                if (!include) {
-                    if (byteOrderMark.length() < firstBytes.length) {
-                        fbIndex = byteOrderMark.length();
-                    } else {
-                        fbLength = 0;
-                    }
+            if ((byteOrderMark != null) && !include) {
+                if (byteOrderMark.length() < firstBytes.length) {
+                    fbIndex = byteOrderMark.length();
+                } else {
+                    fbLength = 0;
                 }
             }
         }
