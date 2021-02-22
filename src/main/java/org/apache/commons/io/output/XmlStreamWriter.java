@@ -178,12 +178,10 @@ public class XmlStreamWriter extends Writer {
                         // encoding
                         encoding = defaultEncoding;
                     }
-                } else {
-                    if (xmlProlog.length() >= BUFFER_SIZE) {
-                        // no encoding found in first characters: using default
-                        // encoding
-                        encoding = defaultEncoding;
-                    }
+                } else if (xmlProlog.length() >= BUFFER_SIZE) {
+                    // no encoding found in first characters: using default
+                    // encoding
+                    encoding = defaultEncoding;
                 }
             } else {
                 // no XML prolog: using default encoding

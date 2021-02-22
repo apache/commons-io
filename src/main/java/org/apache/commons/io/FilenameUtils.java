@@ -1427,12 +1427,10 @@ public class FilenameUtils {
                         if (repeat >= 0) {
                             backtrack.push(new int[] {wcsIdx, repeat});
                         }
-                    } else {
+                    } else if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
                         // matching from current position
-                        if (!caseSensitivity.checkRegionMatches(fileName, textIdx, wcs[wcsIdx])) {
-                            // couldn't match token
-                            break;
-                        }
+                        // couldn't match token
+                        break;
                     }
 
                     // matched text token, move text index to end of matched token
