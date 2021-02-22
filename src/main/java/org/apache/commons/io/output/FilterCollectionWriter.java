@@ -81,7 +81,7 @@ public class FilterCollectionWriter extends Writer {
      * @param e The cause.
      * @return the given list or a new list on null input.
      */
-    private List<Exception> add(List<Exception> causeList, int i, final IOException e) {
+    private List<Exception> add(List<Exception> causeList, final int i, final IOException e) {
         if (causeList == null) {
             causeList = new ArrayList<>();
         }
@@ -201,7 +201,7 @@ public class FilterCollectionWriter extends Writer {
      * @param causeList the list to test.
      * @return true if empty or null.
      */
-    private boolean notEmpty(List<Exception> causeList) {
+    private boolean notEmpty(final List<Exception> causeList) {
         return causeList != null && !causeList.isEmpty();
     }
 

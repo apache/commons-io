@@ -440,10 +440,10 @@ public class IOUtilsCopyTestCase {
     @Test
     public void testCopy_URLToFile() throws Exception {
         final String name = "/org/apache/commons/io/abitmorethan16k.txt";
-        URL in = getClass().getResource(name);
+        final URL in = getClass().getResource(name);
         assertNotNull(in, name);
 
-        Path path = Files.createTempFile("testCopy_URLToFile", ".txt");
+        final Path path = Files.createTempFile("testCopy_URLToFile", ".txt");
         try {
             IOUtils.copy(in, path.toFile());
 
@@ -456,7 +456,7 @@ public class IOUtilsCopyTestCase {
     @Test
     public void testCopy_URLToOutputStream() throws Exception {
         final String name = "/org/apache/commons/io/abitmorethan16k.txt";
-        URL in = getClass().getResource(name);
+        final URL in = getClass().getResource(name);
         assertNotNull(in, name);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();

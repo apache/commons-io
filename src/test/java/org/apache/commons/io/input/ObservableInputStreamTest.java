@@ -63,7 +63,7 @@ public class ObservableInputStreamTest {
         }
 
         @Override
-        public void data(int value) throws IOException {
+        public void data(final int value) throws IOException {
             total++;
         }
 
@@ -90,12 +90,12 @@ public class ObservableInputStreamTest {
         }
 
         @Override
-        public void data(int value) throws IOException {
+        public void data(final int value) throws IOException {
             dataCount++;
         }
 
         @Override
-        public void error(IOException exception) throws IOException {
+        public void error(final IOException exception) throws IOException {
             errorCount++;
         }
 

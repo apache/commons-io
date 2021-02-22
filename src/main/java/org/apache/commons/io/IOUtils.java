@@ -179,12 +179,12 @@ public class IOUtils {
      * Internal byte array buffer.
      */
     private static final ThreadLocal<byte[]> SKIP_BYTE_BUFFER = ThreadLocal.withInitial(() -> byteArray());
-    
+
     /**
      * Internal byte array buffer.
      */
     private static final ThreadLocal<char[]> SKIP_CHAR_BUFFER = ThreadLocal.withInitial(() -> charArray());
-    
+
     /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.

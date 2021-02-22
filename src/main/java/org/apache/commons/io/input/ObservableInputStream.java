@@ -241,7 +241,7 @@ public class ObservableInputStream extends ProxyInputStream {
         }
     }
 
-    private void notify(final byte[] buffer, final int offset, int result, IOException ioe) throws IOException {
+    private void notify(final byte[] buffer, final int offset, final int result, final IOException ioe) throws IOException {
         if (ioe != null) {
             noteError(ioe);
             throw ioe;

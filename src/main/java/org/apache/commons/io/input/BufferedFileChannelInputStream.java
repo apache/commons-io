@@ -58,7 +58,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
         return res;
     }
 
-    private static boolean isDirectBuffer(Object object) {
+    private static boolean isDirectBuffer(final Object object) {
         return DIRECT_BUFFER_CLASS != null && DIRECT_BUFFER_CLASS.isInstance(object);
     }
 
