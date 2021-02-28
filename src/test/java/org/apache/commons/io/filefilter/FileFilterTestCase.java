@@ -460,7 +460,7 @@ public class FileFilterTestCase {
         assertFiltering(filter, new File("openXY.123103").toPath(), false);
 //        assertFiltering(filter, new File("openAB.102504.old").toPath(), false);
 
-        filter = new WildcardFilter(new String[] {"*.java", "*.class"});
+        filter = new WildcardFilter("*.java", "*.class");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.class"), true);
         assertFiltering(filter, new File("Test.jsp"), false);
@@ -1258,7 +1258,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testNameFilter() {
-        assertFooBarFileFiltering(new NameFileFilter(new String[] {"foo", "bar"}));
+        assertFooBarFileFiltering(new NameFileFilter("foo", "bar"));
     }
 
     @Test
@@ -1367,7 +1367,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testPrefix() {
-        IOFileFilter filter = new PrefixFileFilter(new String[] {"foo", "bar"});
+        IOFileFilter filter = new PrefixFileFilter("foo", "bar");
         final File testFile = new File("test");
         final Path testPath = testFile.toPath();
         final File fredFile = new File("fred");
@@ -1597,7 +1597,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testSuffix() {
-        IOFileFilter filter = new SuffixFileFilter(new String[] {"tes", "est"});
+        IOFileFilter filter = new SuffixFileFilter("tes", "est");
         final File testFile = new File("test");
         final Path testPath = testFile.toPath();
         final File fredFile = new File("fred");
@@ -1769,7 +1769,7 @@ public class FileFilterTestCase {
         assertFiltering(filter, new File("log.txt").toPath(), true);
         assertFiltering(filter, new File("log.TXT").toPath(), false);
 
-        filter = new WildcardFileFilter(new String[] {"*.java", "*.class"});
+        filter = new WildcardFileFilter("*.java", "*.class");
         assertFiltering(filter, new File("Test.java"), true);
         assertFiltering(filter, new File("Test.class"), true);
         assertFiltering(filter, new File("Test.jsp"), false);

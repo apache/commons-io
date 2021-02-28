@@ -732,7 +732,7 @@ public class FileUtilsTestCase {
         final File childDir = new File(parentDir, "child");
         createFilesForTestCopyDirectory(grandParentDir, parentDir, childDir);
 
-        final NameFileFilter filter = new NameFileFilter(new String[]{"parent", "child", "file3.txt"});
+        final NameFileFilter filter = new NameFileFilter("parent", "child", "file3.txt");
         final File destDir = new File(temporaryFolder, "copydest");
 
         FileUtils.copyDirectory(grandParentDir, destDir, filter);
