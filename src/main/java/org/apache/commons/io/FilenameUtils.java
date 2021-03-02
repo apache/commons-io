@@ -1199,7 +1199,7 @@ public class FilenameUtils {
             String fileName1, String fileName2,
             final boolean normalized, IOCase caseSensitivity) {
 
-        if (fileName1 == null || fileName2 == null) {
+        if (IOUtils.anyNull(fileName1, fileName2)) {
             return fileName1 == null && fileName2 == null;
         }
         if (normalized) {
@@ -1375,7 +1375,7 @@ public class FilenameUtils {
         if (fileName == null && wildcardMatcher == null) {
             return true;
         }
-        if (fileName == null || wildcardMatcher == null) {
+        if (IOUtils.anyNull(fileName, wildcardMatcher)) {
             return false;
         }
         if (caseSensitivity == null) {

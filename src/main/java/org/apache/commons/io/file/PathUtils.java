@@ -524,7 +524,7 @@ public final class PathUtils {
         if (path1 == null && path2 == null) {
             return true;
         }
-        if (path1 == null || path2 == null) {
+        if (IOUtils.anyNull(path1, path2)) {
             return false;
         }
         if (Files.notExists(path1) && Files.notExists(path2)) {
@@ -620,7 +620,7 @@ public final class PathUtils {
         if (path1 == null && path2 == null) {
             return true;
         }
-        if (path1 == null || path2 == null) {
+        if (IOUtils.anyNull(path1, path2)) {
             return false;
         }
         final Path nPath1 = path1.normalize();

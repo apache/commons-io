@@ -622,7 +622,7 @@ public class XmlStreamReader extends Reader {
 
         // BOM is Null
         if (bomEnc == null) {
-            if (xmlGuessEnc == null || xmlEnc == null) {
+            if (IOUtils.anyNull(xmlGuessEnc, xmlEnc)) {
                 return defaultEncoding == null ? UTF_8 : defaultEncoding;
             }
             if (xmlEnc.equals(UTF_16) &&

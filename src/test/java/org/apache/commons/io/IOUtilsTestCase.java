@@ -140,6 +140,26 @@ public class IOUtilsTestCase {
             carr[i] = (char) i;
         }
     }
+    /**
+     * Tests {@link IOUtils#anyNull(Object...)}.
+     */
+    @Test
+    public void testAnyNull() {
+
+        final String FOO = "foo";
+        final String BAR = "bar";
+
+        assertTrue(IOUtils.anyNull((Object) null));
+        assertTrue(IOUtils.anyNull((Object[]) null));
+        assertTrue(IOUtils.anyNull(null, null, null));
+        assertTrue(IOUtils.anyNull(null, FOO, BAR));
+        assertTrue(IOUtils.anyNull(FOO, BAR, null));
+        assertTrue(IOUtils.anyNull(FOO, BAR, null, FOO, BAR));
+
+        assertFalse(IOUtils.anyNull());
+        assertFalse(IOUtils.anyNull(FOO));
+        assertFalse(IOUtils.anyNull(FOO, BAR, 1, Boolean.TRUE, new Object(), new Object[]{}));
+    }
 
     @Test
     public void testAsBufferedInputStream() {

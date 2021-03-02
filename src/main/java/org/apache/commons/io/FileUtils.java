@@ -378,7 +378,7 @@ public class FileUtils {
         if (file1 == null && file2 == null) {
             return true;
         }
-        if (file1 == null || file2 == null) {
+        if (IOUtils.anyNull(file1, file2)) {
             return false;
         }
         final boolean file1Exists = file1.exists();
@@ -433,7 +433,7 @@ public class FileUtils {
         if (file1 == null && file2 == null) {
             return true;
         }
-        if (file1 == null || file2 == null) {
+        if (IOUtils.anyNull(file1, file2)) {
             return false;
         }
         final boolean file1Exists = file1.exists();

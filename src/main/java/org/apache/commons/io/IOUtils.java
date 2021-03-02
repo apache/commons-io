@@ -186,6 +186,43 @@ public class IOUtils {
     private static final ThreadLocal<char[]> SKIP_CHAR_BUFFER = ThreadLocal.withInitial(() -> charArray());
 
     /**
+     * Checks if any values in the array are {@code nulls}.
+     *
+     * <p>
+     * If any value is {@code null} or the array is {@code null} then
+     * {@code true} is returned. If all elements in array are not
+     * {@code null} or the array is empty (contains no elements) {@code false}
+     * is returned.
+     * </p>
+     *
+     * <pre>
+     * IOUtils.anyNull(*)             = false
+     * IOUtils.anyNull(*, *)          = false
+     * IOUtils.anyNull(null)          = true
+     * IOUtils.anyNull(null, null)    = true
+     * IOUtils.anyNull(null, *)       = true
+     * IOUtils.anyNull(*, null)       = true
+     * IOUtils.anyNull(*, *, null, *) = true
+     * </pre>
+     *
+     * @param values the values to test, may be {@code null} or empty
+     * @return {@code true} if there is at least one {@code null} value in the array or the array is {@code null},
+     * {@code false} if all values in the array are not {@code null}s or array contains no elements.
+     * @since 2.9.0
+     */
+    public static boolean anyNull(final Object... values) {
+        if (values == null) {
+            return true;
+        }
+        for (final Object val : values) {
+            if (val == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the given InputStream if it is already a {@link BufferedInputStream}, otherwise creates a
      * BufferedInputStream from the given InputStream.
      *
@@ -794,7 +831,7 @@ public class IOUtils {
         if (input1 == input2) {
             return true;
         }
-        if (input1 == null || input2 == null) {
+        if (IOUtils.anyNull(input1, input2)) {
             return false;
         }
 
@@ -852,7 +889,7 @@ public class IOUtils {
         if (input1 == input2) {
             return true;
         }
-        if (input1 == null || input2 == null) {
+        if (IOUtils.anyNull(input1, input2)) {
             return false;
         }
 
@@ -1520,7 +1557,6 @@ public class IOUtils {
     static char[] getCharArray() {
         return SKIP_CHAR_BUFFER.get();
     }
-
     /**
      * Returns the length of the given array in a null-safe manner.
      *
@@ -1668,6 +1704,24 @@ public class IOUtils {
     }
 
     /**
+     * Checks that the specified number is less than {@code 0} and
+     * throws a customized {@link IllegalArgumentException}  message if it is.
+     *
+     *
+     * @param n the number to check
+     * @param message the {@link String#format(String, Object...)} message to be
+     * used in the event that a {@code IllegalArgumentException} is thrown
+     *
+     * @throws IllegalArgumentException if {@code n} is less than {@code 0}
+     * @since 2.9.0
+     */
+    private static void notNegative(final long n, final String message) {
+        if (n < 0) {
+            throw new IllegalArgumentException(String.format(message, n));
+        }
+    }
+
+    /**
      * Reads bytes from an input stream.
      * This implementation guarantees that it will read as many bytes
      * as possible before giving up; this may not always be the case for
@@ -1699,9 +1753,7 @@ public class IOUtils {
      */
     public static int read(final InputStream input, final byte[] buffer, final int offset, final int length)
             throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        notNegative(length,"Length must not be negative: %s");
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
@@ -1770,9 +1822,7 @@ public class IOUtils {
      */
     public static int read(final Reader reader, final char[] buffer, final int offset, final int length)
             throws IOException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Length must not be negative: " + length);
-        }
+        notNegative(length,"Length must not be negative: %s");
         int remaining = length;
         while (remaining > 0) {
             final int location = length - remaining;
@@ -2138,9 +2188,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final InputStream input, final long toSkip) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
-        }
+        notNegative(toSkip,"Skip count must be non-negative, actual: %s");
         /*
          * N.B. no need to synchronize access to SKIP_BYTE_BUFFER: - we don't care if the buffer is created multiple
          * times (the data is ignored) - we always use the same size buffer, so if it it is recreated it will still be
@@ -2173,9 +2221,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static long skip(final ReadableByteChannel input, final long toSkip) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
-        }
+        notNegative(toSkip,"Skip count must be non-negative, actual: %s");
         final ByteBuffer skipByteBuffer = ByteBuffer.allocate((int) Math.min(toSkip, DEFAULT_BUFFER_SIZE));
         long remain = toSkip;
         while (remain > 0) {
@@ -2212,9 +2258,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static long skip(final Reader reader, final long toSkip) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Skip count must be non-negative, actual: " + toSkip);
-        }
+        notNegative(toSkip,"Skip count must be non-negative, actual: %s");
         long remain = toSkip;
         while (remain > 0) {
             // See https://issues.apache.org/jira/browse/IO-203 for why we use read() rather than delegating to skip()
@@ -2248,9 +2292,7 @@ public class IOUtils {
      * @since 2.0
      */
     public static void skipFully(final InputStream input, final long toSkip) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
-        }
+        notNegative(toSkip, "Bytes to skip must not be negative: %s");
         final long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
@@ -2268,9 +2310,7 @@ public class IOUtils {
      * @since 2.5
      */
     public static void skipFully(final ReadableByteChannel input, final long toSkip) throws IOException {
-        if (toSkip < 0) {
-            throw new IllegalArgumentException("Bytes to skip must not be negative: " + toSkip);
-        }
+        notNegative(toSkip, "Bytes to skip must not be negative: %s");
         final long skipped = skip(input, toSkip);
         if (skipped != toSkip) {
             throw new EOFException("Bytes to skip: " + toSkip + " actual: " + skipped);
@@ -2414,11 +2454,7 @@ public class IOUtils {
      * @since 2.1
      */
     public static byte[] toByteArray(final InputStream input, final int size) throws IOException {
-
-        if (size < 0) {
-            throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
-        }
-
+        notNegative(size, "Size must be equal or greater than zero: %s");
         if (size == 0) {
             return EMPTY_BYTE_ARRAY;
         }

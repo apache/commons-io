@@ -191,7 +191,7 @@ public enum IOCase {
      * @return true if equal using the case rules, false if either input is null
      */
     public boolean checkEndsWith(final String str, final String end) {
-        if (str == null || end == null) {
+        if (IOUtils.anyNull(str, end)) {
             return false;
         }
         final int endLen = end.length();
