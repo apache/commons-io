@@ -268,7 +268,7 @@ file comparators, endian transformation classes, and much more.
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.11</version>
+      <version>3.12.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
