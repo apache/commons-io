@@ -140,11 +140,11 @@ public class NullInputStream extends InputStream {
         final long avail = size - position;
         if (avail <= 0) {
             return 0;
-        } else if (avail > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-        } else {
-            return (int)avail;
         }
+        if (avail > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) avail;
     }
 
     /**

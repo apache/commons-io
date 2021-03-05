@@ -403,12 +403,11 @@ public class ReversedLinesFileReader implements Closeable {
         String line = currentFilePart.readLine();
         while (line == null) {
             currentFilePart = currentFilePart.rollOver();
-            if (currentFilePart != null) {
-                line = currentFilePart.readLine();
-            } else {
+            if (currentFilePart == null) {
                 // no more fileparts: we're done, leave line set to null
                 break;
             }
+            line = currentFilePart.readLine();
         }
 
         // aligned behavior with BufferedReader that doesn't return a last, empty line

@@ -88,24 +88,25 @@ public class LineIterator implements Iterator<String>, Closeable {
     public boolean hasNext() {
         if (cachedLine != null) {
             return true;
-        } else if (finished) {
+        }
+        if (finished) {
             return false;
-        } else {
-            try {
-                while (true) {
-                    final String line = bufferedReader.readLine();
-                    if (line == null) {
-                        finished = true;
-                        return false;
-                    } else if (isValidLine(line)) {
-                        cachedLine = line;
-                        return true;
-                    }
+        }
+        try {
+            while (true) {
+                final String line = bufferedReader.readLine();
+                if (line == null) {
+                    finished = true;
+                    return false;
                 }
-            } catch(final IOException ioe) {
-                IOUtils.closeQuietly(this, e -> ioe.addSuppressed(e));
-                throw new IllegalStateException(ioe);
+                if (isValidLine(line)) {
+                    cachedLine = line;
+                    return true;
+                }
             }
+        } catch(final IOException ioe) {
+            IOUtils.closeQuietly(this, e -> ioe.addSuppressed(e));
+            throw new IllegalStateException(ioe);
         }
     }
 

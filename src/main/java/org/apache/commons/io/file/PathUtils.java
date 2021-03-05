@@ -541,12 +541,11 @@ public final class PathUtils {
         final List<Path> fileList2 = relativeSortedPaths.relativeFileList2;
         for (final Path path : fileList1) {
             final int binarySearch = Collections.binarySearch(fileList2, path);
-            if (binarySearch > -1) {
-                if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
-                    return false;
-                }
-            } else {
+            if (binarySearch <= -1) {
                 throw new IllegalStateException("Unexpected mismatch.");
+            }
+            if (!fileContentEquals(path1.resolve(path), path2.resolve(path), linkOptions, openOptions)) {
+                return false;
             }
         }
         return true;

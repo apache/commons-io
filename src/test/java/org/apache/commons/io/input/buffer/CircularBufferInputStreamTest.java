@@ -58,16 +58,16 @@ public class CircularBufferInputStreamTest {
 				final int res = cbis.read(readBuffer, 0, rnd.nextInt(readBuffer.length+1));
 				if (res == -1) {
 					throw new IllegalStateException("Unexpected EOF at offset " + offset);
-				} else if (res == 0) {
-					throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
-				} else {
-					for (int i = 0;  i < res;  i++) {
-						if (inputBuffer[offset] != readBuffer[i]) {
-							throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
-						}
-						++offset;
-					}
 				}
+        if (res == 0) {
+					throw new IllegalStateException("Unexpected zero-byte-result at offset " + offset);
+				}
+        for (int i = 0;  i < res;  i++) {
+            if (inputBuffer[offset] != readBuffer[i]) {
+                throw new IllegalStateException("Expected " + inputBuffer[offset] + " at offset " + offset + ", got " + readBuffer[i]);
+            }
+            ++offset;
+        }
 				break;
 			}
 			default:

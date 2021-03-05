@@ -245,7 +245,8 @@ public class ObservableInputStream extends ProxyInputStream {
         if (ioe != null) {
             noteError(ioe);
             throw ioe;
-        } else if (result == EOF) {
+        }
+        if (result == EOF) {
             noteFinished();
         } else if (result > 0) {
             noteDataBytes(buffer, offset, result);
@@ -264,7 +265,8 @@ public class ObservableInputStream extends ProxyInputStream {
         if (ioe != null) {
             noteError(ioe);
             throw ioe;
-        } else if (result == EOF) {
+        }
+        if (result == EOF) {
             noteFinished();
         } else {
             noteDataByte(result);

@@ -426,14 +426,13 @@ public class FileSystemUtils {
         StringTokenizer tok = new StringTokenizer(line2, " ");
         if (tok.countTokens() < 4) {
             // could be long Filesystem, thus data on third line
-            if (tok.countTokens() == 1 && lines.size() >= 3) {
-                final String line3 = lines.get(2); // the line may be interested in
-                tok = new StringTokenizer(line3, " ");
-            } else {
+            if ((tok.countTokens() != 1) || (lines.size() < 3)) {
                 throw new IOException(
                         "Command line '" + DF + "' did not return data as expected " +
                         "for path '" + path + "'- check path is valid");
             }
+            final String line3 = lines.get(2); // the line may be interested in
+            tok = new StringTokenizer(line3, " ");
         } else {
             tok.nextToken(); // Ignore Filesystem
         }

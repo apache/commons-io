@@ -2251,12 +2251,12 @@ public class FileUtils {
         if (!destDir.isDirectory()) {
             if (destDir.exists()) {
                 throw new IOException("Destination '" + destDir + "' is not a directory");
-            } else if (createDestDir) {
-                mkdirs(destDir);
-            } else {
+            }
+            if (!createDestDir) {
                 throw new FileNotFoundException("Destination directory '" + destDir +
                         "' does not exist [createDestDir=" + createDestDir + "]");
             }
+            mkdirs(destDir);
         }
         moveDirectory(src, new File(destDir, src.getName()));
     }

@@ -76,21 +76,21 @@ public class WindowsLineEndingInputStream  extends InputStream {
     public int read() throws IOException {
         if (eofSeen) {
             return eofGame();
-        } else if (injectSlashN) {
+        }
+        if (injectSlashN) {
             injectSlashN = false;
             return LF;
-        } else {
-            final boolean prevWasSlashR = slashRSeen;
-            final int target = readWithUpdate();
-            if (eofSeen) {
-                return eofGame();
-            }
-            if ((target == LF) && !prevWasSlashR) {
-                injectSlashN = true;
-                return CR;
-            }
-            return target;
         }
+        final boolean prevWasSlashR = slashRSeen;
+        final int target = readWithUpdate();
+        if (eofSeen) {
+            return eofGame();
+        }
+        if ((target == LF) && !prevWasSlashR) {
+            injectSlashN = true;
+            return CR;
+        }
+        return target;
     }
 
     /**

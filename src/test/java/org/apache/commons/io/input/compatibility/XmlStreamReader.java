@@ -516,53 +516,50 @@ public class XmlStreamReader extends Reader {
         } else {
             final boolean appXml = isAppXml(cTMime);
             final boolean textXml = isTextXml(cTMime);
-            if (appXml || textXml) {
-                if (cTEnc == null) {
-                    if (appXml) {
-                        encoding = calculateRawEncoding(bomEnc, xmlGuessEnc,
-                                xmlEnc, is);
-                    } else {
-                        encoding = defaultEncoding == null ? US_ASCII
-                                : defaultEncoding;
-                    }
-                } else if (bomEnc != null
-                        && (cTEnc.equals(UTF_16BE) || cTEnc.equals(UTF_16LE))) {
-                    throw new XmlStreamReaderException(HTTP_EX_1
-                            .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                    xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                            bomEnc, xmlGuessEnc, xmlEnc, is);
-                } else if (cTEnc.equals(UTF_16)) {
-                    if (bomEnc != null && bomEnc.startsWith(UTF_16)) {
-                        encoding = bomEnc;
-                    } else {
-                        throw new XmlStreamReaderException(HTTP_EX_2
-                                .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                        xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                                bomEnc, xmlGuessEnc, xmlEnc, is);
-                    }
-                } else if (bomEnc != null
-                        && (cTEnc.equals(UTF_32BE) || cTEnc.equals(UTF_32LE))) {
-                    throw new XmlStreamReaderException(HTTP_EX_1
-                            .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                    xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                            bomEnc, xmlGuessEnc, xmlEnc, is);
-                } else if (cTEnc.equals(UTF_32)) {
-                    if (bomEnc != null && bomEnc.startsWith(UTF_32)) {
-                        encoding = bomEnc;
-                    } else {
-                        throw new XmlStreamReaderException(HTTP_EX_2
-                                .format(new Object[] { cTMime, cTEnc, bomEnc,
-                                        xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
-                                bomEnc, xmlGuessEnc, xmlEnc, is);
-                    }
-                } else {
-                    encoding = cTEnc;
-                }
-            } else {
+            if (!appXml && !textXml) {
                 throw new XmlStreamReaderException(HTTP_EX_3
                         .format(new Object[] { cTMime, cTEnc, bomEnc,
                                 xmlGuessEnc, xmlEnc }), cTMime, cTEnc, bomEnc,
                         xmlGuessEnc, xmlEnc, is);
+            }
+            if (cTEnc == null) {
+                if (appXml) {
+                    encoding = calculateRawEncoding(bomEnc, xmlGuessEnc,
+                            xmlEnc, is);
+                } else {
+                    encoding = defaultEncoding == null ? US_ASCII
+                            : defaultEncoding;
+                }
+            } else if (bomEnc != null
+                    && (cTEnc.equals(UTF_16BE) || cTEnc.equals(UTF_16LE))) {
+                throw new XmlStreamReaderException(HTTP_EX_1
+                        .format(new Object[] { cTMime, cTEnc, bomEnc,
+                                xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
+                        bomEnc, xmlGuessEnc, xmlEnc, is);
+            } else if (cTEnc.equals(UTF_16)) {
+                if ((bomEnc == null) || !bomEnc.startsWith(UTF_16)) {
+                    throw new XmlStreamReaderException(HTTP_EX_2
+                            .format(new Object[] { cTMime, cTEnc, bomEnc,
+                                    xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
+                            bomEnc, xmlGuessEnc, xmlEnc, is);
+                }
+                encoding = bomEnc;
+            } else if (bomEnc != null
+                    && (cTEnc.equals(UTF_32BE) || cTEnc.equals(UTF_32LE))) {
+                throw new XmlStreamReaderException(HTTP_EX_1
+                        .format(new Object[] { cTMime, cTEnc, bomEnc,
+                                xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
+                        bomEnc, xmlGuessEnc, xmlEnc, is);
+            } else if (cTEnc.equals(UTF_32)) {
+                if ((bomEnc == null) || !bomEnc.startsWith(UTF_32)) {
+                    throw new XmlStreamReaderException(HTTP_EX_2
+                            .format(new Object[] { cTMime, cTEnc, bomEnc,
+                                    xmlGuessEnc, xmlEnc }), cTMime, cTEnc,
+                            bomEnc, xmlGuessEnc, xmlEnc, is);
+                }
+                encoding = bomEnc;
+            } else {
+                encoding = cTEnc;
             }
         }
         return encoding;

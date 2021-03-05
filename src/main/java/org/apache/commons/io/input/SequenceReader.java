@@ -83,11 +83,10 @@ public class SequenceReader extends Reader {
         int c = EOF;
         while (reader != null) {
             c = reader.read();
-            if (c == EOF) {
-                reader = nextReader();
-            } else {
+            if (c != EOF) {
                 break;
             }
+            reader = nextReader();
         }
         return c;
     }

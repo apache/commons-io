@@ -84,7 +84,8 @@ public class CircularBufferInputStream extends InputStream {
             if (res == EOF) {
                 eof = true;
                 return;
-            } else if (res > 0) {
+            }
+            if (res > 0) {
                 buffer.add(buf, 0, res);
                 space -= res;
             }

@@ -667,25 +667,26 @@ public class FilenameUtils {
                     return 2;
                 }
                 return 3;
-            } else if (ch0 == UNIX_SEPARATOR) {
+            }
+            if (ch0 == UNIX_SEPARATOR) {
                 return 1;
             }
             return NOT_FOUND;
 
-        } else if (isSeparator(ch0) && isSeparator(ch1)) {
-            int posUnix = fileName.indexOf(UNIX_SEPARATOR, 2);
-            int posWin = fileName.indexOf(WINDOWS_SEPARATOR, 2);
-            if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
-                return NOT_FOUND;
-            }
-            posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
-            posWin = posWin == NOT_FOUND ? posUnix : posWin;
-            final int pos = Math.min(posUnix, posWin) + 1;
-            final String hostnamePart = fileName.substring(2, pos - 1);
-            return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
-        } else {
+        }
+        if (!isSeparator(ch0) || !isSeparator(ch1)) {
             return isSeparator(ch0) ? 1 : 0;
         }
+        int posUnix = fileName.indexOf(UNIX_SEPARATOR, 2);
+        int posWin = fileName.indexOf(WINDOWS_SEPARATOR, 2);
+        if (posUnix == NOT_FOUND && posWin == NOT_FOUND || posUnix == 2 || posWin == 2) {
+            return NOT_FOUND;
+        }
+        posUnix = posUnix == NOT_FOUND ? posWin : posUnix;
+        posWin = posWin == NOT_FOUND ? posUnix : posWin;
+        final int pos = Math.min(posUnix, posWin) + 1;
+        final String hostnamePart = fileName.substring(2, pos - 1);
+        return isValidHostName(hostnamePart) ? pos : NOT_FOUND;
     }
 
     /**

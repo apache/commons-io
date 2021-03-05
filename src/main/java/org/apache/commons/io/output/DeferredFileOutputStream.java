@@ -275,9 +275,8 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
         if (isInMemory()) {
             return memoryOutputStream.toInputStream();
-        } else {
-            return Files.newInputStream(outputFile.toPath());
         }
+        return Files.newInputStream(outputFile.toPath());
     }
 
     /**

@@ -230,11 +230,11 @@ public class FileWriterWithEncoding extends Writer {
             stream = new FileOutputStream(file, append);
             if (encoding instanceof Charset) {
                 return new OutputStreamWriter(stream, (Charset)encoding);
-            } else if (encoding instanceof CharsetEncoder) {
-                return new OutputStreamWriter(stream, (CharsetEncoder)encoding);
-            } else {
-                return new OutputStreamWriter(stream, (String)encoding);
             }
+            if (encoding instanceof CharsetEncoder) {
+                return new OutputStreamWriter(stream, (CharsetEncoder)encoding);
+            }
+            return new OutputStreamWriter(stream, (String)encoding);
         } catch (final IOException | RuntimeException ex) {
             try {
                 IOUtils.close(stream);
