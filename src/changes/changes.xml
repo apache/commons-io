@@ -237,7 +237,7 @@ The <action> type attribute can be add,update,fix,remove.
         Tiny performance improvement in FileUtils#moveDirectoryToDirectory() #174.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump checkstyle from 8.38 to 8.39 #689.
+        Bump checkstyle from 8.38 to 8.41 #689, #209.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump maven-checkstyle-plugin from 3.1.1 to 3.1.2 #198.
