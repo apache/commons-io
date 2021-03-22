@@ -75,7 +75,7 @@ class MemoryMappedFileInputStreamTest {
     @Test
     void testLargerFile() throws IOException {
         // setup
-        final Path file = createTestFile(5 * 1024 * 1024);
+        final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
 
         // test
@@ -89,7 +89,7 @@ class MemoryMappedFileInputStreamTest {
     @Test
     void testAlternateBufferSize() throws IOException {
         // setup
-        final Path file = createTestFile(1 * 1024 * 1024);
+        final Path file = createTestFile(1024 * 1024);
         final byte[] expectedData = Files.readAllBytes(file);
 
         // test
