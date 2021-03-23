@@ -27,6 +27,8 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.apache.commons.io.ByteBufferCleaner;
+
 /**
  * An {@link InputStream} that utilizes memory mapped files to improve
  * performance. A sliding window of the file is mapped to memory to avoid
@@ -37,8 +39,7 @@ import java.nio.file.StandardOpenOption;
  * reading or writing a few tens of kilobytes of data. From the standpoint of
  * performance it is generally only worth mapping relatively large files into
  * memory. Use of this class can provide approximately a 25% increase in
- * throughput when reading large files.
- * <br>
+ * throughput when reading large files. <br>
  * Note: Use of this class does not necessarily obviate the need to use a
  * {@link BufferedInputStream}. Depending on the use case, the use of buffering
  * may still further improve performance. For example:
@@ -57,12 +58,13 @@ import java.nio.file.StandardOpenOption;
  */
 public class MemoryMappedFileInputStream extends InputStream {
     /**
-     * Default size of the sliding memory mapped buffer. We use 256K,
-     * equal to 65536 pages (given a 4K page size). Increasing the value beyond the
-     * default size will generally not provide any increase in throughput.
+     * Default size of the sliding memory mapped buffer. We use 256K, equal to 65536
+     * pages (given a 4K page size). Increasing the value beyond the default size
+     * will generally not provide any increase in throughput.
      */
     private static final int DEFAULT_BUFFER_SIZE = 256 * 1024;
     private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.wrap(new byte[0]).asReadOnlyBuffer();
+    private static final boolean IS_CLEANING_SUPPORTED = ByteBufferCleaner.isSupported();
     private final int bufferSize;
     private final FileChannel channel;
     private ByteBuffer buffer = EMPTY_BUFFER;
@@ -106,7 +108,7 @@ public class MemoryMappedFileInputStream extends InputStream {
         buffer.get(b, off, numBytes);
         return numBytes;
     }
-    
+
     @Override
     public int available() throws IOException {
         return this.buffer.remaining();
@@ -114,13 +116,12 @@ public class MemoryMappedFileInputStream extends InputStream {
 
     @Override
     public void close() throws IOException {
-        // There is currently no way to safely unmap the file from memory.
-        // It will happen automatically when the MappedByteBuffer is garbage collected.
-        // If JDK-4724038 is ever implemented we should utilize that feature instead
-        // (probably would be needed for each call to nextBuffer()).
-        this.buffer = null;
-        this.channel.close();
-        this.closed = true;
+        if (!closed) {
+            cleanBuffer();
+            this.buffer = null;
+            this.channel.close();
+            this.closed = true;
+        }
     }
 
     private void ensureOpen() throws IOException {
@@ -133,10 +134,17 @@ public class MemoryMappedFileInputStream extends InputStream {
         long remainingInFile = this.channel.size() - this.nextBufferPosition;
         if (remainingInFile > 0) {
             long amountToMap = Math.min(remainingInFile, bufferSize);
+            cleanBuffer();
             this.buffer = this.channel.map(MapMode.READ_ONLY, nextBufferPosition, amountToMap);
             this.nextBufferPosition += amountToMap;
         } else {
             this.buffer = EMPTY_BUFFER;
+        }
+    }
+
+    private void cleanBuffer() {
+        if (IS_CLEANING_SUPPORTED && this.buffer.isDirect()) {
+            ByteBufferCleaner.clean(this.buffer);
         }
     }
 
