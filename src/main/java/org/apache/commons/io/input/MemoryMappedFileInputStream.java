@@ -110,6 +110,24 @@ public class MemoryMappedFileInputStream extends InputStream {
     }
 
     @Override
+    public long skip(long n) throws IOException {
+        ensureOpen();
+        if (n <= 0) {
+            return 0;
+        }
+        if (n <= this.buffer.remaining()) {
+            this.buffer.position((int) (this.buffer.position() + n));
+            return n;
+        } else {
+            long remainingInFile = this.channel.size() - nextBufferPosition;
+            long skipped = this.buffer.remaining() + Math.min(remainingInFile, n - this.buffer.remaining());
+            this.nextBufferPosition += skipped - this.buffer.remaining();
+            nextBuffer();
+            return skipped;
+        }
+    }
+
+    @Override
     public int available() throws IOException {
         return this.buffer.remaining();
     }
