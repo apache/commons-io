@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -32,6 +33,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class MemoryMappedFileInputStreamTest {
 
@@ -124,7 +127,113 @@ class MemoryMappedFileInputStreamTest {
             int b2 = is.read();
             assertEquals(-1, is.read());
             // verify
-            assertArrayEquals(expectedData, new byte[] {(byte) b1, (byte) b2});
+            assertArrayEquals(expectedData, new byte[] { (byte) b1, (byte) b2 });
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { -5, -1, 0 })
+    void testSkipNoop(int amountToSkip) throws IOException {
+        // setup
+        final Path file = createTestFile(10);
+        final byte[] expectedData = Files.readAllBytes(file);
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file)) {
+            assertEquals(0, is.skip(amountToSkip));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(expectedData, data);
+        }
+    }
+
+    @Test
+    void testSkipEmpty() throws IOException {
+        // setup
+        final Path file = createTestFile(0);
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file)) {
+            assertEquals(0, is.skip(5));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(new byte[0], data);
+        }
+    }
+
+    @Test
+    void testSkipAtStart() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file, 10)) {
+            assertEquals(1, is.skip(1));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(Arrays.copyOfRange(expectedData, 1, expectedData.length), data);
+        }
+    }
+
+    @Test
+    void testSkipInCurrentBuffer() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file, 10)) {
+            IOUtils.toByteArray(is, 5);
+            assertEquals(3, is.skip(3));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(Arrays.copyOfRange(expectedData, 8, expectedData.length), data);
+        }
+    }
+
+    @Test
+    void testSkipToEndOfCurrentBuffer() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file, 10)) {
+            IOUtils.toByteArray(is, 5);
+            assertEquals(5, is.skip(5));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(Arrays.copyOfRange(expectedData, 10, expectedData.length), data);
+        }
+    }
+
+    @Test
+    void testSkipOutOfCurrentBuffer() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+        final byte[] expectedData = Files.readAllBytes(file);
+
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file, 10)) {
+            IOUtils.toByteArray(is, 5);
+            assertEquals(6, is.skip(6));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(Arrays.copyOfRange(expectedData, 11, expectedData.length), data);
+        }
+    }
+
+    @Test
+    void testSkipPastEof() throws IOException {
+        // setup
+        final Path file = createTestFile(100);
+
+        // test
+        try (InputStream is = new MemoryMappedFileInputStream(file, 10)) {
+            IOUtils.toByteArray(is, 5);
+            assertEquals(95, is.skip(96));
+            byte[] data = IOUtils.toByteArray(is);
+            // verify
+            assertArrayEquals(new byte[0], data);
         }
     }
 
