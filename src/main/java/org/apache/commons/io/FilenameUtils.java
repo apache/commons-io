@@ -519,7 +519,7 @@ public class FilenameUtils {
     /**
      * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
      * <p>
-     * The files names are expected to be normalized.
+     * The files names are expected to be canonical.
      * </p>
      *
      * Edge cases:
