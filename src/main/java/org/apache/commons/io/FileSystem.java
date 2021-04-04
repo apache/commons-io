@@ -65,6 +65,14 @@ public enum FileSystem {
 
     /**
      * Windows file system.
+     * <p>
+     * The reserved characters are defined in the
+     * <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
+     * (microsoft.com)</a>.
+     * </p>
+     * 
+     * @see <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
+     *      (microsoft.com)</a>
      */
     WINDOWS(false, true, 255,
             32000, new char[] {
