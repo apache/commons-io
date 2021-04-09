@@ -284,7 +284,7 @@ public class FileUtils {
         requireExistsChecked(file, "file");
         requireFile(file, "file");
         Objects.requireNonNull(checksum, "checksum");
-        try (InputStream inputStream = new CheckedInputStream(new FileInputStream(file), checksum)) {
+        try (InputStream inputStream = new CheckedInputStream(Files.newInputStream(file.toPath()), checksum)) {
             IOUtils.consume(inputStream);
         }
         return checksum;
@@ -404,7 +404,7 @@ public class FileUtils {
             return true;
         }
 
-        try (InputStream input1 = new FileInputStream(file1); InputStream input2 = new FileInputStream(file2)) {
+        try (InputStream input1 = Files.newInputStream(file1.toPath()); InputStream input2 = Files.newInputStream(file2.toPath())) {
             return IOUtils.contentEquals(input1, input2);
         }
     }
@@ -455,8 +455,8 @@ public class FileUtils {
         }
 
         final Charset charset = Charsets.toCharset(charsetName);
-        try (Reader input1 = new InputStreamReader(new FileInputStream(file1), charset);
-             Reader input2 = new InputStreamReader(new FileInputStream(file2), charset)) {
+        try (Reader input1 = new InputStreamReader(Files.newInputStream(file1.toPath()), charset);
+             Reader input2 = new InputStreamReader(Files.newInputStream(file2.toPath()), charset)) {
             return IOUtils.contentEqualsIgnoreEOL(input1, input2);
         }
     }
@@ -867,7 +867,7 @@ public class FileUtils {
      * @since 2.1
      */
     public static long copyFile(final File input, final OutputStream output) throws IOException {
-        try (FileInputStream fis = new FileInputStream(input)) {
+        try (InputStream fis = Files.newInputStream(input.toPath())) {
             return IOUtils.copyLarge(fis, output);
         }
     }

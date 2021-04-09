@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -357,7 +357,7 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
-        final Reader reader = new FileReader(testFile);
+        final Reader reader = Files.newBufferedReader(testFile.toPath());
         this.testFiltering(lines, reader);
     }
 
@@ -369,7 +369,7 @@ public class LineIteratorTestCase {
         final File testFile = new File(temporaryFolder, fileName);
         final List<String> lines = createLinesFile(testFile, encoding, 9);
 
-        final Reader reader = new BufferedReader(new FileReader(testFile));
+        final Reader reader = new BufferedReader(Files.newBufferedReader(testFile.toPath()));
         this.testFiltering(lines, reader);
     }
 

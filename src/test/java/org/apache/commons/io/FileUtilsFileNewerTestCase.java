@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 
 import org.apache.commons.io.test.TestUtils;
@@ -54,7 +54,7 @@ public class FileUtilsFileNewerTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, FILE1_SIZE);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -62,7 +62,7 @@ public class FileUtilsFileNewerTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, FILE2_SIZE);
         }
     }

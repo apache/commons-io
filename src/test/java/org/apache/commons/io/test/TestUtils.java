@@ -23,10 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,6 +32,8 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -54,7 +53,7 @@ public abstract class TestUtils {
     public static void assertEqualContent(final byte[] b0, final File file) throws IOException {
         int count = 0, numRead = 0;
         final byte[] b1 = new byte[b0.length];
-        try (InputStream is = new FileInputStream(file)) {
+        try (InputStream is = Files.newInputStream(file.toPath())) {
             while (count < b0.length && numRead >= 0) {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
@@ -76,7 +75,7 @@ public abstract class TestUtils {
     public static void assertEqualContent(final char[] c0, final File file) throws IOException {
         int count = 0, numRead = 0;
         final char[] c1 = new char[c0.length];
-        try (Reader ir = new FileReader(file)) {
+        try (Reader ir = Files.newBufferedReader(file.toPath())) {
             while (count < c0.length && numRead >= 0) {
                 numRead = ir.read(c1, count, c0.length);
                 count += numRead;
@@ -99,8 +98,8 @@ public abstract class TestUtils {
                     " have differing file sizes (" + f0.length() +
                     " vs " + f1.length() + ")", ( f0.length() == f1.length() ) );
         */
-        try (InputStream is0 = new FileInputStream(f0)) {
-            try (InputStream is1 = new FileInputStream(f1)) {
+        try (InputStream is0 = Files.newInputStream(f0.toPath())) {
+            try (InputStream is1 = Files.newInputStream(f1.toPath())) {
                 final byte[] buf0 = new byte[1024];
                 final byte[] buf1 = new byte[1024];
                 int n0 = 0;
@@ -148,7 +147,7 @@ public abstract class TestUtils {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new java.io.FileOutputStream(file))) {
+                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             generateTestData(output, size);
         }
     }
@@ -157,7 +156,7 @@ public abstract class TestUtils {
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
-        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (final PrintWriter output = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
             for (final String element : data) {
                 output.println(element);
             }
@@ -171,7 +170,7 @@ public abstract class TestUtils {
     }
 
     public static void generateTestData(final File file, final long size) throws IOException, FileNotFoundException {
-        try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file))) {
+        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             generateTestData(output, size);
         }
     }

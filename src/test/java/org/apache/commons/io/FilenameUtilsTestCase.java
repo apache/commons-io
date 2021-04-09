@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -68,7 +68,7 @@ public class FilenameUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output3 =
-                new BufferedOutputStream(new FileOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output3, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -76,7 +76,7 @@ public class FilenameUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output2, testFile2Size);
         }
         if (!testFile1.getParentFile().exists()) {
@@ -84,7 +84,7 @@ public class FilenameUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -92,7 +92,7 @@ public class FilenameUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, testFile2Size);
         }
     }

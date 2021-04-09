@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
@@ -222,7 +221,7 @@ public class BoundedReaderTest {
         try {
             final File file = path.toFile();
             FileUtils.write(file, data, StandardCharsets.ISO_8859_1);
-            try (FileReader source = new FileReader(file)) {
+            try (Reader source = Files.newBufferedReader(file.toPath())) {
                 testLineNumberReader(source);
             }
         } finally {

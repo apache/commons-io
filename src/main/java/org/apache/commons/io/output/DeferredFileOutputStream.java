@@ -17,8 +17,6 @@
 package org.apache.commons.io.output;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -240,7 +238,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
             outputFile = File.createTempFile(prefix, suffix, directory);
         }
         FileUtils.forceMkdirParent(outputFile);
-        final FileOutputStream fos = new FileOutputStream(outputFile);
+        final OutputStream fos = Files.newOutputStream(outputFile.toPath());
         try {
             memoryOutputStream.writeTo(fos);
         } catch (final IOException e) {
@@ -297,7 +295,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
         if (isInMemory()) {
             memoryOutputStream.writeTo(outputStream);
         } else {
-            try (FileInputStream fis = new FileInputStream(outputFile)) {
+            try (InputStream fis = Files.newInputStream(outputFile.toPath())) {
                 IOUtils.copy(fis, outputStream);
             }
         }

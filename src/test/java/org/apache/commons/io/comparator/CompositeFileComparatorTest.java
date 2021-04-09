@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -51,7 +51,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
         }
 
         try (final BufferedOutputStream output3 =
-                new BufferedOutputStream(new FileOutputStream(lessFile))) {
+                new BufferedOutputStream(Files.newOutputStream(lessFile.toPath()))) {
             TestUtils.generateTestData(output3, 32);
         }
         if (!equalFile1.getParentFile().exists()) {
@@ -59,7 +59,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(equalFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(equalFile1.toPath()))) {
             TestUtils.generateTestData(output2, 48);
         }
         if (!equalFile2.getParentFile().exists()) {
@@ -67,7 +67,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(equalFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(equalFile2.toPath()))) {
             TestUtils.generateTestData(output1, 48);
         }
         if (!moreFile.getParentFile().exists()) {
@@ -75,7 +75,7 @@ public class CompositeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(moreFile))) {
+                new BufferedOutputStream(Files.newOutputStream(moreFile.toPath()))) {
             TestUtils.generateTestData(output, 48);
         }
     }

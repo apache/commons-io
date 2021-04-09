@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +55,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(smallerFile))) {
+                new BufferedOutputStream(Files.newOutputStream(smallerFile.toPath()))) {
             TestUtils.generateTestData(output2, 32);
         }
         if (!equalFile.getParentFile().exists()) {
@@ -63,7 +63,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(equalFile))) {
+                new BufferedOutputStream(Files.newOutputStream(equalFile.toPath()))) {
             TestUtils.generateTestData(output1, 48);
         }
         if (!largerFile.getParentFile().exists()) {
@@ -71,7 +71,7 @@ public class SizeFileComparatorTest extends ComparatorAbstractTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(largerFile))) {
+                new BufferedOutputStream(Files.newOutputStream(largerFile.toPath()))) {
             TestUtils.generateTestData(output, 64);
         }
         equalFile1 = equalFile;

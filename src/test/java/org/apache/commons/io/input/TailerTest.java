@@ -26,10 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -37,6 +34,8 @@ import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -76,7 +75,7 @@ public class TailerTest {
 
         final File file = new File(temporaryFolder, "testLongFile.txt");
         createFile(file, 0);
-        try (final Writer writer = new FileWriter(file, true)) {
+        try (final Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (int i = 0; i < 100000; i++) {
                 writer.write("LineLineLineLineLineLineLineLineLineLine\n");
             }
@@ -139,8 +138,8 @@ public class TailerTest {
         final Thread thread = new Thread(tailer);
         thread.start();
 
-        try (Writer out = new OutputStreamWriter(new FileOutputStream(file), charsetUTF8);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(origin), charsetUTF8))) {
+        try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), charsetUTF8);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(origin.toPath()), charsetUTF8))) {
             final List<String> lines = new ArrayList<>();
             String line;
             while((line = reader.readLine()) != null){
@@ -297,7 +296,7 @@ public class TailerTest {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(file))) {
+                new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             TestUtils.generateTestData(output, size);
         }
 
@@ -327,7 +326,7 @@ public class TailerTest {
 
     /** Append some lines to a file */
     private void write(final File file, final String... lines) throws Exception {
-        try (FileWriter writer = new FileWriter(file, true)) {
+        try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String line : lines) {
                 writer.write(line + "\n");
             }
@@ -336,7 +335,7 @@ public class TailerTest {
 
     /** Append a string to a file */
     private void writeString(final File file, final String ... strings) throws Exception {
-        try (FileWriter writer = new FileWriter(file, true)) {
+        try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND)) {
             for (final String string : strings) {
                 writer.write(string);
             }

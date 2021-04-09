@@ -17,13 +17,14 @@
 package org.apache.commons.io.output;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
@@ -227,7 +228,7 @@ public class FileWriterWithEncoding extends Writer {
         OutputStream stream = null;
         final boolean fileExistedAlready = file.exists();
         try {
-            stream = new FileOutputStream(file, append);
+            stream = Files.newOutputStream(file.toPath(),  append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             if (encoding instanceof Charset) {
                 return new OutputStreamWriter(stream, (Charset)encoding);
             }

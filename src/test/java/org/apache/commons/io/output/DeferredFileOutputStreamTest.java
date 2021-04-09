@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.IntStream;
 
@@ -390,7 +390,7 @@ public class DeferredFileOutputStreamTest {
      */
     private void verifyResultFile(final File testFile) {
         try {
-            final FileInputStream fis = new FileInputStream(testFile);
+            final InputStream fis = Files.newInputStream(testFile.toPath());
             assertEquals(testBytes.length, fis.available());
 
             final byte[] resultBytes = new byte[testBytes.length];

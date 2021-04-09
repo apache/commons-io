@@ -19,7 +19,6 @@ package org.apache.commons.io.input.compatibility;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,6 +27,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -134,7 +134,7 @@ public class XmlStreamReader extends Reader {
      */
     @SuppressWarnings("resource") // FileInputStream is closed when this closed when this object is closed.
     public XmlStreamReader(final File file) throws IOException {
-        this(new FileInputStream(file));
+        this(Files.newInputStream(file.toPath()));
     }
 
     /**
