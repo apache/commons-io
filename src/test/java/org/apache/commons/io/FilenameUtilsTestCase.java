@@ -272,6 +272,9 @@ public class FilenameUtilsTestCase {
         assertEquals(null, FilenameUtils.normalize("\\\\g:2:3:4:5:6:7:8\\a\\b\\c.txt"));
         assertEquals(null, FilenameUtils.normalize("\\\\1ffff:2:3:4:5:6:7:8\\a\\b\\c.txt"));
         assertEquals(null, FilenameUtils.normalize("\\\\1:2\\a\\b\\c.txt"));
+        // IO-556
+        assertEquals(null, FilenameUtils.normalize("//../foo"));
+        assertEquals(null, FilenameUtils.normalize("\\\\..\\foo"));
     }
 
     /**
