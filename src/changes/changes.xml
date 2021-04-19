@@ -221,8 +221,8 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update actions/checkout from v2.3.2 to v2.3.4, #156, #168.
       </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump actions/setup-java from v1.4.2 to v1.4.3 #160.
+      <action dev="ggregory" type="update" due-to="Dependabot, Gary Gregory">
+        Bump actions/setup-java from v1.4.2 to v2 #160.
       </action>
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5.
