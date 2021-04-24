@@ -39,6 +39,7 @@ public class CountingOutputStreamTest {
             for (int i = 0; i < 20; i++) {
                 cos.write(i);
             }
+            cos.flush();
             assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 0, 20);
             assertEquals(cos.getCount(), 20, "CountingOutputStream.getCount()");
 
@@ -47,6 +48,7 @@ public class CountingOutputStreamTest {
                 array[i - 20] = (byte) i;
             }
             cos.write(array);
+            cos.flush();
             assertByteArrayEquals("CountingOutputStream.write(byte[])", baos.toByteArray(), 0, 30);
             assertEquals(cos.getCount(), 30, "CountingOutputStream.getCount()");
 
@@ -54,6 +56,7 @@ public class CountingOutputStreamTest {
                 array[i - 25] = (byte) i;
             }
             cos.write(array, 5, 5);
+            cos.flush();
             assertByteArrayEquals("CountingOutputStream.write(byte[], int, int)", baos.toByteArray(), 0, 35);
             assertEquals(cos.getCount(), 35, "CountingOutputStream.getCount()");
 
@@ -63,6 +66,7 @@ public class CountingOutputStreamTest {
             for (int i = 0; i < 10; i++) {
                 cos.write(i);
             }
+            cos.flush();
             assertByteArrayEquals("CountingOutputStream.write(int)", baos.toByteArray(), 35, 45);
             assertEquals(cos.getCount(), 10, "CountingOutputStream.getCount()");
         }

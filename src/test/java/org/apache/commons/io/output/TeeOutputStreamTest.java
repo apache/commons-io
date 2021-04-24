@@ -78,6 +78,7 @@ public class TeeOutputStreamTest {
                 tos.write(i);
                 expected.write(i);
             }
+            tos.flush();
             assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos1.toByteArray());
             assertByteArrayEquals("TeeOutputStream.write(int)", expected.toByteArray(), baos2.toByteArray());
 
@@ -86,6 +87,7 @@ public class TeeOutputStreamTest {
                 array[i - 20] = (byte) i;
             }
             tos.write(array);
+            tos.flush();
             expected.write(array);
             assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos1.toByteArray());
             assertByteArrayEquals("TeeOutputStream.write(byte[])", expected.toByteArray(), baos2.toByteArray());
@@ -94,6 +96,7 @@ public class TeeOutputStreamTest {
                 array[i - 25] = (byte) i;
             }
             tos.write(array, 5, 5);
+            tos.flush();
             expected.write(array, 5, 5);
             assertByteArrayEquals("TeeOutputStream.write(byte[], int, int)", expected.toByteArray(),
                     baos1.toByteArray());
