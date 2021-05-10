@@ -17,9 +17,11 @@
 package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.Duration;
 import java.util.HashSet;
 
 import org.apache.commons.io.IOUtils;
@@ -92,4 +94,17 @@ public class CharacterFilterReaderTest {
         }
     }
 
+    @Test
+    public void testReadFilteringEOF() throws IOException {
+        final StringReader input = new StringReader("ababcabcd");
+        assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
+            try (StringBuilderWriter output = new StringBuilderWriter(); CharacterFilterReader reader = new CharacterFilterReader(input, -1)) {
+                int c;
+                while ((c = reader.read()) != -1) {
+                    output.write(c);
+                }
+                assertEquals("ababcabcd", output.toString());
+            }
+        });
+    }
 }

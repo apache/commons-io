@@ -42,7 +42,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
         int ch;
         do {
             ch = in.read();
-        } while (filter(ch));
+        } while (ch != EOF && filter(ch));
         return ch;
     }
 
