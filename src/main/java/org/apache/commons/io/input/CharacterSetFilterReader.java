@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.IntPredicate;
 
 /**
  * A filter reader that removes a given set of characters represented as {@code int} code points, handy to remove known
@@ -31,6 +32,14 @@ import java.util.Set;
  * </p>
  */
 public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
+
+    private static IntPredicate toIntPredicate(final Set<Integer> skip) {
+        if (skip == null) {
+            return SKIP_NONE;
+        }
+        final Set<Integer> unmodifiableSet = Collections.unmodifiableSet(skip);
+        return c -> unmodifiableSet.contains(Integer.valueOf(c));
+    }
 
     /**
      * Constructs a new reader.
@@ -50,7 +59,7 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
      * @param skip the set of characters to filter out.
      */
     public CharacterSetFilterReader(final Reader reader, final Set<Integer> skip) {
-        super(reader, c -> skip == null ? null : Collections.unmodifiableSet(skip).contains(Integer.valueOf(c)));
+        super(reader, toIntPredicate(skip));
     }
 
 }

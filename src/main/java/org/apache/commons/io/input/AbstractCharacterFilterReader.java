@@ -28,7 +28,7 @@ import java.util.function.IntPredicate;
  */
 public abstract class AbstractCharacterFilterReader extends FilterReader {
 
-    private static final IntPredicate SKIP_NONE = ch -> false;
+    protected static final IntPredicate SKIP_NONE = ch -> false;
 
     private final IntPredicate skip;
 
