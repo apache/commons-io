@@ -356,7 +356,7 @@ file comparators, endian transformation classes, and much more.
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.41</version>
+              <version>8.42</version>
             </dependency>
           </dependencies>
         </plugin>      
