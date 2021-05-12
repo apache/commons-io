@@ -17,6 +17,7 @@
 package org.apache.commons.io.input;
 
 import java.io.Reader;
+import java.util.function.IntPredicate;
 
 /**
  * A filter reader that filters out a given character represented as an {@code int} code point, handy to remove
@@ -24,8 +25,6 @@ import java.io.Reader;
  * character, as opposed to using a {@link CharacterSetFilterReader}. You can also nest {@link CharacterFilterReader}s.
  */
 public class CharacterFilterReader extends AbstractCharacterFilterReader {
-
-    private final int skip;
 
     /**
      * Constructs a new reader.
@@ -36,13 +35,18 @@ public class CharacterFilterReader extends AbstractCharacterFilterReader {
      *            the character to filter out.
      */
     public CharacterFilterReader(final Reader reader, final int skip) {
-        super(reader);
-        this.skip = skip;
+        super(reader, c -> c == skip);
     }
 
-    @Override
-    protected boolean filter(final int ch) {
-        return ch == skip;
+    /**
+     * Constructs a new reader.
+     *
+     * @param reader the reader to filter.
+     * @param skip Skip test.
+     * @since 2.9.0
+     */
+    public CharacterFilterReader(final Reader reader, final IntPredicate skip) {
+        super(reader, skip);
     }
 
 }

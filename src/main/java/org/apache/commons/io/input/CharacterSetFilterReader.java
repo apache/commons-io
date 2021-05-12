@@ -32,9 +32,6 @@ import java.util.Set;
  */
 public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
 
-    private static final Set<Integer> EMPTY_SET = Collections.emptySet();
-    private final Set<Integer> skipSet;
-
     /**
      * Constructs a new reader.
      *
@@ -53,14 +50,7 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
      * @param skip the set of characters to filter out.
      */
     public CharacterSetFilterReader(final Reader reader, final Set<Integer> skip) {
-        super(reader);
-        this.skipSet = skip == null ? EMPTY_SET : Collections.unmodifiableSet(skip);
-    }
-
-    @Override
-    protected boolean filter(final int ch) {
-        // Note WRT Integer.valueOf(): You can increase the Integer cache with a system property, see {@link Integer}.
-        return skipSet.contains(Integer.valueOf(ch));
+        super(reader, c -> skip == null ? null : Collections.unmodifiableSet(skip).contains(Integer.valueOf(c)));
     }
 
 }
