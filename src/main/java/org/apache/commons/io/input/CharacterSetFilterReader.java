@@ -17,15 +17,17 @@
 package org.apache.commons.io.input;
 
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A filter reader that removes a given set of characters represented as {@code int} code points, handy to remove
- * known junk characters from CSV files for example.
+ * A filter reader that removes a given set of characters represented as {@code int} code points, handy to remove known
+ * junk characters from CSV files for example.
  * <p>
- * This class must convert each {@code int} read to an {@code Integer}. You can increase the Integer cache
- * with a system property, see {@link Integer}.
+ * This class must convert each {@code int} read to an {@code Integer}. You can increase the Integer cache with a system
+ * property, see {@link Integer}.
  * </p>
  */
 public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
@@ -36,10 +38,19 @@ public class CharacterSetFilterReader extends AbstractCharacterFilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader
-     *            the reader to filter.
-     * @param skip
-     *            the set of characters to filter out.
+     * @param reader the reader to filter.
+     * @param skip the set of characters to filter out.
+     * @since 2.9.0
+     */
+    public CharacterSetFilterReader(final Reader reader, final Integer... skip) {
+        this(reader, new HashSet<>(Arrays.asList(skip)));
+    }
+
+    /**
+     * Constructs a new reader.
+     *
+     * @param reader the reader to filter.
+     * @param skip the set of characters to filter out.
      */
     public CharacterSetFilterReader(final Reader reader, final Set<Integer> skip) {
         super(reader);

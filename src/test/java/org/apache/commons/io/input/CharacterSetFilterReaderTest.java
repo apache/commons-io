@@ -16,15 +16,22 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.Duration;
 import java.util.HashSet;
+import java.util.Set;
 
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.junit.jupiter.api.Test;
 
 public class CharacterSetFilterReaderTest {
+
+    private static final String STRING_FIXTURE = "ab";
 
     @Test
     public void testInputSize0FilterSize0() throws IOException {
@@ -47,7 +54,7 @@ public class CharacterSetFilterReaderTest {
     @Test
     public void testInputSize0NullFilter() throws IOException {
         final StringReader input = new StringReader("");
-        try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, null)) {
+        try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, (Set<Integer>) null)) {
             assertEquals(-1, reader.read());
         }
     }
@@ -75,7 +82,7 @@ public class CharacterSetFilterReaderTest {
 
     @Test
     public void testInputSize2FilterSize1FilterFirst() throws IOException {
-        final StringReader input = new StringReader("ab");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('a'));
         try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, codePoints)) {
@@ -86,7 +93,7 @@ public class CharacterSetFilterReaderTest {
 
     @Test
     public void testInputSize2FilterSize1FilterLast() throws IOException {
-        final StringReader input = new StringReader("ab");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('b'));
         try (CharacterSetFilterReader reader = new CharacterSetFilterReader(input, codePoints)) {
@@ -97,7 +104,7 @@ public class CharacterSetFilterReaderTest {
 
     @Test
     public void testInputSize2FilterSize2FilterFirst() throws IOException {
-        final StringReader input = new StringReader("ab");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('a'));
         codePoints.add(Integer.valueOf('y'));
@@ -109,7 +116,7 @@ public class CharacterSetFilterReaderTest {
 
     @Test
     public void testInputSize2FilterSize2FilterLast() throws IOException {
-        final StringReader input = new StringReader("ab");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('x'));
         codePoints.add(Integer.valueOf('b'));
@@ -121,7 +128,7 @@ public class CharacterSetFilterReaderTest {
 
     @Test
     public void testInputSize2FilterSize2FilterNone() throws IOException {
-        final StringReader input = new StringReader("ab");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         final HashSet<Integer> codePoints = new HashSet<>();
         codePoints.add(Integer.valueOf('x'));
         codePoints.add(Integer.valueOf('y'));
@@ -129,5 +136,20 @@ public class CharacterSetFilterReaderTest {
             assertEquals('a', reader.read());
             assertEquals('b', reader.read());
         }
+    }
+
+    @Test
+    public void testReadFilteringEOF() throws IOException {
+        final StringReader input = new StringReader(STRING_FIXTURE);
+        assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
+            try (StringBuilderWriter output = new StringBuilderWriter();
+                CharacterSetFilterReader reader = new CharacterSetFilterReader(input, EOF)) {
+                int c;
+                while ((c = reader.read()) != EOF) {
+                    output.write(c);
+                }
+                assertEquals(STRING_FIXTURE, output.toString());
+            }
+        });
     }
 }

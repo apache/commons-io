@@ -123,6 +123,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-720" dev="ggregory" type="fix" due-to="XenoAmess">
         Fix error about usage of DirectBuffer in JRE 16/17 #205.
       </action>
+      <action dev="ggregory" type="fix" due-to="Rob Spoor, Gary Gregory">
+        Prevent infinite loop with AbstractCharacterFilterReader if EOF is filtered out #226.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add FileSystemProviders class.
@@ -193,8 +196,11 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add copy(URL, OutputStream).
       </action>
-      <action  issue="IO-651" dev="ggregory" type="add" due-to="jmark109, Gary Gregory">
+      <action issue="IO-651" dev="ggregory" type="add" due-to="jmark109, Gary Gregory">
         Add DeferredFileOutputStream.toInputStream() #206.
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add CharacterSetFilterReader.CharacterSetFilterReader(Reader, Integer...).
       </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">

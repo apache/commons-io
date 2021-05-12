@@ -30,8 +30,7 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
     /**
      * Constructs a new reader.
      *
-     * @param reader
-     *            the reader to filter
+     * @param reader the reader to filter
      */
     protected AbstractCharacterFilterReader(final Reader reader) {
         super(reader);
@@ -42,15 +41,14 @@ public abstract class AbstractCharacterFilterReader extends FilterReader {
         int ch;
         do {
             ch = in.read();
-        } while (filter(ch));
+        } while (ch != EOF && filter(ch));
         return ch;
     }
 
     /**
      * Returns true if the given character should be filtered out, false to keep the character.
      *
-     * @param ch
-     *            the character to test.
+     * @param ch the character to test.
      * @return true if the given character should be filtered out, false to keep the character.
      */
     protected abstract boolean filter(int ch);

@@ -16,10 +16,13 @@
  */
 package org.apache.commons.io.input;
 
+import static org.apache.commons.io.IOUtils.EOF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.Duration;
 import java.util.HashSet;
 
 import org.apache.commons.io.IOUtils;
@@ -27,6 +30,8 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.junit.jupiter.api.Test;
 
 public class CharacterFilterReaderTest {
+
+    private static final String STRING_FIXTURE = "ababcabcd";
 
     @Test
     public void testInputSize0FilterSize1() throws IOException {
@@ -41,7 +46,7 @@ public class CharacterFilterReaderTest {
     @Test
     public void testInputSize1FilterSize1() throws IOException {
         try (StringReader input = new StringReader("a");
-                CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
+            CharacterFilterReader reader = new CharacterFilterReader(input, 'a')) {
             assertEquals(-1, reader.read());
         }
     }
@@ -73,8 +78,23 @@ public class CharacterFilterReaderTest {
     }
 
     @Test
+    public void testReadFilteringEOF() throws IOException {
+        final StringReader input = new StringReader(STRING_FIXTURE);
+        assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
+            try (StringBuilderWriter output = new StringBuilderWriter();
+                CharacterFilterReader reader = new CharacterFilterReader(input, EOF)) {
+                int c;
+                while ((c = reader.read()) != EOF) {
+                    output.write(c);
+                }
+                assertEquals(STRING_FIXTURE, output.toString());
+            }
+        });
+    }
+
+    @Test
     public void testReadIntoBuffer() throws IOException {
-        final StringReader input = new StringReader("ababcabcd");
+        final StringReader input = new StringReader(STRING_FIXTURE);
         try (CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
             final char[] buff = new char[9];
             final int charCount = reader.read(buff);
@@ -85,8 +105,9 @@ public class CharacterFilterReaderTest {
 
     @Test
     public void testReadUsingReader() throws IOException {
-        final StringReader input = new StringReader("ababcabcd");
-        try (StringBuilderWriter output = new StringBuilderWriter(); CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
+        final StringReader input = new StringReader(STRING_FIXTURE);
+        try (StringBuilderWriter output = new StringBuilderWriter();
+            CharacterFilterReader reader = new CharacterFilterReader(input, 'b')) {
             IOUtils.copy(reader, output);
             assertEquals("aacacd", output.toString());
         }
