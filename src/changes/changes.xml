@@ -210,7 +210,7 @@ The <action> type attribute can be add,update,fix,remove.
         Update commons.jacoco.version 0.8.5 to 0.8.6 (Fixes Java 15 builds).
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Update spotbugs from 4.1.2 to 4.2.2, #158, #164, #165, #180, #199, #213.
+        Update spotbugs from 4.1.2 to 4.2.2, 4.2.3, #158, #164, #165, #180, #199, #213, #224.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump spotbugs-maven-plugin from 4.0.4 to 4.2.0, #161, #172.
