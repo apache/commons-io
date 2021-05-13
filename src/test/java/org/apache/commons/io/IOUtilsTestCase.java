@@ -62,6 +62,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.NullOutputStream;
@@ -1435,9 +1436,13 @@ public class IOUtilsTestCase {
         }
     }
 
+    @Test public void testToByteArray_InputStreamTooLong() throws Exception {
+        CircularInputStream cin = new CircularInputStream(new byte[]{65, 65, 65}, ((long)Integer.MAX_VALUE) + 1L);
+        assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(cin));
+    }
+
     @Test
     public void testToByteArray_InputStream_NegativeSize() throws Exception {
-
         try (FileInputStream fin = new FileInputStream(testFile)) {
             IOUtils.toByteArray(fin, -1);
             fail("IllegalArgumentException expected");
