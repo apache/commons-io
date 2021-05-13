@@ -58,7 +58,7 @@ public class TimestampedObserverTest {
     }
 
     @Test
-    public void testExample() throws IOException, InterruptedException {
+    public void testExample() throws IOException {
         final TimestampedObserver timestampedObserver = new TimestampedObserver();
         final byte[] buffer = MessageDigestCalculatingInputStreamTest
             .generateRandomByteStream(IOUtils.DEFAULT_BUFFER_SIZE);
