@@ -139,7 +139,7 @@ public class CharacterSetFilterReaderTest {
     }
 
     @Test
-    public void testReadFilteringEOF() throws IOException {
+    public void testReadFilteringEOF() {
         final StringReader input = new StringReader(STRING_FIXTURE);
         assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
             try (StringBuilderWriter output = new StringBuilderWriter();
