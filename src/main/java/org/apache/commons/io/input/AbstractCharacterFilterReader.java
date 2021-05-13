@@ -28,6 +28,11 @@ import java.util.function.IntPredicate;
  */
 public abstract class AbstractCharacterFilterReader extends FilterReader {
 
+    /**
+     * Skips nothing.
+     *
+     * @since 2.9.0
+     */
     protected static final IntPredicate SKIP_NONE = ch -> false;
 
     private final IntPredicate skip;
