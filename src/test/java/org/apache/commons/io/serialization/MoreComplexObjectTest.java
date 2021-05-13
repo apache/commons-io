@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
  *  to verify which settings it requires, as the object uses a number of primitive
  *  and java.* member objects.
  */
-public class MoreComplexObjectTest extends ClosingBase {
+public class MoreComplexObjectTest extends AbstractCloseableListTest {
 
     private InputStream inputStream;
     private MoreComplexObject original;
@@ -44,10 +44,10 @@ public class MoreComplexObjectTest extends ClosingBase {
     @BeforeEach
     public void setupMoreComplexObject() throws IOException {
         original = new MoreComplexObject();
-        final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
-        final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
+        final ByteArrayOutputStream bos = closeAfterEachTest(new ByteArrayOutputStream());
+        final ObjectOutputStream oos = closeAfterEachTest(new ObjectOutputStream(bos));
         oos.writeObject(original);
-        inputStream = willClose(new ByteArrayInputStream(bos.toByteArray()));
+        inputStream = closeAfterEachTest(new ByteArrayInputStream(bos.toByteArray()));
     }
 
     private void assertSerialization(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
@@ -61,7 +61,7 @@ public class MoreComplexObjectTest extends ClosingBase {
      */
     @Test
     public void trustJavaLang() throws IOException, ClassNotFoundException {
-        assertSerialization(willClose(
+        assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class, ArrayList.class, Random.class)
                 .accept("java.lang.*","[Ljava.lang.*")
@@ -73,7 +73,7 @@ public class MoreComplexObjectTest extends ClosingBase {
      */
     @Test
     public void trustJavaIncludingArrays() throws IOException, ClassNotFoundException {
-        assertSerialization(willClose(
+        assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept(MoreComplexObject.class)
                 .accept("java.*","[Ljava.*")
@@ -94,7 +94,7 @@ public class MoreComplexObjectTest extends ClosingBase {
                 "org.codehaus.groovy.runtime.MethodClosure",
                 "org.springframework.beans.factory.ObjectFactory"
         };
-        assertSerialization(willClose(
+        assertSerialization(closeAfterEachTest(
                 new ValidatingObjectInputStream(inputStream)
                 .accept("*")
                 .reject(blacklist)

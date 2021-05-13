@@ -26,25 +26,32 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-/** Test base class that keeps track of Closeable objects
- *  and cleans them up.
+/**
+ * Test base class that keeps track of Closeable objects and cleans them up.
  */
-public class ClosingBase {
-    private final List<Closeable> toClose = new ArrayList<>();
+public abstract class AbstractCloseableListTest {
+    private final List<Closeable> closeableList = new ArrayList<>();
 
-    protected <T extends Closeable> T willClose(final T t) {
-        toClose.add(t);
+    /**
+     * Adds a Closeable to close after each test.
+     *
+     * @param <T> The Closeable type
+     * @param t The Closeable.
+     * @return The Closeable.
+     */
+    protected <T extends Closeable> T closeAfterEachTest(final T t) {
+        closeableList.add(t);
         return t;
     }
 
     @BeforeEach
     public void setup() {
-        toClose.clear();
+        closeableList.clear();
     }
 
     @AfterEach
     public void cleanup() {
-        for (final Closeable c : toClose) {
+        for (final Closeable c : closeableList) {
             try {
                 c.close();
             } catch (final IOException ignored) {
