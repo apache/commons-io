@@ -64,9 +64,9 @@ public class CharacterSetFilterReaderTest {
         try (StringReader input = new StringReader("a")) {
             final HashSet<Integer> codePoints = new HashSet<>();
             codePoints.add(Integer.valueOf('a'));
-            final CharacterSetFilterReader reader = new CharacterSetFilterReader(input, codePoints);
-            assertEquals(-1, reader.read());
-            reader.close();
+            try (final CharacterSetFilterReader reader = new CharacterSetFilterReader(input, codePoints)) {
+                assertEquals(-1, reader.read());
+            }
         }
     }
 
