@@ -42,9 +42,8 @@ public class ValidatingObjectInputStreamTest extends ClosingBase {
 
     private static final ClassNameMatcher ALWAYS_TRUE = className -> true;
 
-    @Override
     @BeforeEach
-    public void setup() throws IOException {
+    public void setupMockSerializedClass() throws IOException {
         testObject = new MockSerializedClass(UUID.randomUUID().toString());
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));

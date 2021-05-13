@@ -41,9 +41,8 @@ public class MoreComplexObjectTest extends ClosingBase {
     private InputStream inputStream;
     private MoreComplexObject original;
 
-    @Override
     @BeforeEach
-    public void setup() throws IOException {
+    public void setupMoreComplexObject() throws IOException {
         original = new MoreComplexObject();
         final ByteArrayOutputStream bos = willClose(new ByteArrayOutputStream());
         final ObjectOutputStream oos = willClose(new ObjectOutputStream(bos));
