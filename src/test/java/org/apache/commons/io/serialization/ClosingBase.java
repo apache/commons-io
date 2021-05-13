@@ -38,7 +38,7 @@ public class ClosingBase {
     }
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
         toClose.clear();
     }
 

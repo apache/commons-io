@@ -51,7 +51,7 @@ public abstract class AbstractMonitorTestCase {
     protected final long pauseTime = 100L;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
         final IOFileFilter javaSuffix = FileFilterUtils.suffixFileFilter(".java");
         final IOFileFilter fileFilter = FileFilterUtils.and(files, javaSuffix);
