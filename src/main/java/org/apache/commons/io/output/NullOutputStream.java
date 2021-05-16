@@ -39,7 +39,7 @@ public class NullOutputStream extends OutputStream {
     }
 
     /**
-     * A singleton.
+     * The singleton.
      */
     public static final NullOutputStream NULL_OUTPUT_STREAM = new NullOutputStream();
 
