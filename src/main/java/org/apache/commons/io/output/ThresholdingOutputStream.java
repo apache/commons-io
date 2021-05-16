@@ -34,8 +34,6 @@ import java.io.OutputStream;
  */
 public abstract class ThresholdingOutputStream extends OutputStream {
 
-    // ----------------------------------------------------------- Data members
-
     /**
      * The threshold at which the event will be triggered.
      */
@@ -51,8 +49,6 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      */
     private boolean thresholdExceeded;
 
-    // ----------------------------------------------------------- Constructors
-
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold.
      *
@@ -62,22 +58,111 @@ public abstract class ThresholdingOutputStream extends OutputStream {
         this.threshold = threshold;
     }
 
-    // --------------------------------------------------- OutputStream methods
+    /**
+     * Checks to see if writing the specified number of bytes would cause the configured threshold to be exceeded. If
+     * so, triggers an event to allow a concrete implementation to take action on this.
+     *
+     * @param count The number of bytes about to be written to the underlying output stream.
+     *
+     * @throws IOException if an error occurs.
+     */
+    protected void checkThreshold(final int count) throws IOException {
+        if (!thresholdExceeded && written + count > threshold) {
+            thresholdExceeded = true;
+            thresholdReached();
+        }
+    }
 
     /**
-     * Writes the specified byte to this output stream.
+     * Closes this output stream and releases any system resources associated with this stream.
      *
-     * @param b The byte to be written.
+     * @throws IOException if an error occurs.
+     */
+    @Override
+    public void close() throws IOException {
+        try {
+            flush();
+        } catch (final IOException ignored) {
+            // ignore
+        }
+        getStream().close();
+    }
+
+    /**
+     * Flushes this output stream and forces any buffered output bytes to be written out.
      *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
-    public void write(final int b) throws IOException {
-        checkThreshold(1);
-        getStream().write(b);
-        written++;
+    public void flush() throws IOException {
+        getStream().flush();
     }
+
+    /**
+     * Returns the number of bytes that have been written to this output stream.
+     *
+     * @return The number of bytes written.
+     */
+    public long getByteCount() {
+        return written;
+    }
+
+    /**
+     * Returns the underlying output stream, to which the corresponding {@code OutputStream} methods in this class will
+     * ultimately delegate.
+     *
+     * @return The underlying output stream.
+     *
+     * @throws IOException if an error occurs.
+     */
+    protected abstract OutputStream getStream() throws IOException;
+
+    /**
+     * Returns the threshold, in bytes, at which an event will be triggered.
+     *
+     * @return The threshold point, in bytes.
+     */
+    public int getThreshold() {
+        return threshold;
+    }
+
+    /**
+     * Determines whether or not the configured threshold has been exceeded for this output stream.
+     *
+     * @return {@code true} if the threshold has been reached; {@code false} otherwise.
+     */
+    public boolean isThresholdExceeded() {
+        return written > threshold;
+    }
+
+    /**
+     * Resets the byteCount to zero. You can call this from {@link #thresholdReached()} if you want the event to be
+     * triggered again.
+     */
+    protected void resetByteCount() {
+        this.thresholdExceeded = false;
+        this.written = 0;
+    }
+
+    /**
+     * Sets the byteCount to count. Useful for re-opening an output stream that has previously been written to.
+     *
+     * @param count The number of bytes that have already been written to the output stream
+     *
+     * @since 2.5
+     */
+    protected void setByteCount(final long count) {
+        this.written = count;
+    }
+
+    /**
+     * Indicates that the configured threshold has been reached, and that a subclass should take whatever action
+     * necessary on this event. This may include changing the underlying output stream.
+     *
+     * @throws IOException if an error occurs.
+     */
+    protected abstract void thresholdReached() throws IOException;
 
     /**
      * Writes {@code b.length} bytes from the specified byte array to this output stream.
@@ -112,114 +197,17 @@ public abstract class ThresholdingOutputStream extends OutputStream {
     }
 
     /**
-     * Flushes this output stream and forces any buffered output bytes to be written out.
+     * Writes the specified byte to this output stream.
+     *
+     * @param b The byte to be written.
      *
      * @throws IOException if an error occurs.
      */
     @SuppressWarnings("resource") // the underlying stream is managed by a subclass.
     @Override
-    public void flush() throws IOException {
-        getStream().flush();
+    public void write(final int b) throws IOException {
+        checkThreshold(1);
+        getStream().write(b);
+        written++;
     }
-
-    /**
-     * Closes this output stream and releases any system resources associated with this stream.
-     *
-     * @throws IOException if an error occurs.
-     */
-    @Override
-    public void close() throws IOException {
-        try {
-            flush();
-        } catch (final IOException ignored) {
-            // ignore
-        }
-        getStream().close();
-    }
-
-    // --------------------------------------------------------- Public methods
-
-    /**
-     * Returns the threshold, in bytes, at which an event will be triggered.
-     *
-     * @return The threshold point, in bytes.
-     */
-    public int getThreshold() {
-        return threshold;
-    }
-
-    /**
-     * Returns the number of bytes that have been written to this output stream.
-     *
-     * @return The number of bytes written.
-     */
-    public long getByteCount() {
-        return written;
-    }
-
-    /**
-     * Determines whether or not the configured threshold has been exceeded for this output stream.
-     *
-     * @return {@code true} if the threshold has been reached; {@code false} otherwise.
-     */
-    public boolean isThresholdExceeded() {
-        return written > threshold;
-    }
-
-    // ------------------------------------------------------ Protected methods
-
-    /**
-     * Checks to see if writing the specified number of bytes would cause the configured threshold to be exceeded. If
-     * so, triggers an event to allow a concrete implementation to take action on this.
-     *
-     * @param count The number of bytes about to be written to the underlying output stream.
-     *
-     * @throws IOException if an error occurs.
-     */
-    protected void checkThreshold(final int count) throws IOException {
-        if (!thresholdExceeded && written + count > threshold) {
-            thresholdExceeded = true;
-            thresholdReached();
-        }
-    }
-
-    /**
-     * Resets the byteCount to zero. You can call this from {@link #thresholdReached()} if you want the event to be
-     * triggered again.
-     */
-    protected void resetByteCount() {
-        this.thresholdExceeded = false;
-        this.written = 0;
-    }
-
-    /**
-     * Sets the byteCount to count. Useful for re-opening an output stream that has previously been written to.
-     *
-     * @param count The number of bytes that have already been written to the output stream
-     *
-     * @since 2.5
-     */
-    protected void setByteCount(final long count) {
-        this.written = count;
-    }
-
-    // ------------------------------------------------------- Abstract methods
-
-    /**
-     * Returns the underlying output stream, to which the corresponding {@code OutputStream} methods in this class will
-     * ultimately delegate.
-     *
-     * @return The underlying output stream.
-     *
-     * @throws IOException if an error occurs.
-     */
-    protected abstract OutputStream getStream() throws IOException;
-
-    /**
-     * Indicates that the configured threshold has been reached, and that a subclass should take whatever action
-     * necessary on this event. This may include changing the underlying output stream.
-     *
-     * @throws IOException if an error occurs.
-     */
-    protected abstract void thresholdReached() throws IOException;
 }
