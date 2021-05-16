@@ -2395,7 +2395,7 @@ public class IOUtils {
      * @param inputStream the {@code InputStream} to read.
      * @return the requested byte array.
      * @throws NullPointerException if the InputStream is {@code null}.
-     * @throws IOException if an I/O error occurs or reading more than {@link Integer#MAX_VALUE} occurs. 
+     * @throws IOException if an I/O error occurs or reading more than {@link Integer#MAX_VALUE} occurs.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
         // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.

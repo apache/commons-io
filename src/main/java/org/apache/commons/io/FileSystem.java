@@ -70,7 +70,7 @@ public enum FileSystem {
      * <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
      * (microsoft.com)</a>.
      * </p>
-     * 
+     *
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
      *      (microsoft.com)</a>
      */

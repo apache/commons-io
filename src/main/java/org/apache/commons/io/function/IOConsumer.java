@@ -37,7 +37,7 @@ public interface IOConsumer<T> {
 
     /**
      * Returns a constant NOOP consumer.
-     * 
+     *
      * @param <T> Type consumer type.
      * @return a constant NOOP consumer.
      * @since 2.9.0
