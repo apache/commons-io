@@ -44,11 +44,6 @@ public class IOUtilsWriteTestCase {
 
     private final byte[] inData = TestUtils.generateTestData(FILE_SIZE);
 
-    // ----------------------------------------------------------------
-    // Tests
-    // ----------------------------------------------------------------
-
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -83,7 +78,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -122,7 +116,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_byteArrayToWriter_Encoding() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -177,7 +170,6 @@ public class IOUtilsWriteTestCase {
         assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToOutputStream() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
@@ -215,7 +207,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToOutputStream_Encoding() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
@@ -269,7 +260,6 @@ public class IOUtilsWriteTestCase {
         assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charSequenceToWriter() throws Exception {
         final CharSequence csq = new StringBuilder(new String(inData, StandardCharsets.US_ASCII));
@@ -311,7 +301,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToOutputStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
@@ -349,7 +338,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
@@ -403,7 +391,6 @@ public class IOUtilsWriteTestCase {
         assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_stringToWriter() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
@@ -445,7 +432,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToOutputStream() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
@@ -483,7 +469,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWrite_charArrayToOutputStream_Encoding() throws Exception {
         final String str = new String(inData, StandardCharsets.US_ASCII);
@@ -579,7 +564,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWriteLines_OutputStream() throws Exception {
         final Object[] data = new Object[]{
@@ -639,7 +623,6 @@ public class IOUtilsWriteTestCase {
         }
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWriteLines_OutputStream_Encoding() throws Exception {
         final Object[] data = new Object[]{
@@ -718,7 +701,6 @@ public class IOUtilsWriteTestCase {
         assertEquals(expected, actual);
     }
 
-    //-----------------------------------------------------------------------
     @Test
     public void testWriteLines_Writer() throws Exception {
         final Object[] data = new Object[]{
