@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-@DisabledOnOs(OS.WINDOWS)
+@DisabledOnOs({OS.WINDOWS, OS.MAC})
 public class FileUtilsDeleteDirectoryLinuxTestCase extends FileUtilsDeleteDirectoryBaseTestCase {
 
 	/** Only runs on Linux. */
