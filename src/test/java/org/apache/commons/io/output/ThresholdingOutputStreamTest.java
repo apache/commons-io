@@ -18,6 +18,7 @@
 package org.apache.commons.io.output;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -46,10 +47,61 @@ public class ThresholdingOutputStreamTest {
                 reached.set(true);
             }
         }) {
-            tos.write(12);
+            tos.write('a');
             assertFalse(reached.get());
-            tos.write(12);
+            tos.write('a');
             assertTrue(reached.get());
+        }
+    }
+
+    @Test
+    public void testThresholdIOConsumer() throws Exception {
+        final AtomicBoolean reached = new AtomicBoolean();
+        // Null threshold consumer
+        reached.set(false);
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, null,
+            os -> new ByteArrayOutputStream(4))) {
+            tos.write('a');
+            assertFalse(reached.get());
+            tos.write('a');
+            assertFalse(reached.get());
+        }
+        // Null output stream function
+        reached.set(false);
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true), null)) {
+            tos.write('a');
+            assertFalse(reached.get());
+            tos.write('a');
+            assertTrue(reached.get());
+        }
+        // non-null inputs.
+        reached.set(false);
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> reached.set(true),
+            os -> new ByteArrayOutputStream(4))) {
+            tos.write('a');
+            assertFalse(reached.get());
+            tos.write('a');
+            assertTrue(reached.get());
+        }
+    }
+
+    @Test
+    public void testThresholdIOConsumerIOException() throws Exception {
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+            throw new IOException("Threshold reached.");
+        }, os -> new ByteArrayOutputStream(4))) {
+            tos.write('a');
+            assertThrows(IOException.class, () -> tos.write('a'));
+        }
+    }
+
+    @Test
+    public void testThresholdIOConsumerUncheckedException() throws Exception {
+        try (final ThresholdingOutputStream tos = new ThresholdingOutputStream(1, os -> {
+            throw new IllegalStateException("Threshold reached.");
+        }, os -> new ByteArrayOutputStream(4))) {
+            tos.write('a');
+            assertThrows(IllegalStateException.class, () -> tos.write('a'));
         }
     }
 }

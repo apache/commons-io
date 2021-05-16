@@ -19,6 +19,9 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.function.IOFunction;
+
 /**
  * An output stream which triggers an event when a specified number of bytes of data have been written to it. The event
  * can be used, for example, to throw an exception if a maximum has been reached, or to switch the underlying stream
@@ -32,12 +35,27 @@ import java.io.OutputStream;
  * when a pending write operation would cause the threshold to be exceeded.
  * </p>
  */
-public abstract class ThresholdingOutputStream extends OutputStream {
+public class ThresholdingOutputStream extends OutputStream {
+
+    /**
+     * Noop output stream getter function.
+     */
+    private static IOFunction<ThresholdingOutputStream, OutputStream> NOOP_OS_GETTER = os -> NullOutputStream.NULL_OUTPUT_STREAM;
 
     /**
      * The threshold at which the event will be triggered.
      */
     private final int threshold;
+
+    /**
+     * Accepts reaching the threshold.
+     */
+    private final IOConsumer<ThresholdingOutputStream> thresholdConsumer;
+
+    /**
+     * Gets the output stream.
+     */
+    private final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter;
 
     /**
      * The number of bytes written to the output stream.
@@ -55,7 +73,22 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      * @param threshold The number of bytes at which to trigger an event.
      */
     public ThresholdingOutputStream(final int threshold) {
+        this(threshold, IOConsumer.noop(), NOOP_OS_GETTER);
+    }
+
+    /**
+     * Constructs an instance of this class which will trigger an event at the specified threshold.
+     *
+     * @param threshold The number of bytes at which to trigger an event.
+     * @param thresholdConsumer Accepts reaching the threshold.
+     * @param outputStreamGetter Gets the output stream.
+     * @since 2.9.0
+     */
+    public ThresholdingOutputStream(final int threshold, final IOConsumer<ThresholdingOutputStream> thresholdConsumer,
+        final IOFunction<ThresholdingOutputStream, OutputStream> outputStreamGetter) {
         this.threshold = threshold;
+        this.thresholdConsumer = thresholdConsumer == null ? IOConsumer.noop() : thresholdConsumer;
+        this.outputStreamGetter = outputStreamGetter == null ? NOOP_OS_GETTER : outputStreamGetter;
     }
 
     /**
@@ -116,7 +149,9 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
-    protected abstract OutputStream getStream() throws IOException;
+    protected OutputStream getStream() throws IOException {
+        return outputStreamGetter.apply(this);
+    }
 
     /**
      * Returns the threshold, in bytes, at which an event will be triggered.
@@ -162,7 +197,9 @@ public abstract class ThresholdingOutputStream extends OutputStream {
      *
      * @throws IOException if an error occurs.
      */
-    protected abstract void thresholdReached() throws IOException;
+    protected void thresholdReached() throws IOException {
+        thresholdConsumer.accept(this);
+    }
 
     /**
      * Writes {@code b.length} bytes from the specified byte array to this output stream.
