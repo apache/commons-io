@@ -55,6 +55,7 @@ import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 
 /**
  * General IO stream manipulation utilities.
@@ -941,7 +942,7 @@ public class IOUtils {
      *
      * @param inputStream the {@code InputStream} to read.
      * @param outputStream the {@code OutputStream} to write.
-     * @return the number of bytes copied, or -1 if &gt; Integer.MAX_VALUE.
+     * @return the number of bytes copied, or -1 if greater than {@link Integer#MAX_VALUE}.
      * @throws NullPointerException if the InputStream is {@code null}.
      * @throws NullPointerException if the OutputStream is {@code null}.
      * @throws IOException if an I/O error occurs.
@@ -2396,7 +2397,7 @@ public class IOUtils {
      * @throws IOException if an I/O error occurs.
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
-        try (final ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+        try (final UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream()) {
             copy(inputStream, output);
             return output.toByteArray();
         }
