@@ -31,6 +31,23 @@ import java.util.function.Consumer;
 public interface IOConsumer<T> {
 
     /**
+     * Package private constant; consider private.
+     */
+    static final IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
+
+    /**
+     * Returns a constant NOOP consumer.
+     * 
+     * @param <T> Type consumer type.
+     * @return a constant NOOP consumer.
+     * @since 2.9.0
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> IOConsumer<T> noop() {
+        return (IOConsumer<T>) NOOP_IO_CONSUMER;
+    }
+
+    /**
      * Performs this operation on the given argument.
      *
      * @param t the input argument

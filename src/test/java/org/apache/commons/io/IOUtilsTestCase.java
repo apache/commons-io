@@ -337,25 +337,25 @@ public class IOUtilsTestCase {
 
     @Test
     public void testCloseConsumer() {
-        final Closeable nulCloseable = null;
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, null)); // null consumer
+        final Closeable nullCloseable = null;
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, null)); // null consumer
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), null)); // null consumer
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), null)); // null consumer
 
         final IOConsumer<IOException> nullConsumer = null; // null consumer doesn't throw
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nullConsumer));
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), nullConsumer));
 
-        final IOConsumer<IOException> silentConsumer = i -> {}; // silent consumer doesn't throw
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, silentConsumer));
+        final IOConsumer<IOException> silentConsumer = IOConsumer.noop(); // noop consumer doesn't throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), silentConsumer));
         assertDoesNotThrow(() -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), silentConsumer));
 
         final IOConsumer<IOException> noisyConsumer = i -> {
             throw i;
         }; // consumer passes on the throw
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, noisyConsumer)); // no throw
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, noisyConsumer)); // no throw
         assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), noisyConsumer)); // no throw
         assertThrows(IOException.class,
             () -> IOUtils.close(new ThrowOnCloseReader(new StringReader("s")), noisyConsumer)); // closeable throws
@@ -363,14 +363,14 @@ public class IOUtilsTestCase {
 
     @Test
     public void testCloseMulti() {
-        final Closeable nulCloseable = null;
+        final Closeable nullCloseable = null;
         final Closeable[] closeables = {null, null};
-        assertDoesNotThrow(() -> IOUtils.close(nulCloseable, nulCloseable));
+        assertDoesNotThrow(() -> IOUtils.close(nullCloseable, nullCloseable));
         assertDoesNotThrow(() -> IOUtils.close(closeables));
         assertDoesNotThrow(() -> IOUtils.close((Closeable[]) null));
-        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nulCloseable));
+        assertDoesNotThrow(() -> IOUtils.close(new StringReader("s"), nullCloseable));
         assertThrows(IOException.class,
-            () -> IOUtils.close(nulCloseable, new ThrowOnCloseReader(new StringReader("s"))));
+            () -> IOUtils.close(nullCloseable, new ThrowOnCloseReader(new StringReader("s"))));
     }
 
     @Test
