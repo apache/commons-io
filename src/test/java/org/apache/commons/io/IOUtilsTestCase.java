@@ -62,6 +62,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.function.IOConsumer;
+import org.apache.commons.io.input.CircularInputStream;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.NullOutputStream;
@@ -69,6 +70,7 @@ import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.io.test.TestUtils;
 import org.apache.commons.io.test.ThrowOnCloseReader;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -1433,6 +1435,13 @@ public class IOUtilsTestCase {
             assertEquals(FILE_SIZE, out.length, "Wrong output size");
             TestUtils.assertEqualContent(out, testFile);
         }
+    }
+
+    @Test
+    @Disabled("Disable by default as it uses too much memory and can cause builds to fail.")
+    public void testToByteArray_InputStream_LongerThanIntegerMaxValue() throws Exception {
+        final CircularInputStream cin = new CircularInputStream(IOUtils.byteArray(), Integer.MAX_VALUE + 1L);
+        assertThrows(IllegalArgumentException.class, () -> IOUtils.toByteArray(cin));
     }
 
     @Test

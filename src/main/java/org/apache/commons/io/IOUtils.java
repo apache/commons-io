@@ -55,6 +55,7 @@ import org.apache.commons.io.output.AppendableWriter;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.ThresholdingOutputStream;
 import org.apache.commons.io.output.UnsynchronizedByteArrayOutputStream;
 
 /**
@@ -2394,12 +2395,17 @@ public class IOUtils {
      * @param inputStream the {@code InputStream} to read.
      * @return the requested byte array.
      * @throws NullPointerException if the InputStream is {@code null}.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs or reading more than {@link Integer#MAX_VALUE} occurs. 
      */
     public static byte[] toByteArray(final InputStream inputStream) throws IOException {
-        try (final UnsynchronizedByteArrayOutputStream output = new UnsynchronizedByteArrayOutputStream()) {
-            copy(inputStream, output);
-            return output.toByteArray();
+        // We use a ThresholdingOutputStream to avoid reading AND writing more than Integer.MAX_VALUE.
+        try (final UnsynchronizedByteArrayOutputStream ubaOutput = new UnsynchronizedByteArrayOutputStream();
+            final ThresholdingOutputStream thresholdOuput = new ThresholdingOutputStream(Integer.MAX_VALUE, os -> {
+                throw new IllegalArgumentException(
+                    String.format("Cannot read more than %,d into a byte array", Integer.MAX_VALUE));
+            }, os -> ubaOutput)) {
+            copy(inputStream, thresholdOuput);
+            return ubaOutput.toByteArray();
         }
     }
 
