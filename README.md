@@ -43,10 +43,11 @@
 Apache Commons IO
 ===================
 
-[![Build Status](https://travis-ci.org/apache/commons-io.svg)](https://travis-ci.org/apache/commons-io)
+[![Travis-CI Status](https://travis-ci.org/apache/commons-io.svg)](https://travis-ci.org/apache/commons-io)
+[![GitHub Actions Status](https://github.com/apache/commons-io/workflows/Java%20CI/badge.svg)](https://github.com/apache/commons-io/actions)
 [![Coverage Status](https://coveralls.io/repos/apache/commons-io/badge.svg)](https://coveralls.io/r/apache/commons-io)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/badge.svg)](https://maven-badges.herokuapp.com/maven-central/commons-io/commons-io/)
-[![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.8.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.8.0)
+[![Javadocs](https://javadoc.io/badge/commons-io/commons-io/2.9.0.svg)](https://javadoc.io/doc/commons-io/commons-io/2.9.0)
 
 The Apache Commons IO library contains utility classes, stream implementations, file filters,
 file comparators, endian transformation classes, and much more.
@@ -68,7 +69,7 @@ Alternatively you can pull it from the central Maven repositories:
 <dependency>
   <groupId>commons-io</groupId>
   <artifactId>commons-io</artifactId>
-  <version>2.8.0</version>
+  <version>2.9.0</version>
 </dependency>
 ```
 
