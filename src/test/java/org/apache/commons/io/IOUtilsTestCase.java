@@ -109,7 +109,7 @@ public class IOUtilsTestCase {
 
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(final byte[] b0, final byte[] b1) {
-        assertTrue(Arrays.equals(b0, b1), "Content not equal according to java.util.Arrays#equals()");
+        assertArrayEquals(b0, b1, "Content not equal according to java.util.Arrays#equals()");
     }
 
     @BeforeEach

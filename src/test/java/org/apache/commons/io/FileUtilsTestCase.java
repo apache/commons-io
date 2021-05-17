@@ -1402,7 +1402,7 @@ public class FileUtilsTestCase {
         destination.createNewFile();
         assertTrue(destination.exists(), "Copy1.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
-        assertTrue(!destination.exists(), "Check No Exist");
+        assertFalse(destination.exists(), "Check No Exist");
     }
 
     @Test
@@ -1411,13 +1411,13 @@ public class FileUtilsTestCase {
         destination.createNewFile();
         assertTrue(destination.exists(), "Copy2.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
-        assertTrue(!destination.exists(), "Check No Exist");
+        assertFalse(destination.exists(), "Check No Exist");
     }
 
     @Test
     public void testForceDeleteAFile3() throws Exception {
         final File destination = new File(temporaryFolder, "no_such_file");
-        assertTrue(!destination.exists(), "Check No Exist");
+        assertFalse(destination.exists(), "Check No Exist");
         try {
             FileUtils.forceDelete(destination);
             fail("Should generate FileNotFoundException");
@@ -1448,7 +1448,7 @@ public class FileUtilsTestCase {
         assertFalse(destination.canWrite());
         assertTrue(destination.exists(), "File doesn't exist to delete");
         FileUtils.forceDelete(destination);
-        assertTrue(!destination.exists(), "Check deletion");
+        assertFalse(destination.exists(), "Check deletion");
     }
 
     @Test
@@ -2038,7 +2038,7 @@ public class FileUtilsTestCase {
 
         // Check results
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
         final File movedDir = new File(destination, testDir.getName());
         final File movedFile = new File(movedDir, testFile.getName());
         assertTrue(movedDir.exists(), "Check dir moved");
@@ -2106,7 +2106,7 @@ public class FileUtilsTestCase {
 
         // Check results
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
         final File movedDir = new File(destination, testDir.getName());
         final File movedFile = new File(movedDir, testFile.getName());
         assertTrue(movedDir.exists(), "Check dir moved");
@@ -2140,7 +2140,7 @@ public class FileUtilsTestCase {
 
         // Check results
         assertTrue(destDir.exists(), "Check Exist after");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
         final File movedDir = new File(destDir, src.getName());
         final File movedChildDir = new File(movedDir, testChildDir.getName());
         final File movedFile = new File(movedChildDir, testFile.getName());
@@ -2204,7 +2204,7 @@ public class FileUtilsTestCase {
         };
         FileUtils.moveFile(src, destination);
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
     }
 
     @Test
@@ -2229,7 +2229,7 @@ public class FileUtilsTestCase {
         };
         assertThrows(IOException.class, () -> FileUtils.moveFile(src, destination));
         // expected
-        assertTrue(!destination.exists(), "Check Rollback");
+        assertFalse(destination.exists(), "Check Rollback");
         assertTrue(src.exists(), "Original exists");
     }
 
@@ -2253,7 +2253,7 @@ public class FileUtilsTestCase {
 
         FileUtils.moveFile(src, destination, StandardCopyOption.COPY_ATTRIBUTES);
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
 
         final long destLastMod = getLastModifiedMillis(destination);
         final long delta = destLastMod - expected;
@@ -2283,7 +2283,7 @@ public class FileUtilsTestCase {
 
         FileUtils.moveFile(src, destination, PathUtils.EMPTY_COPY_OPTIONS);
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!src.exists(), "Original deleted");
+        assertFalse(src.exists(), "Original deleted");
 
         // On Windows, the last modified time is copied by default.
         if (!SystemUtils.IS_OS_WINDOWS) {
@@ -2345,7 +2345,7 @@ public class FileUtilsTestCase {
 
         FileUtils.moveFile(testFile1, destination);
         assertTrue(destination.exists(), "Check Exist");
-        assertTrue(!testFile1.exists(), "Original deleted");
+        assertFalse(testFile1.exists(), "Original deleted");
     }
 
     @Test
@@ -2357,7 +2357,7 @@ public class FileUtilsTestCase {
 
         FileUtils.moveFileToDirectory(testFile1, destDir, true);
         assertTrue(movedFile.exists(), "Check Exist after");
-        assertTrue(!testFile1.exists(), "Original deleted");
+        assertFalse(testFile1.exists(), "Original deleted");
     }
 
     @Test
@@ -2683,8 +2683,8 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToFile3() throws Exception {
-        assertEquals(null, FileUtils.toFile(null));
-        assertEquals(null, FileUtils.toFile(new URL("http://jakarta.apache.org")));
+        assertNull(FileUtils.toFile(null));
+        assertNull(FileUtils.toFile(new URL("http://jakarta.apache.org")));
     }
 
     @Test
@@ -2711,8 +2711,8 @@ public class FileUtilsTestCase {
         final File[] files = FileUtils.toFiles(urls);
 
         assertEquals(urls.length, files.length);
-        assertEquals(true, files[0].toString().contains("file1.txt"), "File: " + files[0]);
-        assertEquals(true, files[1].toString().contains("file2.txt"), "File: " + files[1]);
+        assertTrue(files[0].toString().contains("file1.txt"), "File: " + files[0]);
+        assertTrue(files[1].toString().contains("file2.txt"), "File: " + files[1]);
     }
 
     @Test
@@ -2724,8 +2724,8 @@ public class FileUtilsTestCase {
         final File[] files = FileUtils.toFiles(urls);
 
         assertEquals(urls.length, files.length);
-        assertEquals(true, files[0].toString().contains("file1.txt"), "File: " + files[0]);
-        assertEquals(null, files[1], "File: " + files[1]);
+        assertTrue(files[0].toString().contains("file1.txt"), "File: " + files[0]);
+        assertNull(files[1], "File: " + files[1]);
     }
 
     @Test
@@ -2770,7 +2770,7 @@ public class FileUtilsTestCase {
         if (file.exists()) {
             file.delete();
         }
-        assertTrue(!file.exists(), "Bad test: test file still exists");
+        assertFalse(file.exists(), "Bad test: test file still exists");
         FileUtils.touch(file);
         assertTrue(file.exists(), "FileUtils.touch() created file");
         final FileOutputStream out = new FileOutputStream(file);
@@ -2780,15 +2780,15 @@ public class FileUtilsTestCase {
         assertEquals(1, file.length(), "Wrote one byte to file");
         final long y2k = new GregorianCalendar(2000, 0, 1).getTime().getTime();
         final boolean res = setLastModifiedMillis(file, y2k);  // 0L fails on Win98
-        assertEquals(true, res, "Bad test: set lastModified failed");
+        assertTrue(res, "Bad test: set lastModified failed");
         assertEquals(y2k, getLastModifiedMillis(file), "Bad test: set lastModified set incorrect value");
         final long nowMillis = System.currentTimeMillis();
         FileUtils.touch(file);
         assertEquals(1, file.length(), "FileUtils.touch() didn't empty the file.");
-        assertEquals(false, y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
+        assertFalse(y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
         final int delta = 3000;
-        assertEquals(true, getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
-        assertEquals(true, getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
+        assertTrue(getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
+        assertTrue(getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
     }
 
     @Test

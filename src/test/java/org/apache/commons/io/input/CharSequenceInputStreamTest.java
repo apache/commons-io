@@ -18,7 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -132,7 +132,7 @@ public class CharSequenceInputStreamTest {
 
         for (int i = 0; i < readFirst; i++) {
             final int ch = is.read();
-            assertFalse(ch == -1);
+            assertNotEquals(-1, ch);
         }
 
         is.mark(dataSize);

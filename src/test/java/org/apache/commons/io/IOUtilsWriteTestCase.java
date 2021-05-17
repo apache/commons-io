@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.OutputStream;
@@ -54,7 +54,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -129,7 +129,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_8).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -167,7 +167,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -182,7 +182,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -220,7 +220,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -257,7 +257,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -274,7 +274,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -313,7 +313,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -351,7 +351,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -388,7 +388,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -405,7 +405,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -444,7 +444,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -482,7 +482,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -519,7 +519,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     //-----------------------------------------------------------------------
@@ -537,7 +537,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test

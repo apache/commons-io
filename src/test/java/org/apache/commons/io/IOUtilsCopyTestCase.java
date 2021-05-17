@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -34,7 +33,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.io.input.NullReader;
@@ -78,7 +76,7 @@ public class IOUtilsCopyTestCase {
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
         assertEquals(inData.length,count);
     }
 
@@ -144,7 +142,7 @@ public class IOUtilsCopyTestCase {
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
         assertEquals(inData.length,count);
     }
 
@@ -164,7 +162,7 @@ public class IOUtilsCopyTestCase {
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -184,7 +182,7 @@ public class IOUtilsCopyTestCase {
         assertEquals(0, in.available(), "Not all bytes were read");
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_8).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -203,7 +201,7 @@ public class IOUtilsCopyTestCase {
 
         assertEquals(0, in.available(), "Not all bytes were read");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -252,7 +250,7 @@ public class IOUtilsCopyTestCase {
         writer.flush();
         assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -308,7 +306,7 @@ public class IOUtilsCopyTestCase {
 
         // Note: rely on the method to flush
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -327,7 +325,7 @@ public class IOUtilsCopyTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @SuppressWarnings("resource") // 'in' is deliberately not closed
@@ -345,7 +343,7 @@ public class IOUtilsCopyTestCase {
         // note: we don't flush here; this IOUtils method does it for us
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -397,7 +395,7 @@ public class IOUtilsCopyTestCase {
         writer.flush();
         assertEquals(inData.length, count, "The number of characters returned by copy is wrong");
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     /*
