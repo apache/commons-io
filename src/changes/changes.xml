@@ -275,7 +275,7 @@ The <action> type attribute can be add,update,fix,remove.
         Bump actions/cache from v2 to v2.1.5 #202, #228.
       </action>
       <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump junit-bom from 5.7.0 to 5.7.1 #200.
+        Bump junit-bom from 5.7.0 to 5.7.2 #200, #232.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
         Update from Apache Commons Lang 3.11 to 3.12.0.
@@ -405,9 +405,6 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action type="update" dev="ggregory" due-to="Gary Gregory">
         Update com.github.siom79.japicmp:japicmp-maven-plugin 0.14.3 -> 0.14.4.
-      </action>
-      <action dev="ggregory" type="update" due-to="Dependabot">
-        Bump junit-bom from 5.7.1 to 5.7.2 #232.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
