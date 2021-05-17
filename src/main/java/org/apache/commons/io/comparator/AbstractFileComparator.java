@@ -58,7 +58,7 @@ abstract class AbstractFileComparator implements Comparator<File> {
      */
     public List<File> sort(final List<File> files) {
         if (files != null) {
-            Collections.sort(files, this);
+            files.sort(this);
         }
         return files;
     }

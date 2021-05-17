@@ -1507,7 +1507,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static boolean isDirectory(final File file, final LinkOption... options) {
-        return file != null ? Files.isDirectory(file.toPath(), options) : false;
+        return file != null && Files.isDirectory(file.toPath(), options);
     }
 
     /**
@@ -1681,7 +1681,7 @@ public class FileUtils {
      */
     public static boolean isFileNewer(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() ? lastModifiedUnchecked(file) > timeMillis : false;
+        return file.exists() && lastModifiedUnchecked(file) > timeMillis;
     }
 
     /**
@@ -1842,7 +1842,7 @@ public class FileUtils {
      */
     public static boolean isFileOlder(final File file, final long timeMillis) {
         Objects.requireNonNull(file, "file");
-        return file.exists() ? lastModifiedUnchecked(file) < timeMillis : false;
+        return file.exists() && lastModifiedUnchecked(file) < timeMillis;
     }
 
     /**
@@ -1860,7 +1860,7 @@ public class FileUtils {
      * @since 2.9.0
      */
     public static boolean isRegularFile(final File file, final LinkOption... options) {
-        return file != null ? Files.isRegularFile(file.toPath(), options) : false;
+        return file != null && Files.isRegularFile(file.toPath(), options);
     }
 
     /**
@@ -1875,7 +1875,7 @@ public class FileUtils {
      * @see Files#isSymbolicLink(Path)
      */
     public static boolean isSymlink(final File file) {
-        return file != null ? Files.isSymbolicLink(file.toPath()) : false;
+        return file != null && Files.isSymbolicLink(file.toPath());
     }
 
     /**
@@ -2060,7 +2060,7 @@ public class FileUtils {
             inputStream = openInputStream(file);
             return IOUtils.lineIterator(inputStream, charsetName);
         } catch (final IOException | RuntimeException ex) {
-            IOUtils.closeQuietly(inputStream, e -> ex.addSuppressed(e));
+            IOUtils.closeQuietly(inputStream, ex::addSuppressed);
             throw ex;
         }
     }
