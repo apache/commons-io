@@ -24,11 +24,10 @@ limitations under the License.
 <!-- ================================================== -->
 <section name="Overview">
 <p>
-  Commons IO uses <a href="http://maven.apache.org">Maven 2+</a> or
-  <a href="http://ant.apache.org">Ant</a> as a build system.
+  Commons IO uses <a href="http://maven.apache.org">Maven</a> its build system.
 </p>
 <p>
-  Commons IO requires a minimum of JDK 1.5 to build.
+  Commons IO requires a minimum of JDK 8 to build.
 </p>
 <p>
   You may also be interested in the upgrade notes:<br />
@@ -42,7 +41,7 @@ limitations under the License.
   Upgrade <a href="upgradeto1_1.html">from 1.0 to 1.1</a><br />
 </p>
 </section>
-<section name="Maven 2 Goals">
+<section name="Maven Goals">
   <p>
     The following <a href="http://maven.apache.org">Maven</a> commands can be used to build io:
   </p>
@@ -51,29 +50,7 @@ limitations under the License.
     <li><code>mvn test</code> - compile and run the unit tests</li>
     <li><code>mvn site</code> - create io documentation</li>
     <li><code>mvn package</code> - build the jar</li>
-    <li><code>mvn package -Prc</code> - Create the source and binary distributions</li>
   </ul>
 </section>
-<!-- ================================================== -->
-<section name="Ant Goals">
-  <p>
-    <strong>Note:</strong>
-    <ul>
-        <li>Dependencies are automatically downloaded if not specified explicitly in
-            a <code>build.properties</code> file.</li>
-    </ul>
-  </p>
-  <p>
-    The following <a href="http://ant.apache.org">Ant</a> commands can be used to build io:
-  </p>
-  <ul>
-    <li><code>ant clean</code> - clean up</li>
-    <li><code>ant test</code> - compile and run the unit tests</li>
-    <li><code>ant javadoc</code> - create javadocs</li>
-    <li><code>ant jar</code> - build the jar</li>
-    <li><code>ant dist</code> - Create the source and binary distributions</li>
-  </ul>
-</section>
-<!-- ================================================== -->
 </body>
 </document>

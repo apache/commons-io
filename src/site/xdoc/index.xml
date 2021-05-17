@@ -85,6 +85,19 @@ There are six main areas included:
 <!-- ================================================== -->
 <section name="Releases">
 
+    <subsection name="Commons IO 2.9.0 (requires Java 8)">
+        <p>
+            Commons IO 2.9.0 requires a minimum of Java 8 -
+            <a href="https://commons.apache.org/io/download_io.cgi">Download now!</a>
+        </p>
+        <p>
+            View the
+            <a href="changes-report.html">Release Notes</a>
+            and
+            <a href="apidocs/index.html">Javadoc API documents</a>
+        </p>
+    </subsection>
+
     <subsection name="Commons IO 2.8.0 (requires Java 8)">
         <p>
             Commons IO 2.8.0 requires a minimum of Java 8 -
@@ -94,7 +107,7 @@ There are six main areas included:
             View the
             <a href="changes-report.html">Release Notes</a>
             and
-            <a href="apidocs/index.html">Javadoc API documents</a>
+            <a href="https://javadoc.io/doc/commons-io/commons-io/2.8.0/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
@@ -107,7 +120,7 @@ There are six main areas included:
             View the
             <a href="changes-report.html">Release Notes</a>
             and
-            <a href="javadocs/api-2.7/index.html">Javadoc API documents</a>
+            <a href="https://javadoc.io/doc/commons-io/commons-io/2.7/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
@@ -120,7 +133,7 @@ There are six main areas included:
             View the
             <a href="upgradeto2_6.html">Release Notes</a>
             and
-            <a href="javadocs/api-2.6/index.html">Javadoc API documents</a>
+            <a href="https://javadoc.io/doc/commons-io/commons-io/2.6/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
@@ -133,7 +146,7 @@ There are six main areas included:
             View the
             <a href="upgradeto2_5.html">Release Notes</a>
             and
-            <a href="javadocs/api-2.5/index.html">Javadoc API documents</a>
+            <a href="https://javadoc.io/doc/commons-io/commons-io/2.5/index.html">Javadoc API documents</a>
         </p>
     </subsection>
 
@@ -144,7 +157,7 @@ There are six main areas included:
 </p>
 <p>
 View the <a href="upgradeto2_4.html">Release Notes</a> and
-<a href="javadocs/api-2.4/index.html">Javadoc API documents</a>
+<a href="https://javadoc.io/doc/commons-io/commons-io/2.4/index.html">Javadoc API documents</a>
 </p>
 </subsection>
 
@@ -155,7 +168,7 @@ View the <a href="upgradeto2_4.html">Release Notes</a> and
 </p>
 <p>
 View the <a href="upgradeto2_3.html">Release Notes</a> and
-<a href="javadocs/api-2.3/index.html">Javadoc API documents</a>
+<a href="https://javadoc.io/doc/commons-io/commons-io/2.3/index.html">Javadoc API documents</a>
 </p>
 </subsection>
 
@@ -166,13 +179,14 @@ Commons IO 2.2 requires a minimum of JDK 1.5 -
 </p> 
 <p>
 View the <a href="upgradeto2_2.html">Release Notes</a> and
-<a href="javadocs/api-2.2/index.html">Javadoc API documents</a>
+<a href="https://javadoc.io/doc/commons-io/commons-io/2.2/index.html">Javadoc API documents</a>
 </p> 
 </subsection>
 
 <subsection name="Older Releases">
 <p>
-For previous releases, see the <a href="https://archive.apache.org/dist/commons/io/">Apache Archive</a>.
+For previous releases, see the <a href="https://archive.apache.org/dist/commons/io/">Apache Archive</a>
+and <a href="https://javadoc.io/doc/commons-io/commons-io/">Javadoc Archive</a>
 </p> 
 </subsection>
 
