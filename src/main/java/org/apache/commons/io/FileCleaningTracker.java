@@ -52,11 +52,11 @@ public class FileCleaningTracker {
     /**
      * Collection of {@code Tracker} instances in existence.
      */
-    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<Tracker>()); // synchronized
+    final Collection<Tracker> trackers = Collections.synchronizedSet(new HashSet<>()); // synchronized
     /**
      * Collection of File paths that failed to delete.
      */
-    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<String>());
+    final List<String> deleteFailures = Collections.synchronizedList(new ArrayList<>());
     /**
      * Whether to terminate the thread when the tracking is complete.
      */

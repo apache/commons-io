@@ -733,7 +733,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static boolean isDirectory(final Path path, final LinkOption... options) {
-        return path != null ? Files.isDirectory(path, options) : false;
+        return path != null && Files.isDirectory(path, options);
     }
 
     /**
@@ -815,7 +815,7 @@ public final class PathUtils {
      * @since 2.9.0
      */
     public static boolean isRegularFile(final Path path, final LinkOption... options) {
-        return path != null ? Files.isRegularFile(path, options) : false;
+        return path != null && Files.isRegularFile(path, options);
     }
 
     /**
