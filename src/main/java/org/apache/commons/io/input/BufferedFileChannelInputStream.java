@@ -47,13 +47,14 @@ public final class BufferedFileChannelInputStream extends InputStream {
 
     private final FileChannel fileChannel;
 
-    private static final Class DIRECT_BUFFER_CLASS = getDirectBufferClass();
+    private static final Class<?> DIRECT_BUFFER_CLASS = getDirectBufferClass();
 
-    private static Class getDirectBufferClass() {
-        Class res = null;
+    private static Class<?> getDirectBufferClass() {
+        Class<?> res = null;
         try {
             res = Class.forName("sun.nio.ch.DirectBuffer");
         } catch (IllegalAccessError | ClassNotFoundException ignored) {
+            // ignored
         }
         return res;
     }
