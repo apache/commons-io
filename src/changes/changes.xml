@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.9.0" date="2020-MM-DD" description="Java 8 required.">
+    <release version="2.9.0" date="2021-MM-DD" description="Java 8 required.">
       <!-- FIX -->
       <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Gary Gregory">
         IOUtils.toByteArray(InputStream) Javadoc does not match code.
