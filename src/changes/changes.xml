@@ -280,6 +280,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Gary Gregory">
         Update from Apache Commons Lang 3.11 to 3.12.0.
       </action>
+      <action type="update" dev="ggregory" due-to="Arturo Bernal">
+        Minor improvements #233.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
