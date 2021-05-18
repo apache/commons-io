@@ -357,7 +357,7 @@ public class IOUtils {
      * @return a new char array of the given size.
      * @since 2.9.0
      */
-    private static char[] charArray(final int size) {
+    public static char[] charArray(final int size) {
         return new char[size];
     }
 
