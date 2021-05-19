@@ -17,15 +17,11 @@
 package org.apache.commons.io.output;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.CharSequenceReader;
-import org.apache.commons.io.input.ClosedInputStream;
 import org.apache.commons.io.input.ClosedReader;
 import org.apache.commons.io.input.SequenceReader;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.apache.commons.io.IOUtils.EOF;
