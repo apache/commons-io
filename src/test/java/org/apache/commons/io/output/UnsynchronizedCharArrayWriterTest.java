@@ -16,9 +16,11 @@
  */
 package org.apache.commons.io.output;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,7 +75,7 @@ public class UnsynchronizedCharArrayWriterTest {
 
     @Test
     public void testReset() throws IOException {
-        try (final UnsynchronizedCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
+        try (final AbstractCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
             writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
             assertEquals("BarFoo", writer.toString());
             writer.reset();
@@ -139,11 +141,26 @@ public class UnsynchronizedCharArrayWriterTest {
 
     @Test
     public void testWriteStringPortion() throws IOException {
-        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
+        try (final AbstractCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
             writer.write("FooBar", 3, 3);
             assertEquals("Bar", writer.toString());
             writer.write("FooBar", 0, 3);
+            assertArrayEquals("BarFoo".toCharArray(), writer.toCharArray());
             assertEquals("BarFoo", writer.toString());
+        }
+    }
+
+    @Test
+    public void testReader() throws IOException {
+        try (final AbstractCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
+            writer.write("FooBar", 3, 3);
+            writer.write("FooBar", 0, 3);
+            assertEquals("BarFoo", writer.toString());
+            try (final Reader reader = writer.toReader()) {
+                char[] array = new char[writer.size()];
+                IOUtils.readFully(reader, array);
+                assertArrayEquals("BarFoo".toCharArray(), array);
+            }
         }
     }
 
