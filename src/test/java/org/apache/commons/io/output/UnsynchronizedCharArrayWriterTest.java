@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test case for {@link UnsynchronizedCharArrayWriter}.
