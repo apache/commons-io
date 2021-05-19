@@ -24,13 +24,13 @@ import java.io.Writer;
 /**
  * Implements a version of {@link AbstractCharArrayWriter} <b>without</b> any concurrent thread safety.
  *
- * @since 2.9
+ * @since 2.9.0
  */
 //@NotThreadSafe
 public final class UnsynchronizedCharArrayWriter extends AbstractCharArrayWriter {
 
     /**
-     * Creates a new byte array output stream. The buffer capacity is initially
+     * Creates a new char array writer. The buffer capacity is initially
      * {@value AbstractCharArrayWriter#DEFAULT_SIZE} chars, though its size increases if necessary.
      */
     public UnsynchronizedCharArrayWriter() {

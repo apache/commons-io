@@ -43,18 +43,18 @@ import static org.apache.commons.io.IOUtils.EOF;
  * <p>
  * This is the base for an alternative implementation of the
  * {@link java.io.CharArrayWriter} class. The original implementation
- * only allocates 32 bytes at the beginning. It is also a good alternative to
+ * only allocates 32 chars at the beginning. It is also a good alternative to
  * {@link java.io.StringWriter} class.
  *
  * As this class is designed for
- * heavy duty it starts at {@value #DEFAULT_SIZE} bytes. In contrast to the original it doesn't
+ * heavy duty it starts at {@value #DEFAULT_SIZE} chars. In contrast to the original it doesn't
  * reallocate the whole memory block but allocates additional buffers. This
  * way no buffers need to be garbage collected and the contents don't have
  * to be copied to the new buffer. This class is designed to behave exactly
  * like the original.
  * </p>
  *
- * @since 2.9
+ * @since 2.9.0
  */
 public abstract class AbstractCharArrayWriter extends Writer {
 
@@ -64,11 +64,11 @@ public abstract class AbstractCharArrayWriter extends Writer {
     private final List<char[]> buffers = new ArrayList<>();
     /** The index of the current buffer. */
     private int currentBufferIndex;
-    /** The total count of bytes in all the filled buffers. */
+    /** The total count of chars in all the filled buffers. */
     private int filledBufferSum;
     /** The current buffer. */
     private char[] currentBuffer;
-    /** The total count of bytes written. */
+    /** The total count of chars written. */
     protected int count;
     /** Flag to indicate if the buffers can be reused after reset */
     private boolean reuseBuffers = true;
@@ -279,16 +279,16 @@ public abstract class AbstractCharArrayWriter extends Writer {
     public abstract Reader toReader();
 
     /**
-     * Gets the current contents of this byte stream as a Input Stream. The
+     * Gets the current contents of this char stream as a Reader. The
      * returned stream is backed by buffers of {@code this} stream,
      * avoiding memory allocation and copy, thus saving space and time.<br>
      *
-     * @param <T> the type of the InputStream which makes up
-     *            the {@link SequenceInputStream}.
+     * @param <T> the type of the Reader which makes up
+     *            the {@link SequenceReader}.
      * @param readerConstructor A constructor for a Reader which makes
      *                     up the {@link SequenceReader}.
      *
-     * @return the current contents of this output stream.
+     * @return the current contents of this char stream.
      */
     @SuppressWarnings("resource") // The result InputStream MUST be managed by the call site.
     protected <T extends Reader> Reader toReader(
@@ -331,20 +331,20 @@ public abstract class AbstractCharArrayWriter extends Writer {
     }
 
     /**
-     * Gets the current contents of this byte stream as a byte array.
+     * Gets the current contents of this char stream as a char array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array
-     * @see java.io.ByteArrayOutputStream#toByteArray()
+     * @return the current contents of this output stream, as a char array
+     * @see java.io.CharArrayWriter#toCharArray()
      */
     public abstract char[] toCharArray();
 
     /**
-     * Gets the current contents of this byte stream as a byte array.
+     * Gets the current contents of this char stream as a char array.
      * The result is independent of this stream.
      *
-     * @return the current contents of this output stream, as a byte array
-     * @see java.io.ByteArrayOutputStream#toByteArray()
+     * @return the current contents of this output stream, as a char array
+     * @see java.io.CharArrayWriter#toCharArray()
      */
     protected char[] toCharArrayImpl() {
         int remaining = count;
