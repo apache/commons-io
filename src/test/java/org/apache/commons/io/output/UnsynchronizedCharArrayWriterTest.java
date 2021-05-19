@@ -24,16 +24,16 @@ import java.io.Writer;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test case for {@link UnsynchronizedStringWriter}.
+ * Test case for {@link UnsynchronizedCharArrayWriter}.
  *
  */
-public class UnsynchronizedStringWriterTest {
+public class UnsynchronizedCharArrayWriterTest {
     private static final char[] FOOBAR_CHARS = new char[] {'F', 'o', 'o', 'B', 'a', 'r'};
 
 
     @Test
     public void testAppendConstructCapacity() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter(100)) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter(100)) {
             writer.append("Foo");
             assertEquals("Foo", writer.toString());
         }
@@ -41,7 +41,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testAppendConstructNull() throws IOException {
-        try (final UnsynchronizedStringWriter writer = new UnsynchronizedStringWriter()) {
+        try (final UnsynchronizedCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
             writer.append("Foo");
             assertEquals("Foo", writer.toString());
         }
@@ -49,7 +49,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testAppendChar() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.append('F').append('o').append('o');
             assertEquals("Foo", writer.toString());
         }
@@ -57,7 +57,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testAppendCharSequence() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.append("Foo").append("Bar");
             assertEquals("FooBar", writer.toString());
         }
@@ -65,15 +65,25 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testAppendCharSequencePortion() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
             assertEquals("BarFoo", writer.toString());
         }
     }
 
     @Test
+    public void testReset() throws IOException {
+        try (final UnsynchronizedCharArrayWriter writer = new UnsynchronizedCharArrayWriter()) {
+            writer.append("FooBar", 3, 6).append(new StringBuffer("FooBar"), 0, 3);
+            assertEquals("BarFoo", writer.toString());
+            writer.reset();
+            assertEquals("", writer.toString());
+        }
+    }
+
+    @Test
     public void testClose() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             try {
                 writer.append("Foo");
                 writer.close();
@@ -87,7 +97,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testWriteChar() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.write('F');
             assertEquals("F", writer.toString());
             writer.write('o');
@@ -99,7 +109,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testWriteCharArray() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.write(new char[] { 'F', 'o', 'o' });
             assertEquals("Foo", writer.toString());
             writer.write(new char[] { 'B', 'a', 'r' });
@@ -109,7 +119,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testWriteCharArrayPortion() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
         writer.write(FOOBAR_CHARS, 3, 3);
         assertEquals("Bar", writer.toString());
         writer.write(FOOBAR_CHARS, 0, 3);
@@ -119,7 +129,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testWriteString() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.write("Foo");
             assertEquals("Foo", writer.toString());
             writer.write("Bar");
@@ -129,7 +139,7 @@ public class UnsynchronizedStringWriterTest {
 
     @Test
     public void testWriteStringPortion() throws IOException {
-        try (final Writer writer = new UnsynchronizedStringWriter()) {
+        try (final Writer writer = new UnsynchronizedCharArrayWriter()) {
             writer.write("FooBar", 3, 3);
             assertEquals("Bar", writer.toString());
             writer.write("FooBar", 0, 3);

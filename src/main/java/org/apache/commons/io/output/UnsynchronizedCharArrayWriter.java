@@ -22,18 +22,18 @@ import java.io.Reader;
 import java.io.Writer;
 
 /**
- * Implements a version of {@link AbstractStringWriter} <b>without</b> any concurrent thread safety.
+ * Implements a version of {@link AbstractCharArrayWriter} <b>without</b> any concurrent thread safety.
  *
  * @since 2.9
  */
 //@NotThreadSafe
-public final class UnsynchronizedStringWriter extends AbstractStringWriter {
+public final class UnsynchronizedCharArrayWriter extends AbstractCharArrayWriter {
 
     /**
      * Creates a new byte array output stream. The buffer capacity is initially
-     * {@value AbstractStringWriter#DEFAULT_SIZE} chars, though its size increases if necessary.
+     * {@value AbstractCharArrayWriter#DEFAULT_SIZE} chars, though its size increases if necessary.
      */
-    public UnsynchronizedStringWriter() {
+    public UnsynchronizedCharArrayWriter() {
         this(DEFAULT_SIZE);
     }
 
@@ -43,7 +43,7 @@ public final class UnsynchronizedStringWriter extends AbstractStringWriter {
      * @param size the initial size
      * @throws IllegalArgumentException if size is negative
      */
-    public UnsynchronizedStringWriter(final int size) {
+    public UnsynchronizedCharArrayWriter(final int size) {
         if (size < 0) {
             throw new IllegalArgumentException("Negative initial size: " + size);
         }
@@ -74,6 +74,14 @@ public final class UnsynchronizedStringWriter extends AbstractStringWriter {
     @Override
     public int size() {
         return count;
+    }
+
+    /**
+     * @see java.io.CharArrayWriter#reset()
+     */
+    @Override
+    public void reset() {
+        resetImpl();
     }
 
     @Override
@@ -122,7 +130,7 @@ public final class UnsynchronizedStringWriter extends AbstractStringWriter {
      */
     public static Reader toBufferedReader(final Reader input, final int size) throws IOException {
         // It does not matter if a StringWriter is not closed as close() is a no-op
-        try (final UnsynchronizedStringWriter output = new UnsynchronizedStringWriter(size)) {
+        try (final UnsynchronizedCharArrayWriter output = new UnsynchronizedCharArrayWriter(size)) {
             output.write(input);
             return output.toReader();
         }

@@ -36,14 +36,17 @@ import static org.apache.commons.io.IOUtils.EOF;
  * is written to it.
  * <p>
  * The data can be retrieved using {@code toString()}.
- * Closing an {@code AbstractStringWriter} has no effect. The methods in
+ * Closing an {@code AbstractCharArrayWriter} has no effect. The methods in
  * this class can be called after the stream has been closed without
  * generating an {@code IOException}.
  * </p>
  * <p>
  * This is the base for an alternative implementation of the
- * {@link java.io.StringWriter} class. The original implementation
- * only allocates 32 bytes at the beginning. As this class is designed for
+ * {@link java.io.CharArrayWriter} class. The original implementation
+ * only allocates 32 bytes at the beginning. It is also a good alternative to
+ * {@link java.io.StringWriter} class.
+ *
+ * As this class is designed for
  * heavy duty it starts at {@value #DEFAULT_SIZE} bytes. In contrast to the original it doesn't
  * reallocate the whole memory block but allocates additional buffers. This
  * way no buffers need to be garbage collected and the contents don't have
@@ -53,7 +56,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  *
  * @since 2.9
  */
-public abstract class AbstractStringWriter extends Writer {
+public abstract class AbstractCharArrayWriter extends Writer {
 
     static final int DEFAULT_SIZE = 1024;
 
@@ -200,6 +203,30 @@ public abstract class AbstractStringWriter extends Writer {
      * @return the current size of the char array
      */
     public abstract int size();
+
+    /**
+     * @see java.io.CharArrayWriter#reset()
+     */
+    public abstract void reset();
+
+    /**
+     * @see java.io.CharArrayWriter#reset()
+     */
+    protected void resetImpl() {
+        count = 0;
+        filledBufferSum = 0;
+        currentBufferIndex = 0;
+        if (reuseBuffers) {
+            currentBuffer = buffers.get(currentBufferIndex);
+        } else {
+            //Throw away old buffers
+            currentBuffer = null;
+            final int size = buffers.get(0).length;
+            buffers.clear();
+            needNewBuffer(size);
+            reuseBuffers = true;
+        }
+    }
 
     /**
      * Closing a {@code Writer} has no effect. The methods in
