@@ -111,7 +111,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Creates a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to proxy.
+     * @param inputStream the input stream to observe.
      */
     public ObservableInputStream(final InputStream inputStream) {
         this(inputStream, new ArrayList<>());
@@ -120,8 +120,8 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Creates a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to proxy.
-     * @param observers List of callbacks.
+     * @param inputStream the input stream to observe.
+     * @param observers List of observer callbacks.
      */
     private ObservableInputStream(final InputStream inputStream, final List<Observer> observers) {
         super(inputStream);
@@ -131,8 +131,8 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Creates a new ObservableInputStream for the given InputStream.
      *
-     * @param inputStream the input stream to proxy.
-     * @param observers List of callbacks.
+     * @param inputStream the input stream to observe.
+     * @param observers List of observer callbacks.
      * @since 2.9.0
      */
     public ObservableInputStream(final InputStream inputStream, final Observer... observers) {
@@ -142,7 +142,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Adds an Observer.
      *
-     * @param observer the observer to add
+     * @param observer the observer to add.
      */
     public void add(final Observer observer) {
         observers.add(observer);
@@ -178,7 +178,7 @@ public class ObservableInputStream extends ProxyInputStream {
     /**
      * Gets all currently registered observers.
      *
-     * @return a list of the currently registered observers
+     * @return a list of the currently registered observers.
      * @since 2.9.0
      */
     public List<Observer> getObservers() {
