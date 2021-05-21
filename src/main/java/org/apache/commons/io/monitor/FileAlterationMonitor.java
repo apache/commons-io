@@ -56,7 +56,7 @@ public final class FileAlterationMonitor implements Runnable {
     /**
      * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}
      */
-    public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers){
+    public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
         this(interval, observers.toArray(new FileAlterationObserver[0]));
     }
 
