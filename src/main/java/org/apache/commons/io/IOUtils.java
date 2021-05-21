@@ -344,7 +344,7 @@ public class IOUtils {
      * @return a new char array of size {@link #DEFAULT_BUFFER_SIZE}.
      * @since 2.9.0
      */
-    private static char[] charArray() {
+    public static char[] charArray() {
         return charArray(DEFAULT_BUFFER_SIZE);
     }
 
