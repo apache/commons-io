@@ -17,7 +17,9 @@
 package org.apache.commons.io.monitor;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
@@ -57,7 +59,10 @@ public final class FileAlterationMonitor implements Runnable {
      * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}
      */
     public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
-        this(interval, observers.toArray(new FileAlterationObserver[0]));
+        this(interval, Optional.ofNullable(observers)
+                .orElse(Collections.emptyList())
+                .toArray(new FileAlterationObserver[0])
+        );
     }
 
     /**
