@@ -56,7 +56,12 @@ public final class FileAlterationMonitor implements Runnable {
     }
 
     /**
-     * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}
+     * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}.
+     * Constructs a monitor with the specified interval and collection of observers.
+     *
+     * @param interval The amount of time in milliseconds to wait between
+     * checks of the file system
+     * @param observers The collection of observers to add to the monitor
      */
     public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
         this(interval, Optional.ofNullable(observers)
