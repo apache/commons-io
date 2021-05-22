@@ -109,7 +109,7 @@ public class CharSequenceInputStreamTest {
 
     private void testCharsetMismatchInfiniteLoop(final String csName) throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         final Charset charset = Charset.forName(csName); // infinite loop for US-ASCII, UTF-8 OK
         try (InputStream stream = new CharSequenceInputStream(new String(inputChars), charset, 512)) {
             while (stream.read() != -1) {

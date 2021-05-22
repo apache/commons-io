@@ -99,7 +99,7 @@ public class FileSystemTestCase {
         for (char i = 0; i < 32; i++) {
             assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }
-        final char[] illegal = new char[] { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
+        final char[] illegal = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
         for (char i = 0; i < illegal.length; i++) {
             assertEquals(replacement, fs.toLegalFileName(String.valueOf(i), replacement).charAt(0));
         }

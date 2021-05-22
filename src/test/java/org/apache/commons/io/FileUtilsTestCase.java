@@ -2501,7 +2501,7 @@ public class FileUtilsTestCase {
     public void testReadLines() throws Exception {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         try {
-            final String[] data = new String[]{"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
 
             final List<String> lines = FileUtils.readLines(file, "UTF-8");
@@ -2704,7 +2704,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToFiles1() throws Exception {
-        final URL[] urls = new URL[]{
+        final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 new URL("file", null, "file2.txt"),
         };
@@ -2717,7 +2717,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToFiles2() throws Exception {
-        final URL[] urls = new URL[]{
+        final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 null,
         };
@@ -2738,7 +2738,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToFiles3a() throws Exception {
-        final URL[] urls = new URL[0]; // empty array
+        final URL[] urls = {}; // empty array
         final File[] files = FileUtils.toFiles(urls);
 
         assertEquals(0, files.length);
@@ -2746,7 +2746,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToFiles4() throws Exception {
-        final URL[] urls = new URL[]{
+        final URL[] urls = {
                 new URL("file", null, "file1.txt"),
                 new URL("http", "jakarta.apache.org", "file1.txt"),
         };
@@ -2793,7 +2793,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToURLs1() throws Exception {
-        final File[] files = new File[]{
+        final File[] files = {
                 new File(temporaryFolder, "file1.txt"),
                 new File(temporaryFolder, "file2.txt"),
                 new File(temporaryFolder, "test file.txt"),
@@ -2813,7 +2813,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testToURLs3a() throws Exception {
-        final File[] files = new File[0]; // empty array
+        final File[] files = {}; // empty array
         final URL[] urls = FileUtils.toURLs(files);
 
         assertEquals(0, urls.length);
@@ -2847,7 +2847,7 @@ public class FileUtilsTestCase {
     @Test
     public void testWriteByteArrayToFile() throws Exception {
         final File file = new File(temporaryFolder, "write.obj");
-        final byte[] data = new byte[]{11, 21, 31};
+        final byte[] data = {11, 21, 31};
         FileUtils.writeByteArrayToFile(file, data);
         TestUtils.assertEqualContent(data, file);
     }
@@ -2880,7 +2880,7 @@ public class FileUtilsTestCase {
     @Test
     public void testWriteByteArrayToFile_WithOffsetAndLength() throws Exception {
         final File file = new File(temporaryFolder, "write.obj");
-        final byte[] data = new byte[]{11, 21, 32, 41, 51};
+        final byte[] data = {11, 21, 32, 41, 51};
         final byte[] writtenData = new byte[3];
         System.arraycopy(data, 1, writtenData, 0, 3);
         FileUtils.writeByteArrayToFile(file, data, 1, 3);
@@ -2931,7 +2931,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testWriteLines_3arg_nullSeparator() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -2978,7 +2978,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testWriteLines_4arg() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -2992,7 +2992,7 @@ public class FileUtilsTestCase {
 
     @Test
     public void testWriteLines_4arg_nullSeparator() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 

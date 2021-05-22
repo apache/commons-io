@@ -28,7 +28,7 @@ import org.apache.commons.io.IOCase;
 import org.junit.jupiter.api.Test;
 
 /**
- * Used to test RegexFileFilterUtils.
+ * Tests {@link RegexFileFilter}.
  */
 public class RegexFileFilterTestCase {
 

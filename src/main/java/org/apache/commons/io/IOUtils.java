@@ -140,7 +140,7 @@ public class IOUtils {
      *
      *  @since 2.9.0
      */
-    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    public static final byte[] EMPTY_BYTE_ARRAY = {};
 
     /**
      * Represents the end-of-file (or stream).

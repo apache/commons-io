@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  *
  */
 public class StringBuilderWriterTest {
-    private static final char[] FOOBAR_CHARS = new char[] {'F', 'o', 'o', 'B', 'a', 'r'};
+    private static final char[] FOOBAR_CHARS = {'F', 'o', 'o', 'B', 'a', 'r'};
 
 
     @Test

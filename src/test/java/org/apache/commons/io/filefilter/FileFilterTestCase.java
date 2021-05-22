@@ -907,7 +907,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterBytes() throws Exception {
-        final byte[] classFileMagicNumber = new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+        final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
         final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
 
         final File classAFile = new File(temporaryFolder, "A.class");
@@ -953,7 +953,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterBytesOffset() throws Exception {
-        final byte[] tarMagicNumber = new byte[] {0x75, 0x73, 0x74, 0x61, 0x72};
+        final byte[] tarMagicNumber = {0x75, 0x73, 0x74, 0x61, 0x72};
         final long tarMagicNumberOffset = 257;
 
         final File tarFileA = new File(temporaryFolder, "A.tar");
@@ -990,7 +990,7 @@ public class FileFilterTestCase {
 
     @Test
     public void testMagicNumberFileFilterString() throws Exception {
-        final byte[] classFileMagicNumber = new byte[] {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+        final byte[] classFileMagicNumber = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
         final String xmlFileContent = "<?xml version=\"1.0\" encoding=\"UTF-8\">\n" + "<element>text</element>";
         final String xmlMagicNumber = "<?xml version=\"1.0\"";
 

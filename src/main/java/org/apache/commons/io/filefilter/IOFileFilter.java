@@ -35,7 +35,7 @@ public interface IOFileFilter extends FileFilter, FilenameFilter, PathFilter {
     /**
      * An empty String array.
      */
-    String[] EMPTY_STRING_ARRAY = new String[0];
+    String[] EMPTY_STRING_ARRAY = {};
 
     /**
      * Checks to see if the File should be accepted by this filter.

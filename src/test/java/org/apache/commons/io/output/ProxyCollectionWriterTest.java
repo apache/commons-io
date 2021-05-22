@@ -209,7 +209,7 @@ public class ProxyCollectionWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         @SuppressWarnings("resource") // not necessary to close this
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(badW, goodW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data);
             fail("Expected " + IOException.class.getName());
@@ -226,7 +226,7 @@ public class ProxyCollectionWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         @SuppressWarnings("resource") // not necessary to close this
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(goodW, badW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data);
             fail("Expected " + IOException.class.getName());
@@ -243,7 +243,7 @@ public class ProxyCollectionWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         @SuppressWarnings("resource") // not necessary to close this
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(badW, goodW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data, 0, 0);
             fail("Expected " + IOException.class.getName());
@@ -260,7 +260,7 @@ public class ProxyCollectionWriterTest {
         final StringWriter goodW = mock(StringWriter.class);
         @SuppressWarnings("resource") // not necessary to close this
         final ProxyCollectionWriter tw = new ProxyCollectionWriter(goodW, badW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data, 0, 0);
             fail("Expected " + IOException.class.getName());

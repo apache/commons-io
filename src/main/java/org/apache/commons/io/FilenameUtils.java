@@ -87,7 +87,7 @@ import java.util.regex.Pattern;
  */
 public class FilenameUtils {
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    private static final String[] EMPTY_STRING_ARRAY = {};
 
     private static final String EMPTY_STRING = "";
 

@@ -182,7 +182,7 @@ public class ClassLoaderObjectInputStreamTest {
 
         try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
-            final String[] interfaces = new String[] { Comparable.class.getName() };
+            final String[] interfaces = { Comparable.class.getName() };
             final Class<?> result = clois.resolveProxyClass(interfaces);
             assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");
         }
@@ -198,7 +198,7 @@ public class ClassLoaderObjectInputStreamTest {
 
         try (final ClassLoaderObjectInputStream clois = new ClassLoaderObjectInputStream(getClass().getClassLoader(),
                 bais)) {
-            final String[] interfaces = new String[] { Comparable.class.getName(), Serializable.class.getName(),
+            final String[] interfaces = { Comparable.class.getName(), Serializable.class.getName(),
                     Runnable.class.getName() };
             final Class<?> result = clois.resolveProxyClass(interfaces);
             assertTrue(Comparable.class.isAssignableFrom(result), "Assignable");

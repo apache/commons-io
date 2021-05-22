@@ -32,7 +32,7 @@ import java.util.concurrent.ThreadFactory;
  */
 public final class FileAlterationMonitor implements Runnable {
 
-    private static final FileAlterationObserver[] EMPTY_ARRAY = new FileAlterationObserver[0];
+    private static final FileAlterationObserver[] EMPTY_ARRAY = {};
 
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();

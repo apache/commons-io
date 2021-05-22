@@ -88,7 +88,7 @@ public class XmlStreamReader extends Reader {
 
     private static final String EBCDIC = "CP1047";
 
-    private static final ByteOrderMark[] BOMS = new ByteOrderMark[] {
+    private static final ByteOrderMark[] BOMS = {
         ByteOrderMark.UTF_8,
         ByteOrderMark.UTF_16BE,
         ByteOrderMark.UTF_16LE,
@@ -97,7 +97,7 @@ public class XmlStreamReader extends Reader {
     };
 
     // UTF_16LE and UTF_32LE have the same two starting BOM bytes.
-    private static final ByteOrderMark[] XML_GUESS_BYTES = new ByteOrderMark[] {
+    private static final ByteOrderMark[] XML_GUESS_BYTES = {
         new ByteOrderMark(UTF_8,    0x3C, 0x3F, 0x78, 0x6D),
         new ByteOrderMark(UTF_16BE, 0x00, 0x3C, 0x00, 0x3F),
         new ByteOrderMark(UTF_16LE, 0x3C, 0x00, 0x3F, 0x00),

@@ -48,7 +48,7 @@ public class FileWriterWithEncodingTest {
     private File file1;
     private File file2;
     private String textContent;
-    private final char[] anotherTestContent = new char[]{'f', 'z', 'x'};
+    private final char[] anotherTestContent = {'f', 'z', 'x'};
 
     @BeforeEach
     public void setUp() throws Exception {
