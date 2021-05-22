@@ -98,7 +98,7 @@ public class FileDeleteStrategy {
      * @throws IOException if an error occurs during file deletion
      */
     public void delete(final File fileToDelete) throws IOException {
-        if (fileToDelete.exists() && doDelete(fileToDelete) == false) {
+        if (fileToDelete.exists() && !doDelete(fileToDelete)) {
             throw new IOException("Deletion failed: " + fileToDelete);
         }
     }
@@ -115,7 +115,7 @@ public class FileDeleteStrategy {
      * @return true if the file was deleted, or there was no such file
      */
     public boolean deleteQuietly(final File fileToDelete) {
-        if (fileToDelete == null || fileToDelete.exists() == false) {
+        if (fileToDelete == null || !fileToDelete.exists()) {
             return true;
         }
         try {

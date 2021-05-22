@@ -56,23 +56,24 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     @Test
     public void testCollectionConstructorShouldDoNothingWithNullCollection() {
-        Collection<FileAlterationObserver> observers = null;
+        final Collection<FileAlterationObserver> observers = null;
         final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
         assertFalse(monitor.getObservers().iterator().hasNext());
     }
 
     @Test
     public void testCollectionConstructorShouldDoNothingWithNullObservers() {
-        Collection<FileAlterationObserver> observers = new ArrayList<>(5);
+        final Collection<FileAlterationObserver> observers = new ArrayList<>(5);
         final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
         assertFalse(monitor.getObservers().iterator().hasNext());
     }
 
     @Test
     public void testCollectionConstructor() {
-        Collection<FileAlterationObserver> observers = Arrays.asList(new FileAlterationObserver("foo"));
-        FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
-        Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
+        observer = new FileAlterationObserver("foo");
+        final Collection<FileAlterationObserver> observers = Arrays.asList(observer);
+        final FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
+        final Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
         assertEquals(observer, iterator.next());
     }
 
