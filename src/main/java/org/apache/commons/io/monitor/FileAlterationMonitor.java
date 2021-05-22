@@ -16,7 +16,10 @@
  */
 package org.apache.commons.io.monitor;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
@@ -50,6 +53,21 @@ public final class FileAlterationMonitor implements Runnable {
      */
     public FileAlterationMonitor(final long interval) {
         this.interval = interval;
+    }
+
+    /**
+     * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}.
+     * Constructs a monitor with the specified interval and collection of observers.
+     *
+     * @param interval The amount of time in milliseconds to wait between
+     * checks of the file system
+     * @param observers The collection of observers to add to the monitor
+     */
+    public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
+        this(interval, Optional.ofNullable(observers)
+                .orElse(Collections.emptyList())
+                .toArray(new FileAlterationObserver[0])
+        );
     }
 
     /**
