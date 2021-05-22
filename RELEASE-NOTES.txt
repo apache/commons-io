@@ -1,3 +1,140 @@
+
+Apache Commons IO 
+Version 2.9.0
+Release Notes
+
+INTRODUCTION:
+
+Commons IO is a package of Java utility classes like java.io.  
+Classes in this package are considered to be so standard and of such high 
+reuse as to justify existence in java.io.
+
+The Apache Commons IO library contains utility classes, stream implementations, file filters,
+file comparators, endian transformation classes, and much more.
+
+==============================================================================
+Apache Commons IO Version 2.9.0
+==============================================================================
+Java 8 required.
+
+Changes in this version include:
+
+New features:
+o           Add FileSystemProviders class. Thanks to Gary Gregory. 
+o           Let org.apache.commons.io.filefilter classes work with java.nio.file.Files.walk* APIs. Thanks to Gary Gregory. 
+o           Let org.apache.commons.io.filefilter classes work with java.nio.file.Files#newDirectoryStream(Path, DirectoryStream.Filter). Thanks to Gary Gregory. 
+o IO-510:  Add and adapt ReadAheadInputStream and BufferedFileChannelInputStream from Apache Spark. Thanks to Gary Gregory, Apache Spark, David Mollitor. 
+o           Add PathUtils.createParentDirectories(Path, FileAttribute...). Thanks to Gary Gregory. 
+o           Add factory methods to CloseShieldInputStream, CloseShieldReader, CloseShieldOutputStream, CloseShieldWriter, #173. Thanks to Rob Spoor, Gary Gregory. 
+o           Add QueueInputStream and QueueOutputStream as simpler alternatives to PipedInputStream and PipedOutputStream #171. Thanks to Rob Spoor, Gary Gregory. 
+o           Add StandardLineSeparator. Thanks to Gary Gregory. 
+o           Replace magic numbers with constants with the new IOUtils.CR and LF. Thanks to Gary Gregory. 
+o           Add FileSystem#supportsDriveLetter(). Thanks to Gary Gregory. 
+o           Add FileUtils.delete(File). Thanks to Gary Gregory. 
+o IO-700:  Add FileUtils.moveFile(File, File, CopyOption...) #185. Thanks to Gary Gregory. 
+o IO-700:  Add FileUtils.isEmptyDirectory(File). Thanks to Gary Gregory. 
+o           Add FileUtils.lastModified[Unchecked](File) to workaround https://bugs.openjdk.java.net/browse/JDK-8177809. Thanks to Gary Gregory. 
+o IO-709:  Add null safe variants of isDirectory and isRegularFile. Thanks to Boris Unckel, Gary Gregory. 
+o           Add and use IOExceptionList(String, List). Thanks to Gary Gregory. 
+o           Add and use ObservableInputStream.ObservableInputStream(InputStream, Observer...). Thanks to Gary Gregory. 
+o           Make ObservableInputStream.getObservers() public. Thanks to Gary Gregory. 
+o IO-706:  Add TimestampedObserver. Thanks to Gary Gregory. 
+o           Add and use IOUtils.byteArray(*). Thanks to Gary Gregory. 
+o           Make public and reuse IOUtils.EMPTY_BYTE_ARRAY. Thanks to Gary Gregory. 
+o           Add IOUtils.copy(URL, File). Thanks to Gary Gregory. 
+o           Add copy(URL, OutputStream). Thanks to Gary Gregory. 
+o IO-651:  Add DeferredFileOutputStream.toInputStream() #206. Thanks to jmark109, Gary Gregory. 
+o           Add CharacterSetFilterReader.CharacterSetFilterReader(Reader, Integer...). Thanks to Gary Gregory. 
+o           Add AbstractCharacterFilterReader(Reader, IntPredicate), #227.
+        Add CharacterFilterReader(Reader, IntPredicate), #227.
+        Add CharacterFilterReaderIntPredicateTest, #227. Thanks to Rob Spoor, Gary Gregory. 
+o           Add IOConsumer.noop(). Thanks to Gary Gregory. 
+o           Add constructor ThresholdingOutputStream(int, IOConsumer, IOFunction) and make the class concrete. Thanks to Gary Gregory. 
+o           Add constructor accepting collection of file alteration observers #236. Thanks to nstdspace, Gary Gregory. 
+
+Fixed Bugs:
+o IO-686:  IOUtils.toByteArray(InputStream) Javadoc does not match code. Thanks to Alan Moffat, Gary Gregory. 
+o IO-689:  FileUtils: Remove Instant->ZonedDateTime->Instant round-trip. Thanks to Uwe Schindler. 
+o           Make FilenameUtils.equals() not throw an exception #154. Thanks to Michael Ernst, Gary Gregory. 
+o           Un-deprecate IOUtils.closeQuietly() methods. Thanks to Jan Peter Stotz, Bernd Eckenfels, Gary Gregory. 
+o           FileUtils#copyDirectory(File, File, FileFilter, preserveFileDate) clean up #163. Thanks to Michiel Kalkman. 
+o           AccumulatorPathVisitor does not track directories properly. Thanks to Gary Gregory. 
+o IO-597:  FileUtils.iterateFiles runs out of memory when executed for a directory with large number of files.
+        Re-implement FileUtils' iterateFiles(), iterateFilesAndDirs(), listFiles(), listFilesAndDirs() to use NIO
+        file tree walking instead of IO file listings to avoid memory consumption issues on large file trees. Thanks to Gary Gregory, Arvind, Rob Spoor. 
+o           FileUtils.forceDelete(File) actually forces deletion of read-only files as it did in version 2.6. Thanks to Gary Gregory. 
+o IO-692:  PathUtils.deleteFile() no longer throws a NoSuchFileException when applied on a symbolic link pointing
+        to a file that doesn't exist. Thanks to Matthew Rooney, Emmanuel Bourg. 
+o IO-694:  Behavior change in FileUtils.copyDirectory() file last modified timestamp preservation. Match Javadoc to code. Thanks to Tan Yee Fan, Gary Gregory. 
+o IO-600:  Fix getPrefixLength method for Linux filename #179. Thanks to Abhyankar Chaubey, Gary Gregory. 
+o IO-699:  Wrong logging in FileUtils.setLastModified. Thanks to tza, Gary Gregory. 
+o IO-686:  IOUtils.toByteArray(InputStream) Javadoc does not match code. Thanks to Alan Moffat, Sebb, Gary Gregory. 
+o IO-688:  CopyUtils deprecation message gives wrong version. Thanks to Michael Ernst, Gary Gregory. 
+o IO-701:  Make PathUtils.setReadOnly deal with LinuxDosFileAttributeView #186. Thanks to Gary Gregory. 
+o IO-702:  FileUtils.forceDelete does not delete invalid links. #187. Thanks to Boris Unckel, Gary Gregory. 
+o IO-690:  IOUtils.toByteArray(null) no longer throws a NullPointerException. Thanks to Chris Heisterkamp, Gary Gregory. 
+o IO-705:  MarkShieldInputStream#reset should throw UnsupportedOperationException. Thanks to Hao Zhong, Gary Gregory. 
+o IO-705:  LockableFileWriter.close() should fail when the lock file cannot be deleted. Thanks to Hao Zhong, Gary Gregory. 
+o IO-705:  Fix infinite loops in ObservableInputStream read(*) when an exception is caught but not re-thrown. Thanks to Hao Zhong, Gary Gregory. 
+o IO-719:  Fixed error of copying directories between different file systems #203. Thanks to Andrew Shcheglov, Gary Gregory. 
+o           Fix Typos in JavaDoc, Comments and Tests #201. Thanks to Felix Rilling. 
+o IO-718:  FileUtils.checksumCRC32 and FileUtils.checksum are not thread safe. Thanks to Robert Cooper, Gary Gregory. 
+o IO-720:  Fix error about usage of DirectBuffer in JRE 16/17 #205. Thanks to XenoAmess. 
+o           Prevent infinite loop with AbstractCharacterFilterReader if EOF is filtered out #226. Thanks to Rob Spoor, Gary Gregory. 
+o IO-429:  Check for long streams in IOUtils.toByteArray #175. Thanks to Rob Spoor, Ivan Leskin. 
+
+Changes:
+o           Update junit-jupiter from 5.6.2 to 5.7.0 #153. Thanks to Dependabot. 
+o           Update mockito-core from 3.5.9 to 3.10.0, #152, #155, #157, #166, #167, #169, #182. Thanks to Dependabot. 
+o           Bump mockito-inline from 3.7.0 to 3.10.0 #188, #207, #230. Thanks to Dependabot. 
+o           Update commons.jacoco.version 0.8.5 to 0.8.7, fixes Java 15 builds and up. Thanks to Gary Gregory. 
+o           Update spotbugs from 4.1.2 to 4.2.2, 4.2.3, #158, #164, #165, #180, #199, #213, #224. Thanks to Dependabot. 
+o           Bump spotbugs-maven-plugin from 4.0.4 to 4.2.3, #161, #172, #223. Thanks to Dependabot. 
+o           Update org.junit-pioneer:junit-pioneer 0.9.0 -> 1.4,1, #159, #162, #170, #189, #191, #210, #229. Thanks to Gary Gregory, Dependabot. 
+o           Update actions/checkout from v2.3.2 to v2.3.4, #156, #168. Thanks to Dependabot. 
+o           Bump actions/setup-java from v1.4.2 to v2 #160. Thanks to Dependabot, Gary Gregory. 
+o           Update maven-surefire-plugin from 2.22.2 to 3.0.0-M5. Thanks to Gary Gregory. 
+o           Minor improvements, #176, 177, #190. Thanks to Arturo Bernal. 
+o           Update commons.japicmp.version 0.14.4 -> 0.15.3. Thanks to Gary Gregory. 
+o           Tiny performance improvement in FileUtils#moveDirectoryToDirectory() #174. Thanks to Michiel Kalkman. 
+o           Bump checkstyle from 8.38 to 8.42 #689, #209, #225. Thanks to Dependabot. 
+o           Bump maven-checkstyle-plugin from 3.1.1 to 3.1.2 #198. Thanks to Dependabot. 
+o           Bump jimfs from 1.1 to 1.2 #183. Thanks to Dependabot. 
+o           Improve performance of IOUtils.contentEquals(InputStream, InputStream). Thanks to XenoAmess, Gary Gregory. 
+o           Improve performance of IOUtils.contentEquals(Reader, Reader). Thanks to XenoAmess, Gary Gregory. 
+o           Bump actions/cache from v2 to v2.1.5 #202, #228. Thanks to Dependabot. 
+o           Bump junit-bom from 5.7.0 to 5.7.2 #200, #232. Thanks to Dependabot. 
+o           Update from Apache Commons Lang 3.11 to 3.12.0. Thanks to Gary Gregory. 
+o           Minor improvements #233. Thanks to Arturo Bernal. 
+o           Simplify Assertions in tests #234. Thanks to Arturo Bernal. 
+
+Compatibility with 2.6:
+Binary compatible: Yes.
+Source compatible: Yes.
+Semantic compatible: Yes.
+
+Commons IO 2.9.0 requires Java 8.
+Commons IO 2.8.0 requires Java 8.
+Commons IO 2.7 requires Java 8.
+Commons IO 2.6 requires Java 7.
+Commons IO 2.5 requires Java 6.
+Commons IO 2.4 requires Java 6.
+Commons IO 2.3 requires Java 6.
+Commons IO 2.2 requires Java 5.
+Commons IO 1.4 requires Java 1.3.
+
+Historical list of changes: https://commons.apache.org/proper/commons-io/changes-report.html
+
+For complete information on Apache Commons IO, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons IO website:
+
+https://commons.apache.org/proper/commons-io/
+
+Download page: https://commons.apache.org/proper/commons-io/download_io.cgi
+
+Have fun!
+-Apache Commons Team
+
 Apache Commons IO 
 Version 2.8.0
 Release Notes
@@ -146,7 +283,7 @@ o IO-662:  Refactor ByteArrayOutputStream into synchronized and unsynchronized v
 Fixed Bugs:
 o IO-589:  Some tests fail if the base path contains a space. 
 o IO-582:  Make methods in ObservableInputStream.Obsever public. Thanks to Bruno Palos. 
-o IO-535:  Thread bug in FileAlterationMonitor#stop(int). Thanks to Svetlin Zarev, Anthony Raymond. 
+o IO-535:  Thread bug in FileAlterationMonitor.stop(int). Thanks to Svetlin Zarev, Anthony Raymond. 
 o IO-557:  Perform locale independent upper case conversions. Thanks to luccioman. 
 o IO-570:  Missing Javadoc in FilenameUtils causing Travis-CI build to fail. Thanks to Pranet Verma. 
 o IO-571:  Remove redundant isDirectory() check in org.apache.commons.io.FileUtils.listFilesAndDirs(File, IOFileFilter, IOFileFilter). Thanks to pranet. 
