@@ -286,6 +286,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action type="update" dev="ggregory" due-to="Arturo Bernal">
         Minor improvements #233.
       </action>
+      <action type="update" dev="ggregory" due-to="Arturo Bernal">
+        Simplify Assertions in tests #234.
+      </action>
     </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.8.0" date="2020-09-05" description="Java 8 required.">
