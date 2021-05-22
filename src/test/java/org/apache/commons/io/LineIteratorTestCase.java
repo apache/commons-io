@@ -231,7 +231,7 @@ public class LineIteratorTestCase {
                 final String line = iterator.next();
                 assertEquals(lines.get(i), line, "next() line " + i);
             }
-            assertEquals(false, iterator.hasNext(), "No more expected");
+            assertFalse(iterator.hasNext(), "No more expected");
         }
     }
 

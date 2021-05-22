@@ -19,6 +19,7 @@ package org.apache.commons.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.EOFException;
 
@@ -35,7 +36,7 @@ public class IOIndexedExceptionTestCase {
     public void testEdge() {
         final IOIndexedException exception = new IOIndexedException(-1, null);
         assertEquals(-1, exception.getIndex());
-        assertEquals(null, exception.getCause());
+        assertNull(exception.getCause());
         assertNotNull(exception.getMessage());
     }
 
