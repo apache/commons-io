@@ -216,6 +216,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add constructor ThresholdingOutputStream(int, IOConsumer, IOFunction) and make the class concrete.
       </action>
+      <action dev="ggregory" type="add" due-to="nstdspace, Gary Gregory">
+        Add constructor accepting collection of file alteration observers #236.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.

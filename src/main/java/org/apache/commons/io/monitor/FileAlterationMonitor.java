@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadFactory;
  */
 public final class FileAlterationMonitor implements Runnable {
 
+    private static final FileAlterationObserver[] EMPTY_ARRAY = new FileAlterationObserver[0];
+
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
     private Thread thread;
@@ -49,32 +51,36 @@ public final class FileAlterationMonitor implements Runnable {
      * Constructs a monitor with the specified interval.
      *
      * @param interval The amount of time in milliseconds to wait between
-     * checks of the file system
+     * checks of the file system.
      */
     public FileAlterationMonitor(final long interval) {
         this.interval = interval;
     }
 
     /**
-     * Wrapper constructor for {@link #FileAlterationMonitor(long, FileAlterationObserver...)}.
      * Constructs a monitor with the specified interval and collection of observers.
      *
      * @param interval The amount of time in milliseconds to wait between
-     * checks of the file system
-     * @param observers The collection of observers to add to the monitor
+     * checks of the file system.
+     * @param observers The collection of observers to add to the monitor.
+     * @since 2.9.0
      */
     public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
-        this(interval, Optional.ofNullable(observers)
+        // @formatter:off
+        this(interval,
+            Optional
+                .ofNullable(observers)
                 .orElse(Collections.emptyList())
-                .toArray(new FileAlterationObserver[0])
+                .toArray(EMPTY_ARRAY)
         );
+        // @formatter:on
     }
 
     /**
      * Constructs a monitor with the specified interval and set of observers.
      *
      * @param interval The amount of time in milliseconds to wait between
-     * checks of the file system
+     * checks of the file system.
      * @param observers The set of observers to add to the monitor.
      */
     public FileAlterationMonitor(final long interval, final FileAlterationObserver... observers) {

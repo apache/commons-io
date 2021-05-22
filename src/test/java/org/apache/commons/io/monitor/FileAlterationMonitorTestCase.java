@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
@@ -69,10 +70,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
 
     @Test
     public void testCollectionConstructor() {
-        Collection<FileAlterationObserver> observers = new ArrayList<>();
-        FileAlterationObserver observer = new FileAlterationObserver("foo");
-        observers.add(observer);
-
+        Collection<FileAlterationObserver> observers = Arrays.asList(new FileAlterationObserver("foo"));
         FileAlterationMonitor monitor = new FileAlterationMonitor(0, observers);
         Iterator<FileAlterationObserver> iterator = monitor.getObservers().iterator();
         assertEquals(observer, iterator.next());
