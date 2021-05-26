@@ -52,7 +52,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  * like the original.
  * </p>
  *
- * @since 2.9.0
+ * @since 2.10.0
  */
 public abstract class AbstractCharArrayWriter extends Writer {
 

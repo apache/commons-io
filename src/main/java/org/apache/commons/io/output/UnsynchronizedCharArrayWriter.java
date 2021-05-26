@@ -24,7 +24,7 @@ import java.io.Writer;
 /**
  * Implements a version of {@link AbstractCharArrayWriter} <b>without</b> any concurrent thread safety.
  *
- * @since 2.9.0
+ * @since 2.10.0
  */
 //@NotThreadSafe
 public final class UnsynchronizedCharArrayWriter extends AbstractCharArrayWriter {
