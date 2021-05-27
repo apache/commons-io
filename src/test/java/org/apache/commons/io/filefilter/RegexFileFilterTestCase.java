@@ -110,9 +110,12 @@ public class RegexFileFilterTestCase {
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("test.java").toPath(), true);
         assertFiltering(filter, new File("tEST.java").toPath(), true);
+    }
 
+    @Test
+    public void testRegexEdgeCases() {
         try {
-            new RegexFileFilter((String)null);
+            new RegexFileFilter((String) null);
             fail();
         } catch (final IllegalArgumentException ignore) {
             // expected
@@ -133,7 +136,7 @@ public class RegexFileFilterTestCase {
         }
 
         try {
-            new RegexFileFilter((java.util.regex.Pattern)null);
+            new RegexFileFilter((java.util.regex.Pattern) null);
             fail();
         } catch (final IllegalArgumentException ignore) {
             // expected
