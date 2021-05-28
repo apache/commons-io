@@ -91,7 +91,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      * @return Pattern compilation flags.
      */
     private static int toFlags(final IOCase caseSensitivity) {
-        return caseSensitivity != null && !caseSensitivity.isCaseSensitive() ? Pattern.CASE_INSENSITIVE : 0;
+        return IOCase.isCaseSensitive(caseSensitivity) ? Pattern.CASE_INSENSITIVE : 0;
     }
 
     /** The regular expression pattern that will be used to match file names. */
