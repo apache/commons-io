@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
@@ -141,6 +142,17 @@ public class RegexFileFilterTestCase {
         } catch (final IllegalArgumentException ignore) {
             // expected
         }
+    }
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-733.
+     */
+    @Test
+    public void testRegexFileNameOnly() {
+        final Path path = Paths.get("folder", "Foo.java");
+        final String patternStr = "Foo.*";
+        assertFiltering(new RegexFileFilter(patternStr), path, true);
+        assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), Path::toString), path, false);
     }
 
 }

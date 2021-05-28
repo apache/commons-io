@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
@@ -72,7 +73,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
     /**
      * Compiles the given pattern source.
      *
-     * @param pattern the source pattern
+     * @param pattern the source pattern.
      * @param flags the compilation flags.
      * @return a new Pattern.
      */
@@ -97,20 +98,36 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
         return flags;
     }
 
-    /** The regular expression pattern that will be used to match file names */
+    /** The regular expression pattern that will be used to match file names. */
     private final Pattern pattern;
+    
+    /** How convert a path to a string. */
+    private final Function<Path, String> pathToString;
 
     /**
      * Constructs a new regular expression filter for a compiled regular expression
      *
-     * @param pattern regular expression to match
-     * @throws IllegalArgumentException if the pattern is null
+     * @param pattern regular expression to match.
+     * @throws IllegalArgumentException if the pattern is null.
      */
     public RegexFileFilter(final Pattern pattern) {
+        this(pattern, p -> p.getFileName().toString());
+    }
+
+    /**
+     * Constructs a new regular expression filter for a compiled regular expression
+     *
+     * @param pattern regular expression to match.
+     * @param pathToString How convert a path to a string.
+     * @throws IllegalArgumentException if the pattern is null.
+     * @since 2.10.0
+     */
+    public RegexFileFilter(final Pattern pattern, final Function<Path, String> pathToString) {
         if (pattern == null) {
             throw new IllegalArgumentException("Pattern is missing");
         }
         this.pattern = pattern;
+        this.pathToString = pathToString;
     }
 
     /**
@@ -166,7 +183,7 @@ public class RegexFileFilter extends AbstractFileFilter implements Serializable 
      */
     @Override
     public FileVisitResult accept(final Path path, final BasicFileAttributes attributes) {
-        return toFileVisitResult(pattern.matcher(path.getFileName().toString()).matches(), path);
+        return toFileVisitResult(pattern.matcher(pathToString.apply(path)).matches(), path);
     }
 
     /**
