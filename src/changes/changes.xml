@@ -46,7 +46,11 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.9.1" date="2021-MM-DD" description="Java 8 required.">
+    <release version="2.10.0" date="2021-MM-DD" description="Java 8 required.">
+      <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add RegexFileFilter.toString().
+      </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
       <!-- FIX -->
