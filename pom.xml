@@ -311,6 +311,12 @@ file comparators, endian transformation classes, and much more.
         org.apache.commons.io.output;
         org.apache.commons.io.*;version=${project.version};-noimport:=true
     </commons.osgi.export>
+    <commons.osgi.import>
+        <!-- IO-734 - Make the sun.* references from BufferedFileChannelInputStream optional -->
+        sun.nio.ch;resolution:=optional,
+        sun.misc;resolution:=optional,
+        *
+    </commons.osgi.import>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-io/</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
