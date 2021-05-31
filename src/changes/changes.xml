@@ -68,6 +68,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump junit-pioneer from 1.4.1 to 1.4.2 #240.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump checkstyle from 8.42 to 8.43 #241.
+      </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
       <!-- FIX -->
