@@ -62,8 +62,11 @@ The <action> type attribute can be add,update,fix,remove.
         Add and use IOCase.isCaseSensitive(IOCase).
       </action>
       <!-- UPDATES -->
-      <action dev="ggregory" type="add" due-to="Dependabot">
+      <action dev="ggregory" type="update" due-to="Dependabot">
         Bump actions/cache from 2.1.5 to 2.1.6 #238.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump junit-pioneer from 1.4.1 to 1.4.2 #240.
       </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
