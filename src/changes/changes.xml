@@ -61,6 +61,10 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add and use IOCase.isCaseSensitive(IOCase).
       </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="add" due-to="Dependabot">
+        Bump actions/cache from 2.1.5 to 2.1.6 #238.
+      </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
       <!-- FIX -->
