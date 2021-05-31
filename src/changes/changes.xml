@@ -51,6 +51,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-733" dev="ggregory" type="fix" due-to="Jim Sellers, Gary Gregory">
         RegexFileFilter uses the path and file name instead of just the file name.
       </action>
+      <action issue="IO-734" dev="ggregory" type="fix" due-to="Eric Norman">
+        The OSGi manifest now contains sun.* import packages #239.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add and use RegexFileFilter.toString().
