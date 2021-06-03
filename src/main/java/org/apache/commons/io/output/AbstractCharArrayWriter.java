@@ -41,8 +41,7 @@ import static org.apache.commons.io.IOUtils.EOF;
  * <p>
  * This is the base for an alternative implementation of the
  * {@link java.io.CharArrayWriter} class. The original implementation
- * only allocates 32 chars at the beginning. It is also a good alternative to
- * {@link java.io.StringWriter} class.
+ * only allocates 32 chars at the beginning.
  *
  * As this class is designed for
  * heavy duty it starts at {@value #DEFAULT_SIZE} chars. In contrast to the original it doesn't
