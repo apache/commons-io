@@ -389,7 +389,9 @@ public class FilenameUtils {
         }
 
         // adjoining slashes
-        for (int i = prefix + 1; i < size; i++) {
+        // If we get here, prefix can only be 0 or greater, size 1 or greater
+        // If prefix is 0, set loop start to 1 to prevent index errors
+        for (int i = (prefix != 0) ? prefix : 1; i < size; i++) {
             if (array[i] == separator && array[i - 1] == separator) {
                 System.arraycopy(array, i, array, i - 1, size - i);
                 size--;
