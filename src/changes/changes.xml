@@ -74,6 +74,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump checkstyle from 8.42 to 8.43 #241.
       </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.10.0 to 3.11.0 #242. 
+      </action>
     </release>
     <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
       <!-- FIX -->
