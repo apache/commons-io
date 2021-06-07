@@ -54,6 +54,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action issue="IO-734" dev="ggregory" type="fix" due-to="Eric Norman">
         The OSGi manifest now contains sun.* import packages #239.
       </action>
+      <action issue="IO-585" dev="ggregory" type="fix" due-to="Adam McClenaghan">
+        Sanitize double slash after prefix #79.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add and use RegexFileFilter.toString().
