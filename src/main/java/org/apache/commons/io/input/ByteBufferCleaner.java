@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.io;
+package org.apache.commons.io.input;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -37,9 +37,9 @@ import java.nio.ByteBuffer;
  * See <a href=https://bugs.openjdk.java.net/browse/JDK-4724038>JDK-4724038</a>
  * </p>
  * 
- * @since 2.9.0
+ * @since 2.10.0
  */
-public class ByteBufferCleaner {
+class ByteBufferCleaner {
 
     private static final Cleaner cleaner = getCleaner();
 
