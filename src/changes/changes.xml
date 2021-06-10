@@ -46,7 +46,7 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.10.0" date="2021-MM-DD" description="Java 8 required.">
+    <release version="2.10.0" date="2021-06-10" description="Java 8 required.">
       <!-- FIX -->
       <action issue="IO-733" dev="ggregory" type="fix" due-to="Jim Sellers, Gary Gregory">
         RegexFileFilter uses the path and file name instead of just the file name.
