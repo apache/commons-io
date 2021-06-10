@@ -310,7 +310,7 @@ public class FileSystemUtils {
         }
 
         // build and run the 'dir' command
-        final String[] cmdAttribs = new String[] {"cmd.exe", "/C", "dir /a /-c " + normPath};
+        final String[] cmdAttribs = {"cmd.exe", "/C", "dir /a /-c " + normPath};
 
         // read in the output of the command to an ArrayList
         final List<String> lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);

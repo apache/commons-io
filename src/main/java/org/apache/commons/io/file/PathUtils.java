@@ -136,43 +136,43 @@ public final class PathUtils {
      *
      * @since 2.8.0
      */
-    public static final CopyOption[] EMPTY_COPY_OPTIONS = new CopyOption[0];
+    public static final CopyOption[] EMPTY_COPY_OPTIONS = {};
 
     /**
      * Empty {@link LinkOption} array.
      *
      * @since 2.8.0
      */
-    public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = new DeleteOption[0];
+    public static final DeleteOption[] EMPTY_DELETE_OPTION_ARRAY = {};
 
     /**
      * Empty {@link FileVisitOption} array.
      */
-    public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = new FileVisitOption[0];
+    public static final FileVisitOption[] EMPTY_FILE_VISIT_OPTION_ARRAY = {};
 
     /**
      * Empty {@link LinkOption} array.
      */
-    public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = new LinkOption[0];
+    public static final LinkOption[] EMPTY_LINK_OPTION_ARRAY = {};
 
     /**
      * {@link LinkOption} array for {@link LinkOption#NOFOLLOW_LINKS}.
      *
      * @since 2.9.0
      */
-    public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = new LinkOption[] {LinkOption.NOFOLLOW_LINKS};
+    public static final LinkOption[] NOFOLLOW_LINK_OPTION_ARRAY = {LinkOption.NOFOLLOW_LINKS};
 
     /**
      * Empty {@link OpenOption} array.
      */
-    public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = new OpenOption[0];
+    public static final OpenOption[] EMPTY_OPEN_OPTION_ARRAY = {};
 
     /**
      * Empty {@link Path} array.
      *
      * @since 2.9.0
      */
-    public static final Path[] EMPTY_PATH_ARRAY = new Path[0];
+    public static final Path[] EMPTY_PATH_ARRAY = {};
 
     /**
      * Accumulates file tree information in a {@link AccumulatorPathVisitor}.

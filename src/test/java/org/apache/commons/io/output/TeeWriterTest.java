@@ -199,7 +199,7 @@ public class TeeWriterTest {
         final Writer badW = new BrokenWriter();
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data);
             fail("Expected " + IOException.class.getName());
@@ -215,7 +215,7 @@ public class TeeWriterTest {
         final Writer badW = new BrokenWriter();
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data);
             fail("Expected " + IOException.class.getName());
@@ -231,7 +231,7 @@ public class TeeWriterTest {
         final Writer badW = new BrokenWriter();
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(badW, goodW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data, 0, 0);
             fail("Expected " + IOException.class.getName());
@@ -247,7 +247,7 @@ public class TeeWriterTest {
         final Writer badW = new BrokenWriter();
         final StringWriter goodW = mock(StringWriter.class);
         final TeeWriter tw = new TeeWriter(goodW, badW, null);
-        final char[] data = new char[] { 'a' };
+        final char[] data = { 'a' };
         try {
             tw.write(data, 0, 0);
             fail("Expected " + IOException.class.getName());

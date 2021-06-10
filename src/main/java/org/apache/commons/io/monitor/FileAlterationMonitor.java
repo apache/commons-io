@@ -16,7 +16,10 @@
  */
 package org.apache.commons.io.monitor;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
@@ -28,6 +31,8 @@ import java.util.concurrent.ThreadFactory;
  * @since 2.0
  */
 public final class FileAlterationMonitor implements Runnable {
+
+    private static final FileAlterationObserver[] EMPTY_ARRAY = {};
 
     private final long interval;
     private final List<FileAlterationObserver> observers = new CopyOnWriteArrayList<>();
@@ -46,17 +51,36 @@ public final class FileAlterationMonitor implements Runnable {
      * Constructs a monitor with the specified interval.
      *
      * @param interval The amount of time in milliseconds to wait between
-     * checks of the file system
+     * checks of the file system.
      */
     public FileAlterationMonitor(final long interval) {
         this.interval = interval;
     }
 
     /**
+     * Constructs a monitor with the specified interval and collection of observers.
+     *
+     * @param interval The amount of time in milliseconds to wait between
+     * checks of the file system.
+     * @param observers The collection of observers to add to the monitor.
+     * @since 2.9.0
+     */
+    public FileAlterationMonitor(final long interval, final Collection<FileAlterationObserver> observers) {
+        // @formatter:off
+        this(interval,
+            Optional
+                .ofNullable(observers)
+                .orElse(Collections.emptyList())
+                .toArray(EMPTY_ARRAY)
+        );
+        // @formatter:on
+    }
+
+    /**
      * Constructs a monitor with the specified interval and set of observers.
      *
      * @param interval The amount of time in milliseconds to wait between
-     * checks of the file system
+     * checks of the file system.
      * @param observers The set of observers to add to the monitor.
      */
     public FileAlterationMonitor(final long interval, final FileAlterationObserver... observers) {
@@ -159,7 +183,7 @@ public final class FileAlterationMonitor implements Runnable {
      * @since 2.1
      */
     public synchronized void stop(final long stopInterval) throws Exception {
-        if (running == false) {
+        if (!running) {
             throw new IllegalStateException("Monitor is not running");
         }
         running = false;

@@ -34,7 +34,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
  */
 public class CountingPathVisitor extends SimplePathVisitor {
 
-    static final String[] EMPTY_STRING_ARRAY = new String[0];
+    static final String[] EMPTY_STRING_ARRAY = {};
 
     /**
      * Creates a new instance configured with a BigInteger {@link PathCounters}.

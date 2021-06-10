@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.comparator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -44,13 +45,13 @@ public class NameFileComparatorTest extends ComparatorAbstractTestCase {
     public void testCaseSensitivity() {
         final File file3 = new File("a/FOO.txt");
         final Comparator<File> sensitive = new NameFileComparator(null); /* test null as well */
-        assertTrue(sensitive.compare(equalFile1, equalFile2) == 0, "sensitive file1 & file2 = 0");
+        assertEquals(0, sensitive.compare(equalFile1, equalFile2), "sensitive file1 & file2 = 0");
         assertTrue(sensitive.compare(equalFile1, file3) > 0, "sensitive file1 & file3 > 0");
         assertTrue(sensitive.compare(equalFile1, lessFile) > 0, "sensitive file1 & less  > 0");
 
         final Comparator<File> insensitive = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-        assertTrue(insensitive.compare(equalFile1, equalFile2) == 0, "insensitive file1 & file2 = 0");
-        assertTrue(insensitive.compare(equalFile1, file3) == 0, "insensitive file1 & file3 = 0");
+        assertEquals(0, insensitive.compare(equalFile1, equalFile2), "insensitive file1 & file2 = 0");
+        assertEquals(0, insensitive.compare(equalFile1, file3), "insensitive file1 & file3 = 0");
         assertTrue(insensitive.compare(equalFile1, lessFile) > 0, "insensitive file1 & file4 > 0");
         assertTrue(insensitive.compare(file3, lessFile) > 0, "insensitive file3 & less  > 0");
     }

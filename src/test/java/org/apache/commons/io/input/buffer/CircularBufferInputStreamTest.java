@@ -79,7 +79,7 @@ public class CircularBufferInputStreamTest {
 
 	@Test
   public void testIO683() throws IOException {
-		final byte[] buffer = new byte[]{0,1,-2,-2,-1,4};
+		final byte[] buffer = {0,1,-2,-2,-1,4};
 		try (
 			final ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
 			final CircularBufferInputStream cbis = new CircularBufferInputStream(bais)

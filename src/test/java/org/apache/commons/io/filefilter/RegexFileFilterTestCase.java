@@ -22,13 +22,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOCase;
 import org.junit.jupiter.api.Test;
 
 /**
- * Used to test RegexFileFilterUtils.
+ * Tests {@link RegexFileFilter}.
  */
 public class RegexFileFilterTestCase {
 
@@ -110,9 +111,12 @@ public class RegexFileFilterTestCase {
         assertFiltering(filter, new File("Test.java").toPath(), true);
         assertFiltering(filter, new File("test.java").toPath(), true);
         assertFiltering(filter, new File("tEST.java").toPath(), true);
+    }
 
+    @Test
+    public void testRegexEdgeCases() {
         try {
-            new RegexFileFilter((String)null);
+            new RegexFileFilter((String) null);
             fail();
         } catch (final IllegalArgumentException ignore) {
             // expected
@@ -133,11 +137,22 @@ public class RegexFileFilterTestCase {
         }
 
         try {
-            new RegexFileFilter((java.util.regex.Pattern)null);
+            new RegexFileFilter((java.util.regex.Pattern) null);
             fail();
         } catch (final IllegalArgumentException ignore) {
             // expected
         }
+    }
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/IO-733.
+     */
+    @Test
+    public void testRegexFileNameOnly() {
+        final Path path = Paths.get("folder", "Foo.java");
+        final String patternStr = "Foo.*";
+        assertFiltering(new RegexFileFilter(patternStr), path, true);
+        assertFiltering(new RegexFileFilter(Pattern.compile(patternStr), Path::toString), path, false);
     }
 
 }

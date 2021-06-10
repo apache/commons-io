@@ -18,6 +18,7 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -221,9 +222,9 @@ public class ObservableInputStreamTest {
             final ObservableInputStream ois = new ObservableInputStream(bais)) {
             final DataViewObserver observer = new DataViewObserver();
             final byte[] readBuffer = new byte[23];
-            assertEquals(null, observer.buffer);
+            assertNull(observer.buffer);
             ois.read(readBuffer);
-            assertEquals(null, observer.buffer);
+            assertNull(observer.buffer);
             ois.add(observer);
             for (;;) {
                 if (bais.available() >= 2048) {

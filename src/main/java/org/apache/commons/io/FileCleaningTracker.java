@@ -215,7 +215,7 @@ public class FileCleaningTracker {
         @Override
         public void run() {
             // thread exits when exitWhenFinished is true and there are no more tracked objects
-            while (exitWhenFinished == false || !trackers.isEmpty()) {
+            while (!exitWhenFinished || !trackers.isEmpty()) {
                 try {
                     // Wait for a tracker to remove.
                     final Tracker tracker = (Tracker) q.remove(); // cannot return null

@@ -64,6 +64,17 @@ public enum IOCase {
      */
     SYSTEM("System", !FilenameUtils.isSystemWindows());
 
+    /**
+     * Tests for cases sensitivity in a null-safe manner.
+     * 
+     * @param caseSensitivity an IOCase.
+     * @return true if the input is non-null and {@link #isCaseSensitive()}.
+     * @since 2.10.0
+     */
+    public static boolean isCaseSensitive(final IOCase caseSensitivity) {
+        return caseSensitivity != null && !caseSensitivity.isCaseSensitive();
+    }
+
     /** Serialization version. */
     private static final long serialVersionUID = -6343169151696340687L;
 

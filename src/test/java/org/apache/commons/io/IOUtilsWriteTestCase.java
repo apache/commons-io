@@ -16,8 +16,8 @@
  */
 package org.apache.commons.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.OutputStream;
@@ -54,7 +54,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -129,7 +129,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_8).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -167,7 +167,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -182,7 +182,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -220,7 +220,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -257,7 +257,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -274,7 +274,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -313,7 +313,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -351,7 +351,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -388,7 +388,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -405,7 +405,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -444,7 +444,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -482,7 +482,7 @@ public class IOUtilsWriteTestCase {
 
         byte[] bytes = baout.toByteArray();
         bytes = new String(bytes, StandardCharsets.UTF_16).getBytes(StandardCharsets.US_ASCII);
-        assertTrue(Arrays.equals(inData, bytes), "Content differs");
+        assertArrayEquals(inData, bytes, "Content differs");
     }
 
     @Test
@@ -519,7 +519,7 @@ public class IOUtilsWriteTestCase {
         out.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     //-----------------------------------------------------------------------
@@ -537,7 +537,7 @@ public class IOUtilsWriteTestCase {
         writer.flush();
 
         assertEquals(inData.length, baout.size(), "Sizes differ");
-        assertTrue(Arrays.equals(inData, baout.toByteArray()), "Content differs");
+        assertArrayEquals(inData, baout.toByteArray(), "Content differs");
     }
 
     @Test
@@ -566,7 +566,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -597,7 +597,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_nullSeparator() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -614,7 +614,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_nullStream() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (OutputStream) null);
@@ -625,7 +625,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_Encoding() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello\u8364", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -656,7 +656,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_Encoding_nullSeparator() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -673,7 +673,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_Encoding_nullStream() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", null, "US-ASCII");
@@ -684,7 +684,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_OutputStream_Encoding_nullEncoding() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -703,7 +703,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_Writer() throws Exception {
-        final Object[] data = new Object[]{
+        final Object[] data = {
                 "hello", new StringBuffer("world"), "", "this is", null, "some text"};
         final List<Object> list = Arrays.asList(data);
 
@@ -738,7 +738,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_Writer_nullSeparator() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
 
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
@@ -757,7 +757,7 @@ public class IOUtilsWriteTestCase {
 
     @Test
     public void testWriteLines_Writer_nullStream() throws Exception {
-        final Object[] data = new Object[]{"hello", "world"};
+        final Object[] data = {"hello", "world"};
         final List<Object> list = Arrays.asList(data);
         try {
             IOUtils.writeLines(list, "*", (Writer) null);

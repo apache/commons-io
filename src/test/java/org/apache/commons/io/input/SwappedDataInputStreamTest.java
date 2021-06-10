@@ -18,7 +18,9 @@ package org.apache.commons.io.input;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -67,9 +69,9 @@ public class SwappedDataInputStreamTest {
             final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             final SwappedDataInputStream sdis = new SwappedDataInputStream(bais)
         ) {
-            assertEquals(false, sdis.readBoolean());
-            assertEquals(true, sdis.readBoolean());
-            assertEquals(true, sdis.readBoolean());
+            assertFalse(sdis.readBoolean());
+            assertTrue(sdis.readBoolean());
+            assertTrue(sdis.readBoolean());
         }
     }
 

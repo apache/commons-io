@@ -44,40 +44,40 @@ public class ReaderInputStreamTest {
 
     private void testWithSingleByteRead(final String testString, final String charsetName) throws IOException {
         final byte[] bytes = testString.getBytes(charsetName);
-        final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
-        for (final byte b : bytes) {
-            final int read = in.read();
-            assertTrue(read >= 0);
-            assertTrue(read <= 255);
-            assertEquals(b, (byte)read);
+        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+            for (final byte b : bytes) {
+                final int read = in.read();
+                assertTrue(read >= 0);
+                assertTrue(read <= 255);
+                assertEquals(b, (byte) read);
+            }
+            assertEquals(-1, in.read());
         }
-        assertEquals(-1, in.read());
-        in.close();
     }
 
     private void testWithBufferedRead(final String testString, final String charsetName) throws IOException {
         final byte[] expected = testString.getBytes(charsetName);
-        final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName);
-        final byte[] buffer = new byte[128];
-        int offset = 0;
-        while (true) {
-            int bufferOffset = random.nextInt(64);
-            final int bufferLength = random.nextInt(64);
-            int read = in.read(buffer, bufferOffset, bufferLength);
-            if (read == -1) {
-                assertEquals(offset, expected.length);
-                break;
-            }
-            assertTrue(read <= bufferLength);
-            while (read > 0) {
-                assertTrue(offset < expected.length);
-                assertEquals(expected[offset], buffer[bufferOffset]);
-                offset++;
-                bufferOffset++;
-                read--;
+        try (final ReaderInputStream in = new ReaderInputStream(new StringReader(testString), charsetName)) {
+            final byte[] buffer = new byte[128];
+            int offset = 0;
+            while (true) {
+                int bufferOffset = random.nextInt(64);
+                final int bufferLength = random.nextInt(64);
+                int read = in.read(buffer, bufferOffset, bufferLength);
+                if (read == -1) {
+                    assertEquals(offset, expected.length);
+                    break;
+                }
+                assertTrue(read <= bufferLength);
+                while (read > 0) {
+                    assertTrue(offset < expected.length);
+                    assertEquals(expected[offset], buffer[bufferOffset]);
+                    offset++;
+                    bufferOffset++;
+                    read--;
+                }
             }
         }
-        in.close();
     }
 
     @Test
@@ -109,26 +109,26 @@ public class ReaderInputStreamTest {
     @Test
     public void testReadZero() throws Exception {
         final String inStr = "test";
-        final ReaderInputStream r = new ReaderInputStream(new StringReader(inStr));
-        final byte[] bytes = new byte[30];
-        assertEquals(0, r.read(bytes, 0, 0));
-        assertEquals(inStr.length(), r.read(bytes, 0, inStr.length()+1));
-        // Should always return 0 for length == 0
-        assertEquals(0, r.read(bytes, 0, 0));
-        r.close();
+        try (final ReaderInputStream inputStream = new ReaderInputStream(new StringReader(inStr))) {
+            final byte[] bytes = new byte[30];
+            assertEquals(0, inputStream.read(bytes, 0, 0));
+            assertEquals(inStr.length(), inputStream.read(bytes, 0, inStr.length() + 1));
+            // Should always return 0 for length == 0
+            assertEquals(0, inputStream.read(bytes, 0, 0));
+        }
     }
 
     @SuppressWarnings("deprecation")
     @Test
     public void testReadZeroEmptyString() throws Exception {
-        final ReaderInputStream r = new ReaderInputStream(new StringReader(""));
-        final byte[] bytes = new byte[30];
-        // Should always return 0 for length == 0
-        assertEquals(0, r.read(bytes, 0, 0));
-        assertEquals(-1, r.read(bytes, 0, 1));
-        assertEquals(0, r.read(bytes, 0, 0));
-        assertEquals(-1, r.read(bytes, 0, 1));
-        r.close();
+        try (final ReaderInputStream inputStream = new ReaderInputStream(new StringReader(""))) {
+            final byte[] bytes = new byte[30];
+            // Should always return 0 for length == 0
+            assertEquals(0, inputStream.read(bytes, 0, 0));
+            assertEquals(-1, inputStream.read(bytes, 0, 1));
+            assertEquals(0, inputStream.read(bytes, 0, 0));
+            assertEquals(-1, inputStream.read(bytes, 0, 1));
+        }
     }
 
     /*
@@ -137,7 +137,7 @@ public class ReaderInputStreamTest {
     @Test
     public void testCharsetMismatchInfiniteLoop() throws IOException {
         // Input is UTF-8 bytes: 0xE0 0xB2 0xA0
-        final char[] inputChars = new char[] { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
+        final char[] inputChars = { (char) 0xE0, (char) 0xB2, (char) 0xA0 };
         // Charset charset = Charset.forName("UTF-8"); // works
         final Charset charset = StandardCharsets.US_ASCII; // infinite loop
         try (ReaderInputStream stream = new ReaderInputStream(new CharArrayReader(inputChars), charset)) {

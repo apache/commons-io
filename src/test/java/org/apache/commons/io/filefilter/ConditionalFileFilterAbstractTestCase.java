@@ -17,6 +17,7 @@
 package org.apache.commons.io.filefilter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public abstract class ConditionalFileFilterAbstractTestCase extends IOFileFilter
         filters.add(new TesterTrueFileFilter());
         for (final TesterTrueFileFilter filter : filters) {
             fileFilter.removeFileFilter(filter);
-            assertTrue(!fileFilter.getFileFilters().contains(filter), "file filter removed");
+            assertFalse(fileFilter.getFileFilters().contains(filter), "file filter removed");
         }
         assertEquals(0, fileFilter.getFileFilters().size(), "file filters count");
     }

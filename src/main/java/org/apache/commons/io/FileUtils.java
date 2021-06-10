@@ -186,7 +186,7 @@ public class FileUtils {
     /**
      * An empty array of type {@code File}.
      */
-    public static final File[] EMPTY_FILE_ARRAY = new File[0];
+    public static final File[] EMPTY_FILE_ARRAY = {};
 
     /**
      * Copies the given array and adds StandardCopyOption.COPY_ATTRIBUTES.

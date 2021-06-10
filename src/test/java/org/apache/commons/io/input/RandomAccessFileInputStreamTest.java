@@ -19,7 +19,9 @@ package org.apache.commons.io.input;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class RandomAccessFileInputStreamTest {
     public void testCtorCloseOnCloseFalse() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, false)) {
-                assertEquals(false, inputStream.isCloseOnClose());
+                assertFalse(inputStream.isCloseOnClose());
             }
             file.read();
         }
@@ -67,7 +69,7 @@ public class RandomAccessFileInputStreamTest {
     public void testCtorCloseOnCloseTrue() throws IOException {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, true)) {
-                assertEquals(true, inputStream.isCloseOnClose());
+                assertTrue(inputStream.isCloseOnClose());
             }
             assertThrows(IOException.class, () -> file.read());
         }
@@ -83,7 +85,7 @@ public class RandomAccessFileInputStreamTest {
         try (RandomAccessFile file = createRandomAccessFile()) {
             try (final RandomAccessFileInputStream inputStream = new RandomAccessFileInputStream(file, true)) {
                 assertEquals(file, inputStream.getRandomAccessFile());
-                assertEquals(true, inputStream.isCloseOnClose());
+                assertTrue(inputStream.isCloseOnClose());
             }
         }
     }

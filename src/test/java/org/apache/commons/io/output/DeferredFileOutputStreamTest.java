@@ -30,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
@@ -129,7 +128,7 @@ public class DeferredFileOutputStreamTest {
 
         final byte[] resultBytes = dfos.getData();
         assertEquals(testBytes.length, resultBytes.length);
-        assertTrue(Arrays.equals(resultBytes, testBytes));
+        assertArrayEquals(resultBytes, testBytes);
     }
 
     /**
@@ -150,7 +149,7 @@ public class DeferredFileOutputStreamTest {
 
         final byte[] resultBytes = dfos.getData();
         assertEquals(testBytes.length, resultBytes.length);
-        assertTrue(Arrays.equals(resultBytes, testBytes));
+        assertArrayEquals(resultBytes, testBytes);
     }
 
     /**
@@ -342,7 +341,7 @@ public class DeferredFileOutputStreamTest {
             fail("Unexpected IOException");
         }
         final byte[] copiedBytes = baos.toByteArray();
-        assertTrue(Arrays.equals(testBytes, copiedBytes));
+        assertArrayEquals(testBytes, copiedBytes);
         verifyResultFile(testFile);
         testFile.delete();
     }
@@ -379,7 +378,7 @@ public class DeferredFileOutputStreamTest {
             fail("Unexpected IOException");
         }
         final byte[] copiedBytes = baos.toByteArray();
-        assertTrue(Arrays.equals(testBytes, copiedBytes));
+        assertArrayEquals(testBytes, copiedBytes);
 
         testFile.delete();
     }
@@ -397,7 +396,7 @@ public class DeferredFileOutputStreamTest {
             final byte[] resultBytes = new byte[testBytes.length];
             assertEquals(testBytes.length, fis.read(resultBytes));
 
-            assertTrue(Arrays.equals(resultBytes, testBytes));
+            assertArrayEquals(resultBytes, testBytes);
             assertEquals(-1, fis.read(resultBytes));
 
             try {

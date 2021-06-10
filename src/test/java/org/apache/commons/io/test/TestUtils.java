@@ -16,6 +16,7 @@
  */
 package org.apache.commons.io.test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -34,7 +35,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -113,8 +113,7 @@ public abstract class TestUtils {
                             "The files " + f0 + " and " + f1 +
                             " have differing number of bytes available (" + n0 + " vs " + n1 + ")");
 
-                    assertTrue(Arrays.equals(buf0, buf1),
-                            "The files " + f0 + " and " + f1 + " have different content");
+                    assertArrayEquals(buf0, buf1, "The files " + f0 + " and " + f1 + " have different content");
                 }
             }
         }

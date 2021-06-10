@@ -46,7 +46,42 @@ The <action> type attribute can be add,update,fix,remove.
 
   <body>
     <!-- The release date is the date RC is cut -->
-    <release version="2.9.0" date="2021-MM-DD" description="Java 8 required.">
+    <release version="2.10.0" date="2021-06-10" description="Java 8 required.">
+      <!-- FIX -->
+      <action issue="IO-733" dev="ggregory" type="fix" due-to="Jim Sellers, Gary Gregory">
+        RegexFileFilter uses the path and file name instead of just the file name.
+      </action>
+      <action issue="IO-734" dev="ggregory" type="fix" due-to="Eric Norman">
+        The OSGi manifest now contains sun.* import packages #239.
+      </action>
+      <action issue="IO-585" dev="ggregory" type="fix" due-to="Adam McClenaghan">
+        Sanitize double slash after prefix #79.
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use RegexFileFilter.toString().
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use RegexFileFilter.RegexFileFilter(Pattern, Function&lt;Path&gt;, String>)
+      </action>
+      <action dev="ggregory" type="add" due-to="Gary Gregory">
+        Add and use IOCase.isCaseSensitive(IOCase).
+      </action>
+      <!-- UPDATES -->
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump actions/cache from 2.1.5 to 2.1.6 #238.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump junit-pioneer from 1.4.1 to 1.4.2 #240.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump checkstyle from 8.42 to 8.43 #241.
+      </action>
+      <action dev="ggregory" type="update" due-to="Dependabot">
+        Bump mockito-inline from 3.10.0 to 3.11.0 #242. 
+      </action>
+    </release>
+    <release version="2.9.0" date="2021-05-22" description="Java 8 required.">
       <!-- FIX -->
       <action issue="IO-686" dev="ggregory" type="fix" due-to="Alan Moffat, Gary Gregory">
         IOUtils.toByteArray(InputStream) Javadoc does not match code.
@@ -126,7 +161,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Rob Spoor, Gary Gregory">
         Prevent infinite loop with AbstractCharacterFilterReader if EOF is filtered out #226.
       </action>
-      <action issue="IO-429" dev="ggregory" type="fix" due-to="Rob Spoor, Ivan Leskin">
+      <action issue="IO-429" dev="ggregory" type="fix" due-to="Ivan Leskin, Ivan Leskin">
         Check for long streams in IOUtils.toByteArray #175.
       </action>
       <!-- ADD -->
@@ -148,7 +183,7 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
         Add factory methods to CloseShieldInputStream, CloseShieldReader, CloseShieldOutputStream, CloseShieldWriter, #173.
       </action>
-      <action dev="ggregory" type="add" due-to="Rob Spoor, Gary Gregory">
+      <action dev="ggregory" type="add" due-to="maxxedev, Gary Gregory">
         Add QueueInputStream and QueueOutputStream as simpler alternatives to PipedInputStream and PipedOutputStream #171.
       </action>
       <action dev="ggregory" type="add" due-to="Gary Gregory">
@@ -216,6 +251,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="add" due-to="Gary Gregory">
         Add constructor ThresholdingOutputStream(int, IOConsumer, IOFunction) and make the class concrete.
       </action>
+      <action dev="ggregory" type="add" due-to="nstdspace, Gary Gregory">
+        Add constructor accepting collection of file alteration observers #236.
+      </action>
       <!-- UPDATES -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Update junit-jupiter from 5.6.2 to 5.7.0 #153.
@@ -282,6 +320,9 @@ The <action> type attribute can be add,update,fix,remove.
       </action>
       <action type="update" dev="ggregory" due-to="Arturo Bernal">
         Minor improvements #233.
+      </action>
+      <action type="update" dev="ggregory" due-to="Arturo Bernal">
+        Simplify Assertions in tests #234.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->

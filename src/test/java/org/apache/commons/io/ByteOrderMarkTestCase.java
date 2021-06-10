@@ -17,8 +17,9 @@
 package org.apache.commons.io;
 
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -79,26 +80,26 @@ public class ByteOrderMarkTestCase  {
     /** Test {@link ByteOrderMark#getBytes()} */
     @Test
     public void getBytes() {
-        assertTrue(Arrays.equals(TEST_BOM_1.getBytes(), new byte[] {(byte)1}), "test1 bytes");
+        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[]{(byte) 1}, "test1 bytes");
         TEST_BOM_1.getBytes()[0] = 2;
-        assertTrue(Arrays.equals(TEST_BOM_1.getBytes(), new byte[] {(byte)1}), "test1 bytes");
-        assertTrue(Arrays.equals(TEST_BOM_2.getBytes(), new byte[] {(byte)1, (byte)2}), "test1 bytes");
-        assertTrue(Arrays.equals(TEST_BOM_3.getBytes(), new byte[] {(byte)1, (byte)2, (byte)3}), "test1 bytes");
+        assertArrayEquals(TEST_BOM_1.getBytes(), new byte[]{(byte) 1}, "test1 bytes");
+        assertArrayEquals(TEST_BOM_2.getBytes(), new byte[]{(byte) 1, (byte) 2}, "test1 bytes");
+        assertArrayEquals(TEST_BOM_3.getBytes(), new byte[]{(byte) 1, (byte) 2, (byte) 3}, "test1 bytes");
     }
 
     /** Test {@link ByteOrderMark#equals(Object)} */
     @SuppressWarnings("EqualsWithItself")
     @Test
     public void testEquals() {
-        assertTrue(TEST_BOM_1.equals(TEST_BOM_1), "test1 equals");
-        assertTrue(TEST_BOM_2.equals(TEST_BOM_2), "test2 equals");
-        assertTrue(TEST_BOM_3.equals(TEST_BOM_3), "test3 equals");
+        assertEquals(TEST_BOM_1, TEST_BOM_1, "test1 equals");
+        assertEquals(TEST_BOM_2, TEST_BOM_2, "test2 equals");
+        assertEquals(TEST_BOM_3, TEST_BOM_3, "test3 equals");
 
-        assertFalse(TEST_BOM_1.equals(new Object()), "Object not equal");
-        assertFalse(TEST_BOM_1.equals(new ByteOrderMark("1a", 2)), "test1-1 not equal");
-        assertFalse(TEST_BOM_1.equals(new ByteOrderMark("1b", 1, 2)), "test1-2 not test2");
-        assertFalse(TEST_BOM_2.equals(new ByteOrderMark("2", 1, 1)), "test2 not equal");
-        assertFalse(TEST_BOM_3.equals(new ByteOrderMark("3", 1, 2, 4)), "test3 not equal");
+        assertNotEquals(TEST_BOM_1, new Object(), "Object not equal");
+        assertNotEquals(TEST_BOM_1, new ByteOrderMark("1a", 2), "test1-1 not equal");
+        assertNotEquals(TEST_BOM_1, new ByteOrderMark("1b", 1, 2), "test1-2 not test2");
+        assertNotEquals(TEST_BOM_2, new ByteOrderMark("2", 1, 1), "test2 not equal");
+        assertNotEquals(TEST_BOM_3, new ByteOrderMark("3", 1, 2, 4), "test3 not equal");
     }
 
     /** Test {@link ByteOrderMark#hashCode()} */

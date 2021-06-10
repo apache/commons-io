@@ -81,8 +81,8 @@ public class CircularInputStreamTest {
 
     @Test
     public void testCycleBytes() throws IOException {
-        final byte[] input = new byte[] { 1, 2 };
-        final byte[] expected = new byte[] { 1, 2, 1, 2, 1 };
+        final byte[] input = { 1, 2 };
+        final byte[] expected = { 1, 2, 1, 2, 1 };
 
         assertStreamOutput(input, expected);
     }

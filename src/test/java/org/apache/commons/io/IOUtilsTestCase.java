@@ -109,7 +109,7 @@ public class IOUtilsTestCase {
 
     /** Assert that the contents of two byte arrays are the same. */
     private void assertEqualContent(final byte[] b0, final byte[] b1) {
-        assertTrue(Arrays.equals(b0, b1), "Content not equal according to java.util.Arrays#equals()");
+        assertArrayEquals(b0, b1, "Content not equal according to java.util.Arrays#equals()");
     }
 
     @BeforeEach
@@ -1044,7 +1044,7 @@ public class IOUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
-            final String[] data = new String[] {"hello", "world", "", "this is", "some text"};
+            final String[] data = {"hello", "world", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
 
             in = new FileInputStream(file);
@@ -1062,7 +1062,7 @@ public class IOUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         InputStream in = null;
         try {
-            final String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
 
             in = new FileInputStream(file);
@@ -1080,7 +1080,7 @@ public class IOUtilsTestCase {
         final File file = TestUtils.newFile(temporaryFolder, "lines.txt");
         Reader in = null;
         try {
-            final String[] data = new String[] {"hello", "/u1234", "", "this is", "some text"};
+            final String[] data = {"hello", "/u1234", "", "this is", "some text"};
             TestUtils.createLineBasedFile(file, data);
 
             in = new InputStreamReader(new FileInputStream(file));
