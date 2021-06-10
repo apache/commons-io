@@ -27,19 +27,19 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import org.apache.commons.io.ByteBufferCleaner;
-
 /**
+ * <p>
  * An {@link InputStream} that utilizes memory mapped files to improve
  * performance. A sliding window of the file is mapped to memory to avoid
  * mapping the entire file to memory at one time. The size of the sliding buffer
  * is user configurable.
- * 
+ * </p>
+ * <p>
  * For most operating systems, mapping a file into memory is more expensive than
  * reading or writing a few tens of kilobytes of data. From the standpoint of
  * performance it is generally only worth mapping relatively large files into
- * memory. Use of this class can provide approximately a 25% increase in
- * throughput when reading large files. <br>
+ * memory.
+ * </p>
  * Note: Use of this class does not necessarily obviate the need to use a
  * {@link BufferedInputStream}. Depending on the use case, the use of buffering
  * may still further improve performance. For example:
@@ -54,7 +54,7 @@ import org.apache.commons.io.ByteBufferCleaner;
  * new GzipInputStream(new MemoryMappedFileInputStream(path))
  * </pre>
  * 
- * @since 2.9.0
+ * @since 2.10.0
  */
 public class MemoryMappedFileInputStream extends InputStream {
     /**
@@ -96,7 +96,7 @@ public class MemoryMappedFileInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
+    public int read(final byte[] b, final int off, final int len) throws IOException {
         ensureOpen();
         if (!buffer.hasRemaining()) {
             nextBuffer();
@@ -110,7 +110,7 @@ public class MemoryMappedFileInputStream extends InputStream {
     }
 
     @Override
-    public long skip(long n) throws IOException {
+    public long skip(final long n) throws IOException {
         ensureOpen();
         if (n <= 0) {
             return 0;
