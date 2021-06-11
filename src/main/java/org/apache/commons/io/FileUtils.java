@@ -687,7 +687,7 @@ public class FileUtils {
         final String destDirCanonicalPath = destDir.getCanonicalPath();
         if (destDirCanonicalPath.startsWith(srcDirCanonicalPath)) {
             final File[] srcFiles = listFiles(srcDir, fileFilter);
-            if (srcFiles != null && srcFiles.length > 0) {
+            if (srcFiles.length > 0) {
                 exclusionList = new ArrayList<>(srcFiles.length);
                 for (final File srcFile : srcFiles) {
                     final File copiedFile = new File(destDir, srcFile.getName());
@@ -2254,7 +2254,7 @@ public class FileUtils {
             }
             if (!createDestDir) {
                 throw new FileNotFoundException("Destination directory '" + destDir +
-                        "' does not exist [createDestDir=" + createDestDir + "]");
+                        "' does not exist [createDestDir=" + false + "]");
             }
             mkdirs(destDir);
         }

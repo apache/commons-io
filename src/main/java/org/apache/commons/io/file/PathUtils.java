@@ -92,8 +92,8 @@ public final class PathUtils {
          */
         private RelativeSortedPaths(final Path dir1, final Path dir2, final int maxDepth,
             final LinkOption[] linkOptions, final FileVisitOption[] fileVisitOptions) throws IOException {
-            List<Path> tmpRelativeDirList1 = null;
-            List<Path> tmpRelativeDirList2 = null;
+            final List<Path> tmpRelativeDirList1;
+            final List<Path> tmpRelativeDirList2;
             List<Path> tmpRelativeFileList1 = null;
             List<Path> tmpRelativeFileList2 = null;
             if (dir1 == null && dir2 == null) {

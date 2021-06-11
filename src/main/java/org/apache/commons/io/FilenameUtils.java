@@ -1604,7 +1604,7 @@ public class FilenameUtils {
                 if (octet.length() > IPV6_MAX_HEX_DIGITS_PER_GROUP) {
                     return false;
                 }
-                int octetInt = 0;
+                final int octetInt;
                 try {
                     octetInt = Integer.parseInt(octet, BASE_16);
                 } catch (final NumberFormatException e) {

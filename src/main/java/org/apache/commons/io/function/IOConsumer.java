@@ -33,7 +33,7 @@ public interface IOConsumer<T> {
     /**
      * Package private constant; consider private.
      */
-    static final IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
+    IOConsumer<?> NOOP_IO_CONSUMER = t -> {/* noop */};
 
     /**
      * Returns a constant NOOP consumer.
@@ -43,7 +43,7 @@ public interface IOConsumer<T> {
      * @since 2.9.0
      */
     @SuppressWarnings("unchecked")
-    public static <T> IOConsumer<T> noop() {
+    static <T> IOConsumer<T> noop() {
         return (IOConsumer<T>) NOOP_IO_CONSUMER;
     }
 

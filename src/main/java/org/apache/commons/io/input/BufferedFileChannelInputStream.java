@@ -53,7 +53,7 @@ public final class BufferedFileChannelInputStream extends InputStream {
         Class<?> res = null;
         try {
             res = Class.forName("sun.nio.ch.DirectBuffer");
-        } catch (IllegalAccessError | ClassNotFoundException ignored) {
+        } catch (final IllegalAccessError | ClassNotFoundException ignored) {
             // ignored
         }
         return res;

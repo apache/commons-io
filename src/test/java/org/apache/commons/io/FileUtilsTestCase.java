@@ -2785,7 +2785,7 @@ public class FileUtilsTestCase {
         final long nowMillis = System.currentTimeMillis();
         FileUtils.touch(file);
         assertEquals(1, file.length(), "FileUtils.touch() didn't empty the file.");
-        assertFalse(y2k == getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
+        assertNotEquals(y2k, getLastModifiedMillis(file), "FileUtils.touch() changed lastModified");
         final int delta = 3000;
         assertTrue(getLastModifiedMillis(file) >= nowMillis - delta, "FileUtils.touch() changed lastModified to more than now-3s");
         assertTrue(getLastModifiedMillis(file) <= nowMillis + delta, "FileUtils.touch() changed lastModified to less than now+3s");
