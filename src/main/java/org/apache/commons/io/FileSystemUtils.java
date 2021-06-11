@@ -99,8 +99,6 @@ public class FileSystemUtils {
             } else if (osName.contains("hp-ux") ||
                     osName.contains("aix")) {
                 os = POSIX_UNIX;
-            } else {
-                os = OTHER;
             }
 
         } catch (final Exception ex) {
