@@ -17,9 +17,14 @@
 package org.apache.commons.io.filefilter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link AndFileFilter}.
@@ -293,5 +298,19 @@ public class AndFileFilterTestCase extends ConditionalFileFilterAbstractTestCase
       testFileResults.add(9, Boolean.FALSE);
       testFilenameResults.add(9, Boolean.FALSE);
     }
+  }
+
+  @Test
+  public void setTestFiltersClearsOld() {
+    // test that new filters correctly clear old filters
+    final List<IOFileFilter> simpleEmptyFileFilter = Collections.singletonList(EmptyFileFilter.EMPTY);
+    final AndFileFilter andFileFilter = new AndFileFilter(simpleEmptyFileFilter);
+    // make sure the filters at this point are the same
+    assertEquals(simpleEmptyFileFilter, andFileFilter.getFileFilters());
+
+    final List<IOFileFilter> simpleNonEmptyFilter = Collections.singletonList(EmptyFileFilter.NOT_EMPTY);
+    // when calling the setter the filters should reference the new filters
+    andFileFilter.setFileFilters(simpleNonEmptyFilter);
+    assertEquals(simpleNonEmptyFilter, andFileFilter.getFileFilters());
   }
 }
