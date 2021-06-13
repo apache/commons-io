@@ -45,6 +45,12 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
+    <release version="2.10.1" date="2021-MM-DD" description="Java 8 required.">
+      <!-- FIX -->
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Minor changes #243.
+      </action>
+    </release>
     <!-- The release date is the date RC is cut -->
     <release version="2.10.0" date="2021-06-10" description="Java 8 required.">
       <!-- FIX -->

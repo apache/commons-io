@@ -169,7 +169,7 @@ public class CopyUtils {
     public static int copy(final InputStream input, final OutputStream output) throws IOException {
         final byte[] buffer = IOUtils.byteArray();
         int count = 0;
-        int n = 0;
+        int n;
         while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
@@ -194,7 +194,7 @@ public class CopyUtils {
                 throws IOException {
         final char[] buffer = IOUtils.getCharArray();
         int count = 0;
-        int n = 0;
+        int n;
         while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
