@@ -1180,7 +1180,7 @@ public class FileUtils {
      *
      * @param directory directory to delete
      * @throws IOException              in case deletion is unsuccessful
-     * @throws IllegalArgumentException if {@code directory} does not exist or is not a directory
+     * @throws IllegalArgumentException if {@code directory} is not a directory
      */
     public static void deleteDirectory(final File directory) throws IOException {
         Objects.requireNonNull(directory, "directory");
