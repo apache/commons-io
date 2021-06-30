@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.CopyOption;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NotDirectoryException;
@@ -2967,7 +2968,8 @@ public class FileUtils {
         throws IOException {
         final IOFileFilter filter = extensions == null ? FileFileFilter.INSTANCE
             : FileFileFilter.INSTANCE.and(new SuffixFileFilter(toSuffixes(extensions)));
-        return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false).map(Path::toFile);
+        return PathUtils.walk(directory.toPath(), filter, toMaxDepth(recursive), false, FileVisitOption.FOLLOW_LINKS)
+            .map(Path::toFile);
     }
 
     /**

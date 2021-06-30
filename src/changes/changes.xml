@@ -47,15 +47,18 @@ The <action> type attribute can be add,update,fix,remove.
   <body>
     <release version="2.11.0" date="2021-MM-DD" description="Java 8 required.">
       <!-- FIX -->
-      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
-        Minor changes #243.
+      <action issue="IO-741" dev="ggregory" type="fix" due-to="Zach Sherman">
+        FileUtils.listFiles does not list matching files if File parameter is a symbolic link.
       </action>
       <action issue="IO-724" dev="ggregory" type="fix" due-to="liran2000">
         FileUtils#deleteDirectory(File) exception Javadoc inaccurate update #245.
       </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Minor changes #243.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
-        Add SymbolicLinkFileFilter. 
+        Add SymbolicLinkFileFilter.
       </action>
       <action dev="ggregory" type="update" due-to="trncate">
         Add test to make sure the setter of AndFileFilter works correctly #244.
