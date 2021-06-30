@@ -471,18 +471,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <configuration>
-          <parameter>
-            <overrideCompatibilityChangeParameters>
-              <overrideCompatibilityChangeParameter>
-                <compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
-                <binaryCompatible>true</binaryCompatible>
-                <sourceCompatible>true</sourceCompatible>
-                <semanticVersionLevel>PATCH</semanticVersionLevel>
-              </overrideCompatibilityChangeParameter>
-            </overrideCompatibilityChangeParameters>
-          </parameter>
-        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -504,18 +492,6 @@ file comparators, endian transformation classes, and much more.
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <configuration>
-          <parameter>
-            <overrideCompatibilityChangeParameters>
-              <overrideCompatibilityChangeParameter>
-                <compatibilityChange>METHOD_NEW_DEFAULT</compatibilityChange>
-                <binaryCompatible>true</binaryCompatible>
-                <sourceCompatible>true</sourceCompatible>
-                <semanticVersionLevel>PATCH</semanticVersionLevel>
-              </overrideCompatibilityChangeParameter>
-            </overrideCompatibilityChangeParameters>
-          </parameter>
-        </configuration>
       </plugin>    
     </plugins>
   </reporting>
