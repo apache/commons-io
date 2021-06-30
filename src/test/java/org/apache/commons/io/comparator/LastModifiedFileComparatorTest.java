@@ -18,8 +18,8 @@ package org.apache.commons.io.comparator;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.test.TestUtils;
@@ -38,7 +38,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         if (!olderFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + olderFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output2 = new BufferedOutputStream(new FileOutputStream(olderFile))) {
+        try (final BufferedOutputStream output2 = new BufferedOutputStream(Files.newOutputStream(olderFile.toPath()))) {
             TestUtils.generateTestData(output2, 0);
         }
 
@@ -46,7 +46,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         if (!equalFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + equalFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output1 = new BufferedOutputStream(new FileOutputStream(equalFile))) {
+        try (final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(equalFile.toPath()))) {
             TestUtils.generateTestData(output1, 0);
         }
         do {
@@ -58,7 +58,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         if (!newerFile.getParentFile().exists()) {
             throw new IOException("Cannot create file " + newerFile + " as the parent directory does not exist");
         }
-        try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(newerFile))) {
+        try (final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(newerFile.toPath()))) {
             TestUtils.generateTestData(output, 0);
         }
         do {

@@ -25,7 +25,6 @@ import java.io.CharArrayWriter;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,6 +43,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.Selector;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -1230,7 +1230,7 @@ public class IOUtils {
      * @since 2.9.0
      */
     public static long copy(final URL url, final File file) throws IOException {
-        try (FileOutputStream outputStream = new FileOutputStream(Objects.requireNonNull(file, "file"))) {
+        try (OutputStream outputStream = Files.newOutputStream(Objects.requireNonNull(file, "file").toPath())) {
             return copy(url, outputStream);
         }
     }

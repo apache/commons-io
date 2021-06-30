@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.ReferenceQueue;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,7 +156,7 @@ public class FileCleaningTrackerTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()))) {
             TestUtils.generateTestData(output, 100);
         }
         assertTrue(testFile.exists());

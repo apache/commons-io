@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.file.Files;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ public class FileWriterWithEncodingTest {
     @BeforeEach
     public void setUp() throws Exception {
         final File encodingFinder = new File(temporaryFolder, "finder.txt");
-        try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(encodingFinder))) {
+        try (OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(encodingFinder.toPath()))) {
             defaultEncoding = out.getEncoding();
         }
         file1 = new File(temporaryFolder, "testfile1.txt");

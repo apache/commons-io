@@ -34,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URL;
@@ -286,7 +287,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output3 =
-                new BufferedOutputStream(new FileOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output3, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -294,7 +295,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output2 =
-                new BufferedOutputStream(new FileOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output2, testFile2Size);
         }
         FileUtils.deleteDirectory(temporaryFolder);
@@ -304,7 +305,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()))) {
             TestUtils.generateTestData(output1, testFile1Size);
         }
         if (!testFile2.getParentFile().exists()) {
@@ -312,7 +313,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2))) {
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()))) {
             TestUtils.generateTestData(output, testFile2Size);
         }
     }
@@ -825,8 +826,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
+        final OutputStream output1 =
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
         try {
             TestUtils.generateTestData(output1, 1234);
         } finally {
@@ -836,8 +837,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 4321);
         } finally {
@@ -889,8 +890,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
+        final OutputStream output1 =
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
         try {
             TestUtils.generateTestData(output1, 1234);
         } finally {
@@ -900,8 +901,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 4321);
         } finally {
@@ -959,8 +960,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile1
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
+        final OutputStream output1 =
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
         try {
             TestUtils.generateTestData(output1, 1234);
         } finally {
@@ -970,8 +971,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile2
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 4321);
         } finally {
@@ -1093,8 +1094,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + largeFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(largeFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(largeFile.toPath()));
         try {
             TestUtils.generateTestData(output, FileUtils.ONE_GB);
         } finally {
@@ -1227,7 +1228,7 @@ public class FileUtilsTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file);
 
         // Tests that resuorce was copied correctly
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (InputStream fis = Files.newInputStream(file.toPath())) {
             assertTrue(IOUtils.contentEquals(getClass().getResourceAsStream(resourceName), fis),
                     "Content is not equal.");
         }
@@ -1245,7 +1246,7 @@ public class FileUtilsTestCase {
         FileUtils.copyURLToFile(getClass().getResource(resourceName), file, 500, 500);
 
         // Tests that resuorce was copied correctly
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (InputStream fis = Files.newInputStream(file.toPath())) {
             assertTrue(IOUtils.contentEquals(getClass().getResourceAsStream(resourceName), fis),
                     "Content is not equal.");
         }
@@ -1308,8 +1309,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -1330,8 +1331,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -1374,7 +1375,7 @@ public class FileUtilsTestCase {
         final String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
-        try (OutputStream out = new FileOutputStream(file1)) {
+        try (OutputStream out = Files.newOutputStream(file1.toPath())) {
             out.write("This is a test".getBytes(StandardCharsets.UTF_8));
         }
 
@@ -1629,8 +1630,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + oldFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(oldFile));
+        final OutputStream output1 =
+                new BufferedOutputStream(Files.newOutputStream(oldFile.toPath()));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
@@ -1647,8 +1648,8 @@ public class FileUtilsTestCase {
                 throw new IOException("Cannot create file " + reference
                         + " as the parent directory does not exist");
             }
-            final BufferedOutputStream output =
-                    new BufferedOutputStream(new FileOutputStream(reference));
+            final OutputStream output =
+                    new BufferedOutputStream(Files.newOutputStream(reference.toPath()));
             try {
                 TestUtils.generateTestData(output, 0);
             } finally {
@@ -1675,8 +1676,8 @@ public class FileUtilsTestCase {
                 throw new IOException("Cannot create file " + newFile
                         + " as the parent directory does not exist");
             }
-            final BufferedOutputStream output =
-                    new BufferedOutputStream(new FileOutputStream(newFile));
+            final OutputStream output =
+                    new BufferedOutputStream(Files.newOutputStream(newFile.toPath()));
             try {
                 TestUtils.generateTestData(output, 0);
             } finally {
@@ -1887,7 +1888,7 @@ public class FileUtilsTestCase {
         final WildcardFileFilter fileFilterAllDirs = new WildcardFileFilter("*");
         final WildcardFileFilter fileFilterExtTxt = new WildcardFileFilter("*.txt");
         try {
-            try (final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(someFile))) {
+            try (final OutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()))) {
                 TestUtils.generateTestData(output, 100);
             }
             //
@@ -1933,7 +1934,7 @@ public class FileUtilsTestCase {
                 if (!theFile.getParentFile().exists()) {
                     throw new IOException("Cannot create file " + theFile + " as the parent directory does not exist");
                 }
-                final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(theFile));
+                final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(theFile.toPath()));
                 try {
                     TestUtils.generateTestData(output, fileSizes[i]);
                 } finally {
@@ -1980,7 +1981,7 @@ public class FileUtilsTestCase {
             if (!someFile.getParentFile().exists()) {
                 throw new IOException("Cannot create file " + someFile + " as the parent directory does not exist");
             }
-            final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(someFile));
+            final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(someFile.toPath()));
             try {
                 TestUtils.generateTestData(output, 100);
             } finally {
@@ -2023,8 +2024,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2060,8 +2061,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2091,8 +2092,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2124,8 +2125,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + testFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2158,7 +2159,7 @@ public class FileUtilsTestCase {
         if (!testFile1.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile1 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output1 = new BufferedOutputStream(new FileOutputStream(testFile1));
+        final BufferedOutputStream output1 = new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
@@ -2167,7 +2168,7 @@ public class FileUtilsTestCase {
         if (!testFile2.getParentFile().exists()) {
             throw new IOException("Cannot create file " + testFile2 + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(testFile2));
+        final BufferedOutputStream output = new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2314,7 +2315,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testSourceFile));
+                new BufferedOutputStream(Files.newOutputStream(testSourceFile.toPath()));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
@@ -2325,7 +2326,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testDestFile));
+                new BufferedOutputStream(Files.newOutputStream(testDestFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2371,7 +2372,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         final BufferedOutputStream output1 =
-                new BufferedOutputStream(new FileOutputStream(testFile1));
+                new BufferedOutputStream(Files.newOutputStream(testFile1.toPath()));
         try {
             TestUtils.generateTestData(output1, 0);
         } finally {
@@ -2382,7 +2383,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile2));
+                new BufferedOutputStream(Files.newOutputStream(testFile2.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2410,7 +2411,7 @@ public class FileUtilsTestCase {
                     + " as the parent directory does not exist");
         }
         final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(testFile));
+                new BufferedOutputStream(Files.newOutputStream(testFile.toPath()));
         try {
             TestUtils.generateTestData(output, 0);
         } finally {
@@ -2460,7 +2461,7 @@ public class FileUtilsTestCase {
     @Test
     public void testReadFileToByteArray() throws Exception {
         final File file = new File(temporaryFolder, "read.txt");
-        final FileOutputStream out = new FileOutputStream(file);
+        final OutputStream out = Files.newOutputStream(file.toPath());
         out.write(11);
         out.write(21);
         out.write(31);
@@ -2476,7 +2477,7 @@ public class FileUtilsTestCase {
     @Test
     public void testReadFileToStringWithDefaultEncoding() throws Exception {
         final File file = new File(temporaryFolder, "read.obj");
-        final FileOutputStream out = new FileOutputStream(file);
+        final OutputStream out = Files.newOutputStream(file.toPath());
         final byte[] text = "Hello /u1234".getBytes();
         out.write(text);
         out.close();
@@ -2488,7 +2489,7 @@ public class FileUtilsTestCase {
     @Test
     public void testReadFileToStringWithEncoding() throws Exception {
         final File file = new File(temporaryFolder, "read.obj");
-        final FileOutputStream out = new FileOutputStream(file);
+        final OutputStream out = Files.newOutputStream(file.toPath());
         final byte[] text = "Hello /u1234".getBytes(StandardCharsets.UTF_8);
         out.write(text);
         out.close();
@@ -2650,8 +2651,8 @@ public class FileUtilsTestCase {
             throw new IOException("Cannot create file " + nonEmptyFile
                     + " as the parent directory does not exist");
         }
-        final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(nonEmptyFile));
+        final OutputStream output =
+                new BufferedOutputStream(Files.newOutputStream(nonEmptyFile.toPath()));
         try {
             TestUtils.generateTestData(output, TEST_DIRECTORY_SIZE_GT_ZERO_BI.longValue());
         } finally {
@@ -2773,7 +2774,7 @@ public class FileUtilsTestCase {
         assertFalse(file.exists(), "Bad test: test file still exists");
         FileUtils.touch(file);
         assertTrue(file.exists(), "FileUtils.touch() created file");
-        final FileOutputStream out = new FileOutputStream(file);
+        final OutputStream out = Files.newOutputStream(file.toPath());
         assertEquals(0, file.length(), "Created empty file.");
         out.write(0);
         out.close();

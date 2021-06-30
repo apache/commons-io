@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.apache.commons.io.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ public class FileDeleteStrategyTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile))) {
+                new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }
 
@@ -89,7 +89,7 @@ public class FileDeleteStrategyTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile))) {
+                new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }
 
@@ -122,7 +122,7 @@ public class FileDeleteStrategyTestCase {
                     + " as the parent directory does not exist");
         }
         try (final BufferedOutputStream output =
-                new BufferedOutputStream(new FileOutputStream(subFile))) {
+                new BufferedOutputStream(Files.newOutputStream(subFile.toPath()))) {
             TestUtils.generateTestData(output, 16);
         }
 
