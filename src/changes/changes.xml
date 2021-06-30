@@ -57,6 +57,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Add SymbolicLinkFileFilter. 
       </action>
+      <action dev="ggregory" type="update" due-to="trncate">
+        Add test to make sure the setter of AndFileFilter works correctly #244.
+      </action>
       <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump mockito-inline from 3.11.0 to 3.11.2 #247. 
