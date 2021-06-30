@@ -45,16 +45,21 @@ The <action> type attribute can be add,update,fix,remove.
   </properties>
 
   <body>
-    <release version="2.10.1" date="2021-MM-DD" description="Java 8 required.">
+    <release version="2.11.0" date="2021-MM-DD" description="Java 8 required.">
       <!-- FIX -->
       <action dev="ggregory" type="fix" due-to="Arturo Bernal">
         Minor changes #243.
       </action>
+      <action issue="IO-724" dev="ggregory" type="fix" due-to="liran2000">
+        FileUtils#deleteDirectory(File) exception Javadoc inaccurate update #245.
+      </action>
+      <!-- ADD -->
+      <action dev="ggregory" type="update" due-to="Gary Gregory">
+        Add SymbolicLinkFileFilter. 
+      </action>
+      <!-- UPDATE -->
       <action dev="ggregory" type="update" due-to="Dependabot">
         Bump mockito-inline from 3.11.0 to 3.11.2 #247. 
-      </action>
-      <action issue="IO-724" dev="ggregory" type="update" due-to="liran2000">
-        FileUtils#deleteDirectory(File) exception Javadoc inaccurate update #245.
       </action>
     </release>
     <!-- The release date is the date RC is cut -->
