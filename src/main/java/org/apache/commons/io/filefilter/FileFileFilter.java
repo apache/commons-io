@@ -32,7 +32,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <h2>Using Classic IO</h2>
  * <pre>
  * File dir = new File(".");
- * String[] files = dir.list(FileFileFilter.FILE);
+ * String[] files = dir.list(FileFileFilter.INSTANCE);
  * for (String file : files) {
  *     System.out.println(file);
  * }
@@ -41,7 +41,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * <h2>Using NIO</h2>
  * <pre>
  * final Path dir = Paths.get("");
- * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(FileFileFilter.FILE);
+ * final AccumulatorPathVisitor visitor = AccumulatorPathVisitor.withLongCounters(FileFileFilter.INSTANCE);
  * //
  * // Walk one dir
  * Files.<b>walkFileTree</b>(dir, Collections.emptySet(), 1, visitor);
