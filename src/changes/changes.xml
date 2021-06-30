@@ -56,6 +56,9 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Arturo Bernal">
         Minor changes #243.
       </action>
+      <action dev="ggregory" type="fix" due-to="Arturo Bernal">
+        Replace construction of FileInputStream and FileOutputStream objects with Files NIO APIs. #221.
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Add SymbolicLinkFileFilter.
