@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -275,9 +276,8 @@ public class XmlStreamReader extends Reader {
      * @param file File to create a Reader from.
      * @throws IOException thrown if there is a problem reading the file.
      */
-    @SuppressWarnings("resource") // FileInputStream is managed through another reader in this instance.
     public XmlStreamReader(final File file) throws IOException {
-        this(Files.newInputStream(Objects.requireNonNull(file, "file").toPath()));
+        this(Objects.requireNonNull(file, "file").toPath());
     }
 
     /**
@@ -387,7 +387,6 @@ public class XmlStreamReader extends Reader {
         this(inputStream, httpContentType, true);
     }
 
-
     /**
      * Creates a Reader using an InputStream and the associated content-type
      * header. This constructor is lenient regarding the encoding detection.
@@ -425,6 +424,7 @@ public class XmlStreamReader extends Reader {
             final boolean lenient) throws IOException {
         this(inputStream, httpContentType, lenient, null);
     }
+
 
     /**
      * Creates a Reader using an InputStream and the associated content-type
@@ -469,6 +469,24 @@ public class XmlStreamReader extends Reader {
         final BOMInputStream pis = new BOMInputStream(bom, true, XML_GUESS_BYTES);
         this.encoding = processHttpStream(bom, pis, httpContentType, lenient);
         this.reader = new InputStreamReader(pis, encoding);
+    }
+
+    /**
+     * Creates a Reader for a File.
+     * <p>
+     * It looks for the UTF-8 BOM first, if none sniffs the XML prolog charset,
+     * if this is also missing defaults to UTF-8.
+     * <p>
+     * It does a lenient charset encoding detection, check the constructor with
+     * the lenient parameter for details.
+     *
+     * @param file File to create a Reader from.
+     * @throws IOException thrown if there is a problem reading the file.
+     * @since 2.11.0
+     */
+    @SuppressWarnings("resource") // InputStream is managed through another reader in this instance.
+    public XmlStreamReader(final Path file) throws IOException {
+        this(Files.newInputStream(Objects.requireNonNull(file, "file")));
     }
 
     /**
