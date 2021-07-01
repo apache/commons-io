@@ -685,7 +685,7 @@ public final class PathUtils {
         if (paths == null) {
             return EMPTY_PATH_ARRAY;
         }
-        return filterPaths(filter, Arrays.stream(paths), Collectors.toList()).toArray(EMPTY_PATH_ARRAY);
+        return filterPaths(filter, Stream.of(paths), Collectors.toList()).toArray(EMPTY_PATH_ARRAY);
     }
 
     private static <R, A> R filterPaths(final PathFilter filter, final Stream<Path> stream,
@@ -951,7 +951,7 @@ public final class PathUtils {
      */
     static Set<FileVisitOption> toFileVisitOptionSet(final FileVisitOption... fileVisitOptions) {
         return fileVisitOptions == null ? EnumSet.noneOf(FileVisitOption.class)
-            : Arrays.stream(fileVisitOptions).collect(Collectors.toSet());
+            : Stream.of(fileVisitOptions).collect(Collectors.toSet());
     }
 
     /**

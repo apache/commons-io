@@ -248,7 +248,7 @@ public class FileFilterUtils {
         if (files == null) {
             return FileUtils.EMPTY_FILE_ARRAY;
         }
-        return filterFiles(filter, Arrays.stream(files), Collectors.toList()).toArray(FileUtils.EMPTY_FILE_ARRAY);
+        return filterFiles(filter, Stream.of(files), Collectors.toList()).toArray(FileUtils.EMPTY_FILE_ARRAY);
     }
 
     /**
