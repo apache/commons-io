@@ -100,7 +100,9 @@ public class FileSystemUtils {
                     osName.contains("aix")) {
                 os = POSIX_UNIX;
             }
-
+        } catch (final SecurityException secex) {
+            // Permission should be granted instead of defaulting
+            throw secex;
         } catch (final Exception ex) {
             os = INIT_PROBLEM;
         }

@@ -405,6 +405,7 @@ public class Tailer implements Runnable {
 
     /**
      * Follows changes in the file, calling the TailerListener's handle method for each new line.
+     * @throws SecurityException if underlying calls fail due to missing permissions.
      */
     @Override
     public void run() {
@@ -484,6 +485,9 @@ public class Tailer implements Runnable {
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
             listener.handle(e);
+        } catch (final SecurityException secex) {
+         // Permission should be granted instead using for app logic.
+            throw secex;
         } catch (final Exception e) {
             listener.handle(e);
         } finally {
