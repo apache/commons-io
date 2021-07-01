@@ -159,11 +159,19 @@ file comparators, endian transformation classes, and much more.
       </roles>
     </developer>
     <developer>
-      <name>Gary Gregory</name>
       <id>ggregory</id>
-      <email>ggregory@apache.org</email>
-      <url>http://www.garygregory.com</url>
-      <timezone>-5</timezone>
+      <name>Gary Gregory</name>
+      <email>ggregory at apache.org</email>
+      <url>https://www.garygregory.com</url>
+      <organization>The Apache Software Foundation</organization>
+      <organizationUrl>https://www.apache.org/</organizationUrl>      
+      <roles>
+        <role>PMC Member</role>
+      </roles>
+      <timezone>America/New_York</timezone>
+      <properties>
+        <picUrl>https://people.apache.org/~ggregory/img/garydgregory80.png</picUrl>
+      </properties>
     </developer>
     <developer>
       <name>Kristian Rosenvold</name>
