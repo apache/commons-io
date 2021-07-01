@@ -841,12 +841,7 @@ public final class PathUtils {
         if (deleteOptions == null) {
             return false;
         }
-        for (final DeleteOption deleteOption : deleteOptions) {
-            if (deleteOption == StandardDeleteOption.OVERRIDE_READ_ONLY) {
-                return true;
-            }
-        }
-        return false;
+        return Stream.of(deleteOptions).anyMatch(e -> e == StandardDeleteOption.OVERRIDE_READ_ONLY);
     }
 
     /**
