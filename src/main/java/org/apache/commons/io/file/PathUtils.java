@@ -488,6 +488,7 @@ public final class PathUtils {
             pathCounts.getFileCounter().increment();
             pathCounts.getByteCounter().add(size);
         }
+        assert Files.notExists(file, linkOptions) : "File still exists " + file;
         return pathCounts;
     }
 
