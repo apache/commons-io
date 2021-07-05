@@ -332,7 +332,7 @@ file comparators, endian transformation classes, and much more.
     <commons.surefire.version>3.0.0-M5</commons.surefire.version>
     <commons.japicmp.version>0.15.3</commons.japicmp.version>
     <spotbugs.plugin.version>4.2.3</spotbugs.plugin.version>
-    <spotbugs.impl.version>4.2.3</spotbugs.impl.version>
+    <spotbugs.impl.version>4.3.0</spotbugs.impl.version>
     <jmh.version>1.32</jmh.version>    
     <japicmp.skip>false</japicmp.skip>
     <jacoco.skip>${env.JACOCO_SKIP}</jacoco.skip>
