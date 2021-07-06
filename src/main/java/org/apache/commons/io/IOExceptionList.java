@@ -52,7 +52,7 @@ public class IOExceptionList extends IOException {
      * @since 2.9.0
      */
     public IOExceptionList(final String message, final List<? extends Throwable> causeList) {
-        super(message, causeList == null ? null : causeList.get(0));
+        super(message, causeList == null || causeList.isEmpty() ? null : causeList.get(0));
         this.causeList = causeList == null ? Collections.emptyList() : causeList;
     }
 

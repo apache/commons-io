@@ -50,6 +50,12 @@ public class IOExceptionListTestCase {
     }
 
     @Test
+    public void testEmptyList() {
+        new IOExceptionList(Collections.emptyList());
+        new IOExceptionList("foo", Collections.emptyList());
+    }
+
+    @Test
     public void testMessageCause() {
         final EOFException cause = new EOFException();
         final List<EOFException> list = Collections.singletonList(cause);
