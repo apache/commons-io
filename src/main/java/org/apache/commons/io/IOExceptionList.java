@@ -76,7 +76,7 @@ public class IOExceptionList extends IOException {
      * @return The list of causes.
      */
     public <T extends Throwable> T getCause(final int index, final Class<T> clazz) {
-        return (T) causeList.get(index);
+        return clazz.cast(causeList.get(index));
     }
 
     /**
