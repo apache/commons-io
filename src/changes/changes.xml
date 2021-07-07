@@ -59,6 +59,25 @@ The <action> type attribute can be add,update,fix,remove.
       <action dev="ggregory" type="fix" due-to="Arturo Bernal">
         Replace construction of FileInputStream and FileOutputStream objects with Files NIO APIs. #221.
       </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Fix IndexOutOfBoundsException in IOExceptionList constructors.
+      </action>
+      <action dev="ggregory" type="fix" due-to="Gary Gregory">
+        Remove IOException from the method signatures that no longer throw IOException.
+        This maintains binary compatibility but not source compatibility.
+        - FilenameUtils
+            directoryContains(String, String)
+        - BoundedReader
+            BoundedReader(java.io.Reader, int)
+        - IOUtils
+            lineIterator(java.io.InputStream, Charset)
+            lineIterator(java.io.InputStream, String)
+            toByteArray(String)
+            toInputStream(CharSequence, String)
+            toInputStream(String, String)
+            toString(byte[])
+            toString(byte[], String)
+      </action>
       <!-- ADD -->
       <action dev="ggregory" type="update" due-to="Gary Gregory">
         Add SymbolicLinkFileFilter.

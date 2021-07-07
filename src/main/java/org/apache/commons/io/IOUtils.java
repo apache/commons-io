@@ -1594,10 +1594,9 @@ public class IOUtils {
      * @param charset the charset to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException if the input is null
-     * @throws IOException Never thrown.
      * @since 2.3
      */
-    public static LineIterator lineIterator(final InputStream input, final Charset charset) throws IOException {
+    public static LineIterator lineIterator(final InputStream input, final Charset charset) {
         return new LineIterator(new InputStreamReader(input, Charsets.toCharset(charset)));
     }
 
@@ -1628,13 +1627,12 @@ public class IOUtils {
      * @param charsetName the encoding to use, null means platform default
      * @return an Iterator of the lines in the reader, never null
      * @throws IllegalArgumentException                     if the input is null
-     * @throws IOException                                  if an I/O error occurs, such as if the encoding is invalid
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 1.2
      */
-    public static LineIterator lineIterator(final InputStream input, final String charsetName) throws IOException {
+    public static LineIterator lineIterator(final InputStream input, final String charsetName) {
         return lineIterator(input, Charsets.toCharset(charsetName));
     }
 
@@ -2543,11 +2541,10 @@ public class IOUtils {
      * @param input the {@code String} to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws IOException Never thrown.
      * @deprecated 2.5 Use {@link String#getBytes()} instead
      */
     @Deprecated
-    public static byte[] toByteArray(final String input) throws IOException {
+    public static byte[] toByteArray(final String input) {
         // make explicit the use of the default charset
         return input.getBytes(Charset.defaultCharset());
     }
@@ -2717,13 +2714,12 @@ public class IOUtils {
      * @param input the CharSequence to convert
      * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
-     * @throws IOException Never thrown.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 2.0
      */
-    public static InputStream toInputStream(final CharSequence input, final String charsetName) throws IOException {
+    public static InputStream toInputStream(final CharSequence input, final String charsetName) {
         return toInputStream(input, Charsets.toCharset(charsetName));
     }
 
@@ -2764,13 +2760,12 @@ public class IOUtils {
      * @param input the string to convert
      * @param charsetName the name of the requested charset, null means platform default
      * @return an input stream
-     * @throws IOException Never thrown.
      * @throws java.nio.charset.UnsupportedCharsetException thrown instead of {@link java.io
      *                                                      .UnsupportedEncodingException} in version 2.2 if the
      *                                                      encoding is not supported.
      * @since 1.1
      */
-    public static InputStream toInputStream(final String input, final String charsetName) throws IOException {
+    public static InputStream toInputStream(final String input, final String charsetName) {
         final byte[] bytes = input.getBytes(Charsets.toCharset(charsetName));
         return new ByteArrayInputStream(bytes);
     }
@@ -2782,11 +2777,10 @@ public class IOUtils {
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException Never thrown.
      * @deprecated 2.5 Use {@link String#String(byte[])} instead
      */
     @Deprecated
-    public static String toString(final byte[] input) throws IOException {
+    public static String toString(final byte[] input) {
         // make explicit the use of the default charset
         return new String(input, Charset.defaultCharset());
     }
@@ -2802,9 +2796,8 @@ public class IOUtils {
      * @param charsetName the name of the requested charset, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws IOException Never thrown.
      */
-    public static String toString(final byte[] input, final String charsetName) throws IOException {
+    public static String toString(final byte[] input, final String charsetName) {
         return new String(input, Charsets.toCharset(charsetName));
     }
 

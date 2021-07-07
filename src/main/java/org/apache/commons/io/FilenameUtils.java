@@ -17,7 +17,6 @@
 package org.apache.commons.io;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -533,12 +532,10 @@ public class FilenameUtils {
      * @param canonicalChild
      *            the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
-     * @throws IOException Never thrown.
      * @since 2.2
      * @see FileUtils#directoryContains(File, File)
      */
-    public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
-            throws IOException {
+    public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
         Objects.requireNonNull(canonicalParent, "canonicalParent");
 
         if (canonicalChild == null) {
